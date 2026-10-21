@@ -36,6 +36,7 @@ const TABLES = [
 `CREATE TABLE IF NOT EXISTS outcomes (id INTEGER PRIMARY KEY AUTOINCREMENT,candidate_id INTEGER NOT NULL,outcome TEXT NOT NULL,evidence TEXT,time_utc TEXT NOT NULL)`,
 `CREATE TABLE IF NOT EXISTS search_history (id INTEGER PRIMARY KEY AUTOINCREMENT,site TEXT,query TEXT,attempted_at TEXT,result_count INTEGER DEFAULT 0,inserted_count INTEGER DEFAULT 0,error TEXT)`,
 `CREATE TABLE IF NOT EXISTS referral_metrics (id INTEGER PRIMARY KEY AUTOINCREMENT,site TEXT,referrer_domain TEXT,date TEXT,sessions INTEGER NOT NULL DEFAULT 0,engaged_sessions INTEGER,conversions INTEGER,source TEXT)`,
+`CREATE TABLE IF NOT EXISTS gsc_sync_state (site TEXT PRIMARY KEY,last_attempt_at TEXT NOT NULL,last_result TEXT NOT NULL DEFAULT '')`,
 `CREATE TABLE IF NOT EXISTS cron_locks (name TEXT PRIMARY KEY,owner TEXT NOT NULL,claimed_at TEXT NOT NULL,expires_at TEXT NOT NULL)`,
 ];
 
@@ -48,6 +49,7 @@ export async function ensureDb(db) {
   }
   // Additive migration: existing databases predate the opportunity table.
   await db.prepare('CREATE TABLE IF NOT EXISTS url_opportunities (site TEXT NOT NULL,url TEXT NOT NULL,score REAL NOT NULL,impressions REAL,clicks REAL,position REAL,kind TEXT,state TEXT NOT NULL DEFAULT \'needs_validation\',measured_at TEXT NOT NULL,PRIMARY KEY(site,url))').run();
+  await db.prepare("CREATE TABLE IF NOT EXISTS gsc_sync_state (site TEXT PRIMARY KEY,last_attempt_at TEXT NOT NULL,last_result TEXT NOT NULL DEFAULT '')").run();
   const stamp=NOW();
   await db.batch(Object.entries(CONTROL_DEFAULTS).map(([key,value])=>
     db.prepare('INSERT OR IGNORE INTO operator_controls(key,value,updated_at,updated_by) VALUES(?,?,?,?)')
