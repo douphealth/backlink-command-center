@@ -1,4 +1,4 @@
-name: Verify LinkForge unified Cloudflare Worker
+name: Verify LinkForge Cloudflare Pages
 on:
   push:
     branches: [main]
@@ -14,11 +14,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Single-Worker, D1, auth, scheduler and safe deploy tests
-        run: npm test
-      - name: Static JS and Worker build checks
+      - name: Build Pages assets without secrets or server provisioning
         run: npm run build
-      - name: Fail on tracked secrets or private data
+      - name: Test browser workspace, Pages JSON routing and secure optional Worker
+        run: npm test
+      - name: Prevent recurrence of HTML-as-JSON Pages deploy error
+        run: |
+          test -f 'functions/api/[[path]].js'
+          test -f public/_routes.json
+          test -f public/browser-store.js
+          test -f public/portfolio.json
+          test ! -f wrangler.jsonc
+          test -f worker.wrangler.jsonc
+          node -e "const c=require('./public/_routes.json'); if(!c.include.includes('/api/*'))process.exit(1)"
+      - name: Block public secret and DB artifacts
         run: |
           test ! -e .linkforge
           test ! -f DataforSEO_API.txt

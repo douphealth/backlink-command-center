@@ -14,7 +14,7 @@ import {fileURLToPath} from 'node:url';
 const root=process.env.NODE_ENV==='test' && process.env.LINKFORGE_TEST_ROOT_DIR ? resolve(process.env.LINKFORGE_TEST_ROOT_DIR) : resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const home=join(root,'.linkforge');
 const credentialsFile=join(home,'operator-credentials.json');
-const config=join(root,'wrangler.jsonc');
+const config=join(root,'worker.wrangler.jsonc');
 const autoInstall=process.env.LINKFORGE_TEST_SKIP_INSTALL!=='1';
 
 function banner(text){process.stdout.write(`\n${text}\n`);}
@@ -53,7 +53,7 @@ function deploymentUrl(output){
 async function main(){
   banner('LINKFORGE · ONE CLOUDFLARE DEPLOYMENT');
   banner('Dashboard + private API + D1 database + scheduled jobs, in a single Worker.');
-  if(!existsSync(config))throw Error('wrangler.jsonc is missing');
+  if(!existsSync(config))throw Error('worker.wrangler.jsonc is missing');
   if(!process.env.LINKFORGE_TEST_WRANGLER_BIN && autoInstall && !existsSync(join(root,'node_modules','wrangler','bin','wrangler.js'))){
     banner('Installing the official Cloudflare Wrangler CLI...');
     await run(process.platform==='win32'?'npm.cmd':'npm',['install','--no-audit','--no-fund']);
@@ -72,7 +72,7 @@ async function main(){
   let deployOutput='';
   try{
     banner('Deploying ONE Cloudflare Worker. Wrangler will create and attach D1 automatically.');
-    deployOutput=await wrangler('deploy','--config','wrangler.jsonc','--secrets-file',secretFile);
+    deployOutput=await wrangler('deploy','--config','worker.wrangler.jsonc','--secrets-file',secretFile);
   }finally{try{unlinkSync(secretFile);}catch{}}
   const url=deploymentUrl(deployOutput);
   banner('CLOUDFLARE DEPLOYMENT COMMAND SUCCEEDED.');

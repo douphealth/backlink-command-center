@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0c1017"><meta name="description" content="Private evidence-first backlink research and outreach operations console"><title>Backlink Command Center</title><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/styles.css"></head><body>
 <div id="auth-screen" class="auth-screen hidden"><div class="auth-glow"></div><main class="auth-box setup-box" aria-labelledby="setup-title">
-  <div class="setup-brand"><div class="logo-mark large">↗</div><span>LINKFORGE · UNIFIED CLOUDFLARE WORKER</span></div>
-  <div class="single-label">ONE DEPLOYMENT · ONE DASHBOARD · ONE DATABASE</div>
+  <div class="setup-brand"><div class="logo-mark large">↗</div><span>LINKFORGE · CLOUDFLARE PAGES READY</span></div>
+  <div class="single-label">ONE DASHBOARD · WORKS IMMEDIATELY ON PAGES</div>
   <h1 id="setup-title">Your private command center.</h1>
   <p id="setup-message">Dashboard, database and automated checks are deployed together on Cloudflare.</p>
   <form id="code-login" class="operator-login hidden" autocomplete="on">
@@ -15,12 +15,12 @@
     <button type="button" class="secondary full" id="setup-retry">↻ Recheck connection</button>
     <a class="setup-guide-link" href="https://github.com/douphealth/backlink-command-center#one-cloudflare-deployment" target="_blank" rel="noopener noreferrer">Deployment instructions ↗</a>
   </div>
-  <small>Your operator code protects private campaign records. DataForSEO paid requests and sending are disabled by default.</small>
+  <small>Your browser workspace opens without configuration. A deployed Worker can optionally enable shared Cloudflare operations.</small>
 </main></div>
 <div class="shell hidden" id="shell">
   <aside class="sidebar" id="sidebar">
     <div class="brand"><div class="logo-mark">↗</div><div class="brand-copy"><strong>LINKFORGE</strong><span>COMMAND CENTER <i>01</i></span></div></div>
-    <div class="workspace-pill"><div class="workspace-avatar">P</div><div><strong>Portfolio HQ</strong><span>Cloudflare workspace</span></div><span class="chevron">⌄</span></div>
+    <div class="workspace-pill"><div class="workspace-avatar">P</div><div><strong>Portfolio HQ</strong><span>Browser or Cloudflare workspace</span></div><span class="chevron">⌄</span></div>
     <div class="sidebar-label">WORKSPACE</div>
     <nav id="navigation" aria-label="Main navigation">
       <button class="nav-link active" data-view="overview"><span class="nav-icon">◧</span> Overview <span class="nav-shortcut">01</span></button>
@@ -43,5 +43,5 @@
   <footer class="footer"><span>LINKFORGE · PRIVATE OPERATIONS</span><span id="footer-sync">—</span><span>Evidence-driven outreach, never vanity metrics.</span></footer></div>
   <div class="toast-stack" id="toasts" aria-live="polite"></div>
 </div>
-<script src="/app.js" defer></script>
+<input id="workspace-import" type="file" accept=".csv,.json,application/json,text/csv" class="hidden" aria-label="Import LinkForge records"><script type="module" src="/app.js"></script>
 </body></html>

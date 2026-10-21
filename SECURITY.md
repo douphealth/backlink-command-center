@@ -1,19 +1,21 @@
-# LinkForge security and cost gates
+# Security and data truth — LinkForge Cloudflare Pages
 
-## Architecture and authentication
+## Zero-configuration browser mode
 
-The production deployment is exactly one Cloudflare Worker with a D1 database and Cron Trigger. The dashboard is delivered as static assets but every `/api/*` route runs the Worker first. No private prospect, mailbox or payment records are embedded in public JavaScript. All data routes require a cryptographically signed, short-lived (7-day) HttpOnly/Secure/SameSite=Strict session cookie and CSRF confirmation for writes.
+No administrator password is requested, and no persistent campaign records are placed on Cloudflare's public static hosting. Browser records live in origin-scoped IndexedDB and are accessible to JavaScript executing on that origin. They may be lost if the browser profile is cleared or storage is disabled. A browser backup contains private publisher/contact information if such information was imported; handle it as sensitive and do not check it into a public repository.
 
-The `npm run deploy` command generates a high-entropy operator access code and session-signing key using Node.js `crypto.randomBytes`. Both are uploaded only as Worker encrypted secrets with Wrangler's `--secrets-file` option; its temporary upload file is deleted. A local copy is written to `.linkforge/operator-credentials.json` (gitignored; mode `0600` on POSIX). Deploying from a new checkout rotates the operator credentials, so store this recovery file securely. Failed logins are tracked in D1 with a 15-minute lockout after six failures; raw IPs are not stored.
+The Pages site is publicly reachable. **Browser-only storage is not a substitute for multi-user access control** and does not constitute a secure online CRM for shared teams. Site operators who need shared confidential campaign data must deploy server-side authentication and private storage.
 
-Never paste access codes or API passwords into ChatGPT, a public GitHub issue, or `.env` tracked files. The previously uploaded DataForSEO credential should be rotated before use in production.
+No DataForSEO API key, Gmail token or arbitrary provider credential is accepted or transmitted by browser mode. Public health checking fetches only a small allowlist of preconfigured site URLs; no user-supplied hosts, no redirects followed, at most three HEAD requests per site, 7-second request timeout. Observed HTTP 200s are not treated as earned backlinks.
 
-## Billing and outbound safety
+The `/api/setup` endpoint returns no secrets. Unconfigured `/api/*` routes return a JSON 503 instead of exposing D1 data or falling through to a cached HTML SPA response. The client never blindly calls `.json()` on a `text/html` response.
 
-`DATAFORSEO_PAID_ENABLED=NO` is hardwired into `wrangler.jsonc` default vars, and the D1 operator hold `dataforseo_paused=true` also blocks paid calls. When later deliberately enabled, the backend checks actual account pricing and balance and reserves the maximum projected cost before each request. Caps are $0.06/request, $0.12/day, $1/month; request rows and number of daily calls are separately limited. Unknown charges, timeouts, conflicting requests, or external account expenditure fail closed. **Other agents can still spend on the same DataForSEO account**, so coordinate all consumers.
+## Optional Worker mode
 
-`outreach_paused=true` by default, and the unified Worker has **no autonomous Gmail sender** without a separate OAuth and suppressions import. A prospect or draft is not a real link. Link placement only counts after independently checking a linking anchor element.
+Strong generated operator credentials are installed as Worker secrets from an authorized workstation, never committed to Git. Sessions are signed, HttpOnly and Secure; writes require CSRF confirmation; rate limiting is durable in D1. Worker paid queries and outgoing emails remain disabled until independently authorized. Do not use a DataForSEO credential that has appeared in chat without rotating it.
 
-## Operational limits
+Separate Cloudflare Pages deployments and Worker deployments are separate data origins. Never imply they share data without a correctly configured and authenticated synchronization mechanism. Do not expose an unprotected D1-backed Pages Function.
 
-This implementation has automated local tests for API auth, D1, cost pauses, scheduling and single-Worker routing, but production Cloudflare account access and third-party API authentication must be verified separately. Do not claim paid-data research or live email sending works until observed. Keep GitHub Actions test-only; no plaintext provider keys in Actions logs.
+## Claims and outcomes
+
+Imported publishers are marked `research`, not `verified_ready`. Browser-only task plans never show as completed work, never send email and never incur DataForSEO charges. HTTP site checks are observations and cannot count as backlinks. Empty performance metrics are displayed as zero or unknown, never fabricated.

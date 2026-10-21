@@ -1,49 +1,77 @@
-# LINKFORGE — One Cloudflare deployment
+# LinkForge v5 — Cloudflare Pages, ready on every Git deployment
 
-One Cloudflare **Worker** serves the premium dashboard, private JSON API, automatically provisioned D1 database, and hourly research scheduler. No VPS, Docker, Cloudflare Pages bindings, separate scheduler deployment, manual D1 creation, or Cloudflare Access app is required.
+**The Git-connected Cloudflare Pages project is the default deployment target.**
 
-## ONE-COMMAND DEPLOYMENT
+LinkForge previously placed a single-Worker API behind a Pages static site. Pages fell back to `index.html` for missing `/api/setup`, and the browser crashed with `Unexpected token '<'`. This release fixes that routing error and makes the dashboard **useful immediately** after an ordinary Cloudflare Pages deployment, including when there is no D1 binding, Cloudflare Access policy, secret, or additional Worker.
 
-**Windows 11 / PowerShell or macOS / Linux** (requires Node.js 22+ and a Cloudflare account):
+## Deploy with Cloudflare Pages (no setup wizard)
 
-```bash
-git clone https://github.com/douphealth/backlink-command-center.git
-cd backlink-command-center
+Connect `douphealth/backlink-command-center`, branch `main`, to Cloudflare Pages and use:
+
+| Field | Value |
+| --- | --- |
+| Framework preset | None |
+| Root directory | `/` (repository root) |
+| Build command | `npm run build` |
+| Build output directory | `public` |
+| Production branch | `main` |
+| Environment variables | **None required for browser mode** |
+| Administrator password | **Not used in browser mode** |
+
+**After that, every push to `main` redeploys Pages automatically.** Your current `pages.dev` URL remains the entry point. You should not need to switch to a separate `workers.dev` site to use the browser workspace.
+
+For Git-connected Pages, the `functions/` directory at the repository root is compiled and deployed by Cloudflare automatically. It contains `functions/api/[[path]].js` for JSON API diagnostics and bounded, free public HTTP checks. The `public/_routes.json` file routes only `/api/*` through Functions. A separate `worker.wrangler.jsonc` remains available for an optional, separately deployed Worker, but is **not** interpreted as a Pages config.
+
+## What works immediately, with no manual Cloudflare setup
+
+- All 11 dashboard sections open, even if Cloudflare `/api/setup` still returns an HTML page from an old cached deployment.
+- Ten portfolio sites and existing configured resource URLs are available as static reference data.
+- Browser IndexedDB saves prospects, manual status holds, notes, suppressions, site HTTP observations, and task **plans** across reloads on **the same device and browser profile**.
+- Add publishers, find/filter them, place them on hold, manage suppressions.
+- Import validated prospects or suppression lists from CSV. CSV prospects are deliberately downgraded to **research pending**: a user's spreadsheet is not proof that a backlink or publisher has been verified.
+- Export six CSV datasets; back up or restore the entire on-device workspace as a JSON file.
+- The Pages Function can check HTTP status for a small, fixed allowlist of owned asset URLs. This does not make DataForSEO calls. If the site was uploaded as static files without the Functions layer, the UI still works but reports that live HTTP checks are unavailable.
+- Shows no invented contacts, sends, earned backlinks, spend, activity or results.
+- The client checks API response Content-Type before JSON parsing; it never attempts to parse a `<!doctype>` response as JSON.
+
+### Limits of a no-setup Pages deployment
+
+**Local browser records are not stored on a shared Cloudflare database.** They are only on the device used. Clearing browser site data or changing browsers can remove access to the local workspace, so use the built-in backup/export button. The publicly deployed HTML/JS source is not access-controlled; private local workspace contents are never uploaded as public assets or committed to GitHub. For confidential datasets on a shared backend, configure real access control.
+
+**Pages alone does not run unattended Cron Triggers or safely authenticate to a paid DataForSEO/Gmail account.** The browser UI therefore never claims saved task plans were executed, and it never sends emails or makes paid DataForSEO calls. The absence of a cloud Worker is disclosed in the UI. If you need 24/7 autonomous checks, durable cross-device D1 state and provider integrations, provision a secure Worker/D1 backend through the separate optional command below or attach an already-provisioned D1/Access connection to Pages. These services require one-time Cloudflare account authorization; source files alone cannot create them securely.
+
+## Optional: a private Cloudflare Worker for unattended tasks and central records
+
+This does not affect the Pages-first deployment. From an authorized workstation with Node.js 22+:
+
+```powershell
+npm install
 npm run deploy
 ```
 
-The final command takes care of the rest: installs the official Wrangler CLI if needed, opens Cloudflare sign-in if needed, provisions and binds **D1** (binding `DB`), uploads static assets and the API, registers the hourly Cron Trigger, creates two random **Worker Secrets**, and prints your **workers.dev URL and private sign-in code**. Use that URL, **not the old Pages URL**.
+The optional deployment uses `worker.wrangler.jsonc`, generates a private operator access code locally, provisions D1 through Wrangler where supported, and installs an hourly Worker. Keep the locally generated `.linkforge/` credentials out of GitHub, backups intended for public sharing, and chat messages. **This optional Worker has its own `workers.dev` URL; it does not silently synchronize with a separate Pages browser workspace.** To move data, use the browser backup/export functions and a separate authenticated ingestion workflow after verification. Do not assume two copies of the dashboard share state just because they are in Cloudflare.
 
-You do **not** need to create D1, set up Zero Trust, paste three Access identifiers, configure a Pages Function, set environment variables, or choose an administrator password. A secure randomly generated sign-in code replaces those manual steps. It is stored locally at `.linkforge/operator-credentials.json` (gitignored, protected file permissions) so repeat deployments reuse it; **never share or commit it**.
+### DataForSEO hard safety gates
 
-Cloudflare's Wrangler automatic D1 provisioning requires Wrangler >=4.45.0. The project uses `wrangler ^4.149.0`. `wrangler.jsonc` declares the DB binding without a hard-coded account-specific ID. [Cloudflare resource provisioning](https://developers.cloudflare.com/changelog/post/2025-10-24-automatic-resource-provisioning/).
+The optional Worker starts with paid DataForSEO disabled and outgoing Gmail disabled. Code ceilings remain $0.06/request, $0.12/day, $1/month, 3 paid calls/day and 2/site/day, with no automatic retry after an uncertain charge. These ceilings only limit LinkForge's own worker, not other applications using the same DataForSEO account. Rotate any API credential previously uploaded into a conversation before storing it as a Cloudflare Worker secret.
 
-**Already deployed with the old Cloudflare Pages project?** Leave it for now. The new single Worker will have its own `*.workers.dev` URL. You can delete the obsolete Pages project after you verify this new app; do not delete any live D1 databases in the meantime. The new D1 database starts empty and does not silently import data from previous Sheets or Workers.
+## Verify the correct Pages deployment
 
-## Architecture
+1. On your Pages site, open `/api/setup`: it should return JSON with `"mode":"browser_workspace"` if the Git-connected Function has deployed and no secure D1 backend is attached.
+2. Open the root site: the dashboard should load and show **Ready on Cloudflare Pages · On this device**, not a deployment-needed screen.
+3. Add a publisher and refresh: IndexedDB must preserve it in the same browser.
+4. Open Portfolio sites and check one site: results are labeled HTTP observations, not verified SEO outcomes.
+5. Export a JSON backup and confirm records remain local.
 
-- `src/index.js`: one Worker HTTP + scheduled entry point. Serves `public/` static UI, API, and Cron Trigger.
-- `src/scheduler.js`: bounded hourly source checks and evidence-oriented research; dormant paid API calls until explicitly enabled.
-- `functions/_lib/api.js`: authenticated management API, D1 query, CSV export and operator controls.
-- `functions/_lib/operator-auth.js`: stateless signed Secure+HttpOnly session cookies and CSRF; login attempt throttling in D1.
-- `functions/_lib/db.js`: D1 schema, operation queue, cost ledger, suppression and worker heartbeat.
-- `wrangler.jsonc`: **single deployment config**, auto-provisioned `DB`, static assets and hourly Cron Trigger.
-- `scripts/deploy-one-cloudflare.mjs`: **one command**. Never uploads DataForSEO credentials, Gmail OAuth tokens or private contacts.
+Even if the Functions route is absent temporarily, the root dashboard detects the HTML fallback safely and enters local mode.
 
-## Important operating safeguards
-
-- **DataForSEO paid calls start OFF.** Additional Worker secret `DATAFORSEO_BASIC_AUTH` is optional; credentials uploaded to previous chats should be rotated before configuring production. Never add secrets to public GitHub.
-- Hard budget caps are **$0.06/request, $0.12/day, $1/month**, with a request/row limit, cache, no automatic retry after uncertain charges, and separate operator pause. The app does **not** control spending by other scripts sharing the same DataForSEO account.
-- Email sending is **not implemented** in the Cloudflare Worker without separate Gmail OAuth/deliverability authorization; outbound messaging remains paused. This single deployment enables the dashboard and free autonomous site checks, **not an independently verified live Gmail campaign**.
-- Zero fabricated backlinks, traffic, publisher replies or placements. Empty D1 data remains empty; existing Google Sheets campaign history must be explicitly imported with authenticated authorization.
-- Source code is intentionally public, but **operator code, sessions, private records and all provider credentials** are kept out of the repository. UI requests are same-origin; management endpoints require the signed session and CSRF confirmation.
-- GitHub Actions runs tests **only**. It does not have permission to modify your Cloudflare account. To publish code updates, rerun `npm run deploy` or connect this Worker to GitHub using Cloudflare Workers Builds after the initial setup.
-
-## Run tests (no Cloudflare API calls and no billable activity)
+## Development and tests
 
 ```bash
 npm test
 npm run build
 ```
 
-For deployment troubleshooting: [DEPLOYMENT.md](DEPLOYMENT.md). For safety controls: [SECURITY.md](SECURITY.md). The former Cloudflare Pages architecture can be viewed in this repo's Git history but is no longer the active deploy target.
+Tests include Pages route JSON shape, legacy HTML fallback compatibility assertions, secure operator auth on the optional Worker, cost/sending gates, no-fabrication rules, prospect import and de-duplication, safe task planning, and CSV handling. Browser QA may need an environment where Chromium can open local development URLs.
+
+See `DEPLOYMENT.md`, `SECURITY.md`, and `OPERATIONS.md` for operating details. The public repository contains no DataForSEO credentials or private outreach records.

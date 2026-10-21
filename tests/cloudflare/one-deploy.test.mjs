@@ -74,7 +74,7 @@ test('brute-force guard is durable in D1, after six failures next attempt is blo
 });
 
 test('Cloudflare config auto-provisions one D1 and deploys static site, API and cron in one Worker',()=>{
-  const json=JSON.parse(readFileSync(join(root,'wrangler.jsonc'),'utf8'));
+  const json=JSON.parse(readFileSync(join(root,'worker.wrangler.jsonc'),'utf8'));
   assert.equal(json.main,'src/index.js');assert.equal(json.d1_databases.length,1);
   assert.equal(json.d1_databases[0].binding,'DB');assert.equal(json.d1_databases[0].database_name,'linkforge-db');
   assert.equal('database_id' in json.d1_databases[0],false);
@@ -87,7 +87,7 @@ test('Cloudflare config auto-provisions one D1 and deploys static site, API and 
 test('single deployment script generates safe secrets once, reuses them, never checks secrets into git',()=>{
   const dir=mkdtempSync(join(tmpdir(),'linkforge-deploy-test-'));
   try{
-    writeFileSync(join(dir,'wrangler.jsonc'),'{}');
+    writeFileSync(join(dir,'worker.wrangler.jsonc'),'{}');
     const wrangler=join(dir,'fake-wrangler.mjs');
     const events=join(dir,'calls.log');
     writeFileSync(wrangler,`import{writeFileSync,readFileSync}from'node:fs';\nconst cmd=process.argv[2];\nif(cmd==='deploy'){const ix=process.argv.indexOf('--secrets-file');if(ix<0)process.exit(4);const s=JSON.parse(readFileSync(process.argv[ix+1],'utf8'));if(s.LINKFORGE_ADMIN_KEY.length<32||s.LINKFORGE_SESSION_SECRET.length<40)process.exit(5);}\nwriteFileSync(process.env.MOCK_CALLS_FILE,cmd+'\\n',{flag:'a'});if(cmd==='deploy')console.log('https://linkforge-command-center.owner.workers.dev');\n`);

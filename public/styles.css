@@ -73,3 +73,23 @@
 .login-code-row input:focus{outline:2px solid #93bf69;outline-offset:2px}
 .operator-login button.primary{min-height:43px}
 @media(max-width:520px){.operator-login{padding:14px}.single-label{font-size:9px}.login-code-row .secondary{padding:10px}}
+
+/* Cloudflare Pages v5: a usable, candid, local-first workspace. */
+.browser-banner{display:flex;align-items:center;justify-content:space-between;gap:18px;background:#e9f2e9;border:1px solid #c5dfc7;border-radius:15px;padding:18px 21px;margin-bottom:20px;color:#263e31}
+.browser-banner strong{font:800 14px Manrope,sans-serif;color:#22432a;display:block;margin:4px 0}
+.browser-banner p{font:500 11.5px/1.65 'DM Sans',sans-serif;color:#53665a;margin:0;max-width:825px}
+.browser-banner p b{font-weight:800;color:#245831}
+.browser-eyebrow{font:800 9.5px Manrope,sans-serif;letter-spacing:1.1px;color:#457645;display:flex;align-items:center;gap:8px}
+.browser-eyebrow .pulse-indicator{background:#619f52}
+.browser-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.browser-actions button{white-space:nowrap;font-size:11px;border-color:#acc6aa;background:#fff;color:#38533d}
+.add-prospect{background:#fff;border-radius:15px;border:1px solid #e3e9ed;padding:19px 22px;margin-bottom:17px;box-shadow:0 12px 28px rgba(28,38,50,.04)}
+.add-prospect.hidden{display:none}
+.add-prospect small{color:#7b8996;font-size:10px;line-height:1.6}
+.local-form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.7fr) auto;align-items:end;gap:12px;margin-bottom:11px}
+.local-form>div{display:grid;gap:7px;min-width:0}
+.local-form label{font-size:10.5px;color:#566879;font-weight:750}
+.local-form input,.local-form select{width:100%;min-width:0;min-height:39px;padding:10px;border:1px solid #dbe4e9;border-radius:8px;color:#263745;background:#fff;font-size:11px}
+.local-form button{min-height:39px;white-space:nowrap;font-size:11px}
+@media(max-width:950px){.browser-banner{flex-wrap:wrap}.browser-actions{width:100%}.local-form{grid-template-columns:repeat(2,minmax(0,1fr))}.local-form>div:nth-child(3){grid-column:span 2}}
+@media(max-width:640px){.browser-banner{padding:16px;gap:10px;margin-bottom:14px}.browser-actions{flex-wrap:wrap}.browser-actions button{flex:1}.local-form{grid-template-columns:1fr}.local-form>div:nth-child(3){grid-column:auto}.local-form button{width:100%}}

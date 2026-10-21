@@ -1,14 +1,15 @@
 {
-  "name": "linkforge-one-cloudflare-worker",
-  "version": "4.0.0",
+  "name": "linkforge-cloudflare-pages-ready",
+  "version": "5.0.0",
   "type": "module",
   "private": true,
-  "description": "Single Cloudflare Worker: static dashboard, private API, auto-provisioned D1 and scheduled outreach research",
+  "description": "Cloudflare Pages dashboard works immediately with browser IndexedDB, with optional Cloudflare Worker automation",
   "scripts": {
-    "build": "node --check src/index.js && node --check public/app.js && node --check functions/_lib/api.js && node --check functions/_lib/operator-auth.js && node --check src/scheduler.js",
+    "build": "node scripts/build-pages.mjs && node --check public/app.js && node --check public/browser-store.js && node --check src/index.js && node --check functions/api/[[path]].js",
     "test": "node --test tests/cloudflare/*.test.mjs",
     "deploy": "node scripts/deploy-one-cloudflare.mjs",
-    "deploy:one": "node scripts/deploy-one-cloudflare.mjs"
+    "deploy:one": "node scripts/deploy-one-cloudflare.mjs",
+    "build:pages": "npm run build"
   },
   "engines": {
     "node": ">=22"
