@@ -66,27 +66,54 @@ async function viewLearning(){
 }
 async function setView(view){if(!titles[view])return;state.view=view;state.page=1;document.querySelectorAll('[data-view]').forEach(a=>{if(a.classList.contains('nav-link'))a.classList.toggle('active',a.dataset.view===view)});el('current-crumb').textContent=titles[view][0];el('sidebar').classList.remove('open');window.history.replaceState(null,'','#'+view);await load()}
 async function load(){let main=el('main');main.innerHTML=intro(state.view)+`<div class="loading-block">Loading verified database records…</div>`;try{let html;switch(state.view){case'overview':state.overview=await api('overview');html=renderOverview(state.overview);el('nav-prospects').textContent=state.overview.counts.prospects;if(el('engine-indicator'))el('engine-indicator').innerHTML=`<span class="${state.overview.worker_status==='Scheduled Worker recently active'?'green-lamp':'red-lamp'}"></span> ${state.overview.worker_status==='Scheduled Worker recently active'?'WORKER ONLINE':'WORKER OFFLINE'}`;break;case'operations':html=await viewOperations();break;case'learning':html=await viewLearning();break;case'prospects':html=await viewProspects();break;case'outreach':html=await viewOutreach();break;case'placements':html=await viewPlacements();break;case'submissions':html=await viewSubmissions();break;case'spend':if(!state.overview)state.overview=await api('overview');html=await viewSpend();break;case'sites':html=await viewSites();break;case'activity':html=await viewActivity();break;case'suppression':html=await viewSuppression();break;default:html=renderOverview(await api('overview'))}main.innerHTML=html;el('footer-sync').textContent='Last loaded · '+niceTime(new Date().toISOString());}catch(e){main.innerHTML=intro(state.view)+`<div class="alert-warning">Unable to load live records: ${escapeHTML(e.message)}</div>`;toast(e.message,true)}}
-function showSetup(title,message){
+function showSetup(title,message,config=null,problem=''){
   el('shell').classList.add('hidden');el('auth-screen').classList.remove('hidden');
   el('setup-title').textContent=title;
   el('setup-message').textContent=message;
-  el('backend-state').textContent='No administrator password needed. Cloudflare Access provides private sign-in.';
+  const db=Boolean(config?.database_bound);
+  const access=Boolean(config?.cloudflare_access_configured);
+  for(const [part,ok] of [['db',db],['access',access]]){
+    const label=el(`setup-${part}-status`),step=el(`setup-step-${part}`);
+    label.textContent=ok?'Settings found':'Action needed';
+    label.className='setup-pill '+(ok?'setup-good':'setup-missing');
+    step.classList.toggle('setup-done',ok);
+  }
+  const vars=config?.access_settings||{};
+  for(const [key,exists] of Object.entries({team_domain_present:vars.team_domain_present,audience_tag_present:vars.audience_tag_present,admin_email_present:vars.admin_email_present})){
+    const field=document.querySelector(`[data-setup-var="${key}"]`);
+    if(field){field.textContent=exists?'✓ Added':'Not set';field.className=exists?'setup-var-ok':'setup-var-missing';}
+  }
+  const count=Number(db)+Number(access);
+  el('setup-progress').textContent=config?`${count} of 2 configuration checks completed`:'Unable to check live configuration';
+  el('backend-state').textContent=problem||(
+    count===2?'The settings are present. Sign in through Cloudflare Access on your production site to verify identity.':
+    'Save the missing settings in Cloudflare, redeploy your Pages project, then select Recheck connection.');
 }
 async function start(){
+  const retry=el('setup-retry');retry.disabled=true;
   try{
-    const status=await fetch('/api/setup',{cache:'no-store'}).then(r=>r.json());
+    const res=await fetch('/api/setup',{cache:'no-store',credentials:'same-origin'});
+    if(!res.ok)throw Error('The Pages API is unavailable. Verify that Pages Functions were deployed from GitHub.');
+    const status=await res.json();
+    if(typeof status.database_bound!=='boolean'||typeof status.cloudflare_access_configured!=='boolean')throw Error('The Pages API returned an unrecognized setup response.');
     if(!status.cloudflare_access_configured||!status.database_bound){
-      const missing=[!status.database_bound?'Create and bind Cloudflare D1 as DB':null,!status.cloudflare_access_configured?'Enable Cloudflare Access email sign-in':null].filter(Boolean);
-      showSetup('Almost there — just Cloudflare.',missing.join(' · ')+'. No VPS or separate administrator password.');return;
+      showSetup('Finish the Cloudflare connection','Only the settings marked Action needed are still missing. No administrator password is required.',status);return;
     }
-    const s=await api('session');state.csrf=s.csrf;
-    el('auth-screen').classList.add('hidden');el('shell').classList.remove('hidden');
-    state.view=titles[location.hash.slice(1)]?location.hash.slice(1):'overview';
-    document.querySelectorAll('.nav-link').forEach(a=>a.classList.toggle('active',a.dataset.view===state.view));
-    el('current-crumb').textContent=titles[state.view][0];await load();
+    try{
+      const s=await api('session');state.csrf=s.csrf;
+      el('auth-screen').classList.add('hidden');el('shell').classList.remove('hidden');
+      state.view=titles[location.hash.slice(1)]?location.hash.slice(1):'overview';
+      document.querySelectorAll('.nav-link').forEach(a=>a.classList.toggle('active',a.dataset.view===state.view));
+      el('current-crumb').textContent=titles[state.view][0];await load();
+    }catch(err){
+      let msg='The app settings are present, but Cloudflare Access has not authenticated your browser. Protect the production Pages hostname, sign in with the allowed email, and retry.';
+      if(/not authorized|403/i.test(err.message))msg='Cloudflare Access signed you in, but the account email does not match ADMIN_EMAIL. Check the allowed address and your Access policy.';
+      else if(/D1|database|503/i.test(err.message))msg='Cloudflare Access was reached, but D1 could not initialize. Check the DB binding in Production and redeploy.';
+      showSetup('Complete private sign-in','Configuration values are present. Your identity or database is not yet fully verified.',status,msg);
+    }
   }catch(err){
-    showSetup('Connect with Cloudflare Access.','No administrator password is required. Check your Cloudflare Access policy and D1 binding, then retry.');
-  }
+    showSetup('Cloudflare connection unavailable','The app could not check its Cloudflare Pages API. Confirm that Pages Functions are deployed and retry.',null,String(err.message).slice(0,300));
+  }finally{retry.disabled=false;}
 }
 
 let searchDebounce;

@@ -26,9 +26,16 @@ export async function handleApi(request,env) {
   if(!url.pathname.startsWith('/api/')&&url.pathname!=='/api')return error('Not found',404);
   if(request.method==='GET'&&path==='setup')return json({
     mode:env?.DB && accessReady(env)?'configured':'setup_required',
-    database_bound:!!env?.DB,cloudflare_access_configured:accessReady(env),
+    database_bound:!!env?.DB,
+    cloudflare_access_configured:accessReady(env),
+    access_settings:{
+      team_domain_present:!!env?.CF_ACCESS_TEAM_DOMAIN,
+      audience_tag_present:!!env?.CF_ACCESS_AUD,
+      admin_email_present:!!env?.ADMIN_EMAIL,
+    },
+    access_policy_verified:false, // Cannot check an Access policy from public setup flags.
     no_admin_password:true,
-    message:env?.DB && accessReady(env)?'Cloudflare services configured. Sign in through Cloudflare Access.':'Connect a Cloudflare D1 database and Cloudflare Access. No VPS or administrator password is needed.',
+    message:env?.DB && accessReady(env)?'Settings are present. Cloudflare Access identity is verified only at /api/session.':'One-time Cloudflare D1 binding and Access configuration required.',
   });
   if(request.method==='POST'&&path==='login')return error('No administrator password is used. Sign in through Cloudflare Access.',410);
   if(request.method==='GET'&&path==='logout')return Response.redirect('/cdn-cgi/access/logout',302);

@@ -29,3 +29,35 @@
 .setup-link{display:flex;align-items:center;justify-content:center;text-decoration:none;min-height:44px}
 .setup-actions .full{width:100%}
 #setup-message{line-height:1.65}
+
+/* Two-step Cloudflare first-run wizard. All statuses are driven by /api/setup. */
+.auth-screen{padding:28px 16px;overflow:auto;align-items:center}
+.setup-box{width:min(710px,100%);padding:35px clamp(20px,4vw,42px);box-shadow:0 25px 110px #070c1270}
+.setup-brand{display:flex;align-items:center;gap:13px;margin-bottom:19px;font-weight:800;font-size:10px;letter-spacing:1.8px;color:#617084}
+.setup-brand .logo-mark.large{width:38px;height:38px;font-size:26px;margin:0}
+.setup-box h1{font:800 clamp(23px,3.5vw,33px)/1.25 Manrope,sans-serif;letter-spacing:-1px;margin:0 0 5px}
+.setup-box #setup-message{margin:0 0 16px;color:#677482;line-height:1.55;font-size:12px}
+.setup-progress{background:#f3f6f2;color:#4b6454;border-radius:7px;padding:10px 12px;margin-bottom:12px;font-size:11px;font-weight:750}
+.setup-checklist{display:grid;gap:11px}
+.setup-step{border:1px solid #e6ebf0;background:#fff;border-radius:12px;padding:18px}
+.setup-step.setup-done{border-color:#cee6b2;background:#fafdf7}
+.setup-step-top{display:flex;gap:11px;align-items:center;margin-bottom:9px}
+.step-number{background:#f2f6f9;color:#66778a;font-size:11px;font-weight:800;width:28px;height:28px;flex:0 0 28px;border-radius:8px;display:grid;place-items:center}
+.setup-step-top h2{font:800 14px Manrope,sans-serif;letter-spacing:-.3px;margin:0;flex:1}
+.setup-pill{font-size:10px;font-weight:800;border-radius:99px;padding:5px 9px;white-space:nowrap}
+.setup-good{color:#3b6a40;background:#e4f5d8}.setup-missing{color:#7c581f;background:#fbf0dc}
+.setup-step p{font-size:11px;color:#5f6b79;line-height:1.6;margin:0 0 11px}
+.setup-step a{font-size:11px;color:#45653d;font-weight:800}
+.setup-step code{font-size:10px;background:#edf0f4;color:#25313b;padding:2px 5px;border-radius:4px}
+.setup-varlist{display:grid;gap:4px;padding:9px;border:1px solid #edf0f3;border-radius:8px;margin:9px 0}
+.setup-varlist>div{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:10px}
+.setup-varlist code{font-size:10px;overflow-wrap:anywhere}
+.setup-var-ok{color:#396b35;font-weight:800}.setup-var-missing{color:#925e22;font-weight:700}
+.setup-details{margin-top:13px;font-size:11px;line-height:1.6;color:#667481}
+.setup-details summary{cursor:pointer;color:#516577;font-weight:700}
+.setup-details p{margin:8px 0 0}
+.setup-box .backend-state{text-align:left;padding:10px 12px;margin-top:12px;border-top:0;border-left:3px solid #91ae72;background:#f7f9f7;border-radius:5px}
+.setup-box .setup-actions{margin:15px 0 0;gap:10px}
+.setup-guide-link{text-align:center;font-size:11px;font-weight:700;color:#536478}
+.setup-box small{margin-top:15px;line-height:1.5}
+@media(max-width:580px){.auth-screen{align-items:start;padding:10px}.setup-box{border-radius:13px;padding:25px 17px}.setup-step{padding:13px}.setup-step-top{gap:7px}.setup-step-top h2{font-size:12px}.setup-pill{font-size:9px;padding:4px 7px}.setup-varlist>div{flex-wrap:wrap}}

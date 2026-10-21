@@ -44,7 +44,7 @@ The private Worker has separate optional `DATAFORSEO_BASIC_AUTH` secret (the Bas
 - Pages Functions: `functions/api/[[path]].js` and `functions/_lib/*`
 - **No root `wrangler.toml` committed**, so Cloudflare dashboard bindings remain authoritative. Avoid adding it without a real D1 binding ID.
 
-If Pages says the backend is unavailable, `/api/setup` reports whether Access variables and D1 are present, without exposing private records. You can refresh the setup page after fixing a binding. Password login is removed; Access handles it.
+If Pages shows the setup screen, the **live two-step wizard** identifies missing D1 and Access configuration and identifies which of the three Access variables are still unset. `/api/setup` returns safe booleans only and never reveals secrets or email values. Configure the production Access **policy** separately: three present variables alone do not prove that private sign-in is active. Password login has been removed; Access handles it.
 
 ## Application sections
 
