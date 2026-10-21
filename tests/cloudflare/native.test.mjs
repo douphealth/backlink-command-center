@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
 import {webcrypto} from 'node:crypto';
 import {handleApi} from '../../functions/_lib/api.js';
-import {runTick, researchGap} from '../../workers/scheduler/src/index.js';
+import {runTick, researchGap} from '../../src/scheduler.js';
 import {ensureDb,run,first,flags,query} from '../../functions/_lib/db.js';
 
 if(!globalThis.crypto)globalThis.crypto=webcrypto;
@@ -35,7 +35,7 @@ test.before(async()=>{await setupIdentity();globalThis.fetch=async (input,init)=
 test.after(()=>{globalThis.fetch=orig});
 
 test('No password on the frontend; setup endpoint reveals config status without data',async()=>{
-  const r=await handleApi(request('/api/setup'),{});assert.equal(r.status,200);const d=await r.json();assert.equal(d.no_admin_password,true);assert.equal(d.mode,'setup_required');
+  const r=await handleApi(request('/api/setup'),{});assert.equal(r.status,200);const d=await r.json();assert.equal(d.no_manual_cloudflare_setup,true);assert.equal(d.mode,'setup_required');
 });
 test('Dashboard API denies access without valid Cloudflare identity and refuses missing config',async()=>{
   let r=await handleApi(request('/api/overview'),env());assert.equal(r.status,503);

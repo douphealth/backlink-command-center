@@ -1,3 +1,4 @@
+import {operatorReady,authenticateCode,clearOperatorCookie} from './operator-auth.js';
 import {ACTIONS,SPENDING,CONTROL_DEFAULTS,ensureDb,query,first,run,count,flags,log,workerSummary,NOW,csvSafe,isDomain} from './db.js';
 import {SITES} from './sites.js';
 import {accessReady,verifyAccess,checkCsrf} from './auth.js';
@@ -25,19 +26,20 @@ export async function handleApi(request,env) {
   const url=new URL(request.url),path=url.pathname.replace(/^\/api\/?/,'');
   if(!url.pathname.startsWith('/api/')&&url.pathname!=='/api')return error('Not found',404);
   if(request.method==='GET'&&path==='setup')return json({
-    mode:env?.DB && accessReady(env)?'configured':'setup_required',
+    mode:env?.DB && (operatorReady(env)||accessReady(env))?'configured':'setup_required',
     database_bound:!!env?.DB,
+    admin_login_ready:operatorReady(env),
+    auth_ready:operatorReady(env)||accessReady(env),
     cloudflare_access_configured:accessReady(env),
-    access_settings:{
-      team_domain_present:!!env?.CF_ACCESS_TEAM_DOMAIN,
-      audience_tag_present:!!env?.CF_ACCESS_AUD,
-      admin_email_present:!!env?.ADMIN_EMAIL,
-    },
-    access_policy_verified:false, // Cannot check an Access policy from public setup flags.
-    no_admin_password:true,
-    message:env?.DB && accessReady(env)?'Settings are present. Cloudflare Access identity is verified only at /api/session.':'One-time Cloudflare D1 binding and Access configuration required.',
+    login_method:operatorReady(env)?'deployment_code':accessReady(env)?'cloudflare_access':'not_provisioned',
+    no_manual_cloudflare_setup:true,
+    message:env?.DB && operatorReady(env)?'One Cloudflare Worker is ready. Sign in using the automatically generated access code.':'Deploy the unified Cloudflare Worker to connect dashboard, database and scheduled tasks.',
   });
-  if(request.method==='POST'&&path==='login')return error('No administrator password is used. Sign in through Cloudflare Access.',410);
+  if(request.method==='POST'&&path==='login'){
+    if(!operatorReady(env))return error('Use Cloudflare Access or deploy the unified Worker to enable code sign-in',410);
+    if(!env?.DB)return error('Database is not connected',503);
+    try {await ensureDb(env.DB);return await authenticateCode(request,env,env.DB);}catch{return error('Authentication database unavailable',503);}
+  }
   if(request.method==='GET'&&path==='logout')return Response.redirect('/cdn-cgi/access/logout',302);
   const identity=await verifyAccess(request,env);
   if(!identity.ok)return error(identity.error,identity.status);
@@ -47,7 +49,8 @@ export async function handleApi(request,env) {
   try{await ensureDb(db);}catch{return error('Cloudflare D1 could not initialize. Check the DB binding.',503);}
   const now=NOW();const day=now.slice(0,10),month=now.slice(0,7);
   try{
-    if(request.method==='GET'&&path==='session')return json({authenticated:true,csrf:identity.csrf,identity:identity.email,provider:'Cloudflare Access'});
+    if(request.method==='GET'&&path==='session')return json({authenticated:true,csrf:identity.csrf,identity:identity.email,provider:identity.provider||'Cloudflare Access'});
+    if(request.method==='POST'&&path==='logout'&&operatorReady(env))return new Response(JSON.stringify({ok:true}),{headers:{'Content-Type':'application/json','Set-Cookie':clearOperatorCookie(),'Cache-Control':'no-store'}});
     if(request.method==='POST'&&path==='logout')return json({ok:true,logout_url:'/cdn-cgi/access/logout'});
     if(request.method==='GET'&&path==='overview'){
       const [prospects,qualified,drafts,sent,links,pending,ledger,events,alerts,by_state,by_site,ws,daily]=await Promise.all([
@@ -180,6 +183,6 @@ export async function handleApi(request,env) {
   }catch(e){
     // Avoid returning SQL, configuration, external provider details or secrets to browsers.
     console.error('LinkForge API internal error',e?.name||'Error');
-    return error('Unable to load verified records. Check Cloudflare Function logs and D1 binding.',500);
+    return error('Unable to load verified records. Check the unified Cloudflare Worker logs and D1 binding.',500);
   }
 }

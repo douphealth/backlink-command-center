@@ -1,62 +1,49 @@
-# LinkForge — Cloudflare-only Backlink Command Center
+# LINKFORGE — One Cloudflare deployment
 
-A private dashboard for your ten websites. **No RackNerd, Docker, Python host, or administrator password is needed to run the current dashboard.** Cloudflare Pages Functions handle the API, Cloudflare D1 holds verified records and controls, Cloudflare Access provides email-based sign-in, and one Cloudflare Worker runs scheduled jobs.
+One Cloudflare **Worker** serves the premium dashboard, private JSON API, automatically provisioned D1 database, and hourly research scheduler. No VPS, Docker, Cloudflare Pages bindings, separate scheduler deployment, manual D1 creation, or Cloudflare Access app is required.
 
-> Production safety: the public GitHub repository contains **code only**. DataForSEO credentials, Gmail credentials and actual campaign contacts are never committed. The initial D1 database is empty and truthful. **Autonomous Gmail outreach is NOT connected until a separate OAuth authorization and deliverability checks are completed.** No unverified backlinks or costs are displayed.
+## ONE-COMMAND DEPLOYMENT
 
-## Do this once in Cloudflare
+**Windows 11 / PowerShell or macOS / Linux** (requires Node.js 22+ and a Cloudflare account):
 
-Your Pages site already deploys from `douphealth/backlink-command-center`. A push to `main` updates the interface automatically.
+```bash
+git clone https://github.com/douphealth/backlink-command-center.git
+cd backlink-command-center
+npm run deploy
+```
 
-**1. Create a Cloudflare D1 database named `linkforge-db`.** Open Cloudflare Dashboard → Workers & Pages → D1 SQL Databases → Create. Open your existing Pages project → Settings → Bindings → Add → D1 database → Variable name **`DB`** → select `linkforge-db`. Deploy again after saving. The API initializes its tables on first authenticated request.
+The final command takes care of the rest: installs the official Wrangler CLI if needed, opens Cloudflare sign-in if needed, provisions and binds **D1** (binding `DB`), uploads static assets and the API, registers the hourly Cron Trigger, creates two random **Worker Secrets**, and prints your **workers.dev URL and private sign-in code**. Use that URL, **not the old Pages URL**.
 
-**2. Enable Cloudflare Access** for your Pages project (Settings → Enable access policy), allow only your own email address, and use the One-time PIN email login. In Pages → Settings → Variables and Secrets, set three **plain-text** variables:
+You do **not** need to create D1, set up Zero Trust, paste three Access identifiers, configure a Pages Function, set environment variables, or choose an administrator password. A secure randomly generated sign-in code replaces those manual steps. It is stored locally at `.linkforge/operator-credentials.json` (gitignored, protected file permissions) so repeat deployments reuse it; **never share or commit it**.
 
-| Variable | Value |
-|---|---|
-| `CF_ACCESS_TEAM_DOMAIN` | `<your-team>.cloudflareaccess.com` from Zero Trust |
-| `CF_ACCESS_AUD` | your Access application AUD tag (from Access app settings) |
-| `ADMIN_EMAIL` | your email address allowed into the dashboard |
+Cloudflare's Wrangler automatic D1 provisioning requires Wrangler >=4.45.0. The project uses `wrangler ^4.149.0`. `wrangler.jsonc` declares the DB binding without a hard-coded account-specific ID. [Cloudflare resource provisioning](https://developers.cloudflare.com/changelog/post/2025-10-24-automatic-resource-provisioning/).
 
-These are non-secret identifiers. Configure them for production and any intentionally accessible preview separately; preview sites must also have an Access policy. **There is no `DASHBOARD_ADMIN_PASSWORD` in the Cloudflare-only app.** No DataForSEO secret is added to Pages.
+**Already deployed with the old Cloudflare Pages project?** Leave it for now. The new single Worker will have its own `*.workers.dev` URL. You can delete the obsolete Pages project after you verify this new app; do not delete any live D1 databases in the meantime. The new D1 database starts empty and does not silently import data from previous Sheets or Workers.
 
-**3. For scheduled background checks**, deploy the included Worker once. Copy `workers/scheduler/wrangler.example.toml` to `workers/scheduler/wrangler.toml`, replace the D1 database ID with the actual ID from Cloudflare, then run `npm exec -- wrangler login` and `sh scripts/deploy-cloudflare-worker.sh` (Windows: `scripts/deploy-cloudflare-worker.ps1`). The Worker runs hourly and only performs automatic research/audits on its bounded cadence. The dashboard immediately shows whether the Worker has really run.
+## Architecture
 
-The private Worker has separate optional `DATAFORSEO_BASIC_AUTH` secret (the Base64 `login:password` credential from DataForSEO). Add with `npx wrangler secret put DATAFORSEO_BASIC_AUTH --config workers/scheduler/wrangler.toml` **only after rotating credentials that were ever uploaded to a chat**. Paid requests remain disabled even with a secret until both the Worker variable `DATAFORSEO_PAID_ENABLED=YES` and authenticated dashboard control `dataforseo_paused=false` are set. Configure the first test carefully. Gmail is disabled pending OAuth setup; research and link verification can run without Gmail.
+- `src/index.js`: one Worker HTTP + scheduled entry point. Serves `public/` static UI, API, and Cron Trigger.
+- `src/scheduler.js`: bounded hourly source checks and evidence-oriented research; dormant paid API calls until explicitly enabled.
+- `functions/_lib/api.js`: authenticated management API, D1 query, CSV export and operator controls.
+- `functions/_lib/operator-auth.js`: stateless signed Secure+HttpOnly session cookies and CSRF; login attempt throttling in D1.
+- `functions/_lib/db.js`: D1 schema, operation queue, cost ledger, suppression and worker heartbeat.
+- `wrangler.jsonc`: **single deployment config**, auto-provisioned `DB`, static assets and hourly Cron Trigger.
+- `scripts/deploy-one-cloudflare.mjs`: **one command**. Never uploads DataForSEO credentials, Gmail OAuth tokens or private contacts.
 
-## Safety and DataForSEO budgets
+## Important operating safeguards
 
-- Maximum reserved charge **$0.06 per API call, $0.12 per day, $1.00 per month** inside the Worker; maximum 3 paid calls/day, 2/site/day, 25 rows/request.
-- Free account/rate endpoint is checked before every paid lookup. No fallback price assumptions, and each request is tracked in D1 before sending.
-- Uncertain network responses, unexpected rate changes and unexplained provider account balance changes **stop** further paid calls. The Worker never retries a possibly billed operation automatically.
-- The dashboard itself cannot request the DataForSEO paid API. Account-wide spend by other scripts is not controlled by this application's local budgets.
-- Outreach email sending is not auto-enabled. Imported historical suppression and independently authorized Gmail OAuth are prerequisites for any sender.
-- Cloudflare Workers Cron Triggers, unlike Pages Functions alone, can run recurring jobs. The Worker is part of the same Cloudflare platform and shares D1. There is no VPS.
+- **DataForSEO paid calls start OFF.** Additional Worker secret `DATAFORSEO_BASIC_AUTH` is optional; credentials uploaded to previous chats should be rotated before configuring production. Never add secrets to public GitHub.
+- Hard budget caps are **$0.06/request, $0.12/day, $1/month**, with a request/row limit, cache, no automatic retry after uncertain charges, and separate operator pause. The app does **not** control spending by other scripts sharing the same DataForSEO account.
+- Email sending is **not implemented** in the Cloudflare Worker without separate Gmail OAuth/deliverability authorization; outbound messaging remains paused. This single deployment enables the dashboard and free autonomous site checks, **not an independently verified live Gmail campaign**.
+- Zero fabricated backlinks, traffic, publisher replies or placements. Empty D1 data remains empty; existing Google Sheets campaign history must be explicitly imported with authenticated authorization.
+- Source code is intentionally public, but **operator code, sessions, private records and all provider credentials** are kept out of the repository. UI requests are same-origin; management endpoints require the signed session and CSRF confirmation.
+- GitHub Actions runs tests **only**. It does not have permission to modify your Cloudflare account. To publish code updates, rerun `npm run deploy` or connect this Worker to GitHub using Cloudflare Workers Builds after the initial setup.
 
-## Cloudflare Pages build settings
-
-- Git repo: `douphealth/backlink-command-center`
-- Branch: `main`
-- Framework: None
-- Build command: `npm run build`
-- Output directory: `public`
-- Root directory: repository root
-- Pages Functions: `functions/api/[[path]].js` and `functions/_lib/*`
-- **No root `wrangler.toml` committed**, so Cloudflare dashboard bindings remain authoritative. Avoid adding it without a real D1 binding ID.
-
-If Pages shows the setup screen, the **live two-step wizard** identifies missing D1 and Access configuration and identifies which of the three Access variables are still unset. `/api/setup` returns safe booleans only and never reveals secrets or email values. Configure the production Access **policy** separately: three present variables alone do not prove that private sign-in is active. Password login has been removed; Access handles it.
-
-## Application sections
-
-Overview; Operations (pause controls and durable queue); Prospects; Outreach; Live backlinks; Submissions; DataForSEO spending; Portfolio sites; Learn & improve; Activity log; Suppression. Verified events only. All sections read actual D1 data; empty tables are not simulated.
-
-## Build and test
+## Run tests (no Cloudflare API calls and no billable activity)
 
 ```bash
 npm test
 npm run build
 ```
 
-Tests use built-in `node:sqlite` for an accurate, local D1 emulator and generated test-only signed Cloudflare Access tokens. There are no runtime npm dependencies. The original Python worker and its historical tests remain in `engine/` only as a **legacy reference, not the deployment runtime**.
-
-See [CLOUDFLARE-PAGES.md](CLOUDFLARE-PAGES.md) for the exact security model, worker deployment and verification checklist.
+For deployment troubleshooting: [DEPLOYMENT.md](DEPLOYMENT.md). For safety controls: [SECURITY.md](SECURITY.md). The former Cloudflare Pages architecture can be viewed in this repo's Git history but is no longer the active deploy target.

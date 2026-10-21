@@ -1,31 +1,21 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0c1017"><meta name="description" content="Private evidence-first backlink research and outreach operations console"><title>Backlink Command Center</title><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/styles.css"></head><body>
 <div id="auth-screen" class="auth-screen hidden"><div class="auth-glow"></div><main class="auth-box setup-box" aria-labelledby="setup-title">
-  <div class="setup-brand"><div class="logo-mark large">↗</div><span>LINKFORGE · SECURE SETUP</span></div>
-  <h1 id="setup-title">Connect your Cloudflare workspace</h1>
-  <p id="setup-message">Two one-time Cloudflare settings. No VPS, administrator password, or new hosting service.</p>
-  <div class="setup-progress" id="setup-progress" role="status" aria-live="polite">Checking configuration…</div>
-  <div class="setup-checklist" aria-label="Cloudflare connection checklist">
-    <section class="setup-step" id="setup-step-db" aria-labelledby="setup-db-title">
-      <div class="setup-step-top"><span class="step-number">01</span><h2 id="setup-db-title">Connect your database</h2><span class="setup-pill" id="setup-db-status">Checking</span></div>
-      <p>Cloudflare <strong>Workers &amp; Pages → D1</strong>: create <code>linkforge-db</code>. In your <strong>Pages project → Settings → Bindings</strong>, add a D1 binding named <code>DB</code>, then redeploy.</p>
-      <a href="https://dash.cloudflare.com/" target="_blank" rel="noopener noreferrer">Open Cloudflare dashboard ↗</a>
-    </section>
-    <section class="setup-step" id="setup-step-access" aria-labelledby="setup-access-title">
-      <div class="setup-step-top"><span class="step-number">02</span><h2 id="setup-access-title">Protect your dashboard</h2><span class="setup-pill" id="setup-access-status">Checking</span></div>
-      <p>In <strong>Zero Trust → Access controls → Applications</strong>, protect your <strong>production Pages URL</strong> and allow only your email. Then add these three Pages <strong>Settings → Variables and Secrets</strong> values:</p>
-      <div class="setup-varlist" id="setup-access-variables" aria-label="Required Cloudflare Access variable status">
-        <div><code>CF_ACCESS_TEAM_DOMAIN</code><span data-setup-var="team_domain_present">—</span></div>
-        <div><code>CF_ACCESS_AUD</code><span data-setup-var="audience_tag_present">—</span></div>
-        <div><code>ADMIN_EMAIL</code><span data-setup-var="admin_email_present">—</span></div>
-      </div>
-      <a href="https://one.dash.cloudflare.com/" target="_blank" rel="noopener noreferrer">Open Cloudflare Zero Trust ↗</a>
-      <details class="setup-details"><summary>Where do I find these values?</summary><p><strong>Team domain:</strong> your <code>yourteam.cloudflareaccess.com</code> hostname (no <code>https://</code>). <strong>AUD:</strong> Access → Applications → your app → Configure → Additional settings → Application Audience (AUD) Tag. <strong>Admin email:</strong> the exact email allowed by the Access policy. Set these for <strong>Production</strong> and redeploy.</p><p>Cloudflare's Pages Access toggle may cover only preview deployments. Verify that your main <code>*.pages.dev</code> URL is protected too.</p></details>
-    </section>
-  </div>
+  <div class="setup-brand"><div class="logo-mark large">↗</div><span>LINKFORGE · UNIFIED CLOUDFLARE WORKER</span></div>
+  <div class="single-label">ONE DEPLOYMENT · ONE DASHBOARD · ONE DATABASE</div>
+  <h1 id="setup-title">Your private command center.</h1>
+  <p id="setup-message">Dashboard, database and automated checks are deployed together on Cloudflare.</p>
+  <form id="code-login" class="operator-login hidden" autocomplete="on">
+    <label for="admin-code">Private access code</label>
+    <p>Enter the automatically generated code from your <code>npm run deploy</code> output. The code never belongs in GitHub.</p>
+    <div class="login-code-row"><input id="admin-code" type="password" autocomplete="current-password" minlength="32" required placeholder="Enter deployment access code"><button id="toggle-code" type="button" class="secondary" aria-label="Show or hide code">Show</button></div>
+    <button class="primary full" type="submit" id="login-submit">Open my dashboard →</button>
+  </form>
   <div id="backend-state" class="backend-state" role="status" aria-live="polite"></div>
-  <div class="setup-actions"><button type="button" class="primary full" id="setup-retry">↻ Recheck Cloudflare connection</button>
-    <a class="setup-guide-link" href="https://github.com/douphealth/backlink-command-center/blob/main/CLOUDFLARE-PAGES.md" target="_blank" rel="noopener noreferrer">View the complete setup guide ↗</a></div>
-  <small>No DataForSEO or Gmail credentials are needed to open the dashboard. Paid research and outgoing email remain disabled.</small>
+  <div class="setup-actions">
+    <button type="button" class="secondary full" id="setup-retry">↻ Recheck connection</button>
+    <a class="setup-guide-link" href="https://github.com/douphealth/backlink-command-center#one-cloudflare-deployment" target="_blank" rel="noopener noreferrer">Deployment instructions ↗</a>
+  </div>
+  <small>Your operator code protects private campaign records. DataForSEO paid requests and sending are disabled by default.</small>
 </main></div>
 <div class="shell hidden" id="shell">
   <aside class="sidebar" id="sidebar">
@@ -46,7 +36,7 @@
       <button class="nav-link" data-view="activity"><span class="nav-icon">≋</span> Activity log</button>
       <button class="nav-link" data-view="suppression"><span class="nav-icon">⊘</span> Suppression</button>
     </nav>
-    <div class="sidebar-bottom"><div class="side-insight"><div class="side-insight-top"><span class="pulsedot"></span> ENGINE INTEGRITY</div><strong>Evidence first.</strong><p>Every signal sourced. Every cost accounted for. No fabricated outcomes.</p><span class="private-footnote">Evidence stays private · Legacy CRM is available from your authenticated account</span></div><button class="sidebar-user" id="logout"><span class="user-circle">AP</span><span><strong>Administrator</strong><small>Cloudflare sign out</small></span><span class="logout-arrow">↗</span></button></div>
+    <div class="sidebar-bottom"><div class="side-insight"><div class="side-insight-top"><span class="pulsedot"></span> ENGINE INTEGRITY</div><strong>Evidence first.</strong><p>Every signal sourced. Every cost accounted for. No fabricated outcomes.</p><span class="private-footnote">Evidence stays private · Legacy CRM is available from your authenticated account</span></div><button class="sidebar-user" id="logout"><span class="user-circle">AP</span><span><strong>Administrator</strong><small>Secure sign out</small></span><span class="logout-arrow">↗</span></button></div>
   </aside>
   <div class="app-column"><header class="topbar"><div class="top-left"><button class="mobile-menu" id="mobile-menu" aria-label="Toggle menu">☰</button><span class="breadcrumb">Portfolio HQ</span><span class="crumb-sep">/</span><span id="current-crumb">Overview</span></div><div class="top-right"><span class="live-led" id="engine-indicator"><span></span> CONNECTING</span><span class="header-divider"></span><span id="time-now" class="current-time"></span><button class="icon-button" id="refresh" title="Refresh current data" aria-label="Refresh data">↻</button><span class="top-avatar">AP</span></div></header>
   <main class="main" id="main"><section class="section-intro"><div><div class="eyebrow"><span class="tiny-line"></span> WORKSPACE / OVERVIEW</div><h1>Backlink intelligence<span class="period">.</span></h1><p>Your editorial growth engine, without the guesswork.</p></div><button class="secondary" id="refresh2">↻ &nbsp; Refresh intelligence</button></section><div class="loading-block">Loading verified data…</div></main>

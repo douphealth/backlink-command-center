@@ -1,13 +1,19 @@
 {
-  "name":"linkforge-cloudflare-command-center",
-  "version":"3.0.0",
-  "type":"module",
-  "private":true,
-  "description":"Cloudflare Pages + D1 dashboard with a scheduled Worker, protected by Cloudflare Access; no VPS",
-  "scripts":{
-    "build":"node --check public/app.js && node --check 'functions/api/[[path]].js' && node --check functions/_lib/api.js && node --check workers/scheduler/src/index.js",
-    "test":"node --test tests/cloudflare/*.test.mjs",
-    "test:legacy":"python -m pytest -q tests engine/tests"
+  "name": "linkforge-one-cloudflare-worker",
+  "version": "4.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Single Cloudflare Worker: static dashboard, private API, auto-provisioned D1 and scheduled outreach research",
+  "scripts": {
+    "build": "node --check src/index.js && node --check public/app.js && node --check functions/_lib/api.js && node --check functions/_lib/operator-auth.js && node --check src/scheduler.js",
+    "test": "node --test tests/cloudflare/*.test.mjs",
+    "deploy": "node scripts/deploy-one-cloudflare.mjs",
+    "deploy:one": "node scripts/deploy-one-cloudflare.mjs"
   },
-  "engines":{"node":">=22"}
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "wrangler": "^4.149.0"
+  }
 }

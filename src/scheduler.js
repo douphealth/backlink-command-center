@@ -3,8 +3,8 @@
  * Side effects are durable D1 records. Paid API and outbound email are disabled by
  * default, and no ambiguous billable request is automatically retried.
  */
-import {ACTIONS,SPENDING,ensureDb,query,first,run,flags,log,workerSummary,NOW,isDomain} from '../../../functions/_lib/db.js';
-import {SITES} from '../../../functions/_lib/sites.js';
+import {ACTIONS,SPENDING,ensureDb,query,first,run,flags,log,workerSummary,NOW,isDomain} from '../functions/_lib/db.js';
+import {SITES} from '../functions/_lib/sites.js';
 
 const API='https://api.dataforseo.com/v3/';
 const day=()=>new Date().toISOString().slice(0,10);

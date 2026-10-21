@@ -1,3 +1,4 @@
+import {operatorReady,verifyOperator} from './operator-auth.js';
 /* Cloudflare Access JWT validation. Fail CLOSED if Access isn't configured.
  * No in-app passwords. Only signed Access identities explicitly permitted
  * by ADMIN_EMAIL are authorized to read or mutate campaign records.
@@ -27,6 +28,7 @@ async function getJwk(domain,kid){
   return jwk;
 }
 export async function verifyAccess(request,env){
+  if(operatorReady(env))return verifyOperator(request,env);
   if(!accessReady(env))return {ok:false,status:503,error:'Cloudflare Access is not yet configured'};
   const token=request.headers.get('Cf-Access-Jwt-Assertion');
   if(!token)return {ok:false,status:401,error:'Sign in through Cloudflare Access to continue'};

@@ -1,11 +1,9 @@
-# LinkForge Operations — Cloudflare version
+# LinkForge operations
 
-- Frontend and API: GitHub-connected Cloudflare Pages + Pages Functions.
-- Database: one Cloudflare D1 binding named `DB` (no SQLite on a VPS).
-- Login: Cloudflare Access OTP; no in-app admin password.
-- Background automation: one Cloudflare Cron Worker deployed with the same D1 database. Jobs are durable and deduplicated. It produces a real heartbeat and logs results; it does not claim unperformed work.
-- DataForSEO: billed calls only from the Cron Worker after an authenticated user_data free check, worst-case pre-reservation, spend ceiling and double opt-in. Zero requests happen by default.
-- Gmail: no automated sender until OAuth and anti-duplicate history import are configured and proven. Existing ChatGPT outreach schedules are separate; avoid parallel sending.
-- Links: only inspected anchor hrefs on live pages are confirmed. A sent email or a gap domain is not an earned backlink.
+The single Cloudflare Worker routes authenticated dashboard API traffic and runs scheduled research on an hourly Cron Trigger. D1 stores the queue, source checks, publisher suppression, verified placements, actual DataForSEO ledger and heartbeat.
 
-Deploy requirements and source-level security controls are documented in README.md and CLOUDFLARE-PAGES.md.
+**Research** may run autonomously on a bounded schedule with public HTML source checks. It must never invent prospects, contact details, link placements or traffic. `DataForSEO` paid requests are **OFF** by default; billing caps remain in the Worker source. Gmail email sending is **OFF / not connected** pending explicit OAuth, global suppression-history import, sender lock and deliverability checks. The dashboard permits queuing actions but not bypassing independent environment or spending gates.
+
+**Monitor** shows a truthful blocked status until Gmail OAuth is connected. **Backlinks** only count live anchor evidence, not pitches or form submissions. **Spend** shows recorded D1 charges, not unrelated API usage elsewhere.
+
+The first scheduled heartbeat appears after the first hourly Cron execution; an offline status before that is expected. Run `npm run deploy` after changes to deploy the code to your linked Cloudflare account. For optional Git-on-push builds, connect this existing Worker through Cloudflare Workers Builds. Avoid running the former ChatGPT sender concurrently with any new Gmail worker sender.

@@ -1,27 +1,25 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
+import {join,resolve} from 'node:path';
 import {handleApi} from '../../functions/_lib/api.js';
-const source=readFileSync(new URL('../../public/index.html',import.meta.url),'utf8');
-const frontend=readFileSync(new URL('../../public/app.js',import.meta.url),'utf8');
-test('first-run screen provides two explicit steps and the exact binding/Access variable names',()=>{
-  for (const id of ['setup-step-db','setup-step-access','setup-access-variables','setup-db-status','setup-access-status','setup-retry']) {
-    assert.match(source,new RegExp(`id="${id}"`));
-  }
-  for (const setting of ['DB','linkforge-db','CF_ACCESS_TEAM_DOMAIN','CF_ACCESS_AUD','ADMIN_EMAIL'])assert.ok(source.includes(setting),setting);
-  assert.ok(!source.includes('Administrator password'));
-  assert.match(frontend,/config\?\.database_bound/);
-  assert.match(frontend,/config\?\.cloudflare_access_configured/);
+const root=resolve(fileURLToPath(new URL('../..',import.meta.url)));
+const html=readFileSync(join(root,'public','index.html'),'utf8');
+const frontend=readFileSync(join(root,'public','app.js'),'utf8');
+test('Login is a single secure deployment code, without legacy D1/Access instructions',()=>{
+  assert.match(html,/id="code-login"/);
+  assert.match(html,/id="admin-code"/);
+  assert.match(html,/ONE DEPLOYMENT/);
+  for(const obsolete of ['setup-step-db','setup-step-access','CF_ACCESS_TEAM_DOMAIN','CF_ACCESS_AUD','Create and bind Cloudflare D1 as DB'])assert.ok(!html.includes(obsolete),obsolete);
+  assert.match(frontend,/login_method|admin_login_ready|auth_ready/);
+  assert.match(frontend,/\/api\/login/);
 });
-test('setup response lists individual configuration flags but no secret identifiers',async()=>{
-  const env={CF_ACCESS_TEAM_DOMAIN:'private.cloudflareaccess.com',CF_ACCESS_AUD:'SECRET_AUD_IDENTIFIER',ADMIN_EMAIL:'secret@private.example'};
-  const res=await handleApi(new Request('https://command.example/api/setup'),env);
-  assert.equal(res.status,200);
-  const json=await res.json();
+test('Safe setup endpoint reveals readiness without secrets',async()=>{
+  const secret='A'.repeat(40),session='S'.repeat(48);
+  const env={LINKFORGE_ADMIN_KEY:secret,LINKFORGE_SESSION_SECRET:session};
+  const response=await handleApi(new Request('https://linkforge.example/api/setup'),env);
+  const json=await response.json();assert.equal(json.mode,'setup_required');assert.equal(json.admin_login_ready,true);
   assert.equal(json.database_bound,false);
-  assert.equal(json.cloudflare_access_configured,true);
-  assert.equal(json.access_policy_verified,false);
-  assert.deepEqual(json.access_settings,{team_domain_present:true,audience_tag_present:true,admin_email_present:true});
-  const serialized=JSON.stringify(json);
-  for(const secret of [env.CF_ACCESS_TEAM_DOMAIN,env.CF_ACCESS_AUD,env.ADMIN_EMAIL])assert.ok(!serialized.includes(secret));
+  assert.ok(!JSON.stringify(json).includes(secret));assert.ok(!JSON.stringify(json).includes(session));
 });

@@ -27,3 +27,6 @@ secrets/**
 workers/scheduler/wrangler.toml
 # Avoid root wrangler.toml overriding production Pages dashboard bindings.
 wrangler.toml
+
+# One-command deployment generates local, never-published access credentials.
+.linkforge/

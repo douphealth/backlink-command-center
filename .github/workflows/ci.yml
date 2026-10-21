@@ -1,4 +1,4 @@
-name: Verify LinkForge Cloudflare-only
+name: Verify LinkForge unified Cloudflare Worker
 on:
   push:
     branches: [main]
@@ -14,16 +14,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Cloudflare-native API, security and scheduled worker tests
+      - name: Single-Worker, D1, auth, scheduler and safe deploy tests
         run: npm test
-      - name: Cloudflare Pages build checks
+      - name: Static JS and Worker build checks
         run: npm run build
-      - name: Confirm no public secrets or databases
+      - name: Fail on tracked secrets or private data
         run: |
+          test ! -e .linkforge
+          test ! -f DataforSEO_API.txt
           test ! -f .env
           test ! -f .env.worker
-          test ! -f DataforSEO_API.txt
-          test ! -f wrangler.toml
-          test ! -f workers/scheduler/wrangler.toml
-          test ! -e state/outreach.sqlite3
-          ! grep -R -i -E 'BEGIN PRIVATE KEY|ghp_[A-Za-z0-9]{28,}|DASHBOARD_ADMIN_PASSWORD=[^r]' functions/ workers/ public/ 2>/dev/null
+          test ! -f state/outreach.sqlite3
+          ! grep -R -i -E 'BEGIN PRIVATE KEY|ghp_[A-Za-z0-9]{28,}|DATAFORSEO_PASSWORD=[^r]' src/ functions/ public/ 2>/dev/null

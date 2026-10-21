@@ -61,3 +61,15 @@
 .setup-guide-link{text-align:center;font-size:11px;font-weight:700;color:#536478}
 .setup-box small{margin-top:15px;line-height:1.5}
 @media(max-width:580px){.auth-screen{align-items:start;padding:10px}.setup-box{border-radius:13px;padding:25px 17px}.setup-step{padding:13px}.setup-step-top{gap:7px}.setup-step-top h2{font-size:12px}.setup-pill{font-size:9px;padding:4px 7px}.setup-varlist>div{flex-wrap:wrap}}
+
+/* One-Worker operator code login: only one secret generated during deployment. */
+.single-label{display:inline-flex;align-items:center;gap:7px;background:#e8f3db;color:#48662f;padding:8px 11px;border-radius:8px;font-size:10px;font-weight:800;letter-spacing:.8px;margin-bottom:20px}
+.operator-login{display:grid;gap:13px;padding:21px;border:1px solid #e3e8ed;background:#fff;border-radius:12px;margin:16px 0}
+.operator-login label{font-size:13px;font-weight:800;color:#222f3a}
+.operator-login p{font-size:11px;line-height:1.6;margin:0;color:#71808e}
+.operator-login code{background:#f2f6f9;border-radius:3px;padding:2px 4px}
+.login-code-row{display:flex;gap:7px;align-items:center}
+.login-code-row input{flex:1;min-width:0;padding:12px 13px;border:1px solid #d8e0e8;border-radius:9px;font-size:13px;background:#f9fbfd;color:#273340}
+.login-code-row input:focus{outline:2px solid #93bf69;outline-offset:2px}
+.operator-login button.primary{min-height:43px}
+@media(max-width:520px){.operator-login{padding:14px}.single-label{font-size:9px}.login-code-row .secondary{padding:10px}}

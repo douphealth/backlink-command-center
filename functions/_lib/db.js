@@ -13,6 +13,7 @@ export const ACTIONS = Object.freeze({
 export const NOW = () => new Date().toISOString();
 
 const TABLES = [
+`CREATE TABLE IF NOT EXISTS login_attempts (ip_hash TEXT PRIMARY KEY, failed INTEGER NOT NULL DEFAULT 0, until_ms INTEGER NOT NULL)`,
 `CREATE TABLE IF NOT EXISTS operator_controls (key TEXT PRIMARY KEY, value INTEGER NOT NULL CHECK(value IN (0,1)), updated_at TEXT NOT NULL, updated_by TEXT NOT NULL)`,
 `CREATE TABLE IF NOT EXISTS worker_status (id INTEGER PRIMARY KEY CHECK(id=1),started_at TEXT,last_seen_at TEXT,last_action TEXT,last_research_at TEXT,last_monitor_at TEXT,last_error TEXT,updated_at TEXT)`,
 `CREATE TABLE IF NOT EXISTS worker_commands (id INTEGER PRIMARY KEY AUTOINCREMENT,action TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'queued',requested_at TEXT NOT NULL,started_at TEXT,finished_at TEXT,requested_by TEXT NOT NULL DEFAULT 'dashboard',outcome TEXT NOT NULL DEFAULT '',error TEXT NOT NULL DEFAULT '')`,
