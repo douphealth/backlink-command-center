@@ -16,7 +16,7 @@ const root=process.env.NODE_ENV==='test' && process.env.LINKFORGE_TEST_ROOT_DIR 
 const home=join(root,'.linkforge');
 const credentialsFile=join(home,'operator-credentials.json');
 const config=join(root,'worker.wrangler.jsonc');
-const deployConfig=join(home,'worker.deploy.jsonc');
+const deployConfig=join(root,'.linkforge-worker.deploy.jsonc');
 const autoInstall=process.env.LINKFORGE_TEST_SKIP_INSTALL!=='1';
 
 function banner(text){process.stdout.write(`\n${text}\n`);}
