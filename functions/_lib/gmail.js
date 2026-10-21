@@ -53,13 +53,19 @@ export async function probeGmail(env,{fetchImpl=fetch}={}){
    const actual=String(profile.emailAddress||'').toLowerCase();
    if(!emailSafe(actual)||actual!==env.GMAIL_SENDER_ADDRESS.toLowerCase())
      return {ok:false,status:'sender_mismatch'};
-   return {ok:true,status:'authenticated',sender:actual,messages_total:Number(profile.messagesTotal||0)};
+   // gmail.send alone cannot read the profile or search Sent. Validate the
+   // independent read permission needed for duplicate-outreach protection.
+   const sent=await gmailJson(GMAIL+'/messages?'+new URLSearchParams({q:'in:sent newer_than:7d',maxResults:'1'}),token,{fetchImpl});
+   if(!Array.isArray(sent.messages)&&!Number.isFinite(Number(sent.resultSizeEstimate)))
+     return {ok:false,status:'sent_history_inaccessible',sender:actual};
+   return {ok:true,status:'profile_and_sent_search_verified',sender:actual,history_search_verified:true};
  }catch{return {ok:false,status:'oauth_or_scope_rejected'};}
 }
 export async function hasSentToRecipient(env,email,{fetchImpl=fetch,token}={}){
  if(!emailSafe(email))throw Error('Invalid recipient');
  const access=token||await oauthAccessToken(env,{fetchImpl});
- const q='in:sent to:'+email+' newer_than:365d';
+ // Search the entire mailbox, not just 365 days; an older contact is still a duplicate.
+ const q='in:sent to:"'+email+'"';
  const data=await gmailJson(GMAIL+'/messages?'+new URLSearchParams({q,maxResults:'1'}),access,{fetchImpl});
  return Array.isArray(data.messages)&&data.messages.length>0;
 }

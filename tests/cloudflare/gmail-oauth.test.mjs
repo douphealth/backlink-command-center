@@ -10,8 +10,8 @@ test('Worker sending remains off by default and requires exclusive ownership',()
 });
 test('Worker verifies Gmail sender via OAuth without sending',async()=>{
  let calls=0;
- const fetchImpl=async(url,options)=>{calls++;if(url.includes('oauth2'))return Response.json({access_token:'test',expires_in:3600});return Response.json({emailAddress:'sender@example.com',messagesTotal:4});};
- assert.equal((await probeGmail(env,{fetchImpl})).ok,true);assert.equal(calls,2);
+ const fetchImpl=async(url,options)=>{calls++;if(url.includes('oauth2'))return Response.json({access_token:'test',expires_in:3600});if(url.includes('/profile'))return Response.json({emailAddress:'sender@example.com',messagesTotal:4});return Response.json({messages:[],resultSizeEstimate:0});};
+ assert.equal((await probeGmail(env,{fetchImpl})).ok,true);assert.equal(calls,3);
 });
 test('Gmail recipient deduplication uses real Sent query',async()=>{
  const fetchImpl=async(url,options)=>url.includes('oauth2')?Response.json({access_token:'x',expires_in:3600}):Response.json({messages:[{id:'abc'}]});
@@ -24,4 +24,10 @@ test('Gmail sends only valid payload and confirms Gmail IDs',async()=>{
  assert.equal(out.gmail_id,'gmail-id');
  assert.equal(requests.length,2);
  await assert.rejects(()=>sendGmailMessage(env,{to:'editor@example.com',subject:'Header\nInjection',body:'x'},{fetchImpl}));
+});
+
+test('Profile alone cannot authorize sending: Sent search must work',async()=>{
+ const fetchImpl=async url=>url.includes('oauth2')?Response.json({access_token:'test',expires_in:3600}):url.includes('/profile')?Response.json({emailAddress:'sender@example.com'}):new Response('forbidden',{status:403});
+ const result=await probeGmail(env,{fetchImpl});
+ assert.equal(result.ok,false);
 });
