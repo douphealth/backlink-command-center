@@ -1,0 +1,39 @@
+name: Autonomous public URL evidence
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  push:
+    branches: [main]
+    paths:
+      - public/portfolio.json
+      - scripts/refresh-public-intelligence.mjs
+      - .github/workflows/public-intelligence.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: public-url-evidence
+  cancel-in-progress: false
+jobs:
+  public-url-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Collect bounded technical signals for owned URLs
+        run: node scripts/refresh-public-intelligence.mjs
+      - name: Validate source and prevent fabricated GSC figures
+        run: |
+          node -e "const d=require('./public/public-intelligence.json');if(d.gsc_metrics_included!==false || d.source!=='public_http_technical_checks' || !Array.isArray(d.urls))process.exit(1)"
+      - name: Commit public health evidence only if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/public-intelligence.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data: refresh public owned-URL evidence [skip ci]"
+            git push
+          fi
