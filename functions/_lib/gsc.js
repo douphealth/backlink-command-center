@@ -58,6 +58,6 @@ export async function collectSite(db,env,site){
     site,x.url,x.score,x.impressions,x.clicks,x.position,x.type,'needs_validation',NOW());
   }
   await log(db,'gsc_site_collected',{site,count:items.length,partial:(all.length===25000)});
-  return {site,items:items.length,source:'Official Search Console API',partial:(data.rows||[]).length===5000};
+  return {site,items:items.length,source:'Official Search Console API',partial:all.length===25000};
  }catch(e){await log(db,'gsc_site_error',{site,error:String(e.message).slice(0,100)});return {blocked:String(e.message).slice(0,120),site};}
 }
