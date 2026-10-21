@@ -46,6 +46,8 @@ export async function ensureDb(db) {
   if (!found) {
     await db.batch(TABLES.map(sql=>db.prepare(sql)));
   }
+  // Additive migration: existing databases predate the opportunity table.
+  await db.prepare('CREATE TABLE IF NOT EXISTS url_opportunities (site TEXT NOT NULL,url TEXT NOT NULL,score REAL NOT NULL,impressions REAL,clicks REAL,position REAL,kind TEXT,state TEXT NOT NULL DEFAULT \'needs_validation\',measured_at TEXT NOT NULL,PRIMARY KEY(site,url))').run();
   const stamp=NOW();
   await db.batch(Object.entries(CONTROL_DEFAULTS).map(([key,value])=>
     db.prepare('INSERT OR IGNORE INTO operator_controls(key,value,updated_at,updated_by) VALUES(?,?,?,?)')
