@@ -7,7 +7,7 @@ export function rankUrls(site,rows){
  for(const r of rows){
   const url=r.keys?.[0];let u;
   try{u=new URL(url)}catch{continue}
-  if(u.protocol!=='https:'||u.hostname.replace(/^www\./,'')!==site||u.pathname==='/'||/\/(privacy|terms|contact|author|tag|category|feed)\//.test(u.pathname))continue;
+  if(u.protocol!=='https:'||u.username||u.password||u.port||u.hostname.replace(/^www\./,'')!==site||u.pathname==='/'||/(?:^|\/)(?:privacy|terms|contact|author|tag|category|feed)(?:\/|$)/.test(u.pathname))continue;
   const impressions=Number(r.impressions||0),clicks=Number(r.clicks||0),position=Number(r.position||100);
   if(impressions<15||!Number.isFinite(position))continue;
   const type=/calculator|methodology|finder|tool|guide|framework|security|comparison|study/i.test(url)?'linkable_resource':'editorial_review';
@@ -45,13 +45,19 @@ export async function collectSite(db,env,site){
   if(!property)throw Error('Service account lacks GSC property permission');
   const end=new Date(Date.now()-3*86400000),start=new Date(end.getTime()-89*86400000);
   const body={startDate:start.toISOString().slice(0,10),endDate:end.toISOString().slice(0,10),dimensions:['page'],rowLimit:5000,type:'web',dataState:'final'};
-  const data=await google(api+'/sites/'+encodeURIComponent(property)+'/searchAnalytics/query',token,body);
-  const items=rankUrls(site,data.rows||[]);
+  const all=[];
+  for(let offset=0;offset<25000;offset+=5000){
+    const data=await google(api+'/sites/'+encodeURIComponent(property)+'/searchAnalytics/query',token,{...body,startRow:offset});
+    const rows=Array.isArray(data.rows)?data.rows:[];
+    all.push(...rows);
+    if(rows.length<5000)break;
+  }
+  const items=rankUrls(site,all);
   for(const x of items){
    await run(db,'INSERT INTO url_opportunities(site,url,score,impressions,clicks,position,kind,state,measured_at) VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(site,url) DO UPDATE SET score=excluded.score,impressions=excluded.impressions,clicks=excluded.clicks,position=excluded.position,kind=excluded.kind,measured_at=excluded.measured_at',
     site,x.url,x.score,x.impressions,x.clicks,x.position,x.type,'needs_validation',NOW());
   }
-  await log(db,'gsc_site_collected',{site,count:items.length,partial:((data.rows||[]).length===5000)});
+  await log(db,'gsc_site_collected',{site,count:items.length,partial:(all.length===25000)});
   return {site,items:items.length,source:'Official Search Console API',partial:(data.rows||[]).length===5000};
  }catch(e){await log(db,'gsc_site_error',{site,error:String(e.message).slice(0,100)});return {blocked:String(e.message).slice(0,120),site};}
 }
