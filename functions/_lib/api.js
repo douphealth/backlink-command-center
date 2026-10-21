@@ -73,6 +73,10 @@ export async function handleApi(request,env) {
         by_state,by_site,events,last_activity:events[0]||null,sites_configured:SITES.length,links_verified:links,
         data_source:'Cloudflare D1 — verified records only',worker_status:worker.label,dfs_configured:false,paid_enabled:false});
     }
+    if(request.method==='GET'&&path==='best-urls'){
+      const items=await query(db,"SELECT site,url,score,impressions,clicks,position,kind,state,measured_at FROM url_opportunities ORDER BY score DESC LIMIT 120");
+      return json({items,total:items.length,source:'Direct Search Console API',note:'These are candidates, not verified editorial placements. Validate live URL, canonical and editor fit before outreach.'});
+    }
     if(request.method==='GET'&&path==='prospects'){
       const page=num(url.searchParams.get('page'),1,10000),size=num(url.searchParams.get('page_size'),25,100);
       const filters=[],args=[];for(const [param,field] of [['status','status'],['site','site']]){const v=url.searchParams.get(param);if(v&&v!=='all'){filters.push(`${field}=?`);args.push(v.slice(0,200));}}

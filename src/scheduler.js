@@ -5,6 +5,7 @@
  */
 import {ACTIONS,SPENDING,ensureDb,query,first,run,flags,log,workerSummary,NOW,isDomain} from '../functions/_lib/db.js';
 import {SITES} from '../functions/_lib/sites.js';
+import {collectSite} from '../functions/_lib/gsc.js';
 
 const API='https://api.dataforseo.com/v3/';
 const day=()=>new Date().toISOString().slice(0,10);
@@ -202,6 +203,13 @@ async function verifyCandidates(db){
   return {checked:rows.length,reached:verified,blocked,note:'Reaching a page does not automatically qualify its editorial policy or contact'};
 }
 async function doAction(db,env,action){
+  if(action==='sync_gsc'){
+    if(!env.GSC_SERVICE_ACCOUNT_JSON)return {blocked:'Service account not configured'};
+    const records=await query(db,"SELECT site,MAX(measured_at) AS checked FROM url_opportunities GROUP BY site");
+    const checks=new Map(records.map(x=>[x.site,x.checked]));
+    const candidate=[...SITES].sort((a,b)=>(checks.get(a.domain)||'').localeCompare(checks.get(b.domain)||''))[0];
+    return collectSite(db,env,candidate.domain);
+  }
   if(action==='audit_assets')return auditAssets(db);
   if(action==='research'){
     const assets=await auditAssets(db,2);
@@ -220,6 +228,12 @@ export async function runTick(env,{maxJobs=2}={}){
   if(!env?.DB)throw Error('D1 binding DB is missing');
   const db=env.DB;await ensureDb(db);await heartbeat(db,'scheduled');
   const results=[];
+  // Queue one free, read-only Search Console rotation per scheduled cycle.
+  if(env.GSC_SERVICE_ACCOUNT_JSON){
+    const last=await first(db,"SELECT requested_at FROM worker_commands WHERE action='sync_gsc' ORDER BY id DESC LIMIT 1");
+    if(!last||Date.now()-Date.parse(last.requested_at)>55*60*1000)
+      await run(db,"INSERT OR IGNORE INTO worker_commands(action,status,requested_at,requested_by) VALUES('sync_gsc','queued',?,'scheduled-worker')",NOW());
+  }
   // Automatic daily research: fixed cadence, not a perpetual spend loop.
   const utcHour=new Date().getUTCHours();
   if(utcHour%8===0 && !(await flags(db)).research_paused){

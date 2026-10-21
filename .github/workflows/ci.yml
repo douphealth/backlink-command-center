@@ -16,6 +16,8 @@ jobs:
           node-version: '22'
       - name: Build Pages assets without secrets or server provisioning
         run: npm run build
+      - name: Test direct GSC opportunity scoring without API credentials
+        run: python3 -m unittest discover -s tests/gsc -p 'test_*.py'
       - name: Test browser workspace, Pages JSON routing and secure optional Worker
         run: npm test
       - name: Prevent recurrence of HTML-as-JSON Pages deploy error
