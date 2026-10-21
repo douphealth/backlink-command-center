@@ -205,10 +205,12 @@ async function verifyCandidates(db){
 async function doAction(db,env,action){
   if(action==='sync_gsc'){
     if(!env.GSC_SERVICE_ACCOUNT_JSON)return {blocked:'Service account not configured'};
-    const records=await query(db,"SELECT site,MAX(measured_at) AS checked FROM url_opportunities GROUP BY site");
-    const checks=new Map(records.map(x=>[x.site,x.checked]));
+    const records=await query(db,"SELECT site,last_attempt_at FROM gsc_sync_state");
+    const checks=new Map(records.map(x=>[x.site,x.last_attempt_at]));
     const candidate=[...SITES].sort((a,b)=>(checks.get(a.domain)||'').localeCompare(checks.get(b.domain)||''))[0];
-    return collectSite(db,env,candidate.domain);
+    const output=await collectSite(db,env,candidate.domain);
+    await run(db,"INSERT INTO gsc_sync_state(site,last_attempt_at,last_result) VALUES(?,?,?) ON CONFLICT(site) DO UPDATE SET last_attempt_at=excluded.last_attempt_at,last_result=excluded.last_result",candidate.domain,NOW(),output.blocked?'blocked':'completed');
+    return output;
   }
   if(action==='audit_assets')return auditAssets(db);
   if(action==='research'){

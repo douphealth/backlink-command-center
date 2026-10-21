@@ -61,7 +61,7 @@ export async function collectPublicEvidence(portfolio,{fetchImpl=fetch,now=new D
   const unique=[...new Map(resources.filter(x=>{
     try{
       const u=new URL(x.url);
-      return u.protocol===acceptedProtocol&&!u.username&&!u.password&&u.hostname.endsWith('.'+x.site)||u.hostname===x.site&&u.protocol===acceptedProtocol;
+      return u.protocol===acceptedProtocol&&!u.username&&!u.password&&!u.port&&(u.hostname===x.site||u.hostname.endsWith('.'+x.site));
     }catch{return false}
   }).map(x=>[x.url,x])).values()];
   let cursor=0;
