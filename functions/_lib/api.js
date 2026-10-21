@@ -1,6 +1,8 @@
 import {operatorReady,authenticateCode,clearOperatorCookie} from './operator-auth.js';
 import {ACTIONS,SPENDING,CONTROL_DEFAULTS,ensureDb,query,first,run,count,flags,log,workerSummary,NOW,csvSafe,isDomain} from './db.js';
 import {SITES} from './sites.js';
+import {gmailConfigured,probeGmail,sendingAuthorized} from './gmail.js';
+import {getToken} from './gsc.js';
 import {accessReady,verifyAccess,checkCsrf} from './auth.js';
 
 const HEADERS={'Cache-Control':'no-store, private','Content-Security-Policy':"default-src 'none'; frame-ancestors 'none'",'X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'};
@@ -135,8 +137,31 @@ export async function handleApi(request,env) {
       return json({items});
     }
     if(request.method==='GET'&&path==='health'){
-      const row=await first(db,'SELECT * FROM worker_status WHERE id=1');
-      return json({database:'Cloudflare D1 connected',worker:workerSummary(row),gmail:'Not configured on Cloudflare Worker',dataforseo:'Not independently authenticated',automation:'Requires scheduled Cloudflare Worker deployment'});
+      const row=await first(db,'SELECT * FROM worker_status WHERE id=1'),controls=await flags(db);
+      return json({database:'Cloudflare D1 connected',worker:workerSummary(row),
+        gmail:gmailConfigured(env)?'OAuth credentials configured; not independently verified':'OAuth credentials missing',
+        worker_outbound_authorized:sendingAuthorized(env,controls),
+        gsc:env.GSC_SERVICE_ACCOUNT_JSON?'Service-account credential configured; not independently verified':'Service-account credential missing',
+        dataforseo:'Paid requests disabled by default',automation:'Cron operational only when recent Worker heartbeat is present'});
+    }
+    if(request.method==='GET'&&path==='integrations/probe'){
+      const state={tested_at:NOW(),database:{status:'connected'},gmail:{status:'credentials_missing'},gsc:{status:'credentials_missing'},worker:{status:'unknown'}};
+      const heartbeat=await first(db,'SELECT * FROM worker_status WHERE id=1');
+      const summary=workerSummary(heartbeat);state.worker={status:summary.running?'recent_heartbeat':'heartbeat_missing_or_stale',last_seen_at:summary.last_seen_at};
+      state.gmail=await probeGmail(env);
+      if(env.GSC_SERVICE_ACCOUNT_JSON){
+        try{
+          const token=await getToken(env);
+          const response=await fetch('https://searchconsole.googleapis.com/webmasters/v3/sites',{headers:{Authorization:'Bearer '+token,Accept:'application/json'},redirect:'error',signal:AbortSignal.timeout(10000)});
+          if(!response.ok)state.gsc={status:'api_rejected',http_status:response.status};
+          else{
+            const result=await response.json();
+            const sites=Array.isArray(result.siteEntry)?result.siteEntry:[];
+            state.gsc={status:sites.length?'authenticated':'authenticated_no_properties',readable_properties:sites.filter(x=>x.permissionLevel!=='siteUnverifiedUser').length};
+          }
+        }catch{state.gsc={status:'authentication_failed'};}
+      }
+      return json(state);
     }
     if(request.method==='GET'&&path==='operations'){
       const [ws,commands,controls]=await Promise.all([
