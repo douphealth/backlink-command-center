@@ -87,10 +87,11 @@ test('Cloudflare config auto-provisions one D1 and deploys static site, API and 
 test('single deployment script generates safe secrets once, reuses them, never checks secrets into git',()=>{
   const dir=mkdtempSync(join(tmpdir(),'linkforge-deploy-test-'));
   try{
-    writeFileSync(join(dir,'worker.wrangler.jsonc'),'{}');
+    writeFileSync(join(dir,'worker.wrangler.jsonc'),JSON.stringify({main:'src/index.js',assets:{directory:'./public'},d1_databases:[{binding:'DB',database_name:'linkforge-db'}]}));
     const wrangler=join(dir,'fake-wrangler.mjs');
     const events=join(dir,'calls.log');
-    writeFileSync(wrangler,`import{writeFileSync,readFileSync}from'node:fs';\nconst cmd=process.argv[2];\nif(cmd==='deploy'){const ix=process.argv.indexOf('--secrets-file');if(ix<0)process.exit(4);const s=JSON.parse(readFileSync(process.argv[ix+1],'utf8'));if(s.LINKFORGE_ADMIN_KEY.length<32||s.LINKFORGE_SESSION_SECRET.length<40)process.exit(5);}\nwriteFileSync(process.env.MOCK_CALLS_FILE,cmd+'\\n',{flag:'a'});if(cmd==='deploy')console.log('https://linkforge-command-center.owner.workers.dev');\n`);
+    writeFileSync(wrangler,`import{writeFileSync,readFileSync}from'node:fs';\nconst cmd=process.argv[2];\nif(cmd==='d1'&&process.argv[3]==='list'){console.log(JSON.stringify([{name:'linkforge-db',uuid:'11111111-1111-4111-8111-111111111111'}]));process.exit(0);}
+if(cmd==='deploy'){const ix=process.argv.indexOf('--secrets-file');if(ix<0)process.exit(4);const s=JSON.parse(readFileSync(process.argv[ix+1],'utf8'));if(s.LINKFORGE_ADMIN_KEY.length<32||s.LINKFORGE_SESSION_SECRET.length<40)process.exit(5);}\nwriteFileSync(process.env.MOCK_CALLS_FILE,cmd+'\\n',{flag:'a'});if(cmd==='deploy')console.log('https://linkforge-command-center.owner.workers.dev');\n`);
     const cmd=join(root,'scripts/deploy-one-cloudflare.mjs');
     const env={...process.env,NODE_ENV:'test',LINKFORGE_TEST_ROOT_DIR:dir,LINKFORGE_TEST_WRANGLER_BIN:wrangler,MOCK_CALLS_FILE:events,CI:'false'};
     const firstRun=spawnSync(process.execPath,[cmd],{env,encoding:'utf8',timeout:20000});

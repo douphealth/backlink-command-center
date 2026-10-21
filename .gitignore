@@ -30,3 +30,5 @@ wrangler.toml
 
 # One-command deployment generates local, never-published access credentials.
 .linkforge/
+
+.linkforge-worker.deploy.jsonc

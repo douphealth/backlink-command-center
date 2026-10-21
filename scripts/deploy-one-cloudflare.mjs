@@ -10,11 +10,13 @@ import {randomBytes} from 'node:crypto';
 import {chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync} from 'node:fs';
 import {dirname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {findDatabase,workerConfig,workerUrl,googleServiceAccount} from './cloudflare-deploy-guards.mjs';
 
 const root=process.env.NODE_ENV==='test' && process.env.LINKFORGE_TEST_ROOT_DIR ? resolve(process.env.LINKFORGE_TEST_ROOT_DIR) : resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const home=join(root,'.linkforge');
 const credentialsFile=join(home,'operator-credentials.json');
 const config=join(root,'worker.wrangler.jsonc');
+const deployConfig=join(root,'.linkforge-worker.deploy.jsonc');
 const autoInstall=process.env.LINKFORGE_TEST_SKIP_INSTALL!=='1';
 
 function banner(text){process.stdout.write(`\n${text}\n`);}
@@ -65,16 +67,28 @@ async function main(){
     banner('One-time Cloudflare sign-in: complete the browser prompt.');
     await wrangler('login');
   }
+  const list=await wrangler('d1','list','--json');
+  let database=findDatabase(list);
+  if(!database){
+    banner('Creating the missing LinkForge D1 database once...');
+    await wrangler('d1','create','linkforge-db');
+    database=findDatabase(await wrangler('d1','list','--json'));
+    if(!database)throw Error('D1 was not visible after creation; refusing an unbound deployment');
+  }
+  mkdirSync(home,{recursive:true,mode:0o700});
+  secureWrite(deployConfig,workerConfig(readFileSync(config,'utf8'),database.id));
   const {data,created}=credentials();
   if(created)banner('A unique private access code was generated and saved locally (not in GitHub).');
   const secretFile=join(home,`secrets-upload-${randomBytes(6).toString('hex')}.json`);
-  secureWrite(secretFile,JSON.stringify({LINKFORGE_ADMIN_KEY:data.access_code,LINKFORGE_SESSION_SECRET:data.session_secret}));
+  const secrets={LINKFORGE_ADMIN_KEY:data.access_code,LINKFORGE_SESSION_SECRET:data.session_secret};
+  if(process.env.GSC_SERVICE_ACCOUNT_JSON)secrets.GSC_SERVICE_ACCOUNT_JSON=googleServiceAccount(process.env.GSC_SERVICE_ACCOUNT_JSON);
+  secureWrite(secretFile,JSON.stringify(secrets));
   let deployOutput='';
   try{
     banner('Deploying ONE Cloudflare Worker. Wrangler will create and attach D1 automatically.');
-    deployOutput=await wrangler('deploy','--config','worker.wrangler.jsonc','--secrets-file',secretFile);
+    deployOutput=await wrangler('deploy','--config',deployConfig,'--secrets-file',secretFile);
   }finally{try{unlinkSync(secretFile);}catch{}}
-  const url=deploymentUrl(deployOutput);
+  const url=workerUrl(deployOutput);
   banner('CLOUDFLARE DEPLOYMENT COMMAND SUCCEEDED.');
   banner(`Open: ${url||'the workers.dev URL printed by Wrangler above'}`);
   banner(`PRIVATE SIGN-IN CODE: ${data.access_code}`);
@@ -83,9 +97,9 @@ async function main(){
   banner('DataForSEO paid calls: OFF. Outgoing emails: OFF. No RackNerd, Pages bindings, Access identifiers, or separate scheduler.');
   if(url&&!process.env.LINKFORGE_TEST_WRANGLER_BIN){
     try{const r=await fetch(`${url}/api/setup`,{signal:AbortSignal.timeout(12000)});const s=await r.json();
-      if(r.ok&&s.database_bound&&s.admin_login_ready)banner('Remote API: configuration verified.');
-      else banner('Remote configuration not yet verified; wait briefly and check the /api/setup endpoint.');
-    }catch{banner('Remote readiness check pending (the deployment itself succeeded).');}
+      if(!(r.ok&&s.database_bound&&s.admin_login_ready))throw Error('Live Worker health check failed: missing D1 or operator auth');
+      banner('Remote API: database and authentication verified.');
+    }catch(e){throw Error('Live Worker readiness not verified: '+e.message);}
   }
 }
 main().catch(e=>{console.error('\nDeployment stopped:',e.message);process.exitCode=1;});
