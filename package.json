@@ -1,0 +1,12 @@
+{
+  "name": "backlink-command-center-pages",
+  "version": "2.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Cloudflare Pages frontend and secure API gateway for the private Backlink Finder Python worker",
+  "scripts": {
+    "build": "node --check public/app.js && node --check 'functions/api/[[path]].js'",
+    "test": "node --test tests/pages-proxy.test.mjs"
+  },
+  "engines": {"node": ">=20"}
+}

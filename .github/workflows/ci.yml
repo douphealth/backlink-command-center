@@ -1,0 +1,33 @@
+name: Verify Backlink Command Center
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install -r requirements.txt pytest httpx requests
+      - run: python -m pip install -e ./engine
+      - name: Dashboard and API tests
+        run: python -m pytest -q tests
+      - name: Engine safety and budget tests
+        run: python -m pytest -q engine/tests
+      - name: Cloudflare Pages gateway checks
+        run: npm test && npm run build
+      - name: Static syntax
+        run: node --check public/app.js
+      - name: Reject accidental secrets
+        run: |
+          test ! -f .env
+          test ! -f .env.worker
+          test ! -f DataforSEO_API.txt
+          test ! -e state/outreach.sqlite3

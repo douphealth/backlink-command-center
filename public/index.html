@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0c1017"><meta name="description" content="Private evidence-first backlink research and outreach operations console"><title>Backlink Command Center</title><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/styles.css"></head><body>
+<div id="auth-screen" class="auth-screen hidden"><div class="auth-glow"></div><form id="login-form" class="auth-box"><div class="logo-mark large">↗</div><div class="eyebrow">PRIVATE OPERATIONS CONSOLE</div><h1>Command your growth.</h1><p>Secure access to backlink intelligence, outreach operations and spending controls.</p><label for="password">Administrator password</label><input id="password" type="password" autocomplete="current-password" required placeholder="Enter your admin password"><button type="submit" class="primary full">Unlock workspace <span>→</span></button><div id="login-error" class="error-text" role="status" aria-live="polite"></div><div id="backend-state" class="backend-state" role="status" aria-live="polite"></div><small>Private workspace · No API secrets exposed to your browser</small></form></div>
+<div class="shell hidden" id="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="logo-mark">↗</div><div class="brand-copy"><strong>LINKFORGE</strong><span>COMMAND CENTER <i>01</i></span></div></div>
+    <div class="workspace-pill"><div class="workspace-avatar">P</div><div><strong>Portfolio HQ</strong><span>Private workspace</span></div><span class="chevron">⌄</span></div>
+    <div class="sidebar-label">WORKSPACE</div>
+    <nav id="navigation" aria-label="Main navigation">
+      <button class="nav-link active" data-view="overview"><span class="nav-icon">◧</span> Overview <span class="nav-shortcut">01</span></button>
+      <button class="nav-link" data-view="operations"><span class="nav-icon">⚙</span> Operations <span class="nav-count" id="nav-jobs">—</span></button>
+      <button class="nav-link" data-view="prospects"><span class="nav-icon">⊞</span> Prospects <span class="nav-count" id="nav-prospects">—</span></button>
+      <button class="nav-link" data-view="outreach"><span class="nav-icon">↗</span> Outreach</button>
+      <button class="nav-link" data-view="placements"><span class="nav-icon">◇</span> Live backlinks</button>
+      <button class="nav-link" data-view="submissions"><span class="nav-icon">▤</span> Submissions</button>
+      <div class="sidebar-label sublabel">INTELLIGENCE</div>
+      <button class="nav-link" data-view="spend"><span class="nav-icon">◉</span> DataForSEO <span class="nav-indicator"></span></button>
+      <button class="nav-link" data-view="sites"><span class="nav-icon">▦</span> Portfolio sites</button>
+      <button class="nav-link" data-view="learning"><span class="nav-icon">↗</span> Learn & improve</button>
+      <button class="nav-link" data-view="activity"><span class="nav-icon">≋</span> Activity log</button>
+      <button class="nav-link" data-view="suppression"><span class="nav-icon">⊘</span> Suppression</button>
+    </nav>
+    <div class="sidebar-bottom"><div class="side-insight"><div class="side-insight-top"><span class="pulsedot"></span> ENGINE INTEGRITY</div><strong>Evidence first.</strong><p>Every signal sourced. Every cost accounted for. No fabricated outcomes.</p><span class="private-footnote">Evidence stays private · Legacy CRM is available from your authenticated account</span></div><button class="sidebar-user" id="logout"><span class="user-circle">AP</span><span><strong>Administrator</strong><small>Sign out</small></span><span class="logout-arrow">↗</span></button></div>
+  </aside>
+  <div class="app-column"><header class="topbar"><div class="top-left"><button class="mobile-menu" id="mobile-menu" aria-label="Toggle menu">☰</button><span class="breadcrumb">Portfolio HQ</span><span class="crumb-sep">/</span><span id="current-crumb">Overview</span></div><div class="top-right"><span class="live-led" id="engine-indicator"><span></span> CONNECTING</span><span class="header-divider"></span><span id="time-now" class="current-time"></span><button class="icon-button" id="refresh" title="Refresh current data" aria-label="Refresh data">↻</button><span class="top-avatar">AP</span></div></header>
+  <main class="main" id="main"><section class="section-intro"><div><div class="eyebrow"><span class="tiny-line"></span> WORKSPACE / OVERVIEW</div><h1>Backlink intelligence<span class="period">.</span></h1><p>Your editorial growth engine, without the guesswork.</p></div><button class="secondary" id="refresh2">↻ &nbsp; Refresh intelligence</button></section><div class="loading-block">Loading verified data…</div></main>
+  <footer class="footer"><span>LINKFORGE · PRIVATE OPERATIONS</span><span id="footer-sync">—</span><span>Evidence-driven outreach, never vanity metrics.</span></footer></div>
+  <div class="toast-stack" id="toasts" aria-live="polite"></div>
+</div>
+<script src="/app.js" defer></script>
+</body></html>

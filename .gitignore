@@ -1,0 +1,25 @@
+.env
+.env.*
+!.env.example
+!.env.worker.example
+*.sqlite3*
+state/
+__pycache__/
+.pytest_cache/
+*.pyc
+.DS_Store
+secrets/
+# Secrets and local previews
+DataforSEO_API.txt
+*.sqlite3
+*.sqlite3-*
+qa_state/
+qa_browser.py
+*.png
+*.zip
+secrets/**
+
+# Cloudflare Pages local secret bindings
+.dev.vars*
+.wrangler/
+.env.production*
