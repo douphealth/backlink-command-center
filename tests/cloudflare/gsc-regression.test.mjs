@@ -20,7 +20,7 @@ test('public asset list rejects credential-in-URL and non-HTTPS URLs',async()=>{
   let calls=0;
   const data=await collectPublicEvidence({sites:[{domain:'gearuptofit.com',assets:urls}]},{
     now:new Date('2026-10-21T00:00:00Z'),
-    fetchImpl:async()=>{calls++;return new Response('<html><title>Page</title></html>',{status:200,headers:{'content-type':'text/html'}})}
+    fetchImpl:async url=>{if(String(url).endsWith('.xml'))return new Response('',{status:404});calls++;return new Response('<html><title>Page</title></html>',{status:200,headers:{'content-type':'text/html'}})}
   });
   assert.equal(calls,1);
   assert.equal(data.urls.length,1);

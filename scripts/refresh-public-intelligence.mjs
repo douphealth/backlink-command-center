@@ -5,6 +5,7 @@
  */
 import {readFile, writeFile, mkdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
+import {discoverSitemapUrls} from './sitemap-discovery.mjs';
 import {resolve, dirname} from 'node:path';
 
 const MAX_HTML=120000;
@@ -57,7 +58,9 @@ export function editorialSignals(url,topic=''){
 }
 export async function collectPublicEvidence(portfolio,{fetchImpl=fetch,now=new Date()}={}){
   const sites=Array.isArray(portfolio?.sites)?portfolio.sites:[];
-  const resources=sites.flatMap(s=>(s.assets||[]).map(url=>({site:s.domain,topic:s.topic||'',url})));
+  const discoveries=await Promise.all(sites.map(async s=>{try{return await discoverSitemapUrls(s,{fetchImpl,limit:12});}catch{return {site:s.domain,urls:[],sitemap_sources:[]};}}));
+  const discovered=new Map(discoveries.map(d=>[d.site,d]));
+  const resources=sites.flatMap(s=>[...(s.assets||[]),...(discovered.get(s.domain)?.urls||[])].map(url=>({site:s.domain,topic:s.topic||'',url})));
   const unique=[...new Map(resources.filter(x=>{
     try{
       const u=new URL(x.url);
@@ -96,7 +99,8 @@ export async function collectPublicEvidence(portfolio,{fetchImpl=fetch,now=new D
   };
   await Promise.all(Array.from({length:Math.min(3,unique.length)},runner));
   return {schema_version:1,generated_at:now.toISOString(),source:'public_http_technical_checks',gsc_metrics_included:false,
-    methodology:'Technical checks of configured owned resources only. Editorial fit is a deterministic heuristic, not search traffic or backlinks.',
+    methodology:'Bounded technical checks of configured assets and first-party sitemap URLs. Editorial fit is heuristic, not search traffic or backlinks.',
+    discovery:{source:'owned_public_sitemaps',sites:discoveries.map(d=>({site:d.site,found:d.urls.length,source_count:d.sitemap_sources.length}))},
     urls:output.sort((a,b)=>(b.technical_status==='technically_eligible'?1:0)-(a.technical_status==='technically_eligible'?1:0)||b.editorial_fit_score-a.editorial_fit_score)};
 }
 const main=fileURLToPath(import.meta.url)===resolve(process.argv[1]||'');
