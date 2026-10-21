@@ -1,7 +1,7 @@
 import {operatorReady,authenticateCode,clearOperatorCookie} from './operator-auth.js';
 import {ACTIONS,SPENDING,CONTROL_DEFAULTS,ensureDb,query,first,run,count,flags,log,workerSummary,NOW,csvSafe,isDomain} from './db.js';
 import {SITES} from './sites.js';
-import {gmailConfigured,probeGmail,sendingAuthorized} from './gmail.js';
+import {gmailConfigured,probeGmail,sendingAuthorized,sendGmailMessage} from './gmail.js';
 import {getToken} from './gsc.js';
 import {accessReady,verifyAccess,checkCsrf} from './auth.js';
 
@@ -162,6 +162,21 @@ export async function handleApi(request,env) {
         }catch{state.gsc={status:'authentication_failed'};}
       }
       return json(state);
+    }
+    if(request.method==='POST'&&path==='integrations/gmail-self-test'){
+      // Only an authenticated operator can initiate this operation; existing
+      // CSRF checks apply. Never contact any publisher as a test.
+      if(!gmailConfigured(env))return error('Worker Gmail OAuth credentials not configured',409);
+      const probe=await probeGmail(env);
+      if(!probe.ok)return json({ok:false,stage:'authentication',status:probe.status},409);
+      const now=NOW(),subject='LinkForge private Worker delivery self-test '+now;
+      try{
+        const receipt=await sendGmailMessage(env,{to:env.GMAIL_SENDER_ADDRESS,subject,body:'Internal delivery test only. No publisher was contacted and this is not editorial outreach.'});
+        await addEvent(db,'gmail_self_test',{at:now,gmail_id:receipt.gmail_id,recipient:'self'});
+        return json({ok:true,status:'gmail_api_accepted',gmail_id:receipt.gmail_id,thread_id:receipt.thread_id,note:'Gmail API accepted a message to the configured sender; downstream delivery is not guaranteed.'});
+      }catch{
+        return json({ok:false,stage:'send',status:'gmail_api_rejected'},502);
+      }
     }
     if(request.method==='GET'&&path==='operations'){
       const [ws,commands,controls]=await Promise.all([
