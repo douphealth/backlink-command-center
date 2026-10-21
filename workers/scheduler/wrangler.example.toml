@@ -1,0 +1,17 @@
+# Copy to workers/scheduler/wrangler.toml (gitignored), replace the D1 ID.
+# Cloudflare Worker is scheduled separately from Cloudflare Pages.
+name = "linkforge-scheduler"
+main = "src/index.js"
+compatibility_date = "2026-10-21"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "linkforge-db"
+database_id = "PASTE_REAL_D1_DATABASE_ID_HERE"
+
+[triggers]
+crons = ["0 * * * *"]
+
+[vars]
+# NO actual login or API password here.
+DATAFORSEO_PAID_ENABLED = "NO"

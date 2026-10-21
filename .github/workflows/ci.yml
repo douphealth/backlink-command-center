@@ -1,4 +1,4 @@
-name: Verify Backlink Command Center
+name: Verify LinkForge Cloudflare-only
 on:
   push:
     branches: [main]
@@ -8,26 +8,22 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-node@v4
         with:
-          python-version: '3.12'
-          cache: pip
-      - run: python -m pip install -r requirements.txt pytest httpx requests
-      - run: python -m pip install -e ./engine
-      - name: Dashboard and API tests
-        run: python -m pytest -q tests
-      - name: Engine safety and budget tests
-        run: python -m pytest -q engine/tests
-      - name: Cloudflare Pages gateway checks
-        run: npm test && npm run build
-      - name: Static syntax
-        run: node --check public/app.js
-      - name: Reject accidental secrets
+          node-version: '22'
+      - name: Cloudflare-native API, security and scheduled worker tests
+        run: npm test
+      - name: Cloudflare Pages build checks
+        run: npm run build
+      - name: Confirm no public secrets or databases
         run: |
           test ! -f .env
           test ! -f .env.worker
           test ! -f DataforSEO_API.txt
+          test ! -f wrangler.toml
+          test ! -f workers/scheduler/wrangler.toml
           test ! -e state/outreach.sqlite3
+          ! grep -R -i -E 'BEGIN PRIVATE KEY|ghp_[A-Za-z0-9]{28,}|DASHBOARD_ADMIN_PASSWORD=[^r]' functions/ workers/ public/ 2>/dev/null

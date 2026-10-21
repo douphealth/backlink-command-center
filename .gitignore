@@ -23,3 +23,7 @@ secrets/**
 .dev.vars*
 .wrangler/
 .env.production*
+# Deployment-only Cloudflare Worker configuration: contains account-specific D1 id.
+workers/scheduler/wrangler.toml
+# Avoid root wrangler.toml overriding production Pages dashboard bindings.
+wrangler.toml

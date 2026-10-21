@@ -1,0 +1,99 @@
+// Public configuration only; never add secrets or private contact data.
+export const SITES = [
+  {
+    "domain": "gearuptofit.com",
+    "topic": "running shoes",
+    "assets": [
+      "https://gearuptofit.com/shoe-finder/methodology/",
+      "https://gearuptofit.com/shoe-finder/",
+      "https://gearuptofit.com/watch-match/"
+    ],
+    "competitors": [
+      "believeintherun.com",
+      "doctorsofrunning.com"
+    ]
+  },
+  {
+    "domain": "plantastichaven.com",
+    "topic": "houseplant care",
+    "assets": [
+      "https://plantastichaven.com/plants-that-look-like-spider-plants/",
+      "https://procare.plantastichaven.com/"
+    ],
+    "competitors": [
+      "smartgardenguide.com",
+      "plantcaretoday.com"
+    ]
+  },
+  {
+    "domain": "gearuptogrow.com",
+    "topic": "study skills spaced repetition",
+    "assets": [
+      "https://gearuptogrow.com/learning/spaced-repetition/"
+    ],
+    "competitors": [
+      "collegeinfogeek.com",
+      "examstudyexpert.com"
+    ]
+  },
+  {
+    "domain": "affiliatemarketingforsuccess.com",
+    "topic": "affiliate marketing",
+    "assets": [
+      "https://affiliatemarketingforsuccess.com/affiliate-marketing/"
+    ],
+    "competitors": []
+  },
+  {
+    "domain": "mysticaldigits.com",
+    "topic": "numerology calculators",
+    "assets": [
+      "https://mysticaldigits.com/life-path-number-calculator/",
+      "https://blueprint.mysticaldigits.com/"
+    ],
+    "competitors": []
+  },
+  {
+    "domain": "frenchyfab.com",
+    "topic": "french bulldog care",
+    "assets": [
+      "https://frenchyfab.com/french-bulldog-care/"
+    ],
+    "competitors": []
+  },
+  {
+    "domain": "micegoneguide.com",
+    "topic": "mouse proofing home",
+    "assets": [
+      "https://micegoneguide.com/how-to-get-rid-of-mice/",
+      "https://elimination.micegoneguide.com/"
+    ],
+    "competitors": []
+  },
+  {
+    "domain": "efficientgptprompts.com",
+    "topic": "AI prompt engineering tools",
+    "assets": [
+      "https://promptgrade.efficientgptprompts.com/",
+      "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/"
+    ],
+    "competitors": []
+  },
+  {
+    "domain": "openclaw-skillshub.com",
+    "topic": "OpenClaw AI agent skills",
+    "assets": [
+      "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+      "https://openclaw-skillshub.com/"
+    ],
+    "competitors": []
+  },
+  {
+    "domain": "imagealchemy.app",
+    "topic": "free browser image compression tools",
+    "assets": [
+      "https://imagealchemy.app/"
+    ],
+    "competitors": []
+  }
+];

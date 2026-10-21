@@ -23,3 +23,9 @@
 .backend-state{margin-top:14px;border-top:1px solid #edf0f3;padding-top:14px;color:#788794;font-size:11px;line-height:1.55;text-align:center}
 
 .private-footnote{font-size:10px;color:#98aab6;line-height:1.5;display:block}
+
+/* Cloudflare-native no-password first-run connection screen */
+.setup-actions{display:grid;gap:10px;margin:24px 0 12px}
+.setup-link{display:flex;align-items:center;justify-content:center;text-decoration:none;min-height:44px}
+.setup-actions .full{width:100%}
+#setup-message{line-height:1.65}
