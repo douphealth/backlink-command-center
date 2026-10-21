@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-21T17:49:24.691Z",
+  "generated_at": "2026-10-21T18:05:16.608Z",
   "source": "public_http_technical_checks",
   "gsc_metrics_included": false,
   "methodology": "Technical checks of configured owned resources only. Editorial fit is a deterministic heuristic, not search traffic or backlinks.",
@@ -33,7 +33,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120560
+      "html_length": 121539
     },
     {
       "site": "efficientgptprompts.com",
@@ -48,7 +48,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125467
+      "html_length": 125022
     },
     {
       "site": "openclaw-skillshub.com",
@@ -93,7 +93,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122981
+      "html_length": 122935
     },
     {
       "site": "mysticaldigits.com",
@@ -153,7 +153,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122098
+      "html_length": 122937
     },
     {
       "site": "micegoneguide.com",
@@ -213,7 +213,7 @@
       "canonical_matches": false,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120693
+      "html_length": 120701
     },
     {
       "site": "plantastichaven.com",
