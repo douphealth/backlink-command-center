@@ -87,7 +87,7 @@ test('Cloudflare config auto-provisions one D1 and deploys static site, API and 
 test('single deployment script generates safe secrets once, reuses them, never checks secrets into git',()=>{
   const dir=mkdtempSync(join(tmpdir(),'linkforge-deploy-test-'));
   try{
-    writeFileSync(join(dir,'worker.wrangler.jsonc'),'{}');
+    writeFileSync(join(dir,'worker.wrangler.jsonc'),JSON.stringify({main:'src/index.js',assets:{directory:'./public'},d1_databases:[{binding:'DB',database_name:'linkforge-db'}]}));
     const wrangler=join(dir,'fake-wrangler.mjs');
     const events=join(dir,'calls.log');
     writeFileSync(wrangler,`import{writeFileSync,readFileSync}from'node:fs';\nconst cmd=process.argv[2];\nif(cmd==='d1'&&process.argv[3]==='list'){console.log(JSON.stringify([{name:'linkforge-db',uuid:'11111111-1111-4111-8111-111111111111'}]));process.exit(0);}
