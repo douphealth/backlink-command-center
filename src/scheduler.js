@@ -205,8 +205,9 @@ async function verifyCandidates(db){
 async function doAction(db,env,action){
   if(action==='sync_gsc'){
     if(!env.GSC_SERVICE_ACCOUNT_JSON)return {blocked:'Service account not configured'};
-    const row=await first(db,"SELECT site FROM url_opportunities GROUP BY site ORDER BY MAX(measured_at) ASC LIMIT 1");
-    const candidate=SITES.find(s=>!row||s.domain!==row.site)||SITES[0];
+    const records=await query(db,"SELECT site,MAX(measured_at) AS checked FROM url_opportunities GROUP BY site");
+    const checks=new Map(records.map(x=>[x.site,x.checked]));
+    const candidate=[...SITES].sort((a,b)=>(checks.get(a.domain)||'').localeCompare(checks.get(b.domain)||''))[0];
     return collectSite(db,env,candidate.domain);
   }
   if(action==='audit_assets')return auditAssets(db);
