@@ -9,6 +9,7 @@ export const ACTIONS = Object.freeze({
   check_links:'Recheck actual placed links',
   monitor:'Review real outreach replies',
   weekly:'Review real outcomes and learning',
+  sync_gsc:'Discover best owned URLs from direct GSC',
 });
 export const NOW = () => new Date().toISOString();
 
