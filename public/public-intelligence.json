@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-22T06:19:18.078Z",
+  "generated_at": "2026-10-22T07:34:15.666Z",
   "source": "public_http_technical_checks",
   "gsc_metrics_included": false,
   "methodology": "Bounded technical checks of configured assets and first-party sitemap URLs. Editorial fit is heuristic, not search traffic or backlinks.",
@@ -73,7 +73,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 21051
+      "html_length": 21051,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -88,7 +90,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 123319
+      "html_length": 124696,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -103,7 +107,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121990
+      "html_length": 122511,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -118,7 +124,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121548
+      "html_length": 121533,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -133,7 +141,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 123455
+      "html_length": 125789,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -148,7 +158,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121289
+      "html_length": 129790,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -163,7 +175,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125752
+      "html_length": 120970,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -178,7 +192,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 126133
+      "html_length": 126351,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -193,7 +209,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121722
+      "html_length": 126381,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -208,7 +226,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122518
+      "html_length": 123771,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -223,7 +243,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 126115
+      "html_length": 126380,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -238,7 +260,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121769
+      "html_length": 126159,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -253,7 +277,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120075
+      "html_length": 126212,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptogrow.com",
@@ -268,7 +294,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 123539
+      "html_length": 121136,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -283,7 +311,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
+      "html_length": 131070,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -298,7 +328,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 127672
+      "html_length": 120872,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -313,7 +345,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125462
+      "html_length": 126064,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -328,7 +362,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 15920
+      "html_length": 15920,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -343,7 +379,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 5685
+      "html_length": 5685,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -358,7 +396,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 7584
+      "html_length": 7584,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -373,7 +413,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 27098
+      "html_length": 27098,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -388,7 +430,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120834
+      "html_length": 120575,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -403,7 +447,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122997
+      "html_length": 124935,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -418,7 +464,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 4322
+      "html_length": 4322,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -433,7 +481,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125983
+      "html_length": 123567,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -448,7 +498,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121122
+      "html_length": 122244,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -463,7 +515,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121212
+      "html_length": 121244,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -478,7 +532,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 124941
+      "html_length": 127133,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -493,7 +549,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 126799
+      "html_length": 131044,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -508,7 +566,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 126654
+      "html_length": 121130,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -523,7 +583,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 130684
+      "html_length": 121980,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -538,7 +600,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 124676
+      "html_length": 129943,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -553,7 +617,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122146
+      "html_length": 122915,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -568,7 +634,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131060
+      "html_length": 131060,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -583,7 +651,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 130053
+      "html_length": 130113,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "mysticaldigits.com",
@@ -598,7 +668,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 126354
+      "html_length": 125273,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -613,7 +685,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121624
+      "html_length": 131060,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -628,7 +702,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 3406
+      "html_length": 3406,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -643,7 +719,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125270
+      "html_length": 125262,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -658,7 +736,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125537
+      "html_length": 131068,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -673,7 +753,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131068
+      "html_length": 131068,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -688,7 +770,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121119
+      "html_length": 131068,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -703,7 +787,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121202
+      "html_length": 125505,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -718,7 +804,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121041
+      "html_length": 121048,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -733,7 +821,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121313
+      "html_length": 121349,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -748,7 +838,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120861
+      "html_length": 131068,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -763,7 +855,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131068
+      "html_length": 121814,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -778,7 +872,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120775
+      "html_length": 120792,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -793,7 +889,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131068
+      "html_length": 122249,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "efficientgptprompts.com",
@@ -808,7 +906,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 126131
+      "html_length": 121581,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -823,7 +923,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 16773
+      "html_length": 16773,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -838,7 +940,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 45742
+      "html_length": 45742,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -853,7 +957,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 52978
+      "html_length": 52978,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -868,7 +974,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 50443
+      "html_length": 50443,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -883,7 +991,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 49903
+      "html_length": 49903,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -898,7 +1008,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 59784
+      "html_length": 59784,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -913,7 +1025,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 49570
+      "html_length": 49570,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -928,7 +1042,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 50652
+      "html_length": 50652,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -943,7 +1059,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 51515
+      "html_length": 51515,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -958,7 +1076,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 74075
+      "html_length": 74075,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -973,7 +1093,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 61840
+      "html_length": 61840,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -988,7 +1110,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 47828
+      "html_length": 47828,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "imagealchemy.app",
@@ -1003,7 +1127,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 47744
+      "html_length": 47744,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -1018,7 +1144,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 127410
+      "html_length": 120566,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -1033,7 +1161,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121664
+      "html_length": 121664,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -1048,7 +1178,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131068
+      "html_length": 131068,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -1063,7 +1195,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131064
+      "html_length": 125547,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -1078,7 +1212,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 128667
+      "html_length": 130831,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -1093,7 +1229,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122145
+      "html_length": 120823,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -1108,7 +1246,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125774
+      "html_length": 131068,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -1123,7 +1263,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131068
+      "html_length": 131068,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -1138,7 +1280,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131059
+      "html_length": 120629,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -1153,7 +1297,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122363
+      "html_length": 122369,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -1168,7 +1314,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 127130
+      "html_length": 122799,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -1183,7 +1331,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122527
+      "html_length": 131070,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -1198,7 +1348,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 123059
+      "html_length": 123059,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -1213,7 +1365,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131062
+      "html_length": 122706,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -1228,7 +1382,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131068
+      "html_length": 123951,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -1243,7 +1399,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 123897
+      "html_length": 131070,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -1258,7 +1416,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131062
+      "html_length": 131062,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -1273,7 +1433,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 127072
+      "html_length": 131060,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -1288,7 +1450,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122032
+      "html_length": 131058,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1303,7 +1467,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122094
+      "html_length": 122108,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1318,7 +1484,43 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131069
+      "html_length": 131069,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
+    },
+    {
+      "site": "affiliatemarketingforsuccess.com",
+      "topic": "affiliate marketing",
+      "url": "https://affiliatemarketingforsuccess.com/about-alexios-lead-researcher-editor/",
+      "category": "reference",
+      "editorial_fit_score": 62,
+      "http_status": 200,
+      "technical_status": "technically_eligible",
+      "title": "About Alexios | Lead Researcher and Editor",
+      "canonical": "https://affiliatemarketingforsuccess.com/about-alexios-lead-researcher-editor/",
+      "canonical_matches": true,
+      "noindex": false,
+      "nofollow": false,
+      "html_length": 131072,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
+    },
+    {
+      "site": "affiliatemarketingforsuccess.com",
+      "topic": "affiliate marketing",
+      "url": "https://affiliatemarketingforsuccess.com/review-methodology-affiliate-marketing-for-success/",
+      "category": "reference",
+      "editorial_fit_score": 62,
+      "http_status": 200,
+      "technical_status": "technically_eligible",
+      "title": "Review Methodology | Affiliate Marketing for Success",
+      "canonical": "https://affiliatemarketingforsuccess.com/review-methodology-affiliate-marketing-for-success/",
+      "canonical_matches": true,
+      "noindex": false,
+      "nofollow": false,
+      "html_length": 131072,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -1333,7 +1535,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131066
+      "html_length": 131066,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -1348,7 +1552,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122919
+      "html_length": 122932,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1363,7 +1569,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 3648
+      "html_length": 3648,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1378,7 +1586,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131061
+      "html_length": 124534,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1393,7 +1603,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 123224
+      "html_length": 123282,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1408,7 +1620,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122328
+      "html_length": 131069,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1423,7 +1637,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131069
+      "html_length": 120110,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1438,7 +1654,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131063
+      "html_length": 131063,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1453,7 +1671,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131069
+      "html_length": 131069,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1468,7 +1688,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 126887
+      "html_length": 131069,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1483,7 +1705,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120923
+      "html_length": 127782,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1498,7 +1722,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131069
+      "html_length": 126666,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "micegoneguide.com",
@@ -1513,7 +1739,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 127360
+      "html_length": 131069,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -1528,7 +1756,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 21411
+      "html_length": 21411,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -1543,7 +1773,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 27686
+      "html_length": 27686,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -1558,7 +1790,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 27436
+      "html_length": 27436,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -1573,7 +1807,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 5972
+      "html_length": 5972,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -1588,7 +1824,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 9574
+      "html_length": 9574,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -1603,7 +1841,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 8801
+      "html_length": 8801,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -1618,7 +1858,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 6951
+      "html_length": 6951,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -1633,7 +1875,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 7799
+      "html_length": 7799,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -1648,7 +1892,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 6991
+      "html_length": 6991,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -1663,7 +1909,9 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 7908
+      "html_length": 7908,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "openclaw-skillshub.com",
@@ -1678,37 +1926,26 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 6915
+      "html_length": 6915,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "affiliatemarketingforsuccess.com",
       "topic": "affiliate marketing",
-      "url": "https://affiliatemarketingforsuccess.com/review/how-to-get-approved-for-affiliate-programs/",
+      "url": "https://affiliatemarketingforsuccess.com/content-strategy-guide/",
       "category": "practical_guide",
       "editorial_fit_score": 45,
       "http_status": 200,
       "technical_status": "technically_eligible",
-      "title": "How to Get Approved for Affiliate Programs (2026)",
-      "canonical": "https://affiliatemarketingforsuccess.com/review/how-to-get-approved-for-affiliate-programs/",
+      "title": "Affiliate Content Strategy Guide: SEO, AEO &amp; Topic Maps",
+      "canonical": "https://affiliatemarketingforsuccess.com/content-strategy-guide/",
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
-    },
-    {
-      "site": "affiliatemarketingforsuccess.com",
-      "topic": "affiliate marketing",
-      "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-seo-for-affiliate-marketing/",
-      "category": "practical_guide",
-      "editorial_fit_score": 45,
-      "http_status": 200,
-      "technical_status": "technically_eligible",
-      "title": "Affiliate SEO: Rank Helpful Content in 2026",
-      "canonical": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-seo-for-affiliate-marketing/",
-      "canonical_matches": true,
-      "noindex": false,
-      "nofollow": false,
-      "html_length": 131070
+      "html_length": 131072,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "affiliatemarketingforsuccess.com",
@@ -1723,157 +1960,162 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120696
+      "html_length": 120652,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "affiliatemarketingforsuccess.com",
       "topic": "affiliate marketing",
-      "url": "https://affiliatemarketingforsuccess.com/blog/",
+      "url": "https://affiliatemarketingforsuccess.com/disclaimer/",
       "category": "editorial_review",
       "editorial_fit_score": 29,
       "http_status": 200,
       "technical_status": "technically_eligible",
-      "title": "Affiliate Marketing Blog: SEO, AI &amp; Monetization",
-      "canonical": "https://affiliatemarketingforsuccess.com/blog/",
+      "title": "Disclaimer | Affiliate Marketing for Success",
+      "canonical": "https://affiliatemarketingforsuccess.com/disclaimer/",
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 130928
+      "html_length": 131072,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "affiliatemarketingforsuccess.com",
       "topic": "affiliate marketing",
-      "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-tips-for-beginners/",
+      "url": "https://affiliatemarketingforsuccess.com/privacy-policy/",
       "category": "editorial_review",
       "editorial_fit_score": 29,
       "http_status": 200,
       "technical_status": "technically_eligible",
-      "title": "Affiliate Marketing Tips for Beginners: 12 Rules",
-      "canonical": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-tips-for-beginners/",
+      "title": "Privacy Policy | Affiliate Marketing for Success",
+      "canonical": "https://affiliatemarketingforsuccess.com/privacy-policy/",
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121418
+      "html_length": 123644,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "affiliatemarketingforsuccess.com",
       "topic": "affiliate marketing",
-      "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-email-sequence-template/",
+      "url": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
       "category": "editorial_review",
       "editorial_fit_score": 29,
       "http_status": 200,
       "technical_status": "technically_eligible",
-      "title": "Affiliate Email Sequence: 7 Consent-First Templates",
-      "canonical": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-email-sequence-template/",
+      "title": "Affiliate Growth Checklist: SEO, Trust &amp; Revenue",
+      "canonical": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
+      "html_length": 123540,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "affiliatemarketingforsuccess.com",
       "topic": "affiliate marketing",
-      "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-publisher-tax-records-documentation/",
+      "url": "https://affiliatemarketingforsuccess.com/start-here/",
       "category": "editorial_review",
       "editorial_fit_score": 29,
       "http_status": 200,
       "technical_status": "technically_eligible",
-      "title": "Affiliate Publisher Tax Records: The 2026 Documentation &amp; Deduction Guide | Affiliate Marketing",
-      "canonical": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-publisher-tax-records-documentation/",
+      "title": "Start Affiliate Marketing in 2026: The Step-by-Step Roadmap",
+      "canonical": "https://affiliatemarketingforsuccess.com/start-here/",
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
+      "html_length": 131072,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "affiliatemarketingforsuccess.com",
       "topic": "affiliate marketing",
-      "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/ai-affiliate-marketing-2026/",
+      "url": "https://affiliatemarketingforsuccess.com/seo/",
       "category": "editorial_review",
       "editorial_fit_score": 29,
       "http_status": 200,
       "technical_status": "technically_eligible",
-      "title": "AI Affiliate Marketing 2026: Strategies for SEO, AEO &amp; Publisher Trust | Affiliate Marketing",
-      "canonical": "https://affiliatemarketingforsuccess.com/affiliate-marketing/ai-affiliate-marketing-2026/",
+      "title": "Affiliate SEO: Rankings, AEO &amp; GEO for AI Search",
+      "canonical": "https://affiliatemarketingforsuccess.com/seo/",
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
+      "html_length": 131072,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "affiliatemarketingforsuccess.com",
       "topic": "affiliate marketing",
-      "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/amazon-associates-approval-checklist/",
+      "url": "https://affiliatemarketingforsuccess.com/faq/",
       "category": "editorial_review",
       "editorial_fit_score": 29,
       "http_status": 200,
       "technical_status": "technically_eligible",
-      "title": "Amazon Associates Approval Checklist (2026)",
-      "canonical": "https://affiliatemarketingforsuccess.com/affiliate-marketing/amazon-associates-approval-checklist/",
+      "title": "Affiliate Marketing FAQ: 28 Most Common Questions Answered (2026) - Affiliate Marketing",
+      "canonical": "https://affiliatemarketingforsuccess.com/faq/",
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
+      "html_length": 131070,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "affiliatemarketingforsuccess.com",
       "topic": "affiliate marketing",
-      "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/perplexity-model/",
+      "url": "https://affiliatemarketingforsuccess.com/about-us/",
       "category": "editorial_review",
       "editorial_fit_score": 29,
       "http_status": 200,
       "technical_status": "technically_eligible",
-      "title": "How Perplexity Chooses Sources: The Publisher Citation Playbook (2026) | Affiliate Marketing",
-      "canonical": "https://affiliatemarketingforsuccess.com/affiliate-marketing/perplexity-model/",
+      "title": "About AMFS: Editorial Mission, Methods &amp; Standards",
+      "canonical": "https://affiliatemarketingforsuccess.com/about-us/",
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
+      "html_length": 131072,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "affiliatemarketingforsuccess.com",
       "topic": "affiliate marketing",
-      "url": "https://affiliatemarketingforsuccess.com/ai/write-with-perplexity/",
+      "url": "https://affiliatemarketingforsuccess.com/contact-us/",
       "category": "editorial_review",
       "editorial_fit_score": 29,
       "http_status": 200,
       "technical_status": "technically_eligible",
-      "title": "How to Use Perplexity AI for Affiliate Content: A Verification-First Workflow",
-      "canonical": "https://affiliatemarketingforsuccess.com/ai/write-with-perplexity/",
+      "title": "Contact Affiliate Marketing for Success | Editorial &amp; Business Inquiries",
+      "canonical": "https://affiliatemarketingforsuccess.com/contact-us/",
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
+      "html_length": 131072,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "affiliatemarketingforsuccess.com",
       "topic": "affiliate marketing",
-      "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/first-10-affiliate-blog-posts/",
+      "url": "https://affiliatemarketingforsuccess.com/affiliate-disclosure/",
       "category": "editorial_review",
       "editorial_fit_score": 29,
       "http_status": 200,
       "technical_status": "technically_eligible",
-      "title": "First 10 Affiliate Blog Posts: Exact Launch Plan",
-      "canonical": "https://affiliatemarketingforsuccess.com/affiliate-marketing/first-10-affiliate-blog-posts/",
+      "title": "Affiliate Disclosure | How We Handle Recommendations",
+      "canonical": "https://affiliatemarketingforsuccess.com/affiliate-disclosure/",
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
-    },
-    {
-      "site": "affiliatemarketingforsuccess.com",
-      "topic": "affiliate marketing",
-      "url": "https://affiliatemarketingforsuccess.com/seo/programmatic-seo/",
-      "category": "editorial_review",
-      "editorial_fit_score": 29,
-      "http_status": 200,
-      "technical_status": "technically_eligible",
-      "title": "Programmatic SEO for Affiliate Sites: An Evidence-Led Quality Guide",
-      "canonical": "https://affiliatemarketingforsuccess.com/seo/programmatic-seo/",
-      "canonical_matches": true,
-      "noindex": false,
-      "nofollow": false,
-      "html_length": 131070
+      "html_length": 131072,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "gearuptofit.com",
@@ -1888,7 +2130,9 @@
       "canonical_matches": false,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120775
+      "html_length": 120626,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "plantastichaven.com",
@@ -1897,13 +2141,15 @@
       "category": "practical_guide",
       "editorial_fit_score": 68,
       "http_status": 403,
-      "technical_status": "unreachable_from_probe",
+      "technical_status": "probe_access_restricted",
       "title": "",
       "canonical": null,
       "canonical_matches": false,
       "noindex": false,
       "nofollow": false,
-      "html_length": 0
+      "html_length": 0,
+      "probe_access": "restricted",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "plantastichaven.com",
@@ -1912,13 +2158,15 @@
       "category": "practical_guide",
       "editorial_fit_score": 68,
       "http_status": 403,
-      "technical_status": "unreachable_from_probe",
+      "technical_status": "probe_access_restricted",
       "title": "",
       "canonical": null,
       "canonical_matches": false,
       "noindex": false,
       "nofollow": false,
-      "html_length": 0
+      "html_length": 0,
+      "probe_access": "restricted",
+      "edge_hint": "cloudflare_detected"
     },
     {
       "site": "frenchyfab.com",
@@ -1933,7 +2181,9 @@
       "canonical_matches": false,
       "noindex": false,
       "nofollow": false,
-      "html_length": 0
+      "html_length": 0,
+      "probe_access": "observed",
+      "edge_hint": "cloudflare_detected"
     }
   ]
 }
