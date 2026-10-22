@@ -48,7 +48,10 @@ const technicalNote={
   redirect_requires_review:'The inspected URL redirects; final target must be re-evaluated',
   needs_editorial_review:'Missing canonical or title, or insufficient HTML evidence',
   unreachable_from_probe:'The HTTP probe could not verify the URL',
-  unexpected_content_type:'The response was not an HTML page'
+  unexpected_content_type:'The response was not an HTML page',
+  probe_access_restricted:'The audit probe received 401, 403 or 429; this does not prove the page is unavailable to visitors or search engines',
+  probe_challenged:'The edge served a challenge rather than the page',
+  origin_or_edge_error:'A server or edge error was observed, but its cause is not verified'
 };
 export function scoreOpportunity(item,{configured=false,checkedAt=null}={}){
   const classification=classifyAsset(item.url,item.title);
