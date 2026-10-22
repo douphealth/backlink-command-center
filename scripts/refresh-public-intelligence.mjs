@@ -38,14 +38,19 @@ export function evaluatePublicPage(url,{status=0,contentType='',headers={},body=
   const contentLength=body.length;
   const canonicalMatches=Boolean(canonicalUrl&&normalize(canonicalUrl,url)===normalize(url));
   const html=contentType.toLowerCase().includes('text/html');
+  const cloudflare=/(?:^|\\b)cloudflare(?:\\b|$)/i.test(getHeader('server'))||Boolean(getHeader('cf-ray'));
+  const challenge=getHeader('cf-mitigated')==='challenge'||/\\b(?:just a moment|checking your browser|challenge-platform|verify you are human)\\b/i.test(body.slice(0,2500));
   let statusLabel='unreachable_from_probe';
-  if(status>=300&&status<400)statusLabel='redirect_requires_review';
+  if(status===401||status===403||status===429)statusLabel='probe_access_restricted';
+  else if(challenge)statusLabel='probe_challenged';
+  else if(status>=500)statusLabel='origin_or_edge_error';
+  else if(status>=300&&status<400)statusLabel='redirect_requires_review';
   else if(status===200&&!html)statusLabel='unexpected_content_type';
   else if(status===200&&noindex)statusLabel='blocked_noindex';
   else if(status===200&&canonicalUrl&&!canonicalMatches)statusLabel='blocked_canonical';
   else if(status===200&&(!canonicalUrl||!title||contentLength<650))statusLabel='needs_editorial_review';
   else if(status===200)statusLabel='technically_eligible';
-  return {http_status:status,technical_status:statusLabel,title,canonical:canonicalUrl||null,canonical_matches:canonicalMatches,noindex,nofollow,html_length:contentLength};
+  return {http_status:status,technical_status:statusLabel,title,canonical:canonicalUrl||null,canonical_matches:canonicalMatches,noindex,nofollow,html_length:contentLength,probe_access:status===401||status===403||status===429?'restricted':challenge?'challenge':'observed',edge_hint:cloudflare?'cloudflare_detected':'not_confirmed'};
 }
 export function editorialSignals(url,topic=''){
   const path=new URL(url).pathname.toLowerCase(),description=(path+' '+topic).toLowerCase();
@@ -73,7 +78,7 @@ export async function collectPublicEvidence(portfolio,{fetchImpl=fetch,now=new D
   const runner=async()=>{
     while(cursor<unique.length){
       const n=cursor++,entry=unique[n],signals=editorialSignals(entry.url,entry.topic);
-      const fallback={...entry,...signals,http_status:0,technical_status:'unreachable_from_probe',title:'',canonical:null,canonical_matches:false,noindex:false,nofollow:false,html_length:0};
+      const fallback={...entry,...signals,http_status:0,technical_status:'unreachable_from_probe',title:'',canonical:null,canonical_matches:false,noindex:false,nofollow:false,html_length:0,probe_access:'unknown',edge_hint:'not_confirmed'};
       try{
         const controller=new AbortController();
         const timer=setTimeout(()=>controller.abort(),SAFE_TIMEOUT_MS);
