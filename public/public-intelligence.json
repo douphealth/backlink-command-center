@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-21T18:33:03.763Z",
+  "generated_at": "2026-10-22T06:19:18.078Z",
   "source": "public_http_technical_checks",
   "gsc_metrics_included": false,
   "methodology": "Bounded technical checks of configured assets and first-party sitemap URLs. Editorial fit is heuristic, not search traffic or backlinks.",
@@ -88,7 +88,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 124104
+      "html_length": 123319
     },
     {
       "site": "gearuptogrow.com",
@@ -103,7 +103,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122475
+      "html_length": 121990
     },
     {
       "site": "gearuptogrow.com",
@@ -118,7 +118,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120362
+      "html_length": 121548
     },
     {
       "site": "gearuptogrow.com",
@@ -133,7 +133,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 123539
+      "html_length": 123455
     },
     {
       "site": "gearuptogrow.com",
@@ -148,7 +148,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125918
+      "html_length": 121289
     },
     {
       "site": "gearuptogrow.com",
@@ -178,7 +178,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120266
+      "html_length": 126133
     },
     {
       "site": "gearuptogrow.com",
@@ -193,7 +193,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125262
+      "html_length": 121722
     },
     {
       "site": "gearuptogrow.com",
@@ -208,7 +208,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 127867
+      "html_length": 122518
     },
     {
       "site": "gearuptogrow.com",
@@ -223,7 +223,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 126047
+      "html_length": 126115
     },
     {
       "site": "gearuptogrow.com",
@@ -238,7 +238,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 123539
+      "html_length": 121769
     },
     {
       "site": "gearuptogrow.com",
@@ -253,7 +253,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122113
+      "html_length": 120075
     },
     {
       "site": "gearuptogrow.com",
@@ -268,7 +268,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120562
+      "html_length": 123539
     },
     {
       "site": "frenchyfab.com",
@@ -313,7 +313,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 124927
+      "html_length": 125462
     },
     {
       "site": "openclaw-skillshub.com",
@@ -388,7 +388,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 130492
+      "html_length": 120834
     },
     {
       "site": "mysticaldigits.com",
@@ -403,7 +403,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 123039
+      "html_length": 122997
     },
     {
       "site": "mysticaldigits.com",
@@ -433,7 +433,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131050
+      "html_length": 125983
     },
     {
       "site": "mysticaldigits.com",
@@ -448,7 +448,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 130111
+      "html_length": 121122
     },
     {
       "site": "mysticaldigits.com",
@@ -463,7 +463,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122823
+      "html_length": 121212
     },
     {
       "site": "mysticaldigits.com",
@@ -478,7 +478,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125001
+      "html_length": 124941
     },
     {
       "site": "mysticaldigits.com",
@@ -493,7 +493,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125123
+      "html_length": 126799
     },
     {
       "site": "mysticaldigits.com",
@@ -508,7 +508,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121048
+      "html_length": 126654
     },
     {
       "site": "mysticaldigits.com",
@@ -523,7 +523,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121743
+      "html_length": 130684
     },
     {
       "site": "mysticaldigits.com",
@@ -538,7 +538,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 129098
+      "html_length": 124676
     },
     {
       "site": "mysticaldigits.com",
@@ -553,7 +553,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 130099
+      "html_length": 122146
     },
     {
       "site": "mysticaldigits.com",
@@ -568,7 +568,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 129372
+      "html_length": 131060
     },
     {
       "site": "mysticaldigits.com",
@@ -583,7 +583,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 130163
+      "html_length": 130053
     },
     {
       "site": "mysticaldigits.com",
@@ -598,7 +598,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131060
+      "html_length": 126354
     },
     {
       "site": "frenchyfab.com",
@@ -613,7 +613,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122051
+      "html_length": 121624
     },
     {
       "site": "efficientgptprompts.com",
@@ -643,7 +643,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125262
+      "html_length": 125270
     },
     {
       "site": "efficientgptprompts.com",
@@ -658,7 +658,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125198
+      "html_length": 125537
     },
     {
       "site": "efficientgptprompts.com",
@@ -673,7 +673,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125046
+      "html_length": 131068
     },
     {
       "site": "efficientgptprompts.com",
@@ -688,7 +688,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120306
+      "html_length": 121119
     },
     {
       "site": "efficientgptprompts.com",
@@ -703,7 +703,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125365
+      "html_length": 121202
     },
     {
       "site": "efficientgptprompts.com",
@@ -718,7 +718,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 130966
+      "html_length": 121041
     },
     {
       "site": "efficientgptprompts.com",
@@ -733,7 +733,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120478
+      "html_length": 121313
     },
     {
       "site": "efficientgptprompts.com",
@@ -748,7 +748,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120043
+      "html_length": 120861
     },
     {
       "site": "efficientgptprompts.com",
@@ -763,7 +763,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125287
+      "html_length": 131068
     },
     {
       "site": "efficientgptprompts.com",
@@ -778,7 +778,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 125127
+      "html_length": 120775
     },
     {
       "site": "efficientgptprompts.com",
@@ -793,7 +793,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121016
+      "html_length": 131068
     },
     {
       "site": "efficientgptprompts.com",
@@ -808,7 +808,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131068
+      "html_length": 126131
     },
     {
       "site": "imagealchemy.app",
@@ -1018,7 +1018,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120554
+      "html_length": 127410
     },
     {
       "site": "gearuptofit.com",
@@ -1033,7 +1033,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 123168
+      "html_length": 121664
     },
     {
       "site": "gearuptofit.com",
@@ -1048,7 +1048,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121201
+      "html_length": 131068
     },
     {
       "site": "gearuptofit.com",
@@ -1063,7 +1063,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 129506
+      "html_length": 131064
     },
     {
       "site": "gearuptofit.com",
@@ -1078,7 +1078,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122623
+      "html_length": 128667
     },
     {
       "site": "gearuptofit.com",
@@ -1093,7 +1093,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120817
+      "html_length": 122145
     },
     {
       "site": "gearuptofit.com",
@@ -1108,7 +1108,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122726
+      "html_length": 125774
     },
     {
       "site": "gearuptofit.com",
@@ -1153,7 +1153,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122859
+      "html_length": 122363
     },
     {
       "site": "frenchyfab.com",
@@ -1168,7 +1168,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 123281
+      "html_length": 127130
     },
     {
       "site": "frenchyfab.com",
@@ -1183,7 +1183,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
+      "html_length": 122527
     },
     {
       "site": "frenchyfab.com",
@@ -1198,7 +1198,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 127713
+      "html_length": 123059
     },
     {
       "site": "frenchyfab.com",
@@ -1228,7 +1228,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 122980
+      "html_length": 131068
     },
     {
       "site": "frenchyfab.com",
@@ -1243,7 +1243,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
+      "html_length": 123897
     },
     {
       "site": "frenchyfab.com",
@@ -1273,7 +1273,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131060
+      "html_length": 127072
     },
     {
       "site": "frenchyfab.com",
@@ -1288,7 +1288,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 130508
+      "html_length": 122032
     },
     {
       "site": "micegoneguide.com",
@@ -1303,7 +1303,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121845
+      "html_length": 122094
     },
     {
       "site": "micegoneguide.com",
@@ -1333,7 +1333,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120512
+      "html_length": 131066
     },
     {
       "site": "gearuptofit.com",
@@ -1348,7 +1348,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131067
+      "html_length": 122919
     },
     {
       "site": "micegoneguide.com",
@@ -1393,7 +1393,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 123319
+      "html_length": 123224
     },
     {
       "site": "micegoneguide.com",
@@ -1408,7 +1408,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 124333
+      "html_length": 122328
     },
     {
       "site": "micegoneguide.com",
@@ -1433,12 +1433,12 @@
       "editorial_fit_score": 52,
       "http_status": 200,
       "technical_status": "technically_eligible",
-      "title": "Mouse Droppings: Visual Identification, Size Scale &amp; Lookalikes | Mice Gone Guide",
+      "title": "What Do Mouse Droppings Look Like? ID Guide &amp; Lookalikes",
       "canonical": "https://micegoneguide.com/mouse-droppings/",
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131069
+      "html_length": 131063
     },
     {
       "site": "micegoneguide.com",
@@ -1468,7 +1468,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131069
+      "html_length": 126887
     },
     {
       "site": "micegoneguide.com",
@@ -1483,7 +1483,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 127812
+      "html_length": 120923
     },
     {
       "site": "micegoneguide.com",
@@ -1493,12 +1493,12 @@
       "editorial_fit_score": 52,
       "http_status": 200,
       "technical_status": "technically_eligible",
-      "title": "Signs of Mice Infestation: Physical Evidence &amp; Next-Step Checklist | Mice Gone Guide",
+      "title": "Signs of Mice in Your Home: Evidence &amp; What to Do Next",
       "canonical": "https://micegoneguide.com/signs-of-mice-infestation/",
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 126988
+      "html_length": 131069
     },
     {
       "site": "micegoneguide.com",
@@ -1513,7 +1513,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131069
+      "html_length": 127360
     },
     {
       "site": "openclaw-skillshub.com",
@@ -1723,7 +1723,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 121295
+      "html_length": 120696
     },
     {
       "site": "affiliatemarketingforsuccess.com",
@@ -1738,7 +1738,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
+      "html_length": 130928
     },
     {
       "site": "affiliatemarketingforsuccess.com",
@@ -1753,7 +1753,7 @@
       "canonical_matches": true,
       "noindex": false,
       "nofollow": false,
-      "html_length": 131070
+      "html_length": 121418
     },
     {
       "site": "affiliatemarketingforsuccess.com",
@@ -1888,7 +1888,7 @@
       "canonical_matches": false,
       "noindex": false,
       "nofollow": false,
-      "html_length": 120629
+      "html_length": 120775
     },
     {
       "site": "plantastichaven.com",
