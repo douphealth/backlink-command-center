@@ -6,6 +6,7 @@
 import {readFile, writeFile, mkdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {discoverSitemapUrls} from './sitemap-discovery.mjs';
+import {buildOpportunitySnapshot} from './editorial-opportunity-engine.mjs';
 import {resolve, dirname} from 'node:path';
 
 const MAX_HTML=120000;
@@ -111,5 +112,7 @@ if(main){
   const out=resolve(root,'public/public-intelligence.json');
   await mkdir(dirname(out),{recursive:true});
   await writeFile(out,JSON.stringify(evidence,null,2)+'\n','utf8');
-  console.log('Public owned-URL checks:',evidence.urls.length,'technically eligible:',evidence.urls.filter(x=>x.technical_status==='technically_eligible').length);
+  const opportunities=buildOpportunitySnapshot(evidence,input);
+  await writeFile(resolve(root,'public/editorial-opportunities.json'),JSON.stringify(opportunities,null,2)+'\n','utf8');
+  console.log('Public owned-URL checks:',evidence.urls.length,'technically eligible:',evidence.urls.filter(x=>x.technical_status==='technically_eligible').length,'shortlisted:',opportunities.shortlist.length);
 }
