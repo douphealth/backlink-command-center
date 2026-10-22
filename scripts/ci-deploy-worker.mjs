@@ -41,7 +41,7 @@ async function wrangler(args){
     const {stdout,stderr}=await exec(binary,['--no-install','wrangler',...args],{
       cwd:root,env:process.env,timeout:180000,maxBuffer:3*1024*1024,windowsHide:true
     });
-    return stdout+'\n'+(stderr||'');
+    return stdout;
   }catch(e){
     // Do not echo stdout or stderr: Wrangler may include deployment output.
     throw Error('Wrangler command failed ('+args.slice(0,2).join(' ')+'): exit '+(e.code||'unknown'));
