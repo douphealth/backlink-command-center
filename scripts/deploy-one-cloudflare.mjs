@@ -85,13 +85,13 @@ async function main(){
   secureWrite(secretFile,JSON.stringify(secrets));
   let deployOutput='';
   try{
-    banner('Deploying ONE Cloudflare Worker. Wrangler will create and attach D1 automatically.');
+    banner('Deploying ONE Cloudflare Worker with an already-resolved D1 binding.');
     deployOutput=await wrangler('deploy','--config',deployConfig,'--secrets-file',secretFile);
   }finally{try{unlinkSync(secretFile);}catch{}}
   const url=workerUrl(deployOutput);
   banner('CLOUDFLARE DEPLOYMENT COMMAND SUCCEEDED.');
   banner(`Open: ${url||'the workers.dev URL printed by Wrangler above'}`);
-  banner(`PRIVATE SIGN-IN CODE: ${data.access_code}`);
+  banner('Private sign-in code remains only in the local operator-credentials.json (never printed in deployment logs).');
   banner(`A recovery copy is saved at: ${credentialsFile}`);
   banner('Never paste this code in chat or commit the local .linkforge directory.');
   banner('DataForSEO paid calls: OFF. Outgoing emails: OFF. No RackNerd, Pages bindings, Access identifiers, or separate scheduler.');
