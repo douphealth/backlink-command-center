@@ -1,0 +1,60 @@
+name: LinkForge private Worker production
+on:
+  push:
+    branches: [main]
+    paths:
+      - src/**
+      - functions/_lib/**
+      - worker.wrangler.jsonc
+      - scripts/ci-deploy-worker.mjs
+      - scripts/cloudflare-deploy-guards.mjs
+      - .github/workflows/deploy-worker.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: linkforge-private-worker-deploy
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: 'true'
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      LINKFORGE_ADMIN_KEY: ${{ secrets.LINKFORGE_ADMIN_KEY }}
+      LINKFORGE_SESSION_SECRET: ${{ secrets.LINKFORGE_SESSION_SECRET }}
+      GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+      GMAIL_OAUTH_CLIENT_ID: ${{ secrets.GMAIL_OAUTH_CLIENT_ID }}
+      GMAIL_OAUTH_CLIENT_SECRET: ${{ secrets.GMAIL_OAUTH_CLIENT_SECRET }}
+      GMAIL_OAUTH_REFRESH_TOKEN: ${{ secrets.GMAIL_OAUTH_REFRESH_TOKEN }}
+      GMAIL_SENDER_ADDRESS: ${{ secrets.GMAIL_SENDER_ADDRESS }}
+      GMAIL_SELF_TEST_ON_DEPLOY: 'NO'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preflight private account authorization
+        id: preflight
+        shell: bash
+        run: |
+          if node scripts/ci-deploy-worker.mjs --preflight; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Private Cloudflare Worker deployment blocked by missing or invalid account authorization. No Worker deployment attempted."
+            echo "## Worker authorization unavailable" >> "$GITHUB_STEP_SUMMARY"
+            echo "Required account secrets are absent or invalid. Pages and public URL research remain unaffected; production Worker status remains UNVERIFIED." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Install dependencies and run tests
+        if: steps.preflight.outputs.ready == 'true'
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+          npm test
+          python3 -m unittest discover -s tests/gsc -p 'test_*.py'
+      - name: Deploy and verify actual private Worker
+        if: steps.preflight.outputs.ready == 'true'
+        run: node scripts/ci-deploy-worker.mjs
