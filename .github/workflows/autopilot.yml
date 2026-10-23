@@ -37,6 +37,7 @@ jobs:
         env:
           AUTOPILOT_DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
           LINKFORGE_DATA_KEY: ${{ secrets.LINKFORGE_DATA_KEY }}
+          LINKFORGE_VAULT_RESET_AT: ${{ vars.LINKFORGE_VAULT_RESET_AT }}
           DATAFORSEO_LOGIN: ${{ secrets.DATAFORSEO_LOGIN }}
           DATAFORSEO_PASSWORD: ${{ secrets.DATAFORSEO_PASSWORD }}
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}

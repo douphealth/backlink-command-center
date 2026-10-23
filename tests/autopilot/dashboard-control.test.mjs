@@ -32,6 +32,8 @@ function mockGitHub(){
     const path=new URL(url).pathname,method=init.method||'GET';calls.push(`${method} ${path}`);
     const json=(b,s=200)=>new Response(JSON.stringify(b),{status:s,headers:{'content-type':'application/json'}});
     if(init.headers?.Authorization!=='Bearer tok'&&method!=='GET')return json({message:'Bad credentials'},401);
+    if(path==='/user')return init.headers?.Authorization==='Bearer tok'?json({login:'douphealth'}):json({message:'Bad credentials'},401);
+    if(state.publicOnly&&/\/actions\/(secrets|variables)|\/enable$/.test(path))return json({message:'Resource not accessible by personal access token'},403);
     if(path.endsWith('/workflows/autopilot.yml'))return json({state:state.wf});
     if(path.endsWith('/workflows/autopilot.yml/runs'))return json({workflow_runs:new URL(url).searchParams.get('status')==='queued'?[]:state.runs});
     if(path.endsWith('/disable')){state.wf='disabled_manually';return new Response(null,{status:204})}
@@ -81,4 +83,19 @@ test('a bad token produces a clear message',async()=>{
   mockGitHub();control.token.set('wrong');
   await assert.rejects(control.run(),/rejected the token/);
   assert.ok(control.TOKEN_URL.includes('actions=write')&&control.TOKEN_URL.includes('secrets=write')&&control.TOKEN_URL.includes('variables=write'));
+});
+
+test('diagnose names the exact missing permission (public-only repository access)',async()=>{
+  const gh=mockGitHub();control.token.set('tok');
+  gh.state.publicOnly=true;
+  let d=await control.diagnose();
+  assert.equal(d.valid,true);assert.equal(d.login,'douphealth');
+  assert.equal(d.secrets,false);assert.equal(d.variables,false);assert.equal(d.actions,false);
+  assert.equal(control.diagnosisOk(d),false);
+  gh.state.publicOnly=false;gh.state.secrets.LINKFORGE_DATA_KEY={};
+  d=await control.diagnose();
+  assert.equal(control.diagnosisOk(d),true);assert.ok(d.secretNames.has('LINKFORGE_DATA_KEY'));
+  control.token.set('wrong');
+  d=await control.diagnose();
+  assert.equal(d.valid,false);assert.match(d.error,/rejected the token/);
 });

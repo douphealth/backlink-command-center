@@ -38,7 +38,7 @@ export function loadConfig(env=process.env,argv=process.argv){
     dryRun,
     minutes:num(env.AUTOPILOT_MINUTES,22),maxUrlsPerSite:num(env.AUTOPILOT_MAX_URLS_PER_SITE,300),
     assetsPerSite:num(env.AUTOPILOT_ASSETS_PER_SITE,3),queriesPerAsset:num(env.AUTOPILOT_QUERIES_PER_ASSET,2),maxNewProspects:num(env.AUTOPILOT_MAX_NEW_PROSPECTS,60),
-    dataKey:env.LINKFORGE_DATA_KEY||'',
+    dataKey:env.LINKFORGE_DATA_KEY||'',vaultResetAt:env.LINKFORGE_VAULT_RESET_AT||'',
     dfs:{login:env.DATAFORSEO_LOGIN||'',password:env.DATAFORSEO_PASSWORD||'',dailyUsd:num(env.DATAFORSEO_DAILY_USD,0.5),monthlyUsd:num(env.DATAFORSEO_MONTHLY_USD,10)},
     outreach:{mode,gmail,fromAddress:env.GMAIL_ADDRESS||(dryRun?'dry-run@linkforge.invalid':''),senderName:env.SENDER_NAME||'',postalAddress:env.SENDER_POSTAL_ADDRESS||'',
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),gapMs:()=>15000+Math.floor(Math.random()*30000)},
@@ -101,7 +101,10 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   let state={v:1,created_at:NOW(),prospects:{},domains:{},suppression:{},contacted:{},queries:{},ledger:[]},vaultOk=false;
   const box=await readJson(P.vault,null);
   if(cfg.dataKey){
-    if(box){try{state={...state,...await open(box,cfg.dataKey)};vaultOk=true}catch(e){log('vault: '+e.message+' — private stages disabled, vault left untouched')}}
+    if(box){try{state={...state,...await open(box,cfg.dataKey)};vaultOk=true}catch(e){
+      // The owner created a new key from the dashboard after this vault was sealed: start fresh.
+      if(cfg.vaultResetAt&&Date.parse(cfg.vaultResetAt)>Date.parse(box.sealed_at||0)){vaultOk=true;log('vault: new key requested from the dashboard — starting a fresh vault')}
+      else log('vault: '+e.message+' — private stages disabled, vault left untouched')}}
     else vaultOk=true;
   }
   const privateWhy=!cfg.dataKey?'LINKFORGE_DATA_KEY not set':'vault could not be opened';
