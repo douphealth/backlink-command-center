@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-23T10:16:31.994Z",
- "duration_s": 150,
+ "generated_at": "2026-10-23T10:31:31.410Z",
+ "duration_s": 182,
  "dry_run": false,
  "schedule": "Twice daily (05:40 and 14:10 UTC) via GitHub Actions; every run redeploys Cloudflare Pages",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 20.738426
+    "balance_usd": 20.625146
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 6744,
+   "ms": 15036,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -91,7 +91,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 3,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -106,31 +106,31 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 22029,
+   "ms": 0,
    "result": {
-    "checked": 66,
-    "rejected": 40,
-    "no_followup": 3,
-    "recontacted": 7
+    "checked": 0,
+    "rejected": 0,
+    "no_followup": 0,
+    "recontacted": 0
    }
   },
   "prospects": {
    "ok": true,
-   "ms": 103795,
+   "ms": 154570,
    "result": {
-    "queries": 12,
-    "serp_results": 214,
-    "candidates": 97,
-    "qualified": 35,
+    "queries": 14,
+    "serp_results": 238,
+    "candidates": 98,
+    "qualified": 31,
     "already_linked": 0,
-    "rejected": 93,
-    "with_email": 12,
-    "contact_form": 9
+    "rejected": 92,
+    "with_email": 15,
+    "contact_form": 6
    }
   },
   "replies": {
    "ok": true,
-   "ms": 13677,
+   "ms": 10383,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -173,18 +173,18 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.291,
-  "month_usd": 0.291,
+  "today_usd": 0.4477,
+  "month_usd": 0.4477,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 15
+  "calls_this_run": 17
  },
  "funnel": {
-  "prospects_evaluated": 248,
-  "qualified": 61,
-  "ready": 19,
-  "contact_form_only": 13,
-  "no_contact": 24,
+  "prospects_evaluated": 371,
+  "qualified": 92,
+  "ready": 34,
+  "contact_form_only": 19,
+  "no_contact": 34,
   "contacted": 5,
   "replied": 0,
   "positive": 0,
@@ -196,11 +196,11 @@
  "history": [
   {
    "date": "2026-10-23",
-   "prospects_evaluated": 248,
-   "qualified": 61,
-   "ready": 19,
-   "contact_form_only": 13,
-   "no_contact": 24,
+   "prospects_evaluated": 371,
+   "qualified": 92,
+   "ready": 34,
+   "contact_form_only": 19,
+   "no_contact": 34,
    "contacted": 5,
    "replied": 0,
    "positive": 0,
@@ -208,7 +208,7 @@
    "existing_links": 0,
    "declined": 0,
    "bounced": 0,
-   "spend_usd": 0.291
+   "spend_usd": 0.4477
   }
  ],
  "sites": [
@@ -470,7 +470,7 @@
    ],
    "prospects": 4,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -494,7 +494,7 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -516,7 +516,7 @@
     "1 data table",
     "Recently updated"
    ],
-   "prospects": 6,
+   "prospects": 13,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -542,7 +542,7 @@
    ],
    "prospects": 11,
    "internal_link_suggestions": 1,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -566,7 +566,7 @@
    ],
    "prospects": 3,
    "internal_link_suggestions": 1,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -592,7 +592,7 @@
    ],
    "prospects": 6,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -615,7 +615,7 @@
     "3 data tables",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 5,
    "internal_link_suggestions": 4,
    "promoting": true
   },
@@ -640,9 +640,9 @@
     "2 data tables",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 7,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -665,9 +665,9 @@
     "6 data tables",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 4,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "mysticaldigits.com",
@@ -689,7 +689,7 @@
     "2 data tables",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 5,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -714,7 +714,7 @@
     "4 data tables",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 3,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -866,7 +866,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -1276,7 +1276,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 3,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -3175,6 +3175,16 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-success/",
+   "from_title": "2026 Affiliate Marketing for Beginners: Ultimate Guide",
+   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
+   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
+   "anchor": "choose profitable affiliate",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/seo/mastering-seo-best-practices/",
    "from_title": "Affiliate SEO best practices: ranking, revenue, and AI visibility cleanup",
    "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
@@ -3187,16 +3197,6 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-vs-dropshipping/",
    "from_title": "Affiliate Marketing Vs Dropshipping: 2026 Winner? (2026 Analysis)",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "choose profitable affiliate",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-success/",
-   "from_title": "2026 Affiliate Marketing for Beginners: Ultimate Guide",
    "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
    "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
    "anchor": "choose profitable affiliate",
@@ -4316,22 +4316,22 @@
  ],
  "wins": [],
  "log": [
-  "10:14:05 connection dataforseo: connected",
-  "10:14:05 connection gmail: connected",
-  "10:14:06 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "10:14:06 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "10:14:06 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "10:14:06 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "10:14:07 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "10:14:08 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "10:14:08 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "10:14:09 crawl frenchyfab.com: 239/239 urls, fetched 0, 304 0, reused 239",
-  "10:14:10 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "10:14:12 crawl mysticaldigits.com: 300/471 urls, fetched 0, 304 0, reused 300",
-  "10:14:34 requalify: 66 re-checked, 40 dropped, 3 follow-ups cancelled, 7 still ready",
-  "10:16:18 prospects: 12 queries, 97 candidates, 35 qualified, 12 with email, 0 already linking",
-  "10:16:31 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "10:16:31 outreach (send): 0 sent, 0 drafted, 0 follow-ups, cap 5",
-  "10:16:31 link checks: 0 pages, 0 new links won, 0 lost"
+  "10:28:31 connection dataforseo: connected",
+  "10:28:31 connection gmail: connected",
+  "10:28:33 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "10:28:34 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "10:28:37 crawl mysticaldigits.com: 300/471 urls, fetched 0, 304 0, reused 300",
+  "10:28:38 crawl frenchyfab.com: 239/239 urls, fetched 0, 304 0, reused 239",
+  "10:28:39 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "10:28:39 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "10:28:40 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "10:28:42 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "10:28:44 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "10:28:46 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "10:30:16 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "10:31:20 prospects: 14 queries, 98 candidates, 31 qualified, 15 with email, 0 already linking",
+  "10:31:31 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "10:31:31 outreach (send): 0 sent, 0 drafted, 0 follow-ups, cap 5",
+  "10:31:31 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
