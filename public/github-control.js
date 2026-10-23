@@ -1,8 +1,8 @@
 /**
  * Dashboard control of the Autopilot workflow through the GitHub REST API.
- * Uses a fine-grained token (this repository only: Actions, Secrets, Variables)
- * kept in this browser's localStorage. Secret values are encrypted in the browser
- * with the repository's public key before upload; GitHub can't return them.
+ * Needs a fine-grained token for this repository with Actions + Secrets
+ * (read & write) only. Secret values are encrypted in the browser with the
+ * repository's public key before upload; GitHub can't return them.
  */
 import {sealedBox,toB64,fromB64} from './sealed-box.js';
 
@@ -10,12 +10,20 @@ export const REPO='douphealth/backlink-command-center';
 const WORKFLOW='autopilot.yml';
 const API='https://api.github.com';
 const TOKEN_KEY='linkforge-github-token';
+export const SETTINGS_SECRET='LINKFORGE_SETTINGS';
 export const TOKEN_URL='https://github.com/settings/personal-access-tokens/new?'+new URLSearchParams({
   name:'LinkForge Autopilot control',description:'Run/Stop and connect credentials from the LinkForge dashboard',
-  target_name:REPO.split('/')[0],expires_in:'365',actions:'write',secrets:'write',variables:'write'});
+  target_name:REPO.split('/')[0],expires_in:'366',actions:'write',secrets:'write'});
 
-export const token={get:()=>{try{return localStorage.getItem(TOKEN_KEY)||''}catch{return ''}},
-  set:v=>{try{v?localStorage.setItem(TOKEN_KEY,v):localStorage.removeItem(TOKEN_KEY)}catch{}}};
+// localStorage when the browser allows it; otherwise this tab's memory only.
+let memoryToken='';
+export const token={
+  persistent:true,
+  get(){try{return localStorage.getItem(TOKEN_KEY)||memoryToken}catch{return memoryToken}},
+  set(v){memoryToken=v||'';
+    try{v?localStorage.setItem(TOKEN_KEY,v):localStorage.removeItem(TOKEN_KEY);this.persistent=!v||localStorage.getItem(TOKEN_KEY)===v}
+    catch{this.persistent=!v}},
+};
 
 async function gh(path,{method='GET',body,auth=true}={}){
   const t=token.get();
@@ -23,7 +31,7 @@ async function gh(path,{method='GET',body,auth=true}={}){
     ...(auth&&t?{Authorization:'Bearer '+t}:{}),...(body?{'Content-Type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,cache:'no-store'});
   if(res.status===204)return {};
   const data=await res.json().catch(()=>({}));
-  if(!res.ok){const e=Error(res.headers.get('x-ratelimit-remaining')==='0'?'GitHub rate limit reached — add your control token to lift it.':res.status===401?'GitHub rejected the token (expired or mistyped).':res.status===403||res.status===404?'The token is missing a permission for this repository (needs Actions, Secrets and Variables: read & write).':data.message||`GitHub error ${res.status}`);e.status=res.status;throw e}
+  if(!res.ok){const e=Error(res.headers.get('x-ratelimit-remaining')==='0'?'GitHub rate limit reached — add your control token to lift it.':res.status===401?'GitHub rejected the token (expired or mistyped).':res.status===403||res.status===404?'The token is missing a permission for this repository (needs Actions and Secrets: read & write).':data.message||`GitHub error ${res.status}`);e.status=res.status;throw e}
   return data;
 }
 
@@ -54,35 +62,23 @@ export async function stop(){
  * Check what the saved token can actually do, permission by permission, so the
  * dashboard can say exactly what to fix instead of failing silently.
  * Fine-grained tokens default to "Public repositories (read-only)", which
- * silently ignores the Actions/Secrets/Variables permissions.
+ * silently ignores the Actions/Secrets permissions.
  */
 export async function diagnose(){
-  const out={valid:false,login:null,error:'',actions:null,secrets:null,variables:null,secretNames:new Set(),vars:{}};
+  const out={valid:false,login:null,error:'',actions:null,secrets:null,secretNames:new Set()};
   try{out.login=(await gh('/user')).login;out.valid=true}catch(e){out.error=e.message;return out}
-  const [s,v,wf]=await Promise.all([
-    gh(`/repos/${REPO}/actions/secrets?per_page=100`).catch(()=>null),
-    gh(`/repos/${REPO}/actions/variables?per_page=30`).catch(()=>null),
-    gh(`/repos/${REPO}/actions/workflows/${WORKFLOW}`).catch(()=>null)]);
-  out.secrets=!!s;out.variables=!!v;
+  const [s,wf]=await Promise.all([gh(`/repos/${REPO}/actions/secrets?per_page=100`).catch(()=>null),gh(`/repos/${REPO}/actions/workflows/${WORKFLOW}`).catch(()=>null)]);
+  out.secrets=!!s;
   if(s)out.secretNames=new Set((s.secrets||[]).map(x=>x.name));
-  if(v)out.vars=Object.fromEntries((v.variables||[]).map(x=>[x.name,x.value]));
   // Enabling an already-active workflow is a no-op that needs Actions: write — a safe write probe.
   if(wf?.state==='active')out.actions=await gh(`/repos/${REPO}/actions/workflows/${WORKFLOW}/enable`,{method:'PUT'}).then(()=>true,()=>false);
   return out;
 }
-export const diagnosisOk=d=>!!d&&d.valid&&d.secrets&&d.variables&&d.actions!==false;
+export const diagnosisOk=d=>!!d&&d.valid&&d.secrets&&d.actions!==false;
 
-export async function configured(){
-  const [s,v]=await Promise.all([gh(`/repos/${REPO}/actions/secrets?per_page=100`),gh(`/repos/${REPO}/actions/variables?per_page=30`)]);
-  return {secrets:new Set((s.secrets||[]).map(x=>x.name)),variables:Object.fromEntries((v.variables||[]).map(x=>[x.name,x.value]))};
-}
 let publicKey=null;
 export async function setSecret(name,value){
   publicKey??=await gh(`/repos/${REPO}/actions/secrets/public-key`);
   const sealed=sealedBox(new TextEncoder().encode(value),fromB64(publicKey.key));
   await gh(`/repos/${REPO}/actions/secrets/${name}`,{method:'PUT',body:{encrypted_value:toB64(sealed),key_id:publicKey.key_id}});
-}
-export async function setVariable(name,value){
-  try{await gh(`/repos/${REPO}/actions/variables/${name}`,{method:'PATCH',body:{name,value}})}
-  catch(e){if(e.status!==404)throw e;await gh(`/repos/${REPO}/actions/variables`,{method:'POST',body:{name,value}})}
 }

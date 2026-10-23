@@ -25,7 +25,7 @@ crawl every owned page ─► measure real demand ─► rank the best URLs ─�
 
 ## Turn it on from the dashboard (one time, ~5 minutes)
 
-1. Open the dashboard → **Autopilot** → **Create control token**. GitHub opens with the name and permissions pre-filled (Actions, Secrets, Variables: read & write). Pick **Only select repositories → backlink-command-center**, generate it, and paste it into the dashboard. It stays in that browser only.
+1. Open the dashboard → **Autopilot** → **Create control token**. GitHub opens with the name and permissions pre-filled (Actions and Secrets: read & write). Pick **Only select repositories → backlink-command-center**, generate it, and paste it into the dashboard. It stays in that browser only.
 2. Fill in **DataForSEO login + API password**, **Gmail address + app password**, your name and the outreach mode, then press **Save & run now**. Values are encrypted in the browser with the repository's public key (libsodium sealed box) and stored as GitHub secrets. Nobody can read them back.
 3. From then on, use **▶ Run** (starts a cycle and re-enables the schedule) and **■ Stop** (pauses the schedule and cancels a running cycle). The page refreshes itself while a run is in progress.
 
@@ -80,7 +80,7 @@ Run a cycle on demand: **Actions → LinkForge Autopilot → Run workflow** (tic
 ## Development
 
 ```bash
-npm test                # 69 tests: Pages routing, legacy Worker, Autopilot engine (mocked network, SMTP/IMAP fakes)
+npm test                # 73 tests: Pages routing, legacy Worker, Autopilot engine (mocked network, SMTP/IMAP fakes)
 npm run build
 npm run autopilot:dry   # full cycle locally, nothing sent or written
 ```

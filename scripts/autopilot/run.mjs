@@ -30,7 +30,15 @@ const P={summary:resolve(ROOT,'public/data/autopilot.json'),vault:resolve(ROOT,'
 const readJson=async(f,fallback)=>{try{return JSON.parse(await readFile(f,'utf8'))}catch{return fallback}};
 const num=(v,d)=>Number.isFinite(Number(v))&&String(v).trim()!==''?Number(v):d;
 
+const DASHBOARD_SETTINGS=['SENDER_NAME','OUTREACH_MODE','OUTREACH_DAILY_LIMIT'];
+/** The dashboard saves these as one JSON secret; it takes precedence over older repo variables. */
+export function withDashboardSettings(env){
+  let s={};try{s=JSON.parse(env.LINKFORGE_SETTINGS||'{}')}catch{}
+  const picked=Object.fromEntries(DASHBOARD_SETTINGS.filter(k=>typeof s?.[k]==='string'&&s[k].trim()).map(k=>[k,s[k].trim()]));
+  return {...env,...picked};
+}
 export function loadConfig(env=process.env,argv=process.argv){
+  env=withDashboardSettings(env);
   const gmail=!!(env.GMAIL_ADDRESS&&env.GMAIL_APP_PASSWORD);
   const dryRun=argv.includes('--dry-run')||env.AUTOPILOT_DRY_RUN==='1';
   const mode=['off','draft','send'].includes(env.OUTREACH_MODE)?env.OUTREACH_MODE:gmail?'draft':'off';

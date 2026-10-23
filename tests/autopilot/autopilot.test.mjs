@@ -232,3 +232,10 @@ test('engine refuses a wrong vault key but starts fresh after a dashboard key re
     assert.equal(reset.summary.capabilities.vault,true);
   }finally{original==null?fs.unlinkSync(path):fs.writeFileSync(path,original)}
 });
+
+test('dashboard settings secret overrides older repo variables',async()=>{
+  const {withDashboardSettings}=await import('../../scripts/autopilot/run.mjs');
+  const env=withDashboardSettings({SENDER_NAME:'Old',OUTREACH_MODE:'draft',LINKFORGE_SETTINGS:JSON.stringify({SENDER_NAME:'Alex',OUTREACH_MODE:'send',OUTREACH_DAILY_LIMIT:'15',EVIL:'x'})});
+  assert.equal(env.SENDER_NAME,'Alex');assert.equal(env.OUTREACH_MODE,'send');assert.equal(env.OUTREACH_DAILY_LIMIT,'15');assert.equal(env.EVIL,undefined);
+  assert.equal(withDashboardSettings({SENDER_NAME:'Kept',LINKFORGE_SETTINGS:'not json'}).SENDER_NAME,'Kept');
+});
