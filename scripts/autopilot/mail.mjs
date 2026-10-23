@@ -68,8 +68,10 @@ export class Imap{
   constructor({user,pass,connect=defaultConnect,host='imap.gmail.com',port=993}){Object.assign(this,{user,pass,connect,host,port});this.n=0}
   async open(){
     this.w=new Wire(this.connect(this.host,this.port));
-    await this.w.wait(b=>{const i=b.indexOf(CRLF);return i>=0?{consumed:i+2,value:b.slice(0,i)}:null});
-    await this.cmd(`LOGIN ${quote(this.user)} ${quote(this.pass)}`);
+    try{
+      await this.w.wait(b=>{const i=b.indexOf(CRLF);return i>=0?{consumed:i+2,value:b.slice(0,i)}:null});
+      await this.cmd(`LOGIN ${quote(this.user)} ${quote(this.pass)}`);
+    }catch(e){this.w.end();this.w.s.destroy?.();throw e} // never leave a socket holding the run open
     return this;
   }
   /** Send a command; resolves with the full untagged response text once the tagged OK arrives. */

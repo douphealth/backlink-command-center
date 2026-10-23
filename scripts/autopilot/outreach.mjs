@@ -128,6 +128,14 @@ export function gmailTransport(env){
     send:({to,raw})=>smtpSend({user,pass,from:user,to,raw}),
     draft:async raw=>(await getImap()).appendDraft(raw),
     imap:{recentHeaders:async(...a)=>(await getImap()).recentHeaders(...a)},
+    /** Logs in over IMAP with the same app password used for sending; sends nothing. */
+    check:async()=>{
+      // Close right away: the socket's idle timeout would otherwise drop it before replies are read.
+      try{await getImap();await imap.close();imap=null;return {status:'connected'}}
+      catch(e){return {status:'rejected',error:/AUTHENTICATIONFAILED|Invalid credentials|LOGIN (NO|BAD)|Application-specific password/i.test(e.message)
+        ?'Gmail rejected the login. Use the full Gmail address and a 16-letter app password from myaccount.google.com/apppasswords (2-Step Verification must be on).'
+        :'Gmail could not be reached: '+String(e.message).slice(0,100)}}
+    },
     close:async()=>{if(imap)await imap.close()},
   };
 }
