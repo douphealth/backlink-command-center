@@ -1,17 +1,17 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-23T09:49:36.395Z",
- "duration_s": 30,
+ "generated_at": "2026-10-23T10:07:02.758Z",
+ "duration_s": 355,
  "dry_run": false,
  "schedule": "Twice daily (05:40 and 14:10 UTC) via GitHub Actions; every run redeploys Cloudflare Pages",
  "capabilities": {
   "vault": true,
-  "dataforseo": false,
+  "dataforseo": true,
   "gmail": true,
   "connections": {
    "dataforseo": {
-    "status": "rejected",
-    "error": "DataForSEO rejected the login (HTTP 401: You are not authorized to access this resource. See your login details here: https://app.dataforseo.com/api-access .). Use the API login and the API password from app.dataforseo.com/api-access — not your website password."
+    "status": "connected",
+    "balance_usd": 20.928466
    },
    "gmail": {
     "status": "connected"
@@ -75,15 +75,15 @@
  ],
  "stages": {
   "connections": {
-   "ok": false,
+   "ok": true,
    "result": {
-    "dataforseo": "rejected",
+    "dataforseo": "connected",
     "gmail": "connected"
    }
   },
   "crawl": {
    "ok": true,
-   "ms": 9141,
+   "ms": 7142,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -91,26 +91,36 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 3377,
    "result": {
     "gsc_pages": 0,
-    "dataforseo_pages": 0
+    "dataforseo_pages": 155
    }
   },
   "rank": {
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 314
+    "internal_suggestions": 309
    }
   },
   "prospects": {
-   "ok": null,
-   "skipped": "DataForSEO rejected the login (HTTP 401: You are not authorized to access this resource. See your login details here: https://app.dataforseo.com/api-access .). Use the API login and the API password from app.dataforseo.com/api-access — not your website password."
+   "ok": true,
+   "ms": 153447,
+   "result": {
+    "queries": 12,
+    "serp_results": 197,
+    "candidates": 124,
+    "qualified": 66,
+    "already_linked": 0,
+    "rejected": 54,
+    "with_email": 34,
+    "contact_form": 8
+   }
   },
   "replies": {
    "ok": true,
-   "ms": 0,
+   "ms": 1,
    "result": {
     "scanned": 0,
     "replies": 0,
@@ -121,10 +131,10 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 0,
+   "ms": 189585,
    "result": {
     "followups": 0,
-    "sent": 0,
+    "sent": 5,
     "drafted": 0,
     "skipped": 0,
     "cap": 5
@@ -136,7 +146,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 0,
+   "ms": 1,
    "result": {
     "checked": 0,
     "won": 0,
@@ -149,23 +159,23 @@
   "pages_crawled": 1902,
   "urls_discovered": 2837,
   "promotable": 250,
-  "internal_suggestions": 314,
+  "internal_suggestions": 309,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0,
-  "month_usd": 0,
+  "today_usd": 0.1777,
+  "month_usd": 0.1777,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 0
+  "calls_this_run": 23
  },
  "funnel": {
-  "prospects_evaluated": 0,
-  "qualified": 0,
-  "ready": 0,
-  "contact_form_only": 0,
-  "no_contact": 0,
-  "contacted": 0,
+  "prospects_evaluated": 120,
+  "qualified": 66,
+  "ready": 29,
+  "contact_form_only": 8,
+  "no_contact": 24,
+  "contacted": 5,
   "replied": 0,
   "positive": 0,
   "won": 0,
@@ -176,19 +186,19 @@
  "history": [
   {
    "date": "2026-10-23",
-   "prospects_evaluated": 0,
-   "qualified": 0,
-   "ready": 0,
-   "contact_form_only": 0,
-   "no_contact": 0,
-   "contacted": 0,
+   "prospects_evaluated": 120,
+   "qualified": 66,
+   "ready": 29,
+   "contact_form_only": 8,
+   "no_contact": 24,
+   "contacted": 5,
    "replied": 0,
    "positive": 0,
    "won": 0,
    "existing_links": 0,
    "declined": 0,
    "bounced": 0,
-   "spend_usd": 0
+   "spend_usd": 0.1777
   }
  ],
  "sites": [
@@ -206,7 +216,7 @@
    "discovered": 161,
    "sitemaps": 5,
    "eligible": 25,
-   "top": "https://plantastichaven.com/plant-care-plan/"
+   "top": "https://plantastichaven.com/string-of-pearls-plant-care/"
   },
   {
    "domain": "gearuptogrow.com",
@@ -230,7 +240,7 @@
    "discovered": 471,
    "sitemaps": 5,
    "eligible": 25,
-   "top": "https://mysticaldigits.com/life-path-number-calculator/"
+   "top": "https://mysticaldigits.com/numerology-love-meter-calculator/"
   },
   {
    "domain": "frenchyfab.com",
@@ -262,7 +272,7 @@
    "discovered": 158,
    "sitemaps": 1,
    "eligible": 25,
-   "top": "https://openclaw-skillshub.com/articles/hermes-agent-vs-openclaw/"
+   "top": "https://openclaw-skillshub.com/articles/openclaw-provider-apis-guide/"
   },
   {
    "domain": "imagealchemy.app",
@@ -296,58 +306,8 @@
     "Cites 63 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 14,
    "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
-   "site": "mysticaldigits.com",
-   "url": "https://mysticaldigits.com/life-path-number-calculator/",
-   "title": "Life Path Number Calculator (Free) | Mystical Digits",
-   "h1": "Life Path Number Calculator (Free)",
-   "description": "Use the standard Life Path number calculator method, learn the exact formula, protect Master Numbers, and read practical meanings for Life Path 1-9, 11, 22, and 33.",
-   "type": "interactive_tool",
-   "promotion": 87,
-   "linkability": 90,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 298,
-   "words": 1838,
-   "interactive": true,
-   "modified": "2026-10-09T09:44:15+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "1 data table",
-    "Recently updated",
-    "Flagship asset"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
-   "site": "plantastichaven.com",
-   "url": "https://plantastichaven.com/plant-care-plan/",
-   "title": "Free Houseplant Care Planner: Watering & Light Schedule",
-   "h1": "Free Houseplant Care Planner: Personalized Watering & Light Schedules",
-   "description": "Build a free houseplant care plan around your light, pot, soil and habits — a realistic routine for watering, feeding, placement, pruning and troubleshooting.",
-   "type": "interactive_tool",
-   "promotion": 86,
-   "linkability": 95,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 5,
-   "words": 1238,
-   "interactive": true,
-   "modified": "2026-09-26T05:51:05+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "3 data tables",
-    "Cites 4 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 3,
    "promoting": true
   },
   {
@@ -371,7 +331,7 @@
     "Cites 8 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 13,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -396,7 +356,7 @@
     "Cites 4 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 13,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -422,7 +382,7 @@
     "Cites 5 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 1,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -446,7 +406,7 @@
     "2 data tables",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 19,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -472,33 +432,8 @@
     "Recently updated",
     "Under-linked internally (1 inbound)"
    ],
-   "prospects": 0,
+   "prospects": 6,
    "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/mental-wellness/burnout-vs-stress/",
-   "title": "Burnout vs Stress: How to Tell the Difference & Recover",
-   "h1": "Burnout Symptoms, HPA-Axis Dysregulation, and the Clinical Differential Diagnosis",
-   "description": "Compare burnout vs stress. Learn to recognize key symptoms, understand autonomic nervous system response, and apply evidence-based recovery protocols.",
-   "type": "comparison",
-   "promotion": 81,
-   "linkability": 90,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 2971,
-   "interactive": true,
-   "modified": "2026-09-20T16:02:48+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,971 words)",
-    "3 data tables",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 3,
    "promoting": true
   },
   {
@@ -549,7 +484,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -749,6 +684,31 @@
    "promoting": true
   },
   {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "h1": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate",
+   "description": "Advanced Numerology · Calculator Guide Direct answer: Karmic debt numbers are 13, 14, 16, and 19. They are written as 13/4, 14/5, 16/7, and 19/1 because",
+   "type": "interactive_tool",
+   "promotion": 77,
+   "linkability": 85,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 297,
+   "words": 3379,
+   "interactive": true,
+   "modified": "2026-08-22T09:14:57+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (3,379 words)",
+    "4 data tables",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
    "site": "gearuptofit.com",
    "url": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
    "title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
@@ -923,219 +883,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/steel-wool-vs-copper-mesh-for-mice/",
-   "title": "Steel Wool vs Copper Mesh for Mice: Durability, Rust & Best Use - Mice Gone Guide",
-   "h1": "Steel Wool vs Copper Mesh for Mice: Durability, Rust & Best Use",
-   "description": "Compare steel wool, copper mesh and rigid screening by location, corrosion, opening size and compatible installation. No laboratory tests or guaranteed lifespan are reported.",
-   "type": "comparison",
-   "promotion": 74,
-   "linkability": 96,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 11,
-   "words": 1526,
-   "interactive": true,
-   "modified": "2026-10-03T06:11:55+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "2 data tables",
-    "Cites 11 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 3,
-   "promoting": true
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/mouse-proofing/",
-   "title": "Mouse Proofing Hub: Find Gaps, Choose Materials, and Prevent Return Routes | Mice Gone Guide",
-   "h1": "Mouse Proofing: Find and Seal Entry Gaps",
-   "description": "Inspect possible mouse entry gaps and match metal mesh, steel wool plus a retaining sealant, or durable repairs to the opening. Compare material limits and safe installation.",
-   "type": "practical_guide",
-   "promotion": 74,
-   "linkability": 95,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 52,
-   "words": 2993,
-   "interactive": true,
-   "modified": "2026-10-05T18:30:47+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,993 words)",
-    "3 data tables",
-    "Cites 18 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 4,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "title": "Where to Place Mouse Traps: Room-by-Room Guide to Safer Placement | Mice Gone Guide",
-   "h1": "Where to Place Mouse Traps: Best Locations",
-   "description": "Room-by-room guide on where to place mouse traps: set mouse-sized snap traps in a T against the wall with chunky peanut butter, check daily, and keep out of reach of kids and pets.",
-   "type": "practical_guide",
-   "promotion": 74,
-   "linkability": 95,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 52,
-   "words": 2329,
-   "interactive": true,
-   "modified": "2026-10-05T18:30:44+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,329 words)",
-    "2 data tables",
-    "Cites 9 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
-   "h1": "How to Get Rid of Mice in Walls Safely",
-   "description": "Investigate wall sounds without diagnosing species or a hidden cavity. Confirm accessible physical evidence, trap confirmed routes safely, and seek help for inaccessible hazards.",
-   "type": "practical_guide",
-   "promotion": 74,
-   "linkability": 95,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 52,
-   "words": 1973,
-   "interactive": true,
-   "modified": "2026-10-05T18:30:39+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "2 data tables",
-    "Cites 52 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "title": "Mice in Attic Insulation: Removal, Cleanup & When to Call a Pro",
-   "h1": "How to Get Rid of Mice in Attic Insulation Safely",
-   "description": "Learn how to find mice in attic insulation, trap safely, clean contaminated areas, seal entry points, and know when professional help is the safer choice.",
-   "type": "practical_guide",
-   "promotion": 74,
-   "linkability": 95,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 13,
-   "words": 1773,
-   "interactive": true,
-   "modified": "2026-10-05T18:30:17+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "4 data tables",
-    "Cites 4 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/how-to-remove-mice-droppings-safely/",
-   "title": "How to Clean Up Mouse Droppings Safely: Do Not Vacuum First | Mice Gone Guide",
-   "h1": "How to Clean Up Mouse Droppings Safely",
-   "description": "CDC wet-cleanup guidance for mouse droppings: ventilate, wear gloves, follow disinfectant-label contact times, wipe up waste and dispose of it safely.",
-   "type": "practical_guide",
-   "promotion": 74,
-   "linkability": 95,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 52,
-   "words": 3072,
-   "interactive": true,
-   "modified": "2026-10-05T18:30:14+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,072 words)",
-    "1 data table",
-    "Cites 9 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/best-mouse-traps-for-homes/",
-   "title": "Best Mouse Traps for Homes: Snap Traps, Enclosed Options & Safety Limits | Mice Gone Guide",
-   "h1": "Best Mouse Traps for Homes: Snap Traps, Enclosed Options & Safety Limits",
-   "description": "Compare mouse-sized snap traps, enclosed snap traps, and electronic traps. Learn why the CDC advises against glue and live traps and why no trap is automatically pet-safe.",
-   "type": "practical_guide",
-   "promotion": 74,
-   "linkability": 95,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 52,
-   "words": 2217,
-   "interactive": true,
-   "modified": "2026-10-03T08:29:04+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,217 words)",
-    "2 data tables",
-    "Cites 8 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/best-bait-for-mouse-traps/",
-   "title": "Best Bait for Mouse Traps: Chunky Peanut Butter, Trigger Setup & Mistakes | Mice Gone Guide",
-   "h1": "Best Bait for Mouse Traps: Chunky Peanut Butter, Trigger Setup & Mistakes",
-   "description": "Choose bait and trigger setup using the trap instructions, household precautions and observed feeding clues. Review CDC snap-trap guidance and placement mistakes.",
-   "type": "practical_guide",
-   "promotion": 74,
-   "linkability": 95,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 52,
-   "words": 2768,
-   "interactive": true,
-   "modified": "2026-10-03T07:57:01+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,768 words)",
-    "1 data table",
-    "Cites 10 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
    "url": "https://micegoneguide.com/prevent-mice-in-kitchen/",
    "title": "How to Prevent Mice in the Kitchen: Food Storage, Sanitation, and Sealing | Mice Gone Guide",
    "h1": "How to Prevent Mice in the Kitchen: Food Storage, Sanitation, and Sealing",
@@ -1159,7 +906,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -1185,32 +932,6 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/how-small-a-hole-can-a-mouse-fit-through/",
-   "title": "How Small a Hole Can a Mouse Fit Through? Entry Gap Guide",
-   "h1": "How Small a Hole Can a Mouse Fit Through? Entry Gap Guide",
-   "description": "Learn how small a hole mice can fit through, where to inspect, what materials seal mouse holes, and why spray foam alone is not enough.",
-   "type": "practical_guide",
-   "promotion": 74,
-   "linkability": 95,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 11,
-   "words": 2202,
-   "interactive": true,
-   "modified": "2026-10-03T06:17:12+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,202 words)",
-    "Cites 5 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -1264,32 +985,6 @@
    "promoting": true
   },
   {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/learning/spaced-repetition/",
-   "title": "Spaced Repetition: A Simple Review Schedule That Works",
-   "h1": "Spaced Repetition: A Simple Review Schedule for Long-Term Memory",
-   "description": "Use a flexible spaced-repetition schedule, active recall, and a simple Leitner-style system to review more effectively over time.",
-   "type": "commercial",
-   "promotion": 74,
-   "linkability": 75,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 13,
-   "words": 2390,
-   "interactive": true,
-   "modified": "2026-10-16T19:19:12+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,390 words)",
-    "5 data tables",
-    "Recently updated",
-    "Flagship asset"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
    "site": "micegoneguide.com",
    "url": "https://micegoneguide.com/snap-traps-for-mice/",
    "title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
@@ -1311,7 +1006,7 @@
     "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 0,
+   "internal_link_suggestions": 5,
    "promoting": false
   },
   {
@@ -1337,7 +1032,7 @@
     "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 0,
+   "internal_link_suggestions": 5,
    "promoting": false
   },
   {
@@ -1391,56 +1086,36 @@
    "promoting": false
   },
   {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/mouse-droppings/",
-   "title": "What Do Mouse Droppings Look Like? ID Guide & Lookalikes",
-   "h1": "Mouse Droppings: Visual Identification, Size Scale & Lookalikes",
-   "description": "Mouse droppings ID: size, shape, and photos to compare against rat, roach, and bat lookalikes — plus how to clean up safely once you've found them.",
-   "type": "practical_guide",
-   "promotion": 72,
-   "linkability": 93,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 52,
-   "words": 1500,
-   "interactive": true,
-   "modified": "2026-10-05T19:47:22+00:00",
+   "site": "plantastichaven.com",
+   "url": "https://plantastichaven.com/spider-plant-family/",
+   "title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
+   "h1": "Spider Plant Family: Main Types and Easy Care Basics",
+   "description": "Learn the lowest safe temperature for philodendrons, cold-damage signs, winter placement, rescue steps, and frost-prevention care.",
+   "type": "general_article",
+   "promotion": 73,
+   "linkability": 63,
+   "demand": 86,
+   "metrics": {
+    "source": "dataforseo",
+    "url": "https://plantastichaven.com/spider-plant-family/",
+    "etv": 427.1230060979724,
+    "keywords": 27,
+    "striking": 1,
+    "top3": 0
+   },
+   "internal_inlinks": 30,
+   "words": 3254,
+   "interactive": false,
+   "modified": "2026-10-09T09:53:33+00:00",
    "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "1 data table",
-    "Cites 14 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
+    "~427 est. monthly visits from 27 keywords",
+    "In-depth (3,254 words)",
+    "3 data tables",
+    "Recently updated"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/humane-mouse-traps/",
-   "title": "Humane Mouse Traps: Catch-and-Release Guide & Honest Limits",
-   "h1": "Humane Mouse Traps: Catch-and-Release Guide & Welfare Rules",
-   "description": "How live-catch traps work, how to use them without causing suffering, where release is legal, and when a protected snap trap is the kinder choice.",
-   "type": "practical_guide",
-   "promotion": 72,
-   "linkability": 93,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 17,
-   "words": 1848,
-   "interactive": true,
-   "modified": "2026-10-03T07:39:22+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "1 data table",
-    "Cites 9 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
+   "internal_link_suggestions": 5,
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1489,33 +1164,7 @@
     "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/how-to-get-rid-of-mice-in-car/",
-   "title": "How to Get Rid of Mice in Your Car: Engine Bay, Cabin & Air Vents",
-   "h1": "How to Get Rid of Mice in Your Car Safely",
-   "description": "Inspect accessible vehicle evidence without diagnosing damage from odors or warnings. Use qualified help for wiring, ventilation systems or inaccessible nests.",
-   "type": "practical_guide",
-   "promotion": 71,
-   "linkability": 92,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 15,
-   "words": 1270,
-   "interactive": true,
-   "modified": "2026-10-05T18:30:35+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "1 data table",
-    "Cites 3 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
+   "internal_link_suggestions": 5,
    "promoting": false
   },
   {
@@ -1541,7 +1190,7 @@
     "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 0,
+   "internal_link_suggestions": 5,
    "promoting": false
   },
   {
@@ -1567,7 +1216,7 @@
     "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 0,
+   "internal_link_suggestions": 5,
    "promoting": false
   },
   {
@@ -1593,7 +1242,7 @@
     "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 0,
+   "internal_link_suggestions": 3,
    "promoting": false
   },
   {
@@ -1669,7 +1318,7 @@
     "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 0,
+   "internal_link_suggestions": 1,
    "promoting": false
   },
   {
@@ -1690,6 +1339,33 @@
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "1 data table",
+    "Recently updated",
+    "One of 51 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
+   "title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
+   "h1": "Peppermint Oil for Mouse Repellent: How to Use It and What It Cannot Do",
+   "description": "Peppermint scent is not evidence of mouse control. Review exposure precautions and prioritize food control, inspection, suitable trapping and exclusion.",
+   "type": "general_article",
+   "promotion": 69,
+   "linkability": 90,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 8,
+   "words": 2170,
+   "interactive": true,
+   "modified": "2026-10-03T06:27:23+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,170 words)",
+    "3 data tables",
+    "Cites 4 authoritative sources",
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
    ],
@@ -1747,6 +1423,32 @@
    "promoting": false
   },
   {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/natural-mouse-repellents/",
+   "title": "Natural Mouse Repellents: What Helps and What Fails",
+   "h1": "Natural Mouse Repellents: Evidence, Limits, and Safer Next Steps",
+   "description": "Evidence limits of peppermint, vinegar and other mouse repellents. Prioritize sanitation, exclusion and trapping; natural does not mean effective or safe for every household.",
+   "type": "general_article",
+   "promotion": 68,
+   "linkability": 89,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 15,
+   "words": 1991,
+   "interactive": true,
+   "modified": "2026-10-03T06:12:39+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "2 data tables",
+    "Cites 7 authoritative sources",
+    "Recently updated",
+    "One of 51 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/health/focus-supplements/",
    "title": "Do Focus Supplements Work? Evidence, Risks, Safer Picks",
@@ -1793,6 +1495,29 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
+   "title": "Burnout at Work: Signs, Support, and Next Steps",
+   "h1": "Burnout Symptoms: Signs, Support, and Next Steps",
+   "description": "Learn how the WHO defines work-related burnout, how to notice work strain, and when to seek qualified support.",
+   "type": "practical_guide",
+   "promotion": 68,
+   "linkability": 75,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 13,
+   "words": 1843,
+   "interactive": false,
+   "modified": "2026-10-15T10:08:10+00:00",
+   "reasons": [
+    "4 data tables",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 2,
    "promoting": false
   },
   {
@@ -1866,6 +1591,137 @@
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": true
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
+   "title": "7 Surprising Health Risks of Mouse Infestation Revealed",
+   "h1": "7 Surprising Health Risks of Mouse Infestation Revealed",
+   "description": "Rodent health concerns depend on species, location and exposure. Household signs do not diagnose infection; review cleanup precautions and medical advice.",
+   "type": "general_article",
+   "promotion": 67,
+   "linkability": 88,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 2845,
+   "interactive": true,
+   "modified": "2026-10-03T06:40:56+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,845 words)",
+    "3 data tables",
+    "Cites 7 authoritative sources",
+    "Recently updated",
+    "One of 51 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/seasonal-rodent-control-strategies/",
+   "title": "Seasonal Rodent Control Strategies for Year-Round Prevention",
+   "h1": "Seasonal Rodent Control Strategies: Spring, Summer, Fall, and Winter",
+   "description": "Learn seasonal rodent control strategies that help you prevent mice and rats before weather changes drive them indoors.",
+   "type": "general_article",
+   "promotion": 67,
+   "linkability": 88,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 11,
+   "words": 1610,
+   "interactive": true,
+   "modified": "2026-10-03T06:40:47+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Cites 3 authoritative sources",
+    "Recently updated",
+    "One of 51 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/mice-allergy-risks/",
+   "title": "Mice Allergy Symptoms, Risks, and Relief at Home",
+   "h1": "Mouse Allergy Risks: Symptoms, Cleanup Precautions, and When to Get Help",
+   "description": "Learn the symptoms and health risks of mice allergies, plus the cleanup and prevention steps that help reduce allergen exposure inside the home.",
+   "type": "general_article",
+   "promotion": 67,
+   "linkability": 88,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 4,
+   "words": 1733,
+   "interactive": true,
+   "modified": "2026-10-03T06:26:28+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Cites 6 authoritative sources",
+    "Recently updated",
+    "One of 51 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/eco-friendly-mouse-proofing-techniques/",
+   "title": "Eco-Friendly Mouse Control: Proofing, Traps & Sanitation",
+   "h1": "Eco-Friendly Mouse Proofing Techniques: Sustainable Ways to Protect Your Home",
+   "description": "Eco-friendly mouse control that works: sanitation, durable exclusion, protected trapping and monitoring, plus the honest limits of natural methods.",
+   "type": "general_article",
+   "promotion": 67,
+   "linkability": 88,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 8,
+   "words": 1640,
+   "interactive": true,
+   "modified": "2026-10-03T06:15:55+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Cites 3 authoritative sources",
+    "Recently updated",
+    "One of 51 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/diseases-from-mice/",
+   "title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
+   "h1": "Diseases from Mice: Real Risks, Cleanup Safety, and When to Call a Doctor",
+   "description": "Learn the main diseases from mice, how infections spread through droppings and urine, and what to do to reduce health risks after exposure inside the home.",
+   "type": "general_article",
+   "promotion": 67,
+   "linkability": 88,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 16,
+   "words": 1249,
+   "interactive": true,
+   "modified": "2026-10-03T06:15:49+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Cites 4 authoritative sources",
+    "Recently updated",
+    "One of 51 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -1942,6 +1798,58 @@
    "promoting": true
   },
   {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/mouse-prevention/",
+   "title": "Mouse Prevention Hub: Inspection, Housekeeping, and Durable Exclusion - Mice Gone Guide",
+   "h1": "Mouse Prevention Hub: Inspection, Housekeeping, and Durable Exclusion",
+   "description": "Summary: A prevention hub focused on food control, sealing, monitoring, seasonal pressure points, and habits that reduce repeat activity. Direct answer Mouse prevention works best when food access, nesting material, moisture, and entry points are controll",
+   "type": "practical_guide",
+   "promotion": 66,
+   "linkability": 87,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 13,
+   "words": 655,
+   "interactive": true,
+   "modified": "2026-10-03T06:27:16+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Cites 5 authoritative sources",
+    "Recently updated",
+    "One of 51 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/foods-that-attract-mice/",
+   "title": "What Foods Attract Mice? Pantry Risks, Bird Seed & Pet Food",
+   "h1": "Foods That Attract Mice: What to Store, Remove, and Clean First",
+   "description": "The foods that attract mice most: bird seed, pet food, chocolate, peanut butter, grains. Learn how to store food so mice lose interest in your home.",
+   "type": "general_article",
+   "promotion": 66,
+   "linkability": 87,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 16,
+   "words": 1237,
+   "interactive": true,
+   "modified": "2026-10-03T06:17:09+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Cites 3 authoritative sources",
+    "Recently updated",
+    "One of 51 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/seo/answer-engine-optimization/",
    "title": "Answer Engine Optimization (AEO): Examples and Publishing Checklist",
@@ -2015,56 +1923,84 @@
    "promoting": false
   },
   {
-   "site": "plantastichaven.com",
-   "url": "https://plantastichaven.com/philodendron-propagation-methods-guide/",
-   "title": "Philodendron Propagation Methods: Water, Soil, and Air Layering",
-   "h1": "Philodendron Propagation Tips: Nodes, Water vs Soil, Rooting Time, and Common Mistakes",
-   "description": "Compare philodendron propagation methods, including water rooting, soil propagation, and air layering, so you can choose the best method for faster success.",
-   "type": "methodology",
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/role-of-cats-in-controlling-mice-populations/",
+   "title": "Cats and Mice: Hunting, Control Limits & Household Precautions",
+   "h1": "Cats vs Mice: How Much Rodent Control Can Cats Really Provide?",
+   "description": "Cats may catch individual mice but are not a dependable household control plan. Review hunting limits, exposure precautions, sanitation and exclusion.",
+   "type": "general_article",
    "promotion": 65,
-   "linkability": 85,
+   "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 31,
-   "words": 6219,
-   "interactive": false,
-   "modified": "2026-10-22T04:57:05+00:00",
+   "internal_inlinks": 6,
+   "words": 2167,
+   "interactive": true,
+   "modified": "2026-10-03T06:40:36+00:00",
    "reasons": [
-    "Original method/data — citation-worthy",
-    "In-depth (6,219 words)",
-    "17 data tables",
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,167 words)",
+    "2 data tables",
+    "Cites 3 authoritative sources",
     "Recently updated",
-    "One of 158 templated sibling pages — promote the hub first"
+    "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
-   "site": "mysticaldigits.com",
-   "url": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
-   "title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
-   "h1": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate",
-   "description": "Advanced Numerology · Calculator Guide Direct answer: Karmic debt numbers are 13, 14, 16, and 19. They are written as 13/4, 14/5, 16/7, and 19/1 because",
-   "type": "interactive_tool",
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/rodent-infestation-cleanup-protocols/",
+   "title": "Rodent Infestation Cleanup Protocols for Homes and Storage Areas",
+   "h1": "Rodent Infestation Cleanup Protocols: Safe Cleanup After Mice or Rats",
+   "description": "Review wet-cleanup precautions for routine rodent waste and when heavy contamination, ducts or inaccessible material need qualified assessment.",
+   "type": "general_article",
    "promotion": 65,
-   "linkability": 85,
+   "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 297,
-   "words": 3379,
+   "internal_inlinks": 4,
+   "words": 1131,
    "interactive": true,
-   "modified": "2026-08-22T09:14:57+00:00",
+   "modified": "2026-10-03T06:27:37+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,379 words)",
-    "4 data tables",
+    "1 data table",
+    "Cites 3 authoritative sources",
     "Recently updated",
-    "One of 296 templated sibling pages — promote the hub first"
+    "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": true
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/risks-of-diy-mice-removal/",
+   "title": "DIY Mouse Removal Risks: What Can Go Wrong and When to Call a Professional",
+   "h1": "DIY Mouse Removal Risks: What Can Go Wrong and When to Call a Professional",
+   "description": "Review DIY cleanup, access, trap and bait risks. Use qualified help for heavy contamination, inaccessible areas or hazards beyond your safe capabilities.",
+   "type": "general_article",
+   "promotion": 65,
+   "linkability": 86,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 6,
+   "words": 2574,
+   "interactive": true,
+   "modified": "2026-10-03T06:27:34+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,574 words)",
+    "5 data tables",
+    "Cites 3 authoritative sources",
+    "Recently updated",
+    "One of 51 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -2287,29 +2223,86 @@
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/productivity/time-blocking-guide/",
+   "title": "Time Blocking Template: Build a Weekly Schedule",
+   "h1": "Time Blocking Guide: Build a Weekly Schedule You Can Actually Follow",
+   "description": "Copy a working time blocking template: a 20-minute weekly planning routine, worked 5-day schedule example, and fixes for the plans that collapse.",
+   "type": "practical_guide",
+   "promotion": 62,
+   "linkability": 82,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 36,
+   "words": 2098,
+   "interactive": true,
+   "modified": "2026-10-15T10:06:29+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,098 words)",
+    "2 data tables",
+    "Recently updated",
+    "One of 34 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/productivity/improve-focus-7-day-protocol/",
+   "title": "7-Day Focus Reset: Improve Attention & Productivity | Gear Up to Grow",
+   "h1": "7-Day Focus Reset: A Practical Attention Experiment",
+   "description": "Feeling scattered? This 7-day focus reset protocol helps you reduce distractions, protect deep work, and rebuild concentration. Start your reset today!",
+   "type": "reference",
+   "promotion": 62,
+   "linkability": 82,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 21,
+   "words": 1870,
+   "interactive": false,
+   "modified": "2026-10-05T16:00:41+00:00",
+   "reasons": [
+    "3 data tables",
+    "Cites 6 authoritative sources",
+    "Recently updated",
+    "One of 34 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "h1": "Reward-Based Obedience Training for French Bulldogs: Cues, Rewards, and Practice",
+   "description": "Master reward-based obedience training for French Bulldogs! This guide offers expert tips, tricks, and techniques for success. Get started today!",
+   "type": "practical_guide",
+   "promotion": 62,
+   "linkability": 82,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 34,
+   "words": 4289,
+   "interactive": true,
+   "modified": "2026-09-25T21:06:13+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,289 words)",
+    "27 data tables",
+    "Recently updated",
+    "One of 236 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
   }
  ],
  "internal_links": [
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "from_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "from_title": "Mice in Attic Insulation: Removal, Cleanup & When to Call a Pro",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 74
-  },
   {
    "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
@@ -2332,8 +2325,8 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-car/",
-   "from_title": "How to Get Rid of Mice in Your Car: Engine Bay, Cabin & Air Vents",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "from_title": "How to Get Rid of Mice in an Apartment",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "anchor": "rid mice",
@@ -2341,82 +2334,22 @@
    "from_strength": 71
   },
   {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
-   "from_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
-   "to": "https://mysticaldigits.com/life-path-number-calculator/",
-   "to_title": "Life Path Number Calculator (Free) | Mystical Digits",
-   "anchor": "life path",
-   "relevance": 8,
-   "from_strength": 57
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-to-calculate-your-gift-number-in-numerology/",
-   "from_title": "Gift Number Calculator: Discover Your 2026 Numerology Talents",
-   "to": "https://mysticaldigits.com/life-path-number-calculator/",
-   "to_title": "Life Path Number Calculator (Free) | Mystical Digits",
-   "anchor": "life path",
-   "relevance": 8,
-   "from_strength": 56
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/life-path-numbers/",
-   "from_title": "Life Path Numbers: Meanings, Calculator Paths, Traits & Best Starting Guides",
-   "to": "https://mysticaldigits.com/life-path-number-calculator/",
-   "to_title": "Life Path Number Calculator (Free) | Mystical Digits",
-   "anchor": "life path",
-   "relevance": 8,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology/",
-   "from_title": "Numerology Guides | Mystical Digits",
-   "to": "https://mysticaldigits.com/life-path-number-calculator/",
-   "to_title": "Life Path Number Calculator (Free) | Mystical Digits",
-   "anchor": "life path",
-   "relevance": 8,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-calculators/",
-   "from_title": "Free Numerology Calculators: Birth Date, Name and House Number Tools | Mystical Digits",
-   "to": "https://mysticaldigits.com/life-path-number-calculator/",
-   "to_title": "Life Path Number Calculator (Free) | Mystical Digits",
-   "anchor": "life path",
-   "relevance": 8,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/winter-houseplant-care-guide/",
-   "from_title": "Winter Houseplant Care: Low Light, Dry Air & Cold Drafts",
-   "to": "https://plantastichaven.com/plant-care-plan/",
-   "to_title": "Free Houseplant Care Planner: Watering & Light Schedule",
-   "anchor": "houseplant care",
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
+   "from_title": "7 Surprising Health Risks of Mouse Infestation Revealed",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 0
+   "from_strength": 67
   },
   {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/philodendron-splendid/",
-   "from_title": "Philodendron Splendid",
-   "to": "https://plantastichaven.com/plant-care-plan/",
-   "to_title": "Free Houseplant Care Planner: Watering & Light Schedule",
-   "anchor": "houseplant care",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/faq/",
-   "from_title": "Houseplant Care FAQ - PlantasticHaven",
-   "to": "https://plantastichaven.com/plant-care-plan/",
-   "to_title": "Free Houseplant Care Planner: Watering & Light Schedule",
-   "anchor": "houseplant care",
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
+   "from_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "anchor": "rid mice",
    "relevance": 4,
    "from_strength": 0
   },
@@ -2571,36 +2504,6 @@
    "from_strength": 0
   },
   {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/productivity/how-to-recover-from-burnout-while-working/",
-   "from_title": "How to Recover from Burnout While Working",
-   "to": "https://gearuptogrow.com/mental-wellness/burnout-vs-stress/",
-   "to_title": "Burnout vs Stress: How to Tell the Difference & Recover",
-   "anchor": "hpa axis",
-   "relevance": 4,
-   "from_strength": 58
-  },
-  {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
-   "from_title": "Burnout at Work: Signs, Support, and Next Steps",
-   "to": "https://gearuptogrow.com/mental-wellness/burnout-vs-stress/",
-   "to_title": "Burnout vs Stress: How to Tell the Difference & Recover",
-   "anchor": "burnout symptoms",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/mental-wellness/",
-   "from_title": "Mental Wellness Hub: Stress Regulation & Burnout Recovery",
-   "to": "https://gearuptogrow.com/mental-wellness/burnout-vs-stress/",
-   "to_title": "Burnout vs Stress: How to Tell the Difference & Recover",
-   "anchor": "burnout symptoms",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
    "site": "plantastichaven.com",
    "from": "https://plantastichaven.com/african-house-plants/",
    "from_title": "African House Plants: Easy Indoor Picks for Low-Maintenance Homes",
@@ -2612,13 +2515,13 @@
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/plant-care-plan/",
-   "from_title": "Free Houseplant Care Planner: Watering & Light Schedule",
+   "from": "https://plantastichaven.com/spider-plant-family/",
+   "from_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
    "to": "https://plantastichaven.com/string-of-pearls-plant-care/",
    "to_title": "String of Pearls Plant Care: The Complete Guide to Growing Curio Rowleyanus Indoors - PlantasticHaven",
    "anchor": "plant care",
    "relevance": 4,
-   "from_strength": 86
+   "from_strength": 73
   },
   {
    "site": "plantastichaven.com",
@@ -2811,6 +2714,56 @@
    "from_strength": 0
   },
   {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/calculate-your-karmic-number-with-our-calculator/",
+   "from_title": "Karmic Number Calculator: Find Your Past-Life Debt in 60 Seconds",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 10,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/karmic-debt-number-13-in-past-lives/",
+   "from_title": "Karmic Debt Number 13: Past Lives Guide | Mystical Digits",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/compatibility-check-life-path-numbers-6-and-9/",
+   "from_title": "Life Path 6 & 9 Compatibility: Love, Marriage & Karma 2026",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/embrace-the-journey-life-path-number-fourteen/",
+   "from_title": "Life Path Number 14: 2026 Deep Dive into the Karmic Force of 14/5",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/numerology-for-career-change/",
+   "from_title": "9 Numerology Career Change Hacks That Work in 2026",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-aids/",
    "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
@@ -2992,386 +2945,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/mouse-proofing/",
-   "from_title": "Mouse Proofing Hub: Find Gaps, Choose Materials, and Prevent Return Routes | Mice Gone Guide",
-   "to": "https://micegoneguide.com/steel-wool-vs-copper-mesh-for-mice/",
-   "to_title": "Steel Wool vs Copper Mesh for Mice: Durability, Rust & Best Use - Mice Gone Guide",
-   "anchor": "steel wool",
-   "relevance": 9,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-small-a-hole-can-a-mouse-fit-through/",
-   "from_title": "How Small a Hole Can a Mouse Fit Through? Entry Gap Guide",
-   "to": "https://micegoneguide.com/steel-wool-vs-copper-mesh-for-mice/",
-   "to_title": "Steel Wool vs Copper Mesh for Mice: Durability, Rust & Best Use - Mice Gone Guide",
-   "anchor": "steel wool",
-   "relevance": 7,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/prevent-mice-in-kitchen/",
-   "from_title": "How to Prevent Mice in the Kitchen: Food Storage, Sanitation, and Sealing | Mice Gone Guide",
-   "to": "https://micegoneguide.com/steel-wool-vs-copper-mesh-for-mice/",
-   "to_title": "Steel Wool vs Copper Mesh for Mice: Durability, Rust & Best Use - Mice Gone Guide",
-   "anchor": "copper mesh",
-   "relevance": 5,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-small-a-hole-can-a-mouse-fit-through/",
-   "from_title": "How Small a Hole Can a Mouse Fit Through? Entry Gap Guide",
-   "to": "https://micegoneguide.com/mouse-proofing/",
-   "to_title": "Mouse Proofing Hub: Find Gaps, Choose Materials, and Prevent Return Routes | Mice Gone Guide",
-   "anchor": "mouse proofing",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/rodent-proofing-for-new-constructions/",
-   "from_title": "Rodent-Proofing New Construction: Entry Points, Materials, and Inspection",
-   "to": "https://micegoneguide.com/mouse-proofing/",
-   "to_title": "Mouse Proofing Hub: Find Gaps, Choose Materials, and Prevent Return Routes | Mice Gone Guide",
-   "anchor": "mouse proofing",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/mouse-prevention/",
-   "from_title": "Mouse Prevention Hub: Inspection, Housekeeping, and Durable Exclusion - Mice Gone Guide",
-   "to": "https://micegoneguide.com/mouse-proofing/",
-   "to_title": "Mouse Proofing Hub: Find Gaps, Choose Materials, and Prevent Return Routes | Mice Gone Guide",
-   "anchor": "mouse proofing",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/eco-friendly-mouse-proofing-techniques/",
-   "from_title": "Eco-Friendly Mouse Control: Proofing, Traps & Sanitation",
-   "to": "https://micegoneguide.com/mouse-proofing/",
-   "to_title": "Mouse Proofing Hub: Find Gaps, Choose Materials, and Prevent Return Routes | Mice Gone Guide",
-   "anchor": "mouse proofing",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/snap-traps-for-mice/",
-   "from_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "to": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "to_title": "Where to Place Mouse Traps: Room-by-Room Guide to Safer Placement | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 5,
-   "from_strength": 73
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/mouse-traps-baits/",
-   "from_title": "Mouse Traps and Baits: Safer Choices",
-   "to": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "to_title": "Where to Place Mouse Traps: Room-by-Room Guide to Safer Placement | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/best-mouse-traps-for-homes/",
-   "from_title": "Best Mouse Traps for Homes: Snap Traps, Enclosed Options & Safety Limits | Mice Gone Guide",
-   "to": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "to_title": "Where to Place Mouse Traps: Room-by-Room Guide to Safer Placement | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/best-bait-for-mouse-traps/",
-   "from_title": "Best Bait for Mouse Traps: Chunky Peanut Butter, Trigger Setup & Mistakes | Mice Gone Guide",
-   "to": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "to_title": "Where to Place Mouse Traps: Room-by-Room Guide to Safer Placement | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "to": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "to_title": "Where to Place Mouse Traps: Room-by-Room Guide to Safer Placement | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "to_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 6,
-   "from_strength": 71
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "to_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 92
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "from_title": "Mice in Attic Insulation: Removal, Cleanup & When to Call a Pro",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "to_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "to_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-car/",
-   "from_title": "How to Get Rid of Mice in Your Car: Engine Bay, Cabin & Air Vents",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "to_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 71
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "to_title": "Mice in Attic Insulation: Removal, Cleanup & When to Call a Pro",
-   "anchor": "rid mice",
-   "relevance": 6,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "to_title": "Mice in Attic Insulation: Removal, Cleanup & When to Call a Pro",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 92
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "from_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "to_title": "Mice in Attic Insulation: Removal, Cleanup & When to Call a Pro",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-car/",
-   "from_title": "How to Get Rid of Mice in Your Car: Engine Bay, Cabin & Air Vents",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "to_title": "Mice in Attic Insulation: Removal, Cleanup & When to Call a Pro",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 71
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "to_title": "Mice in Attic Insulation: Removal, Cleanup & When to Call a Pro",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 71
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/mouse-droppings/",
-   "from_title": "What Do Mouse Droppings Look Like? ID Guide & Lookalikes",
-   "to": "https://micegoneguide.com/how-to-remove-mice-droppings-safely/",
-   "to_title": "How to Clean Up Mouse Droppings Safely: Do Not Vacuum First | Mice Gone Guide",
-   "anchor": "clean mouse",
-   "relevance": 10,
-   "from_strength": 72
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/mouse-cleanup-safety/",
-   "from_title": "Mouse Cleanup Safety Hub: Contamination, Disposal, and Next Steps | Mice Gone Guide",
-   "to": "https://micegoneguide.com/how-to-remove-mice-droppings-safely/",
-   "to_title": "How to Clean Up Mouse Droppings Safely: Do Not Vacuum First | Mice Gone Guide",
-   "anchor": "mouse droppings",
-   "relevance": 5,
-   "from_strength": 73
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/diseases-from-mice/",
-   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
-   "to": "https://micegoneguide.com/how-to-remove-mice-droppings-safely/",
-   "to_title": "How to Clean Up Mouse Droppings Safely: Do Not Vacuum First | Mice Gone Guide",
-   "anchor": "mouse droppings",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "to": "https://micegoneguide.com/how-to-remove-mice-droppings-safely/",
-   "to_title": "How to Clean Up Mouse Droppings Safely: Do Not Vacuum First | Mice Gone Guide",
-   "anchor": "clean mouse droppings",
-   "relevance": 4,
-   "from_strength": 92
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/mouse-proofing/",
-   "from_title": "Mouse Proofing Hub: Find Gaps, Choose Materials, and Prevent Return Routes | Mice Gone Guide",
-   "to": "https://micegoneguide.com/how-to-remove-mice-droppings-safely/",
-   "to_title": "How to Clean Up Mouse Droppings Safely: Do Not Vacuum First | Mice Gone Guide",
-   "anchor": "clean mouse droppings",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "from_title": "Where to Place Mouse Traps: Room-by-Room Guide to Safer Placement | Mice Gone Guide",
-   "to": "https://micegoneguide.com/best-mouse-traps-for-homes/",
-   "to_title": "Best Mouse Traps for Homes: Snap Traps, Enclosed Options & Safety Limits | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/best-bait-for-mouse-traps/",
-   "from_title": "Best Bait for Mouse Traps: Chunky Peanut Butter, Trigger Setup & Mistakes | Mice Gone Guide",
-   "to": "https://micegoneguide.com/best-mouse-traps-for-homes/",
-   "to_title": "Best Mouse Traps for Homes: Snap Traps, Enclosed Options & Safety Limits | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "to": "https://micegoneguide.com/best-mouse-traps-for-homes/",
-   "to_title": "Best Mouse Traps for Homes: Snap Traps, Enclosed Options & Safety Limits | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/snap-traps-for-mice/",
-   "from_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "to": "https://micegoneguide.com/best-mouse-traps-for-homes/",
-   "to_title": "Best Mouse Traps for Homes: Snap Traps, Enclosed Options & Safety Limits | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 4,
-   "from_strength": 73
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/humane-mouse-traps/",
-   "from_title": "Humane Mouse Traps: Catch-and-Release Guide & Honest Limits",
-   "to": "https://micegoneguide.com/best-mouse-traps-for-homes/",
-   "to_title": "Best Mouse Traps for Homes: Snap Traps, Enclosed Options & Safety Limits | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 4,
-   "from_strength": 72
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "from_title": "Where to Place Mouse Traps: Room-by-Room Guide to Safer Placement | Mice Gone Guide",
-   "to": "https://micegoneguide.com/best-bait-for-mouse-traps/",
-   "to_title": "Best Bait for Mouse Traps: Chunky Peanut Butter, Trigger Setup & Mistakes | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 5,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/best-mouse-traps-for-homes/",
-   "from_title": "Best Mouse Traps for Homes: Snap Traps, Enclosed Options & Safety Limits | Mice Gone Guide",
-   "to": "https://micegoneguide.com/best-bait-for-mouse-traps/",
-   "to_title": "Best Bait for Mouse Traps: Chunky Peanut Butter, Trigger Setup & Mistakes | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 5,
-   "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/snap-traps-for-mice/",
-   "from_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "to": "https://micegoneguide.com/best-bait-for-mouse-traps/",
-   "to_title": "Best Bait for Mouse Traps: Chunky Peanut Butter, Trigger Setup & Mistakes | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 5,
-   "from_strength": 73
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/diy-mouse-traps/",
-   "from_title": "Homemade Mouse Traps: DIY Designs, Risks & Safer Alternatives",
-   "to": "https://micegoneguide.com/best-bait-for-mouse-traps/",
-   "to_title": "Best Bait for Mouse Traps: Chunky Peanut Butter, Trigger Setup & Mistakes | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 5,
-   "from_strength": 71
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/mouse-traps-baits/",
-   "from_title": "Mouse Traps and Baits: Safer Choices",
-   "to": "https://micegoneguide.com/best-bait-for-mouse-traps/",
-   "to_title": "Best Bait for Mouse Traps: Chunky Peanut Butter, Trigger Setup & Mistakes | Mice Gone Guide",
-   "anchor": "mouse traps",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-car/",
-   "from_title": "How to Get Rid of Mice in Your Car: Engine Bay, Cabin & Air Vents",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 71
-  },
-  {
-   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
    "from_title": "How to Get Rid of Mice in an Apartment",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
@@ -3382,6 +2955,16 @@
   },
   {
    "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-car/",
+   "from_title": "How to Get Rid of Mice in Your Car: Engine Bay, Cabin & Air Vents",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "anchor": "rid mice",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
@@ -3392,23 +2975,23 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "from_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
+   "from_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
    "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 74
+   "from_strength": 71
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "from_title": "Mice in Attic Insulation: Removal, Cleanup & When to Call a Pro",
+   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
+   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
    "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 74
+   "from_strength": 69
   },
   {
    "site": "frenchyfab.com",
@@ -3461,54 +3044,104 @@
    "from_strength": 0
   },
   {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/learning-development/rapid-skill-learning/",
-   "from_title": "Rapid Skill Learning: Master New Abilities Faster | Gear Up to Grow",
-   "to": "https://gearuptogrow.com/learning/spaced-repetition/",
-   "to_title": "Spaced Repetition: A Simple Review Schedule That Works",
-   "anchor": "spaced repetition",
-   "relevance": 4,
-   "from_strength": 68
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/safely-remove-mice/",
+   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 69
   },
   {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/learning/active-recall/",
-   "from_title": "Active Recall: How to Study Without Rereading Everything",
-   "to": "https://gearuptogrow.com/learning/spaced-repetition/",
-   "to_title": "Spaced Repetition: A Simple Review Schedule That Works",
-   "anchor": "spaced repetition",
-   "relevance": 4,
-   "from_strength": 62
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/where-to-place-mouse-traps/",
+   "from_title": "Where to Place Mouse Traps: Room-by-Room Guide to Safer Placement | Mice Gone Guide",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 0
   },
   {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/learning/",
-   "from_title": "Learning Hub: Active Recall & Spaced Repetition Systems",
-   "to": "https://gearuptogrow.com/learning/spaced-repetition/",
-   "to_title": "Spaced Repetition: A Simple Review Schedule That Works",
-   "anchor": "spaced repetition",
-   "relevance": 4,
-   "from_strength": 61
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
+   "from_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 0
   },
   {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/productivity/spaced-repetition-schedule-for-studying/",
-   "from_title": "Spaced Repetition Schedule: The 1-3-7-14-30 Matrix",
-   "to": "https://gearuptogrow.com/learning/spaced-repetition/",
-   "to_title": "Spaced Repetition: A Simple Review Schedule That Works",
-   "anchor": "spaced repetition",
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/best-mouse-traps-for-homes/",
+   "from_title": "Best Mouse Traps for Homes: Snap Traps, Enclosed Options & Safety Limits | Mice Gone Guide",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/best-bait-for-mouse-traps/",
+   "from_title": "Best Bait for Mouse Traps: Chunky Peanut Butter, Trigger Setup & Mistakes | Mice Gone Guide",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/diseases-from-mice/",
+   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
+   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
+   "to_title": "Mouse Cleanup Safety Hub: Contamination, Disposal, and Next Steps | Mice Gone Guide",
+   "anchor": "cleanup safety",
+   "relevance": 5,
+   "from_strength": 67
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/rodent-infestation-cleanup-protocols/",
+   "from_title": "Rodent Infestation Cleanup Protocols for Homes and Storage Areas",
+   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
+   "to_title": "Mouse Cleanup Safety Hub: Contamination, Disposal, and Next Steps | Mice Gone Guide",
+   "anchor": "mouse cleanup",
+   "relevance": 5,
+   "from_strength": 65
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/start-here/",
+   "from_title": "Start Here: Identify Your Mouse Problem Safely - Mice Gone Guide",
+   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
+   "to_title": "Mouse Cleanup Safety Hub: Contamination, Disposal, and Next Steps | Mice Gone Guide",
+   "anchor": "mouse cleanup safety",
    "relevance": 4,
    "from_strength": 0
   },
   {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/learning-development/chunking-method/",
-   "from_title": "Chunking Method: Learn Faster & Improve Recall | Gear Up to Grow",
-   "to": "https://gearuptogrow.com/learning/spaced-repetition/",
-   "to_title": "Spaced Repetition: A Simple Review Schedule That Works",
-   "anchor": "spaced repetition",
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/mouse-traps-baits/",
+   "from_title": "Mouse Traps and Baits: Safer Choices",
+   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
+   "to_title": "Mouse Cleanup Safety Hub: Contamination, Disposal, and Next Steps | Mice Gone Guide",
+   "anchor": "mouse cleanup safety",
    "relevance": 4,
    "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
+   "from_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
+   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
+   "to_title": "Mouse Cleanup Safety Hub: Contamination, Disposal, and Next Steps | Mice Gone Guide",
+   "anchor": "mouse cleanup safety",
+   "relevance": 3,
+   "from_strength": 71
   },
   {
    "site": "gearuptogrow.com",
@@ -3561,6 +3194,56 @@
    "from_strength": 0
   },
   {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/overwatered-spider-plant/",
+   "from_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "to": "https://plantastichaven.com/spider-plant-family/",
+   "to_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "from_title": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer - PlantasticHaven",
+   "to": "https://plantastichaven.com/spider-plant-family/",
+   "to_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/mandarin-spider-plant/",
+   "from_title": "Mandarin Spider Plant Care: Identification and Growing Tips",
+   "to": "https://plantastichaven.com/spider-plant-family/",
+   "to_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 55
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/zebra-spider-plant/",
+   "from_title": "Zebra Spider Plant Care: Light, Water, and Troubleshooting",
+   "to": "https://plantastichaven.com/spider-plant-family/",
+   "to_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 54
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/spider-plant-hawaiian/",
+   "from_title": "Hawaiian Spider Plant Care: Light, Water, and Identification Tips",
+   "to": "https://plantastichaven.com/spider-plant-family/",
+   "to_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 54
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/review/namehero-hosting-review/",
    "from_title": "NameHero Hosting Review: Fast, Affordable WordPress Hosting for Growing Sites",
@@ -3601,6 +3284,186 @@
    "from_strength": 0
   },
   {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
+   "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 92
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
+   "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "from_title": "How to Get Rid of Mice in an Apartment",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
+   "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 71
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/safely-remove-mice/",
+   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
+   "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 69
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
+   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
+   "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 69
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "to_title": "How to Get Rid of Mice in an Apartment",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 92
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "to_title": "How to Get Rid of Mice in an Apartment",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
+   "from_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "to_title": "How to Get Rid of Mice in an Apartment",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 71
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
+   "from_title": "7 Surprising Health Risks of Mouse Infestation Revealed",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "to_title": "How to Get Rid of Mice in an Apartment",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 67
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
+   "from_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "to_title": "How to Get Rid of Mice in an Apartment",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/risks-of-diy-mice-removal/",
+   "from_title": "DIY Mouse Removal Risks: What Can Go Wrong and When to Call a Professional",
+   "to": "https://micegoneguide.com/diy-mouse-traps/",
+   "to_title": "Homemade Mouse Traps: DIY Designs, Risks & Safer Alternatives",
+   "anchor": "diy mouse",
+   "relevance": 5,
+   "from_strength": 65
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "to": "https://micegoneguide.com/diy-mouse-traps/",
+   "to_title": "Homemade Mouse Traps: DIY Designs, Risks & Safer Alternatives",
+   "anchor": "mouse traps",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/snap-traps-for-mice/",
+   "from_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "to": "https://micegoneguide.com/diy-mouse-traps/",
+   "to_title": "Homemade Mouse Traps: DIY Designs, Risks & Safer Alternatives",
+   "anchor": "mouse traps",
+   "relevance": 4,
+   "from_strength": 73
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/where-to-place-mouse-traps/",
+   "from_title": "Where to Place Mouse Traps: Room-by-Room Guide to Safer Placement | Mice Gone Guide",
+   "to": "https://micegoneguide.com/diy-mouse-traps/",
+   "to_title": "Homemade Mouse Traps: DIY Designs, Risks & Safer Alternatives",
+   "anchor": "mouse traps",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/best-mouse-traps-for-homes/",
+   "from_title": "Best Mouse Traps for Homes: Snap Traps, Enclosed Options & Safety Limits | Mice Gone Guide",
+   "to": "https://micegoneguide.com/diy-mouse-traps/",
+   "to_title": "Homemade Mouse Traps: DIY Designs, Risks & Safer Alternatives",
+   "anchor": "mouse traps",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "to": "https://micegoneguide.com/mouse-removal/",
+   "to_title": "Mouse Removal Checklist: Traps, Cleanup, and Sealing",
+   "anchor": "mouse removal",
+   "relevance": 4,
+   "from_strength": 92
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/safely-remove-mice/",
+   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "to": "https://micegoneguide.com/mouse-removal/",
+   "to_title": "Mouse Removal Checklist: Traps, Cleanup, and Sealing",
+   "anchor": "mouse removal",
+   "relevance": 4,
+   "from_strength": 69
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/risks-of-diy-mice-removal/",
+   "from_title": "DIY Mouse Removal Risks: What Can Go Wrong and When to Call a Professional",
+   "to": "https://micegoneguide.com/mouse-removal/",
+   "to_title": "Mouse Removal Checklist: Traps, Cleanup, and Sealing",
+   "anchor": "mouse removal",
+   "relevance": 4,
+   "from_strength": 65
+  },
+  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/mental-wellness/positive-affirmations/",
    "from_title": "Positive Affirmations: Use Them Right | Gear Up to Grow",
@@ -3631,12 +3494,42 @@
    "from_strength": 0
   },
   {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/rodent-proofing-for-new-constructions/",
+   "from_title": "Rodent-Proofing New Construction: Entry Points, Materials, and Inspection",
+   "to": "https://micegoneguide.com/winter-rodent-proofing-homes/",
+   "to_title": "Winter Rodent Proofing: Entry Points, Food Storage & Monitoring",
+   "anchor": "rodent proofing",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/health/",
    "from_title": "Health Hub: Sleep, Energy & Cognitive Performance",
    "to": "https://gearuptogrow.com/health/focus-supplements/",
    "to_title": "Do Focus Supplements Work? Evidence, Risks, Safer Picks",
    "anchor": "focus supplements",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptogrow.com",
+   "from": "https://gearuptogrow.com/mental-wellness/",
+   "from_title": "Mental Wellness Hub: Stress Regulation & Burnout Recovery",
+   "to": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
+   "to_title": "Burnout at Work: Signs, Support, and Next Steps",
+   "anchor": "burnout symptoms",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptogrow.com",
+   "from": "https://gearuptogrow.com/mental-wellness/burnout-vs-stress/",
+   "from_title": "Burnout vs Stress: How to Tell the Difference & Recover",
+   "to": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
+   "to_title": "Burnout at Work: Signs, Support, and Next Steps",
+   "anchor": "burnout symptoms",
    "relevance": 4,
    "from_strength": 0
   },
@@ -3698,56 +3591,6 @@
    "to_title": "Habit Stacking for Executive Dysfunction",
    "anchor": "habit stacking",
    "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/calculate-your-karmic-number-with-our-calculator/",
-   "from_title": "Karmic Number Calculator: Find Your Past-Life Debt in 60 Seconds",
-   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
-   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
-   "anchor": "karmic debt",
-   "relevance": 10,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/karmic-debt-number-13-in-past-lives/",
-   "from_title": "Karmic Debt Number 13: Past Lives Guide | Mystical Digits",
-   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
-   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
-   "anchor": "karmic debt",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/compatibility-check-life-path-numbers-6-and-9/",
-   "from_title": "Life Path 6 & 9 Compatibility: Love, Marriage & Karma 2026",
-   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
-   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
-   "anchor": "karmic debt",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/embrace-the-journey-life-path-number-fourteen/",
-   "from_title": "Life Path Number 14: 2026 Deep Dive into the Karmic Force of 14/5",
-   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
-   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
-   "anchor": "karmic debt",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-for-career-change/",
-   "from_title": "9 Numerology Career Change Hacks That Work in 2026",
-   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
-   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
-   "anchor": "karmic debt",
-   "relevance": 6,
    "from_strength": 0
   },
   {
@@ -3849,16 +3692,6 @@
    "anchor": "apple watch",
    "relevance": 10,
    "from_strength": 0
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/tutorials/openclaw-multi-agent-shared-skills-setup/",
-   "from_title": "OpenClaw Multi-Agent Setup: Using Shared vs Per-Agent Skills | ClawSkills",
-   "to": "https://openclaw-skillshub.com/articles/hermes-agent-vs-openclaw/",
-   "to_title": "Hermes Agent vs OpenClaw (2026) — Features, Memory, Security Compared | ClawSkills",
-   "anchor": "agent openclaw",
-   "relevance": 4,
-   "from_strength": 52
   },
   {
    "site": "frenchyfab.com",
@@ -4061,56 +3894,6 @@
    "from_strength": 57
   },
   {
-   "site": "efficientgptprompts.com",
-   "from": "https://efficientgptprompts.com/poetry-exploring-emotions-ideas-and-the-beauty-of-language/",
-   "from_title": "Poetry: Exploring Emotions, Ideas | EfficientGPTPrompts",
-   "to": "https://efficientgptprompts.com/exploring-poetry-thematic-prompts/",
-   "to_title": "Poetry Writing Prompts: 75 Ideas by Theme, Form, Mood, and Image",
-   "anchor": "writing prompts",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "efficientgptprompts.com",
-   "from": "https://efficientgptprompts.com/body-horror-writing-ideas/",
-   "from_title": "Body Horror Writing Prompts: 25 Ideas & How to Write Them",
-   "to": "https://efficientgptprompts.com/exploring-poetry-thematic-prompts/",
-   "to_title": "Poetry Writing Prompts: 75 Ideas by Theme, Form, Mood, and Image",
-   "anchor": "writing prompts",
-   "relevance": 4,
-   "from_strength": 47
-  },
-  {
-   "site": "efficientgptprompts.com",
-   "from": "https://efficientgptprompts.com/historical-events-report-prompts/",
-   "from_title": "Historical Event Writing Prompts: 75 Research Questions",
-   "to": "https://efficientgptprompts.com/exploring-poetry-thematic-prompts/",
-   "to_title": "Poetry Writing Prompts: 75 Ideas by Theme, Form, Mood, and Image",
-   "anchor": "writing prompts",
-   "relevance": 4,
-   "from_strength": 46
-  },
-  {
-   "site": "efficientgptprompts.com",
-   "from": "https://efficientgptprompts.com/disability-representation-prompts/",
-   "from_title": "Disability Representation Writing Guide | EfficientGPTPrompts",
-   "to": "https://efficientgptprompts.com/exploring-poetry-thematic-prompts/",
-   "to_title": "Poetry Writing Prompts: 75 Ideas by Theme, Form, Mood, and Image",
-   "anchor": "writing prompts",
-   "relevance": 4,
-   "from_strength": 46
-  },
-  {
-   "site": "efficientgptprompts.com",
-   "from": "https://efficientgptprompts.com/mythical-creatures-prompts-for-children/",
-   "from_title": "Mythical Creature Writing Prompts for Kids: 60 Ideas",
-   "to": "https://efficientgptprompts.com/exploring-poetry-thematic-prompts/",
-   "to_title": "Poetry Writing Prompts: 75 Ideas by Theme, Form, Mood, and Image",
-   "anchor": "writing prompts",
-   "relevance": 4,
-   "from_strength": 44
-  },
-  {
    "site": "plantastichaven.com",
    "from": "https://plantastichaven.com/zebra-spider-plant/",
    "from_title": "Zebra Spider Plant Care: Light, Water, and Troubleshooting",
@@ -4119,6 +3902,16 @@
    "anchor": "spider plant",
    "relevance": 5,
    "from_strength": 54
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/spider-plant-family/",
+   "from_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 73
   },
   {
    "site": "plantastichaven.com",
@@ -4149,66 +3942,6 @@
    "anchor": "spider plant",
    "relevance": 4,
    "from_strength": 54
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/bonnie-spider-plant/",
-   "from_title": "Bonnie Spider Plant Care: Grow & Propagate Easily",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 53
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/philodendron-micans-care/",
-   "from_title": "Philodendron Micans Care: Complete Velvet Leaf Guide",
-   "to": "https://plantastichaven.com/split-leaf-philodendron-care/",
-   "to_title": "Split Leaf Philodendron Care: Expert Guide for Lush Growth",
-   "anchor": "leaf philodendron",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/philodendron-billietiae-care/",
-   "from_title": "Philodendron Billietiae Care: Expert Tips for Thriving Plants",
-   "to": "https://plantastichaven.com/split-leaf-philodendron-care/",
-   "to_title": "Split Leaf Philodendron Care: Expert Guide for Lush Growth",
-   "anchor": "philodendron care",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/lemon-lime-philodendron-care/",
-   "from_title": "Lemon Lime Philodendron Care: 2026 Guide",
-   "to": "https://plantastichaven.com/split-leaf-philodendron-care/",
-   "to_title": "Split Leaf Philodendron Care: Expert Guide for Lush Growth",
-   "anchor": "philodendron care",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/philodendron-red-emerald-care/",
-   "from_title": "Philodendron Red Emerald Care 2026: The Complete 2500-Word Bible",
-   "to": "https://plantastichaven.com/split-leaf-philodendron-care/",
-   "to_title": "Split Leaf Philodendron Care: Expert Guide for Lush Growth",
-   "anchor": "philodendron care",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/philodendron-care/",
-   "from_title": "Philodendron Care Guide: Light, Water, Soil & Propagation",
-   "to": "https://plantastichaven.com/split-leaf-philodendron-care/",
-   "to_title": "Split Leaf Philodendron Care: Expert Guide for Lush Growth",
-   "anchor": "philodendron care",
-   "relevance": 5,
-   "from_strength": 0
   },
   {
    "site": "plantastichaven.com",
@@ -4289,25 +4022,314 @@
    "anchor": "french bulldogs",
    "relevance": 5,
    "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "to_title": "Are French Bulldogs Hypoallergenic? The Honest, Vet-Checked Answer | Frenchy Fab",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "from_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "to_title": "Are French Bulldogs Hypoallergenic? The Honest, Vet-Checked Answer | Frenchy Fab",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 58
+  },
+  {
+   "site": "efficientgptprompts.com",
+   "from": "https://efficientgptprompts.com/blog/",
+   "from_title": "Blog: AI Prompt Workflows, SEO, AEO, GEO, and Writing Prompt Hubs",
+   "to": "https://efficientgptprompts.com/ai-prompt-templates-for-ecommerce-brands-2026-guide/",
+   "to_title": "AI Prompt Templates for Ecommerce Brands",
+   "anchor": "prompt templates",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "efficientgptprompts.com",
+   "from": "https://efficientgptprompts.com/ai-prompt-library/",
+   "from_title": "AI Prompt Library: Copy-Ready ChatGPT, Claude & Gemini Templates",
+   "to": "https://efficientgptprompts.com/ai-prompt-templates-for-ecommerce-brands-2026-guide/",
+   "to_title": "AI Prompt Templates for Ecommerce Brands",
+   "anchor": "prompt templates",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "efficientgptprompts.com",
+   "from": "https://efficientgptprompts.com/ai-prompt-templates-for-consultants-2026-guide/",
+   "from_title": "AI Prompt Templates for Consultants: Discovery, Strategy, Proposals, and Client Delivery | EfficientGPTPrompts",
+   "to": "https://efficientgptprompts.com/ai-prompt-templates-for-ecommerce-brands-2026-guide/",
+   "to_title": "AI Prompt Templates for Ecommerce Brands",
+   "anchor": "prompt templates",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/",
+   "from_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
+   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "anchor": "openclaw skills",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/does-nemoclaw-replace-openclaw/",
+   "from_title": "Does NemoClaw Replace OpenClaw? Full 2026 Comparison — Enterprise Guide | ClawSkills",
+   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "anchor": "openclaw skills",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/openclaw-vs-nanoclaw/",
+   "from_title": "OpenClaw vs NanoClaw (2026) — Security-Focused Agent Comparison | ClawSkills",
+   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "anchor": "openclaw skills",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/how-to-choose-openclaw-skills/",
+   "from_title": "How to Choose OpenClaw Skills — Decision Guide by Use Case | ClawSkills",
+   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "anchor": "openclaw skills",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/what-are-openclaw-skills/",
+   "from_title": "What Are OpenClaw Skills? Complete Guide to SKILL.md, ClawHub & Safe Setup (2026) | ClawSkills",
+   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "anchor": "openclaw skills",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/philodendron-birkin/",
+   "from_title": "Philodendron Birkin Care: Complete Guide for Thriving Plants",
+   "to": "https://plantastichaven.com/how-to-propagate-a-philodendron-birkin/",
+   "to_title": "Philodendron Birkin Propagation: 5 Proven Methods (2026)",
+   "anchor": "philodendron birkin",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-techniques/",
+   "from_title": "French Bulldog Training: Motivation, Rewards, Consistency",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 77
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-aids/",
+   "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "from_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-classes/",
+   "from_title": "French Bulldog Training Classes: When to Join",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-meals-for-french-bulldogs/",
+   "from_title": "Homemade Meals for French Bulldogs: Safe Planning",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "homemade food",
+   "relevance": 8,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/organic-foods-for-frenchies/",
+   "from_title": "Organic Foods for Frenchies: What Is Worth Buying",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 8,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/right-food-french-bulldog-guide/",
+   "from_title": "Choosing the Right Food for Your French Bulldog",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
+   "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/shop/",
+   "from_title": "Houseplant Tools & Supplies: What to Buy & Skip | PlantasticHaven",
+   "to": "https://plantastichaven.com/houseplant-pest-control/",
+   "to_title": "Houseplant Pest Control: Identify Pests Before Treating",
+   "anchor": "pest control",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/care-guides/",
+   "from_title": "Indoor Plant Care Guides - PlantasticHaven",
+   "to": "https://plantastichaven.com/houseplant-pest-control/",
+   "to_title": "Houseplant Pest Control: Identify Pests Before Treating",
+   "anchor": "pest control",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/numbers-and-mental-wellness/",
+   "from_title": "Numerology for Mental Wellness: 2026 Guide | Mystical Digits",
+   "to": "https://mysticaldigits.com/compatibility-revealed-life-path-number-10/",
+   "to_title": "Life Path Number 10: 2026 Compatibility Guide & Traits",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 61
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "from_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "to": "https://mysticaldigits.com/compatibility-revealed-life-path-number-10/",
+   "to_title": "Life Path Number 10: 2026 Compatibility Guide & Traits",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 57
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/life-path-number-6-traits-compatibility-and-more/",
+   "from_title": "Life Path 6: Meaning, Strengths, Relationships and Work Style | Mystical Digits",
+   "to": "https://mysticaldigits.com/compatibility-revealed-life-path-number-10/",
+   "to_title": "Life Path Number 10: 2026 Compatibility Guide & Traits",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 56
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/life-path-number-9-meaning-compatibility/",
+   "from_title": "Life Path Number 9: Meaning, Strengths, Challenges, and Compatibility Themes",
+   "to": "https://mysticaldigits.com/compatibility-revealed-life-path-number-10/",
+   "to_title": "Life Path Number 10: 2026 Compatibility Guide & Traits",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 56
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/the-secrets-of-life-path-number-11/",
+   "from_title": "Life Path Number 11 Meaning: 11/2 Traits, Strengths, Challenges &…",
+   "to": "https://mysticaldigits.com/compatibility-revealed-life-path-number-10/",
+   "to_title": "Life Path Number 10: 2026 Compatibility Guide & Traits",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 56
   }
  ],
  "wins": [],
  "log": [
-  "09:49:07 dataforseo: DataForSEO rejected the login (HTTP 401: You are not authorized to access this resource. See your login details here: https://app.dataforseo.com/api-access .). Use the API login and the API password from app.dataforseo.com/api-access — not your website password.",
-  "09:49:27 connection dataforseo: rejected — DataForSEO rejected the login (HTTP 401: You are not authorized to access this resource. See your login details here: https://app.dataforseo.com/api-access .). Use the API login and the API password from app.dataforseo.com/api-access — not your website password.",
-  "09:49:27 connection gmail: connected",
-  "09:49:28 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "09:49:29 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "09:49:30 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "09:49:31 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "09:49:31 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "09:49:31 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "09:49:32 crawl frenchyfab.com: 239/239 urls, fetched 0, 304 0, reused 239",
-  "09:49:33 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "09:49:33 crawl mysticaldigits.com: 300/471 urls, fetched 0, 304 0, reused 300",
-  "09:49:36 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "09:49:36 - prospects: skipped (DataForSEO rejected the login (HTTP 401: You are not authorized to access this resource. See your login details here: https://app.dataforseo.com/api-access .). Use the API login and the API password from app.dataforseo.com/api-access — not your website password.)",
-  "09:49:36 outreach (send): 0 sent, 0 drafted, 0 follow-ups, cap 5",
-  "09:49:36 link checks: 0 pages, 0 new links won, 0 lost"
+  "10:01:08 connection dataforseo: connected",
+  "10:01:08 connection gmail: connected",
+  "10:01:10 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "10:01:10 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "10:01:10 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "10:01:11 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "10:01:11 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "10:01:12 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "10:01:13 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "10:01:13 crawl frenchyfab.com: 239/239 urls, fetched 0, 304 0, reused 239",
+  "10:01:14 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "10:01:16 crawl mysticaldigits.com: 300/471 urls, fetched 0, 304 0, reused 300",
+  "10:01:16 dataforseo demand: plantastichaven.com 86 ranking pages",
+  "10:01:17 dataforseo demand: gearuptogrow.com 4 ranking pages",
+  "10:01:17 dataforseo demand: affiliatemarketingforsuccess.com 0 ranking pages",
+  "10:01:17 dataforseo demand: mysticaldigits.com 1 ranking pages",
+  "10:01:17 dataforseo demand: frenchyfab.com 2 ranking pages",
+  "10:01:18 dataforseo demand: micegoneguide.com 17 ranking pages",
+  "10:01:18 dataforseo demand: efficientgptprompts.com 19 ranking pages",
+  "10:01:19 dataforseo demand: openclaw-skillshub.com 35 ranking pages",
+  "10:01:19 dataforseo demand: imagealchemy.app 0 ranking pages",
+  "10:02:43 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "10:03:53 prospects: 12 queries, 124 candidates, 66 qualified, 34 with email, 0 already linking",
+  "10:07:02 outreach (send): 5 sent, 0 drafted, 0 follow-ups, cap 5",
+  "10:07:02 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
