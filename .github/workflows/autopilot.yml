@@ -1,0 +1,72 @@
+name: LinkForge Autopilot
+# The autonomous engine. Runs twice a day, commits results, and the commit
+# redeploys Cloudflare Pages automatically. No Cloudflare credentials needed.
+on:
+  schedule:
+    - cron: '40 5 * * *'
+    - cron: '10 14 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (no emails, nothing committed)'
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: linkforge-autopilot
+  cancel-in-progress: false
+jobs:
+  autopilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund --omit=dev
+      - name: Restore crawl cache
+        uses: actions/cache@v4
+        with:
+          path: .autopilot-cache
+          key: autopilot-crawl-${{ github.run_id }}
+          restore-keys: autopilot-crawl-
+      - name: Run Autopilot cycle
+        env:
+          AUTOPILOT_DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+          LINKFORGE_DATA_KEY: ${{ secrets.LINKFORGE_DATA_KEY }}
+          DATAFORSEO_LOGIN: ${{ secrets.DATAFORSEO_LOGIN }}
+          DATAFORSEO_PASSWORD: ${{ secrets.DATAFORSEO_PASSWORD }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          SENDER_POSTAL_ADDRESS: ${{ secrets.SENDER_POSTAL_ADDRESS }}
+          SENDER_NAME: ${{ vars.SENDER_NAME }}
+          OUTREACH_MODE: ${{ vars.OUTREACH_MODE }}
+          OUTREACH_DAILY_LIMIT: ${{ vars.OUTREACH_DAILY_LIMIT }}
+          FOLLOWUP_DAYS: ${{ vars.FOLLOWUP_DAYS }}
+          DATAFORSEO_DAILY_USD: ${{ vars.DATAFORSEO_DAILY_USD }}
+          DATAFORSEO_MONTHLY_USD: ${{ vars.DATAFORSEO_MONTHLY_USD }}
+          LINKFORGE_CLAUDE_MODEL: ${{ vars.LINKFORGE_CLAUDE_MODEL }}
+        run: node scripts/autopilot/run.mjs
+      - name: Guard against leaking private data
+        if: ${{ !inputs.dry_run }}
+        run: |
+          node -e "
+          const fs=require('fs');const s=fs.readFileSync('public/data/autopilot.json','utf8');JSON.parse(s);
+          if(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(s))throw Error('Public summary contains an email address');
+          if(fs.existsSync('public/data/vault.json')){const v=JSON.parse(fs.readFileSync('public/data/vault.json','utf8'));if(v.alg!=='AES-256-GCM'||!v.ct)throw Error('Vault is not sealed')}"
+      - name: Commit results (redeploys Cloudflare Pages)
+        if: ${{ !inputs.dry_run }}
+        run: |
+          git config user.name "linkforge-autopilot[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/autopilot.json
+          [ -f public/data/vault.json ] && git add public/data/vault.json
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "autopilot: $(date -u +%Y-%m-%dT%H:%MZ) cycle"
+          for i in 1 2 3; do git pull --rebase -X theirs origin main && git push && exit 0; sleep 5; done
+          exit 1

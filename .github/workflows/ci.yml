@@ -14,6 +14,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
       - name: Build Pages assets without secrets or server provisioning
         run: npm run build
       - name: Test direct GSC opportunity scoring without API credentials
@@ -26,6 +29,8 @@ jobs:
           test -f public/_routes.json
           test -f public/browser-store.js
           test -f public/portfolio.json
+          test -f public/autopilot-view.js
+          test -f .github/workflows/autopilot.yml
           test ! -f wrangler.jsonc
           test -f worker.wrangler.jsonc
           node -e "const c=require('./public/_routes.json'); if(!c.include.includes('/api/*'))process.exit(1)"
