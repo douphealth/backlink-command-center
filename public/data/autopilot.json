@@ -1,6 +1,6 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-23T06:45:13.719Z",
+ "generated_at": "2026-10-23T07:09:18.202Z",
  "duration_s": 7,
  "dry_run": false,
  "schedule": "Twice daily (05:40 and 14:10 UTC) via GitHub Actions; every run redeploys Cloudflare Pages",
@@ -67,7 +67,7 @@
  "stages": {
   "crawl": {
    "ok": true,
-   "ms": 6390,
+   "ms": 6786,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -102,7 +102,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 0,
+   "ms": 1,
    "result": {
     "checked": 0,
     "won": 0,
@@ -4259,19 +4259,19 @@
  ],
  "wins": [],
  "log": [
-  "06:45:07 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "06:45:07 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "06:45:08 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "06:45:08 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "06:45:09 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "06:45:10 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "06:45:10 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "06:45:10 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "06:45:12 crawl frenchyfab.com: 239/239 urls, fetched 0, 304 0, reused 239",
-  "06:45:13 crawl mysticaldigits.com: 300/471 urls, fetched 0, 304 0, reused 300",
-  "06:45:13 - prospects: skipped (DataForSEO credentials not set)",
-  "06:45:13 - replies: skipped (Gmail app password not set)",
-  "06:45:13 - outreach: skipped (Gmail app password not set)",
-  "06:45:13 link checks: 0 pages, 0 new links won, 0 lost"
+  "07:09:11 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "07:09:11 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "07:09:12 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "07:09:12 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "07:09:13 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "07:09:13 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "07:09:14 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "07:09:15 crawl frenchyfab.com: 239/239 urls, fetched 0, 304 0, reused 239",
+  "07:09:16 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "07:09:17 crawl mysticaldigits.com: 300/471 urls, fetched 0, 304 0, reused 300",
+  "07:09:18 - prospects: skipped (DataForSEO credentials not set)",
+  "07:09:18 - replies: skipped (Gmail app password not set)",
+  "07:09:18 - outreach: skipped (Gmail app password not set)",
+  "07:09:18 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
