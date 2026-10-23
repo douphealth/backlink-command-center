@@ -67,7 +67,7 @@ export async function renderAutopilot(h){
   const kpiHtml=`<div class="kpi-grid">${kpis.map(([name,v,ico,note])=>`<div class="kpi"><div class="kpi-head">${e(name)}<span class="kpi-ico">${ico}</span></div><div class="kpi-value">${n(v)}</div><div class="kpi-foot">${e(note)}</div></div>`).join('')}</div>`;
   const steps=[['Prospects evaluated',f.prospects_evaluated],['Qualified publishers',f.qualified],['Contacted',f.contacted],['Replied',f.replied],['Links won',f.won]];
   const top=Math.max(1,f.prospects_evaluated||0);
-  const funnel=`<div class="panel-pad pipeline">${steps.map(([k,v])=>`<div class="pipeline-row"><span>${k}</span><div class="pipeline-track"><div class="pipeline-fill" style="width:${Math.min(100,100*(v||0)/top)}%"></div></div><strong>${n(v)}</strong></div>`).join('')}</div>`;
+  const funnel=`<div class="panel-pad pipeline">${steps.map(([k,v])=>`<div class="pipeline-row"><span>${k}</span><div class="pipeline-track"><div class="pipeline-fill" data-w="${Math.min(100,100*(v||0)/top)}"></div></div><strong>${n(v)}</strong></div>`).join('')}</div>`;
   const stageRows=Object.entries(s.stages).map(([k,v])=>`<div class="site-row"><div class="site-monogram">${v.ok?'✓':v.ok===false?'!':'–'}</div><div><strong>${e(k.replace('_',' '))}</strong><small>${e(v.ok===false?v.error:v.skipped?'Skipped: '+v.skipped:v.result?Object.entries(v.result).filter(([,x])=>typeof x!=='object').map(([a,b])=>`${a.replaceAll('_',' ')} ${b}`).join(' · '):'ok')}</small></div>${statusTag(v.ok?'completed':v.ok===false?'failed':'hold')}</div>`).join('');
   const best=(s.best_urls||[]).slice(0,40).map((a,i)=>`<tr><td><strong>${String(i+1).padStart(2,'0')}</strong></td><td>${external(a.url,a.title)}<small>${e(a.site)} · ${e(a.type.replaceAll('_',' '))}${a.promoting?' · promoting now':''}</small><small class="ap-why">${e((a.reasons||[]).join(' · '))}</small></td><td><strong>${n(a.promotion)}</strong><small>link ${n(a.linkability)}${a.demand!=null?' · demand '+n(a.demand):''}</small></td><td>${n(a.internal_inlinks)}<small>${n(a.internal_link_suggestions)} to add</small></td><td>${n(a.prospects)}</td></tr>`);
   const internal=(s.internal_links||[]).slice(0,60).map(x=>`<tr><td>${external(x.from,x.from_title||x.from)}<small>${e(x.site)}</small></td><td><strong>“${e(x.anchor)}”</strong></td><td>${external(x.to,x.to_title||x.to)}</td></tr>`);
@@ -75,11 +75,11 @@ export async function renderAutopilot(h){
   schedulePoll();
   return intro('autopilot','')+status+setup+kpiHtml+
     `<div class="overview-grid">${panel('Outreach funnel','Every number is a stored, verified record',funnel)}${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`+
-    `<div style="margin-top:19px">${panel('Best URLs to promote','Linkability × real search demand; templated duplicates and thin pages are demoted',best.length?table(['#','URL & why','Score','Internal links','Prospects'],best):empty('No promotable URLs yet','The next crawl will rank your pages.'))}</div>`+
-    `<div style="margin-top:19px">${panel('Internal link plan','Add these links on your own pages: highest-ROI, zero-cost ranking boost',internal.length?table(['On this page','Add anchor','Linking to'],internal):empty('No internal gaps found','Your best URLs are already well linked.'))}</div>`+
-    `<div style="margin-top:19px">${panel('Backlinks','Won after outreach, or already linking to you (verified on the live page)',wins.length?table(['Publisher','Page','Links to','Status','Found'],wins):empty('No verified backlinks yet','Pitched pages are re-checked every 4 days for 150 days.'))}</div>`+
-    `<div style="margin-top:19px">${privatePanel(h)}</div>`+
-    `<details class="data-note"><summary><strong>Last run log</strong></summary><div class="pre-detail" style="max-width:none;margin-top:10px">${e((s.log||[]).join('\n'))}</div></details>`;
+    `<div class="ap-gap">${panel('Best URLs to promote','Linkability × real search demand; templated duplicates and thin pages are demoted',best.length?table(['#','URL & why','Score','Internal links','Prospects'],best):empty('No promotable URLs yet','The next crawl will rank your pages.'))}</div>`+
+    `<div class="ap-gap">${panel('Internal link plan','Add these links on your own pages: highest-ROI, zero-cost ranking boost',internal.length?table(['On this page','Add anchor','Linking to'],internal):empty('No internal gaps found','Your best URLs are already well linked.'))}</div>`+
+    `<div class="ap-gap">${panel('Backlinks','Won after outreach, or already linking to you (verified on the live page)',wins.length?table(['Publisher','Page','Links to','Status','Found'],wins):empty('No verified backlinks yet','Pitched pages are re-checked every 4 days for 150 days.'))}</div>`+
+    `<div class="ap-gap">${privatePanel(h)}</div>`+
+    `<details class="data-note"><summary><strong>Last run log</strong></summary><div class="pre-detail ap-log">${e((s.log||[]).join('\n'))}</div></details>`;
 }
 
 function fullyConfigured(){
@@ -109,7 +109,7 @@ function connectPanel(h){
 function privatePanel(h){
   const {escapeHTML:e,external,n,niceTime,statusTag,panel,table,empty}=h;
   if(!ui.vault)return panel('Prospects & conversations','Encrypted in the public repo · unlock on this device with your LINKFORGE_DATA_KEY',
-    `<form class="inline-form" id="ap-unlock" style="margin:0 23px 22px"><input id="ap-key" type="password" autocomplete="off" placeholder="Paste LINKFORGE_DATA_KEY" minlength="16" required><button class="primary" type="submit">Unlock</button></form>${ui.error?`<div class="alert-warning" style="margin:0 23px 22px">${e(ui.error)}</div>`:''}`);
+    `<form class="inline-form ap-inset" id="ap-unlock"><input id="ap-key" type="password" autocomplete="off" placeholder="Paste LINKFORGE_DATA_KEY" minlength="16" required><button class="primary" type="submit">Unlock</button></form>${ui.error?`<div class="alert-warning ap-inset">${e(ui.error)}</div>`:''}`);
   const all=Object.values(ui.vault.prospects||{});
   const active=new Set(['positive','won','replied','followed_up','sent','drafted','ready','contact_form','no_contact']);
   const rows=all.filter(p=>ui.filter==='all'||(ui.filter==='active'?active.has(p.status):p.status===ui.filter))
@@ -128,6 +128,9 @@ async function act(kind,fn,ok){
 }
 export function bindAutopilot(reload){
   reloadView=reload;
+  // The CSP forbids inline style attributes; set bar widths through the CSSOM instead.
+  const main=document.getElementById('main');
+  if(main)new MutationObserver(()=>main.querySelectorAll('[data-w]').forEach(el=>{el.style.width=el.dataset.w+'%'})).observe(main,{childList:true});
   document.addEventListener('click',async ev=>{
     const b=ev.target.closest('[data-ap]');if(!b)return;const a=b.dataset.ap;
     if(a==='connect'){ui.showConnect=!ui.showConnect;return reload()}
