@@ -64,7 +64,7 @@ test('Run re-enables and dispatches; Stop disables and cancels the live run',asy
   assert.ok(gh.calls.at(-1).endsWith('/actions/workflows/autopilot.yml/dispatches'));
 });
 
-test('secrets are sealed in the browser and variables are created or updated',async()=>{
+test('secrets are sealed in the browser before upload',async()=>{
   const gh=mockGitHub();control.token.set('tok');
   await control.setSecret('GMAIL_APP_PASSWORD','abcdabcdabcdabcd');
   const put=gh.state.secrets.GMAIL_APP_PASSWORD;
@@ -73,29 +73,36 @@ test('secrets are sealed in the browser and variables are created or updated',as
   const nonce=blake2b(Uint8Array.from([...sealed.slice(0,32),...gh.kp.publicKey]),24);
   const opened=globalThis.nacl.box.open(sealed.slice(32),nonce,sealed.slice(0,32),gh.kp.secretKey);
   assert.equal(new TextDecoder().decode(opened),'abcdabcdabcdabcd');
-  await control.setVariable('OUTREACH_MODE','send');
-  assert.equal(gh.state.vars.OUTREACH_MODE,'send');
-  const c=await control.configured();
-  assert.ok(c.secrets.has('GMAIL_APP_PASSWORD'));assert.equal(c.variables.OUTREACH_MODE,'send');
+  assert.ok((await control.diagnose()).secretNames.has('GMAIL_APP_PASSWORD'));
 });
 
-test('a bad token produces a clear message',async()=>{
+test('a bad token produces a clear message; the token link asks only for Actions + Secrets',async()=>{
   mockGitHub();control.token.set('wrong');
   await assert.rejects(control.run(),/rejected the token/);
-  assert.ok(control.TOKEN_URL.includes('actions=write')&&control.TOKEN_URL.includes('secrets=write')&&control.TOKEN_URL.includes('variables=write'));
+  const u=new URL(control.TOKEN_URL);
+  assert.equal(u.searchParams.get('actions'),'write');assert.equal(u.searchParams.get('secrets'),'write');
+  assert.ok(!u.searchParams.has('variables')&&!u.searchParams.has('actions_variables'));
 });
 
-test('diagnose names the exact missing permission (public-only repository access)',async()=>{
+test('diagnose names the missing permission; Actions + Secrets alone is enough',async()=>{
   const gh=mockGitHub();control.token.set('tok');
   gh.state.publicOnly=true;
   let d=await control.diagnose();
   assert.equal(d.valid,true);assert.equal(d.login,'douphealth');
-  assert.equal(d.secrets,false);assert.equal(d.variables,false);assert.equal(d.actions,false);
+  assert.equal(d.secrets,false);assert.equal(d.actions,false);
   assert.equal(control.diagnosisOk(d),false);
+  // The owner's real token: Actions + Secrets read/write, no Variables permission.
   gh.state.publicOnly=false;gh.state.secrets.LINKFORGE_DATA_KEY={};
   d=await control.diagnose();
   assert.equal(control.diagnosisOk(d),true);assert.ok(d.secretNames.has('LINKFORGE_DATA_KEY'));
   control.token.set('wrong');
   d=await control.diagnose();
   assert.equal(d.valid,false);assert.match(d.error,/rejected the token/);
+});
+
+test('token falls back to tab memory when the browser blocks storage',()=>{
+  const saved=globalThis.localStorage;
+  globalThis.localStorage={getItem(){throw Error('blocked')},setItem(){throw Error('blocked')},removeItem(){throw Error('blocked')}};
+  try{control.token.set('tok-mem');assert.equal(control.token.get(),'tok-mem');assert.equal(control.token.persistent,false)}
+  finally{globalThis.localStorage=saved;control.token.set('')}
 });

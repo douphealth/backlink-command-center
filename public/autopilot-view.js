@@ -28,15 +28,19 @@ const FIELDS=[
   {name:'DATAFORSEO_PASSWORD',label:'DataForSEO API password',type:'password',kind:'secret',required:true,help:'The API password, not your website login'},
   {name:'GMAIL_ADDRESS',label:'Gmail address that sends outreach',type:'email',kind:'secret',required:true},
   {name:'GMAIL_APP_PASSWORD',label:'Gmail app password (16 letters)',type:'password',kind:'secret',required:true,help:'Create one at myaccount.google.com/apppasswords (needs 2-Step Verification)',link:'https://myaccount.google.com/apppasswords'},
-  {name:'SENDER_NAME',label:'Your name in emails',type:'text',kind:'variable',required:true,help:'e.g. Alex from GearUpToFit'},
-  {name:'OUTREACH_MODE',label:'Outreach mode',type:'select',kind:'variable',options:[['send','Hands-free: send pitches + 1 follow-up automatically'],['draft','Safe: write pitches into Gmail Drafts'],['off','Research only']]},
-  {name:'OUTREACH_DAILY_LIMIT',label:'Max new pitches per day',type:'number',kind:'variable',help:'Starts at 5/day and ramps up by 2/day to this limit'},
+  {name:'SENDER_NAME',label:'Your name in emails',type:'text',kind:'setting',required:true,help:'e.g. Alex from GearUpToFit'},
+  {name:'OUTREACH_MODE',label:'Outreach mode',type:'select',kind:'setting',options:[['send','Hands-free: send pitches + 1 follow-up automatically'],['draft','Safe: write pitches into Gmail Drafts'],['off','Research only']]},
+  {name:'OUTREACH_DAILY_LIMIT',label:'Max new pitches per day',type:'number',kind:'setting',help:'Starts at 5/day and ramps up by 2/day to this limit'},
   {name:'ANTHROPIC_API_KEY',label:'Anthropic API key (optional)',type:'password',kind:'secret',help:'Claude writes a unique pitch for every page'},
 ];
+// Settings travel as one encrypted secret (no Variables permission needed); this browser remembers them for display.
+const local=(k,fallback)=>({get:()=>{try{return JSON.parse(localStorage.getItem(k))??fallback}catch{return fallback}},set:v=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}}});
+const savedSettings=local('linkforge-settings',{});
+const vaultResetAt=local('linkforge-vault-reset-at','');
 async function refreshControl(){
   try{ui.control=await control.status()}catch(err){ui.control={error:err.message}}
   ui.diag=control.token.get()?await control.diagnose():null;
-  ui.configured=ui.diag?.secrets&&ui.diag.variables?{secrets:ui.diag.secretNames,variables:ui.diag.vars}:null;
+  ui.configured=ui.diag?.secrets?{secrets:ui.diag.secretNames}:null;
 }
 function schedulePoll(){
   clearTimeout(pollTimer);
@@ -52,7 +56,7 @@ export async function renderAutopilot(h){
   await refreshControl();
   const key=store.get();
   // A freshly created key keeps retrying until the run that re-seals the vault has deployed.
-  if(key&&!ui.vault&&(!ui.error||ui.pendingVault)){const box=await fetchJson('/data/vault.json');if(box){try{ui.vault=await openVault(box,key);ui.pendingVault=false;ui.error=''}catch{ui.pendingVault=ui.diag?.vars?.LINKFORGE_VAULT_RESET_AT>box.sealed_at;if(ui.pendingVault)ui.settleUntil=Math.max(ui.settleUntil,Date.now()+60000);ui.error=ui.pendingVault?'New vault key saved. It unlocks automatically once the next Autopilot run finishes.':'That key does not unlock this vault. Check you pasted the vault key (not the GitHub token), or create a new vault key.'}}}
+  if(key&&!ui.vault&&(!ui.error||ui.pendingVault)){const box=await fetchJson('/data/vault.json');if(box){try{ui.vault=await openVault(box,key);ui.pendingVault=false;ui.error=''}catch{ui.pendingVault=vaultResetAt.get()>(box.sealed_at||'');if(ui.pendingVault)ui.settleUntil=Math.max(ui.settleUntil,Date.now()+60000);ui.error=ui.pendingVault?'New vault key saved. It unlocks automatically once the next Autopilot run finishes.':'That key does not unlock this vault. Check you pasted the vault key (not the GitHub token), or create a new vault key.'}}}
   const c=s.capabilities,f=s.funnel||{},t=s.totals;
   const missing=s.setup.filter(x=>!x.done);
   const modeLabel={send:'HANDS-FREE SENDING',draft:'DRAFTS TO GMAIL',off:'RESEARCH ONLY'}[c.outreach_mode];
@@ -86,7 +90,11 @@ export async function renderAutopilot(h){
 
 function fullyConfigured(){
   const c=ui.configured;if(!c)return false;
-  return FIELDS.filter(f=>f.required).every(f=>f.kind==='secret'?c.secrets.has(f.name):c.variables[f.name])&&c.secrets.has('LINKFORGE_DATA_KEY');
+  return FIELDS.filter(f=>f.required).every(f=>fieldDone(f,c))&&c.secrets.has('LINKFORGE_DATA_KEY');
+}
+function fieldDone(f,c){
+  // Settings are saved together; the terminal setup script stores them as plain secrets.
+  return f.kind==='secret'?c.secrets.has(f.name):c.secrets.has(control.SETTINGS_SECRET)||c.secrets.has(f.name);
 }
 function tokenStep(h){
   const {escapeHTML:e}=h,d=ui.diag,has=!!control.token.get(),ok=control.diagnosisOk(d);
@@ -95,24 +103,24 @@ function tokenStep(h){
   const checks=has?`<div class="ap-checklist">
       ${row(d?.valid,d?.valid?`Token saved in this browser and accepted by GitHub${d.login?' ('+d.login+')':''}`:'Token rejected by GitHub',e(d?.error||'')+' Paste a fresh token below.')}
       ${d?.valid?row(d.secrets,'Can save secrets (DataForSEO, Gmail)',`${EDIT} → <b>Repository access</b>: <b>Only select repositories</b> → <b>backlink-command-center</b>, and <b>Permissions → Secrets</b>: <b>Read and write</b> → <b>Update</b>.`):''}
-      ${d?.valid?row(d.variables,'Can save settings (name, outreach mode)',`${EDIT} → <b>Permissions → Variables</b>: <b>Read and write</b> → <b>Update</b>.`):''}
       ${d?.valid?row(d.actions,'Can press Run / Stop',`${EDIT} → <b>Permissions → Actions</b>: <b>Read and write</b> → <b>Update</b>.`):''}
     </div>${d?.valid&&!ok?'<p class="ap-hint">After updating the token on GitHub, click <b>Check again</b>. You do not need a new token.</p>':''}`:'';
+  const storage=has&&!control.token.persistent?'<div class="alert-warning">This browser blocks saving data for this site (private window or strict privacy setting), so the token lasts only until you close this tab. Allow site data for this page to keep it.</div>':'';
   const intro=has?'':`<ol class="ap-steps">
-      <li><a class="primary" href="${e(control.TOKEN_URL)}" target="_blank" rel="noopener">Create control token ↗</a> The name and permissions are pre-filled.</li>
+      <li><a class="primary" href="${e(control.TOKEN_URL)}" target="_blank" rel="noopener">Create control token ↗</a> The name and permissions (Actions and Secrets: read &amp; write) are pre-filled. <b>Already made one?</b> Just paste it below.</li>
       <li>On GitHub, set <b>Repository access</b> to <b>Only select repositories</b> → <b>backlink-command-center</b>. This is the step that's easy to miss: the default ("Public repositories") ignores the permissions. Then click <b>Generate token</b>.</li>
       <li>Copy the token (starts with <code>github_pat_</code>) and paste it below.</li></ol>`;
-  return `<section class="ap-step-card"><h3>1 · GitHub control token ${ok?'<b class="ap-ok">✓ ready</b>':''}</h3>${intro}${checks}
+  return `<section class="ap-step-card"><h3>1 · GitHub control token ${ok?'<b class="ap-ok">✓ ready</b>':''}</h3>${intro}${checks}${storage}
     <form id="ap-token-form" class="inline-form ap-token-row"><input id="ap-token" type="password" autocomplete="off" placeholder="${has?'Replace token (optional)':'Paste github_pat_… here'}" ${has?'':'required'} minlength="20">
       <button class="primary" type="submit">${has?'Replace token':'Save token'}</button>${has?'<button class="outline-btn" type="button" data-ap="recheck">Check again</button><button class="outline-btn" type="button" data-ap="forget">Forget token</button>':''}</form></section>`;
 }
 function connectPanel(h){
   const {escapeHTML:e,panel}=h,ready=control.diagnosisOk(ui.diag);
-  const c=ui.configured||{secrets:new Set(),variables:{}};
-  const done=f=>f.kind==='secret'?c.secrets.has(f.name):!!c.variables[f.name];
-  const field=f=>{const ok=done(f),cur=f.kind==='variable'?c.variables[f.name]||'':'';
+  const c=ui.configured||{secrets:new Set()};
+  const done=f=>fieldDone(f,c),settings=savedSettings.get();
+  const field=f=>{const ok=done(f),cur=f.kind==='setting'?settings[f.name]||'':'';
     const input=f.type==='select'?`<select class="selector" name="${f.name}">${f.options.map(([v,l])=>`<option value="${v}" ${(cur||'send')===v?'selected':''}>${e(l)}</option>`).join('')}</select>`
-      :`<input name="${f.name}" type="${f.type}" ${f.type==='number'?'min="1" max="50"':''} autocomplete="${f.type==='password'?'new-password':'off'}" value="${f.kind==='variable'?e(cur):''}" placeholder="${ok&&f.kind==='secret'?'Connected; leave blank to keep':f.type==='number'?'12':''}" ${f.required&&!ok?'required':''}>`;
+      :`<input name="${f.name}" type="${f.type}" ${f.type==='number'?'min="1" max="50"':''} autocomplete="${f.type==='password'?'new-password':'off'}" value="${e(cur)}" placeholder="${ok&&!cur?(f.kind==='secret'?'Connected; leave blank to keep':'Saved; type to change'):f.type==='number'?'12':''}" ${f.required&&!ok?'required':''}>`;
     return `<label class="ap-field"><span>${e(f.label)} ${ok?'<b class="ap-ok">✓ connected</b>':f.required?'<b class="ap-need">needed</b>':''}</span>${input}${f.help?`<small>${f.link?`<a href="${f.link}" target="_blank" rel="noopener">${e(f.help)} ↗</a>`:e(f.help)}</small>`:''}</label>`};
   return panel('Connect Autopilot','Two steps, once. Everything is encrypted in your browser before it reaches GitHub; nothing can read it back.',
     `<div class="panel-pad ap-connect">${tokenStep(h)}
@@ -126,7 +134,7 @@ function connectPanel(h){
 function privatePanel(h){
   const {escapeHTML:e,external,n,niceTime,statusTag,panel,table,empty}=h;
   if(!ui.vault){
-    const canReset=!!(ui.diag?.secrets&&ui.diag.variables);
+    const canReset=!!ui.diag?.secrets;
     return panel('Prospects & conversations','Encrypted in the public repo · unlocked only in your browser with the vault key',
     `<div class="ap-inset ap-vault-help"><p>The <b>vault key</b> is not your GitHub token. It is the separate <code>LINKFORGE_DATA_KEY</code> created during setup (saved on the setup computer in <code>.linkforge/autopilot-unlock-key.txt</code>). Don't have it? Create a new one: this browser and GitHub get the same new key automatically.</p></div>
     <form class="inline-form ap-inset" id="ap-unlock"><input id="ap-key" type="password" autocomplete="off" placeholder="Paste vault key (LINKFORGE_DATA_KEY)" minlength="16" required><button class="primary" type="submit">Unlock</button>
@@ -165,8 +173,9 @@ export function bindAutopilot(reload){
       return act('newvault',async()=>{
         const key=[...crypto.getRandomValues(new Uint8Array(24))].map(b=>b.toString(16).padStart(2,'0')).join('');
         await control.setSecret('LINKFORGE_DATA_KEY',key);
-        await control.setVariable('LINKFORGE_VAULT_RESET_AT',new Date().toISOString());
-        store.set(key);ui.vault=null;ui.error='';
+        const at=new Date().toISOString();
+        await control.setSecret('LINKFORGE_VAULT_RESET_AT',at);
+        store.set(key);vaultResetAt.set(at);ui.vault=null;ui.error='';
         await control.run();ui.settleUntil=Date.now()+600000;
       },'New vault key saved in this browser and on GitHub. The run that just started creates the new vault; it unlocks here automatically afterwards. Use "Copy vault key" to unlock on other devices.');
     }
@@ -181,10 +190,16 @@ export function bindAutopilot(reload){
     const form=new FormData(ev.target),values=FIELDS.map(f=>[f,String(form.get(f.name)||'').trim()]).filter(([,v])=>v);
     const bad=values.find(([f,v])=>(f.type==='email'&&!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(v))||(f.name==='GMAIL_APP_PASSWORD'&&v.replace(/\s+/g,'').length!==16));
     if(bad){ui.err=bad[0].name==='GMAIL_APP_PASSWORD'?'A Gmail app password is exactly 16 letters.':`${bad[0].label} doesn't look like an email address.`;return reload()}
+    const secrets=values.filter(([f])=>f.kind==='secret');
+    const settings={...savedSettings.get(),...Object.fromEntries(values.filter(([f])=>f.kind==='setting').map(([f,v])=>[f.name,v]))};
+    // The mode/limit dropdowns always carry a value, so only rewrite settings when the name is known.
+    const writeSettings=!!settings.SENDER_NAME;
+    if(!writeSettings&&!ui.configured?.secrets.has(control.SETTINGS_SECRET)){ui.err='Please enter your name for the emails.';return reload()}
     await act('connect',async()=>{
-      for(const [f,v] of values){if(f.kind==='secret')await control.setSecret(f.name,f.name==='GMAIL_APP_PASSWORD'?v.replace(/\s+/g,''):v);else await control.setVariable(f.name,v)}
+      for(const [f,v] of secrets)await control.setSecret(f.name,f.name==='GMAIL_APP_PASSWORD'?v.replace(/\s+/g,''):v);
+      if(writeSettings){await control.setSecret(control.SETTINGS_SECRET,JSON.stringify(settings));savedSettings.set(settings)}
       await control.run();ui.showConnect=false;ui.settleUntil=Date.now()+600000;
-    },`Saved ${values.length} setting${values.length===1?'':'s'} and started Autopilot. Results appear here in about 5 minutes.`);
+    },`Saved ${secrets.length+(writeSettings?1:0)} item${secrets.length+(writeSettings?1:0)===1?'':'s'} and started Autopilot. Results appear here in about 5 minutes.`);
   });
   document.addEventListener('submit',async ev=>{
     if(ev.target.id!=='ap-unlock')return;ev.preventDefault();
