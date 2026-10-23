@@ -1,10 +1,11 @@
 name: LinkForge Autopilot
-# The autonomous engine. Runs twice a day, commits results, and the commit
-# redeploys Cloudflare Pages automatically. No Cloudflare credentials needed.
+# The autonomous engine. An hourly check starts a full cycle whenever the last one
+# is 5+ hours old, so GitHub's late or dropped schedule slots are absorbed within
+# the hour (about 4 cycles a day). Each cycle commits results, which redeploys
+# Cloudflare Pages. No Cloudflare credentials needed.
 on:
   schedule:
-    - cron: '40 5 * * *'
-    - cron: '10 14 * * *'
+    - cron: '23 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -22,18 +23,34 @@ jobs:
     timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
+      - name: Is a cycle due?
+        id: due
+        env:
+          EVENT: ${{ github.event_name }}
+          MIN_HOURS: ${{ vars.AUTOPILOT_MIN_HOURS || '5' }}
+        run: |
+          node -e "
+          const fs=require('fs');let last=0;
+          try{last=Date.parse(JSON.parse(fs.readFileSync('public/data/autopilot.json','utf8')).generated_at)||0}catch{}
+          const hours=(Date.now()-last)/36e5,due=process.env.EVENT!=='schedule'||hours>=Number(process.env.MIN_HOURS);
+          console.log('Last cycle '+hours.toFixed(1)+' h ago; due: '+due);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,'due='+due+String.fromCharCode(10))"
       - uses: actions/setup-node@v4
+        if: steps.due.outputs.due == 'true'
         with:
           node-version: '22'
           cache: npm
       - run: npm ci --no-audit --no-fund --omit=dev
+        if: steps.due.outputs.due == 'true'
       - name: Restore crawl cache
+        if: steps.due.outputs.due == 'true'
         uses: actions/cache@v4
         with:
           path: .autopilot-cache
           key: autopilot-crawl-${{ github.run_id }}
           restore-keys: autopilot-crawl-
       - name: Run Autopilot cycle
+        if: steps.due.outputs.due == 'true'
         env:
           AUTOPILOT_DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
           LINKFORGE_DATA_KEY: ${{ secrets.LINKFORGE_DATA_KEY }}
@@ -55,14 +72,14 @@ jobs:
           LINKFORGE_CLAUDE_MODEL: ${{ vars.LINKFORGE_CLAUDE_MODEL }}
         run: node scripts/autopilot/run.mjs
       - name: Guard against leaking private data
-        if: ${{ !inputs.dry_run }}
+        if: ${{ steps.due.outputs.due == 'true' && !inputs.dry_run }}
         run: |
           node -e "
           const fs=require('fs');const s=fs.readFileSync('public/data/autopilot.json','utf8');JSON.parse(s);
           if(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(s))throw Error('Public summary contains an email address');
           if(fs.existsSync('public/data/vault.json')){const v=JSON.parse(fs.readFileSync('public/data/vault.json','utf8'));if(v.alg!=='AES-256-GCM'||!v.ct)throw Error('Vault is not sealed')}"
       - name: Commit results (redeploys Cloudflare Pages)
-        if: ${{ !inputs.dry_run }}
+        if: ${{ steps.due.outputs.due == 'true' && !inputs.dry_run }}
         run: |
           git config user.name "linkforge-autopilot[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

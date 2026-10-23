@@ -6,7 +6,7 @@
 import {sleep,NOW,ageDays} from './util.mjs';
 
 const API='https://api.dataforseo.com/v3/';
-const ESTIMATE={serp:0.004,relevant_pages:0.03,traffic:0.02};
+const ESTIMATE={serp:0.006,relevant_pages:0.025,traffic:0.03}; // calibrated from the ledger's real averages
 
 export class DataForSEO{
   constructor({login,password,state,dailyUsd=0.5,monthlyUsd=10,fetchImpl=fetch,log=()=>{}}){

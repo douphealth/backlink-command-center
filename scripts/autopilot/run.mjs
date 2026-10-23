@@ -22,6 +22,7 @@ import {gscDemand,dfsDemand} from './demand.mjs';
 import {discoverProspects,requalify} from './prospect.mjs';
 import {PitchWriter} from './pitch.mjs';
 import {processReplies,runOutreach,checkLinks,gmailTransport,dailyCap} from './outreach.mjs';
+import {assetStats,learningSummary} from './learn.mjs';
 import {seal,open} from './vault.mjs';
 import {NOW,ageDays} from './util.mjs';
 
@@ -49,7 +50,7 @@ export function loadConfig(env=process.env,argv=process.argv){
     dataKey:env.LINKFORGE_DATA_KEY||'',vaultResetAt:env.LINKFORGE_VAULT_RESET_AT||'',
     dfs:{login:env.DATAFORSEO_LOGIN||'',password:env.DATAFORSEO_PASSWORD||'',dailyUsd:num(env.DATAFORSEO_DAILY_USD,0.5),monthlyUsd:num(env.DATAFORSEO_MONTHLY_USD,10)},
     outreach:{mode,gmail,fromAddress:env.GMAIL_ADDRESS||(dryRun?'dry-run@linkforge.invalid':''),senderName:env.SENDER_NAME||'',postalAddress:env.SENDER_POSTAL_ADDRESS||'',
-      dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),gapMs:()=>15000+Math.floor(Math.random()*30000)},
+      dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5'},
     gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,
   };
@@ -73,8 +74,11 @@ export function chooseAssets(ranked,state,{perSite=3,minLinkability=50}={}){
   const counts=new Map();for(const p of Object.values(state.prospects||{}))counts.set(p.asset_url,(counts.get(p.asset_url)||0)+(p.status==='rejected'?0:1));
   const bySite=new Map();
   for(const a of ranked){if(a.linkability<minLinkability)continue;const l=bySite.get(a.site)||[];if(l.length<perSite*2)l.push(a);bySite.set(a.site,l)}
+  // Pages that earn replies get more prospecting; pages with a deep unused queue get less.
+  const learned=assetStats(state);
+  const value=a=>{const r=learned.get(a.url);return (r&&r.sent>=3?r.rate*3:1)/(1+(counts.get(a.url)||0)/10)};
   const out=[];
-  for(const list of bySite.values())out.push(...list.sort((x,y)=>(counts.get(x.url)||0)-(counts.get(y.url)||0)||y.promotion-x.promotion).slice(0,perSite));
+  for(const list of bySite.values())out.push(...list.sort((x,y)=>value(y)-value(x)||y.promotion-x.promotion).slice(0,perSite));
   return out.sort((a,b)=>b.promotion-a.promotion);
 }
 
@@ -170,14 +174,14 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   const internalByAsset=new Map();for(const s of internal)internalByAsset.set(s.to,(internalByAsset.get(s.to)||0)+1);
   const summary={
     schema:'linkforge-autopilot/1',generated_at:NOW(),duration_s:Math.round((Date.now()-started)/1000),dry_run:cfg.dryRun,
-    schedule:'Twice daily (05:40 and 14:10 UTC) via GitHub Actions; every run redeploys Cloudflare Pages',
+    schedule:"Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
     capabilities:{vault:vaultOk,dataforseo:dfs.enabled,gmail:cfg.outreach.gmail&&gmailOk,connections,outreach_mode:cfg.outreach.mode,claude:!!cfg.claude.apiKey,gsc:cfg.gsc,
       daily_send_cap:cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit},
     setup:setupChecklist(cfg),stages,
     totals:{sites:SITES.length,pages_crawled:crawl.reduce((n,s)=>n+s.pages.length,0),urls_discovered:crawl.reduce((n,s)=>n+(s.discovered||0),0),
       promotable:ranked.length,internal_suggestions:internal.length,promoting_now:chosen.length},
     spend:{today_usd:Number(dfs.spend('day').toFixed(4)),month_usd:Number(dfs.spend('month').toFixed(4)),daily_cap_usd:cfg.dfs.dailyUsd,monthly_cap_usd:cfg.dfs.monthlyUsd,calls_this_run:dfs.calls},
-    funnel:f,history,
+    funnel:f,history,learning:vaultOk?learningSummary(state,SITES):previous.learning||null,
     sites:crawl.map(s=>({domain:s.site,pages:s.pages.length,discovered:s.discovered,sitemaps:s.sitemaps.length,
       eligible:ranked.filter(a=>a.site===s.site).length,top:ranked.find(a=>a.site===s.site)?.url||null})),
     best_urls:ranked.slice(0,80).map(({terms,...a})=>({...a,prospects:prospectsByAsset.get(a.url)||0,internal_link_suggestions:internalByAsset.get(a.url)||0,promoting:chosen.some(c=>c.url===a.url)})),

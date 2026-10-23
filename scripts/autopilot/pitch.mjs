@@ -19,8 +19,18 @@ export function templatePitch(p,asset,{senderName,site}){
     `We recently published ${short(asset.title,100)}: ${asset.url}`,'',value,
     ...(asset.interactive?['','It is free to use, with no sign-up.']:[]),'',
     `If you think it would help your readers, it could be a useful addition to that page. Either way, thanks for putting it together.`,'',
-    `Best,`,senderName,site.domain].join('\n');
+    `Best,`,senderName,site.domain,'',OPT_OUT].join('\n');
   return {subject,body,writer:'template'};
+}
+const OPT_OUT='P.S. Not relevant for you? Just reply "no" and I won\'t email again.';
+/** The editor already mentions us without a link: thank them, ask for the link. */
+export function mentionPitch(p,asset,{senderName,site}){
+  const name=firstName(p.author),brand=asset.title||site.domain;
+  return {subject:`Thanks for mentioning ${short(brand,40)}`,
+    body:[`Hi ${name||'there'},`,'',
+      `Thanks for mentioning ${brand} in "${short(p.title,90)}" — I really appreciate it.`,'',
+      `Would you consider turning the mention into a link, so readers can find it in one click? Here's the address: ${asset.url}`,'',
+      `Thanks again for including us.`,'',`Best,`,senderName,site.domain,'',OPT_OUT].join('\n'),writer:'template'};
 }
 export function followupPitch(p,asset,{senderName}){
   const name=firstName(p.author);
@@ -38,7 +48,9 @@ Rules:
 - One soft ask (consider adding it to the page). No pressure, no guilt, no flattery clichés ("I love your blog", "great content"), no offer of payment or link exchange.
 - Greet by first name only if an author name is provided, otherwise "Hi there".
 - Sign off with the sender name and website provided.
-- Subject: under 60 characters, specific, lowercase-friendly, no clickbait.`;
+- Subject: under 60 characters, specific, lowercase-friendly, no clickbait.
+- If situation is "unlinked_mention": the editor already mentions our brand without a link. Thank them briefly and ask them to turn the mention into a link to our URL. Do not pitch anything else.
+- End with this exact line: P.S. Not relevant for you? Just reply "no" and I won't email again.`;
 
 export function validPitch(out,asset){
   if(!out||typeof out.subject!=='string'||typeof out.body!=='string')return false;
@@ -53,11 +65,11 @@ export class PitchWriter{
     this.model=model;this.senderName=senderName;this.log=log;this.used=0;this.fallbacks=0;
   }
   async write(p,asset,site){
-    const template=templatePitch(p,asset,{senderName:this.senderName,site});
+    const template=(p.kind==='mention'?mentionPitch:templatePitch)(p,asset,{senderName:this.senderName,site});
     if(!this.client)return template;
     const facts={editor_page:{title:p.title,url:p.page_url,author:p.author||null,relevant_section:p.fit_section||null,excerpt:(p.excerpt||'').slice(0,1500)},
       our_asset:{title:asset.title,url:asset.url,kind:KIND[asset.type]||'resource',description:asset.description||'',facts:asset.reasons||[],free_tool:!!asset.interactive},
-      sender:{name:this.senderName,website:site.domain},topic:site.topic};
+      sender:{name:this.senderName,website:site.domain},topic:site.topic,situation:p.kind==='mention'?'unlinked_mention':'resource_suggestion'};
     try{
       const res=await this.client.beta.messages.create({
         model:this.model,max_tokens:2000,betas:['server-side-fallback-2026-07-01'],fallbacks:'default',

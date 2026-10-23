@@ -1,6 +1,13 @@
 # LinkForge v7 — Autopilot
 
-**An autonomous backlink and organic-growth engine for the 10-site portfolio.** It runs twice a day in GitHub Actions, publishes its results to the existing Cloudflare Pages dashboard, and needs **no Cloudflare setup, no server, and no database**.
+**An autonomous backlink and organic-growth engine for the 10-site portfolio.** It runs in GitHub Actions (an hourly check starts a full cycle whenever the last one is 5+ hours old, about 4 a day), publishes its results to the existing Cloudflare Pages dashboard, and needs **no Cloudflare setup, no server, and no database**.
+
+### How it gets smarter
+
+- **Unlinked brand mentions first:** pages that already name one of your sites but don't link are found every 14 days per site. They get a short "thanks for mentioning us, could you link it?" email, which converts far better than a cold pitch.
+- **Link likelihood:** the send queue is ordered by evidence. That covers topical fit, whether the page is a resource page, the site's real audience size (independent sites over giants), whether the address is the article's author, how recently the page was updated, and how well the promoted page has performed so far.
+- **Learning loop:** every search pattern's yield (pitchable prospects per search) and every page's reply and link rate are tracked. The best patterns run first and well-performing pages get more prospecting. See "What Autopilot is learning" on the dashboard.
+- **Right time:** pitches and follow-ups go out only during the recipient region's business hours, Monday to Friday.
 
 ```
 crawl every owned page ─► measure real demand ─► rank the best URLs ─► plan internal links
@@ -80,7 +87,7 @@ Run a cycle on demand: **Actions → LinkForge Autopilot → Run workflow** (tic
 ## Development
 
 ```bash
-npm test                # 73 tests: Pages routing, legacy Worker, Autopilot engine (mocked network, SMTP/IMAP fakes)
+npm test                # 83 tests: Pages routing, legacy Worker, Autopilot engine (mocked network, SMTP/IMAP fakes)
 npm run build
 npm run autopilot:dry   # full cycle locally, nothing sent or written
 ```

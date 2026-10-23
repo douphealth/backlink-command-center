@@ -8,8 +8,26 @@ import {buildMessage,newMessageId,smtpSend,Imap,classifyReply} from './mail.mjs'
 import {followupPitch} from './pitch.mjs';
 import {fetchPage,links,hostOf,sameSite,ageDays,NOW,sleep,DAY} from './util.mjs';
 import {QUALIFY_VERSION} from './prospect.mjs';
+import {assetStats,linkLikelihood} from './learn.mjs';
 // At most this many new pitches per asset per day, so one page doesn't use up the whole daily cap.
 export const PER_ASSET_DAILY=2;
+
+/**
+ * Send while the recipient is plausibly at work (by domain region), Monday–Friday.
+ * Hours are UTC. Unknown/global TLDs use US business hours, where most English editors are.
+ */
+const REGIONS=[
+  [/\.(uk|ie|de|fr|es|it|nl|be|pt|gr|se|no|dk|fi|pl|cz|at|ch|eu|za|ro|hu|sk|si|hr|bg|lt|lv|ee|lu|cy|mt)$/,[7,16]],
+  [/\.(au|nz)$/,[21,6]],
+  [/\.in$/,[3,12]],
+  [/\.(jp|sg|my|ph|hk|kr|cn|id|th|vn|tw)$/,[0,9]],
+];
+export function sendWindowOpen(domain,now=new Date()){
+  const [from,to]=(REGIONS.find(([re])=>re.test(domain))||[null,[13,21]])[1];
+  const h=now.getUTCHours(),d=now.getUTCDay();
+  if(d===0||d===6)return false;
+  return from<to?h>=from&&h<to:h>=from||h<to;
+}
 
 const ACTIVE=new Set(['sent','followed_up','drafted','replied','positive']);
 export function dailyCap(state,limit){
@@ -54,7 +72,9 @@ export async function processReplies({state,imap,log=()=>{}}){
 
 export async function runOutreach({state,assets,sites,writer,mailer,config,deadline=Infinity,log=()=>{}}){
   state.contacted??={};state.suppression??={};
-  const stats={followups:0,sent:0,drafted:0,skipped:0,cap:0};
+  const stats={followups:0,sent:0,drafted:0,skipped:0,deferred:0,cap:0};
+  const now=config.now?.()||new Date();
+  const outOfHours=p=>config.mode==='send'&&config.sendWindow&&!sendWindowOpen(p.domain,now);
   const assetByUrl=new Map(assets.map(a=>[a.url,a])),siteBy=new Map(sites.map(s=>[s.domain,s]));
   const deliver=async(p,{subject,body},type,inReplyTo)=>{
     const messageId=newMessageId(config.fromAddress.split('@')[1]);
@@ -70,6 +90,7 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
       if(Date.now()>deadline)break;
       if(p.status!=='sent'||p.replied_at||p.no_followup||(p.qv||1)<QUALIFY_VERSION||suppressed(state,p.email,p.domain))continue;
       const initial=p.history.find(h=>h.type==='initial');if(!initial||ageDays(initial.at)<config.followupDays)continue;
+      if(outOfHours(p)){stats.deferred++;continue}
       const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title};
       try{await deliver(p,followupPitch(p,asset,{senderName:config.senderName}),'followup',initial.message_id);p.status='followed_up';stats.followups++;await sleep(config.gapMs())}
       catch(e){log('follow-up failed: '+e.message);break}
@@ -78,16 +99,22 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   // 2. New pitches, best prospects first, within the warm-up/daily cap.
   const cap=config.mode==='send'?dailyCap(state,config.dailyLimit):config.dailyLimit;stats.cap=cap;
   let budget=Math.max(0,cap-sentToday(state));
-  const ready=Object.values(state.prospects).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION).sort((a,b)=>b.score-a.score);
+  // Most likely to link first: daily sends are the scarce resource.
+  const learned=assetStats(state);
+  const ready=Object.values(state.prospects).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION)
+    .map(p=>{p.likelihood=linkLikelihood(p,{assets:learned});return p}).sort((a,b)=>b.likelihood-a.likelihood||(b.score||0)-(a.score||0));
   const perAsset=new Map();
   for(const p of Object.values(state.prospects))if((p.history||[]).some(h=>h.type==='initial'&&h.at.startsWith(NOW().slice(0,10))))perAsset.set(p.asset_url,(perAsset.get(p.asset_url)||0)+1);
   for(const p of ready){
     if(budget<=0||Date.now()>deadline)break;
     if((perAsset.get(p.asset_url)||0)>=PER_ASSET_DAILY)continue;
+    if(outOfHours(p)){stats.deferred++;continue}
     const lastDomain=state.contacted[p.domain];
     if(suppressed(state,p.email,p.domain)||(lastDomain&&ageDays(lastDomain)<90)){p.status='skipped_duplicate';stats.skipped++;continue}
-    const asset=assetByUrl.get(p.asset_url);const site=siteBy.get(p.site);
-    if(!asset||!site){p.status='stale_asset';stats.skipped++;continue}
+    const site=siteBy.get(p.site);
+    if(!site){p.status='stale_asset';stats.skipped++;continue}
+    // Pages can drop out of this run's top list; fall back to what was stored when the prospect was found.
+    const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title||site.domain,type:p.kind==='mention'?'brand':'resource',description:''};
     const pitch=await writer.write(p,asset,site);p.writer=pitch.writer;
     try{
       await deliver(p,pitch,'initial');
@@ -97,7 +124,7 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
       if(config.mode==='send')await sleep(config.gapMs());
     }catch(e){log('delivery failed: '+e.message);p.delivery_error=String(e.message).slice(0,160);break}
   }
-  log(`outreach (${config.mode}): ${stats.sent} sent, ${stats.drafted} drafted, ${stats.followups} follow-ups, cap ${cap}`);
+  log(`outreach (${config.mode}): ${stats.sent} sent, ${stats.drafted} drafted, ${stats.followups} follow-ups, ${stats.deferred} waiting for recipients' business hours, cap ${cap}`);
   return stats;
 }
 
