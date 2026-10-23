@@ -18,6 +18,8 @@
     "node": ">=22"
   },
   "devDependencies": {
+    "libsodium-wrappers": "^0.8.4",
+    "tweetnacl": "^1.0.3",
     "wrangler": "^4.149.0"
   },
   "dependencies": {

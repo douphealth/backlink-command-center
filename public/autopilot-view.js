@@ -3,8 +3,9 @@
  * once unlocked with LINKFORGE_DATA_KEY, decrypts prospect details from
  * /data/vault.json entirely in this browser. The key never leaves the device.
  */
+import * as control from './github-control.js';
 const KEY='linkforge-autopilot-key';
-const REPO='https://github.com/douphealth/backlink-command-center';
+const REPO='https://github.com/'+control.REPO;
 const store={get:()=>{try{return localStorage.getItem(KEY)||''}catch{return ''}},set:v=>{try{v?localStorage.setItem(KEY,v):localStorage.removeItem(KEY)}catch{}}};
 // One-click unlock link: https://…pages.dev/#key=YOUR_KEY (hash is never sent to the server).
 if(location.hash.startsWith('#key=')){store.set(decodeURIComponent(location.hash.slice(5)));history.replaceState(null,'',location.pathname+'#autopilot')}
@@ -20,7 +21,28 @@ const ago=t=>{if(!t)return 'never';const m=Math.round((Date.now()-Date.parse(t))
 function nextRun(){const now=new Date(),slots=[[5,40],[14,10]].map(([h,m])=>{const d=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate(),h,m));if(d<=now)d.setUTCDate(d.getUTCDate()+1);return d});return new Date(Math.min(...slots))}
 
 const STATUS_ORDER=['positive','won','replied','followed_up','sent','drafted','ready','contact_form','no_contact','already_linked','declined','bounced','skipped_duplicate','rejected'];
-const ui={filter:'active',vault:null,error:''};
+const ui={filter:'active',vault:null,error:'',control:null,configured:null,tokenError:'',showConnect:false,msg:'',err:'',busy:'',settleUntil:0};
+let reloadView=null,pollTimer=null;
+const FIELDS=[
+  {name:'DATAFORSEO_LOGIN',label:'DataForSEO login (email)',type:'email',kind:'secret',required:true,help:'DataForSEO dashboard → API Access',link:'https://app.dataforseo.com/api-access'},
+  {name:'DATAFORSEO_PASSWORD',label:'DataForSEO API password',type:'password',kind:'secret',required:true,help:'The API password, not your website login'},
+  {name:'GMAIL_ADDRESS',label:'Gmail address that sends outreach',type:'email',kind:'secret',required:true},
+  {name:'GMAIL_APP_PASSWORD',label:'Gmail app password (16 letters)',type:'password',kind:'secret',required:true,help:'Create one at myaccount.google.com/apppasswords (needs 2-Step Verification)',link:'https://myaccount.google.com/apppasswords'},
+  {name:'SENDER_NAME',label:'Your name in emails',type:'text',kind:'variable',required:true,help:'e.g. Alex from GearUpToFit'},
+  {name:'OUTREACH_MODE',label:'Outreach mode',type:'select',kind:'variable',options:[['send','Hands-free: send pitches + 1 follow-up automatically'],['draft','Safe: write pitches into Gmail Drafts'],['off','Research only']]},
+  {name:'OUTREACH_DAILY_LIMIT',label:'Max new pitches per day',type:'number',kind:'variable',help:'Starts at 5/day and ramps up by 2/day to this limit'},
+  {name:'ANTHROPIC_API_KEY',label:'Anthropic API key (optional)',type:'password',kind:'secret',help:'Claude writes a unique pitch for every page'},
+];
+async function refreshControl(){
+  try{ui.control=await control.status()}catch(err){ui.control={error:err.message}}
+  if(control.token.get()){try{ui.configured=await control.configured();ui.tokenError=''}catch(err){ui.configured=null;ui.tokenError=err.message}}else ui.configured=null;
+}
+function schedulePoll(){
+  clearTimeout(pollTimer);
+  const live=ui.control?.running||Date.now()<ui.settleUntil;
+  if(!live||ui.showConnect||!reloadView)return;
+  pollTimer=setTimeout(()=>{if(!location.hash||location.hash==='#autopilot')reloadView()},control.token.get()?15000:60000);
+}
 
 export async function renderAutopilot(h){
   const {escapeHTML:e,external,n,niceTime,statusTag,panel,table,empty,intro}=h;
@@ -31,8 +53,16 @@ export async function renderAutopilot(h){
   const c=s.capabilities,f=s.funnel||{},t=s.totals;
   const missing=s.setup.filter(x=>!x.done);
   const modeLabel={send:'HANDS-FREE SENDING',draft:'DRAFTS TO GMAIL',off:'RESEARCH ONLY'}[c.outreach_mode];
-  const status=`<div class="focus-bar"><div><strong>Autopilot ran ${e(ago(s.generated_at))} · next run ${e(niceTime(nextRun().toISOString()))}</strong><p>${n(t.pages_crawled)} pages audited across ${n(t.sites)} sites in ${n(s.duration_s)}s · DataForSEO ${e('$'+s.spend.today_usd.toFixed(2))} today / ${e('$'+s.spend.month_usd.toFixed(2))} this month (caps $${s.spend.daily_cap_usd} / $${s.spend.monthly_cap_usd})</p></div><em>${e(modeLabel)}</em></div>`;
-  const setup=missing.length?panel('Finish autopilot setup',`${s.setup.length-missing.length} of ${s.setup.length} connected · run "npm run autopilot:setup" once, or add them in GitHub`,`<div class="panel-pad ap-checklist">${s.setup.map(x=>`<div class="ap-check ${x.done?'done':''}"><span>${x.done?'✓':x.required?'!':'+'}</span><div><strong>${e(x.label)}</strong><small>${e(x.unlocks)}</small></div><code>${e(x.key)}</code></div>`).join('')}</div>`,`<a class="panel-link" target="_blank" rel="noopener" href="${REPO}/settings/secrets/actions">Open GitHub secrets ↗</a>`):'';
+  await refreshControl();
+  const ctl=ui.control||{};
+  if(ctl.running)ui.settleUntil=Date.now()+150000; // keep refreshing until Pages has deployed the new results
+  const state=ctl.error?['off','STATUS UNAVAILABLE',ctl.error]:ctl.running?['running','RUNNING NOW',`Started ${ago(ctl.run.started)}; results appear here automatically`]:ctl.enabled?['on','ON · AUTOPILOT',`Next automatic run ${niceTime(nextRun().toISOString())}`]:['off','STOPPED','No automatic runs until you press Run'];
+  const summaryLine=`Last results ${ago(s.generated_at)} · ${n(t.pages_crawled)} pages audited · ${modeLabel.toLowerCase()} · DataForSEO $${s.spend.today_usd.toFixed(2)} today / $${s.spend.month_usd.toFixed(2)} month (caps $${s.spend.daily_cap_usd} / $${s.spend.monthly_cap_usd})`;
+  const status=`<div class="ap-control"><div class="ap-state"><span class="ap-dot ${state[0]}"></span><div><strong>${e(state[1])}</strong><p>${e(state[2])}${ctl.run?.url?` · <a href="${e(ctl.run.url)}" target="_blank" rel="noopener">${ctl.running?'watch live':'last run log'} ↗</a>`:''}</p><p>${e(summaryLine)}</p></div></div>
+    <div class="ap-buttons"><button class="ap-run" data-ap="run" ${ctl.running||ui.busy?'disabled':''}>${ui.busy==='run'?'Starting…':ctl.running?'Running…':'▶ Run'}</button><button class="ap-stop" data-ap="stop" ${(!ctl.enabled&&!ctl.running)||ui.busy?'disabled':''}>${ui.busy==='stop'?'Stopping…':'■ Stop'}</button><button class="outline-btn" data-ap="connect">⚙ Connect</button></div></div>
+    ${ui.msg?`<div class="ap-msg">${e(ui.msg)}</div>`:''}${ui.err?`<div class="alert-warning">${e(ui.err)}</div>`:''}`;
+  const needsSetup=missing.some(x=>x.required)&&!fullyConfigured();
+  const setup=ui.showConnect||needsSetup||!control.token.get()?connectPanel(h):'';
   const kpis=[['Best URLs to promote',t.promotable,'◎',`${n(t.promoting_now)} being promoted now`],['Internal link fixes',t.internal_suggestions,'⇄','Free ranking boosts on your own sites'],['Publishers contacted',f.contacted,'↗',`${n(f.ready)} ready · ${n(f.replied)} replied`],['Backlinks won',f.won,'◇',`+${n(f.existing_links)} existing links found`]];
   const kpiHtml=`<div class="kpi-grid">${kpis.map(([name,v,ico,note])=>`<div class="kpi"><div class="kpi-head">${e(name)}<span class="kpi-ico">${ico}</span></div><div class="kpi-value">${n(v)}</div><div class="kpi-foot">${e(note)}</div></div>`).join('')}</div>`;
   const steps=[['Prospects evaluated',f.prospects_evaluated],['Qualified publishers',f.qualified],['Contacted',f.contacted],['Replied',f.replied],['Links won',f.won]];
@@ -42,13 +72,38 @@ export async function renderAutopilot(h){
   const best=(s.best_urls||[]).slice(0,40).map((a,i)=>`<tr><td><strong>${String(i+1).padStart(2,'0')}</strong></td><td>${external(a.url,a.title)}<small>${e(a.site)} · ${e(a.type.replaceAll('_',' '))}${a.promoting?' · promoting now':''}</small><small class="ap-why">${e((a.reasons||[]).join(' · '))}</small></td><td><strong>${n(a.promotion)}</strong><small>link ${n(a.linkability)}${a.demand!=null?' · demand '+n(a.demand):''}</small></td><td>${n(a.internal_inlinks)}<small>${n(a.internal_link_suggestions)} to add</small></td><td>${n(a.prospects)}</td></tr>`);
   const internal=(s.internal_links||[]).slice(0,60).map(x=>`<tr><td>${external(x.from,x.from_title||x.from)}<small>${e(x.site)}</small></td><td><strong>“${e(x.anchor)}”</strong></td><td>${external(x.to,x.to_title||x.to)}</td></tr>`);
   const wins=(s.wins||[]).map(w=>`<tr><td><strong>${e(w.publisher)}</strong><small>${e(w.site)}</small></td><td>${external(w.page_url,w.title||w.page_url)}</td><td>${w.target?external(w.target,new URL(w.target).pathname):'—'}<small>${e(w.anchor)}</small></td><td>${statusTag(w.kind==='won'?'won':'existing')} ${w.rel?`<small>${e(w.rel)}</small>`:''}</td><td>${e(niceTime(w.found_at))}</td></tr>`);
-  return intro('autopilot',`<a class="secondary" target="_blank" rel="noopener" href="${REPO}/actions/workflows/autopilot.yml">▶ Run now on GitHub</a>`)+status+setup+kpiHtml+
+  schedulePoll();
+  return intro('autopilot','')+status+setup+kpiHtml+
     `<div class="overview-grid">${panel('Outreach funnel','Every number is a stored, verified record',funnel)}${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`+
     `<div style="margin-top:19px">${panel('Best URLs to promote','Linkability × real search demand; templated duplicates and thin pages are demoted',best.length?table(['#','URL & why','Score','Internal links','Prospects'],best):empty('No promotable URLs yet','The next crawl will rank your pages.'))}</div>`+
     `<div style="margin-top:19px">${panel('Internal link plan','Add these links on your own pages: highest-ROI, zero-cost ranking boost',internal.length?table(['On this page','Add anchor','Linking to'],internal):empty('No internal gaps found','Your best URLs are already well linked.'))}</div>`+
     `<div style="margin-top:19px">${panel('Backlinks','Won after outreach, or already linking to you (verified on the live page)',wins.length?table(['Publisher','Page','Links to','Status','Found'],wins):empty('No verified backlinks yet','Pitched pages are re-checked every 4 days for 150 days.'))}</div>`+
     `<div style="margin-top:19px">${privatePanel(h)}</div>`+
     `<details class="data-note"><summary><strong>Last run log</strong></summary><div class="pre-detail" style="max-width:none;margin-top:10px">${e((s.log||[]).join('\n'))}</div></details>`;
+}
+
+function fullyConfigured(){
+  const c=ui.configured;if(!c)return false;
+  return FIELDS.filter(f=>f.required).every(f=>f.kind==='secret'?c.secrets.has(f.name):c.variables[f.name])&&c.secrets.has('LINKFORGE_DATA_KEY');
+}
+function connectPanel(h){
+  const {escapeHTML:e,panel}=h;
+  if(!control.token.get()||ui.tokenError)return panel('Connect the dashboard to GitHub',ui.tokenError?`${ui.tokenError} Create a new token and paste it below.`:'One-time step so Run, Stop and Connect work from this page',
+    `<div class="panel-pad ap-connect"><ol class="ap-steps">
+      <li><a class="primary" href="${e(control.TOKEN_URL)}" target="_blank" rel="noopener">Create control token ↗</a> The name and permissions are pre-filled.</li>
+      <li>Under <b>Repository access</b> choose <b>Only select repositories</b> → <b>backlink-command-center</b>. Make sure <b>Actions</b>, <b>Secrets</b> and <b>Variables</b> are <b>Read and write</b>, then click <b>Generate token</b>.</li>
+      <li>Paste the token below. It stays in this browser only.</li></ol>
+      <form id="ap-token-form" class="inline-form"><input id="ap-token" type="password" autocomplete="off" placeholder="github_pat_…" required minlength="20"><button class="primary" type="submit">Save token</button></form></div>`);
+  const c=ui.configured||{secrets:new Set(),variables:{}};
+  const done=f=>f.kind==='secret'?c.secrets.has(f.name):!!c.variables[f.name];
+  const field=f=>{const ok=done(f),cur=f.kind==='variable'?c.variables[f.name]||'':'';
+    const input=f.type==='select'?`<select class="selector" name="${f.name}">${f.options.map(([v,l])=>`<option value="${v}" ${(cur||'send')===v?'selected':''}>${e(l)}</option>`).join('')}</select>`
+      :`<input name="${f.name}" type="${f.type}" ${f.type==='number'?'min="1" max="50"':''} autocomplete="${f.type==='password'?'new-password':'off'}" value="${f.kind==='variable'?e(cur):''}" placeholder="${ok&&f.kind==='secret'?'Connected; leave blank to keep':f.type==='number'?'12':''}" ${f.required&&!ok?'required':''}>`;
+    return `<label class="ap-field"><span>${e(f.label)} ${ok?'<b class="ap-ok">✓ connected</b>':f.required?'<b class="ap-need">needed</b>':''}</span>${input}${f.help?`<small>${f.link?`<a href="${f.link}" target="_blank" rel="noopener">${e(f.help)} ↗</a>`:e(f.help)}</small>`:''}</label>`};
+  return panel('Connect DataForSEO and Gmail','Values are encrypted in your browser and saved as GitHub secrets. Nobody can read them back, including this page.',
+    `<form id="ap-connect-form" class="panel-pad ap-connect"><div class="ap-fields">${FIELDS.map(field).join('')}</div>
+      <div class="ap-buttons"><button class="primary" type="submit" ${ui.busy?'disabled':''}>${ui.busy==='connect'?'Saving…':'Save & run now'}</button><button class="outline-btn" type="button" data-ap="close">Close</button><button class="outline-btn" type="button" data-ap="forget">Forget token</button></div></form>`,
+    `<span class="panel-link">${c.secrets.has('LINKFORGE_DATA_KEY')?'✓ vault key set':'vault key missing'}</span>`);
 }
 
 function privatePanel(h){
@@ -66,7 +121,34 @@ function privatePanel(h){
     `<div class="table-toolbar"><select class="selector" id="ap-filter">${opts}</select><button class="outline-btn" id="ap-lock" type="button">Lock</button></div>${rows.length?table(['Publisher','Their page','Contact','Our asset','Status'],rows):empty('Nothing in this view','Change the filter to see more prospects.')}`);
 }
 
+async function act(kind,fn,ok){
+  ui.busy=kind;ui.err='';ui.msg='';await reloadView();
+  try{await fn();ui.msg=ok}catch(err){ui.err=err.message}
+  ui.busy='';await reloadView();
+}
 export function bindAutopilot(reload){
+  reloadView=reload;
+  document.addEventListener('click',async ev=>{
+    const b=ev.target.closest('[data-ap]');if(!b)return;const a=b.dataset.ap;
+    if(a==='connect'){ui.showConnect=!ui.showConnect;return reload()}
+    if(a==='close'){ui.showConnect=false;return reload()}
+    if(a==='forget'){control.token.set('');ui.configured=null;return reload()}
+    if(!control.token.get()){ui.showConnect=true;ui.err='Connect the dashboard to GitHub first (one-time token below).';return reload()}
+    if(a==='run')return act('run',async()=>{await control.run();ui.settleUntil=Date.now()+600000},'Autopilot started. This page refreshes on its own while it runs.');
+    if(a==='stop'){if(!confirm('Stop Autopilot? Automatic runs pause until you press Run.'))return;return act('stop',control.stop,'Autopilot stopped. Press Run to start it again.')}
+  });
+  document.addEventListener('submit',async ev=>{
+    if(ev.target.id==='ap-token-form'){ev.preventDefault();control.token.set(document.getElementById('ap-token').value.trim());ui.showConnect=true;ui.err='';return reload()}
+    if(ev.target.id!=='ap-connect-form')return;
+    ev.preventDefault();
+    const form=new FormData(ev.target),values=FIELDS.map(f=>[f,String(form.get(f.name)||'').trim()]).filter(([,v])=>v);
+    const bad=values.find(([f,v])=>(f.type==='email'&&!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(v))||(f.name==='GMAIL_APP_PASSWORD'&&v.replace(/\s+/g,'').length!==16));
+    if(bad){ui.err=bad[0].name==='GMAIL_APP_PASSWORD'?'A Gmail app password is exactly 16 letters.':`${bad[0].label} doesn't look like an email address.`;return reload()}
+    await act('connect',async()=>{
+      for(const [f,v] of values){if(f.kind==='secret')await control.setSecret(f.name,f.name==='GMAIL_APP_PASSWORD'?v.replace(/\s+/g,''):v);else await control.setVariable(f.name,v)}
+      await control.run();ui.showConnect=false;ui.settleUntil=Date.now()+600000;
+    },`Saved ${values.length} setting${values.length===1?'':'s'} and started Autopilot. Results appear here in about 5 minutes.`);
+  });
   document.addEventListener('submit',async ev=>{if(ev.target.id!=='ap-unlock')return;ev.preventDefault();store.set(document.getElementById('ap-key').value.trim());ui.vault=null;ui.error='';await reload()});
   document.addEventListener('change',async ev=>{if(ev.target.id==='ap-filter'){ui.filter=ev.target.value;await reload()}});
   document.addEventListener('click',async ev=>{if(ev.target.id==='ap-lock'){store.set('');ui.vault=null;ui.error='';await reload()}});
