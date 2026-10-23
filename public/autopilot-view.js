@@ -16,7 +16,18 @@ async function openVault(box,pass){
   const key=await crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt:b64(box.salt),iterations:box.iterations},base,{name:'AES-GCM',length:256},false,['decrypt']);
   return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(box.iv)},key,b64(box.ct))));
 }
-const fetchJson=async url=>{const r=await fetch(url,{cache:'no-store'});if(!r.ok||!(r.headers.get('content-type')||'').includes('json'))return null;return r.json()};
+// One retry on network failure, then a clear error the view can explain (instead of a raw "Failed to fetch").
+const fetchJson=async url=>{
+  for(let attempt=0;;attempt++){
+    try{const r=await fetch(url,{cache:'no-store'});if(!r.ok||!(r.headers.get('content-type')||'').includes('json'))return null;return await r.json()}
+    catch(err){if(attempt>=1){const e=Error('offline');e.offline=true;throw e}await new Promise(r=>setTimeout(r,1200))}
+  }
+};
+const LIVE='https://backlink-command-center.pages.dev/#autopilot';
+function offlineCard(h){
+  const local=!/\.pages\.dev$/.test(location.hostname);
+  return h.intro('autopilot','')+`<div class="alert-warning ap-missing"><strong>This page can't reach its server right now.</strong> ${local?`You're on a local or preview copy (<code>${h.escapeHTML(location.host)}</code>) that is no longer running. Open the live dashboard instead: <a href="${LIVE}">backlink-command-center.pages.dev</a>.`:'Check your internet connection, then reload the page. Nothing you saved has been lost.'}</div>`;
+}
 const ago=t=>{if(!t)return 'never';const m=Math.round((Date.now()-Date.parse(t))/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':Math.round(m/1440)+' d ago'};
 function nextRun(){const now=new Date(),slots=[[5,40],[14,10]].map(([h,m])=>{const d=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate(),h,m));if(d<=now)d.setUTCDate(d.getUTCDate()+1);return d});return new Date(Math.min(...slots))}
 
@@ -51,12 +62,12 @@ function schedulePoll(){
 
 export async function renderAutopilot(h){
   const {escapeHTML:e,external,n,niceTime,statusTag,panel,table,empty,intro}=h;
-  const s=await fetchJson('/data/autopilot.json');
+  let s;try{s=await fetchJson('/data/autopilot.json')}catch(err){if(err.offline)return offlineCard(h);throw err}
   if(!s)return intro('autopilot')+`<div class="focus-bar"><div><strong>Autopilot has not published its first run yet.</strong><p>It runs twice a day in GitHub Actions and redeploys this dashboard automatically. Start it now from GitHub.</p></div><a class="primary" target="_blank" rel="noopener" href="${REPO}/actions/workflows/autopilot.yml">Run Autopilot ↗</a></div>`;
   await refreshControl();
   const key=store.get();
   // A freshly created key keeps retrying until the run that re-seals the vault has deployed.
-  if(key&&!ui.vault&&(!ui.error||ui.pendingVault)){const box=await fetchJson('/data/vault.json');if(box){try{ui.vault=await openVault(box,key);ui.pendingVault=false;ui.error=''}catch{ui.pendingVault=vaultResetAt.get()>(box.sealed_at||'');if(ui.pendingVault)ui.settleUntil=Math.max(ui.settleUntil,Date.now()+60000);ui.error=ui.pendingVault?'New vault key saved. It unlocks automatically once the next Autopilot run finishes.':'That key does not unlock this vault. Check you pasted the vault key (not the GitHub token), or create a new vault key.'}}}
+  if(key&&!ui.vault&&(!ui.error||ui.pendingVault)){const box=await fetchJson('/data/vault.json').catch(()=>null);if(box){try{ui.vault=await openVault(box,key);ui.pendingVault=false;ui.error=''}catch{ui.pendingVault=vaultResetAt.get()>(box.sealed_at||'');if(ui.pendingVault)ui.settleUntil=Math.max(ui.settleUntil,Date.now()+60000);ui.error=ui.pendingVault?'New vault key saved. It unlocks automatically once the next Autopilot run finishes.':'That key does not unlock this vault. Check you pasted the vault key (not the GitHub token), or create a new vault key.'}}}
   const c=s.capabilities,f=s.funnel||{},t=s.totals;
   const missing=s.setup.filter(x=>!x.done);
   const modeLabel={send:'HANDS-FREE SENDING',draft:'DRAFTS TO GMAIL',off:'RESEARCH ONLY'}[c.outreach_mode];
