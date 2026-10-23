@@ -32,3 +32,7 @@ wrangler.toml
 .linkforge/
 
 .linkforge-worker.deploy.jsonc
+
+# Dependencies and Autopilot crawl cache (restored by GitHub Actions cache)
+node_modules/
+.autopilot-cache/

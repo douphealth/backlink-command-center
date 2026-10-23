@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {SITES} from '../functions/_lib/sites.js';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const publicDir=resolve(root,'public');
-for(const asset of ['index.html','app.js','browser-store.js','styles.css','_routes.json']){
+for(const asset of ['index.html','app.js','browser-store.js','autopilot-view.js','styles.css','_routes.json']){
   if(!existsSync(resolve(publicDir,asset)))throw Error(`Required Cloudflare Pages asset is missing: ${asset}`);
 }
 const out=JSON.stringify({version:1,generated_from:'functions/_lib/sites.js',sites:SITES},null,2)+'\n';

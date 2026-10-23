@@ -1,77 +1,86 @@
-# LinkForge v5 — Cloudflare Pages, ready on every Git deployment
+# LinkForge v7 — Autopilot
 
-**The Git-connected Cloudflare Pages project is the default deployment target.**
+**An autonomous backlink and organic-growth engine for the 10-site portfolio.** It runs twice a day in GitHub Actions, publishes its results to the existing Cloudflare Pages dashboard, and needs **no Cloudflare setup, no server, and no database**.
 
-LinkForge previously placed a single-Worker API behind a Pages static site. Pages fell back to `index.html` for missing `/api/setup`, and the browser crashed with `Unexpected token '<'`. This release fixes that routing error and makes the dashboard **useful immediately** after an ordinary Cloudflare Pages deployment, including when there is no D1 binding, Cloudflare Access policy, secret, or additional Worker.
+```
+crawl every owned page ─► measure real demand ─► rank the best URLs ─► plan internal links
+        │                                                                     │
+        └─► find link prospects in Google ─► qualify each page ─► find the editor's email
+                 │
+                 └─► write a page-specific pitch ─► Gmail draft or send ─► one follow-up
+                          │
+                          └─► read replies, bounces & opt-outs ─► re-check pages ─► verified backlinks
+```
 
-## Deploy with Cloudflare Pages (no setup wizard)
+| | Before (v5/v6) | Autopilot (v7) |
+| --- | --- | --- |
+| Pages audited per run | 124 (12 per site, HTTP status only) | ~1,900 (all sitemaps, 300/site, full on-page features), ~20 s incremental |
+| "Best URL" ranking | URL keyword heuristics | Content depth, tools/quizzes, data tables, citations, freshness, internal inlinks, **GSC or DataForSEO demand**, de-duplicated templates |
+| Internal links | none | ~300 concrete "add this anchor on this page" fixes |
+| Prospecting | paused, $1/month cap | Intent + resource-page searches per asset, platform/gov/UGC filters, live page qualification |
+| Contacts | none | Editor emails from page, contact/about pages, Cloudflare-obfuscated addresses, author names |
+| Outreach | disabled | Claude-written or template pitch, Gmail Drafts or hands-free sending, warm-up ramp, one follow-up |
+| Results | none | Replies, opt-outs, bounces handled automatically; won links verified on the live page |
+| Deployment | Worker + D1 + Access + secrets | **GitHub Actions + Cloudflare Pages only** (each run's commit redeploys Pages) |
 
-Connect `douphealth/backlink-command-center`, branch `main`, to Cloudflare Pages and use:
-
-| Field | Value |
-| --- | --- |
-| Framework preset | None |
-| Root directory | `/` (repository root) |
-| Build command | `npm run build` |
-| Build output directory | `public` |
-| Production branch | `main` |
-| Environment variables | **None required for browser mode** |
-| Administrator password | **Not used in browser mode** |
-
-**After that, every push to `main` redeploys Pages automatically.** Your current `pages.dev` URL remains the entry point. You should not need to switch to a separate `workers.dev` site to use the browser workspace.
-
-For Git-connected Pages, the `functions/` directory at the repository root is compiled and deployed by Cloudflare automatically. It contains `functions/api/[[path]].js` for JSON API diagnostics and bounded, free public HTTP checks. The `public/_routes.json` file routes only `/api/*` through Functions. A separate `worker.wrangler.jsonc` remains available for an optional, separately deployed Worker, but is **not** interpreted as a Pages config.
-
-## What works immediately, with no manual Cloudflare setup
-
-- All 11 dashboard sections open, even if Cloudflare `/api/setup` still returns an HTML page from an old cached deployment.
-- Ten portfolio sites and existing configured resource URLs are available as static reference data.
-- Browser IndexedDB saves prospects, manual status holds, notes, suppressions, site HTTP observations, and task **plans** across reloads on **the same device and browser profile**.
-- Add publishers, find/filter them, place them on hold, manage suppressions.
-- Import validated prospects or suppression lists from CSV. CSV prospects are deliberately downgraded to **research pending**: a user's spreadsheet is not proof that a backlink or publisher has been verified.
-- Export six CSV datasets; back up or restore the entire on-device workspace as a JSON file.
-- The Pages Function can check HTTP status for a small, fixed allowlist of owned asset URLs. This does not make DataForSEO calls. If the site was uploaded as static files without the Functions layer, the UI still works but reports that live HTTP checks are unavailable.
-- Shows no invented contacts, sends, earned backlinks, spend, activity or results.
-- The client checks API response Content-Type before JSON parsing; it never attempts to parse a `<!doctype>` response as JSON.
-
-### Limits of a no-setup Pages deployment
-
-**Local browser records are not stored on a shared Cloudflare database.** They are only on the device used. Clearing browser site data or changing browsers can remove access to the local workspace, so use the built-in backup/export button. The publicly deployed HTML/JS source is not access-controlled; private local workspace contents are never uploaded as public assets or committed to GitHub. For confidential datasets on a shared backend, configure real access control.
-
-**Pages alone does not run unattended Cron Triggers or safely authenticate to a paid DataForSEO/Gmail account.** The browser UI therefore never claims saved task plans were executed, and it never sends emails or makes paid DataForSEO calls. The absence of a cloud Worker is disclosed in the UI. If you need 24/7 autonomous checks, durable cross-device D1 state and provider integrations, provision a secure Worker/D1 backend through the separate optional command below or attach an already-provisioned D1/Access connection to Pages. These services require one-time Cloudflare account authorization; source files alone cannot create them securely.
-
-## Optional: a private Cloudflare Worker for unattended tasks and central records
-
-This does not affect the Pages-first deployment. From an authorized workstation with Node.js 22+:
+## Turn it on (one time, ~5 minutes)
 
 ```powershell
 npm install
-npm run deploy
+gh auth login          # once, if the GitHub CLI isn't signed in
+npm run autopilot:setup
 ```
 
-The optional deployment uses `worker.wrangler.jsonc`, generates a private operator access code locally, provisions D1 through Wrangler where supported, and installs an hourly Worker. Keep the locally generated `.linkforge/` credentials out of GitHub, backups intended for public sharing, and chat messages. **This optional Worker has its own `workers.dev` URL; it does not silently synchronize with a separate Pages browser workspace.** To move data, use the browser backup/export functions and a separate authenticated ingestion workflow after verification. Do not assume two copies of the dashboard share state just because they are in Cloudflare.
+The setup script stores everything as **encrypted GitHub Actions secrets** (values are piped to `gh`, never written to disk) and starts the first run. It asks for:
 
-### DataForSEO hard safety gates
+| Secret / variable | Needed for | Where to get it |
+| --- | --- | --- |
+| `LINKFORGE_DATA_KEY` | Encrypting prospects & outreach history (repo is public) | Generated automatically; saved to `.linkforge/autopilot-unlock-key.txt` |
+| `DATAFORSEO_LOGIN` / `DATAFORSEO_PASSWORD` | Google prospect searches, page-traffic estimates | DataForSEO dashboard → API Access |
+| `GMAIL_ADDRESS` / `GMAIL_APP_PASSWORD` | Drafts, sending, reply & bounce detection | myaccount.google.com/apppasswords (2-Step Verification required) |
+| `SENDER_NAME` (variable) | Signing pitches | Your name, e.g. "Alex from GearUpToFit" |
+| `OUTREACH_MODE` (variable) | `draft` (default) or `send` for hands-free | — |
+| `ANTHROPIC_API_KEY` *(optional)* | Unique, page-specific pitches written by Claude | console.anthropic.com |
+| `GSC_SERVICE_ACCOUNT_JSON` *(optional)* | Exact impressions/positions → striking-distance targeting | Google Cloud service account with Search Console access |
+| `SENDER_POSTAL_ADDRESS` *(optional)* | CAN-SPAM footer | — |
 
-The optional Worker starts with paid DataForSEO disabled and outgoing Gmail disabled. Code ceilings remain $0.06/request, $0.12/day, $1/month, 3 paid calls/day and 2/site/day, with no automatic retry after an uncertain charge. These ceilings only limit LinkForge's own worker, not other applications using the same DataForSEO account. Rotate any API credential previously uploaded into a conversation before storing it as a Cloudflare Worker secret.
+You can also add them by hand under **GitHub → Settings → Secrets and variables → Actions**. The dashboard's Autopilot page shows exactly which ones are still missing.
 
-## Verify the correct Pages deployment
+Without any secrets the engine still runs: it crawls, ranks the best URLs and produces the internal-link plan. Each connected credential unlocks the next stage.
 
-1. On your Pages site, open `/api/setup`: it should return JSON with `"mode":"browser_workspace"` if the Git-connected Function has deployed and no secure D1 backend is attached.
-2. Open the root site: the dashboard should load and show **Ready on Cloudflare Pages · On this device**, not a deployment-needed screen.
-3. Add a publisher and refresh: IndexedDB must preserve it in the same browser.
-4. Open Portfolio sites and check one site: results are labeled HTTP observations, not verified SEO outcomes.
-5. Export a JSON backup and confirm records remain local.
+## Dashboard
 
-Even if the Functions route is absent temporarily, the root dashboard detects the HTML fallback safely and enters local mode.
+Open your Pages URL (for example `https://backlink-command-center.pages.dev`). **Autopilot** is the first view: last/next run, setup checklist, funnel, best URLs with reasons, internal-link plan, verified backlinks and stage health.
 
-## Development and tests
+Prospect details (emails, conversations) are decrypted **in your browser** after you paste `LINKFORGE_DATA_KEY` once. You can also bookmark `https://…pages.dev/#key=YOUR_KEY`; the part after `#` is never sent to a server.
+
+Run a cycle on demand: **Actions → LinkForge Autopilot → Run workflow** (tick *dry run* to preview without sending or committing).
+
+## Guardrails (built in, not optional)
+
+- **Spend:** DataForSEO daily/monthly caps (`DATAFORSEO_DAILY_USD`, default $0.50; `DATAFORSEO_MONTHLY_USD`, default $10), provider-reported cost ledger, endpoints the account can't access are parked for 7 days.
+- **Deliverability:** warm-up ramp (5/day, +2/day) up to `OUTREACH_DAILY_LIMIT` (default 12), 15–45 s spacing, `List-Unsubscribe` header, plain-text mail.
+- **Respect:** one contact per publisher domain per 90 days, one follow-up only, follow-ups stop on any reply, opt-out replies suppress the domain permanently, bounces switch to an alternate address or stop.
+- **Honesty:** pitches only state facts from the crawled asset; Claude output is rejected if it adds URLs, placeholders or runs long. A backlink counts only when the anchor is found on the live page.
+- **Privacy:** the public summary is checked in CI to contain no email addresses; private state is AES-256-GCM (PBKDF2-SHA256, 210k iterations).
+
+## How "best URL" is decided
+
+`promotion = 0.55 × linkability + 0.45 × demand` (linkability alone when no demand data), plus a bonus for flagship assets and under-linked pages.
+
+- **Linkability:** page type (tool, methodology, data, comparison, guide), depth, structure, tables, embedded tools/quizzes, authoritative citations, rich schema, freshness. Thin pages are penalised, and templated siblings (e.g. `/compare/x-vs-y`) are capped at two per template.
+- **Demand:** Search Console impressions with a striking-distance bonus (positions 4–20), or DataForSEO estimated traffic and keyword counts.
+
+## Development
 
 ```bash
-npm test
+npm test                # 64 tests: Pages routing, legacy Worker, Autopilot engine (mocked network, SMTP/IMAP fakes)
 npm run build
+npm run autopilot:dry   # full cycle locally, nothing sent or written
 ```
 
-Tests include Pages route JSON shape, legacy HTML fallback compatibility assertions, secure operator auth on the optional Worker, cost/sending gates, no-fabrication rules, prospect import and de-duplication, safe task planning, and CSV handling. Browser QA may need an environment where Chromium can open local development URLs.
+Engine code is in `scripts/autopilot/` (`run.mjs` orchestrates; `crawl`, `score`, `demand`, `prospect`, `pitch`, `mail`, `outreach`, `dataforseo`, `vault`). The workflow is in `.github/workflows/autopilot.yml`.
 
-See `DEPLOYMENT.md`, `SECURITY.md`, and `OPERATIONS.md` for operating details. The public repository contains no DataForSEO credentials or private outreach records.
+## Legacy optional Worker
+
+The earlier single-Worker + D1 backend (`src/`, `functions/_lib/`, `worker.wrangler.jsonc`, `npm run deploy`) still builds and is still tested, but Autopilot does not need it. See `DEPLOYMENT.md`, `SECURITY.md` and `OPERATIONS.md`.

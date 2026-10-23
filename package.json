@@ -1,20 +1,26 @@
 {
   "name": "linkforge-cloudflare-pages-ready",
-  "version": "5.0.0",
+  "version": "7.0.0",
   "type": "module",
   "private": true,
-  "description": "Cloudflare Pages dashboard works immediately with browser IndexedDB, with optional Cloudflare Worker automation",
+  "description": "LinkForge Autopilot: autonomous best-URL discovery, link prospecting, outreach and backlink verification, published to Cloudflare Pages",
   "scripts": {
-    "build": "node scripts/build-pages.mjs && node --check public/app.js && node --check public/browser-store.js && node --check src/index.js && node --check functions/api/[[path]].js",
-    "test": "node --test tests/cloudflare/*.test.mjs",
+    "build": "node scripts/build-pages.mjs && node --check public/app.js && node --check public/browser-store.js && node --check public/autopilot-view.js && node --check src/index.js && node --check functions/api/[[path]].js && node --check scripts/autopilot/run.mjs",
+    "test": "node --test tests/cloudflare/*.test.mjs tests/autopilot/*.test.mjs",
     "deploy": "node scripts/deploy-one-cloudflare.mjs",
     "deploy:one": "node scripts/deploy-one-cloudflare.mjs",
-    "build:pages": "npm run build"
+    "build:pages": "npm run build",
+    "autopilot": "node scripts/autopilot/run.mjs",
+    "autopilot:dry": "node scripts/autopilot/run.mjs --dry-run",
+    "autopilot:setup": "node scripts/autopilot/setup.mjs"
   },
   "engines": {
     "node": ">=22"
   },
   "devDependencies": {
     "wrangler": "^4.149.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.1.0"
   }
 }
