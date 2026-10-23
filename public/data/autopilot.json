@@ -1,13 +1,22 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-23T09:45:05.325Z",
- "duration_s": 21,
+ "generated_at": "2026-10-23T09:49:36.395Z",
+ "duration_s": 30,
  "dry_run": false,
  "schedule": "Twice daily (05:40 and 14:10 UTC) via GitHub Actions; every run redeploys Cloudflare Pages",
  "capabilities": {
   "vault": true,
   "dataforseo": false,
   "gmail": true,
+  "connections": {
+   "dataforseo": {
+    "status": "rejected",
+    "error": "DataForSEO rejected the login (HTTP 401: You are not authorized to access this resource. See your login details here: https://app.dataforseo.com/api-access .). Use the API login and the API password from app.dataforseo.com/api-access — not your website password."
+   },
+   "gmail": {
+    "status": "connected"
+   }
+  },
   "outreach_mode": "send",
   "claude": false,
   "gsc": false,
@@ -65,9 +74,16 @@
   }
  ],
  "stages": {
+  "connections": {
+   "ok": false,
+   "result": {
+    "dataforseo": "rejected",
+    "gmail": "connected"
+   }
+  },
   "crawl": {
    "ok": true,
-   "ms": 20206,
+   "ms": 9141,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -75,7 +91,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 530,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 0
@@ -90,7 +106,7 @@
   },
   "prospects": {
    "ok": null,
-   "skipped": "DataForSEO credentials not set"
+   "skipped": "DataForSEO rejected the login (HTTP 401: You are not authorized to access this resource. See your login details here: https://app.dataforseo.com/api-access .). Use the API login and the API password from app.dataforseo.com/api-access — not your website password."
   },
   "replies": {
    "ok": true,
@@ -3516,16 +3532,6 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-success/",
-   "from_title": "2026 Affiliate Marketing for Beginners: Ultimate Guide",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "choose profitable affiliate",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/seo/mastering-seo-best-practices/",
    "from_title": "Affiliate SEO best practices: ranking, revenue, and AI visibility cleanup",
    "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
@@ -3538,6 +3544,16 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-vs-dropshipping/",
    "from_title": "Affiliate Marketing Vs Dropshipping: 2026 Winner? (2026 Analysis)",
+   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
+   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
+   "anchor": "choose profitable affiliate",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-success/",
+   "from_title": "2026 Affiliate Marketing for Beginners: Ultimate Guide",
    "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
    "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
    "anchor": "choose profitable affiliate",
@@ -4277,20 +4293,21 @@
  ],
  "wins": [],
  "log": [
-  "09:44:46 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "09:44:48 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "09:44:50 crawl frenchyfab.com: 239/239 urls, fetched 0, 304 0, reused 239",
-  "09:44:50 crawl mysticaldigits.com: 300/471 urls, fetched 0, 304 0, reused 300",
-  "09:44:52 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "09:44:53 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "09:44:54 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "09:44:57 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "09:44:57 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "09:45:04 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 4, 304 0, reused 254",
-  "09:45:04 dataforseo: credentials rejected",
-  "09:45:04 dataforseo demand: gearuptofit.com 0 ranking pages",
-  "09:45:05 - prospects: skipped (DataForSEO credentials not set)",
-  "09:45:05 outreach (send): 0 sent, 0 drafted, 0 follow-ups, cap 5",
-  "09:45:05 link checks: 0 pages, 0 new links won, 0 lost"
+  "09:49:07 dataforseo: DataForSEO rejected the login (HTTP 401: You are not authorized to access this resource. See your login details here: https://app.dataforseo.com/api-access .). Use the API login and the API password from app.dataforseo.com/api-access — not your website password.",
+  "09:49:27 connection dataforseo: rejected — DataForSEO rejected the login (HTTP 401: You are not authorized to access this resource. See your login details here: https://app.dataforseo.com/api-access .). Use the API login and the API password from app.dataforseo.com/api-access — not your website password.",
+  "09:49:27 connection gmail: connected",
+  "09:49:28 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "09:49:29 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "09:49:30 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "09:49:31 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "09:49:31 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "09:49:31 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "09:49:32 crawl frenchyfab.com: 239/239 urls, fetched 0, 304 0, reused 239",
+  "09:49:33 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "09:49:33 crawl mysticaldigits.com: 300/471 urls, fetched 0, 304 0, reused 300",
+  "09:49:36 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "09:49:36 - prospects: skipped (DataForSEO rejected the login (HTTP 401: You are not authorized to access this resource. See your login details here: https://app.dataforseo.com/api-access .). Use the API login and the API password from app.dataforseo.com/api-access — not your website password.)",
+  "09:49:36 outreach (send): 0 sent, 0 drafted, 0 follow-ups, cap 5",
+  "09:49:36 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
