@@ -27,8 +27,10 @@ export const token={
 
 async function gh(path,{method='GET',body,auth=true}={}){
   const t=token.get();
-  const res=await fetch(API+path,{method,headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28',
-    ...(auth&&t?{Authorization:'Bearer '+t}:{}),...(body?{'Content-Type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,cache:'no-store'});
+  let res;
+  try{res=await fetch(API+path,{method,headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28',
+    ...(auth&&t?{Authorization:'Bearer '+t}:{}),...(body?{'Content-Type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,cache:'no-store'})}
+  catch{const e=Error("Couldn't reach GitHub (connection dropped, or a browser extension is blocking api.github.com). Nothing was changed; please try again.");e.status=0;throw e}
   if(res.status===204)return {};
   const data=await res.json().catch(()=>({}));
   if(!res.ok){const e=Error(res.headers.get('x-ratelimit-remaining')==='0'?'GitHub rate limit reached — add your control token to lift it.':res.status===401?'GitHub rejected the token (expired or mistyped).':res.status===403||res.status===404?'The token is missing a permission for this repository (needs Actions and Secrets: read & write).':data.message||`GitHub error ${res.status}`);e.status=res.status;throw e}

@@ -106,3 +106,11 @@ test('token falls back to tab memory when the browser blocks storage',()=>{
   try{control.token.set('tok-mem');assert.equal(control.token.get(),'tok-mem');assert.equal(control.token.persistent,false)}
   finally{globalThis.localStorage=saved;control.token.set('')}
 });
+
+test('a dropped connection gives a clear message instead of "Failed to fetch"',async()=>{
+  globalThis.fetch=async()=>{throw new TypeError('Failed to fetch')};
+  control.token.set('tok');
+  await assert.rejects(control.setSecret('X','y'),/Couldn't reach GitHub/);
+  const d=await control.diagnose();assert.equal(d.valid,false);assert.match(d.error,/Couldn't reach GitHub/);
+  control.token.set('');
+});
