@@ -6,7 +6,7 @@
 import {sleep,NOW,ageDays} from './util.mjs';
 
 const API='https://api.dataforseo.com/v3/';
-const ESTIMATE={serp:0.004,relevant_pages:0.03};
+const ESTIMATE={serp:0.004,relevant_pages:0.03,traffic:0.02};
 
 export class DataForSEO{
   constructor({login,password,state,dailyUsd=0.5,monthlyUsd=10,fetchImpl=fetch,log=()=>{}}){
@@ -65,6 +65,13 @@ export class DataForSEO{
   async serp(keyword,{depth=20,location=2840,language='en'}={}){
     const r=await this.post('serp','serp/google/organic/live/advanced',{keyword,location_code:location,language_code:language,depth});
     return (r?.[0]?.items||[]).filter(x=>x.type==='organic').map(x=>({url:x.url,domain:x.domain,title:x.title,description:x.description,rank:x.rank_absolute}));
+  }
+  /** Estimated monthly organic visits per domain (one request for up to 1,000 domains). */
+  async domainTraffic(domains,{location=2840,language='en'}={}){
+    if(!domains.length)return {};
+    const r=await this.post('traffic','dataforseo_labs/google/bulk_traffic_estimation/live',{targets:domains.slice(0,1000),location_code:location,language_code:language,item_types:['organic']});
+    if(!r)return null;
+    return Object.fromEntries((r[0]?.items||[]).map(x=>[String(x.target).replace(/^www\./,''),Number(x.metrics?.organic?.etv||0)]));
   }
   async relevantPages(domain,{limit=100,location=2840,language='en'}={}){
     const r=await this.post('relevant_pages','dataforseo_labs/google/relevant_pages/live',{target:domain,location_code:location,language_code:language,limit,order_by:['metrics.organic.etv,desc'],exclude_top_domains:false});

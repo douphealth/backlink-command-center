@@ -19,7 +19,7 @@ import {crawlPortfolio} from './crawl.mjs';
 import {rankPortfolio,internalLinkPlan} from './score.mjs';
 import {DataForSEO} from './dataforseo.mjs';
 import {gscDemand,dfsDemand} from './demand.mjs';
-import {discoverProspects} from './prospect.mjs';
+import {discoverProspects,requalify} from './prospect.mjs';
 import {PitchWriter} from './pitch.mjs';
 import {processReplies,runOutreach,checkLinks,gmailTransport,dailyCap} from './outreach.mjs';
 import {seal,open} from './vault.mjs';
@@ -147,6 +147,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   stages.rank={ok:true,result:{ranked:ranked.length,internal_suggestions:internal.length}};
   const chosen=chooseAssets(ranked,state,{perSite:cfg.assetsPerSite});
   // ---- 4. Prospects ----
+  await stage('requalify',vaultOk,()=>requalify({state,dfs,fetchImpl,deadline:deadline-8*60e3,log}),privateWhy);
   await stage('prospects',vaultOk&&dfs.enabled&&chosen.length>0,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,deadline:deadline-6*60e3,log}),
     !vaultOk?privateWhy:!dfs.enabled?(dfs.authError||'DataForSEO credentials not set'):'no promotable assets');
   // ---- 5. Mail ----

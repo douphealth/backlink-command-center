@@ -7,6 +7,9 @@
 import {buildMessage,newMessageId,smtpSend,Imap,classifyReply} from './mail.mjs';
 import {followupPitch} from './pitch.mjs';
 import {fetchPage,links,hostOf,sameSite,ageDays,NOW,sleep,DAY} from './util.mjs';
+import {QUALIFY_VERSION} from './prospect.mjs';
+// At most this many new pitches per asset per day, so one page doesn't use up the whole daily cap.
+export const PER_ASSET_DAILY=2;
 
 const ACTIVE=new Set(['sent','followed_up','drafted','replied','positive']);
 export function dailyCap(state,limit){
@@ -65,7 +68,7 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   if(config.mode==='send'){
     for(const p of Object.values(state.prospects)){
       if(Date.now()>deadline)break;
-      if(p.status!=='sent'||p.replied_at||suppressed(state,p.email,p.domain))continue;
+      if(p.status!=='sent'||p.replied_at||p.no_followup||(p.qv||1)<QUALIFY_VERSION||suppressed(state,p.email,p.domain))continue;
       const initial=p.history.find(h=>h.type==='initial');if(!initial||ageDays(initial.at)<config.followupDays)continue;
       const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title};
       try{await deliver(p,followupPitch(p,asset,{senderName:config.senderName}),'followup',initial.message_id);p.status='followed_up';stats.followups++;await sleep(config.gapMs())}
@@ -75,9 +78,12 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   // 2. New pitches, best prospects first, within the warm-up/daily cap.
   const cap=config.mode==='send'?dailyCap(state,config.dailyLimit):config.dailyLimit;stats.cap=cap;
   let budget=Math.max(0,cap-sentToday(state));
-  const ready=Object.values(state.prospects).filter(p=>p.status==='ready'&&p.email).sort((a,b)=>b.score-a.score);
+  const ready=Object.values(state.prospects).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION).sort((a,b)=>b.score-a.score);
+  const perAsset=new Map();
+  for(const p of Object.values(state.prospects))if((p.history||[]).some(h=>h.type==='initial'&&h.at.startsWith(NOW().slice(0,10))))perAsset.set(p.asset_url,(perAsset.get(p.asset_url)||0)+1);
   for(const p of ready){
     if(budget<=0||Date.now()>deadline)break;
+    if((perAsset.get(p.asset_url)||0)>=PER_ASSET_DAILY)continue;
     const lastDomain=state.contacted[p.domain];
     if(suppressed(state,p.email,p.domain)||(lastDomain&&ageDays(lastDomain)<90)){p.status='skipped_duplicate';stats.skipped++;continue}
     const asset=assetByUrl.get(p.asset_url);const site=siteBy.get(p.site);
@@ -87,7 +93,7 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
       await deliver(p,pitch,'initial');
       state.contacted[p.domain]=NOW();if(config.mode==='send')state.first_send_at??=NOW();
       p.status=config.mode==='send'?'sent':'drafted';p.next_link_check=new Date(Date.now()+5*DAY).toISOString();
-      config.mode==='send'?stats.sent++:stats.drafted++;budget--;
+      config.mode==='send'?stats.sent++:stats.drafted++;budget--;perAsset.set(p.asset_url,(perAsset.get(p.asset_url)||0)+1);
       if(config.mode==='send')await sleep(config.gapMs());
     }catch(e){log('delivery failed: '+e.message);p.delivery_error=String(e.message).slice(0,160);break}
   }

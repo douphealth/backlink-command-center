@@ -116,15 +116,28 @@ export function extractEmails(html){
   return [...found].map(e=>e.trim().toLowerCase().replace(/^\.+|\.+$/g,'')).filter(e=>/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/.test(e)&&!/\.(png|jpe?g|gif|webp|svg|css|js)$/.test(e)&&!JUNK_EMAIL.test(e.split('@')[0])&&!/(sentry|wixpress|example\.|domain\.com|email\.com|yourdomain|godaddy|cloudflare)/.test(e));
 }
 /** Rank an email for editorial outreach on a given publisher domain (higher is better, <0 = reject). */
-export function rankEmail(email,domain){
+// Inboxes that never handle editorial suggestions (sales, PR, support, admissions…).
+const WRONG_INBOX=/^(press|pr|media|newsroom|sales|plus|enterprise|support|help|helpdesk|customer\w*|care|service|billing|accounts?|invoices?|orders?|returns|inquir(y|ies)|enquir(y|ies)|international\w*|admissions|student\w*|careers|jobs|ads|advertis\w*|sponsor\w*|partner\w*|affiliates?|legal|privacy|compliance|investors?|ir|hr|security|abuse|donat\w*|giving|membership|events?)\b/;
+const EDITORIAL=/^(editor|editorial|editors|content|hello|hi|hey|contact|info|team|write|writers|contribute|submissions?|outreach|blog|news|tips|feedback|webmaster)\b/;
+/**
+ * Rank an email for an editorial link suggestion (higher is better, <0 = reject).
+ * `source`: 'page' (the article itself), 'contact' (contact/about/write-for-us) or 'other'.
+ */
+export function rankEmail(email,domain,{source='other',author=''}={}){
   const [local,host]=email.split('@');if(!host)return -1;
   const onDomain=sameSite(host,domain)||sameSite(domain,rootDomain(host));
   const freemail=/^(gmail|outlook|hotmail|yahoo|icloud|proton(mail)?|aol|gmx|zoho)\./.test(rootDomain(host));
   if(!onDomain&&!freemail)return -1;
+  if(WRONG_INBOX.test(local))return -1;
   let s=onDomain?50:20;
-  if(/^(editor|editorial|editors|content|press|media|pr|hello|hi|contact|info|team|write|writers|contribute|submissions?|partnerships?|outreach|marketing|blog|news|tips)\b/.test(local))s+=25;
-  if(/^[a-z]+(\.[a-z]+)?$/.test(local)&&local.length<=20&&!/^(info|contact|hello|team|support|sales|admin|office|mail|webmaster)$/.test(local))s+=18; // a named person
-  if(/^(support|help|sales|admin|office|webmaster|mail)$/.test(local))s-=12;
+  if(EDITORIAL.test(local))s+=/^(editor|editorial|content|write|contribute|submissions?|blog)/.test(local)?30:22;
+  else if(/^[a-z]+([._-][a-z]+)?$/.test(local)&&local.length<=24){
+    // A named person: only trust it from the article itself or a contact/about page.
+    if(source==='other')return -1;
+    s+=18;
+    const names=String(author||'').toLowerCase().split(/\s+/).filter(x=>x.length>2);
+    if(names.some(n=>local.includes(n)))s+=20; // it's the article's author
+  }else if(source==='other')return -1;
   return s;
 }
 

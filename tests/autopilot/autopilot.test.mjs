@@ -120,14 +120,14 @@ test('IMAP fetch parsing and reply classification',()=>{
 });
 
 test('outreach respects warm-up, dedupes domains, honours opt-outs and follows up once',async()=>{
-  const asset={url:'https://mice.com/plan',title:'Plan',type:'practical_guide',description:'A plan.'};
+  const assets=Array.from({length:9},(_,i)=>({url:'https://mice.com/plan'+i,title:'Plan '+i,type:'practical_guide',description:'A plan.'}));const asset=assets[0];
   const prospects={};
-  for(let i=0;i<9;i++)prospects['p'+i]={id:'p'+i,site:'mice.com',domain:i===8?'dup0.org':`pub${i}.org`,email:`ed@pub${i}.org`,status:'ready',score:i===8?99:90-i,asset_url:asset.url,page_url:`https://pub${i}.org/r`,title:'Resources',history:[]};
+  for(let i=0;i<9;i++)prospects['p'+i]={id:'p'+i,site:'mice.com',domain:i===8?'dup0.org':`pub${i}.org`,email:`ed@pub${i}.org`,status:'ready',score:i===8?99:90-i,asset_url:assets[i].url,qv:2,page_url:`https://pub${i}.org/r`,title:'Resources',history:[]};
   const state={prospects,contacted:{'dup0.org':new Date().toISOString()},suppression:{'pub1.org':{reason:'x'}}};
   const sent=[];const mailer={send:async m=>sent.push(m),draft:async()=>{}};
   const writer={write:async(p,a,s)=>templatePitch(p,a,{senderName:'Alex',site:s})};
   const config={mode:'send',fromAddress:'me@gmail.com',senderName:'Alex',dailyLimit:20,followupDays:6,gapMs:()=>0};
-  const stats=await runOutreach({state,assets:[asset],sites:[{domain:'mice.com',topic:'mice'}],writer,mailer,config});
+  const stats=await runOutreach({state,assets,sites:[{domain:'mice.com',topic:'mice'}],writer,mailer,config});
   assert.equal(dailyCap({},20),5);
   assert.equal(stats.sent,5,'warm-up cap on day one');
   assert.ok(!sent.some(m=>m.to==='ed@pub1.org'),'suppressed domain skipped');
@@ -140,7 +140,7 @@ test('outreach respects warm-up, dedupes domains, honours opt-outs and follows u
   const r=await processReplies({state,imap});
   assert.equal(r.negative,1);assert.ok(state.suppression['pub2.org']);
   sent.length=0;state.first_send_at=new Date(Date.now()-864e5).toISOString();
-  await runOutreach({state,assets:[asset],sites:[{domain:'mice.com',topic:'mice'}],writer,mailer,config});
+  await runOutreach({state,assets,sites:[{domain:'mice.com',topic:'mice'}],writer,mailer,config});
   const followups=sent.filter(m=>m.raw.includes('In-Reply-To'));
   assert.equal(followups.length,1);assert.equal(followups[0].to,'ed@pub0.org');
   assert.equal(prospects.p0.status,'followed_up');
@@ -261,4 +261,49 @@ test('a failed IMAP login closes its socket so the run cannot hang',async()=>{
     write(s){const tag=s.split(' ')[0];setImmediate(()=>this.emit('data',`${tag} NO [AUTHENTICATIONFAILED] Invalid credentials (Failure)\r\n`))}}
   await assert.rejects(new Imap({user:'a',pass:'b',connect:()=>new S()}).open(),/AUTHENTICATIONFAILED/);
   assert.equal(destroyed,true);
+});
+
+test('prospect quality v2: wrong inboxes, vendors, local businesses, traffic band',async()=>{
+  const {siteKind,trafficVerdict}=await import('../../scripts/autopilot/prospect.mjs');
+  for(const bad of ['plus@shopify.com','press@pipedrive.com','pr@x.com','customercare@x.com','international.enquiries@x.com','support@x.com','advertising@x.com'])
+    assert.equal(rankEmail(bad,bad.split('@')[1],{source:'contact'}),-1,bad);
+  assert.ok(rankEmail('editor@blog.com','blog.com',{source:'other'})>0,'editorial role inbox ok from anywhere');
+  assert.equal(rankEmail('rserraglio@org.org','org.org',{source:'other'}),-1,'unknown named person from a random page is rejected');
+  assert.ok(rankEmail('paul@sl.com','sl.com',{source:'page',author:'Paul Main'})>rankEmail('hello@sl.com','sl.com',{source:'page'}),'article author beats generic inbox');
+  assert.equal(siteKind(html('<a href="/pricing">Pricing</a><a href="/signup">Start your free trial</a>')),'software_vendor');
+  assert.equal(siteKind(html('<p>Call now for a free inspection. Licensed & insured.</p>')),'local_business');
+  assert.equal(siteKind(html('<a href="/blog">Blog</a><p>We write about study skills.</p>')),'publisher');
+  assert.match(trafficVerdict(1_545_207),/large brand/);assert.match(trafficVerdict(10),/no search traffic/);
+  assert.equal(trafficVerdict(102_085),null);assert.equal(trafficVerdict(undefined),null);
+});
+
+test('per-asset daily cap spreads pitches across assets',async()=>{
+  const asset={url:'https://mice.com/plan',title:'Plan',type:'practical_guide',description:'A plan.'};
+  const prospects={};for(let i=0;i<6;i++)prospects['q'+i]={id:'q'+i,site:'mice.com',domain:`s${i}.org`,email:`editor@s${i}.org`,status:'ready',score:90-i,asset_url:asset.url,page_url:`https://s${i}.org/r`,title:'R',history:[],qv:2};
+  const sent=[];const state={prospects,contacted:{},suppression:{},first_send_at:new Date(Date.now()-10*864e5).toISOString()};
+  const stats=await runOutreach({state,assets:[asset],sites:[{domain:'mice.com',topic:'mice'}],writer:{write:async(p,a,s)=>templatePitch(p,a,{senderName:'A',site:s})},mailer:{send:async m=>sent.push(m)},config:{mode:'send',fromAddress:'me@gmail.com',senderName:'A',dailyLimit:20,followupDays:6,gapMs:()=>0}});
+  assert.equal(stats.sent,2);
+});
+
+test('requalify drops poor-fit queued prospects and cancels follow-ups to bad inboxes',async()=>{
+  const {requalify}=await import('../../scripts/autopilot/prospect.mjs');
+  const page=html(`<p>${words(400)}</p>`);
+  const f=async url=>{const u=new URL(url);
+    if(u.hostname==='vendor.io'&&u.pathname==='/')return resp(html('<a href="/pricing">Pricing</a><p>Start your free trial</p>'));
+    if(u.hostname==='giant.com'&&u.pathname==='/contact')return resp(html('<a href="mailto:press@giant.com">press</a>'));
+    if(u.hostname==='indie.blog'&&u.pathname==='/contact')return resp(html('<a href="mailto:hello@indie.blog">hi</a>'));
+    return resp(page)};
+  const state={prospects:{
+    a:{id:'a',domain:'vendor.io',page_url:'https://vendor.io/blog/x',status:'ready',email:'hello@vendor.io',history:[]},
+    b:{id:'b',domain:'giant.com',page_url:'https://giant.com/blog/x',status:'sent',email:'press@giant.com',history:[{type:'initial',at:new Date().toISOString()}]},
+    c:{id:'c',domain:'indie.blog',page_url:'https://indie.blog/post',status:'ready',email:'old@other.com',history:[]},
+    d:{id:'d',domain:'uni.ac.uk',page_url:'https://uni.ac.uk/p',status:'ready',email:'x@uni.ac.uk',history:[]}}};
+  const dfs={canSpend:()=>false};
+  const r=await requalify({state,dfs,fetchImpl:f});
+  assert.equal(state.prospects.a.status,'rejected');assert.match(state.prospects.a.reason,/vendor/i);
+  assert.equal(state.prospects.b.no_followup,true);
+  assert.equal(state.prospects.c.status,'ready');assert.equal(state.prospects.c.email,'hello@indie.blog');
+  assert.equal(state.prospects.d.status,'rejected');
+  assert.ok(Object.values(state.prospects).every(p=>p.qv===2));
+  assert.equal(r.checked,4);
 });
