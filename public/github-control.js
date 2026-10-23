@@ -50,6 +50,28 @@ export async function stop(){
     for(const r of runs.workflow_runs||[])await gh(`/repos/${REPO}/actions/runs/${r.id}/cancel`,{method:'POST'}).catch(()=>{});
   }
 }
+/**
+ * Check what the saved token can actually do, permission by permission, so the
+ * dashboard can say exactly what to fix instead of failing silently.
+ * Fine-grained tokens default to "Public repositories (read-only)", which
+ * silently ignores the Actions/Secrets/Variables permissions.
+ */
+export async function diagnose(){
+  const out={valid:false,login:null,error:'',actions:null,secrets:null,variables:null,secretNames:new Set(),vars:{}};
+  try{out.login=(await gh('/user')).login;out.valid=true}catch(e){out.error=e.message;return out}
+  const [s,v,wf]=await Promise.all([
+    gh(`/repos/${REPO}/actions/secrets?per_page=100`).catch(()=>null),
+    gh(`/repos/${REPO}/actions/variables?per_page=30`).catch(()=>null),
+    gh(`/repos/${REPO}/actions/workflows/${WORKFLOW}`).catch(()=>null)]);
+  out.secrets=!!s;out.variables=!!v;
+  if(s)out.secretNames=new Set((s.secrets||[]).map(x=>x.name));
+  if(v)out.vars=Object.fromEntries((v.variables||[]).map(x=>[x.name,x.value]));
+  // Enabling an already-active workflow is a no-op that needs Actions: write — a safe write probe.
+  if(wf?.state==='active')out.actions=await gh(`/repos/${REPO}/actions/workflows/${WORKFLOW}/enable`,{method:'PUT'}).then(()=>true,()=>false);
+  return out;
+}
+export const diagnosisOk=d=>!!d&&d.valid&&d.secrets&&d.variables&&d.actions!==false;
+
 export async function configured(){
   const [s,v]=await Promise.all([gh(`/repos/${REPO}/actions/secrets?per_page=100`),gh(`/repos/${REPO}/actions/variables?per_page=30`)]);
   return {secrets:new Set((s.secrets||[]).map(x=>x.name)),variables:Object.fromEntries((v.variables||[]).map(x=>[x.name,x.value]))};

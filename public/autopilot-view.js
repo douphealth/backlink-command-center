@@ -35,7 +35,8 @@ const FIELDS=[
 ];
 async function refreshControl(){
   try{ui.control=await control.status()}catch(err){ui.control={error:err.message}}
-  if(control.token.get()){try{ui.configured=await control.configured();ui.tokenError=''}catch(err){ui.configured=null;ui.tokenError=err.message}}else ui.configured=null;
+  ui.diag=control.token.get()?await control.diagnose():null;
+  ui.configured=ui.diag?.secrets&&ui.diag.variables?{secrets:ui.diag.secretNames,variables:ui.diag.vars}:null;
 }
 function schedulePoll(){
   clearTimeout(pollTimer);
@@ -48,12 +49,13 @@ export async function renderAutopilot(h){
   const {escapeHTML:e,external,n,niceTime,statusTag,panel,table,empty,intro}=h;
   const s=await fetchJson('/data/autopilot.json');
   if(!s)return intro('autopilot')+`<div class="focus-bar"><div><strong>Autopilot has not published its first run yet.</strong><p>It runs twice a day in GitHub Actions and redeploys this dashboard automatically. Start it now from GitHub.</p></div><a class="primary" target="_blank" rel="noopener" href="${REPO}/actions/workflows/autopilot.yml">Run Autopilot ↗</a></div>`;
+  await refreshControl();
   const key=store.get();
-  if(key&&!ui.vault&&!ui.error){const box=await fetchJson('/data/vault.json');if(box){try{ui.vault=await openVault(box,key)}catch{ui.error='That key does not unlock this vault.';store.set('')}}}
+  // A freshly created key keeps retrying until the run that re-seals the vault has deployed.
+  if(key&&!ui.vault&&(!ui.error||ui.pendingVault)){const box=await fetchJson('/data/vault.json');if(box){try{ui.vault=await openVault(box,key);ui.pendingVault=false;ui.error=''}catch{ui.pendingVault=ui.diag?.vars?.LINKFORGE_VAULT_RESET_AT>box.sealed_at;if(ui.pendingVault)ui.settleUntil=Math.max(ui.settleUntil,Date.now()+60000);ui.error=ui.pendingVault?'New vault key saved. It unlocks automatically once the next Autopilot run finishes.':'That key does not unlock this vault. Check you pasted the vault key (not the GitHub token), or create a new vault key.'}}}
   const c=s.capabilities,f=s.funnel||{},t=s.totals;
   const missing=s.setup.filter(x=>!x.done);
   const modeLabel={send:'HANDS-FREE SENDING',draft:'DRAFTS TO GMAIL',off:'RESEARCH ONLY'}[c.outreach_mode];
-  await refreshControl();
   const ctl=ui.control||{};
   if(ctl.running)ui.settleUntil=Date.now()+150000; // keep refreshing until Pages has deployed the new results
   const state=ctl.error?['off','STATUS UNAVAILABLE',ctl.error]:ctl.running?['running','RUNNING NOW',`Started ${ago(ctl.run.started)}; results appear here automatically`]:ctl.enabled?['on','ON · AUTOPILOT',`Next automatic run ${niceTime(nextRun().toISOString())}`]:['off','STOPPED','No automatic runs until you press Run'];
@@ -62,7 +64,7 @@ export async function renderAutopilot(h){
     <div class="ap-buttons"><button class="ap-run" data-ap="run" ${ctl.running||ui.busy?'disabled':''}>${ui.busy==='run'?'Starting…':ctl.running?'Running…':'▶ Run'}</button><button class="ap-stop" data-ap="stop" ${(!ctl.enabled&&!ctl.running)||ui.busy?'disabled':''}>${ui.busy==='stop'?'Stopping…':'■ Stop'}</button><button class="outline-btn" data-ap="connect">⚙ Connect</button></div></div>
     ${ui.msg?`<div class="ap-msg">${e(ui.msg)}</div>`:''}${ui.err?`<div class="alert-warning">${e(ui.err)}</div>`:''}`;
   const needsSetup=missing.some(x=>x.required)&&!fullyConfigured();
-  const setup=ui.showConnect||needsSetup||!control.token.get()?connectPanel(h):'';
+  const setup=ui.showConnect||needsSetup||!control.diagnosisOk(ui.diag)?connectPanel(h):'';
   const kpis=[['Best URLs to promote',t.promotable,'◎',`${n(t.promoting_now)} being promoted now`],['Internal link fixes',t.internal_suggestions,'⇄','Free ranking boosts on your own sites'],['Publishers contacted',f.contacted,'↗',`${n(f.ready)} ready · ${n(f.replied)} replied`],['Backlinks won',f.won,'◇',`+${n(f.existing_links)} existing links found`]];
   const kpiHtml=`<div class="kpi-grid">${kpis.map(([name,v,ico,note])=>`<div class="kpi"><div class="kpi-head">${e(name)}<span class="kpi-ico">${ico}</span></div><div class="kpi-value">${n(v)}</div><div class="kpi-foot">${e(note)}</div></div>`).join('')}</div>`;
   const steps=[['Prospects evaluated',f.prospects_evaluated],['Qualified publishers',f.qualified],['Contacted',f.contacted],['Replied',f.replied],['Links won',f.won]];
@@ -86,30 +88,50 @@ function fullyConfigured(){
   const c=ui.configured;if(!c)return false;
   return FIELDS.filter(f=>f.required).every(f=>f.kind==='secret'?c.secrets.has(f.name):c.variables[f.name])&&c.secrets.has('LINKFORGE_DATA_KEY');
 }
-function connectPanel(h){
-  const {escapeHTML:e,panel}=h;
-  if(!control.token.get()||ui.tokenError)return panel('Connect the dashboard to GitHub',ui.tokenError?`${ui.tokenError} Create a new token and paste it below.`:'One-time step so Run, Stop and Connect work from this page',
-    `<div class="panel-pad ap-connect"><ol class="ap-steps">
+function tokenStep(h){
+  const {escapeHTML:e}=h,d=ui.diag,has=!!control.token.get(),ok=control.diagnosisOk(d);
+  const row=(state,label,fix)=>`<div class="ap-check ${state===true?'done':''}"><span>${state===true?'✓':state===false?'✗':'…'}</span><div><strong>${e(label)}</strong>${state===false&&fix?`<small>${fix}</small>`:''}</div></div>`;
+  const EDIT='<a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener">Open your tokens ↗</a>, click the token, then <b>Edit</b>';
+  const checks=has?`<div class="ap-checklist">
+      ${row(d?.valid,d?.valid?`Token saved in this browser and accepted by GitHub${d.login?' ('+d.login+')':''}`:'Token rejected by GitHub',e(d?.error||'')+' Paste a fresh token below.')}
+      ${d?.valid?row(d.secrets,'Can save secrets (DataForSEO, Gmail)',`${EDIT} → <b>Repository access</b>: <b>Only select repositories</b> → <b>backlink-command-center</b>, and <b>Permissions → Secrets</b>: <b>Read and write</b> → <b>Update</b>.`):''}
+      ${d?.valid?row(d.variables,'Can save settings (name, outreach mode)',`${EDIT} → <b>Permissions → Variables</b>: <b>Read and write</b> → <b>Update</b>.`):''}
+      ${d?.valid?row(d.actions,'Can press Run / Stop',`${EDIT} → <b>Permissions → Actions</b>: <b>Read and write</b> → <b>Update</b>.`):''}
+    </div>${d?.valid&&!ok?'<p class="ap-hint">After updating the token on GitHub, click <b>Check again</b>. You do not need a new token.</p>':''}`:'';
+  const intro=has?'':`<ol class="ap-steps">
       <li><a class="primary" href="${e(control.TOKEN_URL)}" target="_blank" rel="noopener">Create control token ↗</a> The name and permissions are pre-filled.</li>
-      <li>Under <b>Repository access</b> choose <b>Only select repositories</b> → <b>backlink-command-center</b>. Make sure <b>Actions</b>, <b>Secrets</b> and <b>Variables</b> are <b>Read and write</b>, then click <b>Generate token</b>.</li>
-      <li>Paste the token below. It stays in this browser only.</li></ol>
-      <form id="ap-token-form" class="inline-form"><input id="ap-token" type="password" autocomplete="off" placeholder="github_pat_…" required minlength="20"><button class="primary" type="submit">Save token</button></form></div>`);
+      <li>On GitHub, set <b>Repository access</b> to <b>Only select repositories</b> → <b>backlink-command-center</b>. This is the step that's easy to miss: the default ("Public repositories") ignores the permissions. Then click <b>Generate token</b>.</li>
+      <li>Copy the token (starts with <code>github_pat_</code>) and paste it below.</li></ol>`;
+  return `<section class="ap-step-card"><h3>1 · GitHub control token ${ok?'<b class="ap-ok">✓ ready</b>':''}</h3>${intro}${checks}
+    <form id="ap-token-form" class="inline-form ap-token-row"><input id="ap-token" type="password" autocomplete="off" placeholder="${has?'Replace token (optional)':'Paste github_pat_… here'}" ${has?'':'required'} minlength="20">
+      <button class="primary" type="submit">${has?'Replace token':'Save token'}</button>${has?'<button class="outline-btn" type="button" data-ap="recheck">Check again</button><button class="outline-btn" type="button" data-ap="forget">Forget token</button>':''}</form></section>`;
+}
+function connectPanel(h){
+  const {escapeHTML:e,panel}=h,ready=control.diagnosisOk(ui.diag);
   const c=ui.configured||{secrets:new Set(),variables:{}};
   const done=f=>f.kind==='secret'?c.secrets.has(f.name):!!c.variables[f.name];
   const field=f=>{const ok=done(f),cur=f.kind==='variable'?c.variables[f.name]||'':'';
     const input=f.type==='select'?`<select class="selector" name="${f.name}">${f.options.map(([v,l])=>`<option value="${v}" ${(cur||'send')===v?'selected':''}>${e(l)}</option>`).join('')}</select>`
       :`<input name="${f.name}" type="${f.type}" ${f.type==='number'?'min="1" max="50"':''} autocomplete="${f.type==='password'?'new-password':'off'}" value="${f.kind==='variable'?e(cur):''}" placeholder="${ok&&f.kind==='secret'?'Connected; leave blank to keep':f.type==='number'?'12':''}" ${f.required&&!ok?'required':''}>`;
     return `<label class="ap-field"><span>${e(f.label)} ${ok?'<b class="ap-ok">✓ connected</b>':f.required?'<b class="ap-need">needed</b>':''}</span>${input}${f.help?`<small>${f.link?`<a href="${f.link}" target="_blank" rel="noopener">${e(f.help)} ↗</a>`:e(f.help)}</small>`:''}</label>`};
-  return panel('Connect DataForSEO and Gmail','Values are encrypted in your browser and saved as GitHub secrets. Nobody can read them back, including this page.',
-    `<form id="ap-connect-form" class="panel-pad ap-connect"><div class="ap-fields">${FIELDS.map(field).join('')}</div>
-      <div class="ap-buttons"><button class="primary" type="submit" ${ui.busy?'disabled':''}>${ui.busy==='connect'?'Saving…':'Save & run now'}</button><button class="outline-btn" type="button" data-ap="close">Close</button><button class="outline-btn" type="button" data-ap="forget">Forget token</button></div></form>`,
-    `<span class="panel-link">${c.secrets.has('LINKFORGE_DATA_KEY')?'✓ vault key set':'vault key missing'}</span>`);
+  return panel('Connect Autopilot','Two steps, once. Everything is encrypted in your browser before it reaches GitHub; nothing can read it back.',
+    `<div class="panel-pad ap-connect">${tokenStep(h)}
+    <section class="ap-step-card ${ready?'':'ap-locked'}"><h3>2 · DataForSEO, Gmail and your settings</h3>
+      ${ready?'':'<p class="ap-hint">Finish step 1 first; then these fields unlock.</p>'}
+      <form id="ap-connect-form"><fieldset ${ready?'':'disabled'}><div class="ap-fields">${FIELDS.map(field).join('')}</div>
+      <div class="ap-buttons"><button class="primary" type="submit" ${ui.busy?'disabled':''}>${ui.busy==='connect'?'Saving…':'Save & run now'}</button><button class="outline-btn" type="button" data-ap="close">Close</button></div></fieldset></form></section></div>`,
+    ready?`<span class="panel-link">${c.secrets.has('LINKFORGE_DATA_KEY')?'✓ vault key set':'vault key missing'}</span>`:'');
 }
 
 function privatePanel(h){
   const {escapeHTML:e,external,n,niceTime,statusTag,panel,table,empty}=h;
-  if(!ui.vault)return panel('Prospects & conversations','Encrypted in the public repo · unlock on this device with your LINKFORGE_DATA_KEY',
-    `<form class="inline-form ap-inset" id="ap-unlock"><input id="ap-key" type="password" autocomplete="off" placeholder="Paste LINKFORGE_DATA_KEY" minlength="16" required><button class="primary" type="submit">Unlock</button></form>${ui.error?`<div class="alert-warning ap-inset">${e(ui.error)}</div>`:''}`);
+  if(!ui.vault){
+    const canReset=!!(ui.diag?.secrets&&ui.diag.variables);
+    return panel('Prospects & conversations','Encrypted in the public repo · unlocked only in your browser with the vault key',
+    `<div class="ap-inset ap-vault-help"><p>The <b>vault key</b> is not your GitHub token. It is the separate <code>LINKFORGE_DATA_KEY</code> created during setup (saved on the setup computer in <code>.linkforge/autopilot-unlock-key.txt</code>). Don't have it? Create a new one: this browser and GitHub get the same new key automatically.</p></div>
+    <form class="inline-form ap-inset" id="ap-unlock"><input id="ap-key" type="password" autocomplete="off" placeholder="Paste vault key (LINKFORGE_DATA_KEY)" minlength="16" required><button class="primary" type="submit">Unlock</button>
+      <button class="outline-btn" type="button" data-ap="newvault" ${canReset&&!ui.busy?'':'disabled'} title="${canReset?'':'Needs a working GitHub token (step 1 above)'}">${ui.busy==='newvault'?'Creating…':'Create a new vault key'}</button></form>${ui.error?`<div class="alert-warning ap-inset">${e(ui.error)}</div>`:''}`);
+  }
   const all=Object.values(ui.vault.prospects||{});
   const active=new Set(['positive','won','replied','followed_up','sent','drafted','ready','contact_form','no_contact']);
   const rows=all.filter(p=>ui.filter==='all'||(ui.filter==='active'?active.has(p.status):p.status===ui.filter))
@@ -118,7 +140,7 @@ function privatePanel(h){
   const counts={};for(const p of all)counts[p.status]=(counts[p.status]||0)+1;
   const opts=['active','all',...STATUS_ORDER.filter(x=>counts[x])].map(x=>`<option value="${x}" ${ui.filter===x?'selected':''}>${x==='active'?'In progress':x==='all'?'All prospects':x.replaceAll('_',' ')} ${counts[x]?`(${counts[x]})`:''}</option>`).join('');
   return panel('Prospects & conversations',`${n(all.length)} publishers tracked · decrypted locally`,
-    `<div class="table-toolbar"><select class="selector" id="ap-filter">${opts}</select><button class="outline-btn" id="ap-lock" type="button">Lock</button></div>${rows.length?table(['Publisher','Their page','Contact','Our asset','Status'],rows):empty('Nothing in this view','Change the filter to see more prospects.')}`);
+    `<div class="table-toolbar"><select class="selector" id="ap-filter">${opts}</select><button class="outline-btn" id="ap-lock" type="button">Lock</button><button class="outline-btn" type="button" data-ap="copykey">Copy vault key</button></div>${rows.length?table(['Publisher','Their page','Contact','Our asset','Status'],rows):empty('Nothing in this view','Change the filter to see more prospects.')}`);
 }
 
 async function act(kind,fn,ok){
@@ -135,13 +157,25 @@ export function bindAutopilot(reload){
     const b=ev.target.closest('[data-ap]');if(!b)return;const a=b.dataset.ap;
     if(a==='connect'){ui.showConnect=!ui.showConnect;return reload()}
     if(a==='close'){ui.showConnect=false;return reload()}
-    if(a==='forget'){control.token.set('');ui.configured=null;return reload()}
+    if(a==='forget'){control.token.set('');ui.configured=null;ui.diag=null;return reload()}
+    if(a==='recheck'){ui.msg='';ui.err='';ui.showConnect=true;return reload()}
+    if(a==='copykey'){try{await navigator.clipboard.writeText(store.get());ui.msg='Vault key copied. Paste it on your other devices to unlock there.'}catch{ui.err='Clipboard blocked by the browser.'}return reload()}
+    if(a==='newvault'){
+      if(!confirm('Create a new vault key?\n\nThe current vault can no longer be opened, so private history (prospects, who was contacted, opt-outs) starts fresh on the next run. Only do this if you never had the old key.'))return;
+      return act('newvault',async()=>{
+        const key=[...crypto.getRandomValues(new Uint8Array(24))].map(b=>b.toString(16).padStart(2,'0')).join('');
+        await control.setSecret('LINKFORGE_DATA_KEY',key);
+        await control.setVariable('LINKFORGE_VAULT_RESET_AT',new Date().toISOString());
+        store.set(key);ui.vault=null;ui.error='';
+        await control.run();ui.settleUntil=Date.now()+600000;
+      },'New vault key saved in this browser and on GitHub. The run that just started creates the new vault; it unlocks here automatically afterwards. Use "Copy vault key" to unlock on other devices.');
+    }
     if(!control.token.get()){ui.showConnect=true;ui.err='Connect the dashboard to GitHub first (one-time token below).';return reload()}
     if(a==='run')return act('run',async()=>{await control.run();ui.settleUntil=Date.now()+600000},'Autopilot started. This page refreshes on its own while it runs.');
     if(a==='stop'){if(!confirm('Stop Autopilot? Automatic runs pause until you press Run.'))return;return act('stop',control.stop,'Autopilot stopped. Press Run to start it again.')}
   });
   document.addEventListener('submit',async ev=>{
-    if(ev.target.id==='ap-token-form'){ev.preventDefault();control.token.set(document.getElementById('ap-token').value.trim());ui.showConnect=true;ui.err='';return reload()}
+    if(ev.target.id==='ap-token-form'){ev.preventDefault();const v=document.getElementById('ap-token').value.trim();if(v)control.token.set(v);ui.showConnect=true;ui.err='';return reload()}
     if(ev.target.id!=='ap-connect-form')return;
     ev.preventDefault();
     const form=new FormData(ev.target),values=FIELDS.map(f=>[f,String(form.get(f.name)||'').trim()]).filter(([,v])=>v);
@@ -152,7 +186,12 @@ export function bindAutopilot(reload){
       await control.run();ui.showConnect=false;ui.settleUntil=Date.now()+600000;
     },`Saved ${values.length} setting${values.length===1?'':'s'} and started Autopilot. Results appear here in about 5 minutes.`);
   });
-  document.addEventListener('submit',async ev=>{if(ev.target.id!=='ap-unlock')return;ev.preventDefault();store.set(document.getElementById('ap-key').value.trim());ui.vault=null;ui.error='';await reload()});
+  document.addEventListener('submit',async ev=>{
+    if(ev.target.id!=='ap-unlock')return;ev.preventDefault();
+    const v=document.getElementById('ap-key').value.trim();
+    if(/^(github_pat_|ghp_|gho_)/.test(v)){ui.error='That is your GitHub token, not the vault key. Put the token in step 1 of "Connect Autopilot" above. If you don\'t have the vault key, click "Create a new vault key".';return reload()}
+    store.set(v);ui.vault=null;ui.error='';await reload();
+  });
   document.addEventListener('change',async ev=>{if(ev.target.id==='ap-filter'){ui.filter=ev.target.value;await reload()}});
   document.addEventListener('click',async ev=>{if(ev.target.id==='ap-lock'){store.set('');ui.vault=null;ui.error='';await reload()}});
 }

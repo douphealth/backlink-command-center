@@ -218,3 +218,17 @@ test('IMAP session saves drafts to the special-use Drafts box and reads replies'
   assert.equal(msgs[0].from,'ed@pub.com');
   await imap.close();
 });
+
+test('engine refuses a wrong vault key but starts fresh after a dashboard key reset',async()=>{
+  const f=async url=>{const u=new URL(url);if(u.pathname==='/sitemap.xml')return resp(`<urlset><url><loc>https://${u.hostname}/guide/</loc></url></urlset>`,{type:'application/xml'});
+    if(/\.(xml|txt)$/.test(u.pathname))return resp('',{status:404});return resp(html(`<main><h1>Guide</h1><p>${words(900)}</p></main>`,{title:'Mouse proofing guide'}))};
+  const sealed=await seal({prospects:{}},'old-key-'.repeat(3));
+  const fs=await import('node:fs');const path='public/data/vault.json';const original=fs.existsSync(path)?fs.readFileSync(path,'utf8'):null;
+  fs.writeFileSync(path,JSON.stringify(sealed));
+  try{
+    const wrong=await runAutopilot({env:{LINKFORGE_DATA_KEY:'new-key-'.repeat(3)},argv:[],fetchImpl:f,write:false,useCache:false});
+    assert.equal(wrong.summary.capabilities.vault,false);
+    const reset=await runAutopilot({env:{LINKFORGE_DATA_KEY:'new-key-'.repeat(3),LINKFORGE_VAULT_RESET_AT:new Date(Date.now()+1000).toISOString()},argv:[],fetchImpl:f,write:false,useCache:false});
+    assert.equal(reset.summary.capabilities.vault,true);
+  }finally{original==null?fs.unlinkSync(path):fs.writeFileSync(path,original)}
+});
