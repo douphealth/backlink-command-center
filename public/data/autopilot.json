@@ -1,11 +1,11 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-23T05:21:25.551Z",
- "duration_s": 7,
+ "generated_at": "2026-10-23T05:29:47.690Z",
+ "duration_s": 298,
  "dry_run": false,
  "schedule": "Twice daily (05:40 and 14:10 UTC) via GitHub Actions; every run redeploys Cloudflare Pages",
  "capabilities": {
-  "vault": false,
+  "vault": true,
   "dataforseo": false,
   "gmail": false,
   "outreach_mode": "off",
@@ -17,7 +17,7 @@
   {
    "key": "LINKFORGE_DATA_KEY",
    "label": "Private vault key",
-   "done": false,
+   "done": true,
    "unlocks": "Stores prospects, contacts and outreach history encrypted in the repo",
    "required": true
   },
@@ -67,7 +67,7 @@
  "stages": {
   "crawl": {
    "ok": true,
-   "ms": 6002,
+   "ms": 297535,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -75,7 +75,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 0,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 0
@@ -85,24 +85,29 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 315
+    "internal_suggestions": 314
    }
   },
   "prospects": {
    "ok": null,
-   "skipped": "LINKFORGE_DATA_KEY not set"
+   "skipped": "DataForSEO credentials not set"
   },
   "replies": {
    "ok": null,
-   "skipped": "LINKFORGE_DATA_KEY not set"
+   "skipped": "Gmail app password not set"
   },
   "outreach": {
    "ok": null,
-   "skipped": "LINKFORGE_DATA_KEY not set"
+   "skipped": "Gmail app password not set"
   },
   "link_checks": {
-   "ok": null,
-   "skipped": "LINKFORGE_DATA_KEY not set"
+   "ok": true,
+   "ms": 0,
+   "result": {
+    "checked": 0,
+    "won": 0,
+    "lost": 0
+   }
   }
  },
  "totals": {
@@ -110,7 +115,7 @@
   "pages_crawled": 1902,
   "urls_discovered": 2837,
   "promotable": 250,
-  "internal_suggestions": 315,
+  "internal_suggestions": 314,
   "promoting_now": 30
  },
  "spend": {
@@ -120,8 +125,38 @@
   "monthly_cap_usd": 10,
   "calls_this_run": 0
  },
- "funnel": null,
- "history": [],
+ "funnel": {
+  "prospects_evaluated": 0,
+  "qualified": 0,
+  "ready": 0,
+  "contact_form_only": 0,
+  "no_contact": 0,
+  "contacted": 0,
+  "replied": 0,
+  "positive": 0,
+  "won": 0,
+  "existing_links": 0,
+  "declined": 0,
+  "bounced": 0
+ },
+ "history": [
+  {
+   "date": "2026-10-23",
+   "prospects_evaluated": 0,
+   "qualified": 0,
+   "ready": 0,
+   "contact_form_only": 0,
+   "no_contact": 0,
+   "contacted": 0,
+   "replied": 0,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 0,
+   "declined": 0,
+   "bounced": 0,
+   "spend_usd": 0
+  }
+ ],
  "sites": [
   {
    "domain": "gearuptofit.com",
@@ -368,8 +403,8 @@
    "linkability": 91,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
-   "words": 1667,
+   "internal_inlinks": 10,
+   "words": 1665,
    "interactive": true,
    "modified": "2026-09-13T09:05:03+00:00",
    "reasons": [
@@ -493,8 +528,8 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 30,
-   "words": 1741,
+   "internal_inlinks": 31,
+   "words": 1742,
    "interactive": true,
    "modified": "2026-09-18T17:00:28+00:00",
    "reasons": [
@@ -566,12 +601,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 6,
-   "words": 2185,
+   "words": 2197,
    "interactive": false,
    "modified": "2026-09-13T19:08:04+00:00",
    "reasons": [
     "Original method/data — citation-worthy",
-    "In-depth (2,185 words)",
+    "In-depth (2,197 words)",
     "2 data tables",
     "Cites 5 authoritative sources",
     "Recently updated"
@@ -616,13 +651,13 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 23,
-   "words": 3442,
+   "internal_inlinks": 22,
+   "words": 3441,
    "interactive": true,
    "modified": "2026-10-03T19:51:14+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,442 words)",
+    "In-depth (3,441 words)",
     "2 data tables",
     "Recently updated"
    ],
@@ -742,8 +777,8 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
-   "words": 678,
+   "internal_inlinks": 12,
+   "words": 677,
    "interactive": true,
    "modified": "2026-09-05T13:47:24+00:00",
    "reasons": [
@@ -790,7 +825,7 @@
    "linkability": 83,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 12,
    "words": 2085,
    "interactive": false,
    "modified": "2026-09-25T14:57:36+00:00",
@@ -1023,12 +1058,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 52,
-   "words": 2226,
+   "words": 2217,
    "interactive": true,
    "modified": "2026-10-03T08:29:04+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,226 words)",
+    "In-depth (2,217 words)",
     "2 data tables",
     "Cites 8 authoritative sources",
     "Recently updated",
@@ -1155,7 +1190,7 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 9,
    "words": 4949,
    "interactive": false,
    "modified": "2026-09-13T09:07:20+00:00",
@@ -1307,7 +1342,7 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 11,
    "words": 6585,
    "interactive": false,
    "modified": "2026-09-12T09:23:40+00:00",
@@ -1318,7 +1353,7 @@
     "Recently updated"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 5,
+   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -1408,7 +1443,7 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
+   "internal_inlinks": 4,
    "words": 1574,
    "interactive": true,
    "modified": "2026-10-21T16:14:08+00:00",
@@ -1434,7 +1469,7 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 16,
+   "internal_inlinks": 15,
    "words": 1270,
    "interactive": true,
    "modified": "2026-10-05T18:30:35+00:00",
@@ -1639,7 +1674,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 7,
    "words": 4194,
    "interactive": false,
    "modified": "2026-09-12T07:57:38+00:00",
@@ -1664,7 +1699,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 13,
    "words": 6004,
    "interactive": false,
    "modified": "2026-09-03T11:44:05+00:00",
@@ -1799,31 +1834,6 @@
    "promoting": true
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/seo/why-your-current-seo-strategy-is-failing/",
-   "title": "Fix SEO Strategy Failure: 2026 Step-by-Step Guide",
-   "h1": "Why Your SEO Strategy is Failing: 2026 Recovery Guide",
-   "description": "Discover the SEO strategy gaps that even experts miss. Learn the exact framework that took a new site from 0 to 50K visitors in 6 months.",
-   "type": "practical_guide",
-   "promotion": 68,
-   "linkability": 71,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2986,
-   "interactive": false,
-   "modified": "2026-09-03T12:26:33+00:00",
-   "reasons": [
-    "In-depth (2,986 words)",
-    "2 data tables",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/learning-development/self-expression/",
    "title": "Self-Expression: Share Ideas Honestly & Clearly | Gear Up to Grow",
@@ -1908,11 +1918,35 @@
    "linkability": 73,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 19,
-   "words": 1113,
+   "internal_inlinks": 21,
+   "words": 1108,
    "interactive": false,
    "modified": "2026-09-13T08:04:36+00:00",
    "reasons": [
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/seo/doing-an-seo-audit/",
+   "title": "2026 SEO Audit Guide: 47-Point Checklist to Dominate",
+   "h1": "2026 SEO Audit Checklist: 47-Point Technical Guide",
+   "description": "Boost rankings today! Learn how to perform an SEO audit. Identify issues, optimize content, and enhance search engine performance now!",
+   "type": "reference",
+   "promotion": 66,
+   "linkability": 73,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 9,
+   "words": 3049,
+   "interactive": false,
+   "modified": "2026-09-03T10:44:17+00:00",
+   "reasons": [
+    "In-depth (3,049 words)",
+    "1 data table",
     "Recently updated"
    ],
    "prospects": 0,
@@ -2033,7 +2067,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 7,
    "words": 4455,
    "interactive": false,
    "modified": "2026-09-03T13:33:15+00:00",
@@ -2058,12 +2092,12 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
-   "words": 3117,
+   "internal_inlinks": 8,
+   "words": 3256,
    "interactive": false,
    "modified": "2026-09-03T12:32:26+00:00",
    "reasons": [
-    "In-depth (3,117 words)",
+    "In-depth (3,256 words)",
     "1 data table",
     "Cites 8 authoritative sources",
     "Recently updated"
@@ -2083,7 +2117,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 9,
    "words": 2972,
    "interactive": false,
    "modified": "2026-09-03T12:25:05+00:00",
@@ -2135,7 +2169,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 18,
-   "words": 693,
+   "words": 692,
    "interactive": true,
    "modified": "2026-09-05T13:47:17+00:00",
    "reasons": [
@@ -2207,7 +2241,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 9,
-   "words": 608,
+   "words": 609,
    "interactive": true,
    "modified": "2026-09-05T13:47:04+00:00",
    "reasons": [
@@ -2874,16 +2908,6 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/review/skool-affiliate-program-review/",
-   "from_title": "Skool Affiliate Program Review 2026: 40% Recurring",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-mistakes/",
    "from_title": "12 Affiliate Marketing Mistakes and How to Fix Them",
    "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
@@ -2906,6 +2930,16 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/ai/boost-affiliate-earnings-perplexity-ai/",
    "from_title": "How to Use Perplexity AI to Boost Your Affiliate Earnings in 2026",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
+   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
+   "anchor": "promote affiliate products",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/start-here/",
+   "from_title": "Start Affiliate Marketing in 2026: The Step-by-Step Roadmap",
    "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
    "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
    "anchor": "promote affiliate products",
@@ -3460,16 +3494,6 @@
    "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
    "anchor": "profitable affiliate",
    "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/best-affiliate-marketing-niches-2025/",
-   "from_title": "Best Affiliate Marketing Niches: 8 Durable Picks (2026)",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "affiliate niche",
-   "relevance": 4,
    "from_strength": 0
   },
   {
@@ -4221,23 +4245,33 @@
    "anchor": "french bulldogs",
    "relevance": 5,
    "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "from_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "to_title": "Are French Bulldogs Hypoallergenic? The Honest, Vet-Checked Answer | Frenchy Fab",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 62
   }
  ],
  "wins": [],
  "log": [
-  "05:21:19 crawl plantastichaven.com: 161/161 urls, fetched 0, 304 0, reused 161",
-  "05:21:19 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "05:21:19 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "05:21:21 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "05:21:21 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "05:21:22 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "05:21:22 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "05:21:23 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "05:21:23 crawl frenchyfab.com: 239/239 urls, fetched 0, 304 0, reused 239",
-  "05:21:25 crawl mysticaldigits.com: 300/471 urls, fetched 0, 304 0, reused 300",
-  "05:21:25 - prospects: skipped (LINKFORGE_DATA_KEY not set)",
-  "05:21:25 - replies: skipped (LINKFORGE_DATA_KEY not set)",
-  "05:21:25 - outreach: skipped (LINKFORGE_DATA_KEY not set)",
-  "05:21:25 - link_checks: skipped (LINKFORGE_DATA_KEY not set)"
+  "05:24:57 crawl gearuptogrow.com: 107/107 urls, fetched 107, 304 0, reused 0",
+  "05:25:00 crawl gearuptofit.com: 300/877 urls, fetched 300, 304 0, reused 0",
+  "05:25:11 crawl plantastichaven.com: 161/161 urls, fetched 161, 304 0, reused 0",
+  "05:25:12 crawl frenchyfab.com: 239/239 urls, fetched 239, 304 0, reused 0",
+  "05:25:25 crawl efficientgptprompts.com: 300/487 urls, fetched 300, 304 0, reused 0",
+  "05:25:29 crawl micegoneguide.com: 53/53 urls, fetched 53, 304 0, reused 0",
+  "05:25:31 crawl openclaw-skillshub.com: 158/158 urls, fetched 158, 304 0, reused 0",
+  "05:25:31 crawl imagealchemy.app: 26/26 urls, fetched 26, 304 0, reused 0",
+  "05:25:43 crawl mysticaldigits.com: 300/471 urls, fetched 300, 304 0, reused 0",
+  "05:29:47 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 258, 304 0, reused 0",
+  "05:29:47 - prospects: skipped (DataForSEO credentials not set)",
+  "05:29:47 - replies: skipped (Gmail app password not set)",
+  "05:29:47 - outreach: skipped (Gmail app password not set)",
+  "05:29:47 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
