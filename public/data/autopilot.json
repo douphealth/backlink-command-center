@@ -1,17 +1,17 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-23T07:09:18.202Z",
- "duration_s": 7,
+ "generated_at": "2026-10-23T09:45:05.325Z",
+ "duration_s": 21,
  "dry_run": false,
  "schedule": "Twice daily (05:40 and 14:10 UTC) via GitHub Actions; every run redeploys Cloudflare Pages",
  "capabilities": {
   "vault": true,
   "dataforseo": false,
-  "gmail": false,
-  "outreach_mode": "off",
+  "gmail": true,
+  "outreach_mode": "send",
   "claude": false,
   "gsc": false,
-  "daily_send_cap": 12
+  "daily_send_cap": 5
  },
  "setup": [
   {
@@ -24,28 +24,28 @@
   {
    "key": "DATAFORSEO_LOGIN + DATAFORSEO_PASSWORD",
    "label": "DataForSEO API",
-   "done": false,
+   "done": true,
    "unlocks": "Finds link prospects in Google and estimates page traffic",
    "required": true
   },
   {
    "key": "GMAIL_ADDRESS + GMAIL_APP_PASSWORD",
    "label": "Gmail app password",
-   "done": false,
+   "done": true,
    "unlocks": "Writes pitches into Gmail Drafts, reads replies, detects bounces",
    "required": true
   },
   {
    "key": "SENDER_NAME",
    "label": "Sender name",
-   "done": false,
+   "done": true,
    "unlocks": "Signs every pitch with your real name",
    "required": true
   },
   {
    "key": "OUTREACH_MODE = send",
    "label": "Hands-free sending",
-   "done": false,
+   "done": true,
    "unlocks": "Sends pitches and one follow-up automatically (warm-up ramp, daily cap)",
    "required": false
   },
@@ -67,7 +67,7 @@
  "stages": {
   "crawl": {
    "ok": true,
-   "ms": 6786,
+   "ms": 20206,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -75,7 +75,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 0,
+   "ms": 530,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 0
@@ -93,16 +93,34 @@
    "skipped": "DataForSEO credentials not set"
   },
   "replies": {
-   "ok": null,
-   "skipped": "Gmail app password not set"
+   "ok": true,
+   "ms": 0,
+   "result": {
+    "scanned": 0,
+    "replies": 0,
+    "positive": 0,
+    "negative": 0,
+    "bounces": 0
+   }
   },
   "outreach": {
-   "ok": null,
-   "skipped": "Gmail app password not set"
+   "ok": true,
+   "ms": 0,
+   "result": {
+    "followups": 0,
+    "sent": 0,
+    "drafted": 0,
+    "skipped": 0,
+    "cap": 5
+   },
+   "writer": {
+    "claude": 0,
+    "template_fallbacks": 0
+   }
   },
   "link_checks": {
    "ok": true,
-   "ms": 1,
+   "ms": 0,
    "result": {
     "checked": 0,
     "won": 0,
@@ -651,7 +669,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 22,
+   "internal_inlinks": 23,
    "words": 3441,
    "interactive": true,
    "modified": "2026-10-03T19:51:14+00:00",
@@ -2117,7 +2135,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 10,
    "words": 2972,
    "interactive": false,
    "modified": "2026-09-03T12:25:05+00:00",
@@ -3498,6 +3516,16 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-success/",
+   "from_title": "2026 Affiliate Marketing for Beginners: Ultimate Guide",
+   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
+   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
+   "anchor": "choose profitable affiliate",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/seo/mastering-seo-best-practices/",
    "from_title": "Affiliate SEO best practices: ranking, revenue, and AI visibility cleanup",
    "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
@@ -3510,16 +3538,6 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-vs-dropshipping/",
    "from_title": "Affiliate Marketing Vs Dropshipping: 2026 Winner? (2026 Analysis)",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "choose profitable affiliate",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-success/",
-   "from_title": "2026 Affiliate Marketing for Beginners: Ultimate Guide",
    "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
    "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
    "anchor": "choose profitable affiliate",
@@ -4259,19 +4277,20 @@
  ],
  "wins": [],
  "log": [
-  "07:09:11 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "07:09:11 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "07:09:12 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "07:09:12 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "07:09:13 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "07:09:13 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "07:09:14 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "07:09:15 crawl frenchyfab.com: 239/239 urls, fetched 0, 304 0, reused 239",
-  "07:09:16 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "07:09:17 crawl mysticaldigits.com: 300/471 urls, fetched 0, 304 0, reused 300",
-  "07:09:18 - prospects: skipped (DataForSEO credentials not set)",
-  "07:09:18 - replies: skipped (Gmail app password not set)",
-  "07:09:18 - outreach: skipped (Gmail app password not set)",
-  "07:09:18 link checks: 0 pages, 0 new links won, 0 lost"
+  "09:44:46 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "09:44:48 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "09:44:50 crawl frenchyfab.com: 239/239 urls, fetched 0, 304 0, reused 239",
+  "09:44:50 crawl mysticaldigits.com: 300/471 urls, fetched 0, 304 0, reused 300",
+  "09:44:52 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "09:44:53 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "09:44:54 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "09:44:57 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "09:44:57 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "09:45:04 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 4, 304 0, reused 254",
+  "09:45:04 dataforseo: credentials rejected",
+  "09:45:04 dataforseo demand: gearuptofit.com 0 ranking pages",
+  "09:45:05 - prospects: skipped (DataForSEO credentials not set)",
+  "09:45:05 outreach (send): 0 sent, 0 drafted, 0 follow-ups, cap 5",
+  "09:45:05 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
