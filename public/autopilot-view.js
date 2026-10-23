@@ -81,8 +81,20 @@ export async function renderAutopilot(h){
   const needsSetup=missing.some(x=>x.required)&&!fullyConfigured();
   // Say plainly what is still unconnected: pressing Run alone never saves credentials.
   const notConnected=ui.configured?[['DataForSEO',['DATAFORSEO_LOGIN','DATAFORSEO_PASSWORD']],['Gmail',['GMAIL_ADDRESS','GMAIL_APP_PASSWORD']]].filter(([,keys])=>keys.some(k=>!ui.configured.secrets.has(k))).map(([label])=>label):[];
-  const banner=notConnected.length?`<div class="alert-warning ap-missing"><strong>Not connected yet: ${e(notConnected.join(' and '))}.</strong> Runs do research only until you fill in <b>step 2</b> below and press <b>Save &amp; run now</b>. ▶ Run by itself doesn't save credentials.</div>`:'';
-  const setup=ui.showConnect||needsSetup||!control.diagnosisOk(ui.diag)?connectPanel(h):'';
+  // A rejection only counts if that run used the credentials saved now (not ones re-entered since).
+  const conn=s.capabilities.connections||{},updated=ui.diag?.secretUpdated||{};
+  const SERVICES={dataforseo:['DataForSEO',['DATAFORSEO_LOGIN','DATAFORSEO_PASSWORD']],gmail:['Gmail',['GMAIL_ADDRESS','GMAIL_APP_PASSWORD']]};
+  ui.rejected=new Set();const rejectedMsgs=[];
+  for(const [k,[label,keys]] of Object.entries(SERVICES)){
+    if(conn[k]?.status!=='rejected')continue;
+    if(keys.some(x=>updated[x]&&updated[x]>s.generated_at))continue; // re-entered after this run: wait for the next one
+    keys.forEach(x=>ui.rejected.add(x));rejectedMsgs.push(`<li><b>${label}:</b> ${e(conn[k].error||'login rejected')}</li>`);
+  }
+  const okList=Object.entries(SERVICES).filter(([k])=>conn[k]?.status==='connected').map(([,[l]])=>l);
+  const banner=(rejectedMsgs.length?`<div class="alert-warning ap-missing"><strong>The last run couldn't log in:</strong><ul class="ap-list">${rejectedMsgs.join('')}</ul>Re-enter them in <b>step 2</b> below and press <b>Save &amp; run now</b>.</div>`:'')
+    +(notConnected.length?`<div class="alert-warning ap-missing"><strong>Not connected yet: ${e(notConnected.join(' and '))}.</strong> Runs do research only until you fill in <b>step 2</b> below and press <b>Save &amp; run now</b>. ▶ Run by itself doesn't save credentials.</div>`:'')
+    +(!rejectedMsgs.length&&!notConnected.length&&okList.length?`<div class="ap-msg">✓ Verified by the last run: ${e(okList.join(' and '))} logged in successfully.</div>`:'');
+  const setup=ui.showConnect||needsSetup||rejectedMsgs.length||!control.diagnosisOk(ui.diag)?connectPanel(h):'';
   const kpis=[['Best URLs to promote',t.promotable,'◎',`${n(t.promoting_now)} being promoted now`],['Internal link fixes',t.internal_suggestions,'⇄','Free ranking boosts on your own sites'],['Publishers contacted',f.contacted,'↗',`${n(f.ready)} ready · ${n(f.replied)} replied`],['Backlinks won',f.won,'◇',`+${n(f.existing_links)} existing links found`]];
   const kpiHtml=`<div class="kpi-grid">${kpis.map(([name,v,ico,note])=>`<div class="kpi"><div class="kpi-head">${e(name)}<span class="kpi-ico">${ico}</span></div><div class="kpi-value">${n(v)}</div><div class="kpi-foot">${e(note)}</div></div>`).join('')}</div>`;
   const steps=[['Prospects evaluated',f.prospects_evaluated],['Qualified publishers',f.qualified],['Contacted',f.contacted],['Replied',f.replied],['Links won',f.won]];
@@ -132,10 +144,10 @@ function connectPanel(h){
   const {escapeHTML:e,panel}=h,ready=control.diagnosisOk(ui.diag);
   const c=ui.configured||{secrets:new Set()};
   const done=f=>fieldDone(f,c),settings=savedSettings.get();
-  const field=f=>{const ok=done(f),cur=f.kind==='setting'?settings[f.name]||'':'';
+  const field=f=>{const bad=ui.rejected?.has(f.name),ok=done(f)&&!bad,cur=f.kind==='setting'?settings[f.name]||'':'';
     const input=f.type==='select'?`<select class="selector" name="${f.name}">${f.options.map(([v,l])=>`<option value="${v}" ${(cur||'send')===v?'selected':''}>${e(l)}</option>`).join('')}</select>`
       :`<input name="${f.name}" type="${f.type}" ${f.type==='number'?'min="1" max="50"':''} autocomplete="${f.type==='password'?'new-password':'off'}" value="${e(cur)}" placeholder="${ok&&!cur?(f.kind==='secret'?'Connected; leave blank to keep':'Saved; type to change'):f.type==='number'?'12':''}" ${f.required&&!ok?'required':''}>`;
-    return `<label class="ap-field"><span>${e(f.label)} ${ok?'<b class="ap-ok">✓ connected</b>':f.required?'<b class="ap-need">needed</b>':''}</span>${input}${f.help?`<small>${f.link?`<a href="${f.link}" target="_blank" rel="noopener">${e(f.help)} ↗</a>`:e(f.help)}</small>`:''}</label>`};
+    return `<label class="ap-field"><span>${e(f.label)} ${bad?'<b class="ap-need">✗ rejected: re-enter</b>':ok?'<b class="ap-ok">✓ saved</b>':f.required?'<b class="ap-need">needed</b>':''}</span>${input}${f.help?`<small>${f.link?`<a href="${f.link}" target="_blank" rel="noopener">${e(f.help)} ↗</a>`:e(f.help)}</small>`:''}</label>`};
   return panel('Connect Autopilot','Two steps, once. Everything is encrypted in your browser before it reaches GitHub; nothing can read it back.',
     `<div class="panel-pad ap-connect">${tokenStep(h)}
     <section class="ap-step-card ${ready?'':'ap-locked'}"><h3>2 · DataForSEO, Gmail and your settings</h3>

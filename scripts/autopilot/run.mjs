@@ -117,6 +117,17 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   }
   const privateWhy=!cfg.dataKey?'LINKFORGE_DATA_KEY not set':'vault could not be opened';
   const dfs=new DataForSEO({...cfg.dfs,state,fetchImpl,log});
+  // ---- 0. Connections: free checks that saved credentials really work (nothing is charged or sent) ----
+  const mailer=injectedMailer||(cfg.dryRun?dryMailer(log):gmailTransport(env));
+  const connections={
+    dataforseo:cfg.dfs.login&&cfg.dfs.password?await dfs.verify():{status:'missing'},
+    gmail:!mailer?{status:'missing'}:mailer.check?await mailer.check():{status:'connected'}};
+  for(const [k,v] of Object.entries(connections)){
+    if(v.error)v.error=String(v.error).replace(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi,'[email]'); // published in the public summary
+    log(`connection ${k}: ${v.status}${v.error?' — '+v.error:''}`);
+  }
+  stages.connections={ok:!Object.values(connections).some(c=>c.status==='rejected'),result:Object.fromEntries(Object.entries(connections).map(([k,v])=>[k,v.status]))};
+  const gmailOk=!!mailer&&connections.gmail.status!=='rejected';
   // ---- 1. Crawl ----
   const cache=useCache?await readJson(P.cache,{}):{};
   const crawl=await stage('crawl',true,()=>crawlPortfolio(SITES,{cache,fetchImpl,limitPerSite:cfg.maxUrlsPerSite,deadline:started+cfg.minutes*0.45*60e3,log}))||[];
@@ -137,14 +148,13 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   const chosen=chooseAssets(ranked,state,{perSite:cfg.assetsPerSite});
   // ---- 4. Prospects ----
   await stage('prospects',vaultOk&&dfs.enabled&&chosen.length>0,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,deadline:deadline-6*60e3,log}),
-    !vaultOk?privateWhy:!dfs.enabled?'DataForSEO credentials not set':'no promotable assets');
+    !vaultOk?privateWhy:!dfs.enabled?(dfs.authError||'DataForSEO credentials not set'):'no promotable assets');
   // ---- 5. Mail ----
-  const mailer=injectedMailer||(cfg.dryRun?dryMailer(log):gmailTransport(env));
-  const mailWhy=!vaultOk?privateWhy:!mailer?'Gmail app password not set':cfg.outreach.mode==='off'?'OUTREACH_MODE=off':'';
+  const mailWhy=!vaultOk?privateWhy:!mailer?'Gmail app password not set':!gmailOk?connections.gmail.error:cfg.outreach.mode==='off'?'OUTREACH_MODE=off':'';
   try{
-    await stage('replies',vaultOk&&!!mailer,()=>processReplies({state,imap:mailer.imap,log}),mailWhy||'Gmail not set');
+    await stage('replies',vaultOk&&gmailOk,()=>processReplies({state,imap:mailer.imap,log}),mailWhy||'Gmail not set');
     const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',log});
-    await stage('outreach',vaultOk&&!!mailer&&cfg.outreach.mode!=='off'&&!!cfg.outreach.senderName,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:cfg.outreach,deadline:deadline-2*60e3,log}),mailWhy||'SENDER_NAME not set');
+    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!!cfg.outreach.senderName,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:cfg.outreach,deadline:deadline-2*60e3,log}),mailWhy||'SENDER_NAME not set');
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,template_fallbacks:writer.fallbacks};
   }finally{await mailer?.close?.().catch(()=>{})}
   // ---- 6. Link verification ----
@@ -160,7 +170,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   const summary={
     schema:'linkforge-autopilot/1',generated_at:NOW(),duration_s:Math.round((Date.now()-started)/1000),dry_run:cfg.dryRun,
     schedule:'Twice daily (05:40 and 14:10 UTC) via GitHub Actions; every run redeploys Cloudflare Pages',
-    capabilities:{vault:vaultOk,dataforseo:dfs.enabled,gmail:cfg.outreach.gmail,outreach_mode:cfg.outreach.mode,claude:!!cfg.claude.apiKey,gsc:cfg.gsc,
+    capabilities:{vault:vaultOk,dataforseo:dfs.enabled,gmail:cfg.outreach.gmail&&gmailOk,connections,outreach_mode:cfg.outreach.mode,claude:!!cfg.claude.apiKey,gsc:cfg.gsc,
       daily_send_cap:cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit},
     setup:setupChecklist(cfg),stages,
     totals:{sites:SITES.length,pages_crawled:crawl.reduce((n,s)=>n+s.pages.length,0),urls_discovered:crawl.reduce((n,s)=>n+(s.discovered||0),0),

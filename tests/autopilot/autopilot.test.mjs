@@ -239,3 +239,26 @@ test('dashboard settings secret overrides older repo variables',async()=>{
   assert.equal(env.SENDER_NAME,'Alex');assert.equal(env.OUTREACH_MODE,'send');assert.equal(env.OUTREACH_DAILY_LIMIT,'15');assert.equal(env.EVIL,undefined);
   assert.equal(withDashboardSettings({SENDER_NAME:'Kept',LINKFORGE_SETTINGS:'not json'}).SENDER_NAME,'Kept');
 });
+
+test('connection checks: DataForSEO rejection and Gmail rejection give exact reasons and skip safely',async()=>{
+  const f=async url=>{const u=new URL(url);
+    if(u.hostname==='api.dataforseo.com')return resp(JSON.stringify({status_code:40100,status_message:'You are not authorized to access this resource.'}),{status:401,type:'application/json'});
+    if(u.pathname==='/sitemap.xml')return resp(`<urlset><url><loc>https://${u.hostname}/guide/</loc></url></urlset>`,{type:'application/xml'});
+    if(/\.(xml|txt)$/.test(u.pathname))return resp('',{status:404});return resp(html(`<main><h1>Guide</h1><p>${words(900)}</p></main>`,{title:'Mouse proofing guide'}))};
+  const mailer={check:async()=>({status:'rejected',error:'Gmail rejected the login for me@gmail.com.'}),send:async()=>{throw Error('must not send')},draft:async()=>{},imap:{recentHeaders:async()=>[]},close:async()=>{}};
+  const {summary}=await runAutopilot({env:{LINKFORGE_DATA_KEY:'k'.repeat(24),LINKFORGE_VAULT_RESET_AT:new Date(Date.now()+1e3).toISOString(),DATAFORSEO_LOGIN:'a@b.com',DATAFORSEO_PASSWORD:'wrong',SENDER_NAME:'Alex',OUTREACH_MODE:'send'},argv:[],fetchImpl:f,mailer,write:false,useCache:false});
+  assert.equal(summary.capabilities.connections.dataforseo.status,'rejected');
+  assert.match(summary.stages.prospects.skipped,/rejected the login .*api password/i);
+  assert.equal(summary.capabilities.connections.gmail.status,'rejected');
+  assert.match(summary.stages.outreach.skipped,/Gmail rejected/);
+  assert.ok(!JSON.stringify(summary).includes('me@gmail.com'),'addresses redacted from the public summary');
+  assert.equal(summary.stages.connections.ok,false);
+});
+
+test('a failed IMAP login closes its socket so the run cannot hang',async()=>{
+  let destroyed=false;
+  class S extends EventEmitter{constructor(){super();setImmediate(()=>this.emit('data','* OK hi\r\n'))}setEncoding(){}end(){}destroy(){destroyed=true}
+    write(s){const tag=s.split(' ')[0];setImmediate(()=>this.emit('data',`${tag} NO [AUTHENTICATIONFAILED] Invalid credentials (Failure)\r\n`))}}
+  await assert.rejects(new Imap({user:'a',pass:'b',connect:()=>new S()}).open(),/AUTHENTICATIONFAILED/);
+  assert.equal(destroyed,true);
+});

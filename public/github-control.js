@@ -71,7 +71,7 @@ export async function diagnose(){
   try{out.login=(await gh('/user')).login;out.valid=true}catch(e){out.error=e.message;return out}
   const [s,wf]=await Promise.all([gh(`/repos/${REPO}/actions/secrets?per_page=100`).catch(()=>null),gh(`/repos/${REPO}/actions/workflows/${WORKFLOW}`).catch(()=>null)]);
   out.secrets=!!s;
-  if(s)out.secretNames=new Set((s.secrets||[]).map(x=>x.name));
+  if(s){out.secretNames=new Set((s.secrets||[]).map(x=>x.name));out.secretUpdated=Object.fromEntries((s.secrets||[]).map(x=>[x.name,x.updated_at||'']))}
   // Enabling an already-active workflow is a no-op that needs Actions: write — a safe write probe.
   if(wf?.state==='active')out.actions=await gh(`/repos/${REPO}/actions/workflows/${WORKFLOW}/enable`,{method:'PUT'}).then(()=>true,()=>false);
   return out;

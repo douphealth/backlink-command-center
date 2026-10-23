@@ -15,6 +15,24 @@ export class DataForSEO{
     this.dailyUsd=dailyUsd;this.monthlyUsd=monthlyUsd;this.fetch=fetchImpl;this.log=log;this.calls=0;this.spent=0;
   }
   get enabled(){return !!this.auth}
+  reject(status,body){
+    const msg=String(body?.status_message||body?.tasks?.[0]?.status_message||'').slice(0,140);
+    this.authError=status===403?`DataForSEO refused access (HTTP 403${msg?': '+msg:''}). If IP allow-listing is on in your DataForSEO account, turn it off — GitHub's servers use changing IPs.`
+      :`DataForSEO rejected the login (HTTP ${status}${msg?': '+msg:''}). Use the API login and the API password from app.dataforseo.com/api-access — not your website password.`;
+    this.log('dataforseo: '+this.authError);this.auth='';
+  }
+  /** Free account check (no charge): confirms the login works and reads the balance. */
+  async verify(){
+    if(!this.auth)return {status:'missing'};
+    try{
+      const res=await this.fetch(API+'appendix/user_data',{headers:{Authorization:'Basic '+this.auth},signal:AbortSignal.timeout(30000)});
+      const body=await res.json().catch(()=>null);
+      if(res.status===401||res.status===403||body?.status_code===40100){this.reject(res.status===200?401:res.status,body);return {status:'rejected',error:this.authError}}
+      const r=body?.tasks?.[0]?.result?.[0];
+      if(!res.ok||!r)return {status:'unverified',error:`DataForSEO account check failed (HTTP ${res.status})`};
+      return {status:'connected',balance_usd:Number(r.money?.balance??NaN)};
+    }catch{return {status:'unverified',error:'DataForSEO could not be reached'}}
+  }
   spend(period){const key=period==='day'?NOW().slice(0,10):NOW().slice(0,7);
     return this.state.ledger.filter(x=>x.at.startsWith(key)).reduce((n,x)=>n+Number(x.cost||0),0)}
   canSpend(kind){
@@ -30,7 +48,7 @@ export class DataForSEO{
       try{
         const res=await this.fetch(API+endpoint,{method:'POST',headers:{Authorization:'Basic '+this.auth,'Content-Type':'application/json'},body:JSON.stringify([task]),signal:AbortSignal.timeout(60000)});
         body=await res.json().catch(()=>null);
-        if(res.status===401||res.status===403){this.log('dataforseo: credentials rejected');this.auth='';return null}
+        if(res.status===401||res.status===403){this.reject(res.status,body);return null}
       }catch{body=null}
       const cost=Number(body?.cost||0);
       if(cost>0){this.state.ledger.push({at:NOW(),kind,endpoint,cost});this.spent+=cost}
