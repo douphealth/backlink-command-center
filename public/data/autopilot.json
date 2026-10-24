@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-24T05:57:07.373Z",
- "duration_s": 644,
+ "generated_at": "2026-10-24T06:07:55.647Z",
+ "duration_s": 415,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 20.404386
+    "balance_usd": 20.215746
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 271411,
+   "ms": 22875,
    "result": {
     "sites": 10,
     "pages": 1901
@@ -106,7 +106,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 0,
+   "ms": 1,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -116,23 +116,24 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 361654,
+   "ms": 341195,
    "result": {
-    "queries": 26,
+    "queries": 20,
     "mention_queries": 10,
-    "serp_results": 317,
-    "candidates": 78,
-    "qualified": 23,
-    "mentions": 0,
-    "already_linked": 0,
-    "rejected": 100,
-    "with_email": 8,
-    "contact_form": 7
+    "serp_results": 338,
+    "candidates": 77,
+    "qualified": 14,
+    "mentions": 1,
+    "already_linked": 4,
+    "rejected": 102,
+    "with_email": 3,
+    "contact_form": 3,
+    "failed_queries": 3
    }
   },
   "replies": {
    "ok": true,
-   "ms": 8821,
+   "ms": 46827,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -143,13 +144,13 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 2,
+   "ms": 3,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 48,
+    "deferred": 51,
     "cap": 5
    },
    "writer": {
@@ -159,7 +160,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 0,
+   "ms": 1,
    "result": {
     "checked": 0,
     "won": 0,
@@ -176,23 +177,23 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.1886,
-  "month_usd": 0.7004,
+  "today_usd": 0.3989,
+  "month_usd": 0.9106,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 35
+  "calls_this_run": 30
  },
  "funnel": {
-  "prospects_evaluated": 603,
-  "qualified": 138,
-  "ready": 48,
-  "contact_form_only": 31,
-  "no_contact": 54,
+  "prospects_evaluated": 723,
+  "qualified": 152,
+  "ready": 51,
+  "contact_form_only": 34,
+  "no_contact": 62,
   "contacted": 5,
   "replied": 0,
   "positive": 0,
   "won": 0,
-  "existing_links": 0,
+  "existing_links": 4,
   "declined": 0,
   "bounced": 0
  },
@@ -215,19 +216,19 @@
   },
   {
    "date": "2026-10-24",
-   "prospects_evaluated": 603,
-   "qualified": 138,
-   "ready": 48,
-   "contact_form_only": 31,
-   "no_contact": 54,
+   "prospects_evaluated": 723,
+   "qualified": 152,
+   "ready": 51,
+   "contact_form_only": 34,
+   "no_contact": 62,
    "contacted": 5,
    "replied": 0,
    "positive": 0,
    "won": 0,
-   "existing_links": 0,
+   "existing_links": 4,
    "declined": 0,
    "bounced": 0,
-   "spend_usd": 0.1886
+   "spend_usd": 0.3989
   }
  ],
  "learning": {
@@ -251,16 +252,16 @@
     "rate": 0.714
    },
    {
-    "footprint": "resources",
-    "queries": 12,
-    "ready": 9,
-    "rate": 0.667
-   },
-   {
     "footprint": "intitle_resources",
     "queries": 4,
     "ready": 3,
     "rate": 0.571
+   },
+   {
+    "footprint": "resources",
+    "queries": 16,
+    "ready": 9,
+    "rate": 0.526
    },
    {
     "footprint": "inurl_resources",
@@ -281,6 +282,12 @@
     "rate": 0.25
    },
    {
+    "footprint": "best_guides",
+    "queries": 1,
+    "ready": 0,
+    "rate": 0.25
+   },
+   {
     "footprint": "blogs_to_follow",
     "queries": 2,
     "ready": 0,
@@ -293,10 +300,16 @@
     "rate": 0.2
    },
    {
-    "footprint": "mention",
-    "queries": 10,
+    "footprint": "inurl_links",
+    "queries": 3,
     "ready": 0,
-    "rate": 0.077
+    "rate": 0.167
+   },
+   {
+    "footprint": "mention",
+    "queries": 20,
+    "ready": 0,
+    "rate": 0.043
    }
   ],
   "assets": [
@@ -331,7 +344,7 @@
    "domain": "plantastichaven.com",
    "pages": 161,
    "discovered": 161,
-   "sitemaps": 4,
+   "sitemaps": 5,
    "eligible": 25,
    "top": "https://plantastichaven.com/string-of-pearls-plant-care/"
   },
@@ -450,7 +463,7 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -551,7 +564,7 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "plantastichaven.com",
@@ -601,7 +614,7 @@
    ],
    "prospects": 6,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -647,9 +660,9 @@
     "In-depth (2,051 words)",
     "Recently updated"
    ],
-   "prospects": 11,
+   "prospects": 12,
    "internal_link_suggestions": 1,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -671,9 +684,9 @@
     "Recently updated",
     "Flagship asset"
    ],
-   "prospects": 3,
+   "prospects": 4,
    "internal_link_suggestions": 1,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -722,9 +735,9 @@
     "3 data tables",
     "Recently updated"
    ],
-   "prospects": 5,
+   "prospects": 6,
    "internal_link_suggestions": 4,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -747,7 +760,7 @@
     "2 data tables",
     "Recently updated"
    ],
-   "prospects": 8,
+   "prospects": 13,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -774,7 +787,7 @@
    ],
    "prospects": 11,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "mysticaldigits.com",
@@ -847,9 +860,9 @@
     "Recently updated",
     "Under-linked internally (1 inbound)"
    ],
-   "prospects": 3,
+   "prospects": 7,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "frenchyfab.com",
@@ -973,7 +986,7 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -994,7 +1007,7 @@
     "Has an interactive tool/quiz — earns links naturally",
     "Flagship asset"
    ],
-   "prospects": 2,
+   "prospects": 3,
    "internal_link_suggestions": 1,
    "promoting": true
   },
@@ -1049,7 +1062,7 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1977,7 +1990,7 @@
    "linkability": 73,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 13,
    "words": 3053,
    "interactive": false,
    "modified": "2026-09-03T10:44:17+00:00",
@@ -4421,29 +4434,71 @@
    "from_strength": 56
   }
  ],
- "wins": [],
+ "wins": [
+  {
+   "site": "plantastichaven.com",
+   "publisher": "homestead.org",
+   "page_url": "https://www.homestead.org/gardening/turn-a-spare-room-into-a-grow-room-produce-year-round-produce",
+   "title": "Turn a Spare Room Into a Grow Room: Produce Year-round Produce",
+   "kind": "existing",
+   "target": "https://plantastichaven.com/plant-room-in-house",
+   "anchor": "Create Your Plant Room in House - PlantasticHaven",
+   "rel": "ugc external nofollow",
+   "found_at": "2026-10-24T06:06:52.417Z"
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "publisher": "m.blog.naver.com",
+   "page_url": "https://m.blog.naver.com/grimaldi/223498277877",
+   "title": "AI와 K-초딩 대결 : 네이버 블로그",
+   "kind": "existing",
+   "target": "https://affiliatemarketingforsuccess.com/ai/ai-prompt-writing",
+   "anchor": "affiliatemarketingforsuccess.com",
+   "rel": "",
+   "found_at": "2026-10-24T06:06:52.058Z"
+  },
+  {
+   "site": "plantastichaven.com",
+   "publisher": "cleverbloom.com",
+   "page_url": "https://cleverbloom.com/transfer-your-cuttings-to-soil",
+   "title": "Transfer Your Cuttings To Soil (How & When)",
+   "kind": "existing",
+   "target": "https://plantastichaven.com/transplanting-spider-plants",
+   "anchor": "How to Transplant Spider Plants: Step-by-Step Guide - PlantasticHaven",
+   "rel": "ugc external nofollow",
+   "found_at": "2026-10-24T06:06:51.016Z"
+  },
+  {
+   "site": "plantastichaven.com",
+   "publisher": "climeradar.com",
+   "page_url": "https://climeradar.com/blog/indoor-plant-care-checklist-seasonal-weather",
+   "title": "Indoor Plant Care Checklist: Adapting to Seasonal Weather Changes | Clime Blog",
+   "kind": "existing",
+   "target": "https://plantastichaven.com/plant-care-checklist",
+   "anchor": "plantastichaven.com",
+   "rel": "",
+   "found_at": "2026-10-24T06:06:50.186Z"
+  }
+ ],
  "log": [
-  "05:46:25 connection dataforseo: connected",
-  "05:46:25 connection gmail: connected",
-  "05:46:27 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "05:46:28 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "05:46:33 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "05:46:34 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "05:46:34 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "05:46:35 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "05:46:36 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "05:46:38 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "05:46:44 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "05:50:56 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 247, 304 0, reused 11",
-  "05:51:27 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "05:51:40 dataforseo: serp/google/organic/live/advanced failed 40102 No Search Results.",
-  "05:53:32 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "05:54:01 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "05:55:08 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "05:56:20 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "05:56:58 prospects: 26 queries (10 brand-mention), 78 candidates, 23 qualified (0 unlinked mentions), 8 with email, 0 already linking",
-  "05:57:07 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "05:57:07 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 48 waiting for recipients' business hours, cap 5",
-  "05:57:07 link checks: 0 pages, 0 new links won, 0 lost"
+  "06:01:02 connection dataforseo: connected",
+  "06:01:02 connection gmail: connected",
+  "06:01:04 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "06:01:06 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "06:01:06 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "06:01:08 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "06:01:11 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "06:01:12 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "06:01:13 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "06:01:13 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "06:01:17 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "06:01:25 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 2, 304 0, reused 256",
+  "06:04:05 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "06:04:41 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "06:05:01 dataforseo: serp/google/organic/live/advanced failed 40106 Task completed with partial results. Some pages could not be retrieved after several retry attempts. You have not been charged for the pages that were not returned.",
+  "06:07:06 prospects: 20 queries (10 brand-mention), 77 candidates, 14 qualified (1 unlinked mentions), 3 with email, 4 already linking",
+  "06:07:53 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "06:07:53 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 51 waiting for recipients' business hours, cap 5",
+  "06:07:55 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
