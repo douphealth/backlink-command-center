@@ -397,3 +397,10 @@ test('outreach status says when the next pitches can go out',async()=>{
   assert.equal(s.ready,1);assert.equal(s.cap_today,5);assert.ok(s.next_send_at);
   assert.ok(!JSON.stringify(s).includes('a.com'),'no publisher names in the public status');
 });
+
+test("weekday is judged in the recipient's time zone",async()=>{
+  const {sendWindowOpen}=await import('../../scripts/autopilot/outreach.mjs');
+  assert.equal(sendWindowOpen('blog.com.au',new Date('2026-10-25T22:00:00Z')),true,'Sunday 22:00 UTC is Monday 08:00 in Sydney');
+  assert.equal(sendWindowOpen('blog.com.au',new Date('2026-10-23T22:00:00Z')),false,'Friday 22:00 UTC is Saturday in Sydney');
+  assert.equal(sendWindowOpen('blog.com',new Date('2026-10-26T15:00:00Z')),true,'Monday US');
+});
