@@ -75,6 +75,14 @@ export async function renderAutopilot(h){
   const modeLabel={send:'HANDS-FREE SENDING',draft:'DRAFTS TO GMAIL',off:'RESEARCH ONLY'}[c.outreach_mode];
   const ctl=ui.control||{};
   if(ctl.running)ui.settleUntil=Date.now()+150000; // keep refreshing until Pages has deployed the new results
+  // GitHub's scheduler can run hours late or skip slots. If a cycle is overdue while the schedule is on
+  // (not stopped), opening the dashboard starts a catch-up run, at most once per 30 minutes.
+  const overdueHours=(Date.now()-Date.parse(s.generated_at))/36e5,lastCatchUp=Number(local('linkforge-catch-up-at',0).get());
+  if(control.diagnosisOk(ui.diag)&&ctl.enabled&&!ctl.running&&!ui.busy&&overdueHours>7&&Date.now()-lastCatchUp>30*60e3){
+    local('linkforge-catch-up-at',0).set(Date.now());
+    try{await control.run();ui.settleUntil=Date.now()+600000;ui.msg=`The last cycle was ${Math.round(overdueHours)} h ago (GitHub's scheduler ran late), so a catch-up run was started.`;ctl.running=true}
+    catch(err){ui.err='Catch-up run could not start: '+err.message}
+  }
   const state=ctl.error?['off','STATUS UNAVAILABLE',ctl.error]:ctl.running?['running','RUNNING NOW',`Started ${ago(ctl.run.started)}; results appear here automatically`]:ctl.enabled?['on','ON · AUTOPILOT',`Next automatic cycle around ${niceTime(nextRun(s.generated_at).toISOString())} (checked hourly)`]:['off','STOPPED','No automatic runs until you press Run'];
   const summaryLine=`Last results ${ago(s.generated_at)} · ${n(t.pages_crawled)} pages audited · ${modeLabel.toLowerCase()} · DataForSEO $${s.spend.today_usd.toFixed(2)} today / $${s.spend.month_usd.toFixed(2)} month (caps $${s.spend.daily_cap_usd} / $${s.spend.monthly_cap_usd})`;
   const status=`<div class="ap-control"><div class="ap-state"><span class="ap-dot ${state[0]}"></span><div><strong>${e(state[1])}</strong><p>${e(state[2])}${ctl.run?.url?` · <a href="${e(ctl.run.url)}" target="_blank" rel="noopener">${ctl.running?'watch live':'last run log'} ↗</a>`:''}</p><p>${e(summaryLine)}</p>${outreachLine(s,h)}</div></div>
