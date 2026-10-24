@@ -109,3 +109,4 @@ td small.ap-why{white-space:normal;max-width:560px;color:#7f8b97;line-height:1.5
 .ap-step-card fieldset:disabled .primary{opacity:.4;cursor:not-allowed}
 .ap-missing{font-size:12px;line-height:1.6}.ap-missing strong{color:#8a6420}
 .ap-list{margin:6px 0 6px 18px;padding:0}.ap-list li{margin:3px 0}
+.ap-funnel .pipeline-row{grid-template-columns:140px 1fr 96px}.ap-funnel .pipeline-row strong{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2}.ap-delta{font-size:9.5px;font-weight:600;color:#9aa4af}.ap-delta.up{color:#5c9140}.ap-delta.down{color:#c17e7a}.ap-state p.ap-outreach{color:#d6dee6}.ap-state p.ap-outreach b{color:#c1ed91}
