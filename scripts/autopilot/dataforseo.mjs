@@ -56,6 +56,7 @@ export class DataForSEO{
       const t=body?.tasks?.[0],code=Number(t?.status_code||body?.status_code||0);
       if(code===20000)return t.result||[];
       if(code===40102)return [{items:[]}]; // 'No Search Results' is a real (empty) answer, not a failure
+      if(code===40106&&t.result)return t.result; // partial results: keep what was returned (unreturned pages aren't billed)
       if(code>=40200&&code<40300||code===40204||code===40104){this.state.dfs_blocked[kind]=NOW();this.log(`dataforseo: ${kind} not available on this account (${code}); parked 7 days`);return null}
       if(attempt===0&&(!body||code>=50000||code===40101)){await sleep(3000);continue}
       this.log(`dataforseo: ${endpoint} failed ${code} ${t?.status_message||body?.status_message||''}`.trim());

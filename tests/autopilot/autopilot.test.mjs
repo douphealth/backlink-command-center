@@ -381,3 +381,8 @@ test('failed searches are retried next run; giants that already mention us are k
   const real=new (await import('../../scripts/autopilot/dataforseo.mjs')).DataForSEO({login:'l',password:'p',state:{},fetchImpl:async()=>resp(JSON.stringify({status_code:20000,cost:0.002,tasks:[{status_code:40102,status_message:'No Search Results.'}]}),{type:'application/json'})});
   assert.deepEqual(await real.serp('rare query'),[],'"No Search Results" is an empty answer, not a failure');
 });
+
+test('DataForSEO partial results are kept, not thrown away',async()=>{
+  const dfs=new DataForSEO({login:'l',password:'p',state:{},fetchImpl:async()=>resp(JSON.stringify({status_code:20000,cost:0.002,tasks:[{status_code:40106,status_message:'Task completed with partial results.',result:[{items:[{type:'organic',url:'https://p.com/x',domain:'p.com',title:'P',rank_absolute:1}]}]}]}),{type:'application/json'})});
+  const r=await dfs.serp('q');assert.equal(r.length,1);assert.equal(r[0].domain,'p.com');
+});
