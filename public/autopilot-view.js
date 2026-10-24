@@ -29,7 +29,7 @@ function offlineCard(h){
   return h.intro('autopilot','')+`<div class="alert-warning ap-missing"><strong>This page can't reach its server right now.</strong> ${local?`You're on a local or preview copy (<code>${h.escapeHTML(location.host)}</code>) that is no longer running. Open the live dashboard instead: <a href="${LIVE}">backlink-command-center.pages.dev</a>.`:'Check your internet connection, then reload the page. Nothing you saved has been lost.'}</div>`;
 }
 const ago=t=>{if(!t)return 'never';const m=Math.round((Date.now()-Date.parse(t))/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':Math.round(m/1440)+' d ago'};
-function nextRun(){const now=new Date(),slots=[[5,40],[14,10]].map(([h,m])=>{const d=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate(),h,m));if(d<=now)d.setUTCDate(d.getUTCDate()+1);return d});return new Date(Math.min(...slots))}
+function nextRun(last){const t=Math.max(Date.parse(last||0)+5*36e5,Date.now());const d=new Date(t);if(d.getUTCMinutes()>23)d.setUTCHours(d.getUTCHours()+1);d.setUTCMinutes(23,0,0);return d}
 
 const STATUS_ORDER=['positive','won','replied','followed_up','sent','drafted','ready','contact_form','no_contact','already_linked','declined','bounced','skipped_duplicate','rejected'];
 const ui={filter:'active',vault:null,error:'',control:null,configured:null,tokenError:'',showConnect:false,msg:'',err:'',busy:'',settleUntil:0};
@@ -50,7 +50,9 @@ const savedSettings=local('linkforge-settings',{});
 const vaultResetAt=local('linkforge-vault-reset-at','');
 async function refreshControl(){
   try{ui.control=await control.status()}catch(err){ui.control={error:err.message}}
-  ui.diag=control.token.get()?await control.diagnose():null;
+  // The token check costs 4 GitHub calls; reuse it for 5 minutes unless something changed.
+  if(!control.token.get())ui.diag=null;
+  else if(!ui.diag||ui.forceDiag||Date.now()-(ui.diagAt||0)>300000){ui.diag=await control.diagnose();ui.diagAt=Date.now();ui.forceDiag=false}
   ui.configured=ui.diag?.secrets?{secrets:ui.diag.secretNames}:null;
 }
 function schedulePoll(){
@@ -73,7 +75,7 @@ export async function renderAutopilot(h){
   const modeLabel={send:'HANDS-FREE SENDING',draft:'DRAFTS TO GMAIL',off:'RESEARCH ONLY'}[c.outreach_mode];
   const ctl=ui.control||{};
   if(ctl.running)ui.settleUntil=Date.now()+150000; // keep refreshing until Pages has deployed the new results
-  const state=ctl.error?['off','STATUS UNAVAILABLE',ctl.error]:ctl.running?['running','RUNNING NOW',`Started ${ago(ctl.run.started)}; results appear here automatically`]:ctl.enabled?['on','ON · AUTOPILOT',`Next automatic run ${niceTime(nextRun().toISOString())}`]:['off','STOPPED','No automatic runs until you press Run'];
+  const state=ctl.error?['off','STATUS UNAVAILABLE',ctl.error]:ctl.running?['running','RUNNING NOW',`Started ${ago(ctl.run.started)}; results appear here automatically`]:ctl.enabled?['on','ON · AUTOPILOT',`Next automatic cycle around ${niceTime(nextRun(s.generated_at).toISOString())} (checked hourly)`]:['off','STOPPED','No automatic runs until you press Run'];
   const summaryLine=`Last results ${ago(s.generated_at)} · ${n(t.pages_crawled)} pages audited · ${modeLabel.toLowerCase()} · DataForSEO $${s.spend.today_usd.toFixed(2)} today / $${s.spend.month_usd.toFixed(2)} month (caps $${s.spend.daily_cap_usd} / $${s.spend.monthly_cap_usd})`;
   const status=`<div class="ap-control"><div class="ap-state"><span class="ap-dot ${state[0]}"></span><div><strong>${e(state[1])}</strong><p>${e(state[2])}${ctl.run?.url?` · <a href="${e(ctl.run.url)}" target="_blank" rel="noopener">${ctl.running?'watch live':'last run log'} ↗</a>`:''}</p><p>${e(summaryLine)}</p></div></div>
     <div class="ap-buttons"><button class="ap-run" data-ap="run" ${ctl.running||ui.busy?'disabled':''}>${ui.busy==='run'?'Starting…':ctl.running?'Running…':'▶ Run'}</button><button class="ap-stop" data-ap="stop" ${(!ctl.enabled&&!ctl.running)||ui.busy?'disabled':''}>${ui.busy==='stop'?'Stopping…':'■ Stop'}</button><button class="outline-btn" data-ap="connect">⚙ Connect</button></div></div>
@@ -108,12 +110,21 @@ export async function renderAutopilot(h){
   return intro('autopilot','')+status+banner+setup+kpiHtml+
     `<div class="overview-grid">${panel('Outreach funnel','Every number is a stored, verified record',funnel)}${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`+
     `<div class="ap-gap">${panel('Best URLs to promote','Linkability × real search demand; templated duplicates and thin pages are demoted',best.length?table(['#','URL & why','Score','Internal links','Prospects'],best):empty('No promotable URLs yet','The next crawl will rank your pages.'))}</div>`+
+    learningPanel(h,s)+
     `<div class="ap-gap">${panel('Internal link plan','Add these links on your own pages: highest-ROI, zero-cost ranking boost',internal.length?table(['On this page','Add anchor','Linking to'],internal):empty('No internal gaps found','Your best URLs are already well linked.'))}</div>`+
     `<div class="ap-gap">${panel('Backlinks','Won after outreach, or already linking to you (verified on the live page)',wins.length?table(['Publisher','Page','Links to','Status','Found'],wins):empty('No verified backlinks yet','Pitched pages are re-checked every 4 days for 150 days.'))}</div>`+
     `<div class="ap-gap">${privatePanel(h)}</div>`+
     `<details class="data-note"><summary><strong>Last run log</strong></summary><div class="pre-detail ap-log">${e((s.log||[]).join('\n'))}</div></details>`;
 }
 
+const FP_LABEL={mention:'Unlinked brand mentions',intent:'Same-topic articles',resources:'"{topic} resources"',intitle_resources:'intitle:resources',useful_links:'"useful links" pages',tools:'"{topic} tools"',free_tools:'"free {topic} tools"',best_resources:'"best {topic} resources"',useful_websites:'"useful websites"',statistics:'"{topic} statistics"',research_resources:'"research resources"',sources:'"{topic} sources"',blogs_to_follow:'"blogs to follow"',recommended_reading:'"recommended reading"',inurl_resources:'inurl:resources',inurl_links:'inurl:links',best_guides:'"best … guides"',k_resources:'"{page topic} resources"'};
+function learningPanel(h,s){
+  const {escapeHTML:e,external,n,panel,table,empty}=h,L=s.learning;
+  if(!L)return '';
+  const fps=(L.footprints||[]).slice(0,10).map(x=>`<tr><td><strong>${e(FP_LABEL[x.footprint]||x.footprint)}</strong></td><td>${n(x.queries)}</td><td>${n(x.ready)}</td><td><strong>${Math.round(x.rate*100)}%</strong><small>${x.queries<3?'still testing':''}</small></td></tr>`);
+  const assets=(L.assets||[]).slice(0,10).map(x=>`<tr><td>${external(x.url,new URL(x.url).pathname)}</td><td>${n(x.sent)}</td><td>${n(x.replied)}</td><td>${n(x.positive)}</td><td>${n(x.won)}</td></tr>`);
+  return `<div class="ap-gap">${panel('What Autopilot is learning: searches','Search patterns ranked by pitchable prospects found per search; the best ones are used first',fps.length?table(['Search pattern','Searches','Prospects','Yield'],fps):empty('Not enough data yet','Yields appear after the first searches.'))}</div><div class="ap-gap">${panel('Which of your pages earn replies','Pages with better reply and link rates get more prospecting',assets.length?table(['Page','Pitched','Replies','Positive','Links won'],assets):empty('No pitches yet','Results appear after the first pitches.'))}</div>`;
+}
 function fullyConfigured(){
   const c=ui.configured;if(!c)return false;
   return FIELDS.filter(f=>f.required).every(f=>fieldDone(f,c))&&c.secrets.has('LINKFORGE_DATA_KEY');
@@ -192,10 +203,11 @@ export function bindAutopilot(reload){
     if(a==='connect'){ui.showConnect=!ui.showConnect;return reload()}
     if(a==='close'){ui.showConnect=false;return reload()}
     if(a==='forget'){control.token.set('');ui.configured=null;ui.diag=null;return reload()}
-    if(a==='recheck'){ui.msg='';ui.err='';ui.showConnect=true;return reload()}
+    if(a==='recheck'){ui.msg='';ui.err='';ui.showConnect=true;ui.forceDiag=true;return reload()}
     if(a==='copykey'){try{await navigator.clipboard.writeText(store.get());ui.msg='Vault key copied. Paste it on your other devices to unlock there.'}catch{ui.err='Clipboard blocked by the browser.'}return reload()}
     if(a==='newvault'){
       if(!confirm('Create a new vault key?\n\nThe current vault can no longer be opened, so private history (prospects, who was contacted, opt-outs) starts fresh on the next run. Only do this if you never had the old key.'))return;
+      ui.forceDiag=true;
       return act('newvault',async()=>{
         const key=[...crypto.getRandomValues(new Uint8Array(24))].map(b=>b.toString(16).padStart(2,'0')).join('');
         await control.setSecret('LINKFORGE_DATA_KEY',key);
@@ -210,7 +222,7 @@ export function bindAutopilot(reload){
     if(a==='stop'){if(!confirm('Stop Autopilot? Automatic runs pause until you press Run.'))return;return act('stop',control.stop,'Autopilot stopped. Press Run to start it again.')}
   });
   document.addEventListener('submit',async ev=>{
-    if(ev.target.id==='ap-token-form'){ev.preventDefault();const v=document.getElementById('ap-token').value.trim();if(v)control.token.set(v);ui.showConnect=true;ui.err='';return reload()}
+    if(ev.target.id==='ap-token-form'){ev.preventDefault();const v=document.getElementById('ap-token').value.trim();if(v){control.token.set(v);ui.forceDiag=true}ui.showConnect=true;ui.err='';return reload()}
     if(ev.target.id!=='ap-connect-form')return;
     ev.preventDefault();
     const form=new FormData(ev.target),values=FIELDS.map(f=>[f,String(form.get(f.name)||'').trim()]).filter(([,v])=>v);
@@ -221,6 +233,7 @@ export function bindAutopilot(reload){
     // The mode/limit dropdowns always carry a value, so only rewrite settings when the name is known.
     const writeSettings=!!settings.SENDER_NAME;
     if(!writeSettings&&!ui.configured?.secrets.has(control.SETTINGS_SECRET)){ui.err='Please enter your name for the emails.';return reload()}
+    ui.forceDiag=true;
     await act('connect',async()=>{
       for(const [f,v] of secrets)await control.setSecret(f.name,f.name==='GMAIL_APP_PASSWORD'?v.replace(/\s+/g,''):v);
       if(writeSettings){await control.setSecret(control.SETTINGS_SECRET,JSON.stringify(settings));savedSettings.set(settings)}

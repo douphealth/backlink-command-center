@@ -122,7 +122,7 @@ test('IMAP fetch parsing and reply classification',()=>{
 test('outreach respects warm-up, dedupes domains, honours opt-outs and follows up once',async()=>{
   const assets=Array.from({length:9},(_,i)=>({url:'https://mice.com/plan'+i,title:'Plan '+i,type:'practical_guide',description:'A plan.'}));const asset=assets[0];
   const prospects={};
-  for(let i=0;i<9;i++)prospects['p'+i]={id:'p'+i,site:'mice.com',domain:i===8?'dup0.org':`pub${i}.org`,email:`ed@pub${i}.org`,status:'ready',score:i===8?99:90-i,asset_url:assets[i].url,qv:2,page_url:`https://pub${i}.org/r`,title:'Resources',history:[]};
+  for(let i=0;i<9;i++)prospects['p'+i]={id:'p'+i,site:'mice.com',domain:i===8?'dup0.org':`pub${i}.org`,email:i===8?'ed@dup0.org':`ed@pub${i}.org`,status:'ready',score:i===8?99:90-i,asset_url:assets[i].url,qv:2,page_url:`https://pub${i}.org/r`,title:'Resources',history:[]};
   const state={prospects,contacted:{'dup0.org':new Date().toISOString()},suppression:{'pub1.org':{reason:'x'}}};
   const sent=[];const mailer={send:async m=>sent.push(m),draft:async()=>{}};
   const writer={write:async(p,a,s)=>templatePitch(p,a,{senderName:'Alex',site:s})};
@@ -306,4 +306,64 @@ test('requalify drops poor-fit queued prospects and cancels follow-ups to bad in
   assert.equal(state.prospects.d.status,'rejected');
   assert.ok(Object.values(state.prospects).every(p=>p.qv===2));
   assert.equal(r.checked,4);
+});
+
+test('send windows follow the recipient region and skip weekends',async()=>{
+  const {sendWindowOpen}=await import('../../scripts/autopilot/outreach.mjs');
+  const at=(iso)=>new Date(iso);
+  assert.equal(sendWindowOpen('blog.com',at('2026-10-27T15:00:00Z')),true,'US business hours (Tue)');
+  assert.equal(sendWindowOpen('blog.com',at('2026-10-27T03:00:00Z')),false,'middle of the US night');
+  assert.equal(sendWindowOpen('blog.co.uk',at('2026-10-27T10:00:00Z')),true);
+  assert.equal(sendWindowOpen('blog.co.uk',at('2026-10-27T19:00:00Z')),false);
+  assert.equal(sendWindowOpen('blog.com.au',at('2026-10-27T23:00:00Z')),true,'window wraps midnight UTC');
+  assert.equal(sendWindowOpen('blog.com',at('2026-10-31T15:00:00Z')),false,'Saturday');
+  const prospects={w:{id:'w',site:'mice.com',domain:'night.com',email:'editor@night.com',status:'ready',score:90,asset_url:'https://mice.com/a',page_url:'https://night.com/r',title:'R',history:[],qv:2}};
+  const stats=await runOutreach({state:{prospects},assets:[],sites:[{domain:'mice.com',topic:'mice'}],writer:{write:async()=>({subject:'s',body:'b'})},mailer:{send:async()=>{throw Error('must wait')}},
+    config:{mode:'send',sendWindow:true,now:()=>at('2026-10-27T03:00:00Z'),fromAddress:'me@gmail.com',senderName:'A',dailyLimit:5,followupDays:6,gapMs:()=>0}});
+  assert.equal(stats.deferred,1);assert.equal(stats.sent,0);assert.equal(prospects.w.status,'ready');
+});
+
+test('link likelihood puts warm and author-addressed prospects first',async()=>{
+  const {linkLikelihood,learningSummary}=await import('../../scripts/autopilot/learn.mjs');
+  const base={score:70,domain:'blog.com',etv:20000,resource_page:false,last_year_mentioned:2026};
+  const mention=linkLikelihood({...base,kind:'mention',email:'hello@blog.com'});
+  const author=linkLikelihood({...base,email:'jane@blog.com',email_rank:105});
+  const generic=linkLikelihood({...base,email:'info@blog.com'});
+  const giant=linkLikelihood({...base,etv:900000,email:'info@blog.com'});
+  assert.ok(mention>author&&author>generic&&generic>giant,[mention,author,generic,giant].join(','));
+  const sum=learningSummary({prospects:{a:{asset_url:'https://mice.com/a',status:'sent',email:'x@y.com',history:[{type:'initial',at:'2026-10-20'}]}},queries:{}},[{domain:'mice.com',topic:'mice'}]);
+  assert.ok(!JSON.stringify(sum).includes('x@y.com'));
+});
+
+test('learned footprint yield decides which searches run first',async()=>{
+  const {pickQueries,footprintOf}=await import('../../scripts/autopilot/prospect.mjs');
+  const site={domain:'mice.com',topic:'mouse proofing home'};
+  assert.equal(footprintOf('intitle:resources mouse proofing home',site),'intitle_resources');
+  assert.equal(footprintOf('mouse proofing home "useful links"',site),'useful_links');
+  assert.equal(footprintOf('"micegoneguide" -site:micegoneguide.com',site),'mention');
+  const state={queries:{'mice.com|mouse proofing home resources':'2026-01-01','mice.com|other topic resources':'2026-01-01','mice.com|x resources':'2026-01-01'},
+    prospects:{a:{site:'mice.com',status:'ready',email:'e@a.com',query:'intitle:resources old topic',footprint:'intitle_resources'},b:{site:'mice.com',status:'ready',email:'e@b.com',footprint:'intitle_resources'}}};
+  const jobs=pickQueries([{site:'mice.com',url:'https://mice.com/g',title:'Mouse Proofing Guide',type:'practical_guide'}],[site],state,{perAsset:2});
+  assert.equal(jobs[0].footprint,'intitle_resources','proven footprint first');
+  assert.ok(!jobs.some(j=>j.footprint==='resources'&&j.query==='mouse proofing home resources'),'recently used query not repeated');
+});
+
+test('unlinked brand mentions become warm prospects with a thank-you pitch',async()=>{
+  const {discoverProspects}=await import('../../scripts/autopilot/prospect.mjs');
+  const {mentionPitch}=await import('../../scripts/autopilot/pitch.mjs');
+  const site={domain:'micegoneguide.com',topic:'mouse proofing home',assets:[]};
+  const outs=Array.from({length:6},(_,i)=>`<a href="https://ref${i}.org/">r</a>`).join('');
+  const f=async url=>{const u=new URL(url);
+    if(u.hostname==='homeblog.net'&&u.pathname==='/pests')return resp(html(`<main><h1>Pest tips</h1><p>${words(300)} We liked the plan from MiceGoneGuide for sealing gaps.</p>${outs}</main>`,{title:'Pest tips for renters'}));
+    if(u.hostname==='homeblog.net'&&u.pathname==='/contact')return resp(html('<a href="mailto:editor@homeblog.net">mail</a>'));
+    return resp(html('<p>home</p>'))};
+  const dfs={canSpend:()=>true,serp:async()=>[{url:'https://homeblog.net/pests',domain:'homeblog.net',title:'Pest tips',rank:1}],domainTraffic:async()=>({'homeblog.net':4200})};
+  const state={};
+  const stats=await discoverProspects({assets:[],sites:[site],state,dfs,fetchImpl:f});
+  const p=Object.values(state.prospects).find(x=>x.domain==='homeblog.net');
+  assert.equal(stats.mention_queries,1);assert.equal(p.kind,'mention');assert.equal(p.status,'ready');assert.equal(p.email,'editor@homeblog.net');
+  const pitch=mentionPitch(p,{url:'https://micegoneguide.com/',title:'micegoneguide'},{senderName:'Alex',site});
+  assert.match(pitch.subject,/Thanks for mentioning/);assert.equal((pitch.body.match(/https:\/\/micegoneguide\.com\//g)||[]).length,1);
+  assert.match(pitch.body,/reply "no"/);
+  assert.ok(state.mentions_at['micegoneguide.com'],'mention search rotates (not repeated next run)');
 });
