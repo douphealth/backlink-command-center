@@ -16,7 +16,7 @@ const ACADEMIC=/(\.edu|\.edu\.[a-z]{2}|\.ac\.[a-z]{2})$/i;
 export const QUALIFY_VERSION=2;
 // Estimated monthly organic visits: giants don't answer, near-zero sites add no value.
 export const TRAFFIC_BAND={min:50,max:1_000_000};
-export const trafficVerdict=(etv,kind)=>etv==null?null:etv>TRAFFIC_BAND.max?'Very large brand (unlikely to add outreach links)':etv<(kind==='mention'?10:TRAFFIC_BAND.min)?'Almost no search traffic':null;
+export const trafficVerdict=(etv,kind)=>etv==null?null:etv>(kind==='mention'?5_000_000:TRAFFIC_BAND.max)?'Very large brand (unlikely to add outreach links)':etv<(kind==='mention'?10:TRAFFIC_BAND.min)?'Almost no search traffic':null;
 const UGC=/(?:^|\/)(forum|forums|thread|threads|community|questions?|answers|topic|t|r|groups?|profile|user|members?)\//i;
 const RESOURCE=/\b(resources?|links|useful|helpful|recommended|tools|toolkit|roundup|round-up|best|list|directory|guide|reading|library|where to)\b/i;
 
@@ -51,7 +51,7 @@ export function footprintOf(query,site){
   for(const [fp,tpl] of Object.entries(FOOTPRINTS)){if(fp==='intent')continue;
     const re=new RegExp('^'+tpl.replace(/[.*+?^$()|[\]\\]/g,'\\$&').replace('\\{t\\}',`(${site?.topic?.replace(/[.*+?^$()|[\]\\]/g,'\\$&')||'.+'})`).replace(/\{t\}|\{k\}/g,'.+')+'$','i');
     if(re.test(query))return fp}
-  return /^"[^"]+" -site:/.test(query)?'mention':'intent';
+  return /^"[^"]+"( OR "[^"]+")? -site:/.test(query)?'mention':'intent';
 }
 /**
  * Learned yield per footprint: how many ready-to-pitch prospects each search produced.
@@ -82,9 +82,11 @@ export function pickQueries(assets,sites,state,{perAsset=2,reuseDays=45}={}){
 export const brandOf=site=>site.brand||site.domain.split('.')[0];
 /** One mention search per site every 14 days. */
 export function mentionJobs(sites,state,{everyDays=14}={}){
-  state.mentions_at??={};
-  return sites.filter(s=>ageDays(state.mentions_at[s.domain])>everyDays&&brandOf(s).length>=5)
-    .map(s=>({site:s,query:`"${brandOf(s)}" -site:${s.domain}`}));
+  state.mentions_at??={};state.queries??={};
+  // Keyed by the exact query, so an improved query runs right away instead of waiting out the old one.
+  return sites.filter(s=>brandOf(s).length>=5)
+    .map(s=>({site:s,query:`"${brandOf(s)}" OR "${s.domain}" -site:${s.domain}`}))
+    .filter(j=>ageDays(state.queries[`${j.site.domain}|${j.query}`])>everyDays);
 }
 export function mentionsUs(html,site){
   const text=mainText(html).toLowerCase(),b=brandOf(site).toLowerCase();
@@ -180,6 +182,7 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     if(Date.now()>deadline||fresh.length>=maxNewPerRun*2||!dfs.canSpend('serp'))break;
     const site=bySite.get(job.asset.site);
     const results=await dfs.serp(job.query);
+    if(results===null){stats.failed_queries=(stats.failed_queries||0)+1;continue} // provider error: retry next run
     state.queries[`${site.domain}|${job.query}`]=NOW();stats.queries++;stats.serp_results+=results.length;
     if(job.kind==='mention'){state.mentions_at[site.domain]=NOW();stats.mention_queries++}
     for(const r of results){

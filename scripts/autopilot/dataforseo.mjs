@@ -55,6 +55,7 @@ export class DataForSEO{
       this.calls++;
       const t=body?.tasks?.[0],code=Number(t?.status_code||body?.status_code||0);
       if(code===20000)return t.result||[];
+      if(code===40102)return [{items:[]}]; // 'No Search Results' is a real (empty) answer, not a failure
       if(code>=40200&&code<40300||code===40204||code===40104){this.state.dfs_blocked[kind]=NOW();this.log(`dataforseo: ${kind} not available on this account (${code}); parked 7 days`);return null}
       if(attempt===0&&(!body||code>=50000||code===40101)){await sleep(3000);continue}
       this.log(`dataforseo: ${endpoint} failed ${code} ${t?.status_message||body?.status_message||''}`.trim());
@@ -64,7 +65,8 @@ export class DataForSEO{
   }
   async serp(keyword,{depth=20,location=2840,language='en'}={}){
     const r=await this.post('serp','serp/google/organic/live/advanced',{keyword,location_code:location,language_code:language,depth});
-    return (r?.[0]?.items||[]).filter(x=>x.type==='organic').map(x=>({url:x.url,domain:x.domain,title:x.title,description:x.description,rank:x.rank_absolute}));
+    if(!r)return null; // failed or not allowed: the caller should retry later, not mark the query as done
+    return (r[0]?.items||[]).filter(x=>x.type==='organic').map(x=>({url:x.url,domain:x.domain,title:x.title,description:x.description,rank:x.rank_absolute}));
   }
   /** Estimated monthly organic visits per domain (one request for up to 1,000 domains). */
   async domainTraffic(domains,{location=2840,language='en'}={}){
