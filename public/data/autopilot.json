@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-24T09:06:36.268Z",
- "duration_s": 17,
+ "generated_at": "2026-10-24T14:42:53.463Z",
+ "duration_s": 31,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -20,7 +20,7 @@
   "outreach_mode": "send",
   "claude": false,
   "gsc": false,
-  "daily_send_cap": 5
+  "daily_send_cap": 7
  },
  "setup": [
   {
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 5610,
+   "ms": 18273,
    "result": {
     "sites": 10,
     "pages": 1901
@@ -101,7 +101,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 310
+    "internal_suggestions": 309
    }
   },
   "requalify": {
@@ -116,7 +116,7 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 9,
+   "ms": 6,
    "result": {
     "queries": 0,
     "mention_queries": 0,
@@ -132,7 +132,7 @@
   },
   "replies": {
    "ok": true,
-   "ms": 8844,
+   "ms": 11385,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -150,7 +150,7 @@
     "drafted": 0,
     "skipped": 0,
     "deferred": 60,
-    "cap": 5
+    "cap": 7
    },
    "writer": {
     "claude": 0,
@@ -172,7 +172,7 @@
   "pages_crawled": 1901,
   "urls_discovered": 2833,
   "promotable": 250,
-  "internal_suggestions": 310,
+  "internal_suggestions": 309,
   "promoting_now": 30
  },
  "spend": {
@@ -186,7 +186,7 @@
   "mode": "send",
   "ready": 60,
   "sent_today": 0,
-  "cap_today": 5,
+  "cap_today": 7,
   "next_send_at": "2026-10-26T00:00:00.000Z",
   "sending_now": false
  },
@@ -924,7 +924,7 @@
     "Recently updated"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 4,
+   "internal_link_suggestions": 3,
    "promoting": false
   },
   {
@@ -2987,16 +2987,6 @@
    "from_strength": 0
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/blogging/how-to-write-a-high-ranking-blog-post/",
-   "from_title": "How to Write High-Ranking Blog Posts in 2026 (Proven)",
-   "to": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
-   "to_title": "Email Marketing Template Generator: HTML & Plain Text",
-   "anchor": "write email reader",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
    "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/calculators/",
    "from_title": "Free Fitness & Running Calculators | GearUpToFit",
@@ -4445,6 +4435,16 @@
    "anchor": "life path",
    "relevance": 7,
    "from_strength": 56
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/the-secrets-of-life-path-number-11/",
+   "from_title": "Life Path Number 11 Meaning: 11/2 Traits, Strengths, Challenges &…",
+   "to": "https://mysticaldigits.com/compatibility-revealed-life-path-number-10/",
+   "to_title": "Life Path Number 10: 2026 Compatibility Guide & Traits",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 56
   }
  ],
  "wins": [
@@ -4494,21 +4494,21 @@
   }
  ],
  "log": [
-  "09:06:21 connection dataforseo: connected",
-  "09:06:21 connection gmail: connected",
-  "09:06:21 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "09:06:21 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "09:06:22 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "09:06:22 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "09:06:22 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "09:06:23 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "09:06:24 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "09:06:25 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "09:06:25 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "09:06:26 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "09:06:27 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "09:06:36 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "09:06:36 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 60 waiting for recipients' business hours, cap 5",
-  "09:06:36 link checks: 0 pages, 0 new links won, 0 lost"
+  "14:42:23 connection dataforseo: connected",
+  "14:42:23 connection gmail: connected",
+  "14:42:25 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "14:42:27 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "14:42:30 crawl mysticaldigits.com: 300/468 urls, fetched 4, 304 0, reused 296",
+  "14:42:30 crawl frenchyfab.com: 238/238 urls, fetched 5, 304 0, reused 233",
+  "14:42:31 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "14:42:31 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "14:42:33 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "14:42:34 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "14:42:36 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "14:42:41 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 3, 304 0, reused 255",
+  "14:42:42 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "14:42:53 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "14:42:53 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 60 waiting for recipients' business hours, cap 7",
+  "14:42:53 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
