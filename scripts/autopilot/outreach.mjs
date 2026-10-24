@@ -16,15 +16,17 @@ export const PER_ASSET_DAILY=2;
  * Send while the recipient is plausibly at work (by domain region), Monday–Friday.
  * Hours are UTC. Unknown/global TLDs use US business hours, where most English editors are.
  */
+// [domain pattern, UTC send hours, approximate UTC offset used to tell the recipient's weekday]
 const REGIONS=[
-  [/\.(uk|ie|de|fr|es|it|nl|be|pt|gr|se|no|dk|fi|pl|cz|at|ch|eu|za|ro|hu|sk|si|hr|bg|lt|lv|ee|lu|cy|mt)$/,[7,16]],
-  [/\.(au|nz)$/,[21,6]],
-  [/\.in$/,[3,12]],
-  [/\.(jp|sg|my|ph|hk|kr|cn|id|th|vn|tw)$/,[0,9]],
+  [/\.(uk|ie|de|fr|es|it|nl|be|pt|gr|se|no|dk|fi|pl|cz|at|ch|eu|za|ro|hu|sk|si|hr|bg|lt|lv|ee|lu|cy|mt)$/,[7,16],1],
+  [/\.(au|nz)$/,[21,6],10],
+  [/\.in$/,[3,12],5],
+  [/\.(jp|sg|my|ph|hk|kr|cn|id|th|vn|tw)$/,[0,9],8],
 ];
+const DEFAULT_REGION=[null,[13,21],-5]; // US business hours
 export function sendWindowOpen(domain,now=new Date()){
-  const [from,to]=(REGIONS.find(([re])=>re.test(domain))||[null,[13,21]])[1];
-  const h=now.getUTCHours(),d=now.getUTCDay();
+  const [,[from,to],offset]=REGIONS.find(([re])=>re.test(domain))||DEFAULT_REGION;
+  const h=now.getUTCHours(),d=new Date(now.getTime()+offset*36e5).getUTCDay(); // weekday where the editor is
   if(d===0||d===6)return false;
   return from<to?h>=from&&h<to:h>=from||h<to;
 }
