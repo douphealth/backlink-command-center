@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-24T06:07:55.647Z",
- "duration_s": 415,
+ "generated_at": "2026-10-24T06:41:04.548Z",
+ "duration_s": 283,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 20.215746
+    "balance_usd": 20.005466
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 22875,
+   "ms": 10159,
    "result": {
     "sites": 10,
     "pages": 1901
@@ -106,7 +106,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 1,
+   "ms": 0,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -116,24 +116,23 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 341195,
+   "ms": 254856,
    "result": {
-    "queries": 20,
-    "mention_queries": 10,
-    "serp_results": 338,
-    "candidates": 77,
-    "qualified": 14,
-    "mentions": 1,
-    "already_linked": 4,
-    "rejected": 102,
-    "with_email": 3,
-    "contact_form": 3,
-    "failed_queries": 3
+    "queries": 17,
+    "mention_queries": 0,
+    "serp_results": 296,
+    "candidates": 127,
+    "qualified": 30,
+    "mentions": 0,
+    "already_linked": 0,
+    "rejected": 90,
+    "with_email": 9,
+    "contact_form": 8
    }
   },
   "replies": {
    "ok": true,
-   "ms": 46827,
+   "ms": 15192,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -144,13 +143,13 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 3,
+   "ms": 4,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 51,
+    "deferred": 60,
     "cap": 5
    },
    "writer": {
@@ -177,18 +176,18 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.3989,
-  "month_usd": 0.9106,
+  "today_usd": 0.4889,
+  "month_usd": 1.0006,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 30
+  "calls_this_run": 21
  },
  "funnel": {
-  "prospects_evaluated": 723,
-  "qualified": 152,
-  "ready": 51,
-  "contact_form_only": 34,
-  "no_contact": 62,
+  "prospects_evaluated": 843,
+  "qualified": 182,
+  "ready": 60,
+  "contact_form_only": 42,
+  "no_contact": 75,
   "contacted": 5,
   "replied": 0,
   "positive": 0,
@@ -216,11 +215,11 @@
   },
   {
    "date": "2026-10-24",
-   "prospects_evaluated": 723,
-   "qualified": 152,
-   "ready": 51,
-   "contact_form_only": 34,
-   "no_contact": 62,
+   "prospects_evaluated": 843,
+   "qualified": 182,
+   "ready": 60,
+   "contact_form_only": 42,
+   "no_contact": 75,
    "contacted": 5,
    "replied": 0,
    "positive": 0,
@@ -228,22 +227,22 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 0,
-   "spend_usd": 0.3989
+   "spend_usd": 0.4889
   }
  ],
  "learning": {
   "footprints": [
    {
-    "footprint": "useful_links",
-    "queries": 4,
-    "ready": 6,
-    "rate": 1
+    "footprint": "intent",
+    "queries": 25,
+    "ready": 24,
+    "rate": 0.893
    },
    {
-    "footprint": "intent",
-    "queries": 24,
-    "ready": 24,
-    "rate": 0.926
+    "footprint": "useful_links",
+    "queries": 5,
+    "ready": 6,
+    "rate": 0.875
    },
    {
     "footprint": "tools",
@@ -258,16 +257,22 @@
     "rate": 0.571
    },
    {
-    "footprint": "resources",
-    "queries": 16,
-    "ready": 9,
-    "rate": 0.526
+    "footprint": "best_guides",
+    "queries": 5,
+    "ready": 3,
+    "rate": 0.5
+   },
+   {
+    "footprint": "useful_websites",
+    "queries": 1,
+    "ready": 1,
+    "rate": 0.5
    },
    {
     "footprint": "inurl_resources",
-    "queries": 3,
+    "queries": 4,
     "ready": 2,
-    "rate": 0.5
+    "rate": 0.429
    },
    {
     "footprint": "statistics",
@@ -276,16 +281,10 @@
     "rate": 0.4
    },
    {
-    "footprint": "recommended_reading",
-    "queries": 1,
-    "ready": 0,
-    "rate": 0.25
-   },
-   {
-    "footprint": "best_guides",
-    "queries": 1,
-    "ready": 0,
-    "rate": 0.25
+    "footprint": "resources",
+    "queries": 23,
+    "ready": 9,
+    "rate": 0.385
    },
    {
     "footprint": "blogs_to_follow",
@@ -298,6 +297,12 @@
     "queries": 2,
     "ready": 0,
     "rate": 0.2
+   },
+   {
+    "footprint": "recommended_reading",
+    "queries": 3,
+    "ready": 0,
+    "rate": 0.167
    },
    {
     "footprint": "inurl_links",
@@ -461,7 +466,7 @@
     "Cites 8 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 2,
+   "prospects": 4,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -486,9 +491,9 @@
     "Cites 4 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 6,
+   "prospects": 10,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -564,7 +569,7 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "plantastichaven.com",
@@ -660,7 +665,7 @@
     "In-depth (2,051 words)",
     "Recently updated"
    ],
-   "prospects": 12,
+   "prospects": 17,
    "internal_link_suggestions": 1,
    "promoting": true
   },
@@ -684,7 +689,7 @@
     "Recently updated",
     "Flagship asset"
    ],
-   "prospects": 4,
+   "prospects": 10,
    "internal_link_suggestions": 1,
    "promoting": true
   },
@@ -737,7 +742,7 @@
    ],
    "prospects": 6,
    "internal_link_suggestions": 4,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -762,7 +767,7 @@
    ],
    "prospects": 13,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -785,9 +790,9 @@
     "6 data tables",
     "Recently updated"
    ],
-   "prospects": 11,
+   "prospects": 14,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "mysticaldigits.com",
@@ -862,7 +867,7 @@
    ],
    "prospects": 7,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "frenchyfab.com",
@@ -1007,7 +1012,7 @@
     "Has an interactive tool/quiz — earns links naturally",
     "Flagship asset"
    ],
-   "prospects": 3,
+   "prospects": 7,
    "internal_link_suggestions": 1,
    "promoting": true
   },
@@ -1110,7 +1115,7 @@
     "20 data tables",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 3,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -1135,7 +1140,7 @@
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
    ],
-   "prospects": 0,
+   "prospects": 3,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -4481,24 +4486,21 @@
   }
  ],
  "log": [
-  "06:01:02 connection dataforseo: connected",
-  "06:01:02 connection gmail: connected",
-  "06:01:04 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "06:01:06 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "06:01:06 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "06:01:08 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "06:01:11 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "06:01:12 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "06:01:13 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "06:01:13 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "06:01:17 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "06:01:25 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 2, 304 0, reused 256",
-  "06:04:05 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:04:41 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:05:01 dataforseo: serp/google/organic/live/advanced failed 40106 Task completed with partial results. Some pages could not be retrieved after several retry attempts. You have not been charged for the pages that were not returned.",
-  "06:07:06 prospects: 20 queries (10 brand-mention), 77 candidates, 14 qualified (1 unlinked mentions), 3 with email, 4 already linking",
-  "06:07:53 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "06:07:53 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 51 waiting for recipients' business hours, cap 5",
-  "06:07:55 link checks: 0 pages, 0 new links won, 0 lost"
+  "06:36:23 connection dataforseo: connected",
+  "06:36:23 connection gmail: connected",
+  "06:36:24 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "06:36:25 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "06:36:27 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "06:36:28 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "06:36:29 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "06:36:29 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "06:36:30 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "06:36:30 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "06:36:30 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "06:36:33 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "06:40:49 prospects: 17 queries (0 brand-mention), 127 candidates, 30 qualified (0 unlinked mentions), 9 with email, 0 already linking",
+  "06:41:04 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "06:41:04 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 60 waiting for recipients' business hours, cap 5",
+  "06:41:04 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
