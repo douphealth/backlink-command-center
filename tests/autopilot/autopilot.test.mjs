@@ -89,7 +89,7 @@ test('DataForSEO client enforces caps, records cost and parks forbidden endpoint
   const dfs=new DataForSEO({login:'l',password:'p',state,dailyUsd:0.01,monthlyUsd:1,fetchImpl:f});
   assert.equal((await dfs.serp('q')).length,1);
   await dfs.serp('q2');
-  assert.equal(await dfs.serp('q3').then(r=>r.length),0,'daily cap reached');
+  assert.equal(await dfs.serp('q3'),null,'daily cap reached: search not run (and not marked done)');
   assert.equal(calls,2);assert.ok(Math.abs(dfs.spend('day')-0.008)<1e-9);
   assert.equal(await dfs.relevantPages('a.com').then(()=>dfs.canSpend('relevant_pages')),false,'forbidden endpoint parked');
 });
@@ -366,4 +366,18 @@ test('unlinked brand mentions become warm prospects with a thank-you pitch',asyn
   assert.match(pitch.subject,/Thanks for mentioning/);assert.equal((pitch.body.match(/https:\/\/micegoneguide\.com\//g)||[]).length,1);
   assert.match(pitch.body,/reply "no"/);
   assert.ok(state.mentions_at['micegoneguide.com'],'mention search rotates (not repeated next run)');
+});
+
+test('failed searches are retried next run; giants that already mention us are kept',async()=>{
+  const {discoverProspects,footprintOf,trafficVerdict}=await import('../../scripts/autopilot/prospect.mjs');
+  const site={domain:'micegoneguide.com',topic:'mouse proofing home',assets:[]};
+  const dfs={canSpend:()=>true,serp:async()=>null,domainTraffic:async()=>({})};
+  const state={};
+  const stats=await discoverProspects({assets:[],sites:[site],state,dfs,fetchImpl:async()=>resp('')});
+  assert.equal(stats.failed_queries,1);assert.equal(Object.keys(state.queries).length,0,'query not marked done');
+  assert.ok(!state.mentions_at?.['micegoneguide.com'],'mention search will run again next cycle');
+  assert.equal(footprintOf('"micegoneguide" OR "micegoneguide.com" -site:micegoneguide.com',site),'mention');
+  assert.equal(trafficVerdict(2_000_000,'mention'),null);assert.match(trafficVerdict(2_000_000,'resource'),/large brand/);
+  const real=new (await import('../../scripts/autopilot/dataforseo.mjs')).DataForSEO({login:'l',password:'p',state:{},fetchImpl:async()=>resp(JSON.stringify({status_code:20000,cost:0.002,tasks:[{status_code:40102,status_message:'No Search Results.'}]}),{type:'application/json'})});
+  assert.deepEqual(await real.serp('rare query'),[],'"No Search Results" is an empty answer, not a failure');
 });
