@@ -82,9 +82,11 @@ export function pickQueries(assets,sites,state,{perAsset=2,reuseDays=45}={}){
 export const brandOf=site=>site.brand||site.domain.split('.')[0];
 /** One mention search per site every 14 days. */
 export function mentionJobs(sites,state,{everyDays=14}={}){
-  state.mentions_at??={};
-  return sites.filter(s=>ageDays(state.mentions_at[s.domain])>everyDays&&brandOf(s).length>=5)
-    .map(s=>({site:s,query:`"${brandOf(s)}" OR "${s.domain}" -site:${s.domain}`}));
+  state.mentions_at??={};state.queries??={};
+  // Keyed by the exact query, so an improved query runs right away instead of waiting out the old one.
+  return sites.filter(s=>brandOf(s).length>=5)
+    .map(s=>({site:s,query:`"${brandOf(s)}" OR "${s.domain}" -site:${s.domain}`}))
+    .filter(j=>ageDays(state.queries[`${j.site.domain}|${j.query}`])>everyDays);
 }
 export function mentionsUs(html,site){
   const text=mainText(html).toLowerCase(),b=brandOf(site).toLowerCase();
