@@ -19,9 +19,9 @@ import {crawlPortfolio} from './crawl.mjs';
 import {rankPortfolio,internalLinkPlan} from './score.mjs';
 import {DataForSEO} from './dataforseo.mjs';
 import {gscDemand,dfsDemand} from './demand.mjs';
-import {discoverProspects,requalify} from './prospect.mjs';
+import {discoverProspects,requalify,QUALIFY_VERSION} from './prospect.mjs';
 import {PitchWriter} from './pitch.mjs';
-import {processReplies,runOutreach,checkLinks,gmailTransport,dailyCap} from './outreach.mjs';
+import {processReplies,runOutreach,checkLinks,gmailTransport,dailyCap,outreachStatus} from './outreach.mjs';
 import {assetStats,learningSummary} from './learn.mjs';
 import {seal,open} from './vault.mjs';
 import {NOW,ageDays} from './util.mjs';
@@ -181,6 +181,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     totals:{sites:SITES.length,pages_crawled:crawl.reduce((n,s)=>n+s.pages.length,0),urls_discovered:crawl.reduce((n,s)=>n+(s.discovered||0),0),
       promotable:ranked.length,internal_suggestions:internal.length,promoting_now:chosen.length},
     spend:{today_usd:Number(dfs.spend('day').toFixed(4)),month_usd:Number(dfs.spend('month').toFixed(4)),daily_cap_usd:cfg.dfs.dailyUsd,monthly_cap_usd:cfg.dfs.monthlyUsd,calls_this_run:dfs.calls},
+    outreach:vaultOk?outreachStatus(state,{limit:cfg.outreach.dailyLimit,mode:cfg.outreach.mode,qualifyVersion:QUALIFY_VERSION}):previous.outreach||null,
     funnel:f,history,learning:vaultOk?learningSummary(state,SITES):previous.learning||null,
     sites:crawl.map(s=>({domain:s.site,pages:s.pages.length,discovered:s.discovered,sitemaps:s.sitemaps.length,
       eligible:ranked.filter(a=>a.site===s.site).length,top:ranked.find(a=>a.site===s.site)?.url||null})),

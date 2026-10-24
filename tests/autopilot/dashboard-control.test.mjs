@@ -87,13 +87,13 @@ test('a bad token produces a clear message; the token link asks only for Actions
 test('diagnose names the missing permission; Actions + Secrets alone is enough',async()=>{
   const gh=mockGitHub();control.token.set('tok');
   gh.state.publicOnly=true;
-  let d=await control.diagnose();
+  let d=await control.diagnose({probeActions:true});
   assert.equal(d.valid,true);assert.equal(d.login,'douphealth');
   assert.equal(d.secrets,false);assert.equal(d.actions,false);
   assert.equal(control.diagnosisOk(d),false);
   // The owner's real token: Actions + Secrets read/write, no Variables permission.
   gh.state.publicOnly=false;gh.state.secrets.LINKFORGE_DATA_KEY={};
-  d=await control.diagnose();
+  d=await control.diagnose({probeActions:true});
   assert.equal(control.diagnosisOk(d),true);assert.ok(d.secretNames.has('LINKFORGE_DATA_KEY'));
   control.token.set('wrong');
   d=await control.diagnose();
@@ -113,4 +113,13 @@ test('a dropped connection gives a clear message instead of "Failed to fetch"',a
   await assert.rejects(control.setSecret('X','y'),/Couldn't reach GitHub/);
   const d=await control.diagnose();assert.equal(d.valid,false);assert.match(d.error,/Couldn't reach GitHub/);
   control.token.set('');
+});
+
+test('routine token checks never re-enable the workflow (only an explicit re-check probes)',async()=>{
+  const gh=mockGitHub();control.token.set('tok');
+  await control.diagnose({probeActions:true});
+  const before=gh.calls.filter(c=>c.endsWith('/enable')).length;
+  const d=await control.diagnose();
+  assert.equal(gh.calls.filter(c=>c.endsWith('/enable')).length,before,'no PUT /enable on routine checks');
+  assert.equal(d.actions,true,'remembered result reused');
 });

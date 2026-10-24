@@ -29,12 +29,30 @@ export function sendWindowOpen(domain,now=new Date()){
   return from<to?h>=from&&h<to:h>=from||h<to;
 }
 
+/** First hour (UTC) from `from` when this recipient's send window is open; null if none within 8 days. */
+export function nextSendWindow(domain,from=new Date()){
+  if(sendWindowOpen(domain,from))return new Date(from);
+  const t=new Date(from);t.setUTCMinutes(0,0,0);
+  for(let h=0;h<24*8;h++){t.setUTCHours(t.getUTCHours()+1);if(sendWindowOpen(domain,t))return new Date(t)}
+  return null;
+}
+/** Public outreach status: counts and times only (no publisher names or addresses). */
+export function outreachStatus(state,{limit,mode,qualifyVersion}){
+  const ready=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=qualifyVersion);
+  const cap=mode==='send'?dailyCap(state,limit):limit,sent=sentToday(state),now=new Date();
+  // Today's limit used up: the next chance is tomorrow 00:00 UTC at the earliest.
+  const from=sent>=cap?new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate()+1)):now;
+  const next=ready.map(p=>nextSendWindow(p.domain,from)).filter(Boolean).sort((a,b)=>a-b)[0]||null;
+  return {mode,ready:ready.length,sent_today:sent,cap_today:cap,next_send_at:mode==='off'?null:next?.toISOString()||null,
+    sending_now:mode!=='off'&&sent<cap&&ready.some(p=>sendWindowOpen(p.domain,now))};
+}
+
 const ACTIVE=new Set(['sent','followed_up','drafted','replied','positive']);
 export function dailyCap(state,limit){
   const first=state.first_send_at;if(!first)return Math.min(limit,5);
   return Math.min(limit,5+2*Math.floor(ageDays(first)));
 }
-const sentToday=state=>Object.values(state.prospects||{}).reduce((n,p)=>n+(p.history||[]).filter(h=>h.type==='initial'&&h.at.startsWith(NOW().slice(0,10))).length,0);
+export const sentToday=state=>Object.values(state.prospects||{}).reduce((n,p)=>n+(p.history||[]).filter(h=>h.type==='initial'&&h.at.startsWith(NOW().slice(0,10))).length,0);
 export function suppressed(state,email,domain){return !!(state.suppression?.[email]||state.suppression?.[domain])}
 
 export async function processReplies({state,imap,log=()=>{}}){

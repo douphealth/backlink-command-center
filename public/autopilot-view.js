@@ -52,7 +52,7 @@ async function refreshControl(){
   try{ui.control=await control.status()}catch(err){ui.control={error:err.message}}
   // The token check costs 4 GitHub calls; reuse it for 5 minutes unless something changed.
   if(!control.token.get())ui.diag=null;
-  else if(!ui.diag||ui.forceDiag||Date.now()-(ui.diagAt||0)>300000){ui.diag=await control.diagnose();ui.diagAt=Date.now();ui.forceDiag=false}
+  else if(!ui.diag||ui.forceDiag||Date.now()-(ui.diagAt||0)>300000){ui.diag=await control.diagnose({probeActions:!!ui.forceDiag||!ui.diag});ui.diagAt=Date.now();ui.forceDiag=false}
   ui.configured=ui.diag?.secrets?{secrets:ui.diag.secretNames}:null;
 }
 function schedulePoll(){
@@ -77,7 +77,7 @@ export async function renderAutopilot(h){
   if(ctl.running)ui.settleUntil=Date.now()+150000; // keep refreshing until Pages has deployed the new results
   const state=ctl.error?['off','STATUS UNAVAILABLE',ctl.error]:ctl.running?['running','RUNNING NOW',`Started ${ago(ctl.run.started)}; results appear here automatically`]:ctl.enabled?['on','ON · AUTOPILOT',`Next automatic cycle around ${niceTime(nextRun(s.generated_at).toISOString())} (checked hourly)`]:['off','STOPPED','No automatic runs until you press Run'];
   const summaryLine=`Last results ${ago(s.generated_at)} · ${n(t.pages_crawled)} pages audited · ${modeLabel.toLowerCase()} · DataForSEO $${s.spend.today_usd.toFixed(2)} today / $${s.spend.month_usd.toFixed(2)} month (caps $${s.spend.daily_cap_usd} / $${s.spend.monthly_cap_usd})`;
-  const status=`<div class="ap-control"><div class="ap-state"><span class="ap-dot ${state[0]}"></span><div><strong>${e(state[1])}</strong><p>${e(state[2])}${ctl.run?.url?` · <a href="${e(ctl.run.url)}" target="_blank" rel="noopener">${ctl.running?'watch live':'last run log'} ↗</a>`:''}</p><p>${e(summaryLine)}</p></div></div>
+  const status=`<div class="ap-control"><div class="ap-state"><span class="ap-dot ${state[0]}"></span><div><strong>${e(state[1])}</strong><p>${e(state[2])}${ctl.run?.url?` · <a href="${e(ctl.run.url)}" target="_blank" rel="noopener">${ctl.running?'watch live':'last run log'} ↗</a>`:''}</p><p>${e(summaryLine)}</p>${outreachLine(s,h)}</div></div>
     <div class="ap-buttons"><button class="ap-run" data-ap="run" ${ctl.running||ui.busy?'disabled':''}>${ui.busy==='run'?'Starting…':ctl.running?'Running…':'▶ Run'}</button><button class="ap-stop" data-ap="stop" ${(!ctl.enabled&&!ctl.running)||ui.busy?'disabled':''}>${ui.busy==='stop'?'Stopping…':'■ Stop'}</button><button class="outline-btn" data-ap="connect">⚙ Connect</button></div></div>
     ${ui.msg?`<div class="ap-msg">${e(ui.msg)}</div>`:''}${ui.err?`<div class="alert-warning">${e(ui.err)}</div>`:''}`;
   const needsSetup=missing.some(x=>x.required)&&!fullyConfigured();
@@ -99,9 +99,12 @@ export async function renderAutopilot(h){
   const setup=ui.showConnect||needsSetup||rejectedMsgs.length||!control.diagnosisOk(ui.diag)?connectPanel(h):'';
   const kpis=[['Best URLs to promote',t.promotable,'◎',`${n(t.promoting_now)} being promoted now`],['Internal link fixes',t.internal_suggestions,'⇄','Free ranking boosts on your own sites'],['Publishers contacted',f.contacted,'↗',`${n(f.ready)} ready · ${n(f.replied)} replied`],['Backlinks won',f.won,'◇',`+${n(f.existing_links)} existing links found`]];
   const kpiHtml=`<div class="kpi-grid">${kpis.map(([name,v,ico,note])=>`<div class="kpi"><div class="kpi-head">${e(name)}<span class="kpi-ico">${ico}</span></div><div class="kpi-value">${n(v)}</div><div class="kpi-foot">${e(note)}</div></div>`).join('')}</div>`;
-  const steps=[['Prospects evaluated',f.prospects_evaluated],['Qualified publishers',f.qualified],['Contacted',f.contacted],['Replied',f.replied],['Links won',f.won]];
+  // Change since the previous day's record, so progress is visible even when totals look similar.
+  const hist=s.history||[],prev=hist.length>1?hist[hist.length-2]:null;
+  const delta=k=>{if(!prev)return '';const d=(f[k]||0)-(prev[k]||0);return d?`<small class="ap-delta ${d>0?'up':'down'}">${d>0?'+':''}${n(d)} today</small>`:'<small class="ap-delta">no change today</small>'};
+  const steps=[['Prospects evaluated','prospects_evaluated'],['Qualified publishers','qualified'],['Contacted','contacted'],['Replied','replied'],['Links won','won']];
   const top=Math.max(1,f.prospects_evaluated||0);
-  const funnel=`<div class="panel-pad pipeline">${steps.map(([k,v])=>`<div class="pipeline-row"><span>${k}</span><div class="pipeline-track"><div class="pipeline-fill" data-w="${Math.min(100,100*(v||0)/top)}"></div></div><strong>${n(v)}</strong></div>`).join('')}</div>`;
+  const funnel=`<div class="panel-pad pipeline ap-funnel">${steps.map(([k,key])=>`<div class="pipeline-row"><span>${k}</span><div class="pipeline-track"><div class="pipeline-fill" data-w="${Math.min(100,100*(f[key]||0)/top)}"></div></div><strong>${n(f[key])}${delta(key)}</strong></div>`).join('')}</div>`;
   const stageRows=Object.entries(s.stages).map(([k,v])=>`<div class="site-row"><div class="site-monogram">${v.ok?'✓':v.ok===false?'!':'–'}</div><div><strong>${e(k.replace('_',' '))}</strong><small>${e(v.ok===false?v.error:v.skipped?'Skipped: '+v.skipped:v.result?Object.entries(v.result).filter(([,x])=>typeof x!=='object').map(([a,b])=>`${a.replaceAll('_',' ')} ${b}`).join(' · '):'ok')}</small></div>${statusTag(v.ok?'completed':v.ok===false?'failed':'hold')}</div>`).join('');
   const best=(s.best_urls||[]).slice(0,40).map((a,i)=>`<tr><td><strong>${String(i+1).padStart(2,'0')}</strong></td><td>${external(a.url,a.title)}<small>${e(a.site)} · ${e(a.type.replaceAll('_',' '))}${a.promoting?' · promoting now':''}</small><small class="ap-why">${e((a.reasons||[]).join(' · '))}</small></td><td><strong>${n(a.promotion)}</strong><small>link ${n(a.linkability)}${a.demand!=null?' · demand '+n(a.demand):''}</small></td><td>${n(a.internal_inlinks)}<small>${n(a.internal_link_suggestions)} to add</small></td><td>${n(a.prospects)}</td></tr>`);
   const internal=(s.internal_links||[]).slice(0,60).map(x=>`<tr><td>${external(x.from,x.from_title||x.from)}<small>${e(x.site)}</small></td><td><strong>“${e(x.anchor)}”</strong></td><td>${external(x.to,x.to_title||x.to)}</td></tr>`);
@@ -124,6 +127,13 @@ function learningPanel(h,s){
   const fps=(L.footprints||[]).slice(0,10).map(x=>`<tr><td><strong>${e(FP_LABEL[x.footprint]||x.footprint)}</strong></td><td>${n(x.queries)}</td><td>${n(x.ready)}</td><td><strong>${Math.round(x.rate*100)}%</strong><small>${x.queries<3?'still testing':''}</small></td></tr>`);
   const assets=(L.assets||[]).slice(0,10).map(x=>`<tr><td>${external(x.url,new URL(x.url).pathname)}</td><td>${n(x.sent)}</td><td>${n(x.replied)}</td><td>${n(x.positive)}</td><td>${n(x.won)}</td></tr>`);
   return `<div class="ap-gap">${panel('What Autopilot is learning: searches','Search patterns ranked by pitchable prospects found per search; the best ones are used first',fps.length?table(['Search pattern','Searches','Prospects','Yield'],fps):empty('Not enough data yet','Yields appear after the first searches.'))}</div><div class="ap-gap">${panel('Which of your pages earn replies','Pages with better reply and link rates get more prospecting',assets.length?table(['Page','Pitched','Replies','Positive','Links won'],assets):empty('No pitches yet','Results appear after the first pitches.'))}</div>`;
+}
+/** Plain answer to "why aren't more pitches going out?" */
+function outreachLine(s,{escapeHTML:e,n,niceTime}){
+  const o=s.outreach;if(!o||o.mode==='off')return '';
+  const next=o.next_send_at?niceTime(o.next_send_at):null;
+  const why=o.sent_today>=o.cap_today?`today's warm-up limit is used (${n(o.sent_today)}/${n(o.cap_today)})`:o.sending_now?'sending during this run':`waiting for recipients' business hours (weekdays)`;
+  return `<p class="ap-outreach"><b>Pitches:</b> ${n(o.ready)} ready · ${e(why)}${next&&!o.sending_now?` · next pitches from <b>${e(next)}</b>`:''}</p>`;
 }
 function fullyConfigured(){
   const c=ui.configured;if(!c)return false;

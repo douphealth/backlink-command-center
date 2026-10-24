@@ -66,14 +66,20 @@ export async function stop(){
  * Fine-grained tokens default to "Public repositories (read-only)", which
  * silently ignores the Actions/Secrets permissions.
  */
-export async function diagnose(){
+export async function diagnose({probeActions=false}={}){
   const out={valid:false,login:null,error:'',actions:null,secrets:null,secretNames:new Set()};
   try{out.login=(await gh('/user')).login;out.valid=true}catch(e){out.error=e.message;return out}
   const [s,wf]=await Promise.all([gh(`/repos/${REPO}/actions/secrets?per_page=100`).catch(()=>null),gh(`/repos/${REPO}/actions/workflows/${WORKFLOW}`).catch(()=>null)]);
   out.secrets=!!s;
   if(s){out.secretNames=new Set((s.secrets||[]).map(x=>x.name));out.secretUpdated=Object.fromEntries((s.secrets||[]).map(x=>[x.name,x.updated_at||'']))}
-  // Enabling an already-active workflow is a no-op that needs Actions: write — a safe write probe.
-  if(wf?.state==='active')out.actions=await gh(`/repos/${REPO}/actions/workflows/${WORKFLOW}/enable`,{method:'PUT'}).then(()=>true,()=>false);
+  // Actions: write can only be tested by writing. Re-enabling an active workflow is harmless but
+  // re-registers it with GitHub (which can disturb its schedule), so probe only when the token is
+  // saved or re-checked, and remember the answer for that token.
+  const key='linkforge-actions-ok:'+token.get().slice(-10);
+  if(probeActions&&wf?.state==='active'){
+    out.actions=await gh(`/repos/${REPO}/actions/workflows/${WORKFLOW}/enable`,{method:'PUT'}).then(()=>true,()=>false);
+    try{localStorage.setItem(key,String(out.actions))}catch{}
+  }else{try{const v=localStorage.getItem(key);out.actions=v==null?null:v==='true'}catch{}}
   return out;
 }
 export const diagnosisOk=d=>!!d&&d.valid&&d.secrets&&d.actions!==false;

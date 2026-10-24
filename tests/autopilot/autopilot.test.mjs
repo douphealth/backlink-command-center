@@ -386,3 +386,14 @@ test('DataForSEO partial results are kept, not thrown away',async()=>{
   const dfs=new DataForSEO({login:'l',password:'p',state:{},fetchImpl:async()=>resp(JSON.stringify({status_code:20000,cost:0.002,tasks:[{status_code:40106,status_message:'Task completed with partial results.',result:[{items:[{type:'organic',url:'https://p.com/x',domain:'p.com',title:'P',rank_absolute:1}]}]}]}),{type:'application/json'})});
   const r=await dfs.serp('q');assert.equal(r.length,1);assert.equal(r[0].domain,'p.com');
 });
+
+test('outreach status says when the next pitches can go out',async()=>{
+  const {nextSendWindow,outreachStatus}=await import('../../scripts/autopilot/outreach.mjs');
+  const sat=new Date('2026-10-24T09:00:00Z');
+  assert.equal(nextSendWindow('blog.com',sat).toISOString(),'2026-10-26T13:00:00.000Z','US: Monday 13:00 UTC');
+  assert.equal(nextSendWindow('blog.co.uk',sat).toISOString(),'2026-10-26T07:00:00.000Z','UK: Monday 07:00 UTC');
+  const tue=new Date('2026-10-27T15:30:00Z');assert.equal(nextSendWindow('blog.com',tue).getTime(),tue.getTime(),'already open');
+  const s=outreachStatus({prospects:{a:{status:'ready',email:'e@a.com',domain:'a.com',qv:2}}},{limit:12,mode:'send',qualifyVersion:2});
+  assert.equal(s.ready,1);assert.equal(s.cap_today,5);assert.ok(s.next_send_at);
+  assert.ok(!JSON.stringify(s).includes('a.com'),'no publisher names in the public status');
+});
