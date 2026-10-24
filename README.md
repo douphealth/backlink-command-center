@@ -7,7 +7,8 @@
 - **Unlinked brand mentions first:** pages that already name one of your sites but don't link are found every 14 days per site. They get a short "thanks for mentioning us, could you link it?" email, which converts far better than a cold pitch.
 - **Link likelihood:** the send queue is ordered by evidence. That covers topical fit, whether the page is a resource page, the site's real audience size (independent sites over giants), whether the address is the article's author, how recently the page was updated, and how well the promoted page has performed so far.
 - **Learning loop:** every search pattern's yield (pitchable prospects per search) and every page's reply and link rate are tracked. The best patterns run first and well-performing pages get more prospecting. See "What Autopilot is learning" on the dashboard.
-- **Right time:** pitches and follow-ups go out only during the recipient region's business hours, Monday to Friday.
+- **Right time:** pitches and follow-ups go out only during the recipient region's business hours, Monday to Friday (judged in their own time zone).
+- **Self-healing schedule:** if GitHub's scheduler runs late and the last cycle is more than 7 hours old, opening the dashboard starts a catch-up run (never after you press Stop).
 
 ```
 crawl every owned page ─► measure real demand ─► rank the best URLs ─► plan internal links
