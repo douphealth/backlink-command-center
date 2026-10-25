@@ -168,7 +168,7 @@ export async function checkLinks({state,ourDomains,fetchImpl=fetch,max=60,deadli
     // For a targeted pitch, require its exact normalized URL. Legacy records without a
     // target may still be audited manually, but must not be promoted to 'won'.
     const expected=p.asset_url?new URL(p.asset_url):null;
-    const normalized=u=>{try{const x=new URL(u);return x.hostname.toLowerCase().replace(/^www\./,'')+x.pathname.replace(/\/$/,'')}{catch{return ''}};
+    const normalized=u=>{try{const x=new URL(u);return x.hostname.toLowerCase().replace(/^www\./,'')+x.pathname.replace(/\/$/,'');}catch{return ''}};
     const hit=expected&&ourDomains.some(d=>sameSite(expected.hostname,d))
       ?links(res.body,res.url).find(l=>normalized(l.url)===normalized(expected.href)):null;
     if(hit){
