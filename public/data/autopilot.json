@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-24T21:01:02.489Z",
- "duration_s": 35,
+ "generated_at": "2026-10-25T05:05:19.276Z",
+ "duration_s": 370,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -83,15 +83,15 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 16639,
+   "ms": 16412,
    "result": {
     "sites": 10,
-    "pages": 1897
+    "pages": 1901
    }
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -101,7 +101,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 326
+    "internal_suggestions": 309
    }
   },
   "requalify": {
@@ -116,23 +116,24 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 5,
+   "ms": 341422,
    "result": {
-    "queries": 0,
+    "queries": 16,
     "mention_queries": 0,
-    "serp_results": 0,
-    "candidates": 0,
-    "qualified": 0,
+    "serp_results": 280,
+    "candidates": 94,
+    "qualified": 28,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 0,
-    "with_email": 0,
-    "contact_form": 0
+    "rejected": 107,
+    "with_email": 14,
+    "contact_form": 5,
+    "failed_queries": 4
    }
   },
   "replies": {
    "ok": true,
-   "ms": 16263,
+   "ms": 10407,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -143,13 +144,13 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 5,
+   "ms": 4,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 60,
+    "deferred": 74,
     "cap": 7
    },
    "writer": {
@@ -169,33 +170,33 @@
  },
  "totals": {
   "sites": 10,
-  "pages_crawled": 1897,
-  "urls_discovered": 2252,
+  "pages_crawled": 1901,
+  "urls_discovered": 2833,
   "promotable": 250,
-  "internal_suggestions": 326,
+  "internal_suggestions": 309,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.4969,
-  "month_usd": 1.0086,
+  "today_usd": 0.1102,
+  "month_usd": 1.1188,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 0
+  "calls_this_run": 27
  },
  "outreach": {
   "mode": "send",
-  "ready": 60,
+  "ready": 74,
   "sent_today": 0,
   "cap_today": 7,
   "next_send_at": "2026-10-26T00:00:00.000Z",
   "sending_now": false
  },
  "funnel": {
-  "prospects_evaluated": 854,
-  "qualified": 184,
-  "ready": 60,
-  "contact_form_only": 42,
-  "no_contact": 77,
+  "prospects_evaluated": 989,
+  "qualified": 212,
+  "ready": 74,
+  "contact_form_only": 47,
+  "no_contact": 86,
   "contacted": 5,
   "replied": 0,
   "positive": 0,
@@ -236,21 +237,37 @@
    "declined": 0,
    "bounced": 0,
    "spend_usd": 0.4969
+  },
+  {
+   "date": "2026-10-25",
+   "prospects_evaluated": 989,
+   "qualified": 212,
+   "ready": 74,
+   "contact_form_only": 47,
+   "no_contact": 86,
+   "contacted": 5,
+   "replied": 0,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 4,
+   "declined": 0,
+   "bounced": 0,
+   "spend_usd": 0.1102
   }
  ],
  "learning": {
   "footprints": [
    {
-    "footprint": "intent",
-    "queries": 25,
-    "ready": 24,
-    "rate": 0.893
-   },
-   {
     "footprint": "useful_links",
     "queries": 5,
     "ready": 6,
     "rate": 0.875
+   },
+   {
+    "footprint": "intent",
+    "queries": 28,
+    "ready": 25,
+    "rate": 0.839
    },
    {
     "footprint": "tools",
@@ -271,16 +288,16 @@
     "rate": 0.5
    },
    {
-    "footprint": "best_guides",
-    "queries": 6,
-    "ready": 3,
-    "rate": 0.444
-   },
-   {
     "footprint": "inurl_resources",
     "queries": 4,
     "ready": 2,
     "rate": 0.429
+   },
+   {
+    "footprint": "best_guides",
+    "queries": 9,
+    "ready": 4,
+    "rate": 0.417
    },
    {
     "footprint": "statistics",
@@ -290,21 +307,21 @@
    },
    {
     "footprint": "resources",
-    "queries": 24,
+    "queries": 33,
     "ready": 9,
-    "rate": 0.37
-   },
-   {
-    "footprint": "blogs_to_follow",
-    "queries": 2,
-    "ready": 0,
-    "rate": 0.2
+    "rate": 0.278
    },
    {
     "footprint": "sources",
     "queries": 2,
     "ready": 0,
     "rate": 0.2
+   },
+   {
+    "footprint": "blogs_to_follow",
+    "queries": 3,
+    "ready": 0,
+    "rate": 0.167
    },
    {
     "footprint": "recommended_reading",
@@ -347,9 +364,9 @@
  "sites": [
   {
    "domain": "gearuptofit.com",
-   "pages": 296,
-   "discovered": 296,
-   "sitemaps": 6,
+   "pages": 300,
+   "discovered": 877,
+   "sitemaps": 7,
    "eligible": 25,
    "top": "https://gearuptofit.com/shoe-finder/methodology/"
   },
@@ -525,7 +542,7 @@
     "Cites 5 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 6,
+   "prospects": 8,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -577,7 +594,7 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "plantastichaven.com",
@@ -649,7 +666,7 @@
     "1 data table",
     "Recently updated"
    ],
-   "prospects": 13,
+   "prospects": 14,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -688,7 +705,7 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 289,
+   "internal_inlinks": 293,
    "words": 1406,
    "interactive": true,
    "modified": "2026-10-04T18:13:49.000Z",
@@ -773,7 +790,7 @@
     "2 data tables",
     "Recently updated"
    ],
-   "prospects": 13,
+   "prospects": 14,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -852,6 +869,32 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
+   "title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
+   "h1": "How to Control Emotional Eating & Stop Cravings (2026 Guide)",
+   "description": "Self-help for emotional eaters is possible! Learn to identify triggers and develop healthy eating habits for lasting change.",
+   "type": "practical_guide",
+   "promotion": 77,
+   "linkability": 81,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 3307,
+   "interactive": false,
+   "modified": "2026-09-21T06:03:08+00:00",
+   "reasons": [
+    "In-depth (3,307 words)",
+    "1 data table",
+    "Cites 6 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "prospects": 7,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
    "site": "frenchyfab.com",
    "url": "https://frenchyfab.com/french-bulldog-training-techniques/",
    "title": "French Bulldog Training: Motivation, Rewards, Consistency",
@@ -902,6 +945,30 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/running-pace-calculator/",
+   "title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "h1": "Running Pace Calculator & Race Time Predictor (2026)",
+   "description": "Unbiased & Independent GearUpToFit is reader-supported. We adhere to strict testing standards. When you buy through links on our site, we may earn a commission at no cost to you. Interactive Running Tool &bull; Updated 2026 Accurately calculate your running … Continue reading &rarr;",
+   "type": "interactive_tool",
+   "promotion": 75,
+   "linkability": 83,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 1591,
+   "interactive": true,
+   "modified": "2026-09-08T13:32:42+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "2 data tables",
+    "Recently updated"
+   ],
+   "prospects": 9,
+   "internal_link_suggestions": 3,
+   "promoting": true
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
    "title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
@@ -928,6 +995,31 @@
   },
   {
    "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/review/resistance-bands-vs-free-weights/",
+   "title": "Resistance Bands vs. Free Weights: Which Builds More Muscle? | GearUpToFit",
+   "h1": "Resistance Bands vs. Free Weights: The Scientific Comparison",
+   "description": "Comparing resistance bands vs free weights? Learn the science of variable resistance, progressive overload, and muscle hypertrophy.",
+   "type": "comparison",
+   "promotion": 75,
+   "linkability": 79,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 2022,
+   "interactive": false,
+   "modified": "2026-07-16T05:36:46+00:00",
+   "reasons": [
+    "In-depth (2,022 words)",
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "prospects": 6,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "gearuptofit.com",
    "url": "https://gearuptofit.com/shoe-finder/",
    "title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
    "h1": "Running Shoe Finder Quiz: Find the Right Running Shoes for Your Feet, Mileage, Terrain and Budget",
@@ -937,7 +1029,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 21,
+   "internal_inlinks": 25,
    "words": 999,
    "interactive": true,
    "modified": null,
@@ -972,7 +1064,7 @@
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
    ],
-   "prospects": 3,
+   "prospects": 8,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -998,7 +1090,7 @@
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
    ],
-   "prospects": 2,
+   "prospects": 3,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -1099,7 +1191,7 @@
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
    ],
-   "prospects": 0,
+   "prospects": 1,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -1124,7 +1216,7 @@
     "Cites 8 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 2,
    "internal_link_suggestions": 1,
    "promoting": true
   },
@@ -1181,7 +1273,7 @@
     "3 data tables",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 2,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -1332,7 +1424,7 @@
     "Has an interactive tool/quiz — earns links naturally",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 2,
    "internal_link_suggestions": 3,
    "promoting": true
   },
@@ -1656,7 +1748,7 @@
     "Original method/data — citation-worthy",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 6,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -1811,6 +1903,31 @@
     "2 data tables",
     "Cites 4 authoritative sources",
     "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/risks-of-running-as-a-beginner/",
+   "title": "Strength Training for Runners: Unlock Proven Injury Prevention Tips | GearUpToFit",
+   "h1": "Running Injuries: 7 Surprising Ways to Prevent Them [2026]",
+   "description": "Master the 10% rule for increasing mileage to prevent overuse injuries. Step towards a healthier running journey now!",
+   "type": "practical_guide",
+   "promotion": 67,
+   "linkability": 70,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 4718,
+   "interactive": false,
+   "modified": "2026-07-23T16:53:12+00:00",
+   "reasons": [
+    "In-depth (4,718 words)",
+    "11 data tables",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
@@ -2216,7 +2333,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -2240,7 +2357,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2343,106 +2460,6 @@
    "prospects": 0,
    "internal_link_suggestions": 5,
    "promoting": true
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/french-bulldog-training-classes/",
-   "title": "French Bulldog Training Classes: When to Join",
-   "h1": "French Bulldog Training Classes: When to Join, What to Expect, and Red Flags",
-   "description": "French Bulldog training got you frustrated? Discover expert-approved classes! Transform bad behavior & build a bond. See how now!",
-   "type": "practical_guide",
-   "promotion": 62,
-   "linkability": 82,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 3,
-   "words": 4111,
-   "interactive": true,
-   "modified": "2026-09-25T21:05:17+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,111 words)",
-    "28 data tables",
-    "Recently updated",
-    "One of 236 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "title": "French Bulldog Socialization Training: A Practical Plan",
-   "h1": "French Bulldog Social Interaction Training – Confident Happy Frenchies",
-   "description": "Learn how to train your French Bulldog to socialize effectively with other dogs and people to create a well-adjusted canine companion.",
-   "type": "practical_guide",
-   "promotion": 62,
-   "linkability": 82,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 12,
-   "words": 4278,
-   "interactive": true,
-   "modified": "2026-09-25T21:04:50+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,278 words)",
-    "23 data tables",
-    "Recently updated",
-    "One of 236 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/watch-match/methodology",
-   "title": "How Fitness Watch Match scores watches — methodology",
-   "h1": "How Fitness Watch Match scores watches",
-   "description": "The exact scoring formula behind Fitness Watch Match: nine weighted criteria, how partial matches are credited, the budget gate, tie-breaks, where the specs come from, and what the score cannot tell you.",
-   "type": "methodology",
-   "promotion": 62,
-   "linkability": 69,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 270,
-   "words": 1018,
-   "interactive": false,
-   "modified": "2026-10-01",
-   "reasons": [
-    "Original method/data — citation-worthy",
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": true
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/learning/active-recall/",
-   "title": "Active Recall: How to Study Without Rereading Everything",
-   "h1": "Active Recall: How to Study with Retrieval Practice",
-   "description": "Learn the active recall study method. Discover the science of the testing effect, Feynman technique templates, and step-by-step active testing steps.",
-   "type": "practical_guide",
-   "promotion": 62,
-   "linkability": 69,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 17,
-   "words": 2395,
-   "interactive": false,
-   "modified": "2026-10-05T16:08:12+00:00",
-   "reasons": [
-    "In-depth (2,395 words)",
-    "6 data tables",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
   }
  ],
  "internal_links": [
@@ -2983,6 +3000,36 @@
    "to": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
    "to_title": "Email Marketing Template Generator: HTML & Plain Text",
    "anchor": "write email reader",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/calculators/",
+   "from_title": "Free Fitness & Running Calculators | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/",
+   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running-training-plans/",
+   "from_title": "2026 Running Training Plans: 5K, 10K & Marathon Guide | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
    "relevance": 3,
    "from_strength": 0
   },
@@ -4415,36 +4462,6 @@
    "anchor": "life path",
    "relevance": 7,
    "from_strength": 56
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/life-path-numbers/",
-   "from_title": "Life Path Numbers: Meanings, Calculator Paths, Traits & Best Starting Guides",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/love-compatibility-life-path-one-and-seven/",
-   "from_title": "Life Path 1 & 7 Compatibility: Can Opposite Spirits Ignite Passion in 2026?",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/finding-harmony-compatibility-life-path-3-and-8/",
-   "from_title": "Finding Harmony: Life Path 3 & 8 Compatibility Guide 2026",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
   }
  ],
  "wins": [
@@ -4494,21 +4511,25 @@
   }
  ],
  "log": [
-  "21:00:28 connection dataforseo: connected",
-  "21:00:28 connection gmail: connected",
-  "21:00:31 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "21:00:32 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "21:00:35 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "21:00:36 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "21:00:37 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "21:00:37 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "21:00:39 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "21:00:41 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "21:00:41 crawl gearuptofit.com: 296/296 urls, fetched 1, 304 0, reused 295",
-  "21:00:45 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "21:00:46 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "21:01:02 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "21:01:02 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 60 waiting for recipients' business hours, cap 7",
-  "21:01:02 link checks: 0 pages, 0 new links won, 0 lost"
+  "04:59:10 connection dataforseo: connected",
+  "04:59:10 connection gmail: connected",
+  "04:59:14 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "04:59:14 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "04:59:18 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "04:59:19 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "04:59:20 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "04:59:20 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "04:59:21 crawl gearuptofit.com: 300/877 urls, fetched 5, 304 0, reused 295",
+  "04:59:22 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "04:59:25 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "04:59:26 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "05:00:13 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "05:00:55 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "05:02:08 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "05:04:21 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "05:05:08 prospects: 16 queries (0 brand-mention), 94 candidates, 28 qualified (0 unlinked mentions), 14 with email, 0 already linking",
+  "05:05:19 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "05:05:19 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 74 waiting for recipients' business hours, cap 7",
+  "05:05:19 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
