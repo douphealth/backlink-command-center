@@ -104,13 +104,23 @@ export class Imap{
     const found=await this.cmd(`UID SEARCH SINCE ${since}`);
     const uids=(found.match(/\* SEARCH([\d ]*)/)?.[1]||'').trim().split(/\s+/).filter(Boolean).slice(-max);
     if(!uids.length)return [];
-    const raw=await this.cmd(`UID FETCH ${uids.join(',')} (UID BODY.PEEK[HEADER.FIELDS (FROM SUBJECT IN-REPLY-TO REFERENCES AUTO-SUBMITTED)] BODY.PEEK[TEXT]<0.1500>)`);
+    const raw=await this.cmd(`UID FETCH ${uids.join(',')} (UID BODY.PEEK[HEADER.FIELDS (FROM SUBJECT IN-REPLY-TO REFERENCES AUTO-SUBMITTED MESSAGE-ID DATE CONTENT-TRANSFER-ENCODING)] BODY.PEEK[TEXT]<0.1500>)`);
     return parseFetch(raw);
   }
   async close(){try{await Promise.race([this.cmd('LOGOUT'),new Promise(r=>setTimeout(r,3000).unref?.())])}catch{}this.w?.end()}
 }
 const quote=s=>'"'+String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"')+'"';
 
+function decodeReplyBody(raw,encoding=''){
+  const text=String(raw||'');
+  if(/base64/i.test(encoding)){
+    const data=text.replace(/\s+/g,'');
+    if(data&&/^[A-Za-z0-9+/]*={0,2}$/.test(data))return Buffer.from(data,'base64').toString('utf8');
+  }
+  if(/quoted-printable/i.test(encoding))
+    return text.replace(/=\r?\n/g,'').replace(/=([0-9A-F]{2})/gi,(_,hex)=>String.fromCharCode(parseInt(hex,16)));
+  return text;
+}
 export function parseFetch(raw){
   const out=[];
   for(const part of raw.split(/(?=^\* \d+ FETCH )/m)){
@@ -120,7 +130,9 @@ export function parseFetch(raw){
     const unfolded=header.replace(/\r\n[ \t]+/g,' ');
     const h=k=>(unfolded.match(new RegExp('^'+k+':\\s*(.*)$','im'))||[])[1]||'';
     const from=(h('From').match(/<([^>]+)>/)||[])[1]||h('From').trim();
-    out.push({from:from.toLowerCase(),subject:h('Subject'),inReplyTo:h('In-Reply-To'),references:h('References'),autoSubmitted:h('Auto-Submitted'),body});
+    const uid=(part.match(/\bUID\s+(\d+)\b/i)||[])[1]||'';
+    out.push({uid,messageId:h('Message-ID'),date:h('Date'),from:from.toLowerCase(),subject:h('Subject'),inReplyTo:h('In-Reply-To'),
+      references:h('References'),autoSubmitted:h('Auto-Submitted'),body:decodeReplyBody(body,h('Content-Transfer-Encoding'))});
   }
   return out;
 }
@@ -133,7 +145,7 @@ export function classifyReply(msg){
   if(BOUNCE.test(msg.from)||/delivery status notification|undeliverable|failure notice|returned mail/i.test(msg.subject))return 'bounce';
   if(/auto-replied|auto-generated/i.test(msg.autoSubmitted)||/out of (the )?office|automatic reply|auto(matic)?[- ]?reply/i.test(msg.subject))return 'auto';
   const text=String(msg.body||'').split(/\r?\n>|\r?\nOn .{5,80} wrote:/)[0];
-  if(NEGATIVE.test(text))return 'negative';
+  if(NEGATIVE.test(text)||/^\s*(?:re:\s*)?(?:unsubscribe|remove me|stop emailing|stop contacting)\s*$/i.test(msg.subject||''))return 'negative';
   if(POSITIVE.test(text))return 'positive';
   return 'neutral';
 }
