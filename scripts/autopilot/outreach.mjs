@@ -67,7 +67,7 @@ export async function processReplies({state,imap,log=()=>{}}){
   }
   if(!byMsg.size&&!byEmail.size)return stats;
   const msgs=await imap.recentHeaders(new Date(Date.now()-35*DAY));stats.scanned=msgs.length;
-  state.seen_replies??={};
+  state.seen_replies??={};state.suppression??={};
   for(const m of msgs){
     const ids=`${m.inReplyTo} ${m.references} ${m.body}`.match(/<lf-[^>]+>/g)||[];
     let p=ids.map(i=>byMsg.get(i)).find(Boolean)||byEmail.get(m.from);
