@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-25T12:46:35.430Z",
- "duration_s": 345,
+ "generated_at": "2026-10-25T18:30:49.622Z",
+ "duration_s": 117,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 19.550546
+    "balance_usd": 19.430546
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 26307,
+   "ms": 14121,
    "result": {
     "sites": 10,
     "pages": 1901
@@ -91,7 +91,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 4,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -106,7 +106,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 1,
+   "ms": 0,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -116,24 +116,24 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 306134,
+   "ms": 75574,
    "result": {
-    "queries": 14,
+    "queries": 4,
     "mention_queries": 0,
-    "serp_results": 248,
-    "candidates": 128,
-    "qualified": 37,
+    "serp_results": 76,
+    "candidates": 33,
+    "qualified": 6,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 83,
-    "with_email": 15,
-    "contact_form": 7,
-    "failed_queries": 3
+    "rejected": 27,
+    "with_email": 3,
+    "contact_form": 0,
+    "failed_queries": 1
    }
   },
   "replies": {
    "ok": true,
-   "ms": 11195,
+   "ms": 24493,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -150,7 +150,7 @@
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 111,
+    "deferred": 114,
     "cap": 9
    },
    "writer": {
@@ -177,26 +177,26 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.4769,
-  "month_usd": 1.4856,
+  "today_usd": 0.4969,
+  "month_usd": 1.5056,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 23
+  "calls_this_run": 6
  },
  "outreach": {
   "mode": "send",
-  "ready": 111,
+  "ready": 114,
   "sent_today": 0,
   "cap_today": 9,
   "next_send_at": "2026-10-25T21:00:00.000Z",
   "sending_now": false
  },
  "funnel": {
-  "prospects_evaluated": 1365,
-  "qualified": 302,
-  "ready": 111,
+  "prospects_evaluated": 1398,
+  "qualified": 308,
+  "ready": 114,
   "contact_form_only": 63,
-  "no_contact": 123,
+  "no_contact": 126,
   "contacted": 5,
   "replied": 0,
   "positive": 0,
@@ -240,11 +240,11 @@
   },
   {
    "date": "2026-10-25",
-   "prospects_evaluated": 1365,
-   "qualified": 302,
-   "ready": 111,
+   "prospects_evaluated": 1398,
+   "qualified": 308,
+   "ready": 114,
    "contact_form_only": 63,
-   "no_contact": 123,
+   "no_contact": 126,
    "contacted": 5,
    "replied": 0,
    "positive": 0,
@@ -252,7 +252,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 0,
-   "spend_usd": 0.4769
+   "spend_usd": 0.4969
   }
  ],
  "learning": {
@@ -265,9 +265,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 36,
+    "queries": 37,
     "ready": 34,
-    "rate": 0.897
+    "rate": 0.875
    },
    {
     "footprint": "tools",
@@ -313,9 +313,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 45,
+    "queries": 47,
     "ready": 9,
-    "rate": 0.208
+    "rate": 0.2
    },
    {
     "footprint": "sources",
@@ -544,7 +544,7 @@
    ],
    "prospects": 9,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -767,7 +767,7 @@
    ],
    "prospects": 8,
    "internal_link_suggestions": 4,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -841,7 +841,7 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "mysticaldigits.com",
@@ -864,9 +864,9 @@
     "4 data tables",
     "Recently updated"
    ],
-   "prospects": 3,
+   "prospects": 8,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -1014,7 +1014,7 @@
    ],
    "prospects": 7,
    "internal_link_suggestions": 1,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -1115,9 +1115,9 @@
     "20 data tables",
     "Recently updated"
    ],
-   "prospects": 3,
+   "prospects": 4,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -1906,7 +1906,7 @@
    ],
    "prospects": 10,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "efficientgptprompts.com",
@@ -2460,7 +2460,7 @@
    ],
    "prospects": 3,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   }
  ],
  "internal_links": [
@@ -4456,13 +4456,13 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numbers-and-mental-wellness/",
-   "from_title": "Numerology for Mental Wellness: 2026 Guide | Mystical Digits",
-   "to": "https://mysticaldigits.com/compatibility-revealed-life-path-number-10/",
-   "to_title": "Life Path Number 10: 2026 Compatibility Guide & Traits",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 61
+   "from": "https://mysticaldigits.com/the-zodiac-signs-and-their-careers/",
+   "from_title": "Zodiac Sign Career Paths: Find Your Ideal Job | Mystical Digits",
+   "to": "https://mysticaldigits.com/the-myths-and-legends-of-the-zodiac-signs/",
+   "to_title": "Zodiac Signs 2026: Guide to Myths & Legends | Mystical Digits",
+   "anchor": "zodiac signs",
+   "relevance": 4,
+   "from_strength": 0
   }
  ],
  "wins": [
@@ -4512,24 +4512,22 @@
   }
  ],
  "log": [
-  "12:40:51 connection dataforseo: connected",
-  "12:40:51 connection gmail: connected",
-  "12:40:54 crawl gearuptofit.com: 300/877 urls, fetched 4, 304 0, reused 296",
-  "12:40:54 crawl plantastichaven.com: 161/161 urls, fetched 4, 304 0, reused 157",
-  "12:40:54 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "12:40:57 crawl frenchyfab.com: 238/238 urls, fetched 3, 304 0, reused 235",
-  "12:40:58 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "12:40:58 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "12:40:59 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "12:41:00 crawl micegoneguide.com: 53/53 urls, fetched 3, 304 0, reused 50",
-  "12:41:03 crawl efficientgptprompts.com: 300/487 urls, fetched 3, 304 0, reused 297",
-  "12:41:17 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 16, 304 1, reused 241",
-  "12:42:57 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "12:44:54 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "12:45:30 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "12:46:24 prospects: 14 queries (0 brand-mention), 128 candidates, 37 qualified (0 unlinked mentions), 15 with email, 0 already linking",
-  "12:46:35 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "12:46:35 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 111 waiting for recipients' business hours, cap 9",
-  "12:46:35 link checks: 0 pages, 0 new links won, 0 lost"
+  "18:28:54 connection dataforseo: connected",
+  "18:28:54 connection gmail: connected",
+  "18:28:58 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "18:28:59 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "18:28:59 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "18:29:00 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "18:29:02 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "18:29:02 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "18:29:03 crawl mysticaldigits.com: 300/468 urls, fetched 4, 304 0, reused 296",
+  "18:29:04 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "18:29:06 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "18:29:09 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "18:29:52 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "18:30:24 prospects: 4 queries (0 brand-mention), 33 candidates, 6 qualified (0 unlinked mentions), 3 with email, 0 already linking",
+  "18:30:49 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "18:30:49 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 114 waiting for recipients' business hours, cap 9",
+  "18:30:49 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
