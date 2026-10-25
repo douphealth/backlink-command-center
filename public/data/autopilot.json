@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-25T08:29:43.815Z",
- "duration_s": 320,
+ "generated_at": "2026-10-25T12:46:35.430Z",
+ "duration_s": 345,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 19.658026
+    "balance_usd": 19.550546
    },
    "gmail": {
     "status": "connected"
@@ -20,7 +20,7 @@
   "outreach_mode": "send",
   "claude": false,
   "gsc": false,
-  "daily_send_cap": 7
+  "daily_send_cap": 9
  },
  "setup": [
   {
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 15893,
+   "ms": 26307,
    "result": {
     "sites": 10,
     "pages": 1901
@@ -101,12 +101,12 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 310
+    "internal_suggestions": 313
    }
   },
   "requalify": {
    "ok": true,
-   "ms": 0,
+   "ms": 1,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -116,24 +116,24 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 293298,
+   "ms": 306134,
    "result": {
-    "queries": 16,
+    "queries": 14,
     "mention_queries": 0,
-    "serp_results": 290,
-    "candidates": 97,
-    "qualified": 27,
+    "serp_results": 248,
+    "candidates": 128,
+    "qualified": 37,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 102,
-    "with_email": 14,
-    "contact_form": 2,
+    "rejected": 83,
+    "with_email": 15,
+    "contact_form": 7,
     "failed_queries": 3
    }
   },
   "replies": {
    "ok": true,
-   "ms": 9105,
+   "ms": 11195,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -150,8 +150,8 @@
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 96,
-    "cap": 7
+    "deferred": 111,
+    "cap": 9
    },
    "writer": {
     "claude": 0,
@@ -173,30 +173,30 @@
   "pages_crawled": 1901,
   "urls_discovered": 2833,
   "promotable": 250,
-  "internal_suggestions": 310,
+  "internal_suggestions": 313,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.3569,
-  "month_usd": 1.3656,
+  "today_usd": 0.4769,
+  "month_usd": 1.4856,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 26
+  "calls_this_run": 23
  },
  "outreach": {
   "mode": "send",
-  "ready": 96,
+  "ready": 111,
   "sent_today": 0,
-  "cap_today": 7,
+  "cap_today": 9,
   "next_send_at": "2026-10-25T21:00:00.000Z",
   "sending_now": false
  },
  "funnel": {
-  "prospects_evaluated": 1245,
-  "qualified": 265,
-  "ready": 96,
-  "contact_form_only": 56,
-  "no_contact": 108,
+  "prospects_evaluated": 1365,
+  "qualified": 302,
+  "ready": 111,
+  "contact_form_only": 63,
+  "no_contact": 123,
   "contacted": 5,
   "replied": 0,
   "positive": 0,
@@ -240,11 +240,11 @@
   },
   {
    "date": "2026-10-25",
-   "prospects_evaluated": 1245,
-   "qualified": 265,
-   "ready": 96,
-   "contact_form_only": 56,
-   "no_contact": 108,
+   "prospects_evaluated": 1365,
+   "qualified": 302,
+   "ready": 111,
+   "contact_form_only": 63,
+   "no_contact": 123,
    "contacted": 5,
    "replied": 0,
    "positive": 0,
@@ -252,34 +252,28 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 0,
-   "spend_usd": 0.3569
+   "spend_usd": 0.4769
   }
  ],
  "learning": {
   "footprints": [
    {
     "footprint": "useful_links",
-    "queries": 8,
+    "queries": 9,
     "ready": 13,
-    "rate": 1.273
+    "rate": 1.167
    },
    {
     "footprint": "intent",
-    "queries": 32,
-    "ready": 27,
-    "rate": 0.8
+    "queries": 36,
+    "ready": 34,
+    "rate": 0.897
    },
    {
     "footprint": "tools",
     "queries": 4,
     "ready": 4,
     "rate": 0.714
-   },
-   {
-    "footprint": "intitle_resources",
-    "queries": 4,
-    "ready": 3,
-    "rate": 0.571
    },
    {
     "footprint": "useful_websites",
@@ -289,9 +283,15 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 18,
+    "queries": 19,
     "ready": 9,
-    "rate": 0.476
+    "rate": 0.455
+   },
+   {
+    "footprint": "intitle_resources",
+    "queries": 6,
+    "ready": 3,
+    "rate": 0.444
    },
    {
     "footprint": "inurl_resources",
@@ -313,9 +313,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 39,
+    "queries": 45,
     "ready": 9,
-    "rate": 0.238
+    "rate": 0.208
    },
    {
     "footprint": "sources",
@@ -456,12 +456,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 53,
-   "words": 2185,
+   "words": 2199,
    "interactive": true,
-   "modified": "2026-10-25T07:53:08+00:00",
+   "modified": "2026-10-25T09:14:08+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,185 words)",
+    "In-depth (2,199 words)",
     "3 data tables",
     "Cites 63 authoritative sources",
     "Recently updated"
@@ -493,7 +493,7 @@
    ],
    "prospects": 6,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -542,9 +542,9 @@
     "Cites 5 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 8,
+   "prospects": 9,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -557,7 +557,7 @@
    "linkability": 91,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 1666,
    "interactive": true,
    "modified": "2026-09-13T09:05:03+00:00",
@@ -648,6 +648,30 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
+   "title": "Affiliate Growth Checklist: SEO, Trust & Revenue",
+   "h1": "Affiliate Growth Checklist: Build a Search, Trust, and Revenue System",
+   "description": "Use this affiliate growth checklist to assess niche fit, search intent, topical authority, internal links, trust, monetization, and weekly execution.",
+   "type": "reference",
+   "promotion": 79,
+   "linkability": 88,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 13,
+   "words": 2071,
+   "interactive": true,
+   "modified": "2026-10-25T11:01:04+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,071 words)",
+    "Recently updated"
+   ],
+   "prospects": 17,
+   "internal_link_suggestions": 1,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/review/neuronwriter-review/",
    "title": "NeuronWriter Review 2026: NLP Content Scoring, Pricing & Alternatives",
    "h1": "NeuronWriter Review (2026): Workflow, Limits, Pricing & Who Should Buy",
@@ -669,30 +693,6 @@
    "prospects": 14,
    "internal_link_suggestions": 0,
    "promoting": true
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
-   "title": "Affiliate Growth Checklist: SEO, Trust & Revenue",
-   "h1": "Affiliate Growth Checklist: Build a Search, Trust, and Revenue System",
-   "description": "Use this affiliate growth checklist to assess niche fit, search intent, topical authority, internal links, trust, monetization, and weekly execution.",
-   "type": "reference",
-   "promotion": 79,
-   "linkability": 88,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 13,
-   "words": 2051,
-   "interactive": true,
-   "modified": "2026-08-24T05:31:54+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,051 words)",
-    "Recently updated"
-   ],
-   "prospects": 17,
-   "internal_link_suggestions": 1,
-   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -729,7 +729,7 @@
    "linkability": 87,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 4,
+   "internal_inlinks": 5,
    "words": 2199,
    "interactive": false,
    "modified": "2026-09-13T19:08:04+00:00",
@@ -767,7 +767,7 @@
    ],
    "prospects": 8,
    "internal_link_suggestions": 4,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -995,31 +995,6 @@
   },
   {
    "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/review/resistance-bands-vs-free-weights/",
-   "title": "Resistance Bands vs. Free Weights: Which Builds More Muscle? | GearUpToFit",
-   "h1": "Resistance Bands vs. Free Weights: The Scientific Comparison",
-   "description": "Comparing resistance bands vs free weights? Learn the science of variable resistance, progressive overload, and muscle hypertrophy.",
-   "type": "comparison",
-   "promotion": 75,
-   "linkability": 79,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2022,
-   "interactive": false,
-   "modified": "2026-07-16T05:36:46+00:00",
-   "reasons": [
-    "In-depth (2,022 words)",
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "prospects": 6,
-   "internal_link_suggestions": 0,
-   "promoting": true
-  },
-  {
-   "site": "gearuptofit.com",
    "url": "https://gearuptofit.com/shoe-finder/",
    "title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
    "h1": "Running Shoe Finder Quiz: Find the Right Running Shoes for Your Feet, Mileage, Terrain and Budget",
@@ -1079,7 +1054,7 @@
    "linkability": 95,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 9,
    "words": 2214,
    "interactive": true,
    "modified": "2026-10-03T06:26:18+00:00",
@@ -1155,7 +1130,7 @@
    "linkability": 94,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 1829,
    "interactive": true,
    "modified": "2026-10-03T06:40:50+00:00",
@@ -1167,7 +1142,7 @@
    ],
    "prospects": 4,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -1288,7 +1263,7 @@
    "linkability": 80,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 11,
    "words": 2011,
    "interactive": false,
    "modified": "2026-09-25T17:56:37+00:00",
@@ -1517,7 +1492,7 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 9,
    "words": 2170,
    "interactive": true,
    "modified": "2026-10-03T06:27:23+00:00",
@@ -1544,7 +1519,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 8,
    "words": 4194,
    "interactive": false,
    "modified": "2026-09-12T07:57:38+00:00",
@@ -1645,9 +1620,9 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 238,
-   "words": 1636,
+   "words": 1657,
    "interactive": false,
-   "modified": "2026-09-09T05:14:58+00:00",
+   "modified": "2026-10-25T11:02:11+00:00",
    "reasons": [
     "Original method/data — citation-worthy",
     "1 data table",
@@ -1763,7 +1738,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 9,
    "words": 1655,
    "interactive": true,
    "modified": "2026-10-25T07:53:36+00:00",
@@ -1868,7 +1843,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 16,
+   "internal_inlinks": 19,
    "words": 1249,
    "interactive": true,
    "modified": "2026-10-03T06:15:49+00:00",
@@ -1929,9 +1904,9 @@
     "Recently updated",
     "Under-linked internally (2 inbound)"
    ],
-   "prospects": 0,
+   "prospects": 10,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "efficientgptprompts.com",
@@ -2222,7 +2197,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 12,
    "words": 3117,
    "interactive": false,
    "modified": "2026-09-03T12:32:26+00:00",
@@ -2247,7 +2222,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 8,
    "words": 2972,
    "interactive": false,
    "modified": "2026-09-03T12:25:05+00:00",
@@ -2298,7 +2273,7 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 17,
+   "internal_inlinks": 16,
    "words": 693,
    "interactive": true,
    "modified": "2026-09-05T13:47:17+00:00",
@@ -2382,6 +2357,32 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "h1": "Treadmill Workout for Weight Loss: 2026 Fat Burn Guide",
+   "description": "Treadmill for weight loss: Effective workouts, tips, and strategies to help you achieve your fitness goals and transform your health.",
+   "type": "general_article",
+   "promotion": 63,
+   "linkability": 65,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 6295,
+   "interactive": false,
+   "modified": "2026-09-21T06:18:07+00:00",
+   "reasons": [
+    "In-depth (6,295 words)",
+    "9 data tables",
+    "Recently updated",
+    "Under-linked internally (1 inbound)",
+    "Health/YMYL topic — pitch only to expert publishers"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 3,
    "promoting": false
   },
   {
@@ -2575,6 +2576,16 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/ai/best-chatgpt-alternatives/",
+   "from_title": "Best ChatGPT Alternatives for Writing, Research, SEO, Codin…",
+   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
+   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
+   "anchor": "affiliate link",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/compliance/",
    "from_title": "Affiliate Marketing Compliance: 2026 Rules & Best Practices",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
@@ -2587,16 +2598,6 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/review/grammarly/",
    "from_title": "Grammarly Review 2026: Free vs Premium — Is It Worth It?",
-   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "anchor": "affiliate link",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/ai/best-chatgpt-alternatives/",
-   "from_title": "Best ChatGPT Alternatives for Writing, Research, SEO, Codin…",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
    "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
    "anchor": "affiliate link",
@@ -2625,6 +2626,16 @@
   },
   {
    "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/",
+   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
+   "to": "https://gearuptofit.com/shoe-finder/methodology/",
+   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/review-methodology/testing-log/",
    "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
@@ -2637,16 +2648,6 @@
    "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/reviews/",
    "from_title": "Reviews Hub | Running Shoes, Watches & Fitness Gear | GearUpToFit",
-   "to": "https://gearuptofit.com/shoe-finder/methodology/",
-   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running/",
-   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
    "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
    "anchor": "running shoes",
@@ -2785,6 +2786,16 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/recommended-tools-for-affiliate-site-builders/",
+   "from_title": "Best Affiliate Marketing Tools for Beginners (2026)",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/semrush-vs-ahrefs-for-affiliate-marketing/",
+   "to_title": "Semrush vs Ahrefs for Affiliates (2026): Head-to-Head",
+   "anchor": "affiliate marketing",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/seo/benefits-of-an-effective-seo-strategy/",
    "from_title": "7 SEO Strategy Benefits: 2026 Guide to Dominate Google",
    "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/semrush-vs-ahrefs-for-affiliate-marketing/",
@@ -2807,16 +2818,6 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/niche-specific-affiliate-gap-analysis/",
    "from_title": "How Can a Niche-Specific Affiliate Gap Analysis Help US Publishers Dominate?",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/semrush-vs-ahrefs-for-affiliate-marketing/",
-   "to_title": "Semrush vs Ahrefs for Affiliates (2026): Head-to-Head",
-   "anchor": "affiliate marketing",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/recommended-tools-for-affiliate-site-builders/",
-   "from_title": "Best Affiliate Marketing Tools for Beginners (2026)",
    "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/semrush-vs-ahrefs-for-affiliate-marketing/",
    "to_title": "Semrush vs Ahrefs for Affiliates (2026): Head-to-Head",
    "anchor": "affiliate marketing",
@@ -3045,6 +3046,16 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/start-here/",
+   "from_title": "Start Affiliate Marketing in 2026: The Step-by-Step Roadmap",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
+   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
+   "anchor": "promote affiliate products",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/kit-vs-beehiiv-for-affiliate-newsletters/",
    "from_title": "Kit vs beehiiv 2026: Best for Affiliate Newsletters?",
    "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
@@ -3077,16 +3088,6 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/ai/boost-affiliate-earnings-perplexity-ai/",
    "from_title": "How to Use Perplexity AI to Boost Your Affiliate Earnings in 2026",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/start-here/",
-   "from_title": "Start Affiliate Marketing in 2026: The Step-by-Step Roadmap",
    "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
    "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
    "anchor": "promote affiliate products",
@@ -3864,6 +3865,36 @@
    "from_strength": 0
   },
   {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness/",
+   "from_title": "Fitness Articles | Workouts, HIIT, Strength Training & Exercise Guides | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
+   "from_title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
+   "from_strength": 77
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/weight-loss-guide/",
+   "from_title": "Runner's Weight Loss Guide: Sustainable Fat Loss Tips 2026 | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-success/",
    "from_title": "French Bulldog Training: Tips for Obedience & Bonding",
@@ -4432,36 +4463,6 @@
    "anchor": "life path",
    "relevance": 7,
    "from_strength": 61
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
-   "from_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
-   "to": "https://mysticaldigits.com/compatibility-revealed-life-path-number-10/",
-   "to_title": "Life Path Number 10: 2026 Compatibility Guide & Traits",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 57
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/life-path-number-6-traits-compatibility-and-more/",
-   "from_title": "Life Path 6: Meaning, Strengths, Relationships and Work Style | Mystical Digits",
-   "to": "https://mysticaldigits.com/compatibility-revealed-life-path-number-10/",
-   "to_title": "Life Path Number 10: 2026 Compatibility Guide & Traits",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 56
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/life-path-number-9-meaning-compatibility/",
-   "from_title": "Life Path Number 9: Meaning, Strengths, Challenges, and Compatibility Themes",
-   "to": "https://mysticaldigits.com/compatibility-revealed-life-path-number-10/",
-   "to_title": "Life Path Number 10: 2026 Compatibility Guide & Traits",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 56
   }
  ],
  "wins": [
@@ -4511,24 +4512,24 @@
   }
  ],
  "log": [
-  "08:24:25 connection dataforseo: connected",
-  "08:24:25 connection gmail: connected",
-  "08:24:26 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "08:24:29 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "08:24:29 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "08:24:32 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "08:24:32 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "08:24:33 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "08:24:34 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "08:24:37 crawl micegoneguide.com: 53/53 urls, fetched 10, 304 0, reused 43",
-  "08:24:39 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "08:24:41 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "08:26:21 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "08:27:06 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "08:28:22 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "08:29:34 prospects: 16 queries (0 brand-mention), 97 candidates, 27 qualified (0 unlinked mentions), 14 with email, 0 already linking",
-  "08:29:43 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "08:29:43 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 96 waiting for recipients' business hours, cap 7",
-  "08:29:43 link checks: 0 pages, 0 new links won, 0 lost"
+  "12:40:51 connection dataforseo: connected",
+  "12:40:51 connection gmail: connected",
+  "12:40:54 crawl gearuptofit.com: 300/877 urls, fetched 4, 304 0, reused 296",
+  "12:40:54 crawl plantastichaven.com: 161/161 urls, fetched 4, 304 0, reused 157",
+  "12:40:54 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "12:40:57 crawl frenchyfab.com: 238/238 urls, fetched 3, 304 0, reused 235",
+  "12:40:58 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "12:40:58 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "12:40:59 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "12:41:00 crawl micegoneguide.com: 53/53 urls, fetched 3, 304 0, reused 50",
+  "12:41:03 crawl efficientgptprompts.com: 300/487 urls, fetched 3, 304 0, reused 297",
+  "12:41:17 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 16, 304 1, reused 241",
+  "12:42:57 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "12:44:54 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "12:45:30 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "12:46:24 prospects: 14 queries (0 brand-mention), 128 candidates, 37 qualified (0 unlinked mentions), 15 with email, 0 already linking",
+  "12:46:35 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "12:46:35 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 111 waiting for recipients' business hours, cap 9",
+  "12:46:35 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
