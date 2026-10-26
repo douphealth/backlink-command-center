@@ -132,7 +132,7 @@ const FP_LABEL={mention:'Unlinked brand mentions',intent:'Same-topic articles',r
 function learningPanel(h,s){
   const {escapeHTML:e,external,n,panel,table,empty}=h,L=s.learning;
   if(!L)return '';
-  const fps=(L.footprints||[]).slice(0,10).map(x=>`<tr><td><strong>${e(FP_LABEL[x.footprint]||x.footprint)}</strong></td><td>${n(x.queries)}</td><td>${n(x.ready)}</td><td><strong>${Math.round(x.rate*100)}%</strong><small>${x.queries<3?'still testing':''}</small></td></tr>`);
+  const fps=(L.footprints||[]).slice(0,10).map(x=>`<tr><td><strong>${e(FP_LABEL[x.footprint]||x.footprint)}</strong></td><td>${n(x.queries)}</td><td>${n(x.ready)}</td><td><strong>${Number(x.rate).toFixed(2)} leads/search</strong><small>${x.queries<3?'limited data':''}</small></td></tr>`);
   const assets=(L.assets||[]).slice(0,10).map(x=>`<tr><td>${external(x.url,new URL(x.url).pathname)}</td><td>${n(x.sent)}</td><td>${n(x.replied)}</td><td>${n(x.positive)}</td><td>${n(x.won)}</td></tr>`);
   return `<div class="ap-gap">${panel('What Autopilot is learning: searches','Search patterns ranked by pitchable prospects found per search; the best ones are used first',fps.length?table(['Search pattern','Searches','Prospects','Yield'],fps):empty('Not enough data yet','Yields appear after the first searches.'))}</div><div class="ap-gap">${panel('Which of your pages earn replies','Pages with better reply and link rates get more prospecting',assets.length?table(['Page','Pitched','Replies','Positive','Links won'],assets):empty('No pitches yet','Results appear after the first pitches.'))}</div>`;
 }
