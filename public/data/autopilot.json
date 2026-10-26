@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-26T07:25:20.105Z",
- "duration_s": 396,
+ "generated_at": "2026-10-26T08:04:30.009Z",
+ "duration_s": 23,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 19.029146
+    "balance_usd": 18.915146
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 15383,
+   "ms": 11923,
    "result": {
     "sites": 10,
     "pages": 1901
@@ -116,24 +116,23 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 240473,
+   "ms": 7,
    "result": {
-    "queries": 13,
+    "queries": 0,
     "mention_queries": 0,
-    "serp_results": 209,
-    "candidates": 76,
-    "qualified": 22,
+    "serp_results": 0,
+    "candidates": 0,
+    "qualified": 0,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 54,
-    "with_email": 8,
-    "contact_form": 6,
-    "failed_queries": 2
+    "rejected": 0,
+    "with_email": 0,
+    "contact_form": 0
    }
   },
   "replies": {
    "ok": true,
-   "ms": 8801,
+   "ms": 8532,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -144,13 +143,13 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 130154,
+   "ms": 6,
    "result": {
     "followups": 0,
-    "sent": 4,
+    "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 107,
+    "deferred": 0,
     "cap": 9
    },
    "writer": {
@@ -181,7 +180,7 @@
   "month_usd": 2.001,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 19
+  "calls_this_run": 0
  },
  "outreach": {
   "mode": "send",
@@ -701,7 +700,7 @@
    ],
    "prospects": 4,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -999,7 +998,7 @@
    ],
    "prospects": 7,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1330,7 +1329,7 @@
    ],
    "prospects": 3,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -4592,23 +4591,21 @@
   }
  ],
  "log": [
-  "07:18:45 connection dataforseo: connected",
-  "07:18:45 connection gmail: connected",
-  "07:18:47 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "07:18:48 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "07:18:52 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "07:18:52 crawl frenchyfab.com: 238/238 urls, fetched 1, 304 0, reused 237",
-  "07:18:53 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "07:18:53 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "07:18:54 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "07:18:55 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "07:18:58 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "07:19:00 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "07:20:39 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:22:35 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:23:01 prospects: 13 queries (0 brand-mention), 76 candidates, 22 qualified (0 unlinked mentions), 8 with email, 0 already linking",
-  "07:23:09 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "07:25:20 outreach (send): 4 sent, 0 drafted, 0 follow-ups, 107 waiting for recipients' business hours, cap 9",
-  "07:25:20 link checks: 0 pages, 0 new links won, 0 lost"
+  "08:04:08 connection dataforseo: connected",
+  "08:04:08 connection gmail: connected",
+  "08:04:10 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "08:04:11 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "08:04:13 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "08:04:14 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "08:04:14 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "08:04:15 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "08:04:15 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "08:04:16 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "08:04:18 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "08:04:20 crawl efficientgptprompts.com: 300/487 urls, fetched 2, 304 1, reused 297",
+  "08:04:21 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "08:04:29 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "08:04:29 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 0 waiting for recipients' business hours, cap 9",
+  "08:04:30 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
