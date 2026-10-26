@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-26T12:48:01.980Z",
- "duration_s": 71,
+ "generated_at": "2026-10-26T20:01:44.176Z",
+ "duration_s": 88,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -83,10 +83,10 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 11522,
+   "ms": 16909,
    "result": {
     "sites": 10,
-    "pages": 1901
+    "pages": 1902
    }
   },
   "demand": {
@@ -116,7 +116,7 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 7,
+   "ms": 4,
    "result": {
     "queries": 0,
     "mention_queries": 0,
@@ -132,7 +132,7 @@
   },
   "replies": {
    "ok": true,
-   "ms": 37496,
+   "ms": 18852,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -143,13 +143,13 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 8,
+   "ms": 50556,
    "result": {
     "followups": 0,
-    "sent": 0,
+    "sent": 2,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 128,
+    "deferred": 0,
     "cap": 11
    },
    "writer": {
@@ -159,7 +159,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "checked": 0,
     "won": 0,
@@ -169,8 +169,8 @@
  },
  "totals": {
   "sites": 10,
-  "pages_crawled": 1901,
-  "urls_discovered": 2833,
+  "pages_crawled": 1902,
+  "urls_discovered": 2834,
   "promotable": 250,
   "internal_suggestions": 319,
   "promoting_now": 30
@@ -184,19 +184,19 @@
  },
  "outreach": {
   "mode": "send",
-  "ready": 128,
-  "sent_today": 9,
+  "ready": 126,
+  "sent_today": 11,
   "cap_today": 11,
-  "next_send_at": "2026-10-26T13:00:00.000Z",
+  "next_send_at": "2026-10-27T13:00:00.000Z",
   "sending_now": false
  },
  "funnel": {
   "prospects_evaluated": 1719,
   "qualified": 369,
-  "ready": 128,
+  "ready": 126,
   "contact_form_only": 78,
   "no_contact": 149,
-  "contacted": 14,
+  "contacted": 16,
   "replied": 0,
   "positive": 0,
   "won": 0,
@@ -257,10 +257,10 @@
    "date": "2026-10-26",
    "prospects_evaluated": 1719,
    "qualified": 369,
-   "ready": 128,
+   "ready": 126,
    "contact_form_only": 78,
    "no_contact": 149,
-   "contacted": 14,
+   "contacted": 16,
    "replied": 0,
    "positive": 0,
    "won": 0,
@@ -367,6 +367,14 @@
     "rate": 0.25
    },
    {
+    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/semrush-vs-ahrefs-for-affiliate-marketing/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
     "url": "https://mysticaldigits.com/numerology-love-meter-calculator/",
     "sent": 1,
     "replied": 0,
@@ -376,6 +384,14 @@
    },
    {
     "url": "https://gearuptofit.com/review/resistance-bands-vs-free-weights/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://gearuptofit.com/shoe-finder/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -451,8 +467,8 @@
   },
   {
    "domain": "plantastichaven.com",
-   "pages": 161,
-   "discovered": 161,
+   "pages": 162,
+   "discovered": 162,
    "sitemaps": 5,
    "eligible": 25,
    "top": "https://plantastichaven.com/string-of-pearls-plant-care/"
@@ -677,32 +693,6 @@
    "promoting": true
   },
   {
-   "site": "plantastichaven.com",
-   "url": "https://plantastichaven.com/string-of-pearls-plant-care/",
-   "title": "String of Pearls Plant Care: The Complete Guide to Growing Curio Rowleyanus Indoors - PlantasticHaven",
-   "h1": "String of Pearls Plant Care: The Complete Guide to Growing Curio Rowleyanus Indoors",
-   "description": "Master string of pearls care with this complete guide: watering, light, soil, propagation, troubleshooting, and pet safety for Curio rowleyanus.",
-   "type": "practical_guide",
-   "promotion": 81,
-   "linkability": 86,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 3737,
-   "interactive": true,
-   "modified": "2026-10-19T17:02:41+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,737 words)",
-    "3 data tables",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "prospects": 4,
-   "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/personal-development/goal-achievement/",
    "title": "Goal Achievement: A 7-Step Framework to Finish What You Start | Gear Up to Grow",
@@ -822,6 +812,31 @@
    ],
    "prospects": 11,
    "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "plantastichaven.com",
+   "url": "https://plantastichaven.com/string-of-pearls-plant-care/",
+   "title": "String of Pearls Plant Care: The Complete Guide to Growing Curio Rowleyanus Indoors - PlantasticHaven",
+   "h1": "String of Pearls Plant Care: The Complete Guide to Growing Curio Rowleyanus Indoors",
+   "description": "Master string of pearls care with this complete guide: watering, light, soil, propagation, troubleshooting, and pet safety for Curio rowleyanus.",
+   "type": "practical_guide",
+   "promotion": 77,
+   "linkability": 86,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 3737,
+   "interactive": true,
+   "modified": "2026-10-19T17:02:41+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (3,737 words)",
+    "3 data tables",
+    "Recently updated"
+   ],
+   "prospects": 4,
+   "internal_link_suggestions": 5,
    "promoting": true
   },
   {
@@ -2276,7 +2291,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 11,
    "words": 3117,
    "interactive": false,
    "modified": "2026-09-03T12:32:26+00:00",
@@ -2744,6 +2759,26 @@
    "from_strength": 0
   },
   {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-strategies/",
+   "from_title": "Affiliate Marketing Strategies (2026): 9 Systems of Affiliate Growth",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
+   "to_title": "Affiliate Growth Checklist: SEO, Trust & Revenue",
+   "anchor": "affiliate growth",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/watch-match/methodology",
+   "from_title": "How Fitness Watch Match scores watches — methodology",
+   "to": "https://gearuptofit.com/watch-match/",
+   "to_title": "Fitness Watch Match — Find the Right Watch for Your Training",
+   "anchor": "fitness watch",
+   "relevance": 7,
+   "from_strength": 62
+  },
+  {
    "site": "plantastichaven.com",
    "from": "https://plantastichaven.com/african-house-plants/",
    "from_title": "African House Plants: Easy Indoor Picks for Low-Maintenance Homes",
@@ -2794,26 +2829,6 @@
    "from_strength": 54
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-strategies/",
-   "from_title": "Affiliate Marketing Strategies (2026): 9 Systems of Affiliate Growth",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
-   "to_title": "Affiliate Growth Checklist: SEO, Trust & Revenue",
-   "anchor": "affiliate growth",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/methodology",
-   "from_title": "How Fitness Watch Match scores watches — methodology",
-   "to": "https://gearuptofit.com/watch-match/",
-   "to_title": "Fitness Watch Match — Find the Right Watch for Your Training",
-   "anchor": "fitness watch",
-   "relevance": 7,
-   "from_strength": 62
-  },
-  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/productivity/habit-stacking-executive-dysfunction/",
    "from_title": "Habit Stacking for Executive Dysfunction",
@@ -2825,18 +2840,8 @@
   },
   {
    "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/productivity/best-habit-tracker-apps/",
-   "from_title": "Best Habit Tracker Apps in 2026: An Honest Comparison | Gear Up to Grow",
-   "to": "https://gearuptogrow.com/personal-development/habit-stacking/",
-   "to_title": "Habit Stacking: Examples, Templates & How To Start",
-   "anchor": "habit stacking",
-   "relevance": 4,
-   "from_strength": 58
-  },
-  {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/personal-development/success-habits/",
-   "from_title": "Success Habits That Actually Compound Over Time | Gear Up to Grow",
+   "from": "https://gearuptogrow.com/habits/",
+   "from_title": "Habits Hub: Behavior Design & Routine Automation Guides",
    "to": "https://gearuptogrow.com/personal-development/habit-stacking/",
    "to_title": "Habit Stacking: Examples, Templates & How To Start",
    "anchor": "habit stacking",
@@ -2845,8 +2850,18 @@
   },
   {
    "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/habits/",
-   "from_title": "Habits Hub: Behavior Design & Routine Automation Guides",
+   "from": "https://gearuptogrow.com/productivity/best-habit-tracker-apps/",
+   "from_title": "Best Habit Tracker Apps in 2026: An Honest Comparison | Gear Up to Grow",
+   "to": "https://gearuptogrow.com/personal-development/habit-stacking/",
+   "to_title": "Habit Stacking: Examples, Templates & How To Start",
+   "anchor": "habit stacking",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptogrow.com",
+   "from": "https://gearuptogrow.com/personal-development/success-habits/",
+   "from_title": "Success Habits That Actually Compound Over Time | Gear Up to Grow",
    "to": "https://gearuptogrow.com/personal-development/habit-stacking/",
    "to_title": "Habit Stacking: Examples, Templates & How To Start",
    "anchor": "habit stacking",
@@ -3815,18 +3830,8 @@
   },
   {
    "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/productivity/best-habit-tracker-apps/",
-   "from_title": "Best Habit Tracker Apps in 2026: An Honest Comparison | Gear Up to Grow",
-   "to": "https://gearuptogrow.com/productivity/habit-stacking-executive-dysfunction/",
-   "to_title": "Habit Stacking for Executive Dysfunction",
-   "anchor": "habit stacking",
-   "relevance": 4,
-   "from_strength": 58
-  },
-  {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/personal-development/success-habits/",
-   "from_title": "Success Habits That Actually Compound Over Time | Gear Up to Grow",
+   "from": "https://gearuptogrow.com/habits/",
+   "from_title": "Habits Hub: Behavior Design & Routine Automation Guides",
    "to": "https://gearuptogrow.com/productivity/habit-stacking-executive-dysfunction/",
    "to_title": "Habit Stacking for Executive Dysfunction",
    "anchor": "habit stacking",
@@ -3835,8 +3840,18 @@
   },
   {
    "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/habits/",
-   "from_title": "Habits Hub: Behavior Design & Routine Automation Guides",
+   "from": "https://gearuptogrow.com/productivity/best-habit-tracker-apps/",
+   "from_title": "Best Habit Tracker Apps in 2026: An Honest Comparison | Gear Up to Grow",
+   "to": "https://gearuptogrow.com/productivity/habit-stacking-executive-dysfunction/",
+   "to_title": "Habit Stacking for Executive Dysfunction",
+   "anchor": "habit stacking",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptogrow.com",
+   "from": "https://gearuptogrow.com/personal-development/success-habits/",
+   "from_title": "Success Habits That Actually Compound Over Time | Gear Up to Grow",
    "to": "https://gearuptogrow.com/productivity/habit-stacking-executive-dysfunction/",
    "to_title": "Habit Stacking for Executive Dysfunction",
    "anchor": "habit stacking",
@@ -4155,6 +4170,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
+   "to_title": "French Bulldog Seasonal Diet Guide",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
    "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
    "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
@@ -4167,16 +4192,6 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/right-food-french-bulldog-guide/",
    "from_title": "Choosing the Right Food for Your French Bulldog",
-   "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
-   "to_title": "French Bulldog Seasonal Diet Guide",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
    "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
    "to_title": "French Bulldog Seasonal Diet Guide",
    "anchor": "french bulldog",
@@ -4535,8 +4550,8 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/organic-foods-for-frenchies/",
-   "from_title": "Organic Foods for Frenchies: What Is Worth Buying",
+   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
    "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
    "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
    "anchor": "food french",
@@ -4591,21 +4606,21 @@
   }
  ],
  "log": [
-  "12:47:09 connection dataforseo: connected",
-  "12:47:09 connection gmail: connected",
-  "12:47:10 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "12:47:10 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "12:47:13 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "12:47:14 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "12:47:14 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "12:47:15 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "12:47:15 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "12:47:15 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "12:47:16 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "12:47:21 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 4, 304 0, reused 254",
-  "12:47:21 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "12:47:58 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "12:47:58 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 128 waiting for recipients' business hours, cap 11",
-  "12:48:01 link checks: 0 pages, 0 new links won, 0 lost"
+  "20:00:17 connection dataforseo: connected",
+  "20:00:17 connection gmail: connected",
+  "20:00:20 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "20:00:21 crawl plantastichaven.com: 162/162 urls, fetched 4, 304 0, reused 158",
+  "20:00:23 crawl gearuptogrow.com: 107/107 urls, fetched 3, 304 0, reused 104",
+  "20:00:25 crawl frenchyfab.com: 238/238 urls, fetched 4, 304 0, reused 234",
+  "20:00:26 crawl mysticaldigits.com: 300/468 urls, fetched 7, 304 1, reused 292",
+  "20:00:27 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "20:00:29 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "20:00:29 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "20:00:32 crawl efficientgptprompts.com: 300/487 urls, fetched 1, 304 0, reused 299",
+  "20:00:34 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 3, 304 0, reused 255",
+  "20:00:34 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "20:00:53 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "20:01:44 outreach (send): 2 sent, 0 drafted, 0 follow-ups, 0 waiting for recipients' business hours, cap 11",
+  "20:01:44 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
