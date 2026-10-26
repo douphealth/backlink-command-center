@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-26T00:36:50.288Z",
- "duration_s": 409,
+ "generated_at": "2026-10-26T06:39:13.101Z",
+ "duration_s": 527,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 19.410546
+    "balance_usd": 19.219666
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 14127,
+   "ms": 82477,
    "result": {
     "sites": 10,
     "pages": 1901
@@ -101,7 +101,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 313
+    "internal_suggestions": 319
    }
   },
   "requalify": {
@@ -116,24 +116,24 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 317705,
+   "ms": 334633,
    "result": {
-    "queries": 18,
+    "queries": 17,
     "mention_queries": 0,
-    "serp_results": 317,
-    "candidates": 95,
-    "qualified": 25,
+    "serp_results": 304,
+    "candidates": 81,
+    "qualified": 14,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 99,
-    "with_email": 10,
-    "contact_form": 5,
-    "failed_queries": 2
+    "rejected": 107,
+    "with_email": 5,
+    "contact_form": 4,
+    "failed_queries": 4
    }
   },
   "replies": {
    "ok": true,
-   "ms": 14244,
+   "ms": 8693,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -144,13 +144,13 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 60099,
+   "ms": 98966,
    "result": {
     "followups": 0,
-    "sent": 2,
+    "sent": 3,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 122,
+    "deferred": 124,
     "cap": 9
    },
    "writer": {
@@ -173,31 +173,31 @@
   "pages_crawled": 1901,
   "urls_discovered": 2833,
   "promotable": 250,
-  "internal_suggestions": 313,
+  "internal_suggestions": 319,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.1909,
-  "month_usd": 1.6964,
+  "today_usd": 0.3814,
+  "month_usd": 1.887,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 26
+  "calls_this_run": 27
  },
  "outreach": {
   "mode": "send",
-  "ready": 122,
-  "sent_today": 2,
+  "ready": 124,
+  "sent_today": 5,
   "cap_today": 9,
-  "next_send_at": "2026-10-26T03:00:00.000Z",
+  "next_send_at": "2026-10-26T07:00:00.000Z",
   "sending_now": false
  },
  "funnel": {
-  "prospects_evaluated": 1522,
-  "qualified": 333,
-  "ready": 122,
-  "contact_form_only": 68,
-  "no_contact": 136,
-  "contacted": 7,
+  "prospects_evaluated": 1643,
+  "qualified": 347,
+  "ready": 124,
+  "contact_form_only": 72,
+  "no_contact": 141,
+  "contacted": 10,
   "replied": 0,
   "positive": 0,
   "won": 0,
@@ -256,19 +256,19 @@
   },
   {
    "date": "2026-10-26",
-   "prospects_evaluated": 1522,
-   "qualified": 333,
-   "ready": 122,
-   "contact_form_only": 68,
-   "no_contact": 136,
-   "contacted": 7,
+   "prospects_evaluated": 1643,
+   "qualified": 347,
+   "ready": 124,
+   "contact_form_only": 72,
+   "no_contact": 141,
+   "contacted": 10,
    "replied": 0,
    "positive": 0,
    "won": 0,
    "existing_links": 4,
    "declined": 0,
    "bounced": 0,
-   "spend_usd": 0.1909
+   "spend_usd": 0.3814
   }
  ],
  "learning": {
@@ -281,9 +281,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 41,
-    "ready": 38,
-    "rate": 0.886
+    "queries": 44,
+    "ready": 40,
+    "rate": 0.872
    },
    {
     "footprint": "tools",
@@ -298,22 +298,10 @@
     "rate": 0.6
    },
    {
-    "footprint": "intitle_resources",
-    "queries": 6,
-    "ready": 3,
-    "rate": 0.444
-   },
-   {
-    "footprint": "inurl_resources",
-    "queries": 6,
-    "ready": 3,
-    "rate": 0.444
-   },
-   {
     "footprint": "best_guides",
-    "queries": 23,
+    "queries": 24,
     "ready": 10,
-    "rate": 0.423
+    "rate": 0.407
    },
    {
     "footprint": "statistics",
@@ -322,10 +310,22 @@
     "rate": 0.4
    },
    {
+    "footprint": "intitle_resources",
+    "queries": 7,
+    "ready": 3,
+    "rate": 0.4
+   },
+   {
+    "footprint": "inurl_resources",
+    "queries": 7,
+    "ready": 3,
+    "rate": 0.4
+   },
+   {
     "footprint": "recommended_reading",
-    "queries": 4,
+    "queries": 6,
     "ready": 1,
-    "rate": 0.286
+    "rate": 0.222
    },
    {
     "footprint": "sources",
@@ -335,9 +335,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 51,
+    "queries": 58,
     "ready": 9,
-    "rate": 0.185
+    "rate": 0.164
    },
    {
     "footprint": "blogs_to_follow",
@@ -368,6 +368,14 @@
     "rate": 0.25
    },
    {
+    "url": "https://mysticaldigits.com/numerology-love-meter-calculator/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
     "url": "https://gearuptofit.com/watch-match/",
     "sent": 1,
     "replied": 0,
@@ -377,6 +385,22 @@
    },
    {
     "url": "https://gearuptogrow.com/personal-development/goal-achievement/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://mysticaldigits.com/personal-year-numerology/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -504,26 +528,27 @@
   },
   {
    "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/rats-vs-mice-whats-the-difference/",
-   "title": "Rats vs Mice: Key Differences in Signs, Size, and Behavior",
-   "h1": "Rats vs Mice: How to Tell the Difference",
-   "description": "Compare house mice, roof rats and Norway rats using combined visible traits. Juvenile overlap and lookalikes limit identification from household signs.",
-   "type": "comparison",
+   "url": "https://micegoneguide.com/prevent-mice-in-kitchen/",
+   "title": "How to Prevent Mice in the Kitchen: Food Storage, Sanitation, and Sealing | Mice Gone Guide",
+   "h1": "How to Prevent Mice in the Kitchen: Food Storage, Sanitation, and Sealing",
+   "description": "Inspect accessible kitchen signs, secure food, clean waste wet, and repair suitable gaps. Use qualified help for connected appliances and electrical or gas openings.",
+   "type": "practical_guide",
    "promotion": 86,
    "linkability": 95,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
-   "words": 1123,
+   "internal_inlinks": 52,
+   "words": 2202,
    "interactive": true,
-   "modified": "2026-10-05T18:42:26+00:00",
+   "modified": "2026-10-03T06:27:27+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,202 words)",
     "1 data table",
-    "Cites 8 authoritative sources",
+    "Cites 11 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 6,
+   "prospects": 8,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -863,7 +888,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 8,
-   "words": 1347,
+   "words": 1344,
    "interactive": true,
    "modified": "2026-09-03T07:50:31+00:00",
    "reasons": [
@@ -873,7 +898,7 @@
    ],
    "prospects": 8,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "mysticaldigits.com",
@@ -887,12 +912,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 297,
-   "words": 3379,
+   "words": 3389,
    "interactive": true,
    "modified": "2026-08-22T09:14:57+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,379 words)",
+    "In-depth (3,389 words)",
     "4 data tables",
     "Recently updated"
    ],
@@ -938,19 +963,19 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 2,
-   "words": 2343,
+   "words": 2351,
    "interactive": true,
    "modified": "2026-09-25T21:04:47+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,343 words)",
+    "In-depth (2,351 words)",
     "4 data tables",
     "Recently updated",
     "Under-linked internally (2 inbound)"
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1050,33 +1075,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/prevent-mice-in-kitchen/",
-   "title": "How to Prevent Mice in the Kitchen: Food Storage, Sanitation, and Sealing | Mice Gone Guide",
-   "h1": "How to Prevent Mice in the Kitchen: Food Storage, Sanitation, and Sealing",
-   "description": "Inspect accessible kitchen signs, secure food, clean waste wet, and repair suitable gaps. Use qualified help for connected appliances and electrical or gas openings.",
-   "type": "practical_guide",
-   "promotion": 74,
-   "linkability": 95,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 52,
-   "words": 2209,
-   "interactive": true,
-   "modified": "2026-10-03T06:27:27+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,209 words)",
-    "1 data table",
-    "Cites 11 authoritative sources",
-    "Recently updated",
-    "One of 51 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 8,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
    "url": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
    "title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
    "h1": "How to Get Rid of Mice in the Garage and Keep Them Out",
@@ -1086,13 +1084,13 @@
    "linkability": 95,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
-   "words": 2214,
+   "internal_inlinks": 8,
+   "words": 2209,
    "interactive": true,
    "modified": "2026-10-03T06:26:18+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,214 words)",
+    "In-depth (2,209 words)",
     "Cites 4 authoritative sources",
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
@@ -1137,19 +1135,45 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
-   "words": 3853,
+   "internal_inlinks": 15,
+   "words": 3858,
    "interactive": true,
    "modified": "2026-09-25T21:06:18+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,853 words)",
+    "In-depth (3,858 words)",
     "20 data tables",
     "Recently updated"
    ],
    "prospects": 6,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/rats-vs-mice-whats-the-difference/",
+   "title": "Rats vs Mice: Key Differences in Signs, Size, and Behavior",
+   "h1": "Rats vs Mice: How to Tell the Difference",
+   "description": "Compare house mice, roof rats and Norway rats using combined visible traits. Juvenile overlap and lookalikes limit identification from household signs.",
+   "type": "comparison",
+   "promotion": 73,
+   "linkability": 94,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 13,
+   "words": 1121,
+   "interactive": true,
+   "modified": "2026-10-05T18:42:26+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Cites 8 authoritative sources",
+    "Recently updated",
+    "One of 51 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 6,
+   "internal_link_suggestions": 0,
+   "promoting": false
   },
   {
    "site": "micegoneguide.com",
@@ -1163,7 +1187,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 7,
-   "words": 1829,
+   "words": 1827,
    "interactive": true,
    "modified": "2026-10-03T06:40:50+00:00",
    "reasons": [
@@ -1280,9 +1304,9 @@
     "3 data tables",
     "Recently updated"
    ],
-   "prospects": 2,
+   "prospects": 3,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1319,7 +1343,7 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 8,
    "words": 1590,
    "interactive": true,
    "modified": "2026-10-25T07:53:02+00:00",
@@ -1345,8 +1369,8 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
-   "words": 1124,
+   "internal_inlinks": 8,
+   "words": 1126,
    "interactive": true,
    "modified": "2026-10-03T06:17:15+00:00",
    "reasons": [
@@ -1371,13 +1395,13 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
-   "words": 2561,
+   "internal_inlinks": 9,
+   "words": 2562,
    "interactive": true,
    "modified": "2026-10-03T06:15:52+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,561 words)",
+    "In-depth (2,562 words)",
     "2 data tables",
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
@@ -1499,8 +1523,8 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 1518,
+   "internal_inlinks": 9,
+   "words": 1509,
    "interactive": true,
    "modified": "2026-10-03T06:40:40+00:00",
    "reasons": [
@@ -1524,13 +1548,13 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
-   "words": 2170,
+   "internal_inlinks": 10,
+   "words": 2159,
    "interactive": true,
    "modified": "2026-10-03T06:27:23+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,170 words)",
+    "In-depth (2,159 words)",
     "3 data tables",
     "Cites 4 authoritative sources",
     "Recently updated",
@@ -1600,7 +1624,7 @@
    "linkability": 89,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 17,
+   "internal_inlinks": 16,
    "words": 1986,
    "interactive": true,
    "modified": "2026-10-24T09:10:11+00:00",
@@ -1770,7 +1794,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 10,
    "words": 1655,
    "interactive": true,
    "modified": "2026-10-25T07:53:36+00:00",
@@ -1823,8 +1847,8 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
-   "words": 1610,
+   "internal_inlinks": 10,
+   "words": 1611,
    "interactive": true,
    "modified": "2026-10-03T06:40:47+00:00",
    "reasons": [
@@ -1875,8 +1899,8 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 19,
-   "words": 1249,
+   "internal_inlinks": 16,
+   "words": 1246,
    "interactive": true,
    "modified": "2026-10-03T06:15:49+00:00",
    "reasons": [
@@ -2001,8 +2025,8 @@
    "linkability": 87,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
-   "words": 1237,
+   "internal_inlinks": 12,
+   "words": 1238,
    "interactive": true,
    "modified": "2026-10-03T06:17:09+00:00",
    "reasons": [
@@ -2078,13 +2102,13 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
-   "words": 2167,
+   "internal_inlinks": 5,
+   "words": 2172,
    "interactive": true,
    "modified": "2026-10-03T06:40:36+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,167 words)",
+    "In-depth (2,172 words)",
     "2 data tables",
     "Cites 3 authoritative sources",
     "Recently updated",
@@ -2131,13 +2155,13 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
-   "words": 2574,
+   "internal_inlinks": 7,
+   "words": 2563,
    "interactive": true,
    "modified": "2026-10-03T06:27:34+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,574 words)",
+    "In-depth (2,563 words)",
     "5 data tables",
     "Cites 3 authoritative sources",
     "Recently updated",
@@ -2414,7 +2438,7 @@
     "Health/YMYL topic — pitch only to expert publishers"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 3,
+   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -2479,20 +2503,20 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 34,
-   "words": 4289,
+   "internal_inlinks": 33,
+   "words": 4296,
    "interactive": true,
    "modified": "2026-09-25T21:06:13+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,289 words)",
+    "In-depth (4,296 words)",
     "27 data tables",
     "Recently updated",
     "One of 236 templated sibling pages — promote the hub first"
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   }
  ],
  "internal_links": [
@@ -2538,13 +2562,13 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "from_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
+   "from": "https://micegoneguide.com/diseases-from-mice/",
+   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 0
+   "from_strength": 67
   },
   {
    "site": "gearuptogrow.com",
@@ -2928,6 +2952,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
+   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 6,
+   "from_strength": 58
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/compatibility-check-life-path-numbers-6-and-9/",
    "from_title": "Life Path 6 & 9 Compatibility: Love, Marriage & Karma 2026",
    "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
@@ -2940,16 +2974,6 @@
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/embrace-the-journey-life-path-number-fourteen/",
    "from_title": "Life Path Number 14: 2026 Deep Dive into the Karmic Force of 14/5",
-   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
-   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
-   "anchor": "karmic debt",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-for-career-change/",
-   "from_title": "9 Numerology Career Change Hacks That Work in 2026",
    "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
    "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
    "anchor": "karmic debt",
@@ -3148,16 +3172,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-car/",
-   "from_title": "How to Get Rid of Mice in Your Car: Engine Bay, Cabin & Air Vents",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
@@ -3185,6 +3199,16 @@
    "anchor": "rid mice",
    "relevance": 4,
    "from_strength": 69
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
+   "from_title": "7 Surprising Health Risks of Mouse Infestation Revealed",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 67
   },
   {
    "site": "frenchyfab.com",
@@ -3488,6 +3512,16 @@
   },
   {
    "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "from_title": "How to Get Rid of Mice in an Apartment",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
+   "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
+   "anchor": "rid mice",
+   "relevance": 5,
+   "from_strength": 71
+  },
+  {
+   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
@@ -3505,16 +3539,6 @@
    "anchor": "rid mice",
    "relevance": 4,
    "from_strength": 74
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
-   "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 71
   },
   {
    "site": "micegoneguide.com",
@@ -3578,13 +3602,13 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "from_title": "How to Get Rid of Mice in Walls: Safe, Non-Destructive Method | Mice Gone Guide",
+   "from": "https://micegoneguide.com/diseases-from-mice/",
+   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
    "to_title": "How to Get Rid of Mice in an Apartment",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 0
+   "from_strength": 67
   },
   {
    "site": "micegoneguide.com",
@@ -3898,6 +3922,16 @@
   },
   {
    "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/nutrition/",
+   "from_title": "Nutrition Articles | Fueling, Hydration, Supplements & Meal Planning | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/fitness/",
    "from_title": "Fitness Articles | Workouts, HIIT, Strength Training & Exercise Guides | GearUpToFit",
    "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
@@ -4077,6 +4111,56 @@
    "from_strength": 74
   },
   {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
+   "to_title": "French Bulldog Seasonal Diet Guide",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
+   "to_title": "French Bulldog Seasonal Diet Guide",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
+   "to_title": "French Bulldog Seasonal Diet Guide",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/right-food-french-bulldog-guide/",
+   "from_title": "Choosing the Right Food for Your French Bulldog",
+   "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
+   "to_title": "French Bulldog Seasonal Diet Guide",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
+   "to_title": "French Bulldog Seasonal Diet Guide",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/embrace-transformation-personal-year-7-numerology/",
    "from_title": "Personal Year 7 Numerology Guide [2026] | Mystical Digits",
@@ -4098,6 +4182,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
+   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
+   "to": "https://mysticaldigits.com/personal-year-numerology/",
+   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
+   "anchor": "personal year",
+   "relevance": 5,
+   "from_strength": 58
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/how-is-14-in-numerology/",
    "from_title": "2026 Guide: Numerology Meaning of Number 14 Explained",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
@@ -4110,16 +4204,6 @@
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
    "from_title": "Personal Year Calculator: How to Find Your Number (2026)",
-   "to": "https://mysticaldigits.com/personal-year-numerology/",
-   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "anchor": "personal year",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
-   "from_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
    "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
    "anchor": "personal year",
@@ -4418,13 +4502,13 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-meals-for-french-bulldogs/",
-   "from_title": "Homemade Meals for French Bulldogs: Safe Planning",
+   "from": "https://frenchyfab.com/right-food-french-bulldog-guide/",
+   "from_title": "Choosing the Right Food for Your French Bulldog",
    "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
    "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
    "anchor": "homemade food",
-   "relevance": 8,
-   "from_strength": 0
+   "relevance": 10,
+   "from_strength": 57
   },
   {
    "site": "frenchyfab.com",
@@ -4434,67 +4518,7 @@
    "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
    "anchor": "food french",
    "relevance": 8,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
    "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/right-food-french-bulldog-guide/",
-   "from_title": "Choosing the Right Food for Your French Bulldog",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
-   "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/shop/",
-   "from_title": "Houseplant Tools & Supplies: What to Buy & Skip | PlantasticHaven",
-   "to": "https://plantastichaven.com/houseplant-pest-control/",
-   "to_title": "Houseplant Pest Control: Identify Pests Before Treating",
-   "anchor": "pest control",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/care-guides/",
-   "from_title": "Indoor Plant Care Guides - PlantasticHaven",
-   "to": "https://plantastichaven.com/houseplant-pest-control/",
-   "to_title": "Houseplant Pest Control: Identify Pests Before Treating",
-   "anchor": "pest control",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-zodiac-signs-and-their-careers/",
-   "from_title": "Zodiac Sign Career Paths: Find Your Ideal Job | Mystical Digits",
-   "to": "https://mysticaldigits.com/the-myths-and-legends-of-the-zodiac-signs/",
-   "to_title": "Zodiac Signs 2026: Guide to Myths & Legends | Mystical Digits",
-   "anchor": "zodiac signs",
-   "relevance": 4,
-   "from_strength": 0
   }
  ],
  "wins": [
@@ -4544,23 +4568,25 @@
   }
  ],
  "log": [
-  "00:30:03 connection dataforseo: connected",
-  "00:30:03 connection gmail: connected",
-  "00:30:05 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "00:30:07 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "00:30:07 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "00:30:09 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "00:30:10 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "00:30:11 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "00:30:12 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "00:30:12 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "00:30:15 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "00:30:17 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "00:30:53 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "00:33:25 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "00:35:35 prospects: 18 queries (0 brand-mention), 95 candidates, 25 qualified (0 unlinked mentions), 10 with email, 0 already linking",
-  "00:35:50 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "00:36:50 outreach (send): 2 sent, 0 drafted, 0 follow-ups, 122 waiting for recipients' business hours, cap 9",
-  "00:36:50 link checks: 0 pages, 0 new links won, 0 lost"
+  "06:30:28 connection dataforseo: connected",
+  "06:30:28 connection gmail: connected",
+  "06:30:40 crawl gearuptofit.com: 300/877 urls, fetched 292, 304 0, reused 8",
+  "06:30:40 crawl gearuptogrow.com: 107/107 urls, fetched 107, 304 0, reused 0",
+  "06:30:48 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 7, 304 0, reused 251",
+  "06:30:55 crawl plantastichaven.com: 161/161 urls, fetched 158, 304 0, reused 3",
+  "06:30:58 crawl micegoneguide.com: 53/53 urls, fetched 43, 304 0, reused 10",
+  "06:31:06 crawl openclaw-skillshub.com: 158/158 urls, fetched 158, 304 0, reused 0",
+  "06:31:10 crawl imagealchemy.app: 26/26 urls, fetched 26, 304 0, reused 0",
+  "06:31:11 crawl frenchyfab.com: 238/238 urls, fetched 230, 304 0, reused 8",
+  "06:31:27 crawl mysticaldigits.com: 300/468 urls, fetched 290, 304 0, reused 10",
+  "06:31:50 crawl efficientgptprompts.com: 300/487 urls, fetched 297, 304 0, reused 3",
+  "06:32:24 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "06:33:20 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "06:33:57 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "06:35:07 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "06:37:25 prospects: 17 queries (0 brand-mention), 81 candidates, 14 qualified (0 unlinked mentions), 5 with email, 0 already linking",
+  "06:37:34 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "06:39:13 outreach (send): 3 sent, 0 drafted, 0 follow-ups, 124 waiting for recipients' business hours, cap 9",
+  "06:39:13 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
