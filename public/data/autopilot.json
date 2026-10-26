@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-26T08:05:00.564Z",
- "duration_s": 16,
+ "generated_at": "2026-10-26T10:43:44.797Z",
+ "duration_s": 25,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 18.915146
+    "balance_usd": 18.669646
    },
    "gmail": {
     "status": "connected"
@@ -20,7 +20,7 @@
   "outreach_mode": "send",
   "claude": false,
   "gsc": false,
-  "daily_send_cap": 9
+  "daily_send_cap": 11
  },
  "setup": [
   {
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 5164,
+   "ms": 10882,
    "result": {
     "sites": 10,
     "pages": 1901
@@ -116,7 +116,7 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 6,
+   "ms": 4,
    "result": {
     "queries": 0,
     "mention_queries": 0,
@@ -132,7 +132,7 @@
   },
   "replies": {
    "ok": true,
-   "ms": 9305,
+   "ms": 10343,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -143,14 +143,14 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 6,
+   "ms": 4,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 0,
-    "cap": 9
+    "deferred": 128,
+    "cap": 11
    },
    "writer": {
     "claude": 0,
@@ -159,7 +159,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "checked": 0,
     "won": 0,
@@ -186,8 +186,8 @@
   "mode": "send",
   "ready": 128,
   "sent_today": 9,
-  "cap_today": 9,
-  "next_send_at": "2026-10-27T13:00:00.000Z",
+  "cap_today": 11,
+  "next_send_at": "2026-10-26T13:00:00.000Z",
   "sending_now": false
  },
  "funnel": {
@@ -4591,21 +4591,21 @@
   }
  ],
  "log": [
-  "08:04:45 connection dataforseo: connected",
-  "08:04:45 connection gmail: connected",
-  "08:04:46 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "08:04:46 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "08:04:47 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "08:04:48 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "08:04:49 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "08:04:49 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "08:04:49 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "08:04:50 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "08:04:50 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "08:04:50 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "08:04:51 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "08:05:00 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "08:05:00 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 0 waiting for recipients' business hours, cap 9",
-  "08:05:00 link checks: 0 pages, 0 new links won, 0 lost"
+  "10:43:22 connection dataforseo: connected",
+  "10:43:22 connection gmail: connected",
+  "10:43:23 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "10:43:27 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "10:43:27 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "10:43:27 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "10:43:28 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "10:43:28 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "10:43:29 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "10:43:29 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "10:43:30 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "10:43:33 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "10:43:34 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "10:43:44 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "10:43:44 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 128 waiting for recipients' business hours, cap 11",
+  "10:43:44 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
