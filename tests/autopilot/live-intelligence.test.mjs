@@ -27,7 +27,7 @@ test('live sections never disguise separate browser controls as active controls'
   const operation=livePanel(data,'operations',h);
   assert.match(operation,/NOT pause, resume or cancel GitHub Autopilot/);
   const suppression=livePanel(data,'suppression',h);
-  assert.match(suppression,/does NOT stop/);
+  assert.match(suppression,/does not prevent unattended outreach/);
   const banner=liveBanner(data,'overview',h);
   assert.match(banner,/BROWSER RECORDS SEPARATE/);
 });
