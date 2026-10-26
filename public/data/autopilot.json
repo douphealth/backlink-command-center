@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-26T10:43:44.797Z",
- "duration_s": 25,
+ "generated_at": "2026-10-26T11:59:36.977Z",
+ "duration_s": 27,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 10882,
+   "ms": 17004,
    "result": {
     "sites": 10,
     "pages": 1901
@@ -106,7 +106,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 1,
+   "ms": 0,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -116,7 +116,7 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 4,
+   "ms": 8,
    "result": {
     "queries": 0,
     "mention_queries": 0,
@@ -132,7 +132,7 @@
   },
   "replies": {
    "ok": true,
-   "ms": 10343,
+   "ms": 7963,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -143,7 +143,7 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 4,
+   "ms": 6,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -159,7 +159,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "checked": 0,
     "won": 0,
@@ -4591,21 +4591,21 @@
   }
  ],
  "log": [
-  "10:43:22 connection dataforseo: connected",
-  "10:43:22 connection gmail: connected",
-  "10:43:23 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
-  "10:43:27 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "10:43:27 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "10:43:27 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "10:43:28 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "10:43:28 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "10:43:29 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "10:43:29 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "10:43:30 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "10:43:33 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "10:43:34 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "10:43:44 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "10:43:44 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 128 waiting for recipients' business hours, cap 11",
-  "10:43:44 link checks: 0 pages, 0 new links won, 0 lost"
+  "11:59:11 connection dataforseo: connected",
+  "11:59:11 connection gmail: connected",
+  "11:59:13 crawl plantastichaven.com: 161/161 urls, fetched 1, 304 0, reused 160",
+  "11:59:15 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "11:59:18 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "11:59:19 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "11:59:19 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "11:59:19 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "11:59:19 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "11:59:21 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "11:59:25 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "11:59:28 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "11:59:28 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "11:59:36 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "11:59:36 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 128 waiting for recipients' business hours, cap 11",
+  "11:59:36 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
