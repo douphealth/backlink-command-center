@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-26T20:03:29.731Z",
- "duration_s": 82,
+ "generated_at": "2026-10-27T06:33:31.997Z",
+ "duration_s": 338,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 6515,
+   "ms": 163282,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -106,7 +106,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 0,
+   "ms": 1,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -116,23 +116,24 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 5,
+   "ms": 162172,
    "result": {
-    "queries": 0,
+    "queries": 17,
     "mention_queries": 0,
-    "serp_results": 0,
-    "candidates": 0,
-    "qualified": 0,
+    "serp_results": 287,
+    "candidates": 85,
+    "qualified": 14,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 0,
-    "with_email": 0,
-    "contact_form": 0
+    "rejected": 110,
+    "with_email": 7,
+    "contact_form": 3,
+    "failed_queries": 1
    }
   },
   "replies": {
    "ok": true,
-   "ms": 12493,
+   "ms": 10612,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -143,13 +144,13 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 61063,
+   "ms": 5,
    "result": {
     "followups": 0,
-    "sent": 2,
+    "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 0,
+    "deferred": 133,
     "cap": 11
    },
    "writer": {
@@ -176,26 +177,26 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.4954,
-  "month_usd": 2.001,
+  "today_usd": 0.1349,
+  "month_usd": 2.1358,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 0
+  "calls_this_run": 20
  },
  "outreach": {
   "mode": "send",
-  "ready": 126,
-  "sent_today": 11,
+  "ready": 133,
+  "sent_today": 0,
   "cap_today": 11,
-  "next_send_at": "2026-10-27T13:00:00.000Z",
+  "next_send_at": "2026-10-27T07:00:00.000Z",
   "sending_now": false
  },
  "funnel": {
-  "prospects_evaluated": 1719,
-  "qualified": 369,
-  "ready": 126,
-  "contact_form_only": 78,
-  "no_contact": 149,
+  "prospects_evaluated": 1843,
+  "qualified": 383,
+  "ready": 133,
+  "contact_form_only": 81,
+  "no_contact": 153,
   "contacted": 16,
   "replied": 0,
   "positive": 0,
@@ -268,6 +269,22 @@
    "declined": 0,
    "bounced": 0,
    "spend_usd": 0.4954
+  },
+  {
+   "date": "2026-10-27",
+   "prospects_evaluated": 1843,
+   "qualified": 383,
+   "ready": 133,
+   "contact_form_only": 81,
+   "no_contact": 153,
+   "contacted": 16,
+   "replied": 0,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 4,
+   "declined": 0,
+   "bounced": 0,
+   "spend_usd": 0.1349
   }
  ],
  "learning": {
@@ -280,9 +297,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 46,
-    "ready": 42,
-    "rate": 0.878
+    "queries": 50,
+    "ready": 46,
+    "rate": 0.887
    },
    {
     "footprint": "statistics",
@@ -316,9 +333,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 27,
-    "ready": 11,
-    "rate": 0.4
+    "queries": 30,
+    "ready": 12,
+    "rate": 0.394
    },
    {
     "footprint": "sources",
@@ -334,21 +351,21 @@
    },
    {
     "footprint": "inurl_links",
-    "queries": 5,
-    "ready": 1,
-    "rate": 0.25
+    "queries": 7,
+    "ready": 2,
+    "rate": 0.3
    },
    {
     "footprint": "resources",
-    "queries": 60,
+    "queries": 65,
     "ready": 9,
-    "rate": 0.159
+    "rate": 0.147
    },
    {
     "footprint": "blogs_to_follow",
-    "queries": 5,
+    "queries": 6,
     "ready": 0,
-    "rate": 0.125
+    "rate": 0.111
    },
    {
     "footprint": "mention",
@@ -653,8 +670,8 @@
    "linkability": 91,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
-   "words": 1666,
+   "internal_inlinks": 8,
+   "words": 1667,
    "interactive": true,
    "modified": "2026-09-13T09:05:03+00:00",
    "reasons": [
@@ -751,8 +768,8 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 34,
-   "words": 1738,
+   "internal_inlinks": 28,
+   "words": 1747,
    "interactive": true,
    "modified": "2026-09-18T17:00:28+00:00",
    "reasons": [
@@ -800,12 +817,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 5,
-   "words": 2199,
+   "words": 2182,
    "interactive": false,
    "modified": "2026-09-13T19:08:04+00:00",
    "reasons": [
     "Original method/data — citation-worthy",
-    "In-depth (2,199 words)",
+    "In-depth (2,182 words)",
     "2 data tables",
     "Cites 5 authoritative sources",
     "Recently updated"
@@ -835,7 +852,7 @@
     "3 data tables",
     "Recently updated"
    ],
-   "prospects": 4,
+   "prospects": 5,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -876,12 +893,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 23,
-   "words": 3444,
+   "words": 3431,
    "interactive": true,
    "modified": "2026-10-03T19:51:14+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,444 words)",
+    "In-depth (3,431 words)",
     "2 data tables",
     "Recently updated"
    ],
@@ -900,7 +917,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 14,
+   "internal_inlinks": 11,
    "words": 3486,
    "interactive": true,
    "modified": "2026-09-06T06:47:08+00:00",
@@ -1026,8 +1043,8 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
-   "words": 680,
+   "internal_inlinks": 13,
+   "words": 678,
    "interactive": true,
    "modified": "2026-09-05T13:47:24+00:00",
    "reasons": [
@@ -1074,7 +1091,7 @@
    "linkability": 83,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 12,
    "words": 2085,
    "interactive": false,
    "modified": "2026-09-25T14:57:36+00:00",
@@ -1342,7 +1359,7 @@
     "3 data tables",
     "Recently updated"
    ],
-   "prospects": 3,
+   "prospects": 5,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -1613,7 +1630,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 6,
    "words": 4194,
    "interactive": false,
    "modified": "2026-09-12T07:57:38+00:00",
@@ -1638,7 +1655,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 13,
    "words": 6004,
    "interactive": false,
    "modified": "2026-09-03T11:44:05+00:00",
@@ -1785,7 +1802,7 @@
    "linkability": 75,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 6,
    "words": 3272,
    "interactive": false,
    "modified": "2026-09-13T14:12:52+00:00",
@@ -2090,11 +2107,11 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 13,
-   "words": 3053,
+   "words": 3058,
    "interactive": false,
    "modified": "2026-09-03T10:44:17+00:00",
    "reasons": [
-    "In-depth (3,053 words)",
+    "In-depth (3,058 words)",
     "1 data table",
     "Recently updated"
    ],
@@ -2244,8 +2261,8 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 19,
-   "words": 1101,
+   "internal_inlinks": 20,
+   "words": 1100,
    "interactive": false,
    "modified": "2026-09-13T08:04:36+00:00",
    "reasons": [
@@ -2266,7 +2283,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 8,
    "words": 4455,
    "interactive": false,
    "modified": "2026-09-03T13:33:15+00:00",
@@ -2291,12 +2308,12 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
-   "words": 3117,
+   "internal_inlinks": 10,
+   "words": 3259,
    "interactive": false,
    "modified": "2026-09-03T12:32:26+00:00",
    "reasons": [
-    "In-depth (3,117 words)",
+    "In-depth (3,259 words)",
     "1 data table",
     "Cites 8 authoritative sources",
     "Recently updated"
@@ -2316,7 +2333,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 9,
    "words": 2972,
    "interactive": false,
    "modified": "2026-09-03T12:25:05+00:00",
@@ -2368,7 +2385,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 16,
-   "words": 693,
+   "words": 692,
    "interactive": true,
    "modified": "2026-09-05T13:47:17+00:00",
    "reasons": [
@@ -2440,7 +2457,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 9,
-   "words": 611,
+   "words": 610,
    "interactive": true,
    "modified": "2026-09-05T13:47:04+00:00",
    "reasons": [
@@ -3160,6 +3177,16 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/review/skool-affiliate-program-review/",
+   "from_title": "Skool Affiliate Program Review 2026: 40% Recurring",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
+   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
+   "anchor": "promote affiliate products",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-mistakes/",
    "from_title": "12 Affiliate Marketing Mistakes and How to Fix Them",
    "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
@@ -3172,16 +3199,6 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-niche-selection-mistakes/",
    "from_title": "Affiliate Marketing 2026: 7 Niche Selection Mistakes to Avoid",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/ai/boost-affiliate-earnings-perplexity-ai/",
-   "from_title": "How to Use Perplexity AI to Boost Your Affiliate Earnings in 2026",
    "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
    "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
    "anchor": "promote affiliate products",
@@ -4606,21 +4623,22 @@
   }
  ],
  "log": [
-  "20:02:09 connection dataforseo: connected",
-  "20:02:09 connection gmail: connected",
-  "20:02:10 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "20:02:10 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
-  "20:02:11 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "20:02:12 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "20:02:13 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "20:02:13 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "20:02:14 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "20:02:14 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "20:02:15 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "20:02:15 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "20:02:16 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "20:02:28 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "20:03:29 outreach (send): 2 sent, 0 drafted, 0 follow-ups, 0 waiting for recipients' business hours, cap 11",
-  "20:03:29 link checks: 0 pages, 0 new links won, 0 lost"
+  "06:27:55 connection dataforseo: connected",
+  "06:27:55 connection gmail: connected",
+  "06:27:57 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "06:27:57 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
+  "06:27:59 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "06:28:03 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "06:28:03 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "06:28:03 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "06:28:04 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "06:28:04 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "06:28:11 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "06:30:38 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 226, 304 0, reused 32",
+  "06:32:53 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "06:33:21 prospects: 17 queries (0 brand-mention), 85 candidates, 14 qualified (0 unlinked mentions), 7 with email, 0 already linking",
+  "06:33:31 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "06:33:31 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 133 waiting for recipients' business hours, cap 11",
+  "06:33:31 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
