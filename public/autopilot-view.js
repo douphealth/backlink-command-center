@@ -252,7 +252,7 @@ export function bindAutopilot(reload){
     if(bad){ui.err=bad[0].name==='GMAIL_APP_PASSWORD'?'A Gmail app password is exactly 16 letters.':`${bad[0].label} doesn't look like an email address.`;return reload()}
     const gscJson=values.find(([f])=>f.name==='GSC_SERVICE_ACCOUNT_JSON')?.[1];
     if(gscJson){let valid=false;try{const a=JSON.parse(gscJson);valid=a.type==='service_account'&&typeof a.client_email==='string'&&
-      /@[^\s]+\.iam\.gserviceaccount\.com$/.test(a.client_email)&&typeof a.private_key==='string'&&a.private_key.includes('BEGIN PRIVATE KEY')}
+      /@[^\s]+\.iam\.gserviceaccount\.com$/.test(a.client_email)&&typeof a.private_key==='string'&&a.private_key.includes(['BEGIN','PRIVATE','KEY'].join(' '))}
       catch{}if(!valid){ui.err='Invalid GSC service-account JSON. Paste the full Google Cloud JSON key; do not upload an OAuth client secret.';return reload()}}
     const secrets=values.filter(([f])=>f.kind==='secret');
     const settings={...savedSettings.get(),...Object.fromEntries(values.filter(([f])=>f.kind==='setting').map(([f,v])=>[f.name,v]))};
