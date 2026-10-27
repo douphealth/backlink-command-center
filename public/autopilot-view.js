@@ -43,6 +43,9 @@ const FIELDS=[
   {name:'OUTREACH_MODE',label:'Outreach mode',type:'select',kind:'setting',options:[['send','Hands-free: send pitches + 1 follow-up automatically'],['draft','Safe: write pitches into Gmail Drafts'],['off','Research only']]},
   {name:'OUTREACH_DAILY_LIMIT',label:'Max new pitches per day',type:'number',kind:'setting',help:'Starts at 5/day and ramps up by 2/day to this limit'},
   {name:'ANTHROPIC_API_KEY',label:'Anthropic API key (optional)',type:'password',kind:'secret',help:'Claude writes a unique pitch for every page'},
+  {name:'GSC_SERVICE_ACCOUNT_JSON',label:'Direct Google Search Console service account (optional)',type:'textarea',kind:'secret',
+    help:'Paste the full service-account JSON. Give its client_email read permission to each Search Console property before running. Never paste credentials into a public issue.',
+    link:'https://developers.google.com/webmaster-tools/v1/prereqs'},
 ];
 // Settings travel as one encrypted secret (no Variables permission needed); this browser remembers them for display.
 const local=(k,fallback)=>({get:()=>{try{return JSON.parse(localStorage.getItem(k))??fallback}catch{return fallback}},set:v=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}}});
@@ -175,6 +178,7 @@ function connectPanel(h){
   const done=f=>fieldDone(f,c),settings=savedSettings.get();
   const field=f=>{const bad=ui.rejected?.has(f.name),ok=done(f)&&!bad,cur=f.kind==='setting'?settings[f.name]||'':'';
     const input=f.type==='select'?`<select class="selector" name="${f.name}">${f.options.map(([v,l])=>`<option value="${v}" ${(cur||'send')===v?'selected':''}>${e(l)}</option>`).join('')}</select>`
+      :f.type==='textarea'?`<textarea name="${f.name}" rows="4" autocomplete="off" spellcheck="false" placeholder="${ok?'Connected; leave blank to keep':'Paste service-account JSON'}"></textarea>`
       :`<input name="${f.name}" type="${f.type}" ${f.type==='number'?'min="1" max="50"':''} autocomplete="${f.type==='password'?'new-password':'off'}" value="${e(cur)}" placeholder="${ok&&!cur?(f.kind==='secret'?'Connected; leave blank to keep':'Saved; type to change'):f.type==='number'?'12':''}" ${f.required&&!ok?'required':''}>`;
     return `<label class="ap-field"><span>${e(f.label)} ${bad?'<b class="ap-need">✗ rejected: re-enter</b>':ok?'<b class="ap-ok">✓ saved</b>':f.required?'<b class="ap-need">needed</b>':''}</span>${input}${f.help?`<small>${f.link?`<a href="${f.link}" target="_blank" rel="noopener">${e(f.help)} ↗</a>`:e(f.help)}</small>`:''}</label>`};
   return panel('Connect Autopilot','Two steps, once. Everything is encrypted in your browser before it reaches GitHub; nothing can read it back.',
@@ -246,6 +250,10 @@ export function bindAutopilot(reload){
     const form=new FormData(ev.target),values=FIELDS.map(f=>[f,String(form.get(f.name)||'').trim()]).filter(([,v])=>v);
     const bad=values.find(([f,v])=>(f.type==='email'&&!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(v))||(f.name==='GMAIL_APP_PASSWORD'&&v.replace(/\s+/g,'').length!==16));
     if(bad){ui.err=bad[0].name==='GMAIL_APP_PASSWORD'?'A Gmail app password is exactly 16 letters.':`${bad[0].label} doesn't look like an email address.`;return reload()}
+    const gscJson=values.find(([f])=>f.name==='GSC_SERVICE_ACCOUNT_JSON')?.[1];
+    if(gscJson){let valid=false;try{const a=JSON.parse(gscJson);valid=a.type==='service_account'&&typeof a.client_email==='string'&&
+      /@[^\s]+\.iam\.gserviceaccount\.com$/.test(a.client_email)&&typeof a.private_key==='string'&&a.private_key.includes('BEGIN PRIVATE KEY')}
+      catch{}if(!valid){ui.err='Invalid GSC service-account JSON. Paste the full Google Cloud JSON key; do not upload an OAuth client secret.';return reload()}}
     const secrets=values.filter(([f])=>f.kind==='secret');
     const settings={...savedSettings.get(),...Object.fromEntries(values.filter(([f])=>f.kind==='setting').map(([f,v])=>[f.name,v]))};
     // The mode/limit dropdowns always carry a value, so only rewrite settings when the name is known.
