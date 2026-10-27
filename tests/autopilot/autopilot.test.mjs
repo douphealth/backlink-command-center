@@ -177,6 +177,23 @@ test('later opt-out from same sender and subject is not lost',async()=>{
   assert.ok(state.suppression['publisher.org']);
 });
 
+test('a bounce suppresses the failed address without emailing an alternate',async()=>{
+  const msgId='<lf-bounce@example.org>';
+  const p={id:'b',status:'sent',site:'mice.com',domain:'publisher.org',email:'old@publisher.org',
+    alternates:['other@publisher.org'],page_url:'https://publisher.org/resources',
+    history:[{type:'initial',at:new Date().toISOString(),message_id:msgId}]};
+  const state={prospects:{b:p},contacted:{'publisher.org':new Date().toISOString()}};
+  const r=await processReplies({state,imap:{recentHeaders:async()=>[{
+    uid:'120',messageId:'<bounced@postmaster.org>',from:'mailer-daemon@postmaster.org',
+    subject:'Delivery Status Notification',inReplyTo:msgId,references:'',body:'Mailbox unavailable'}]}});
+  assert.equal(r.bounces,1);
+  assert.equal(p.status,'bounced');
+  assert.equal(p.email,'old@publisher.org');
+  assert.ok(state.suppression['old@publisher.org']);
+  assert.ok(state.contacted['publisher.org']);
+  assert.equal(p.no_followup,true);
+});
+
 test('pitch validation rejects foreign URLs and placeholders',()=>{
   const asset={url:'https://mice.com/plan'};
   const body='Hi there, '+'x'.repeat(220)+' https://mice.com/plan thanks';
