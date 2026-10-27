@@ -80,8 +80,10 @@ export async function processReplies({state,imap,log=()=>{}}){
     if(state.seen_replies[key])continue;state.seen_replies[key]=NOW();
     if(kind==='bounce'){
       stats.bounces++;p.history.push({type:'bounce',at:NOW(),to:p.email});
-      const next=(p.alternates||[]).find(e=>e!==p.email&&!suppressed(state,e,p.domain));
-      if(next){p.email=next;p.status='ready';delete state.contacted[p.domain]}else p.status='bounced';
+      // Do not silently switch to another person/inbox after a bounce. That is a
+      // new outreach decision, not a retry of the same verified conversation.
+      if(p.email)state.suppression[p.email]={reason:'Delivery failure; do not retry',at:NOW()};
+      p.status='bounced';p.no_followup=true;
       continue;
     }
     stats.replies++;p.replied_at=NOW();p.history.push({type:'reply',at:NOW(),from:m.from,sentiment:kind,subject:m.subject.slice(0,140)});
