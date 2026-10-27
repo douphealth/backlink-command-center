@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-27T06:33:31.997Z",
- "duration_s": 338,
+ "generated_at": "2026-10-27T08:08:45.890Z",
+ "duration_s": 377,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 18.669646
+    "balance_usd": 18.534765999999998
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 163282,
+   "ms": 18137,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -116,24 +116,24 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 162172,
+   "ms": 284021,
    "result": {
-    "queries": 17,
+    "queries": 14,
     "mention_queries": 0,
-    "serp_results": 287,
-    "candidates": 85,
-    "qualified": 14,
+    "serp_results": 245,
+    "candidates": 82,
+    "qualified": 23,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 110,
-    "with_email": 7,
-    "contact_form": 3,
-    "failed_queries": 1
+    "rejected": 99,
+    "with_email": 13,
+    "contact_form": 0,
+    "failed_queries": 3
    }
   },
   "replies": {
    "ok": true,
-   "ms": 10612,
+   "ms": 9578,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -144,13 +144,13 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 5,
+   "ms": 63108,
    "result": {
     "followups": 0,
-    "sent": 0,
+    "sent": 2,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 133,
+    "deferred": 144,
     "cap": 11
    },
    "writer": {
@@ -177,27 +177,27 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.1349,
-  "month_usd": 2.1358,
+  "today_usd": 0.2835,
+  "month_usd": 2.2845,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 20
+  "calls_this_run": 25
  },
  "outreach": {
   "mode": "send",
-  "ready": 133,
-  "sent_today": 0,
+  "ready": 144,
+  "sent_today": 2,
   "cap_today": 11,
-  "next_send_at": "2026-10-27T07:00:00.000Z",
+  "next_send_at": "2026-10-27T13:00:00.000Z",
   "sending_now": false
  },
  "funnel": {
-  "prospects_evaluated": 1843,
-  "qualified": 383,
-  "ready": 133,
+  "prospects_evaluated": 1965,
+  "qualified": 406,
+  "ready": 144,
   "contact_form_only": 81,
-  "no_contact": 153,
-  "contacted": 16,
+  "no_contact": 163,
+  "contacted": 18,
   "replied": 0,
   "positive": 0,
   "won": 0,
@@ -272,19 +272,19 @@
   },
   {
    "date": "2026-10-27",
-   "prospects_evaluated": 1843,
-   "qualified": 383,
-   "ready": 133,
+   "prospects_evaluated": 1965,
+   "qualified": 406,
+   "ready": 144,
    "contact_form_only": 81,
-   "no_contact": 153,
-   "contacted": 16,
+   "no_contact": 163,
+   "contacted": 18,
    "replied": 0,
    "positive": 0,
    "won": 0,
    "existing_links": 4,
    "declined": 0,
    "bounced": 0,
-   "spend_usd": 0.1349
+   "spend_usd": 0.2835
   }
  ],
  "learning": {
@@ -297,9 +297,15 @@
    },
    {
     "footprint": "intent",
-    "queries": 50,
-    "ready": 46,
-    "rate": 0.887
+    "queries": 54,
+    "ready": 52,
+    "rate": 0.93
+   },
+   {
+    "footprint": "tools",
+    "queries": 6,
+    "ready": 5,
+    "rate": 0.667
    },
    {
     "footprint": "statistics",
@@ -308,34 +314,28 @@
     "rate": 0.667
    },
    {
-    "footprint": "tools",
-    "queries": 5,
-    "ready": 4,
-    "rate": 0.625
-   },
-   {
     "footprint": "useful_websites",
-    "queries": 2,
-    "ready": 2,
-    "rate": 0.6
-   },
-   {
-    "footprint": "intitle_resources",
-    "queries": 7,
+    "queries": 3,
     "ready": 3,
-    "rate": 0.4
+    "rate": 0.667
    },
    {
     "footprint": "inurl_resources",
-    "queries": 7,
-    "ready": 3,
-    "rate": 0.4
+    "queries": 8,
+    "ready": 4,
+    "rate": 0.455
    },
    {
     "footprint": "best_guides",
     "queries": 30,
     "ready": 12,
     "rate": 0.394
+   },
+   {
+    "footprint": "intitle_resources",
+    "queries": 8,
+    "ready": 3,
+    "rate": 0.364
    },
    {
     "footprint": "sources",
@@ -356,16 +356,16 @@
     "rate": 0.3
    },
    {
-    "footprint": "resources",
-    "queries": 65,
-    "ready": 9,
-    "rate": 0.147
+    "footprint": "blogs_to_follow",
+    "queries": 7,
+    "ready": 1,
+    "rate": 0.2
    },
    {
-    "footprint": "blogs_to_follow",
-    "queries": 6,
-    "ready": 0,
-    "rate": 0.111
+    "footprint": "resources",
+    "queries": 67,
+    "ready": 9,
+    "rate": 0.143
    },
    {
     "footprint": "mention",
@@ -449,6 +449,22 @@
    },
    {
     "url": "https://plantastichaven.com/how-to-propagate-a-philodendron-birkin/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://imagealchemy.app/glossary/entropy-coding",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://openclaw-skillshub.com/skills/web-frontend/css-generator/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -852,7 +868,7 @@
     "3 data tables",
     "Recently updated"
    ],
-   "prospects": 5,
+   "prospects": 7,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -4623,22 +4639,24 @@
   }
  ],
  "log": [
-  "06:27:55 connection dataforseo: connected",
-  "06:27:55 connection gmail: connected",
-  "06:27:57 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
-  "06:27:57 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
-  "06:27:59 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "06:28:03 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "06:28:03 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "06:28:03 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "06:28:04 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "06:28:04 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "06:28:11 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "06:30:38 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 226, 304 0, reused 32",
-  "06:32:53 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:33:21 prospects: 17 queries (0 brand-mention), 85 candidates, 14 qualified (0 unlinked mentions), 7 with email, 0 already linking",
-  "06:33:31 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "06:33:31 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 133 waiting for recipients' business hours, cap 11",
-  "06:33:31 link checks: 0 pages, 0 new links won, 0 lost"
+  "08:02:30 connection dataforseo: connected",
+  "08:02:30 connection gmail: connected",
+  "08:02:32 crawl gearuptofit.com: 300/877 urls, fetched 0, 304 0, reused 300",
+  "08:02:32 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
+  "08:02:35 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "08:02:35 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "08:02:36 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "08:02:36 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "08:02:37 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "08:02:37 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "08:02:41 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "08:02:48 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 4, 304 0, reused 254",
+  "08:03:54 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:04:51 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:06:27 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:07:33 prospects: 14 queries (0 brand-mention), 82 candidates, 23 qualified (0 unlinked mentions), 13 with email, 0 already linking",
+  "08:07:42 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "08:08:45 outreach (send): 2 sent, 0 drafted, 0 follow-ups, 144 waiting for recipients' business hours, cap 11",
+  "08:08:45 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
