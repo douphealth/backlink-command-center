@@ -45,6 +45,27 @@ async function checkPortfolioSite(domain,context){
 export async function onRequest(context){
   const {request,env}=context,url=new URL(request.url);
   const route=url.pathname.replace(/^\/api\/?/,'');
+  // Liveness is not readiness. A missing optional database must not make the
+  // deployed Pages frontend appear offline to uptime checks.
+  if(request.method==='GET'&&route==='health'){
+    const configured=!localMode(env);
+    return json({
+      status:'ok',
+      service:'Backlink Command Center Pages API',
+      dashboard:'available',
+      mode:configured?'cloud_backend':'browser_workspace',
+      backend_ready:configured,
+      database_bound:!!env?.DB,
+      authentication_configured:operatorReady(env)||accessReady(env),
+      automation_ready:false,
+      note:configured?'Cloud backend configured; use authenticated endpoints to inspect individual integrations.':'The browser workspace is available, but cloud automation and cross-device data are not configured.',
+      checked_at:stamp(),
+    });
+  }
+  if(request.method==='GET'&&route==='readiness'){
+    const ready=!localMode(env);
+    return json({ready,backend_ready:ready,reason:ready?'Backend configured':'Cloudflare D1 and owner authentication are required'},ready?200:503);
+  }
   if(request.method==='GET'&&route==='setup'){
     if(!localMode(env))return handleApi(request,env);
     return json({mode:'browser_workspace',deployment:'cloudflare_pages',database_bound:false,auth_ready:false,
