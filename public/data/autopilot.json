@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-28T06:04:06.954Z",
- "duration_s": 346,
+ "generated_at": "2026-10-28T13:25:52.686Z",
+ "duration_s": 548,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 18.172126
+    "balance_usd": 17.966085999999997
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 16140,
+   "ms": 34628,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -91,7 +91,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -101,7 +101,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 323
+    "internal_suggestions": 318
    }
   },
   "requalify": {
@@ -116,24 +116,24 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 315831,
+   "ms": 124965,
    "result": {
     "queries": 12,
     "mention_queries": 0,
-    "serp_results": 223,
-    "candidates": 52,
-    "qualified": 17,
+    "serp_results": 224,
+    "candidates": 47,
+    "qualified": 16,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 50,
-    "with_email": 8,
-    "contact_form": 2,
-    "failed_queries": 5
+    "rejected": 55,
+    "with_email": 7,
+    "contact_form": 3,
+    "failed_queries": 1
    }
   },
   "replies": {
    "ok": true,
-   "ms": 11176,
+   "ms": 12280,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -144,13 +144,13 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 7,
+   "ms": 371204,
    "result": {
     "followups": 0,
-    "sent": 0,
+    "sent": 12,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 153,
+    "deferred": 0,
     "cap": 12
    },
    "writer": {
@@ -160,9 +160,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 2,
+   "ms": 2252,
    "result": {
-    "checked": 0,
+    "checked": 5,
     "won": 0,
     "lost": 0
    }
@@ -173,31 +173,31 @@
   "pages_crawled": 1902,
   "urls_discovered": 2835,
   "promotable": 250,
-  "internal_suggestions": 323,
+  "internal_suggestions": 318,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.206,
-  "month_usd": 2.7045,
+  "today_usd": 0.3266,
+  "month_usd": 2.825,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 26
+  "calls_this_run": 15
  },
  "outreach": {
   "mode": "send",
-  "ready": 153,
-  "sent_today": 0,
+  "ready": 148,
+  "sent_today": 12,
   "cap_today": 12,
-  "next_send_at": "2026-10-28T13:00:00.000Z",
+  "next_send_at": "2026-10-29T13:00:00.000Z",
   "sending_now": false
  },
  "funnel": {
-  "prospects_evaluated": 2181,
-  "qualified": 459,
-  "ready": 153,
-  "contact_form_only": 88,
-  "no_contact": 191,
-  "contacted": 28,
+  "prospects_evaluated": 2252,
+  "qualified": 475,
+  "ready": 148,
+  "contact_form_only": 91,
+  "no_contact": 197,
+  "contacted": 38,
   "replied": 0,
   "positive": 0,
   "won": 0,
@@ -288,19 +288,19 @@
   },
   {
    "date": "2026-10-28",
-   "prospects_evaluated": 2181,
-   "qualified": 459,
-   "ready": 153,
-   "contact_form_only": 88,
-   "no_contact": 191,
-   "contacted": 28,
+   "prospects_evaluated": 2252,
+   "qualified": 475,
+   "ready": 148,
+   "contact_form_only": 91,
+   "no_contact": 197,
+   "contacted": 38,
    "replied": 0,
    "positive": 0,
    "won": 0,
    "existing_links": 4,
    "declined": 0,
    "bounced": 1,
-   "spend_usd": 0.206
+   "spend_usd": 0.3266
   }
  ],
  "learning": {
@@ -313,9 +313,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 59,
-    "ready": 55,
-    "rate": 0.903
+    "queries": 61,
+    "ready": 56,
+    "rate": 0.891
    },
    {
     "footprint": "statistics",
@@ -349,18 +349,18 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 36,
-    "ready": 16,
-    "rate": 0.436
-   },
-   {
-    "footprint": "recommended_reading",
-    "queries": 8,
-    "ready": 3,
-    "rate": 0.364
+    "queries": 39,
+    "ready": 18,
+    "rate": 0.452
    },
    {
     "footprint": "inurl_links",
+    "queries": 9,
+    "ready": 4,
+    "rate": 0.417
+   },
+   {
+    "footprint": "recommended_reading",
     "queries": 8,
     "ready": 3,
     "rate": 0.364
@@ -379,9 +379,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 70,
-    "ready": 9,
-    "rate": 0.137
+    "queries": 72,
+    "ready": 12,
+    "rate": 0.173
    },
    {
     "footprint": "mention",
@@ -432,7 +432,7 @@
     "rate": 0.25
    },
    {
-    "url": "https://imagealchemy.app/learn/compress-images-without-uploading",
+    "url": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -464,15 +464,7 @@
     "rate": 0.25
    },
    {
-    "url": "https://openclaw-skillshub.com/skills/coding-agents/docs-generator/",
-    "sent": 1,
-    "replied": 0,
-    "positive": 0,
-    "won": 0,
-    "rate": 0.25
-   },
-   {
-    "url": "https://imagealchemy.app/glossary/entropy-coding",
+    "url": "https://openclaw-skillshub.com/skills/coding-agents/test-generator/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -528,7 +520,23 @@
     "rate": 0.2
    },
    {
+    "url": "https://imagealchemy.app/learn/compress-images-without-uploading",
+    "sent": 2,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.2
+   },
+   {
     "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
+    "sent": 2,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.2
+   },
+   {
+    "url": "https://openclaw-skillshub.com/skills/coding-agents/docs-generator/",
     "sent": 2,
     "replied": 0,
     "positive": 0,
@@ -542,6 +550,30 @@
     "positive": 0,
     "won": 0,
     "rate": 0.2
+   },
+   {
+    "url": "https://efficientgptprompts.com/ai-prompt-templates-for-ecommerce-brands-2026-guide/",
+    "sent": 2,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.2
+   },
+   {
+    "url": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+    "sent": 2,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.2
+   },
+   {
+    "url": "https://imagealchemy.app/glossary/entropy-coding",
+    "sent": 3,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.167
    },
    {
     "url": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
@@ -566,7 +598,7 @@
    "domain": "plantastichaven.com",
    "pages": 162,
    "discovered": 162,
-   "sitemaps": 5,
+   "sitemaps": 4,
    "eligible": 25,
    "top": "https://plantastichaven.com/string-of-pearls-plant-care/"
   },
@@ -648,12 +680,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 53,
-   "words": 2199,
+   "words": 2205,
    "interactive": true,
    "modified": "2026-10-25T09:14:08+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,199 words)",
+    "In-depth (2,205 words)",
     "3 data tables",
     "Cites 63 authoritative sources",
     "Recently updated"
@@ -896,7 +928,7 @@
    "linkability": 87,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
+   "internal_inlinks": 4,
    "words": 2182,
    "interactive": false,
    "modified": "2026-09-13T19:08:04+00:00",
@@ -972,7 +1004,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 23,
+   "internal_inlinks": 25,
    "words": 3431,
    "interactive": true,
    "modified": "2026-10-03T19:51:14+00:00",
@@ -1219,7 +1251,7 @@
    "linkability": 95,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 9,
    "words": 2209,
    "interactive": true,
    "modified": "2026-10-03T06:26:18+00:00",
@@ -1245,7 +1277,7 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 9,
    "words": 4949,
    "interactive": false,
    "modified": "2026-09-13T09:07:20+00:00",
@@ -1295,7 +1327,7 @@
    "linkability": 94,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
+   "internal_inlinks": 14,
    "words": 1121,
    "interactive": true,
    "modified": "2026-10-05T18:42:26+00:00",
@@ -1321,7 +1353,7 @@
    "linkability": 94,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 8,
    "words": 1827,
    "interactive": true,
    "modified": "2026-10-03T06:40:50+00:00",
@@ -1454,7 +1486,7 @@
    "linkability": 80,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 12,
    "words": 2011,
    "interactive": false,
    "modified": "2026-09-25T17:56:37+00:00",
@@ -1479,7 +1511,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 8,
-   "words": 1590,
+   "words": 1596,
    "interactive": true,
    "modified": "2026-10-25T07:53:02+00:00",
    "reasons": [
@@ -1710,7 +1742,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 7,
    "words": 4194,
    "interactive": false,
    "modified": "2026-09-12T07:57:38+00:00",
@@ -1760,7 +1792,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 17,
-   "words": 1986,
+   "words": 1992,
    "interactive": true,
    "modified": "2026-10-24T09:10:11+00:00",
    "reasons": [
@@ -1929,8 +1961,8 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
-   "words": 1655,
+   "internal_inlinks": 7,
+   "words": 1652,
    "interactive": true,
    "modified": "2026-10-25T07:53:36+00:00",
    "reasons": [
@@ -1982,7 +2014,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 11,
    "words": 1611,
    "interactive": true,
    "modified": "2026-10-03T06:40:47+00:00",
@@ -2237,7 +2269,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
+   "internal_inlinks": 4,
    "words": 2172,
    "interactive": true,
    "modified": "2026-10-03T06:40:36+00:00",
@@ -2363,7 +2395,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 9,
    "words": 4455,
    "interactive": false,
    "modified": "2026-09-03T13:33:15+00:00",
@@ -2388,7 +2420,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 9,
    "words": 3259,
    "interactive": false,
    "modified": "2026-09-03T12:32:26+00:00",
@@ -2476,6 +2508,33 @@
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/essence-of-number-five-guide/",
+   "title": "Exploring Your Path: Essence of Number Five 2026 | Mystical Digits",
+   "h1": "Exploring Your Path: Essence of Number Five 2026",
+   "description": "A grounded guide to exploring your path: essence of number five 2026, with meanings, examples, common mistakes, and practical reflection-first next steps.",
+   "type": "practical_guide",
+   "promotion": 64,
+   "linkability": 80,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 3991,
+   "interactive": true,
+   "modified": "2026-10-28T08:09:35+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (3,991 words)",
+    "3 data tables",
+    "Recently updated",
+    "Under-linked internally (2 inbound)",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 1,
+   "internal_link_suggestions": 0,
+   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -2620,32 +2679,6 @@
     "Has an interactive tool/quiz — earns links naturally",
     "In-depth (4,296 words)",
     "27 data tables",
-    "Recently updated",
-    "One of 236 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 5,
-   "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/french-bulldog-training-classes/",
-   "title": "French Bulldog Training Classes: When to Join",
-   "h1": "French Bulldog Training Classes: When to Join, What to Expect, and Red Flags",
-   "description": "French Bulldog training got you frustrated? Discover expert-approved classes! Transform bad behavior & build a bond. See how now!",
-   "type": "practical_guide",
-   "promotion": 62,
-   "linkability": 82,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 3,
-   "words": 4110,
-   "interactive": true,
-   "modified": "2026-09-25T21:05:17+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,110 words)",
-    "28 data tables",
     "Recently updated",
     "One of 236 templated sibling pages — promote the hub first"
    ],
@@ -4703,26 +4736,22 @@
   }
  ],
  "log": [
-  "05:58:23 connection dataforseo: connected",
-  "05:58:23 connection gmail: connected",
-  "05:58:25 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
-  "05:58:27 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "05:58:30 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "05:58:31 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "05:58:34 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "05:58:35 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "05:58:35 crawl gearuptofit.com: 300/878 urls, fetched 4, 304 0, reused 296",
-  "05:58:36 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "05:58:37 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "05:58:39 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "05:59:06 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "05:59:35 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:00:54 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:01:41 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:02:19 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:03:55 prospects: 12 queries (0 brand-mention), 52 candidates, 17 qualified (0 unlinked mentions), 8 with email, 0 already linking",
-  "06:04:06 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "06:04:06 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 153 waiting for recipients' business hours, cap 12",
-  "06:04:06 link checks: 0 pages, 0 new links won, 0 lost"
+  "13:16:47 connection dataforseo: connected",
+  "13:16:47 connection gmail: connected",
+  "13:16:50 crawl plantastichaven.com: 162/162 urls, fetched 4, 304 0, reused 158",
+  "13:16:51 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
+  "13:16:54 crawl frenchyfab.com: 238/238 urls, fetched 4, 304 0, reused 234",
+  "13:16:55 crawl mysticaldigits.com: 300/468 urls, fetched 2, 304 0, reused 298",
+  "13:16:58 crawl micegoneguide.com: 53/53 urls, fetched 10, 304 0, reused 43",
+  "13:16:59 crawl gearuptofit.com: 300/878 urls, fetched 3, 304 0, reused 297",
+  "13:16:59 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "13:17:00 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "13:17:03 crawl efficientgptprompts.com: 300/487 urls, fetched 6, 304 0, reused 294",
+  "13:17:21 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 22, 304 0, reused 236",
+  "13:18:45 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "13:19:26 prospects: 12 queries (0 brand-mention), 47 candidates, 16 qualified (0 unlinked mentions), 7 with email, 0 already linking",
+  "13:19:39 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "13:25:50 outreach (send): 12 sent, 0 drafted, 0 follow-ups, 0 waiting for recipients' business hours, cap 12",
+  "13:25:52 link checks: 5 pages, 0 new links won, 0 lost"
  ]
 }
