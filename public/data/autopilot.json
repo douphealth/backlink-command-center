@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-28T13:25:52.686Z",
- "duration_s": 548,
+ "generated_at": "2026-10-28T19:00:38.302Z",
+ "duration_s": 203,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 17.966085999999997
+    "balance_usd": 17.845565999999998
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 34628,
+   "ms": 17344,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -91,7 +91,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -101,12 +101,12 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 318
+    "internal_suggestions": 322
    }
   },
   "requalify": {
    "ok": true,
-   "ms": 1,
+   "ms": 0,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -116,24 +116,23 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 124965,
+   "ms": 169969,
    "result": {
-    "queries": 12,
+    "queries": 9,
     "mention_queries": 0,
-    "serp_results": 224,
-    "candidates": 47,
-    "qualified": 16,
+    "serp_results": 167,
+    "candidates": 36,
+    "qualified": 11,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 55,
-    "with_email": 7,
-    "contact_form": 3,
-    "failed_queries": 1
+    "rejected": 42,
+    "with_email": 5,
+    "contact_form": 3
    }
   },
   "replies": {
    "ok": true,
-   "ms": 12280,
+   "ms": 14523,
    "result": {
     "scanned": 400,
     "replies": 0,
@@ -144,10 +143,10 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 371204,
+   "ms": 4,
    "result": {
     "followups": 0,
-    "sent": 12,
+    "sent": 0,
     "drafted": 0,
     "skipped": 0,
     "deferred": 0,
@@ -160,9 +159,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 2252,
+   "ms": 2,
    "result": {
-    "checked": 5,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -173,30 +172,30 @@
   "pages_crawled": 1902,
   "urls_discovered": 2835,
   "promotable": 250,
-  "internal_suggestions": 318,
+  "internal_suggestions": 322,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.3266,
-  "month_usd": 2.825,
+  "today_usd": 0.3869,
+  "month_usd": 2.8854,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 15
+  "calls_this_run": 13
  },
  "outreach": {
   "mode": "send",
-  "ready": 148,
+  "ready": 153,
   "sent_today": 12,
   "cap_today": 12,
   "next_send_at": "2026-10-29T13:00:00.000Z",
   "sending_now": false
  },
  "funnel": {
-  "prospects_evaluated": 2252,
-  "qualified": 475,
-  "ready": 148,
-  "contact_form_only": 91,
-  "no_contact": 197,
+  "prospects_evaluated": 2305,
+  "qualified": 486,
+  "ready": 153,
+  "contact_form_only": 94,
+  "no_contact": 200,
   "contacted": 38,
   "replied": 0,
   "positive": 0,
@@ -288,11 +287,11 @@
   },
   {
    "date": "2026-10-28",
-   "prospects_evaluated": 2252,
-   "qualified": 475,
-   "ready": 148,
-   "contact_form_only": 91,
-   "no_contact": 197,
+   "prospects_evaluated": 2305,
+   "qualified": 486,
+   "ready": 153,
+   "contact_form_only": 94,
+   "no_contact": 200,
    "contacted": 38,
    "replied": 0,
    "positive": 0,
@@ -300,7 +299,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 1,
-   "spend_usd": 0.3266
+   "spend_usd": 0.3869
   }
  ],
  "learning": {
@@ -313,9 +312,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 61,
+    "queries": 62,
     "ready": 56,
-    "rate": 0.891
+    "rate": 0.877
    },
    {
     "footprint": "statistics",
@@ -328,6 +327,12 @@
     "queries": 3,
     "ready": 3,
     "rate": 0.667
+   },
+   {
+    "footprint": "recommended_reading",
+    "queries": 9,
+    "ready": 6,
+    "rate": 0.583
    },
    {
     "footprint": "tools",
@@ -349,9 +354,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 39,
-    "ready": 18,
-    "rate": 0.452
+    "queries": 42,
+    "ready": 19,
+    "rate": 0.444
    },
    {
     "footprint": "inurl_links",
@@ -360,10 +365,10 @@
     "rate": 0.417
    },
    {
-    "footprint": "recommended_reading",
-    "queries": 8,
+    "footprint": "blogs_to_follow",
+    "queries": 9,
     "ready": 3,
-    "rate": 0.364
+    "rate": 0.333
    },
    {
     "footprint": "sources",
@@ -372,16 +377,10 @@
     "rate": 0.333
    },
    {
-    "footprint": "blogs_to_follow",
-    "queries": 8,
-    "ready": 2,
-    "rate": 0.273
-   },
-   {
     "footprint": "resources",
-    "queries": 72,
+    "queries": 73,
     "ready": 12,
-    "rate": 0.173
+    "rate": 0.171
    },
    {
     "footprint": "mention",
@@ -598,7 +597,7 @@
    "domain": "plantastichaven.com",
    "pages": 162,
    "discovered": 162,
-   "sitemaps": 4,
+   "sitemaps": 5,
    "eligible": 25,
    "top": "https://plantastichaven.com/string-of-pearls-plant-care/"
   },
@@ -1238,7 +1237,7 @@
    ],
    "prospects": 7,
    "internal_link_suggestions": 1,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "micegoneguide.com",
@@ -2107,31 +2106,6 @@
    "promoting": false
   },
   {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/running/risks-of-running-as-a-beginner/",
-   "title": "Strength Training for Runners: Unlock Proven Injury Prevention Tips | GearUpToFit",
-   "h1": "Running Injuries: 7 Surprising Ways to Prevent Them [2026]",
-   "description": "Master the 10% rule for increasing mileage to prevent overuse injuries. Step towards a healthier running journey now!",
-   "type": "practical_guide",
-   "promotion": 67,
-   "linkability": 70,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 4718,
-   "interactive": false,
-   "modified": "2026-07-23T16:53:12+00:00",
-   "reasons": [
-    "In-depth (4,718 words)",
-    "11 data tables",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "prospects": 10,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
    "site": "efficientgptprompts.com",
    "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
    "title": "Prompt Engineering Framework for LLMs: Test, Grade, Deploy",
@@ -2532,7 +2506,7 @@
     "Under-linked internally (2 inbound)",
     "One of 299 templated sibling pages — promote the hub first"
    ],
-   "prospects": 1,
+   "prospects": 2,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -2556,9 +2530,9 @@
     "Recently updated",
     "Under-linked internally (2 inbound)"
    ],
-   "prospects": 0,
+   "prospects": 1,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -2607,6 +2581,32 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "h1": "Treadmill Workout for Weight Loss: 2026 Fat Burn Guide",
+   "description": "Treadmill for weight loss: Effective workouts, tips, and strategies to help you achieve your fitness goals and transform your health.",
+   "type": "general_article",
+   "promotion": 63,
+   "linkability": 65,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 6295,
+   "interactive": false,
+   "modified": "2026-09-21T06:18:07+00:00",
+   "reasons": [
+    "In-depth (6,295 words)",
+    "9 data tables",
+    "Recently updated",
+    "Under-linked internally (1 inbound)",
+    "Health/YMYL topic — pitch only to expert publishers"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -4119,6 +4119,46 @@
    "from_strength": 0
   },
   {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/nutrition/",
+   "from_title": "Nutrition Articles | Fueling, Hydration, Supplements & Meal Planning | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness/",
+   "from_title": "Fitness Articles | Workouts, HIIT, Strength Training & Exercise Guides | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
+   "from_title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
+   "from_strength": 77
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/weight-loss-guide/",
+   "from_title": "Runner's Weight Loss Guide: Sustainable Fat Loss Tips 2026 | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-success/",
    "from_title": "French Bulldog Training: Tips for Obedience & Bonding",
@@ -4647,46 +4687,6 @@
    "anchor": "french bulldogs",
    "relevance": 4,
    "from_strength": 62
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "from_title": "French Bulldog Socialization Training: A Practical Plan",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 62
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/right-food-french-bulldog-guide/",
-   "from_title": "Choosing the Right Food for Your French Bulldog",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "homemade food",
-   "relevance": 10,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 8,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/organic-foods-for-frenchies/",
-   "from_title": "Organic Foods for Frenchies: What Is Worth Buying",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 8,
-   "from_strength": 57
   }
  ],
  "wins": [
@@ -4736,22 +4736,21 @@
   }
  ],
  "log": [
-  "13:16:47 connection dataforseo: connected",
-  "13:16:47 connection gmail: connected",
-  "13:16:50 crawl plantastichaven.com: 162/162 urls, fetched 4, 304 0, reused 158",
-  "13:16:51 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
-  "13:16:54 crawl frenchyfab.com: 238/238 urls, fetched 4, 304 0, reused 234",
-  "13:16:55 crawl mysticaldigits.com: 300/468 urls, fetched 2, 304 0, reused 298",
-  "13:16:58 crawl micegoneguide.com: 53/53 urls, fetched 10, 304 0, reused 43",
-  "13:16:59 crawl gearuptofit.com: 300/878 urls, fetched 3, 304 0, reused 297",
-  "13:16:59 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "13:17:00 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "13:17:03 crawl efficientgptprompts.com: 300/487 urls, fetched 6, 304 0, reused 294",
-  "13:17:21 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 22, 304 0, reused 236",
-  "13:18:45 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "13:19:26 prospects: 12 queries (0 brand-mention), 47 candidates, 16 qualified (0 unlinked mentions), 7 with email, 0 already linking",
-  "13:19:39 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "13:25:50 outreach (send): 12 sent, 0 drafted, 0 follow-ups, 0 waiting for recipients' business hours, cap 12",
-  "13:25:52 link checks: 5 pages, 0 new links won, 0 lost"
+  "18:57:16 connection dataforseo: connected",
+  "18:57:16 connection gmail: connected",
+  "18:57:19 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
+  "18:57:19 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "18:57:23 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "18:57:24 crawl mysticaldigits.com: 300/468 urls, fetched 2, 304 0, reused 298",
+  "18:57:28 crawl gearuptofit.com: 300/878 urls, fetched 1, 304 0, reused 299",
+  "18:57:29 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "18:57:29 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "18:57:30 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "18:57:32 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "18:57:33 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "19:00:23 prospects: 9 queries (0 brand-mention), 36 candidates, 11 qualified (0 unlinked mentions), 5 with email, 0 already linking",
+  "19:00:38 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "19:00:38 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 0 waiting for recipients' business hours, cap 12",
+  "19:00:38 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
