@@ -25,7 +25,9 @@ jobs:
           python3 -m unittest discover -s tests/gsc -p 'test_*.py'
       - name: Compile Pages Functions into Advanced Mode Worker
         run: |
-          ./node_modules/.bin/wrangler pages functions build functions --outfile public/_worker.js --output-routes-path public/_routes.json
+          ./node_modules/.bin/wrangler pages functions build functions --outdir .pages-function-build --output-routes-path public/_routes.json
+          test -s .pages-function-build/index.js
+          cp .pages-function-build/index.js public/_worker.js
           test -s public/_worker.js
           test -s public/index.html
           node --check public/_worker.js
