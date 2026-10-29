@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-29T05:32:06.729Z",
- "duration_s": 35,
+ "generated_at": "2026-10-29T10:46:38.678Z",
+ "duration_s": 157,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 17319,
+   "ms": 61911,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -101,7 +101,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 322
+    "internal_suggestions": 315
    }
   },
   "requalify": {
@@ -116,25 +116,25 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 8,
+   "ms": 81550,
    "result": {
-    "queries": 0,
+    "queries": 5,
     "mention_queries": 0,
-    "serp_results": 0,
-    "candidates": 0,
-    "qualified": 0,
+    "serp_results": 87,
+    "candidates": 29,
+    "qualified": 11,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 0,
-    "with_email": 0,
-    "contact_form": 0
+    "rejected": 25,
+    "with_email": 4,
+    "contact_form": 1
    }
   },
   "replies": {
    "ok": true,
-   "ms": 12806,
+   "ms": 11752,
    "result": {
-    "scanned": 400,
+    "scanned": 403,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -149,7 +149,7 @@
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 155,
+    "deferred": 161,
     "cap": 12
    },
    "writer": {
@@ -172,30 +172,30 @@
   "pages_crawled": 1902,
   "urls_discovered": 2835,
   "promotable": 250,
-  "internal_suggestions": 322,
+  "internal_suggestions": 315,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.0299,
-  "month_usd": 2.9153,
+  "today_usd": 0.0682,
+  "month_usd": 2.9536,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 0
+  "calls_this_run": 7
  },
  "outreach": {
   "mode": "send",
-  "ready": 155,
+  "ready": 159,
   "sent_today": 0,
   "cap_today": 12,
   "next_send_at": "2026-10-29T13:00:00.000Z",
   "sending_now": false
  },
  "funnel": {
-  "prospects_evaluated": 2321,
-  "qualified": 489,
-  "ready": 155,
-  "contact_form_only": 94,
-  "no_contact": 201,
+  "prospects_evaluated": 2357,
+  "qualified": 500,
+  "ready": 159,
+  "contact_form_only": 95,
+  "no_contact": 207,
   "contacted": 38,
   "replied": 0,
   "positive": 0,
@@ -303,11 +303,11 @@
   },
   {
    "date": "2026-10-29",
-   "prospects_evaluated": 2321,
-   "qualified": 489,
-   "ready": 155,
-   "contact_form_only": 94,
-   "no_contact": 201,
+   "prospects_evaluated": 2357,
+   "qualified": 500,
+   "ready": 159,
+   "contact_form_only": 95,
+   "no_contact": 207,
    "contacted": 38,
    "replied": 0,
    "positive": 0,
@@ -315,7 +315,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 1,
-   "spend_usd": 0.0299
+   "spend_usd": 0.0682
   }
  ],
  "learning": {
@@ -328,9 +328,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 62,
-    "ready": 56,
-    "rate": 0.877
+    "queries": 64,
+    "ready": 58,
+    "rate": 0.881
    },
    {
     "footprint": "statistics",
@@ -370,9 +370,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 43,
-    "ready": 19,
-    "rate": 0.435
+    "queries": 44,
+    "ready": 20,
+    "rate": 0.447
    },
    {
     "footprint": "inurl_links",
@@ -394,9 +394,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 74,
+    "queries": 76,
     "ready": 14,
-    "rate": 0.195
+    "rate": 0.19
    },
    {
     "footprint": "mention",
@@ -647,7 +647,7 @@
    "discovered": 238,
    "sitemaps": 5,
    "eligible": 25,
-   "top": "https://frenchyfab.com/french-bulldog-training-techniques/"
+   "top": "https://frenchyfab.com/french-bulldog-training-aids/"
   },
   {
    "domain": "micegoneguide.com",
@@ -721,12 +721,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 52,
-   "words": 2202,
+   "words": 2213,
    "interactive": true,
    "modified": "2026-10-03T06:27:27+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,202 words)",
+    "In-depth (2,213 words)",
     "1 data table",
     "Cites 11 authoritative sources",
     "Recently updated"
@@ -1069,8 +1069,8 @@
    "linkability": 85,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 1344,
+   "internal_inlinks": 9,
+   "words": 1346,
    "interactive": true,
    "modified": "2026-09-03T07:50:31+00:00",
    "reasons": [
@@ -1094,12 +1094,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 297,
-   "words": 3389,
+   "words": 3386,
    "interactive": true,
    "modified": "2026-08-22T09:14:57+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,389 words)",
+    "In-depth (3,386 words)",
     "4 data tables",
     "Recently updated"
    ],
@@ -1132,32 +1132,6 @@
    "prospects": 7,
    "internal_link_suggestions": 0,
    "promoting": true
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "title": "French Bulldog Training: Motivation, Rewards, Consistency",
-   "h1": "French Bulldog Training Guide: Motivation, Rewards, Consistency, and Progress",
-   "description": "Read our guide to the 2026 french bulldog training bible: stubborn to superstar in 30 days.",
-   "type": "practical_guide",
-   "promotion": 77,
-   "linkability": 81,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2351,
-   "interactive": true,
-   "modified": "2026-09-25T21:04:47+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,351 words)",
-    "4 data tables",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "prospects": 7,
-   "internal_link_suggestions": 5,
-   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1266,13 +1240,13 @@
    "linkability": 95,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
-   "words": 2209,
+   "internal_inlinks": 10,
+   "words": 2217,
    "interactive": true,
    "modified": "2026-10-03T06:26:18+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,209 words)",
+    "In-depth (2,217 words)",
     "Cites 4 authoritative sources",
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
@@ -1317,19 +1291,44 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 15,
-   "words": 3858,
+   "internal_inlinks": 12,
+   "words": 3861,
    "interactive": true,
    "modified": "2026-09-25T21:06:18+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,858 words)",
+    "In-depth (3,861 words)",
     "20 data tables",
     "Recently updated"
    ],
    "prospects": 6,
    "internal_link_suggestions": 5,
    "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "h1": "Reward-Based Obedience Training for French Bulldogs: Cues, Rewards, and Practice",
+   "description": "Master reward-based obedience training for French Bulldogs! This guide offers expert tips, tricks, and techniques for success. Get started today!",
+   "type": "practical_guide",
+   "promotion": 74,
+   "linkability": 82,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 32,
+   "words": 4292,
+   "interactive": true,
+   "modified": "2026-09-25T21:06:13+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,292 words)",
+    "27 data tables",
+    "Recently updated"
+   ],
+   "prospects": 5,
+   "internal_link_suggestions": 5,
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -1343,7 +1342,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 14,
-   "words": 1121,
+   "words": 1122,
    "interactive": true,
    "modified": "2026-10-05T18:42:26+00:00",
    "reasons": [
@@ -1369,7 +1368,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 8,
-   "words": 1827,
+   "words": 1823,
    "interactive": true,
    "modified": "2026-10-03T06:40:50+00:00",
    "reasons": [
@@ -1525,7 +1524,7 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 6,
    "words": 1596,
    "interactive": true,
    "modified": "2026-10-25T07:53:02+00:00",
@@ -1551,7 +1550,7 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 6,
    "words": 1126,
    "interactive": true,
    "modified": "2026-10-03T06:17:15+00:00",
@@ -1578,12 +1577,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 9,
-   "words": 2562,
+   "words": 2556,
    "interactive": true,
    "modified": "2026-10-03T06:15:52+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,562 words)",
+    "In-depth (2,556 words)",
     "2 data tables",
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
@@ -1679,7 +1678,7 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 10,
    "words": 1510,
    "interactive": true,
    "modified": "2026-10-27T11:19:06+00:00",
@@ -1690,7 +1689,7 @@
     "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 4,
+   "internal_link_suggestions": 3,
    "promoting": false
   },
   {
@@ -1730,13 +1729,13 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
-   "words": 2159,
+   "internal_inlinks": 9,
+   "words": 2171,
    "interactive": true,
    "modified": "2026-10-03T06:27:23+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,159 words)",
+    "In-depth (2,171 words)",
     "3 data tables",
     "Cites 4 authoritative sources",
     "Recently updated",
@@ -1806,7 +1805,7 @@
    "linkability": 89,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 17,
+   "internal_inlinks": 16,
    "words": 1992,
    "interactive": true,
    "modified": "2026-10-24T09:10:11+00:00",
@@ -1954,7 +1953,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 26,
-   "words": 1619,
+   "words": 1640,
    "interactive": false,
    "modified": "2026-09-16",
    "reasons": [
@@ -1976,7 +1975,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 6,
    "words": 1652,
    "interactive": true,
    "modified": "2026-10-25T07:53:36+00:00",
@@ -2029,8 +2028,8 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
-   "words": 1611,
+   "internal_inlinks": 10,
+   "words": 1605,
    "interactive": true,
    "modified": "2026-10-03T06:40:47+00:00",
    "reasons": [
@@ -2082,7 +2081,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 16,
-   "words": 1246,
+   "words": 1257,
    "interactive": true,
    "modified": "2026-10-03T06:15:49+00:00",
    "reasons": [
@@ -2183,7 +2182,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 12,
-   "words": 1238,
+   "words": 1233,
    "interactive": true,
    "modified": "2026-10-03T06:17:09+00:00",
    "reasons": [
@@ -2242,7 +2241,7 @@
     "3 data tables",
     "Cites 6 authoritative sources",
     "Recently updated",
-    "One of 34 templated sibling pages — promote the hub first"
+    "One of 33 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
    "internal_link_suggestions": 4,
@@ -2259,13 +2258,13 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 4,
-   "words": 2172,
+   "internal_inlinks": 8,
+   "words": 2167,
    "interactive": true,
    "modified": "2026-10-03T06:40:36+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,172 words)",
+    "In-depth (2,167 words)",
     "2 data tables",
     "Cites 3 authoritative sources",
     "Recently updated",
@@ -2286,13 +2285,13 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
-   "words": 2563,
+   "internal_inlinks": 5,
+   "words": 2571,
    "interactive": true,
    "modified": "2026-10-03T06:27:34+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,563 words)",
+    "In-depth (2,571 words)",
     "5 data tables",
     "Cites 3 authoritative sources",
     "Recently updated",
@@ -2460,7 +2459,7 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 34,
+   "internal_inlinks": 33,
    "words": 3075,
    "interactive": true,
    "modified": "2026-10-15T10:11:22+00:00",
@@ -2469,7 +2468,7 @@
     "In-depth (3,075 words)",
     "3 data tables",
     "Recently updated",
-    "One of 34 templated sibling pages — promote the hub first"
+    "One of 33 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
@@ -2622,7 +2621,7 @@
     "Health/YMYL topic — pitch only to expert publishers"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 4,
+   "internal_link_suggestions": 3,
    "promoting": false
   },
   {
@@ -2636,7 +2635,7 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 36,
+   "internal_inlinks": 35,
    "words": 2098,
    "interactive": true,
    "modified": "2026-10-15T10:06:29+00:00",
@@ -2645,7 +2644,7 @@
     "In-depth (2,098 words)",
     "2 data tables",
     "Recently updated",
-    "One of 34 templated sibling pages — promote the hub first"
+    "One of 33 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
@@ -2670,7 +2669,7 @@
     "3 data tables",
     "Cites 6 authoritative sources",
     "Recently updated",
-    "One of 34 templated sibling pages — promote the hub first"
+    "One of 33 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
@@ -2678,23 +2677,23 @@
   },
   {
    "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "h1": "Reward-Based Obedience Training for French Bulldogs: Cues, Rewards, and Practice",
-   "description": "Master reward-based obedience training for French Bulldogs! This guide offers expert tips, tricks, and techniques for success. Get started today!",
+   "url": "https://frenchyfab.com/french-bulldog-training-classes/",
+   "title": "French Bulldog Training Classes: When to Join",
+   "h1": "French Bulldog Training Classes: When to Join, What to Expect, and Red Flags",
+   "description": "French Bulldog training got you frustrated? Discover expert-approved classes! Transform bad behavior & build a bond. See how now!",
    "type": "practical_guide",
    "promotion": 62,
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 33,
-   "words": 4296,
+   "internal_inlinks": 3,
+   "words": 4108,
    "interactive": true,
-   "modified": "2026-09-25T21:06:13+00:00",
+   "modified": "2026-09-25T21:05:17+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,296 words)",
-    "27 data tables",
+    "In-depth (4,108 words)",
+    "28 data tables",
     "Recently updated",
     "One of 236 templated sibling pages — promote the hub first"
    ],
@@ -2726,18 +2725,18 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
+   "from": "https://micegoneguide.com/safely-remove-mice/",
+   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 71
+   "from_strength": 69
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/safely-remove-mice/",
-   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
+   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "anchor": "rid mice",
@@ -3136,16 +3135,6 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
-   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
-   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
-   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
-   "anchor": "karmic debt",
-   "relevance": 6,
-   "from_strength": 58
-  },
-  {
-   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/compatibility-check-life-path-numbers-6-and-9/",
    "from_title": "Life Path 6 & 9 Compatibility: Love, Marriage & Karma 2026",
    "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
@@ -3165,53 +3154,13 @@
    "from_strength": 0
   },
   {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-training-aids/",
-   "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
-   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 74
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-training-classes/",
-   "from_title": "French Bulldog Training Classes: When to Join",
-   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 62
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/21-day-french-bulldog-obedience-blueprint/",
-   "from_title": "2026 French Bulldog Training: 21-Day Proven Blueprint",
-   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/teaching-calmness-and-relaxation-to-your-energetic-french-bulldog/",
-   "from_title": "Calm French Bulldog Training: Relaxation Cues, Routines",
-   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/recall-training-teaching-your-french-bulldog-to-come-when-called/",
-   "from_title": "French Bulldog Recall: Step-by-Step Guide",
-   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
-   "anchor": "french bulldog",
-   "relevance": 7,
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/numerology-for-career-change/",
+   "from_title": "9 Numerology Career Change Hacks That Work in 2026",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 6,
    "from_strength": 0
   },
   {
@@ -3346,13 +3295,13 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
+   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
+   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
    "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
    "anchor": "rid mice",
    "relevance": 5,
-   "from_strength": 71
+   "from_strength": 69
   },
   {
    "site": "micegoneguide.com",
@@ -3376,18 +3325,18 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/safely-remove-mice/",
-   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "from_title": "How to Get Rid of Mice in an Apartment",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
    "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 69
+   "from_strength": 71
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
-   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
+   "from": "https://micegoneguide.com/safely-remove-mice/",
+   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
    "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
    "anchor": "rid mice",
@@ -3406,16 +3355,6 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "from_title": "French Bulldog Training: Motivation, Rewards, Consistency",
-   "to": "https://frenchyfab.com/french-bulldog-training-aids/",
-   "to_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 77
-  },
-  {
-   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-classes/",
    "from_title": "French Bulldog Training Classes: When to Join",
    "to": "https://frenchyfab.com/french-bulldog-training-aids/",
@@ -3423,6 +3362,16 @@
    "anchor": "french bulldog",
    "relevance": 7,
    "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-techniques/",
+   "from_title": "French Bulldog Training: Motivation, Rewards, Consistency",
+   "to": "https://frenchyfab.com/french-bulldog-training-aids/",
+   "to_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 61
   },
   {
    "site": "frenchyfab.com",
@@ -3442,6 +3391,56 @@
    "to_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "anchor": "french bulldog",
    "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-success/",
+   "from_title": "French Bulldog Training: Tips for Obedience & Bonding",
+   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "anchor": "obedience training",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/12-week-french-bulldog-blueprint/",
+   "from_title": "12-Week French Bulldog Puppy Training Plan: Socialization",
+   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "anchor": "reward based",
+   "relevance": 6,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
+   "from_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
+   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "anchor": "reward based",
+   "relevance": 6,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/coping-with-stubbornness-training-challenges-in-french-bulldogs/",
+   "from_title": "French Bulldog Stubbornness: Training Challenges, Motivation",
+   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "anchor": "training french",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-puppy-care/",
+   "from_title": "French Bulldog Puppy Care: Week-by-Week First-Year Guide",
+   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "anchor": "reward based",
+   "relevance": 6,
    "from_strength": 0
   },
   {
@@ -3696,18 +3695,18 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
+   "from": "https://micegoneguide.com/safely-remove-mice/",
+   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
    "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
    "anchor": "rid mice",
    "relevance": 5,
-   "from_strength": 71
+   "from_strength": 69
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/safely-remove-mice/",
-   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
+   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
    "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
    "anchor": "rid mice",
@@ -3736,13 +3735,13 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
-   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
+   "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
+   "from_title": "7 Surprising Health Risks of Mouse Infestation Revealed",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
    "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 69
+   "from_strength": 67
   },
   {
    "site": "micegoneguide.com",
@@ -3786,13 +3785,13 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
-   "from_title": "7 Surprising Health Risks of Mouse Infestation Revealed",
+   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
+   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
    "to_title": "How to Get Rid of Mice in an Apartment",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 67
+   "from_strength": 69
   },
   {
    "site": "micegoneguide.com",
@@ -3913,16 +3912,6 @@
    "anchor": "remove mice safely",
    "relevance": 3,
    "from_strength": 69
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/diseases-from-mice/",
-   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
-   "to": "https://micegoneguide.com/safely-remove-mice/",
-   "to_title": "How to Remove Mice Safely: A Step-by-Step Guide",
-   "anchor": "remove mice safely",
-   "relevance": 3,
-   "from_strength": 67
   },
   {
    "site": "micegoneguide.com",
@@ -4146,16 +4135,6 @@
   },
   {
    "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/fitness/",
-   "from_title": "Fitness Articles | Workouts, HIIT, Strength Training & Exercise Guides | GearUpToFit",
-   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
-   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
-   "anchor": "weight loss",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
    "from_title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
    "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
@@ -4176,53 +4155,13 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-training-success/",
-   "from_title": "French Bulldog Training: Tips for Obedience & Bonding",
-   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "obedience training",
+   "from": "https://frenchyfab.com/french-bulldog-training-aids/",
+   "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
+   "to": "https://frenchyfab.com/french-bulldog-training-classes/",
+   "to_title": "French Bulldog Training Classes: When to Join",
+   "anchor": "french bulldog",
    "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
-   "from_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
-   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "reward based",
-   "relevance": 6,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/coping-with-stubbornness-training-challenges-in-french-bulldogs/",
-   "from_title": "French Bulldog Stubbornness: Training Challenges, Motivation",
-   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "training french",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-puppy-care/",
-   "from_title": "French Bulldog Puppy Care: Week-by-Week First-Year Guide",
-   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "reward based",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/12-week-french-bulldog-blueprint/",
-   "from_title": "12-Week French Bulldog Puppy Training Plan: Socialization",
-   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "reward based",
-   "relevance": 6,
-   "from_strength": 0
+   "from_strength": 74
   },
   {
    "site": "frenchyfab.com",
@@ -4232,17 +4171,7 @@
    "to_title": "French Bulldog Training Classes: When to Join",
    "anchor": "french bulldog",
    "relevance": 7,
-   "from_strength": 77
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-training-aids/",
-   "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
-   "to": "https://frenchyfab.com/french-bulldog-training-classes/",
-   "to_title": "French Bulldog Training Classes: When to Join",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 74
+   "from_strength": 61
   },
   {
    "site": "frenchyfab.com",
@@ -4282,7 +4211,7 @@
    "to_title": "French Bulldog Socialization Training: A Practical Plan",
    "anchor": "french bulldog",
    "relevance": 6,
-   "from_strength": 62
+   "from_strength": 74
   },
   {
    "site": "frenchyfab.com",
@@ -4306,16 +4235,6 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "from_title": "French Bulldog Training: Motivation, Rewards, Consistency",
-   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "to_title": "French Bulldog Socialization Training: A Practical Plan",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 77
-  },
-  {
-   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-aids/",
    "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
@@ -4323,6 +4242,66 @@
    "anchor": "french bulldog",
    "relevance": 5,
    "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-classes/",
+   "from_title": "French Bulldog Training Classes: When to Join",
+   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "to_title": "French Bulldog Socialization Training: A Practical Plan",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-aids/",
+   "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
+   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
+   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-classes/",
+   "from_title": "French Bulldog Training Classes: When to Join",
+   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
+   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/21-day-french-bulldog-obedience-blueprint/",
+   "from_title": "2026 French Bulldog Training: 21-Day Proven Blueprint",
+   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
+   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/teaching-calmness-and-relaxation-to-your-energetic-french-bulldog/",
+   "from_title": "Calm French Bulldog Training: Relaxation Cues, Routines",
+   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
+   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/recall-training-teaching-your-french-bulldog-to-come-when-called/",
+   "from_title": "French Bulldog Recall: Step-by-Step Guide",
+   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
+   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
   },
   {
    "site": "frenchyfab.com",
@@ -4396,26 +4375,6 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
-   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
-   "to": "https://mysticaldigits.com/personal-year-numerology/",
-   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "anchor": "personal year",
-   "relevance": 5,
-   "from_strength": 58
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-is-14-in-numerology/",
-   "from_title": "2026 Guide: Numerology Meaning of Number 14 Explained",
-   "to": "https://mysticaldigits.com/personal-year-numerology/",
-   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "anchor": "personal year",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
    "from_title": "Personal Year Calculator: How to Find Your Number (2026)",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
@@ -4423,6 +4382,26 @@
    "anchor": "personal year",
    "relevance": 5,
    "from_strength": 57
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "from_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "to": "https://mysticaldigits.com/personal-year-numerology/",
+   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
+   "anchor": "personal year",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/life-transition-numbers/",
+   "from_title": "2026 Life Transition Numbers Guide | Mystical Digits",
+   "to": "https://mysticaldigits.com/personal-year-numerology/",
+   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
+   "anchor": "personal year",
+   "relevance": 5,
+   "from_strength": 56
   },
   {
    "site": "plantastichaven.com",
@@ -4552,7 +4531,7 @@
    "to_title": "Are French Bulldogs Hypoallergenic? The Honest, Vet-Checked Answer | Frenchy Fab",
    "anchor": "french bulldogs",
    "relevance": 5,
-   "from_strength": 62
+   "from_strength": 74
   },
   {
    "site": "frenchyfab.com",
@@ -4666,16 +4645,6 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "from_title": "French Bulldog Training: Motivation, Rewards, Consistency",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 77
-  },
-  {
-   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-aids/",
    "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
@@ -4692,7 +4661,7 @@
    "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
    "anchor": "french bulldogs",
    "relevance": 4,
-   "from_strength": 62
+   "from_strength": 74
   },
   {
    "site": "frenchyfab.com",
@@ -4703,6 +4672,36 @@
    "anchor": "french bulldogs",
    "relevance": 4,
    "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-techniques/",
+   "from_title": "French Bulldog Training: Motivation, Rewards, Consistency",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 61
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 8,
+   "from_strength": 57
   }
  ],
  "wins": [
@@ -4752,21 +4751,21 @@
   }
  ],
  "log": [
-  "05:31:36 connection dataforseo: connected",
-  "05:31:36 connection gmail: connected",
-  "05:31:37 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
-  "05:31:41 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "05:31:42 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "05:31:45 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "05:31:46 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "05:31:46 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "05:31:46 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "05:31:47 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "05:31:49 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "05:31:53 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "05:31:53 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "05:32:06 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "05:32:06 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 155 waiting for recipients' business hours, cap 12",
-  "05:32:06 link checks: 0 pages, 0 new links won, 0 lost"
+  "10:44:03 connection dataforseo: connected",
+  "10:44:03 connection gmail: connected",
+  "10:44:12 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 7, 304 0, reused 251",
+  "10:44:12 crawl gearuptofit.com: 300/878 urls, fetched 292, 304 0, reused 8",
+  "10:44:20 crawl plantastichaven.com: 162/162 urls, fetched 156, 304 0, reused 6",
+  "10:44:24 crawl gearuptogrow.com: 107/107 urls, fetched 103, 304 0, reused 4",
+  "10:44:29 crawl frenchyfab.com: 238/238 urls, fetched 227, 304 0, reused 11",
+  "10:44:32 crawl micegoneguide.com: 53/53 urls, fetched 41, 304 0, reused 12",
+  "10:44:33 crawl mysticaldigits.com: 300/468 urls, fetched 286, 304 0, reused 14",
+  "10:44:34 crawl imagealchemy.app: 26/26 urls, fetched 26, 304 0, reused 0",
+  "10:44:35 crawl openclaw-skillshub.com: 158/158 urls, fetched 158, 304 0, reused 0",
+  "10:45:05 crawl efficientgptprompts.com: 300/487 urls, fetched 290, 304 0, reused 10",
+  "10:46:26 prospects: 5 queries (0 brand-mention), 29 candidates, 11 qualified (0 unlinked mentions), 4 with email, 0 already linking",
+  "10:46:38 replies: scanned 403, 0 replies (0 positive, 0 opt-out), 0 bounces",
+  "10:46:38 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 161 waiting for recipients' business hours, cap 12",
+  "10:46:38 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
