@@ -67,18 +67,23 @@ export async function processReplies({state,imap,log=()=>{}}){
   }
   if(!byMsg.size&&!byEmail.size)return stats;
   const msgs=await imap.recentHeaders(new Date(Date.now()-35*DAY));stats.scanned=msgs.length;
-  state.seen_replies??={};
+  state.seen_replies??={};state.suppression??={};
   for(const m of msgs){
     const ids=`${m.inReplyTo} ${m.references} ${m.body}`.match(/<lf-[^>]+>/g)||[];
     let p=ids.map(i=>byMsg.get(i)).find(Boolean)||byEmail.get(m.from);
     const kind=classifyReply(m);
     if(!p&&kind==='bounce'){for(const [e,q] of byEmail)if(m.body.toLowerCase().includes(e)){p=q;break}}
     if(!p||kind==='auto')continue;
-    const key=`${p.id}|${m.subject}|${m.from}`;if(state.seen_replies[key])continue;state.seen_replies[key]=NOW();
+    // Deduplicate individual messages, not sender + subject: a later opt-out must never be ignored.
+    const identity=m.messageId||m.uid&&('imap-uid:'+m.uid);
+    const key=identity?`${p.id}|${identity}`:`${p.id}|${m.from}|${m.subject}|${m.body}`;
+    if(state.seen_replies[key])continue;state.seen_replies[key]=NOW();
     if(kind==='bounce'){
       stats.bounces++;p.history.push({type:'bounce',at:NOW(),to:p.email});
-      const next=(p.alternates||[]).find(e=>e!==p.email&&!suppressed(state,e,p.domain));
-      if(next){p.email=next;p.status='ready';delete state.contacted[p.domain]}else p.status='bounced';
+      // Do not silently switch to another person/inbox after a bounce. That is a
+      // new outreach decision, not a retry of the same verified conversation.
+      if(p.email)state.suppression[p.email]={reason:'Delivery failure; do not retry',at:NOW()};
+      p.status='bounced';p.no_followup=true;
       continue;
     }
     stats.replies++;p.replied_at=NOW();p.history.push({type:'reply',at:NOW(),from:m.from,sentiment:kind,subject:m.subject.slice(0,140)});
@@ -161,7 +166,13 @@ export async function checkLinks({state,ourDomains,fetchImpl=fetch,max=60,deadli
     const res=await fetchPage(p.page_url,{fetchImpl,timeout:12000,maxBytes:800000});stats.checked++;
     p.next_link_check=new Date(Date.now()+4*DAY).toISOString();
     if(res.status!==200)continue;
-    const hit=links(res.body,res.url).find(l=>ourDomains.some(d=>sameSite(hostOf(l.url),d)));
+    // A link to another portfolio page is not evidence that this pitch earned a placement.
+    // For a targeted pitch, require its exact normalized URL. Legacy records without a
+    // target may still be audited manually, but must not be promoted to 'won'.
+    const expected=p.asset_url?new URL(p.asset_url):null;
+    const normalized=u=>{try{const x=new URL(u);return x.hostname.toLowerCase().replace(/^www\./,'')+x.pathname.replace(/\/$/,'');}catch{return ''}};
+    const hit=expected&&ourDomains.some(d=>sameSite(expected.hostname,d))
+      ?links(res.body,res.url).find(l=>normalized(l.url)===normalized(expected.href)):null;
     if(hit){
       if(p.status!=='won'){stats.won++;p.history.push({type:'won',at:NOW(),url:hit.url})}
       p.status='won';p.won={target:hit.url,anchor:hit.anchor,rel:hit.rel||'follow',found_at:p.won?.found_at||NOW(),checked_at:NOW()};

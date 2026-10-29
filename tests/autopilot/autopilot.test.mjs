@@ -147,10 +147,51 @@ test('outreach respects warm-up, dedupes domains, honours opt-outs and follows u
 });
 
 test('link checks mark wins from the live page',async()=>{
-  const state={prospects:{a:{id:'a',status:'sent',page_url:'https://pub.org/r',history:[{type:'initial',at:new Date(Date.now()-10*864e5).toISOString()}]}}};
+  const state={prospects:{a:{id:'a',status:'sent',asset_url:'https://mice.com/plan',page_url:'https://pub.org/r',history:[{type:'initial',at:new Date(Date.now()-10*864e5).toISOString()}]}}};
   const f=async()=>resp(html('<a href="https://www.mice.com/plan" rel="nofollow">mouse plan</a>'));
   const r=await checkLinks({state,ourDomains:['mice.com'],fetchImpl:f});
   assert.equal(r.won,1);assert.equal(state.prospects.a.status,'won');assert.equal(state.prospects.a.won.rel,'nofollow');
+});
+
+test('unrelated owned-domain links are not falsely credited as earned',async()=>{
+  const state={prospects:{a:{id:'a',status:'sent',asset_url:'https://mice.com/plan',page_url:'https://pub.org/resources',
+    history:[{type:'initial',at:new Date(Date.now()-10*864e5).toISOString()}]}}};
+  const f=async()=>resp(html('<a href="https://mice.com/other-guide">unrelated portfolio link</a>'));
+  const result=await checkLinks({state,ourDomains:['mice.com'],fetchImpl:f});
+  assert.equal(result.won,0);
+  assert.equal(state.prospects.a.status,'sent');
+});
+
+test('later opt-out from same sender and subject is not lost',async()=>{
+  const id='<lf-123@example.org>';
+  const state={prospects:{a:{id:'a',status:'sent',site:'mice.com',domain:'publisher.org',email:'editor@publisher.org',
+    page_url:'https://publisher.org/resources',history:[{type:'initial',at:new Date().toISOString(),message_id:id}]}}};
+  const messages=[
+    {uid:'10',messageId:'<one@publisher.org>',from:'editor@publisher.org',subject:'Re: resource',inReplyTo:id,references:id,body:'Thanks for the suggestion'},
+    {uid:'11',messageId:'<two@publisher.org>',from:'editor@publisher.org',subject:'Re: resource',inReplyTo:id,references:id,body:'Please remove me'}
+  ];
+  const result=await processReplies({state,imap:{recentHeaders:async()=>messages}});
+  assert.equal(result.replies,2);
+  assert.equal(result.negative,1);
+  assert.equal(state.prospects.a.status,'declined');
+  assert.ok(state.suppression['publisher.org']);
+});
+
+test('a bounce suppresses the failed address without emailing an alternate',async()=>{
+  const msgId='<lf-bounce@example.org>';
+  const p={id:'b',status:'sent',site:'mice.com',domain:'publisher.org',email:'old@publisher.org',
+    alternates:['other@publisher.org'],page_url:'https://publisher.org/resources',
+    history:[{type:'initial',at:new Date().toISOString(),message_id:msgId}]};
+  const state={prospects:{b:p},contacted:{'publisher.org':new Date().toISOString()}};
+  const r=await processReplies({state,imap:{recentHeaders:async()=>[{
+    uid:'120',messageId:'<bounced@postmaster.org>',from:'mailer-daemon@postmaster.org',
+    subject:'Delivery Status Notification',inReplyTo:msgId,references:'',body:'Mailbox unavailable'}]}});
+  assert.equal(r.bounces,1);
+  assert.equal(p.status,'bounced');
+  assert.equal(p.email,'old@publisher.org');
+  assert.ok(state.suppression['old@publisher.org']);
+  assert.ok(state.contacted['publisher.org']);
+  assert.equal(p.no_followup,true);
 });
 
 test('pitch validation rejects foreign URLs and placeholders',()=>{
