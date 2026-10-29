@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-29T10:46:38.678Z",
- "duration_s": 157,
+ "generated_at": "2026-10-29T17:08:46.227Z",
+ "duration_s": 516,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 17.755285999999998
+    "balance_usd": 17.716966
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 61911,
+   "ms": 15494,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -101,7 +101,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 315
+    "internal_suggestions": 316
    }
   },
   "requalify": {
@@ -116,40 +116,40 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 81550,
+   "ms": 39983,
    "result": {
-    "queries": 5,
+    "queries": 2,
     "mention_queries": 0,
-    "serp_results": 87,
-    "candidates": 29,
-    "qualified": 11,
+    "serp_results": 27,
+    "candidates": 11,
+    "qualified": 6,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 25,
-    "with_email": 4,
-    "contact_form": 1
+    "rejected": 7,
+    "with_email": 3,
+    "contact_form": 0
    }
   },
   "replies": {
    "ok": true,
-   "ms": 11752,
+   "ms": 37758,
    "result": {
-    "scanned": 403,
+    "scanned": 400,
     "replies": 0,
     "positive": 0,
     "negative": 0,
-    "bounces": 0
+    "bounces": 1
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 7,
+   "ms": 420574,
    "result": {
-    "followups": 0,
-    "sent": 0,
+    "followups": 2,
+    "sent": 12,
     "drafted": 0,
-    "skipped": 0,
-    "deferred": 161,
+    "skipped": 1,
+    "deferred": 0,
     "cap": 12
    },
    "writer": {
@@ -159,7 +159,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "checked": 0,
     "won": 0,
@@ -172,31 +172,31 @@
   "pages_crawled": 1902,
   "urls_discovered": 2835,
   "promotable": 250,
-  "internal_suggestions": 315,
+  "internal_suggestions": 316,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.0682,
-  "month_usd": 2.9536,
+  "today_usd": 0.0878,
+  "month_usd": 2.9732,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 7
+  "calls_this_run": 3
  },
  "outreach": {
   "mode": "send",
-  "ready": 159,
-  "sent_today": 0,
+  "ready": 150,
+  "sent_today": 12,
   "cap_today": 12,
-  "next_send_at": "2026-10-29T13:00:00.000Z",
+  "next_send_at": "2026-10-30T13:00:00.000Z",
   "sending_now": false
  },
  "funnel": {
-  "prospects_evaluated": 2357,
-  "qualified": 500,
-  "ready": 159,
+  "prospects_evaluated": 2370,
+  "qualified": 506,
+  "ready": 150,
   "contact_form_only": 95,
-  "no_contact": 207,
-  "contacted": 38,
+  "no_contact": 210,
+  "contacted": 49,
   "replied": 0,
   "positive": 0,
   "won": 0,
@@ -303,19 +303,19 @@
   },
   {
    "date": "2026-10-29",
-   "prospects_evaluated": 2357,
-   "qualified": 500,
-   "ready": 159,
+   "prospects_evaluated": 2370,
+   "qualified": 506,
+   "ready": 150,
    "contact_form_only": 95,
-   "no_contact": 207,
-   "contacted": 38,
+   "no_contact": 210,
+   "contacted": 49,
    "replied": 0,
    "positive": 0,
    "won": 0,
    "existing_links": 4,
    "declined": 0,
    "bounced": 1,
-   "spend_usd": 0.0682
+   "spend_usd": 0.0878
   }
  ],
  "learning": {
@@ -363,16 +363,16 @@
     "rate": 0.538
    },
    {
+    "footprint": "best_guides",
+    "queries": 46,
+    "ready": 23,
+    "rate": 0.49
+   },
+   {
     "footprint": "intitle_resources",
     "queries": 10,
     "ready": 5,
     "rate": 0.462
-   },
-   {
-    "footprint": "best_guides",
-    "queries": 44,
-    "ready": 20,
-    "rate": 0.447
    },
    {
     "footprint": "inurl_links",
@@ -463,6 +463,14 @@
     "rate": 0.25
    },
    {
+    "url": "https://micegoneguide.com/rats-vs-mice-whats-the-difference/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
     "url": "https://mysticaldigits.com/personal-year-numerology/",
     "sent": 1,
     "replied": 0,
@@ -471,7 +479,7 @@
     "rate": 0.25
    },
    {
-    "url": "https://plantastichaven.com/how-to-propagate-a-philodendron-birkin/",
+    "url": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -479,7 +487,15 @@
     "rate": 0.25
    },
    {
-    "url": "https://openclaw-skillshub.com/skills/coding-agents/test-generator/",
+    "url": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://plantastichaven.com/how-to-propagate-a-philodendron-birkin/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -503,7 +519,23 @@
     "rate": 0.25
    },
    {
-    "url": "https://efficientgptprompts.com/product/24-hour-ai-revenue-audit/",
+    "url": "https://efficientgptprompts.com/body-horror-writing-ideas/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://efficientgptprompts.com/the-secret-society-conspiracy/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://imagealchemy.app/formats/jpeg",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -535,7 +567,7 @@
     "rate": 0.2
    },
    {
-    "url": "https://imagealchemy.app/learn/compress-images-without-uploading",
+    "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
     "sent": 2,
     "replied": 0,
     "positive": 0,
@@ -543,7 +575,7 @@
     "rate": 0.2
    },
    {
-    "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
+    "url": "https://openclaw-skillshub.com/skills/coding-agents/test-generator/",
     "sent": 2,
     "replied": 0,
     "positive": 0,
@@ -567,7 +599,7 @@
     "rate": 0.2
    },
    {
-    "url": "https://efficientgptprompts.com/ai-prompt-templates-for-ecommerce-brands-2026-guide/",
+    "url": "https://efficientgptprompts.com/product/24-hour-ai-revenue-audit/",
     "sent": 2,
     "replied": 0,
     "positive": 0,
@@ -583,6 +615,14 @@
     "rate": 0.2
    },
    {
+    "url": "https://imagealchemy.app/learn/compress-images-without-uploading",
+    "sent": 3,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.167
+   },
+   {
     "url": "https://imagealchemy.app/glossary/entropy-coding",
     "sent": 3,
     "replied": 0,
@@ -592,6 +632,14 @@
    },
    {
     "url": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
+    "sent": 4,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.143
+   },
+   {
+    "url": "https://efficientgptprompts.com/ai-prompt-templates-for-ecommerce-brands-2026-guide/",
     "sent": 4,
     "replied": 0,
     "positive": 0,
@@ -1019,7 +1067,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 25,
+   "internal_inlinks": 26,
    "words": 3431,
    "interactive": true,
    "modified": "2026-10-03T19:51:14+00:00",
@@ -1192,7 +1240,7 @@
    "linkability": 83,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 11,
    "words": 2085,
    "interactive": false,
    "modified": "2026-09-25T14:57:36+00:00",
@@ -1240,7 +1288,7 @@
    "linkability": 95,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 9,
    "words": 2217,
    "interactive": true,
    "modified": "2026-10-03T06:26:18+00:00",
@@ -1367,7 +1415,7 @@
    "linkability": 94,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 6,
    "words": 1823,
    "interactive": true,
    "modified": "2026-10-03T06:40:50+00:00",
@@ -1524,10 +1572,10 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
-   "words": 1596,
+   "internal_inlinks": 9,
+   "words": 1594,
    "interactive": true,
-   "modified": "2026-10-25T07:53:02+00:00",
+   "modified": "2026-10-29T07:50:28+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "1 data table",
@@ -1679,9 +1727,9 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 10,
-   "words": 1510,
+   "words": 1530,
    "interactive": true,
-   "modified": "2026-10-27T11:19:06+00:00",
+   "modified": "2026-10-29T07:52:25+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "1 data table",
@@ -1689,7 +1737,7 @@
     "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 3,
+   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -1805,7 +1853,7 @@
    "linkability": 89,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 16,
+   "internal_inlinks": 15,
    "words": 1992,
    "interactive": true,
    "modified": "2026-10-24T09:10:11+00:00",
@@ -2121,6 +2169,31 @@
    "promoting": false
   },
   {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/blogging/keys-to-creating-successful-content-on-your-blog/",
+   "title": "Content Creation for Blogs: 2026 Proven Strategy Guide",
+   "h1": "Keys to Creating Successful Blog Content: 2026 ROI Guide",
+   "description": "Learn proven strategies to craft blog content that drives traffic & conversions. Perfect for beginners & intermediate marketers. Start optimizing today!",
+   "type": "practical_guide",
+   "promotion": 67,
+   "linkability": 70,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 2013,
+   "interactive": false,
+   "modified": "2026-09-03T11:44:29+00:00",
+   "reasons": [
+    "In-depth (2,013 words)",
+    "7 data tables",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
    "site": "efficientgptprompts.com",
    "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
    "title": "Prompt Engineering Framework for LLMs: Test, Grade, Deploy",
@@ -2241,7 +2314,7 @@
     "3 data tables",
     "Cites 6 authoritative sources",
     "Recently updated",
-    "One of 33 templated sibling pages — promote the hub first"
+    "One of 34 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
    "internal_link_suggestions": 4,
@@ -2400,31 +2473,6 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/blogging/11-things-to-outsource-as-a-blogger-for-more-time-and-efficiency/",
-   "title": "11 Things To Outsource As A Blogger For More Time And Efficiency",
-   "h1": "11 Things to Outsource as a Blogger for Faster Scaling",
-   "description": "Stop wasting time! Discover 11 blogging tasks you can easily outsource to skyrocket your efficiency and grow your blog faster. Get more traffic now!",
-   "type": "general_article",
-   "promotion": 65,
-   "linkability": 72,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 3259,
-   "interactive": false,
-   "modified": "2026-09-03T12:32:26+00:00",
-   "reasons": [
-    "In-depth (3,259 words)",
-    "1 data table",
-    "Cites 8 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/info/paraphrase-text-using-nlp/",
    "title": "7 Proven Ways to Paraphrase Text with NLP in 2026",
    "h1": "How to Paraphrase Text Using NLP: 7 AI Methods (2026 Guide)",
@@ -2459,7 +2507,7 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 33,
+   "internal_inlinks": 34,
    "words": 3075,
    "interactive": true,
    "modified": "2026-10-15T10:11:22+00:00",
@@ -2468,7 +2516,7 @@
     "In-depth (3,075 words)",
     "3 data tables",
     "Recently updated",
-    "One of 33 templated sibling pages — promote the hub first"
+    "One of 34 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
@@ -2635,7 +2683,7 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 35,
+   "internal_inlinks": 36,
    "words": 2098,
    "interactive": true,
    "modified": "2026-10-15T10:06:29+00:00",
@@ -2644,7 +2692,7 @@
     "In-depth (2,098 words)",
     "2 data tables",
     "Recently updated",
-    "One of 33 templated sibling pages — promote the hub first"
+    "One of 34 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
@@ -2669,7 +2717,7 @@
     "3 data tables",
     "Cites 6 authoritative sources",
     "Recently updated",
-    "One of 33 templated sibling pages — promote the hub first"
+    "One of 34 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
@@ -3905,6 +3953,16 @@
   },
   {
    "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
+   "from_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
+   "to": "https://micegoneguide.com/safely-remove-mice/",
+   "to_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "anchor": "remove mice safely",
+   "relevance": 3,
+   "from_strength": 71
+  },
+  {
+   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
    "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
    "to": "https://micegoneguide.com/safely-remove-mice/",
@@ -4692,16 +4750,6 @@
    "anchor": "french bulldogs",
    "relevance": 4,
    "from_strength": 61
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 8,
-   "from_strength": 57
   }
  ],
  "wins": [
@@ -4751,21 +4799,21 @@
   }
  ],
  "log": [
-  "10:44:03 connection dataforseo: connected",
-  "10:44:03 connection gmail: connected",
-  "10:44:12 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 7, 304 0, reused 251",
-  "10:44:12 crawl gearuptofit.com: 300/878 urls, fetched 292, 304 0, reused 8",
-  "10:44:20 crawl plantastichaven.com: 162/162 urls, fetched 156, 304 0, reused 6",
-  "10:44:24 crawl gearuptogrow.com: 107/107 urls, fetched 103, 304 0, reused 4",
-  "10:44:29 crawl frenchyfab.com: 238/238 urls, fetched 227, 304 0, reused 11",
-  "10:44:32 crawl micegoneguide.com: 53/53 urls, fetched 41, 304 0, reused 12",
-  "10:44:33 crawl mysticaldigits.com: 300/468 urls, fetched 286, 304 0, reused 14",
-  "10:44:34 crawl imagealchemy.app: 26/26 urls, fetched 26, 304 0, reused 0",
-  "10:44:35 crawl openclaw-skillshub.com: 158/158 urls, fetched 158, 304 0, reused 0",
-  "10:45:05 crawl efficientgptprompts.com: 300/487 urls, fetched 290, 304 0, reused 10",
-  "10:46:26 prospects: 5 queries (0 brand-mention), 29 candidates, 11 qualified (0 unlinked mentions), 4 with email, 0 already linking",
-  "10:46:38 replies: scanned 403, 0 replies (0 positive, 0 opt-out), 0 bounces",
-  "10:46:38 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 161 waiting for recipients' business hours, cap 12",
-  "10:46:38 link checks: 0 pages, 0 new links won, 0 lost"
+  "17:00:11 connection dataforseo: connected",
+  "17:00:11 connection gmail: connected",
+  "17:00:14 crawl plantastichaven.com: 162/162 urls, fetched 2, 304 0, reused 160",
+  "17:00:15 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "17:00:18 crawl gearuptogrow.com: 107/107 urls, fetched 1, 304 0, reused 106",
+  "17:00:18 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "17:00:19 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "17:00:21 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "17:00:22 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "17:00:26 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 6, 304 0, reused 252",
+  "17:00:27 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "17:00:27 crawl micegoneguide.com: 53/53 urls, fetched 4, 304 0, reused 49",
+  "17:01:07 prospects: 2 queries (0 brand-mention), 11 candidates, 6 qualified (0 unlinked mentions), 3 with email, 0 already linking",
+  "17:01:45 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 1 bounces",
+  "17:08:46 outreach (send): 12 sent, 0 drafted, 2 follow-ups, 0 waiting for recipients' business hours, cap 12",
+  "17:08:46 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
