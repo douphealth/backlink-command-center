@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-29T17:08:46.227Z",
- "duration_s": 516,
+ "generated_at": "2026-10-30T02:03:06.549Z",
+ "duration_s": 39,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 17.716966
+    "balance_usd": 17.697406
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 15494,
+   "ms": 18060,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -91,7 +91,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -116,40 +116,40 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 39983,
+   "ms": 9,
    "result": {
-    "queries": 2,
+    "queries": 0,
     "mention_queries": 0,
-    "serp_results": 27,
-    "candidates": 11,
-    "qualified": 6,
+    "serp_results": 0,
+    "candidates": 0,
+    "qualified": 0,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 7,
-    "with_email": 3,
+    "rejected": 0,
+    "with_email": 0,
     "contact_form": 0
    }
   },
   "replies": {
    "ok": true,
-   "ms": 37758,
+   "ms": 18644,
    "result": {
     "scanned": 400,
     "replies": 0,
     "positive": 0,
     "negative": 0,
-    "bounces": 1
+    "bounces": 2
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 420574,
+   "ms": 8,
    "result": {
-    "followups": 2,
-    "sent": 12,
+    "followups": 0,
+    "sent": 0,
     "drafted": 0,
-    "skipped": 1,
-    "deferred": 0,
+    "skipped": 0,
+    "deferred": 151,
     "cap": 12
    },
    "writer": {
@@ -159,7 +159,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "checked": 0,
     "won": 0,
@@ -176,16 +176,16 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.0878,
+  "today_usd": 0,
   "month_usd": 2.9732,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 3
+  "calls_this_run": 0
  },
  "outreach": {
   "mode": "send",
-  "ready": 150,
-  "sent_today": 12,
+  "ready": 151,
+  "sent_today": 0,
   "cap_today": 12,
   "next_send_at": "2026-10-30T13:00:00.000Z",
   "sending_now": false
@@ -193,7 +193,7 @@
  "funnel": {
   "prospects_evaluated": 2370,
   "qualified": 506,
-  "ready": 150,
+  "ready": 151,
   "contact_form_only": 95,
   "no_contact": 210,
   "contacted": 49,
@@ -202,7 +202,7 @@
   "won": 0,
   "existing_links": 4,
   "declined": 0,
-  "bounced": 1
+  "bounced": 2
  },
  "history": [
   {
@@ -316,6 +316,22 @@
    "declined": 0,
    "bounced": 1,
    "spend_usd": 0.0878
+  },
+  {
+   "date": "2026-10-30",
+   "prospects_evaluated": 2370,
+   "qualified": 506,
+   "ready": 151,
+   "contact_form_only": 95,
+   "no_contact": 210,
+   "contacted": 49,
+   "replied": 0,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 4,
+   "declined": 0,
+   "bounced": 2,
+   "spend_usd": 0
   }
  ],
  "learning": {
@@ -365,8 +381,8 @@
    {
     "footprint": "best_guides",
     "queries": 46,
-    "ready": 23,
-    "rate": 0.49
+    "ready": 22,
+    "rate": 0.469
    },
    {
     "footprint": "intitle_resources",
@@ -1351,7 +1367,7 @@
    ],
    "prospects": 6,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "frenchyfab.com",
@@ -1804,7 +1820,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 8,
    "words": 4194,
    "interactive": false,
    "modified": "2026-09-12T07:57:38+00:00",
@@ -1976,7 +1992,7 @@
    "linkability": 75,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 7,
    "words": 3272,
    "interactive": false,
    "modified": "2026-09-13T14:12:52+00:00",
@@ -4362,56 +4378,6 @@
    "from_strength": 0
   },
   {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
-   "to_title": "French Bulldog Seasonal Diet Guide",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
-   "to_title": "French Bulldog Seasonal Diet Guide",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
-   "to_title": "French Bulldog Seasonal Diet Guide",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
-   "to_title": "French Bulldog Seasonal Diet Guide",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/right-food-french-bulldog-guide/",
-   "from_title": "Choosing the Right Food for Your French Bulldog",
-   "to": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
-   "to_title": "French Bulldog Seasonal Diet Guide",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/embrace-transformation-personal-year-7-numerology/",
    "from_title": "Personal Year 7 Numerology Guide [2026] | Mystical Digits",
@@ -4750,6 +4716,56 @@
    "anchor": "french bulldogs",
    "relevance": 4,
    "from_strength": 61
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-meals-for-french-bulldogs/",
+   "from_title": "Homemade Meals for French Bulldogs: Safe Planning",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "homemade food",
+   "relevance": 8,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/organic-foods-for-frenchies/",
+   "from_title": "Organic Foods for Frenchies: What Is Worth Buying",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 8,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/right-food-french-bulldog-guide/",
+   "from_title": "Choosing the Right Food for Your French Bulldog",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
+   "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 0
   }
  ],
  "wins": [
@@ -4799,21 +4815,21 @@
   }
  ],
  "log": [
-  "17:00:11 connection dataforseo: connected",
-  "17:00:11 connection gmail: connected",
-  "17:00:14 crawl plantastichaven.com: 162/162 urls, fetched 2, 304 0, reused 160",
-  "17:00:15 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "17:00:18 crawl gearuptogrow.com: 107/107 urls, fetched 1, 304 0, reused 106",
-  "17:00:18 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "17:00:19 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "17:00:21 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "17:00:22 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "17:00:26 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 6, 304 0, reused 252",
-  "17:00:27 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "17:00:27 crawl micegoneguide.com: 53/53 urls, fetched 4, 304 0, reused 49",
-  "17:01:07 prospects: 2 queries (0 brand-mention), 11 candidates, 6 qualified (0 unlinked mentions), 3 with email, 0 already linking",
-  "17:01:45 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 1 bounces",
-  "17:08:46 outreach (send): 12 sent, 0 drafted, 2 follow-ups, 0 waiting for recipients' business hours, cap 12",
-  "17:08:46 link checks: 0 pages, 0 new links won, 0 lost"
+  "02:02:29 connection dataforseo: connected",
+  "02:02:29 connection gmail: connected",
+  "02:02:31 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "02:02:32 crawl plantastichaven.com: 162/162 urls, fetched 4, 304 0, reused 158",
+  "02:02:34 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
+  "02:02:36 crawl frenchyfab.com: 238/238 urls, fetched 4, 304 0, reused 234",
+  "02:02:38 crawl mysticaldigits.com: 300/468 urls, fetched 7, 304 0, reused 293",
+  "02:02:39 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "02:02:39 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "02:02:40 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "02:02:44 crawl efficientgptprompts.com: 300/487 urls, fetched 1, 304 0, reused 299",
+  "02:02:47 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 2, 304 0, reused 256",
+  "02:02:47 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "02:03:06 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 2 bounces",
+  "02:03:06 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 151 waiting for recipients' business hours, cap 12",
+  "02:03:06 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
