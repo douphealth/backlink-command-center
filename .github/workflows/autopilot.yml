@@ -70,6 +70,10 @@ jobs:
           DATAFORSEO_DAILY_USD: ${{ vars.DATAFORSEO_DAILY_USD }}
           DATAFORSEO_MONTHLY_USD: ${{ vars.DATAFORSEO_MONTHLY_USD }}
           LINKFORGE_CLAUDE_MODEL: ${{ vars.LINKFORGE_CLAUDE_MODEL }}
+          # Verification is disabled until the owner supplies a real key and budget.
+          HUNTER_API_KEY: ${{ secrets.HUNTER_API_KEY }}
+          EMAIL_VERIFICATION_ENABLED: ${{ vars.EMAIL_VERIFICATION_ENABLED || 'NO' }}
+          EMAIL_VERIFY_DAILY_LIMIT: ${{ vars.EMAIL_VERIFY_DAILY_LIMIT || '0' }}
         # Reversible containment: never override this hold from dashboard settings.
         # Research, mailbox reading and backlink checks remain enabled.
         # Remove only after the recipient-verification gate passes production checks.
