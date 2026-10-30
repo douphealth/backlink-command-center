@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-30T02:03:06.549Z",
- "duration_s": 39,
+ "generated_at": "2026-10-30T08:53:32.633Z",
+ "duration_s": 308,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -17,7 +17,7 @@
     "status": "connected"
    }
   },
-  "outreach_mode": "send",
+  "outreach_mode": "off",
   "claude": false,
   "gsc": false,
   "daily_send_cap": 12
@@ -54,7 +54,7 @@
   {
    "key": "OUTREACH_MODE = send",
    "label": "Hands-free sending",
-   "done": true,
+   "done": false,
    "unlocks": "Sends pitches and one follow-up automatically (warm-up ramp, daily cap)",
    "required": false
   },
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 18060,
+   "ms": 240331,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -91,7 +91,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -106,7 +106,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 1,
+   "ms": 0,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -116,7 +116,7 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 9,
+   "ms": 5,
    "result": {
     "queries": 0,
     "mention_queries": 0,
@@ -132,34 +132,23 @@
   },
   "replies": {
    "ok": true,
-   "ms": 18644,
+   "ms": 65250,
    "result": {
-    "scanned": 400,
+    "scanned": 396,
     "replies": 0,
     "positive": 0,
     "negative": 0,
-    "bounces": 2
+    "bounces": 0,
+    "delays": 0
    }
   },
   "outreach": {
-   "ok": true,
-   "ms": 8,
-   "result": {
-    "followups": 0,
-    "sent": 0,
-    "drafted": 0,
-    "skipped": 0,
-    "deferred": 151,
-    "cap": 12
-   },
-   "writer": {
-    "claude": 0,
-    "template_fallbacks": 0
-   }
+   "ok": null,
+   "skipped": "OUTREACH_MODE=off"
   },
   "link_checks": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "checked": 0,
     "won": 0,
@@ -183,17 +172,20 @@
   "calls_this_run": 0
  },
  "outreach": {
-  "mode": "send",
-  "ready": 151,
+  "mode": "off",
+  "ready": 150,
+  "verified_ready": 0,
+  "pending_verification": 150,
   "sent_today": 0,
   "cap_today": 12,
-  "next_send_at": "2026-10-30T13:00:00.000Z",
-  "sending_now": false
+  "next_send_at": null,
+  "sending_now": false,
+  "reply_health": "backlog"
  },
  "funnel": {
   "prospects_evaluated": 2370,
   "qualified": 506,
-  "ready": 151,
+  "ready": 150,
   "contact_form_only": 95,
   "no_contact": 210,
   "contacted": 49,
@@ -202,7 +194,7 @@
   "won": 0,
   "existing_links": 4,
   "declined": 0,
-  "bounced": 2
+  "bounced": 3
  },
  "history": [
   {
@@ -321,7 +313,7 @@
    "date": "2026-10-30",
    "prospects_evaluated": 2370,
    "qualified": 506,
-   "ready": 151,
+   "ready": 150,
    "contact_form_only": 95,
    "no_contact": 210,
    "contacted": 49,
@@ -330,7 +322,7 @@
    "won": 0,
    "existing_links": 4,
    "declined": 0,
-   "bounced": 2,
+   "bounced": 3,
    "spend_usd": 0
   }
  ],
@@ -379,16 +371,16 @@
     "rate": 0.538
    },
    {
-    "footprint": "best_guides",
-    "queries": 46,
-    "ready": 22,
-    "rate": 0.469
-   },
-   {
     "footprint": "intitle_resources",
     "queries": 10,
     "ready": 5,
     "rate": 0.462
+   },
+   {
+    "footprint": "best_guides",
+    "queries": 46,
+    "ready": 21,
+    "rate": 0.449
    },
    {
     "footprint": "inurl_links",
@@ -861,8 +853,8 @@
    "linkability": 91,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 1667,
+   "internal_inlinks": 7,
+   "words": 1668,
    "interactive": true,
    "modified": "2026-09-13T09:05:03+00:00",
    "reasons": [
@@ -926,6 +918,30 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/review/neuronwriter-review/",
+   "title": "NeuronWriter Review 2026: NLP Content Scoring, Pricing & Alternatives",
+   "h1": "NeuronWriter Review (2026): Workflow, Limits, Pricing & Who Should Buy",
+   "description": "A 2026 NeuronWriter review covering NLP content scoring, plan limits and quotas, workflow, pricing, limitations, and honest alternatives.",
+   "type": "comparison",
+   "promotion": 79,
+   "linkability": 88,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 27,
+   "words": 1735,
+   "interactive": true,
+   "modified": "2026-10-30T07:45:22+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Recently updated"
+   ],
+   "prospects": 14,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
    "title": "Affiliate Growth Checklist: SEO, Trust & Revenue",
    "h1": "Affiliate Growth Checklist: Build a Search, Trust, and Revenue System",
@@ -947,30 +963,6 @@
    "prospects": 17,
    "internal_link_suggestions": 1,
    "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/review/neuronwriter-review/",
-   "title": "NeuronWriter Review 2026: NLP Content Scoring, Pricing & Alternatives",
-   "h1": "NeuronWriter Review (2026): Workflow, Limits, Pricing & Who Should Buy",
-   "description": "A 2026 NeuronWriter review covering NLP content scoring, plan limits and quotas, workflow, pricing, limitations, and honest alternatives.",
-   "type": "comparison",
-   "promotion": 79,
-   "linkability": 88,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 28,
-   "words": 1747,
-   "interactive": true,
-   "modified": "2026-09-18T17:00:28+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 14,
-   "internal_link_suggestions": 0,
-   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -1007,13 +999,13 @@
    "linkability": 87,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 4,
-   "words": 2182,
+   "internal_inlinks": 5,
+   "words": 2186,
    "interactive": false,
    "modified": "2026-09-13T19:08:04+00:00",
    "reasons": [
     "Original method/data — citation-worthy",
-    "In-depth (2,182 words)",
+    "In-depth (2,186 words)",
     "2 data tables",
     "Cites 5 authoritative sources",
     "Recently updated"
@@ -1084,12 +1076,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 26,
-   "words": 3431,
+   "words": 3444,
    "interactive": true,
    "modified": "2026-10-03T19:51:14+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,431 words)",
+    "In-depth (3,444 words)",
     "2 data tables",
     "Recently updated"
    ],
@@ -1108,7 +1100,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 12,
    "words": 3486,
    "interactive": true,
    "modified": "2026-09-06T06:47:08+00:00",
@@ -1134,9 +1126,9 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 9,
-   "words": 1346,
+   "words": 1342,
    "interactive": true,
-   "modified": "2026-09-03T07:50:31+00:00",
+   "modified": "2026-10-30T07:30:05+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "2 data tables",
@@ -1209,7 +1201,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 13,
-   "words": 678,
+   "words": 680,
    "interactive": true,
    "modified": "2026-09-05T13:47:24+00:00",
    "reasons": [
@@ -1256,7 +1248,7 @@
    "linkability": 83,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 10,
    "words": 2085,
    "interactive": false,
    "modified": "2026-09-25T14:57:36+00:00",
@@ -1330,7 +1322,7 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 8,
    "words": 4949,
    "interactive": false,
    "modified": "2026-09-13T09:07:20+00:00",
@@ -1507,7 +1499,7 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 6,
    "words": 6585,
    "interactive": false,
    "modified": "2026-09-12T09:23:40+00:00",
@@ -1820,7 +1812,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 9,
    "words": 4194,
    "interactive": false,
    "modified": "2026-09-12T07:57:38+00:00",
@@ -1845,7 +1837,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
+   "internal_inlinks": 12,
    "words": 6004,
    "interactive": false,
    "modified": "2026-09-03T11:44:05+00:00",
@@ -1992,7 +1984,7 @@
    "linkability": 75,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 12,
    "words": 3272,
    "interactive": false,
    "modified": "2026-09-13T14:12:52+00:00",
@@ -2185,31 +2177,6 @@
    "promoting": false
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/blogging/keys-to-creating-successful-content-on-your-blog/",
-   "title": "Content Creation for Blogs: 2026 Proven Strategy Guide",
-   "h1": "Keys to Creating Successful Blog Content: 2026 ROI Guide",
-   "description": "Learn proven strategies to craft blog content that drives traffic & conversions. Perfect for beginners & intermediate marketers. Start optimizing today!",
-   "type": "practical_guide",
-   "promotion": 67,
-   "linkability": 70,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2013,
-   "interactive": false,
-   "modified": "2026-09-03T11:44:29+00:00",
-   "reasons": [
-    "In-depth (2,013 words)",
-    "7 data tables",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
    "site": "efficientgptprompts.com",
    "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
    "title": "Prompt Engineering Framework for LLMs: Test, Grade, Deploy",
@@ -2296,12 +2263,12 @@
    "linkability": 73,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
-   "words": 3058,
+   "internal_inlinks": 12,
+   "words": 3050,
    "interactive": false,
    "modified": "2026-09-03T10:44:17+00:00",
    "reasons": [
-    "In-depth (3,058 words)",
+    "In-depth (3,050 words)",
     "1 data table",
     "Recently updated"
    ],
@@ -2451,8 +2418,8 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 20,
-   "words": 1100,
+   "internal_inlinks": 19,
+   "words": 1103,
    "interactive": false,
    "modified": "2026-09-13T08:04:36+00:00",
    "reasons": [
@@ -2489,6 +2456,31 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/blogging/11-things-to-outsource-as-a-blogger-for-more-time-and-efficiency/",
+   "title": "11 Things To Outsource As A Blogger For More Time And Efficiency",
+   "h1": "11 Things to Outsource as a Blogger for Faster Scaling",
+   "description": "Stop wasting time! Discover 11 blogging tasks you can easily outsource to skyrocket your efficiency and grow your blog faster. Get more traffic now!",
+   "type": "general_article",
+   "promotion": 65,
+   "linkability": 72,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 10,
+   "words": 3117,
+   "interactive": false,
+   "modified": "2026-09-03T12:32:26+00:00",
+   "reasons": [
+    "In-depth (3,117 words)",
+    "1 data table",
+    "Cites 8 authoritative sources",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/info/paraphrase-text-using-nlp/",
    "title": "7 Proven Ways to Paraphrase Text with NLP in 2026",
    "h1": "How to Paraphrase Text Using NLP: 7 AI Methods (2026 Guide)",
@@ -2498,7 +2490,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 6,
    "words": 2972,
    "interactive": false,
    "modified": "2026-09-03T12:25:05+00:00",
@@ -3319,16 +3311,6 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/review/skool-affiliate-program-review/",
-   "from_title": "Skool Affiliate Program Review 2026: 40% Recurring",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-mistakes/",
    "from_title": "12 Affiliate Marketing Mistakes and How to Fix Them",
    "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
@@ -3341,6 +3323,16 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-niche-selection-mistakes/",
    "from_title": "Affiliate Marketing 2026: 7 Niche Selection Mistakes to Avoid",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
+   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
+   "anchor": "promote affiliate products",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/ai/boost-affiliate-earnings-perplexity-ai/",
+   "from_title": "How to Use Perplexity AI to Boost Your Affiliate Earnings in 2026",
    "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
    "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
    "anchor": "promote affiliate products",
@@ -3439,8 +3431,8 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/21-day-french-bulldog-obedience-blueprint/",
-   "from_title": "2026 French Bulldog Training: 21-Day Proven Blueprint",
+   "from": "https://frenchyfab.com/training-games-and-activities-for-french-bulldog-puppies/",
+   "from_title": "2026 French Bulldog Training: 7 Fun Games & Tips",
    "to": "https://frenchyfab.com/french-bulldog-training-aids/",
    "to_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "anchor": "french bulldog",
@@ -3449,8 +3441,8 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/teaching-calmness-and-relaxation-to-your-energetic-french-bulldog/",
-   "from_title": "Calm French Bulldog Training: Relaxation Cues, Routines",
+   "from": "https://frenchyfab.com/21-day-french-bulldog-obedience-blueprint/",
+   "from_title": "2026 French Bulldog Training: 21-Day Proven Blueprint",
    "to": "https://frenchyfab.com/french-bulldog-training-aids/",
    "to_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "anchor": "french bulldog",
@@ -4249,6 +4241,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/training-games-and-activities-for-french-bulldog-puppies/",
+   "from_title": "2026 French Bulldog Training: 7 Fun Games & Tips",
+   "to": "https://frenchyfab.com/french-bulldog-training-classes/",
+   "to_title": "French Bulldog Training Classes: When to Join",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/21-day-french-bulldog-obedience-blueprint/",
    "from_title": "2026 French Bulldog Training: 21-Day Proven Blueprint",
    "to": "https://frenchyfab.com/french-bulldog-training-classes/",
@@ -4261,16 +4263,6 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/teaching-calmness-and-relaxation-to-your-energetic-french-bulldog/",
    "from_title": "Calm French Bulldog Training: Relaxation Cues, Routines",
-   "to": "https://frenchyfab.com/french-bulldog-training-classes/",
-   "to_title": "French Bulldog Training Classes: When to Join",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/recall-training-teaching-your-french-bulldog-to-come-when-called/",
-   "from_title": "French Bulldog Recall: Step-by-Step Guide",
    "to": "https://frenchyfab.com/french-bulldog-training-classes/",
    "to_title": "French Bulldog Training Classes: When to Join",
    "anchor": "french bulldog",
@@ -4349,6 +4341,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/training-games-and-activities-for-french-bulldog-puppies/",
+   "from_title": "2026 French Bulldog Training: 7 Fun Games & Tips",
+   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
+   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/21-day-french-bulldog-obedience-blueprint/",
    "from_title": "2026 French Bulldog Training: 21-Day Proven Blueprint",
    "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
@@ -4361,16 +4363,6 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/teaching-calmness-and-relaxation-to-your-energetic-french-bulldog/",
    "from_title": "Calm French Bulldog Training: Relaxation Cues, Routines",
-   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/recall-training-teaching-your-french-bulldog-to-come-when-called/",
-   "from_title": "French Bulldog Recall: Step-by-Step Guide",
    "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
    "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
    "anchor": "french bulldog",
@@ -4419,8 +4411,8 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/life-transition-numbers/",
-   "from_title": "2026 Life Transition Numbers Guide | Mystical Digits",
+   "from": "https://mysticaldigits.com/how-to-calculate-your-gift-number-in-numerology/",
+   "from_title": "Gift Number Calculator: Discover Your 2026 Numerology Talents",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
    "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
    "anchor": "personal year",
@@ -4815,21 +4807,21 @@
   }
  ],
  "log": [
-  "02:02:29 connection dataforseo: connected",
-  "02:02:29 connection gmail: connected",
-  "02:02:31 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "02:02:32 crawl plantastichaven.com: 162/162 urls, fetched 4, 304 0, reused 158",
-  "02:02:34 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
-  "02:02:36 crawl frenchyfab.com: 238/238 urls, fetched 4, 304 0, reused 234",
-  "02:02:38 crawl mysticaldigits.com: 300/468 urls, fetched 7, 304 0, reused 293",
-  "02:02:39 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "02:02:39 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "02:02:40 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "02:02:44 crawl efficientgptprompts.com: 300/487 urls, fetched 1, 304 0, reused 299",
-  "02:02:47 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 2, 304 0, reused 256",
-  "02:02:47 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "02:03:06 replies: scanned 400, 0 replies (0 positive, 0 opt-out), 2 bounces",
-  "02:03:06 outreach (send): 0 sent, 0 drafted, 0 follow-ups, 151 waiting for recipients' business hours, cap 12",
-  "02:03:06 link checks: 0 pages, 0 new links won, 0 lost"
+  "08:48:26 connection dataforseo: connected",
+  "08:48:26 connection gmail: connected",
+  "08:48:28 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "08:48:28 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
+  "08:48:30 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "08:48:31 crawl frenchyfab.com: 238/238 urls, fetched 1, 304 0, reused 237",
+  "08:48:34 crawl mysticaldigits.com: 300/468 urls, fetched 4, 304 0, reused 296",
+  "08:48:34 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "08:48:35 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "08:48:36 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "08:48:38 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "08:52:26 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 224, 304 0, reused 34",
+  "08:52:27 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "08:53:32 replies: 396 scanned, 0 replies, 0 failures, 0 delays; backlog",
+  "08:53:32 - outreach: skipped (OUTREACH_MODE=off)",
+  "08:53:32 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
