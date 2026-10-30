@@ -64,14 +64,15 @@ export class Imap{
   const usable=!!validity&&cursor?.mailbox===mailbox&&cursor.uidvalidity===validity&&Number.isSafeInteger(cursor.uid)&&cursor.uid>=0;
   const after=usable?cursor.uid:0,since=sinceDate.toUTCString().split(' ').slice(1,4).join('-');
   const found=await this.cmd(usable?`UID SEARCH UID ${after+1}:*`:`UID SEARCH SINCE ${since}`);
-  if(!/\* SEARCH(?:[\d ]*)\r\n/.test(found))throw Error('IMAP search response missing');
+  if(!/(?:^|\r\n)\* SEARCH(?:[ \t]+\d+)*[ \t]*(?:\r\n|$)/.test(found))throw Error('IMAP search response missing');
   const allUids=(found.match(/\* SEARCH([\d ]*)/)?.[1]||'').trim().split(/\s+/).map(Number).filter(n=>Number.isSafeInteger(n)&&n>after).sort((a,b)=>a-b);
   const uids=[...new Set(allUids)].slice(0,Math.max(1,Math.min(400,max))),out=[];
   if(uids.length){const raw=await this.cmd(`UID FETCH ${uids.join(',')} (UID BODY.PEEK[HEADER.FIELDS (FROM SUBJECT IN-REPLY-TO REFERENCES AUTO-SUBMITTED MESSAGE-ID CONTENT-TYPE CONTENT-TRANSFER-ENCODING)] BODY.PEEK[TEXT]<0.32768>)`);out.push(...parseFetch(raw))}
   const parsed=uids.every(u=>out.some(m=>Number(m.uid)===u));
-  out.complete=!!validity&&parsed&&allUids.length<=uids.length;
-  if(validity&&parsed)out.cursor={mailbox,uidvalidity:validity,uid:uids.at(-1)||after};
-  return out;
+  const result=out.filter(m=>m.from!==String(this.user||'').toLowerCase());
+  result.complete=!!validity&&parsed&&allUids.length<=uids.length;
+  if(validity&&parsed)result.cursor={mailbox,uidvalidity:validity,uid:uids.at(-1)||after};
+  return result;
  }
  async close(){try{await Promise.race([this.cmd('LOGOUT'),new Promise(r=>setTimeout(r,3000).unref?.())])}catch{}this.w?.end()}
 }
@@ -97,7 +98,7 @@ export function parseFetch(raw){
  const out=[];for(const part of raw.split(/(?=^\* \d+ FETCH )/m)){
   if(!part.startsWith('* '))continue;
   const header=(part.match(/BODY\[HEADER\.FIELDS[^\]]*\] \{\d+\}\r\n([\s\S]*?)\r\n\r\n/)||[])[1]||'';
-  const body=(part.match(/BODY\[TEXT\]<0> \{\d+\}\r\n([\s\S]*?)(?:\)\r\n|$)/)||[])[1]||'';
+  const body=(part.match(/BODY\[TEXT\]<0> \{\d+\}\r\n([\s\S]*?)(?:\)(?:\r\n|$)|$)/)||[])[1]||'';
   const unfolded=header.replace(/\r\n[ \t]+/g,' '),h=k=>(unfolded.match(new RegExp('^'+k+':\\s*(.*)$','im'))||[])[1]||'';
   const from=(h('From').match(/<([^>]+)>/)||[])[1]||h('From').trim();
   out.push({uid:part.match(/\bUID\s+(\d+)/)?.[1]||'',messageId:h('Message-ID'),from:from.toLowerCase(),subject:h('Subject'),inReplyTo:h('In-Reply-To'),references:h('References'),autoSubmitted:h('Auto-Submitted'),body:decodeReplyBody(body,h('Content-Transfer-Encoding'),h('Content-Type'))});
