@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-31T13:46:00.722Z",
- "duration_s": 60,
+ "generated_at": "2026-10-31T22:38:21.657Z",
+ "duration_s": 32,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 26202,
+   "ms": 15287,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -91,7 +91,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -116,7 +116,7 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 9,
+   "ms": 8,
    "result": {
     "queries": 0,
     "mention_queries": 0,
@@ -131,9 +131,16 @@
    }
   },
   "replies": {
-   "ok": false,
-   "ms": 30045,
-   "error": "mail socket timeout"
+   "ok": true,
+   "ms": 14017,
+   "result": {
+    "scanned": 357,
+    "replies": 0,
+    "positive": 0,
+    "negative": 0,
+    "bounces": 3,
+    "delays": 0
+   }
   },
   "outreach": {
    "ok": null,
@@ -141,9 +148,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 2246,
+   "ms": 401,
    "result": {
-    "checked": 4,
+    "checked": 2,
     "won": 0,
     "lost": 0
    }
@@ -173,7 +180,7 @@
   "cap_today": 12,
   "next_send_at": null,
   "sending_now": false,
-  "reply_health": "failed"
+  "reply_health": "backlog"
  },
  "funnel": {
   "prospects_evaluated": 2370,
@@ -187,7 +194,7 @@
   "won": 0,
   "existing_links": 4,
   "declined": 0,
-  "bounced": 3
+  "bounced": 5
  },
  "history": [
   {
@@ -331,7 +338,7 @@
    "won": 0,
    "existing_links": 4,
    "declined": 0,
-   "bounced": 3,
+   "bounced": 5,
    "spend_usd": 0
   }
  ],
@@ -340,14 +347,14 @@
    {
     "footprint": "useful_links",
     "queries": 10,
-    "ready": 13,
-    "rate": 1.077
+    "ready": 12,
+    "rate": 1
    },
    {
     "footprint": "intent",
     "queries": 64,
-    "ready": 58,
-    "rate": 0.881
+    "ready": 57,
+    "rate": 0.866
    },
    {
     "footprint": "statistics",
@@ -4815,21 +4822,21 @@
   }
  ],
  "log": [
-  "13:45:01 connection dataforseo: connected",
-  "13:45:01 connection gmail: connected",
-  "13:45:05 crawl plantastichaven.com: 162/162 urls, fetched 4, 304 0, reused 158",
-  "13:45:05 crawl gearuptogrow.com: 107/107 urls, fetched 3, 304 0, reused 104",
-  "13:45:10 crawl frenchyfab.com: 238/238 urls, fetched 4, 304 0, reused 234",
-  "13:45:10 crawl mysticaldigits.com: 300/468 urls, fetched 3, 304 0, reused 297",
-  "13:45:14 crawl gearuptofit.com: 300/878 urls, fetched 3, 304 0, reused 297",
-  "13:45:15 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "13:45:15 crawl micegoneguide.com: 53/53 urls, fetched 7, 304 0, reused 46",
-  "13:45:16 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "13:45:19 crawl efficientgptprompts.com: 300/487 urls, fetched 9, 304 0, reused 291",
-  "13:45:28 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 20, 304 0, reused 238",
-  "13:45:28 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "13:45:58 ! replies failed: mail socket timeout",
-  "13:45:58 - outreach: skipped (OUTREACH_MODE=off)",
-  "13:46:00 link checks: 4 pages, 0 new links won, 0 lost"
+  "22:37:51 connection dataforseo: connected",
+  "22:37:51 connection gmail: connected",
+  "22:37:53 crawl gearuptofit.com: 300/878 urls, fetched 1, 304 0, reused 299",
+  "22:37:53 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
+  "22:37:55 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "22:37:57 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "22:37:58 crawl mysticaldigits.com: 300/468 urls, fetched 2, 304 0, reused 298",
+  "22:37:59 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "22:38:00 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "22:38:01 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "22:38:05 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "22:38:06 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "22:38:07 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "22:38:21 replies: 357 scanned, 0 replies, 3 failures, 0 delays; backlog",
+  "22:38:21 - outreach: skipped (OUTREACH_MODE=off)",
+  "22:38:21 link checks: 2 pages, 0 new links won, 0 lost"
  ]
 }
