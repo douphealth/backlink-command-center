@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-31T07:09:06.808Z",
- "duration_s": 41,
+ "generated_at": "2026-10-31T13:46:00.722Z",
+ "duration_s": 60,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 16230,
+   "ms": 26202,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -91,7 +91,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 3,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -131,16 +131,9 @@
    }
   },
   "replies": {
-   "ok": true,
-   "ms": 18898,
-   "result": {
-    "scanned": 369,
-    "replies": 0,
-    "positive": 0,
-    "negative": 0,
-    "bounces": 0,
-    "delays": 0
-   }
+   "ok": false,
+   "ms": 30045,
+   "error": "mail socket timeout"
   },
   "outreach": {
    "ok": null,
@@ -148,9 +141,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 4269,
+   "ms": 2246,
    "result": {
-    "checked": 3,
+    "checked": 4,
     "won": 0,
     "lost": 0
    }
@@ -180,7 +173,7 @@
   "cap_today": 12,
   "next_send_at": null,
   "sending_now": false,
-  "reply_health": "backlog"
+  "reply_health": "failed"
  },
  "funnel": {
   "prospects_evaluated": 2370,
@@ -767,12 +760,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 53,
-   "words": 2205,
+   "words": 2201,
    "interactive": true,
    "modified": "2026-10-25T09:14:08+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,205 words)",
+    "In-depth (2,201 words)",
     "3 data tables",
     "Cites 63 authoritative sources",
     "Recently updated"
@@ -1091,7 +1084,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 26,
+   "internal_inlinks": 24,
    "words": 3444,
    "interactive": true,
    "modified": "2026-10-03T19:51:14+00:00",
@@ -1264,7 +1257,7 @@
    "linkability": 83,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 9,
    "words": 2085,
    "interactive": false,
    "modified": "2026-09-25T14:57:36+00:00",
@@ -1312,7 +1305,7 @@
    "linkability": 95,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 10,
    "words": 2217,
    "interactive": true,
    "modified": "2026-10-03T06:26:18+00:00",
@@ -1338,7 +1331,7 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 4949,
    "interactive": false,
    "modified": "2026-09-13T09:07:20+00:00",
@@ -1413,7 +1406,7 @@
    "linkability": 94,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 14,
+   "internal_inlinks": 13,
    "words": 1122,
    "interactive": true,
    "modified": "2026-10-05T18:42:26+00:00",
@@ -1515,7 +1508,7 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 7,
    "words": 6585,
    "interactive": false,
    "modified": "2026-09-12T09:23:40+00:00",
@@ -1622,7 +1615,7 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 7,
    "words": 1126,
    "interactive": true,
    "modified": "2026-10-03T06:17:15+00:00",
@@ -1648,7 +1641,7 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 8,
    "words": 2556,
    "interactive": true,
    "modified": "2026-10-03T06:15:52+00:00",
@@ -1801,7 +1794,7 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 11,
    "words": 2171,
    "interactive": true,
    "modified": "2026-10-03T06:27:23+00:00",
@@ -1828,7 +1821,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 8,
    "words": 4194,
    "interactive": false,
    "modified": "2026-09-12T07:57:38+00:00",
@@ -1853,7 +1846,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 13,
    "words": 6004,
    "interactive": false,
    "modified": "2026-09-03T11:44:05+00:00",
@@ -1877,8 +1870,8 @@
    "linkability": 89,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 15,
-   "words": 1992,
+   "internal_inlinks": 13,
+   "words": 1981,
    "interactive": true,
    "modified": "2026-10-24T09:10:11+00:00",
    "reasons": [
@@ -2000,7 +1993,7 @@
    "linkability": 75,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
+   "internal_inlinks": 14,
    "words": 3272,
    "interactive": false,
    "modified": "2026-09-13T14:12:52+00:00",
@@ -2048,7 +2041,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 6,
-   "words": 1652,
+   "words": 1656,
    "interactive": true,
    "modified": "2026-10-25T07:53:36+00:00",
    "reasons": [
@@ -2100,7 +2093,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 11,
    "words": 1605,
    "interactive": true,
    "modified": "2026-10-03T06:40:47+00:00",
@@ -2253,7 +2246,7 @@
    "linkability": 87,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 13,
    "words": 1233,
    "interactive": true,
    "modified": "2026-10-03T06:17:09+00:00",
@@ -2330,7 +2323,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 9,
    "words": 2167,
    "interactive": true,
    "modified": "2026-10-03T06:40:36+00:00",
@@ -2571,33 +2564,6 @@
    "promoting": false
   },
   {
-   "site": "mysticaldigits.com",
-   "url": "https://mysticaldigits.com/essence-of-number-five-guide/",
-   "title": "Exploring Your Path: Essence of Number Five 2026 | Mystical Digits",
-   "h1": "Exploring Your Path: Essence of Number Five 2026",
-   "description": "A grounded guide to exploring your path: essence of number five 2026, with meanings, examples, common mistakes, and practical reflection-first next steps.",
-   "type": "practical_guide",
-   "promotion": 64,
-   "linkability": 80,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 3991,
-   "interactive": true,
-   "modified": "2026-10-28T08:09:35+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,991 words)",
-    "3 data tables",
-    "Recently updated",
-    "Under-linked internally (2 inbound)",
-    "One of 299 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 2,
-   "internal_link_suggestions": 0,
-   "promoting": true
-  },
-  {
    "site": "gearuptofit.com",
    "url": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-ultra",
    "title": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch Ultra: Which Should You Buy?",
@@ -2772,6 +2738,32 @@
    "prospects": 5,
    "internal_link_suggestions": 5,
    "promoting": true
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "title": "French Bulldog Socialization Training: A Practical Plan",
+   "h1": "French Bulldog Social Interaction Training – Confident Happy Frenchies",
+   "description": "Learn how to train your French Bulldog to socialize effectively with other dogs and people to create a well-adjusted canine companion.",
+   "type": "practical_guide",
+   "promotion": 62,
+   "linkability": 82,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 12,
+   "words": 4266,
+   "interactive": true,
+   "modified": "2026-09-25T21:04:50+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,266 words)",
+    "23 data tables",
+    "Recently updated",
+    "One of 236 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 8,
+   "internal_link_suggestions": 5,
+   "promoting": false
   }
  ],
  "internal_links": [
@@ -3807,13 +3799,13 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
-   "from_title": "7 Surprising Health Risks of Mouse Infestation Revealed",
+   "from": "https://micegoneguide.com/natural-mouse-repellents/",
+   "from_title": "Natural Mouse Repellents: What Helps and What Fails",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
    "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 67
+   "from_strength": 68
   },
   {
    "site": "micegoneguide.com",
@@ -4823,21 +4815,21 @@
   }
  ],
  "log": [
-  "07:08:26 connection dataforseo: connected",
-  "07:08:26 connection gmail: connected",
-  "07:08:28 crawl gearuptofit.com: 300/878 urls, fetched 3, 304 0, reused 297",
-  "07:08:29 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
-  "07:08:30 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "07:08:31 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "07:08:33 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "07:08:34 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "07:08:34 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "07:08:35 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "07:08:38 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "07:08:43 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 2, 304 0, reused 256",
-  "07:08:43 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "07:09:02 replies: 369 scanned, 0 replies, 0 failures, 0 delays; backlog",
-  "07:09:02 - outreach: skipped (OUTREACH_MODE=off)",
-  "07:09:06 link checks: 3 pages, 0 new links won, 0 lost"
+  "13:45:01 connection dataforseo: connected",
+  "13:45:01 connection gmail: connected",
+  "13:45:05 crawl plantastichaven.com: 162/162 urls, fetched 4, 304 0, reused 158",
+  "13:45:05 crawl gearuptogrow.com: 107/107 urls, fetched 3, 304 0, reused 104",
+  "13:45:10 crawl frenchyfab.com: 238/238 urls, fetched 4, 304 0, reused 234",
+  "13:45:10 crawl mysticaldigits.com: 300/468 urls, fetched 3, 304 0, reused 297",
+  "13:45:14 crawl gearuptofit.com: 300/878 urls, fetched 3, 304 0, reused 297",
+  "13:45:15 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "13:45:15 crawl micegoneguide.com: 53/53 urls, fetched 7, 304 0, reused 46",
+  "13:45:16 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "13:45:19 crawl efficientgptprompts.com: 300/487 urls, fetched 9, 304 0, reused 291",
+  "13:45:28 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 20, 304 0, reused 238",
+  "13:45:28 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "13:45:58 ! replies failed: mail socket timeout",
+  "13:45:58 - outreach: skipped (OUTREACH_MODE=off)",
+  "13:46:00 link checks: 4 pages, 0 new links won, 0 lost"
  ]
 }
