@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-10-31T22:38:21.657Z",
- "duration_s": 32,
+ "generated_at": "2026-11-01T09:31:20.320Z",
+ "duration_s": 27,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 15287,
+   "ms": 16789,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -116,7 +116,7 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 8,
+   "ms": 7,
    "result": {
     "queries": 0,
     "mention_queries": 0,
@@ -132,14 +132,14 @@
   },
   "replies": {
    "ok": true,
-   "ms": 14017,
+   "ms": 7737,
    "result": {
-    "scanned": 357,
+    "scanned": 167,
     "replies": 0,
     "positive": 0,
     "negative": 0,
     "bounces": 3,
-    "delays": 0
+    "delays": 4
    }
   },
   "outreach": {
@@ -148,9 +148,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 401,
+   "ms": 199,
    "result": {
-    "checked": 2,
+    "checked": 1,
     "won": 0,
     "lost": 0
    }
@@ -166,7 +166,7 @@
  },
  "spend": {
   "today_usd": 0,
-  "month_usd": 3.1129,
+  "month_usd": 0,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
   "calls_this_run": 0
@@ -180,7 +180,7 @@
   "cap_today": 12,
   "next_send_at": null,
   "sending_now": false,
-  "reply_health": "backlog"
+  "reply_health": "ok"
  },
  "funnel": {
   "prospects_evaluated": 2370,
@@ -327,6 +327,22 @@
   },
   {
    "date": "2026-10-31",
+   "prospects_evaluated": 2370,
+   "qualified": 506,
+   "ready": 150,
+   "contact_form_only": 95,
+   "no_contact": 210,
+   "contacted": 49,
+   "replied": 0,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 4,
+   "declined": 0,
+   "bounced": 5,
+   "spend_usd": 0
+  },
+  {
+   "date": "2026-11-01",
    "prospects_evaluated": 2370,
    "qualified": 506,
    "ready": 150,
@@ -4822,21 +4838,21 @@
   }
  ],
  "log": [
-  "22:37:51 connection dataforseo: connected",
-  "22:37:51 connection gmail: connected",
-  "22:37:53 crawl gearuptofit.com: 300/878 urls, fetched 1, 304 0, reused 299",
-  "22:37:53 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
-  "22:37:55 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "22:37:57 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "22:37:58 crawl mysticaldigits.com: 300/468 urls, fetched 2, 304 0, reused 298",
-  "22:37:59 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "22:38:00 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "22:38:01 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "22:38:05 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "22:38:06 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "22:38:07 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "22:38:21 replies: 357 scanned, 0 replies, 3 failures, 0 delays; backlog",
-  "22:38:21 - outreach: skipped (OUTREACH_MODE=off)",
-  "22:38:21 link checks: 2 pages, 0 new links won, 0 lost"
+  "09:30:54 connection dataforseo: connected",
+  "09:30:54 connection gmail: connected",
+  "09:30:56 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "09:30:57 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
+  "09:30:58 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "09:31:00 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "09:31:01 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "09:31:02 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "09:31:03 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "09:31:04 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "09:31:06 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "09:31:11 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 1, 304 0, reused 257",
+  "09:31:12 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "09:31:19 replies: 167 scanned, 0 replies, 3 failures, 4 delays; ok",
+  "09:31:19 - outreach: skipped (OUTREACH_MODE=off)",
+  "09:31:20 link checks: 1 pages, 0 new links won, 0 lost"
  ]
 }
