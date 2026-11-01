@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-01T09:31:20.320Z",
- "duration_s": 27,
+ "generated_at": "2026-11-01T16:54:06.585Z",
+ "duration_s": 137,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 16789,
+   "ms": 96896,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -91,7 +91,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -106,7 +106,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 1,
+   "ms": 0,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -116,30 +116,30 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 7,
+   "ms": 19526,
    "result": {
-    "queries": 0,
+    "queries": 2,
     "mention_queries": 0,
-    "serp_results": 0,
-    "candidates": 0,
-    "qualified": 0,
+    "serp_results": 38,
+    "candidates": 1,
+    "qualified": 1,
     "mentions": 0,
     "already_linked": 0,
     "rejected": 0,
     "with_email": 0,
-    "contact_form": 0
+    "contact_form": 1
    }
   },
   "replies": {
    "ok": true,
-   "ms": 7737,
+   "ms": 5752,
    "result": {
-    "scanned": 167,
+    "scanned": 18,
     "replies": 0,
     "positive": 0,
     "negative": 0,
-    "bounces": 3,
-    "delays": 4
+    "bounces": 0,
+    "delays": 0
    }
   },
   "outreach": {
@@ -148,9 +148,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 199,
+   "ms": 13024,
    "result": {
-    "checked": 1,
+    "checked": 13,
     "won": 0,
     "lost": 0
    }
@@ -165,11 +165,11 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0,
-  "month_usd": 0,
+  "today_usd": 0.0201,
+  "month_usd": 0.0201,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 0
+  "calls_this_run": 3
  },
  "outreach": {
   "mode": "off",
@@ -183,10 +183,10 @@
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 2370,
-  "qualified": 506,
+  "prospects_evaluated": 2371,
+  "qualified": 507,
   "ready": 150,
-  "contact_form_only": 95,
+  "contact_form_only": 96,
   "no_contact": 210,
   "contacted": 49,
   "replied": 0,
@@ -343,10 +343,10 @@
   },
   {
    "date": "2026-11-01",
-   "prospects_evaluated": 2370,
-   "qualified": 506,
+   "prospects_evaluated": 2371,
+   "qualified": 507,
    "ready": 150,
-   "contact_form_only": 95,
+   "contact_form_only": 96,
    "no_contact": 210,
    "contacted": 49,
    "replied": 0,
@@ -355,7 +355,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 5,
-   "spend_usd": 0
+   "spend_usd": 0.0201
   }
  ],
  "learning": {
@@ -368,9 +368,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 64,
+    "queries": 65,
     "ready": 57,
-    "rate": 0.866
+    "rate": 0.853
    },
    {
     "footprint": "statistics",
@@ -434,9 +434,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 76,
+    "queries": 77,
     "ready": 14,
-    "rate": 0.19
+    "rate": 0.188
    },
    {
     "footprint": "mention",
@@ -809,12 +809,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 52,
-   "words": 2213,
+   "words": 2204,
    "interactive": true,
    "modified": "2026-10-03T06:27:27+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,213 words)",
+    "In-depth (2,204 words)",
     "1 data table",
     "Cites 11 authoritative sources",
     "Recently updated"
@@ -1181,13 +1181,13 @@
    "linkability": 85,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 297,
-   "words": 3386,
+   "internal_inlinks": 296,
+   "words": 3383,
    "interactive": true,
    "modified": "2026-08-22T09:14:57+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,386 words)",
+    "In-depth (3,383 words)",
     "4 data tables",
     "Recently updated"
    ],
@@ -1328,13 +1328,13 @@
    "linkability": 95,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
-   "words": 2217,
+   "internal_inlinks": 9,
+   "words": 2209,
    "interactive": true,
    "modified": "2026-10-03T06:26:18+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,217 words)",
+    "In-depth (2,209 words)",
     "Cites 4 authoritative sources",
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
@@ -1379,19 +1379,19 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
-   "words": 3861,
+   "internal_inlinks": 16,
+   "words": 3854,
    "interactive": true,
    "modified": "2026-09-25T21:06:18+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,861 words)",
+    "In-depth (3,854 words)",
     "20 data tables",
     "Recently updated"
    ],
    "prospects": 6,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "frenchyfab.com",
@@ -1404,13 +1404,13 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 32,
-   "words": 4292,
+   "internal_inlinks": 35,
+   "words": 4287,
    "interactive": true,
    "modified": "2026-09-25T21:06:13+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,292 words)",
+    "In-depth (4,287 words)",
     "27 data tables",
     "Recently updated"
    ],
@@ -1429,8 +1429,8 @@
    "linkability": 94,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
-   "words": 1122,
+   "internal_inlinks": 14,
+   "words": 1121,
    "interactive": true,
    "modified": "2026-10-05T18:42:26+00:00",
    "reasons": [
@@ -1456,7 +1456,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 6,
-   "words": 1823,
+   "words": 1826,
    "interactive": true,
    "modified": "2026-10-03T06:40:50+00:00",
    "reasons": [
@@ -1612,7 +1612,7 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 13,
    "words": 1594,
    "interactive": true,
    "modified": "2026-10-29T07:50:28+00:00",
@@ -1638,8 +1638,8 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
-   "words": 1126,
+   "internal_inlinks": 6,
+   "words": 1128,
    "interactive": true,
    "modified": "2026-10-03T06:17:15+00:00",
    "reasons": [
@@ -1664,13 +1664,13 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 2556,
+   "internal_inlinks": 7,
+   "words": 2564,
    "interactive": true,
    "modified": "2026-10-03T06:15:52+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,556 words)",
+    "In-depth (2,564 words)",
     "2 data tables",
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
@@ -1766,7 +1766,7 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 8,
    "words": 1530,
    "interactive": true,
    "modified": "2026-10-29T07:52:25+00:00",
@@ -1817,7 +1817,7 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 10,
    "words": 2171,
    "interactive": true,
    "modified": "2026-10-03T06:27:23+00:00",
@@ -1893,7 +1893,7 @@
    "linkability": 89,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
+   "internal_inlinks": 15,
    "words": 1981,
    "interactive": true,
    "modified": "2026-10-24T09:10:11+00:00",
@@ -2016,7 +2016,7 @@
    "linkability": 75,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 14,
+   "internal_inlinks": 13,
    "words": 3272,
    "interactive": false,
    "modified": "2026-09-13T14:12:52+00:00",
@@ -2063,7 +2063,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 7,
    "words": 1656,
    "interactive": true,
    "modified": "2026-10-25T07:53:36+00:00",
@@ -2117,7 +2117,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 11,
-   "words": 1605,
+   "words": 1621,
    "interactive": true,
    "modified": "2026-10-03T06:40:47+00:00",
    "reasons": [
@@ -2168,8 +2168,8 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 16,
-   "words": 1257,
+   "internal_inlinks": 17,
+   "words": 1245,
    "interactive": true,
    "modified": "2026-10-03T06:15:49+00:00",
    "reasons": [
@@ -2269,8 +2269,8 @@
    "linkability": 87,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
-   "words": 1233,
+   "internal_inlinks": 15,
+   "words": 1242,
    "interactive": true,
    "modified": "2026-10-03T06:17:09+00:00",
    "reasons": [
@@ -2346,13 +2346,13 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
-   "words": 2167,
+   "internal_inlinks": 6,
+   "words": 2175,
    "interactive": true,
    "modified": "2026-10-03T06:40:36+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,167 words)",
+    "In-depth (2,175 words)",
     "2 data tables",
     "Cites 3 authoritative sources",
     "Recently updated",
@@ -2373,13 +2373,13 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
-   "words": 2571,
+   "internal_inlinks": 6,
+   "words": 2564,
    "interactive": true,
    "modified": "2026-10-03T06:27:34+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,571 words)",
+    "In-depth (2,564 words)",
     "5 data tables",
     "Cites 3 authoritative sources",
     "Recently updated",
@@ -2522,7 +2522,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 7,
    "words": 2972,
    "interactive": false,
    "modified": "2026-09-03T12:25:05+00:00",
@@ -2747,13 +2747,13 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 3,
-   "words": 4108,
+   "internal_inlinks": 5,
+   "words": 4109,
    "interactive": true,
    "modified": "2026-09-25T21:05:17+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,108 words)",
+    "In-depth (4,109 words)",
     "28 data tables",
     "Recently updated",
     "One of 236 templated sibling pages — promote the hub first"
@@ -2773,13 +2773,13 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
-   "words": 4266,
+   "internal_inlinks": 13,
+   "words": 4271,
    "interactive": true,
    "modified": "2026-09-25T21:04:50+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,266 words)",
+    "In-depth (4,271 words)",
     "23 data tables",
     "Recently updated",
     "One of 236 templated sibling pages — promote the hub first"
@@ -2812,18 +2812,18 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/safely-remove-mice/",
-   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "from_title": "How to Get Rid of Mice in an Apartment",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 69
+   "from_strength": 71
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
-   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
+   "from": "https://micegoneguide.com/safely-remove-mice/",
+   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "anchor": "rid mice",
@@ -3382,13 +3382,23 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
-   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "from_title": "How to Get Rid of Mice in an Apartment",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
    "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
    "anchor": "rid mice",
    "relevance": 5,
-   "from_strength": 69
+   "from_strength": 71
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-car/",
+   "from_title": "How to Get Rid of Mice in Your Car: Engine Bay, Cabin & Air Vents",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "anchor": "rid mice",
+   "relevance": 5,
+   "from_strength": 0
   },
   {
    "site": "micegoneguide.com",
@@ -3404,16 +3414,6 @@
    "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
    "from_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 71
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
    "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
    "anchor": "rid mice",
@@ -3792,16 +3792,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
-   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
-   "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 69
-  },
-  {
-   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
@@ -3822,13 +3812,23 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/natural-mouse-repellents/",
-   "from_title": "Natural Mouse Repellents: What Helps and What Fails",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "from_title": "How to Get Rid of Mice in an Apartment",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
    "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 68
+   "from_strength": 71
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
+   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
+   "to_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 69
   },
   {
    "site": "micegoneguide.com",
@@ -3872,13 +3872,13 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
-   "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
+   "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
+   "from_title": "7 Surprising Health Risks of Mouse Infestation Revealed",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
    "to_title": "How to Get Rid of Mice in an Apartment",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 69
+   "from_strength": 67
   },
   {
    "site": "micegoneguide.com",
@@ -4401,6 +4401,56 @@
    "from_strength": 0
   },
   {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/supplements-for-french-bulldogs-what-you-need-to-know/",
+   "from_title": "Best French Bulldog Supplements: What May Help, What to Skip",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
+   "from_title": "French Bulldog Seasonal Diet Guide",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/how-to-keep-your-french-bulldogs-coat-healthy-and-shiny/",
+   "from_title": "French Bulldog Coat Care: Brushing, Bathing, Skin Health",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/recognizing-and-managing-arthritis-in-french-bulldogs/",
+   "from_title": "French Bulldog Arthritis Symptoms: Signs, Comfort, Mobility",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/embrace-transformation-personal-year-7-numerology/",
    "from_title": "Personal Year 7 Numerology Guide [2026] | Mystical Digits",
@@ -4422,6 +4472,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/how-is-14-in-numerology/",
+   "from_title": "2026 Guide: Numerology Meaning of Number 14 Explained",
+   "to": "https://mysticaldigits.com/personal-year-numerology/",
+   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
+   "anchor": "personal year",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
    "from_title": "Personal Year Calculator: How to Find Your Number (2026)",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
@@ -4439,16 +4499,6 @@
    "anchor": "personal year",
    "relevance": 5,
    "from_strength": 57
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-to-calculate-your-gift-number-in-numerology/",
-   "from_title": "Gift Number Calculator: Discover Your 2026 Numerology Talents",
-   "to": "https://mysticaldigits.com/personal-year-numerology/",
-   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "anchor": "personal year",
-   "relevance": 5,
-   "from_strength": 56
   },
   {
    "site": "plantastichaven.com",
@@ -4592,13 +4642,13 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "from_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
    "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
    "to_title": "Are French Bulldogs Hypoallergenic? The Honest, Vet-Checked Answer | Frenchy Fab",
    "anchor": "french bulldogs",
    "relevance": 5,
-   "from_strength": 58
+   "from_strength": 61
   },
   {
    "site": "efficientgptprompts.com",
@@ -4732,63 +4782,13 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "from_title": "French Bulldog Training: Motivation, Rewards, Consistency",
+   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
    "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
    "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
    "anchor": "french bulldogs",
    "relevance": 4,
    "from_strength": 61
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-meals-for-french-bulldogs/",
-   "from_title": "Homemade Meals for French Bulldogs: Safe Planning",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "homemade food",
-   "relevance": 8,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/organic-foods-for-frenchies/",
-   "from_title": "Organic Foods for Frenchies: What Is Worth Buying",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 8,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/right-food-french-bulldog-guide/",
-   "from_title": "Choosing the Right Food for Your French Bulldog",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
-   "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 0
   }
  ],
  "wins": [
@@ -4838,21 +4838,21 @@
   }
  ],
  "log": [
-  "09:30:54 connection dataforseo: connected",
-  "09:30:54 connection gmail: connected",
-  "09:30:56 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "09:30:57 crawl plantastichaven.com: 162/162 urls, fetched 1, 304 0, reused 161",
-  "09:30:58 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "09:31:00 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "09:31:01 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "09:31:02 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "09:31:03 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "09:31:04 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "09:31:06 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "09:31:11 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 1, 304 0, reused 257",
-  "09:31:12 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "09:31:19 replies: 167 scanned, 0 replies, 3 failures, 4 delays; ok",
-  "09:31:19 - outreach: skipped (OUTREACH_MODE=off)",
-  "09:31:20 link checks: 1 pages, 0 new links won, 0 lost"
+  "16:51:50 connection dataforseo: connected",
+  "16:51:50 connection gmail: connected",
+  "16:52:00 crawl gearuptogrow.com: 107/107 urls, fetched 101, 304 0, reused 6",
+  "16:52:11 crawl plantastichaven.com: 162/162 urls, fetched 155, 304 0, reused 7",
+  "16:52:11 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 9, 304 0, reused 249",
+  "16:52:11 crawl gearuptofit.com: 300/878 urls, fetched 292, 304 0, reused 8",
+  "16:52:24 crawl frenchyfab.com: 238/238 urls, fetched 226, 304 0, reused 12",
+  "16:52:29 crawl micegoneguide.com: 53/53 urls, fetched 41, 304 0, reused 12",
+  "16:52:33 crawl imagealchemy.app: 26/26 urls, fetched 26, 304 0, reused 0",
+  "16:52:33 crawl openclaw-skillshub.com: 158/158 urls, fetched 158, 304 0, reused 0",
+  "16:52:34 crawl mysticaldigits.com: 300/468 urls, fetched 283, 304 0, reused 17",
+  "16:53:27 crawl efficientgptprompts.com: 300/487 urls, fetched 287, 304 0, reused 13",
+  "16:53:47 prospects: 2 queries (0 brand-mention), 1 candidates, 1 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "16:53:53 replies: 18 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "16:53:53 - outreach: skipped (OUTREACH_MODE=off)",
+  "16:54:06 link checks: 13 pages, 0 new links won, 0 lost"
  ]
 }
