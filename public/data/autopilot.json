@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-01T16:54:06.585Z",
- "duration_s": 137,
+ "generated_at": "2026-11-02T00:55:22.660Z",
+ "duration_s": 36,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 17.557726000000002
+    "balance_usd": 17.537605999999997
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 96896,
+   "ms": 20607,
    "result": {
     "sites": 10,
     "pages": 1902
@@ -101,12 +101,12 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 316
+    "internal_suggestions": 315
    }
   },
   "requalify": {
    "ok": true,
-   "ms": 0,
+   "ms": 1,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -116,29 +116,29 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 19526,
+   "ms": 11125,
    "result": {
-    "queries": 2,
+    "queries": 1,
     "mention_queries": 0,
-    "serp_results": 38,
+    "serp_results": 19,
     "candidates": 1,
-    "qualified": 1,
+    "qualified": 0,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 0,
+    "rejected": 1,
     "with_email": 0,
-    "contact_form": 1
+    "contact_form": 0
    }
   },
   "replies": {
    "ok": true,
-   "ms": 5752,
+   "ms": 1885,
    "result": {
-    "scanned": 18,
+    "scanned": 14,
     "replies": 0,
     "positive": 0,
     "negative": 0,
-    "bounces": 0,
+    "bounces": 1,
     "delays": 0
    }
   },
@@ -148,9 +148,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 13024,
+   "ms": 1,
    "result": {
-    "checked": 13,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -161,15 +161,15 @@
   "pages_crawled": 1902,
   "urls_discovered": 2835,
   "promotable": 250,
-  "internal_suggestions": 316,
+  "internal_suggestions": 315,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.0201,
-  "month_usd": 0.0201,
+  "today_usd": 0.0161,
+  "month_usd": 0.0362,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 3
+  "calls_this_run": 2
  },
  "outreach": {
   "mode": "off",
@@ -183,7 +183,7 @@
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 2371,
+  "prospects_evaluated": 2372,
   "qualified": 507,
   "ready": 150,
   "contact_form_only": 96,
@@ -194,7 +194,7 @@
   "won": 0,
   "existing_links": 4,
   "declined": 0,
-  "bounced": 5
+  "bounced": 6
  },
  "history": [
   {
@@ -356,6 +356,22 @@
    "declined": 0,
    "bounced": 5,
    "spend_usd": 0.0201
+  },
+  {
+   "date": "2026-11-02",
+   "prospects_evaluated": 2372,
+   "qualified": 507,
+   "ready": 150,
+   "contact_form_only": 96,
+   "no_contact": 210,
+   "contacted": 49,
+   "replied": 0,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 4,
+   "declined": 0,
+   "bounced": 6,
+   "spend_usd": 0.0161
   }
  ],
  "learning": {
@@ -410,9 +426,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 46,
+    "queries": 47,
     "ready": 21,
-    "rate": 0.449
+    "rate": 0.44
    },
    {
     "footprint": "inurl_links",
@@ -1107,7 +1123,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 24,
+   "internal_inlinks": 23,
    "words": 3444,
    "interactive": true,
    "modified": "2026-10-03T19:51:14+00:00",
@@ -1328,7 +1344,7 @@
    "linkability": 95,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 10,
    "words": 2209,
    "interactive": true,
    "modified": "2026-10-03T06:26:18+00:00",
@@ -1455,7 +1471,7 @@
    "linkability": 94,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 8,
    "words": 1826,
    "interactive": true,
    "modified": "2026-10-03T06:40:50+00:00",
@@ -1613,7 +1629,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 13,
-   "words": 1594,
+   "words": 1592,
    "interactive": true,
    "modified": "2026-10-29T07:50:28+00:00",
    "reasons": [
@@ -1767,7 +1783,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 8,
-   "words": 1530,
+   "words": 1518,
    "interactive": true,
    "modified": "2026-10-29T07:52:25+00:00",
    "reasons": [
@@ -1777,7 +1793,7 @@
     "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 4,
+   "internal_link_suggestions": 3,
    "promoting": false
   },
   {
@@ -2063,7 +2079,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 8,
    "words": 1656,
    "interactive": true,
    "modified": "2026-10-25T07:53:36+00:00",
@@ -2472,7 +2488,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 8,
    "words": 4455,
    "interactive": false,
    "modified": "2026-09-03T13:33:15+00:00",
@@ -3992,16 +4008,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-naturally/",
-   "from_title": "How to Get Rid of Mice Naturally Without Poison: 7-Day Plan",
-   "to": "https://micegoneguide.com/safely-remove-mice/",
-   "to_title": "How to Remove Mice Safely: A Step-by-Step Guide",
-   "anchor": "remove mice safely",
-   "relevance": 3,
-   "from_strength": 71
-  },
-  {
-   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
    "from_title": "Peppermint Oil to Repel Mice: Evidence Limits & Safer Priorities",
    "to": "https://micegoneguide.com/safely-remove-mice/",
@@ -4789,6 +4795,16 @@
    "anchor": "french bulldogs",
    "relevance": 4,
    "from_strength": 61
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-meals-for-french-bulldogs/",
+   "from_title": "Homemade Meals for French Bulldogs: Safe Planning",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "homemade food",
+   "relevance": 8,
+   "from_strength": 0
   }
  ],
  "wins": [
@@ -4838,21 +4854,21 @@
   }
  ],
  "log": [
-  "16:51:50 connection dataforseo: connected",
-  "16:51:50 connection gmail: connected",
-  "16:52:00 crawl gearuptogrow.com: 107/107 urls, fetched 101, 304 0, reused 6",
-  "16:52:11 crawl plantastichaven.com: 162/162 urls, fetched 155, 304 0, reused 7",
-  "16:52:11 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 9, 304 0, reused 249",
-  "16:52:11 crawl gearuptofit.com: 300/878 urls, fetched 292, 304 0, reused 8",
-  "16:52:24 crawl frenchyfab.com: 238/238 urls, fetched 226, 304 0, reused 12",
-  "16:52:29 crawl micegoneguide.com: 53/53 urls, fetched 41, 304 0, reused 12",
-  "16:52:33 crawl imagealchemy.app: 26/26 urls, fetched 26, 304 0, reused 0",
-  "16:52:33 crawl openclaw-skillshub.com: 158/158 urls, fetched 158, 304 0, reused 0",
-  "16:52:34 crawl mysticaldigits.com: 300/468 urls, fetched 283, 304 0, reused 17",
-  "16:53:27 crawl efficientgptprompts.com: 300/487 urls, fetched 287, 304 0, reused 13",
-  "16:53:47 prospects: 2 queries (0 brand-mention), 1 candidates, 1 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "16:53:53 replies: 18 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "16:53:53 - outreach: skipped (OUTREACH_MODE=off)",
-  "16:54:06 link checks: 13 pages, 0 new links won, 0 lost"
+  "00:54:48 connection dataforseo: connected",
+  "00:54:48 connection gmail: connected",
+  "00:54:51 crawl plantastichaven.com: 162/162 urls, fetched 2, 304 0, reused 160",
+  "00:54:53 crawl gearuptogrow.com: 107/107 urls, fetched 1, 304 0, reused 106",
+  "00:54:56 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "00:54:57 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "00:54:59 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "00:55:00 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "00:55:01 crawl micegoneguide.com: 53/53 urls, fetched 4, 304 0, reused 49",
+  "00:55:01 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "00:55:02 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "00:55:09 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 5, 304 0, reused 253",
+  "00:55:20 prospects: 1 queries (0 brand-mention), 1 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "00:55:22 replies: 14 scanned, 0 replies, 1 failures, 0 delays; ok",
+  "00:55:22 - outreach: skipped (OUTREACH_MODE=off)",
+  "00:55:22 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
