@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-03T17:56:59.085Z",
- "duration_s": 39,
+ "generated_at": "2026-11-03T23:31:58.328Z",
+ "duration_s": 18,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -83,15 +83,15 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 22157,
+   "ms": 14871,
    "result": {
     "sites": 10,
-    "pages": 1902
+    "pages": 1903
    }
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -101,7 +101,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 314
+    "internal_suggestions": 319
    }
   },
   "requalify": {
@@ -116,7 +116,7 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 9,
+   "ms": 8,
    "result": {
     "queries": 0,
     "mention_queries": 0,
@@ -132,9 +132,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 3422,
+   "ms": 1153,
    "result": {
-    "scanned": 35,
+    "scanned": 11,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -148,9 +148,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 11750,
+   "ms": 2,
    "result": {
-    "checked": 9,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -158,10 +158,10 @@
  },
  "totals": {
   "sites": 10,
-  "pages_crawled": 1902,
-  "urls_discovered": 2835,
+  "pages_crawled": 1903,
+  "urls_discovered": 2836,
   "promotable": 250,
-  "internal_suggestions": 314,
+  "internal_suggestions": 319,
   "promoting_now": 30
  },
  "spend": {
@@ -731,8 +731,8 @@
   },
   {
    "domain": "plantastichaven.com",
-   "pages": 162,
-   "discovered": 162,
+   "pages": 163,
+   "discovered": 163,
    "sitemaps": 5,
    "eligible": 25,
    "top": "https://plantastichaven.com/string-of-pearls-plant-care/"
@@ -1645,9 +1645,9 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 13,
-   "words": 1592,
+   "words": 1589,
    "interactive": true,
-   "modified": "2026-10-29T07:50:28+00:00",
+   "modified": "2026-11-03T18:13:53+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "1 data table",
@@ -2095,7 +2095,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 1660,
    "interactive": true,
    "modified": "2026-10-25T07:53:36+00:00",
@@ -4870,21 +4870,21 @@
   }
  ],
  "log": [
-  "17:56:21 connection dataforseo: connected",
-  "17:56:21 connection gmail: connected",
-  "17:56:24 crawl plantastichaven.com: 162/162 urls, fetched 4, 304 0, reused 158",
-  "17:56:25 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
-  "17:56:29 crawl frenchyfab.com: 238/238 urls, fetched 4, 304 0, reused 234",
-  "17:56:30 crawl mysticaldigits.com: 300/468 urls, fetched 2, 304 0, reused 298",
-  "17:56:34 crawl gearuptofit.com: 300/878 urls, fetched 3, 304 0, reused 297",
-  "17:56:34 crawl micegoneguide.com: 53/53 urls, fetched 6, 304 0, reused 47",
-  "17:56:34 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "17:56:36 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "17:56:40 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 4, 304 0, reused 254",
-  "17:56:43 crawl efficientgptprompts.com: 300/487 urls, fetched 12, 304 0, reused 288",
-  "17:56:43 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "17:56:47 replies: 35 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "17:56:47 - outreach: skipped (OUTREACH_MODE=off)",
-  "17:56:59 link checks: 9 pages, 0 new links won, 0 lost"
+  "23:31:41 connection dataforseo: connected",
+  "23:31:41 connection gmail: connected",
+  "23:31:44 crawl plantastichaven.com: 163/163 urls, fetched 2, 304 0, reused 161",
+  "23:31:45 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "23:31:46 crawl gearuptofit.com: 300/878 urls, fetched 1, 304 0, reused 299",
+  "23:31:48 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "23:31:50 crawl mysticaldigits.com: 300/468 urls, fetched 2, 304 0, reused 298",
+  "23:31:51 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "23:31:52 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "23:31:54 crawl micegoneguide.com: 53/53 urls, fetched 1, 304 0, reused 52",
+  "23:31:54 crawl efficientgptprompts.com: 300/487 urls, fetched 1, 304 0, reused 299",
+  "23:31:56 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "23:31:57 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "23:31:58 replies: 11 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "23:31:58 - outreach: skipped (OUTREACH_MODE=off)",
+  "23:31:58 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
