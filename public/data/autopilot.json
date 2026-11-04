@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-03T23:31:58.328Z",
- "duration_s": 18,
+ "generated_at": "2026-11-04T06:46:26.469Z",
+ "duration_s": 70,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 17.485006
+    "balance_usd": 17.431005999999996
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 14871,
+   "ms": 23825,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -91,7 +91,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -116,25 +116,26 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 8,
+   "ms": 39623,
    "result": {
-    "queries": 0,
+    "queries": 1,
     "mention_queries": 0,
-    "serp_results": 0,
+    "serp_results": 19,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
     "already_linked": 0,
     "rejected": 0,
     "with_email": 0,
-    "contact_form": 0
+    "contact_form": 0,
+    "failed_queries": 1
    }
   },
   "replies": {
    "ok": true,
-   "ms": 1153,
+   "ms": 1441,
    "result": {
-    "scanned": 11,
+    "scanned": 12,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -148,9 +149,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 2,
+   "ms": 3674,
    "result": {
-    "checked": 0,
+    "checked": 2,
     "won": 0,
     "lost": 0
    }
@@ -165,11 +166,11 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.0165,
-  "month_usd": 0.0727,
+  "today_usd": 0.004,
+  "month_usd": 0.0767,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 0
+  "calls_this_run": 3
  },
  "outreach": {
   "mode": "off",
@@ -388,6 +389,22 @@
    "declined": 0,
    "bounced": 6,
    "spend_usd": 0.0165
+  },
+  {
+   "date": "2026-11-04",
+   "prospects_evaluated": 2382,
+   "qualified": 510,
+   "ready": 150,
+   "contact_form_only": 96,
+   "no_contact": 213,
+   "contacted": 49,
+   "replied": 0,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 4,
+   "declined": 0,
+   "bounced": 6,
+   "spend_usd": 0.004
   }
  ],
  "learning": {
@@ -466,9 +483,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 78,
+    "queries": 79,
     "ready": 14,
-    "rate": 0.185
+    "rate": 0.183
    },
    {
     "footprint": "mention",
@@ -767,7 +784,7 @@
    "discovered": 238,
    "sitemaps": 5,
    "eligible": 25,
-   "top": "https://frenchyfab.com/french-bulldog-training-aids/"
+   "top": "https://frenchyfab.com/french-bulldog-social-interaction-training/"
   },
   {
    "domain": "micegoneguide.com",
@@ -918,9 +935,9 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 11,
-   "words": 1666,
+   "words": 1668,
    "interactive": true,
-   "modified": "2026-09-13T09:05:03+00:00",
+   "modified": "2026-11-04T05:40:26+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "2 data tables",
@@ -1189,7 +1206,7 @@
    "linkability": 85,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 8,
    "words": 1341,
    "interactive": true,
    "modified": "2026-10-30T07:30:05+00:00",
@@ -1402,6 +1419,31 @@
   },
   {
    "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "title": "French Bulldog Socialization Training: A Practical Plan",
+   "h1": "French Bulldog Social Interaction Training – Confident Happy Frenchies",
+   "description": "Learn how to train your French Bulldog to socialize effectively with other dogs and people to create a well-adjusted canine companion.",
+   "type": "practical_guide",
+   "promotion": 74,
+   "linkability": 82,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 13,
+   "words": 4266,
+   "interactive": true,
+   "modified": "2026-11-04T05:41:19+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,266 words)",
+    "23 data tables",
+    "Recently updated"
+   ],
+   "prospects": 8,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
    "url": "https://frenchyfab.com/french-bulldog-training-aids/",
    "title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "h1": "French Bulldog Training Aids: Tools, Treats, Clickers, and What to Avoid",
@@ -1424,31 +1466,6 @@
    "prospects": 6,
    "internal_link_suggestions": 5,
    "promoting": false
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "h1": "Reward-Based Obedience Training for French Bulldogs: Cues, Rewards, and Practice",
-   "description": "Master reward-based obedience training for French Bulldogs! This guide offers expert tips, tricks, and techniques for success. Get started today!",
-   "type": "practical_guide",
-   "promotion": 74,
-   "linkability": 82,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 35,
-   "words": 4287,
-   "interactive": true,
-   "modified": "2026-09-25T21:06:13+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,287 words)",
-    "27 data tables",
-    "Recently updated"
-   ],
-   "prospects": 5,
-   "internal_link_suggestions": 5,
-   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -1901,7 +1918,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 16,
+   "internal_inlinks": 17,
    "words": 6004,
    "interactive": false,
    "modified": "2026-09-03T11:44:05+00:00",
@@ -2605,7 +2622,7 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 17,
+   "internal_inlinks": 18,
    "words": 693,
    "interactive": true,
    "modified": "2026-09-05T13:47:17+00:00",
@@ -2770,6 +2787,32 @@
   },
   {
    "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "h1": "Reward-Based Obedience Training for French Bulldogs: Cues, Rewards, and Practice",
+   "description": "Master reward-based obedience training for French Bulldogs! This guide offers expert tips, tricks, and techniques for success. Get started today!",
+   "type": "practical_guide",
+   "promotion": 62,
+   "linkability": 82,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 35,
+   "words": 4287,
+   "interactive": true,
+   "modified": "2026-09-25T21:06:13+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,287 words)",
+    "27 data tables",
+    "Recently updated",
+    "One of 236 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 5,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
+   "site": "frenchyfab.com",
    "url": "https://frenchyfab.com/french-bulldog-training-classes/",
    "title": "French Bulldog Training Classes: When to Join",
    "h1": "French Bulldog Training Classes: When to Join, What to Expect, and Red Flags",
@@ -2793,32 +2836,6 @@
    "prospects": 5,
    "internal_link_suggestions": 5,
    "promoting": true
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "title": "French Bulldog Socialization Training: A Practical Plan",
-   "h1": "French Bulldog Social Interaction Training – Confident Happy Frenchies",
-   "description": "Learn how to train your French Bulldog to socialize effectively with other dogs and people to create a well-adjusted canine companion.",
-   "type": "practical_guide",
-   "promotion": 62,
-   "linkability": 82,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 13,
-   "words": 4271,
-   "interactive": true,
-   "modified": "2026-09-25T21:04:50+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,271 words)",
-    "23 data tables",
-    "Recently updated",
-    "One of 236 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 8,
-   "internal_link_suggestions": 5,
-   "promoting": false
   }
  ],
  "internal_links": [
@@ -3464,6 +3481,56 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "from_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "to_title": "French Bulldog Socialization Training: A Practical Plan",
+   "anchor": "french bulldog",
+   "relevance": 6,
+   "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-puppy-bond-guide/",
+   "from_title": "How to Bond With Your French Bulldog Puppy Faster",
+   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "to_title": "French Bulldog Socialization Training: A Practical Plan",
+   "anchor": "french bulldog",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-puppy-care/",
+   "from_title": "French Bulldog Puppy Care: Week-by-Week First-Year Guide",
+   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "to_title": "French Bulldog Socialization Training: A Practical Plan",
+   "anchor": "french bulldog",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-aids/",
+   "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
+   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "to_title": "French Bulldog Socialization Training: A Practical Plan",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-classes/",
+   "from_title": "French Bulldog Training Classes: When to Join",
+   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "to_title": "French Bulldog Socialization Training: A Practical Plan",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-tips/",
    "from_title": "French Bulldog Training Tips That Actually Work",
    "to": "https://frenchyfab.com/french-bulldog-training-aids/",
@@ -3510,56 +3577,6 @@
    "to_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "anchor": "french bulldog",
    "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-training-success/",
-   "from_title": "French Bulldog Training: Tips for Obedience & Bonding",
-   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "obedience training",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/12-week-french-bulldog-blueprint/",
-   "from_title": "12-Week French Bulldog Puppy Training Plan: Socialization",
-   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "reward based",
-   "relevance": 6,
-   "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
-   "from_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
-   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "reward based",
-   "relevance": 6,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/coping-with-stubbornness-training-challenges-in-french-bulldogs/",
-   "from_title": "French Bulldog Stubbornness: Training Challenges, Motivation",
-   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "training french",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-puppy-care/",
-   "from_title": "French Bulldog Puppy Care: Week-by-Week First-Year Guide",
-   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "reward based",
-   "relevance": 6,
    "from_strength": 0
   },
   {
@@ -4264,6 +4281,56 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-success/",
+   "from_title": "French Bulldog Training: Tips for Obedience & Bonding",
+   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "anchor": "obedience training",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/12-week-french-bulldog-blueprint/",
+   "from_title": "12-Week French Bulldog Puppy Training Plan: Socialization",
+   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "anchor": "reward based",
+   "relevance": 6,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
+   "from_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
+   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "anchor": "reward based",
+   "relevance": 6,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/coping-with-stubbornness-training-challenges-in-french-bulldogs/",
+   "from_title": "French Bulldog Stubbornness: Training Challenges, Motivation",
+   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "anchor": "training french",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-puppy-care/",
+   "from_title": "French Bulldog Puppy Care: Week-by-Week First-Year Guide",
+   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "anchor": "reward based",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-aids/",
    "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "to": "https://frenchyfab.com/french-bulldog-training-classes/",
@@ -4311,56 +4378,6 @@
    "anchor": "french bulldog",
    "relevance": 7,
    "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "from_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "to_title": "French Bulldog Socialization Training: A Practical Plan",
-   "anchor": "french bulldog",
-   "relevance": 6,
-   "from_strength": 74
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-puppy-bond-guide/",
-   "from_title": "How to Bond With Your French Bulldog Puppy Faster",
-   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "to_title": "French Bulldog Socialization Training: A Practical Plan",
-   "anchor": "french bulldog",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-puppy-care/",
-   "from_title": "French Bulldog Puppy Care: Week-by-Week First-Year Guide",
-   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "to_title": "French Bulldog Socialization Training: A Practical Plan",
-   "anchor": "french bulldog",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-training-aids/",
-   "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
-   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "to_title": "French Bulldog Socialization Training: A Practical Plan",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 74
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-training-classes/",
-   "from_title": "French Bulldog Training Classes: When to Join",
-   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "to_title": "French Bulldog Socialization Training: A Practical Plan",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 62
   },
   {
    "site": "frenchyfab.com",
@@ -4624,6 +4641,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "to_title": "Are French Bulldogs Hypoallergenic? The Honest, Vet-Checked Answer | Frenchy Fab",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-aids/",
    "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
@@ -4636,16 +4663,6 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
    "from_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
-   "to_title": "Are French Bulldogs Hypoallergenic? The Honest, Vet-Checked Answer | Frenchy Fab",
-   "anchor": "french bulldogs",
-   "relevance": 5,
-   "from_strength": 74
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "from_title": "French Bulldog Socialization Training: A Practical Plan",
    "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
    "to_title": "Are French Bulldogs Hypoallergenic? The Honest, Vet-Checked Answer | Frenchy Fab",
    "anchor": "french bulldogs",
@@ -4754,6 +4771,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-aids/",
    "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
@@ -4770,22 +4797,12 @@
    "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
    "anchor": "french bulldogs",
    "relevance": 4,
-   "from_strength": 74
+   "from_strength": 62
   },
   {
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-classes/",
    "from_title": "French Bulldog Training Classes: When to Join",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 62
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "from_title": "French Bulldog Socialization Training: A Practical Plan",
    "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
    "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
    "anchor": "french bulldogs",
@@ -4870,21 +4887,22 @@
   }
  ],
  "log": [
-  "23:31:41 connection dataforseo: connected",
-  "23:31:41 connection gmail: connected",
-  "23:31:44 crawl plantastichaven.com: 163/163 urls, fetched 2, 304 0, reused 161",
-  "23:31:45 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "23:31:46 crawl gearuptofit.com: 300/878 urls, fetched 1, 304 0, reused 299",
-  "23:31:48 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "23:31:50 crawl mysticaldigits.com: 300/468 urls, fetched 2, 304 0, reused 298",
-  "23:31:51 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "23:31:52 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "23:31:54 crawl micegoneguide.com: 53/53 urls, fetched 1, 304 0, reused 52",
-  "23:31:54 crawl efficientgptprompts.com: 300/487 urls, fetched 1, 304 0, reused 299",
-  "23:31:56 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "23:31:57 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "23:31:58 replies: 11 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "23:31:58 - outreach: skipped (OUTREACH_MODE=off)",
-  "23:31:58 link checks: 0 pages, 0 new links won, 0 lost"
+  "06:45:17 connection dataforseo: connected",
+  "06:45:17 connection gmail: connected",
+  "06:45:20 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
+  "06:45:22 crawl gearuptogrow.com: 107/107 urls, fetched 3, 304 0, reused 104",
+  "06:45:26 crawl mysticaldigits.com: 300/468 urls, fetched 5, 304 0, reused 295",
+  "06:45:26 crawl frenchyfab.com: 238/238 urls, fetched 5, 304 0, reused 233",
+  "06:45:26 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "06:45:27 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "06:45:28 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "06:45:28 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "06:45:37 crawl efficientgptprompts.com: 300/487 urls, fetched 6, 304 0, reused 294",
+  "06:45:41 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 3, 304 0, reused 255",
+  "06:46:21 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "06:46:21 prospects: 1 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "06:46:22 replies: 12 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "06:46:22 - outreach: skipped (OUTREACH_MODE=off)",
+  "06:46:26 link checks: 2 pages, 0 new links won, 0 lost"
  ]
 }
