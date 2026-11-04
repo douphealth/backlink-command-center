@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-04T15:37:02.785Z",
- "duration_s": 69,
+ "generated_at": "2026-11-04T22:01:02.660Z",
+ "duration_s": 79,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 17.427006
+    "balance_usd": 17.406166
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 20826,
+   "ms": 75592,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -101,12 +101,12 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 319
+    "internal_suggestions": 327
    }
   },
   "requalify": {
    "ok": true,
-   "ms": 1,
+   "ms": 0,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -116,26 +116,26 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 35986,
+   "ms": 6,
    "result": {
-    "queries": 2,
+    "queries": 0,
     "mention_queries": 0,
-    "serp_results": 37,
-    "candidates": 4,
-    "qualified": 2,
+    "serp_results": 0,
+    "candidates": 0,
+    "qualified": 0,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 5,
-    "with_email": 1,
+    "rejected": 0,
+    "with_email": 0,
     "contact_form": 0
    }
   },
   "replies": {
    "ok": true,
-   "ms": 2143,
+   "ms": 1757,
    "result": {
-    "scanned": 36,
-    "replies": 1,
+    "scanned": 12,
+    "replies": 0,
     "positive": 0,
     "negative": 0,
     "bounces": 0,
@@ -148,9 +148,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 8547,
+   "ms": 3,
    "result": {
-    "checked": 7,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -161,7 +161,7 @@
   "pages_crawled": 1903,
   "urls_discovered": 2836,
   "promotable": 250,
-  "internal_suggestions": 319,
+  "internal_suggestions": 327,
   "promoting_now": 30
  },
  "spend": {
@@ -169,7 +169,7 @@
   "month_usd": 0.0976,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 3
+  "calls_this_run": 0
  },
  "outreach": {
   "mode": "off",
@@ -857,12 +857,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 52,
-   "words": 2204,
+   "words": 2208,
    "interactive": true,
    "modified": "2026-10-03T06:27:27+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,204 words)",
+    "In-depth (2,208 words)",
     "1 data table",
     "Cites 11 authoritative sources",
     "Recently updated"
@@ -1205,7 +1205,7 @@
    "linkability": 85,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 11,
    "words": 1341,
    "interactive": true,
    "modified": "2026-10-30T07:30:05+00:00",
@@ -1229,13 +1229,13 @@
    "linkability": 85,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 296,
-   "words": 3383,
+   "internal_inlinks": 297,
+   "words": 3387,
    "interactive": true,
    "modified": "2026-08-22T09:14:57+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,383 words)",
+    "In-depth (3,387 words)",
     "4 data tables",
     "Recently updated"
    ],
@@ -1376,13 +1376,13 @@
    "linkability": 95,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
-   "words": 2209,
+   "internal_inlinks": 11,
+   "words": 2214,
    "interactive": true,
    "modified": "2026-10-03T06:26:18+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,209 words)",
+    "In-depth (2,214 words)",
     "Cites 4 authoritative sources",
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
@@ -1427,7 +1427,7 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
+   "internal_inlinks": 14,
    "words": 4266,
    "interactive": true,
    "modified": "2026-11-04T05:41:19+00:00",
@@ -1452,19 +1452,19 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 16,
-   "words": 3854,
+   "internal_inlinks": 18,
+   "words": 3850,
    "interactive": true,
    "modified": "2026-09-25T21:06:18+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,854 words)",
+    "In-depth (3,850 words)",
     "20 data tables",
     "Recently updated"
    ],
    "prospects": 6,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -1477,7 +1477,7 @@
    "linkability": 94,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 15,
+   "internal_inlinks": 13,
    "words": 1121,
    "interactive": true,
    "modified": "2026-10-05T18:42:26+00:00",
@@ -1503,8 +1503,8 @@
    "linkability": 94,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 1826,
+   "internal_inlinks": 9,
+   "words": 1824,
    "interactive": true,
    "modified": "2026-10-03T06:40:50+00:00",
    "reasons": [
@@ -1660,7 +1660,7 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
+   "internal_inlinks": 10,
    "words": 1589,
    "interactive": true,
    "modified": "2026-11-03T18:13:53+00:00",
@@ -1687,7 +1687,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 6,
-   "words": 1128,
+   "words": 1126,
    "interactive": true,
    "modified": "2026-10-03T06:17:15+00:00",
    "reasons": [
@@ -1712,13 +1712,13 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 2564,
+   "internal_inlinks": 9,
+   "words": 2558,
    "interactive": true,
    "modified": "2026-10-03T06:15:52+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,564 words)",
+    "In-depth (2,558 words)",
     "2 data tables",
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
@@ -1814,7 +1814,7 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 12,
    "words": 1518,
    "interactive": true,
    "modified": "2026-10-29T07:52:25+00:00",
@@ -1825,7 +1825,7 @@
     "One of 51 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 3,
+   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -1865,13 +1865,13 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
-   "words": 2171,
+   "internal_inlinks": 13,
+   "words": 2161,
    "interactive": true,
    "modified": "2026-10-03T06:27:23+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,171 words)",
+    "In-depth (2,161 words)",
     "3 data tables",
     "Cites 4 authoritative sources",
     "Recently updated",
@@ -1941,7 +1941,7 @@
    "linkability": 89,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 16,
+   "internal_inlinks": 14,
    "words": 1987,
    "interactive": true,
    "modified": "2026-10-24T09:10:11+00:00",
@@ -2111,7 +2111,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 1660,
    "interactive": true,
    "modified": "2026-10-25T07:53:36+00:00",
@@ -2165,7 +2165,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 9,
-   "words": 1621,
+   "words": 1612,
    "interactive": true,
    "modified": "2026-10-03T06:40:47+00:00",
    "reasons": [
@@ -2217,7 +2217,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 17,
-   "words": 1245,
+   "words": 1248,
    "interactive": true,
    "modified": "2026-10-03T06:15:49+00:00",
    "reasons": [
@@ -2317,8 +2317,8 @@
    "linkability": 87,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 14,
-   "words": 1242,
+   "internal_inlinks": 11,
+   "words": 1246,
    "interactive": true,
    "modified": "2026-10-03T06:17:09+00:00",
    "reasons": [
@@ -2416,13 +2416,13 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
-   "words": 2175,
+   "internal_inlinks": 7,
+   "words": 2176,
    "interactive": true,
    "modified": "2026-10-03T06:40:36+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,175 words)",
+    "In-depth (2,176 words)",
     "2 data tables",
     "Cites 3 authoritative sources",
     "Recently updated",
@@ -2443,13 +2443,13 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 2564,
+   "internal_inlinks": 7,
+   "words": 2568,
    "interactive": true,
    "modified": "2026-10-03T06:27:34+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,564 words)",
+    "In-depth (2,568 words)",
     "5 data tables",
     "Cites 3 authoritative sources",
     "Recently updated",
@@ -2730,33 +2730,7 @@
     "Health/YMYL topic — pitch only to expert publishers"
    ],
    "prospects": 0,
-   "internal_link_suggestions": 3,
-   "promoting": false
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/productivity/time-blocking-guide/",
-   "title": "Time Blocking Template: Build a Weekly Schedule",
-   "h1": "Time Blocking Guide: Build a Weekly Schedule You Can Actually Follow",
-   "description": "Copy a working time blocking template: a 20-minute weekly planning routine, worked 5-day schedule example, and fixes for the plans that collapse.",
-   "type": "practical_guide",
-   "promotion": 62,
-   "linkability": 82,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 36,
-   "words": 2098,
-   "interactive": true,
-   "modified": "2026-10-15T10:06:29+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,098 words)",
-    "2 data tables",
-    "Recently updated",
-    "One of 34 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
+   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -2796,12 +2770,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 35,
-   "words": 4287,
+   "words": 4295,
    "interactive": true,
    "modified": "2026-09-25T21:06:13+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,287 words)",
+    "In-depth (4,295 words)",
     "27 data tables",
     "Recently updated",
     "One of 236 templated sibling pages — promote the hub first"
@@ -2821,13 +2795,13 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
-   "words": 4109,
+   "internal_inlinks": 4,
+   "words": 4108,
    "interactive": true,
    "modified": "2026-09-25T21:05:17+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,109 words)",
+    "In-depth (4,108 words)",
     "28 data tables",
     "Recently updated",
     "One of 236 templated sibling pages — promote the hub first"
@@ -2835,6 +2809,30 @@
    "prospects": 5,
    "internal_link_suggestions": 5,
    "promoting": true
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/watch-match/methodology",
+   "title": "How Fitness Watch Match scores watches — methodology",
+   "h1": "How Fitness Watch Match scores watches",
+   "description": "The exact scoring formula behind Fitness Watch Match: nine weighted criteria, how partial matches are credited, the budget gate, tie-breaks, where the specs come from, and what the score cannot tell you.",
+   "type": "methodology",
+   "promotion": 62,
+   "linkability": 69,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 270,
+   "words": 1018,
+   "interactive": false,
+   "modified": "2026-10-01",
+   "reasons": [
+    "Original method/data — citation-worthy",
+    "1 data table",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 1,
+   "promoting": false
   }
  ],
  "internal_links": [
@@ -2910,16 +2908,6 @@
   },
   {
    "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/productivity/time-blocking-guide/",
-   "from_title": "Time Blocking Template: Build a Weekly Schedule",
-   "to": "https://gearuptogrow.com/productivity/focus-at-work-when-interrupted/",
-   "to_title": "How to Focus at Work When You Keep Getting Interrupted",
-   "anchor": "focus work keep",
-   "relevance": 3,
-   "from_strength": 62
-  },
-  {
-   "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/productivity/improve-focus-7-day-protocol/",
    "from_title": "7-Day Focus Reset: Improve Attention & Productivity | Gear Up to Grow",
    "to": "https://gearuptogrow.com/productivity/focus-at-work-when-interrupted/",
@@ -2937,6 +2925,16 @@
    "anchor": "focus work keep",
    "relevance": 3,
    "from_strength": 60
+  },
+  {
+   "site": "gearuptogrow.com",
+   "from": "https://gearuptogrow.com/productivity/deep-work/",
+   "from_title": "Deep Work: Practical Focus System & Guide | Gear Up to Grow",
+   "to": "https://gearuptogrow.com/productivity/focus-at-work-when-interrupted/",
+   "to_title": "How to Focus at Work When You Keep Getting Interrupted",
+   "anchor": "focus work keep",
+   "relevance": 3,
+   "from_strength": 57
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -3220,6 +3218,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/electional-astrology-for-weddings-2025-guide/",
+   "from_title": "Electional Astrology For Weddings: 2026 Timing Guide",
+   "to": "https://mysticaldigits.com/numerology-love-meter-calculator/",
+   "to_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
+   "anchor": "numerology love meter",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/unlocking-the-transformational-energy-of-year-six/",
    "from_title": "Personal Year 6: 2026 Guide to Love, Hearth & Karmic Payoff",
    "to": "https://mysticaldigits.com/numerology-love-meter-calculator/",
@@ -3232,16 +3240,6 @@
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/life-path-number-4-compatibility/",
    "from_title": "Life Path 4 Compatibility: Who’s Your 2026 Love Match?",
-   "to": "https://mysticaldigits.com/numerology-love-meter-calculator/",
-   "to_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
-   "anchor": "numerology love meter",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/decoding-the-meaning-behind-numerology-number-21/",
-   "from_title": "Decoding Numerology Number 21: Meanings of 2026",
    "to": "https://mysticaldigits.com/numerology-love-meter-calculator/",
    "to_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
    "anchor": "numerology love meter",
@@ -3270,6 +3268,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
+   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 6,
+   "from_strength": 58
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/compatibility-check-life-path-numbers-6-and-9/",
    "from_title": "Life Path 6 & 9 Compatibility: Love, Marriage & Karma 2026",
    "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
@@ -3282,16 +3290,6 @@
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/embrace-the-journey-life-path-number-fourteen/",
    "from_title": "Life Path Number 14: 2026 Deep Dive into the Karmic Force of 14/5",
-   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
-   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
-   "anchor": "karmic debt",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-for-career-change/",
-   "from_title": "9 Numerology Career Change Hacks That Work in 2026",
    "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
    "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
    "anchor": "karmic debt",
@@ -4040,6 +4038,16 @@
   },
   {
    "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/diseases-from-mice/",
+   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
+   "to": "https://micegoneguide.com/safely-remove-mice/",
+   "to_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "anchor": "remove mice safely",
+   "relevance": 3,
+   "from_strength": 67
+  },
+  {
+   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/foods-that-attract-mice/",
    "from_title": "What Foods Attract Mice? Pantry Risks, Bird Seed & Pet Food",
    "to": "https://micegoneguide.com/safely-remove-mice/",
@@ -4270,6 +4278,16 @@
   },
   {
    "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/reviews/",
+   "from_title": "Reviews Hub | Running Shoes, Watches & Fitness Gear | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/weight-loss-guide/",
    "from_title": "Runner's Weight Loss Guide: Sustainable Fat Loss Tips 2026 | GearUpToFit",
    "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
@@ -4287,6 +4305,16 @@
    "anchor": "obedience training",
    "relevance": 7,
    "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-training-aids/",
+   "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
+   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "anchor": "training french",
+   "relevance": 6,
+   "from_strength": 74
   },
   {
    "site": "frenchyfab.com",
@@ -4310,21 +4338,11 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/coping-with-stubbornness-training-challenges-in-french-bulldogs/",
-   "from_title": "French Bulldog Stubbornness: Training Challenges, Motivation",
+   "from": "https://frenchyfab.com/21-day-french-bulldog-obedience-blueprint/",
+   "from_title": "2026 French Bulldog Training: 21-Day Proven Blueprint",
    "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
    "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "training french",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-puppy-care/",
-   "from_title": "French Bulldog Puppy Care: Week-by-Week First-Year Guide",
-   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "reward based",
+   "anchor": "obedience training",
    "relevance": 6,
    "from_strength": 0
   },
@@ -4379,6 +4397,16 @@
    "from_strength": 0
   },
   {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/reviews/",
+   "from_title": "Reviews Hub | Running Shoes, Watches & Fitness Gear | GearUpToFit",
+   "to": "https://gearuptofit.com/watch-match/methodology",
+   "to_title": "How Fitness Watch Match scores watches — methodology",
+   "anchor": "fitness watch match",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-aids/",
    "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
@@ -4429,56 +4457,6 @@
    "from_strength": 0
   },
   {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/supplements-for-french-bulldogs-what-you-need-to-know/",
-   "from_title": "Best French Bulldog Supplements: What May Help, What to Skip",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-seasonal-diet-plan/",
-   "from_title": "French Bulldog Seasonal Diet Guide",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/how-to-keep-your-french-bulldogs-coat-healthy-and-shiny/",
-   "from_title": "French Bulldog Coat Care: Brushing, Bathing, Skin Health",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/recognizing-and-managing-arthritis-in-french-bulldogs/",
-   "from_title": "French Bulldog Arthritis Symptoms: Signs, Comfort, Mobility",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/embrace-transformation-personal-year-7-numerology/",
    "from_title": "Personal Year 7 Numerology Guide [2026] | Mystical Digits",
@@ -4500,6 +4478,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
+   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
+   "to": "https://mysticaldigits.com/personal-year-numerology/",
+   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
+   "anchor": "personal year",
+   "relevance": 5,
+   "from_strength": 58
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/how-is-14-in-numerology/",
    "from_title": "2026 Guide: Numerology Meaning of Number 14 Explained",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
@@ -4512,16 +4500,6 @@
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
    "from_title": "Personal Year Calculator: How to Find Your Number (2026)",
-   "to": "https://mysticaldigits.com/personal-year-numerology/",
-   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "anchor": "personal year",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
-   "from_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
    "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
    "anchor": "personal year",
@@ -4670,13 +4648,13 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "from": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "from_title": "Best Brushes for French Bulldogs: Shiny Coats",
    "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
    "to_title": "Are French Bulldogs Hypoallergenic? The Honest, Vet-Checked Answer | Frenchy Fab",
    "anchor": "french bulldogs",
    "relevance": 5,
-   "from_strength": 61
+   "from_strength": 58
   },
   {
    "site": "efficientgptprompts.com",
@@ -4810,8 +4788,8 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "from": "https://frenchyfab.com/french-bulldog-training-techniques/",
+   "from_title": "French Bulldog Training: Motivation, Rewards, Consistency",
    "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
    "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
    "anchor": "french bulldogs",
@@ -4837,6 +4815,26 @@
    "anchor": "food french",
    "relevance": 8,
    "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/right-food-french-bulldog-guide/",
+   "from_title": "Choosing the Right Food for Your French Bulldog",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 57
   }
  ],
  "wins": [
@@ -4886,21 +4884,21 @@
   }
  ],
  "log": [
-  "15:35:54 connection dataforseo: connected",
-  "15:35:54 connection gmail: connected",
-  "15:35:59 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
-  "15:35:59 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
-  "15:36:03 crawl frenchyfab.com: 238/238 urls, fetched 1, 304 0, reused 237",
-  "15:36:04 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "15:36:05 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "15:36:06 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "15:36:08 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "15:36:10 crawl micegoneguide.com: 53/53 urls, fetched 1, 304 0, reused 52",
-  "15:36:11 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "15:36:15 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 3, 304 0, reused 255",
-  "15:36:51 prospects: 2 queries (0 brand-mention), 4 candidates, 2 qualified (0 unlinked mentions), 1 with email, 0 already linking",
-  "15:36:54 replies: 36 scanned, 1 replies, 0 failures, 0 delays; ok",
-  "15:36:54 - outreach: skipped (OUTREACH_MODE=off)",
-  "15:37:02 link checks: 7 pages, 0 new links won, 0 lost"
+  "21:59:44 connection dataforseo: connected",
+  "21:59:44 connection gmail: connected",
+  "21:59:53 crawl gearuptogrow.com: 107/107 urls, fetched 98, 304 0, reused 9",
+  "22:00:05 crawl gearuptofit.com: 300/878 urls, fetched 292, 304 0, reused 8",
+  "22:00:06 crawl plantastichaven.com: 163/163 urls, fetched 155, 304 0, reused 8",
+  "22:00:09 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 7, 304 0, reused 251",
+  "22:00:15 crawl frenchyfab.com: 238/238 urls, fetched 221, 304 0, reused 17",
+  "22:00:21 crawl openclaw-skillshub.com: 158/158 urls, fetched 158, 304 0, reused 0",
+  "22:00:24 crawl imagealchemy.app: 26/26 urls, fetched 26, 304 0, reused 0",
+  "22:00:37 crawl micegoneguide.com: 53/53 urls, fetched 41, 304 0, reused 12",
+  "22:00:57 crawl mysticaldigits.com: 300/468 urls, fetched 278, 304 0, reused 22",
+  "22:01:00 crawl efficientgptprompts.com: 300/487 urls, fetched 271, 304 0, reused 29",
+  "22:01:00 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
+  "22:01:02 replies: 12 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "22:01:02 - outreach: skipped (OUTREACH_MODE=off)",
+  "22:01:02 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
