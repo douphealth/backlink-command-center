@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-04T06:46:26.469Z",
- "duration_s": 70,
+ "generated_at": "2026-11-04T15:37:02.785Z",
+ "duration_s": 69,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 17.431005999999996
+    "balance_usd": 17.427006
    },
    "gmail": {
     "status": "connected"
@@ -83,7 +83,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 23825,
+   "ms": 20826,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -116,27 +116,26 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 39623,
+   "ms": 35986,
    "result": {
-    "queries": 1,
+    "queries": 2,
     "mention_queries": 0,
-    "serp_results": 19,
-    "candidates": 0,
-    "qualified": 0,
+    "serp_results": 37,
+    "candidates": 4,
+    "qualified": 2,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 0,
-    "with_email": 0,
-    "contact_form": 0,
-    "failed_queries": 1
+    "rejected": 5,
+    "with_email": 1,
+    "contact_form": 0
    }
   },
   "replies": {
    "ok": true,
-   "ms": 1441,
+   "ms": 2143,
    "result": {
-    "scanned": 12,
-    "replies": 0,
+    "scanned": 36,
+    "replies": 1,
     "positive": 0,
     "negative": 0,
     "bounces": 0,
@@ -149,9 +148,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 3674,
+   "ms": 8547,
    "result": {
-    "checked": 2,
+    "checked": 7,
     "won": 0,
     "lost": 0
    }
@@ -166,17 +165,17 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.004,
-  "month_usd": 0.0767,
+  "today_usd": 0.0248,
+  "month_usd": 0.0976,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
   "calls_this_run": 3
  },
  "outreach": {
   "mode": "off",
-  "ready": 150,
+  "ready": 151,
   "verified_ready": 0,
-  "pending_verification": 150,
+  "pending_verification": 151,
   "sent_today": 0,
   "cap_today": 12,
   "next_send_at": null,
@@ -184,13 +183,13 @@
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 2382,
-  "qualified": 510,
-  "ready": 150,
+  "prospects_evaluated": 2389,
+  "qualified": 512,
+  "ready": 151,
   "contact_form_only": 96,
-  "no_contact": 213,
+  "no_contact": 214,
   "contacted": 49,
-  "replied": 0,
+  "replied": 1,
   "positive": 0,
   "won": 0,
   "existing_links": 4,
@@ -392,19 +391,19 @@
   },
   {
    "date": "2026-11-04",
-   "prospects_evaluated": 2382,
-   "qualified": 510,
-   "ready": 150,
+   "prospects_evaluated": 2389,
+   "qualified": 512,
+   "ready": 151,
    "contact_form_only": 96,
-   "no_contact": 213,
+   "no_contact": 214,
    "contacted": 49,
-   "replied": 0,
+   "replied": 1,
    "positive": 0,
    "won": 0,
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.004
+   "spend_usd": 0.0248
   }
  ],
  "learning": {
@@ -417,9 +416,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 67,
+    "queries": 68,
     "ready": 57,
-    "rate": 0.829
+    "rate": 0.817
    },
    {
     "footprint": "statistics",
@@ -459,9 +458,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 49,
-    "ready": 21,
-    "rate": 0.423
+    "queries": 50,
+    "ready": 22,
+    "rate": 0.434
    },
    {
     "footprint": "inurl_links",
@@ -496,6 +495,14 @@
   ],
   "assets": [
    {
+    "url": "https://gearuptofit.com/watch-match/",
+    "sent": 1,
+    "replied": 1,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.5
+   },
+   {
     "url": "https://affiliatemarketingforsuccess.com/ai/how-teachers-detect-ai-writing/",
     "sent": 1,
     "replied": 0,
@@ -521,14 +528,6 @@
    },
    {
     "url": "https://gearuptofit.com/shoe-finder/",
-    "sent": 1,
-    "replied": 0,
-    "positive": 0,
-    "won": 0,
-    "rate": 0.25
-   },
-   {
-    "url": "https://gearuptofit.com/watch-match/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -832,12 +831,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 53,
-   "words": 4409,
+   "words": 4403,
    "interactive": true,
-   "modified": "2026-11-02T15:56:22+00:00",
+   "modified": "2026-11-04T05:41:39+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,409 words)",
+    "In-depth (4,403 words)",
     "4 data tables",
     "Cites 4 authoritative sources",
     "Recently updated"
@@ -1713,7 +1712,7 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 8,
    "words": 2564,
    "interactive": true,
    "modified": "2026-10-03T06:15:52+00:00",
@@ -1866,7 +1865,7 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 9,
    "words": 2171,
    "interactive": true,
    "modified": "2026-10-03T06:27:23+00:00",
@@ -2008,6 +2007,31 @@
   },
   {
    "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/learning-development/rapid-skill-learning/",
+   "title": "Rapid Skill Learning: Master New Abilities Faster | Gear Up to Grow",
+   "h1": "Rapid Skill Learning: A Practical System for Learning New Skills Faster",
+   "description": "Unlock rapid skill learning with our 8-step system. Master new abilities faster using neuroscience-backed strategies and practical tips. Start learning today!",
+   "type": "practical_guide",
+   "promotion": 68,
+   "linkability": 75,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 7,
+   "words": 2266,
+   "interactive": false,
+   "modified": "2026-11-04T13:24:18+00:00",
+   "reasons": [
+    "In-depth (2,266 words)",
+    "2 data tables",
+    "Cites 16 authoritative sources",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 1,
+   "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
    "title": "Burnout at Work: Signs, Support, and Next Steps",
    "h1": "Burnout Symptoms: Signs, Support, and Next Steps",
@@ -2030,31 +2054,6 @@
    "promoting": false
   },
   {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/learning-development/rapid-skill-learning/",
-   "title": "Rapid Skill Learning: Master New Abilities Faster | Gear Up to Grow",
-   "h1": "Rapid Skill Learning: A Practical System for Learning New Skills Faster",
-   "description": "Unlock rapid skill learning with our 8-step system. Master new abilities faster using neuroscience-backed strategies and practical tips. Start learning today!",
-   "type": "practical_guide",
-   "promotion": 68,
-   "linkability": 75,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 7,
-   "words": 2251,
-   "interactive": false,
-   "modified": "2026-09-14T13:01:07+00:00",
-   "reasons": [
-    "In-depth (2,251 words)",
-    "2 data tables",
-    "Cites 16 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 1,
-   "promoting": false
-  },
-  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/email-marketing/getresponse-vs-tinyemail/",
    "title": "GetResponse vs TinyEmail 2026: Boost Affiliate Revenue $12K+",
@@ -2065,7 +2064,7 @@
    "linkability": 75,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 9,
    "words": 3272,
    "interactive": false,
    "modified": "2026-09-13T14:12:52+00:00",
@@ -2112,7 +2111,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 8,
    "words": 1660,
    "interactive": true,
    "modified": "2026-10-25T07:53:36+00:00",
@@ -2512,6 +2511,31 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/blogging/content-marketing-must-educate-and-convert-the-customer/",
+   "title": "Content Marketing Must Educate And Convert The Customer: 2026 ...",
+   "h1": "Content Marketing: How to Educate and Convert in 2026",
+   "description": "Learn a proven content marketing strategy to educate and convert leads. Discover 9 actionable steps to boost engagement and drive results in 2025.",
+   "type": "general_article",
+   "promotion": 65,
+   "linkability": 72,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 11,
+   "words": 6860,
+   "interactive": false,
+   "modified": "2026-11-04T07:25:02+00:00",
+   "reasons": [
+    "In-depth (6,860 words)",
+    "2 data tables",
+    "Cites 4 authoritative sources",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/blogging/promote-your-blog-to-increase-traffic/",
    "title": "Blog Promotion Strategies 2026: 9 Proven Tactics to 100K+ Views",
    "h1": "9 Blog Promotion Tactics for 100K+ Views (2026 Guide)",
@@ -2529,31 +2553,6 @@
     "In-depth (4,455 words)",
     "15 data tables",
     "Cites 6 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/blogging/11-things-to-outsource-as-a-blogger-for-more-time-and-efficiency/",
-   "title": "11 Things To Outsource As A Blogger For More Time And Efficiency",
-   "h1": "11 Things to Outsource as a Blogger for Faster Scaling",
-   "description": "Stop wasting time! Discover 11 blogging tasks you can easily outsource to skyrocket your efficiency and grow your blog faster. Get more traffic now!",
-   "type": "general_article",
-   "promotion": 65,
-   "linkability": 72,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 13,
-   "words": 3117,
-   "interactive": false,
-   "modified": "2026-09-03T12:32:26+00:00",
-   "reasons": [
-    "In-depth (3,117 words)",
-    "1 data table",
-    "Cites 8 authoritative sources",
     "Recently updated"
    ],
    "prospects": 0,
@@ -4071,6 +4070,16 @@
   },
   {
    "site": "gearuptogrow.com",
+   "from": "https://gearuptogrow.com/learning/",
+   "from_title": "Learning Hub: Active Recall & Spaced Repetition Systems",
+   "to": "https://gearuptogrow.com/learning-development/rapid-skill-learning/",
+   "to_title": "Rapid Skill Learning: Master New Abilities Faster | Gear Up to Grow",
+   "anchor": "skill learning",
+   "relevance": 4,
+   "from_strength": 61
+  },
+  {
+   "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/mental-wellness/",
    "from_title": "Mental Wellness Hub: Stress Regulation & Burnout Recovery",
    "to": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
@@ -4088,16 +4097,6 @@
    "anchor": "burnout symptoms",
    "relevance": 4,
    "from_strength": 0
-  },
-  {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/learning/",
-   "from_title": "Learning Hub: Active Recall & Spaced Repetition Systems",
-   "to": "https://gearuptogrow.com/learning-development/rapid-skill-learning/",
-   "to_title": "Rapid Skill Learning: Master New Abilities Faster | Gear Up to Grow",
-   "anchor": "skill learning",
-   "relevance": 4,
-   "from_strength": 61
   },
   {
    "site": "efficientgptprompts.com",
@@ -4887,22 +4886,21 @@
   }
  ],
  "log": [
-  "06:45:17 connection dataforseo: connected",
-  "06:45:17 connection gmail: connected",
-  "06:45:20 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
-  "06:45:22 crawl gearuptogrow.com: 107/107 urls, fetched 3, 304 0, reused 104",
-  "06:45:26 crawl mysticaldigits.com: 300/468 urls, fetched 5, 304 0, reused 295",
-  "06:45:26 crawl frenchyfab.com: 238/238 urls, fetched 5, 304 0, reused 233",
-  "06:45:26 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "06:45:27 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "06:45:28 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "06:45:28 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "06:45:37 crawl efficientgptprompts.com: 300/487 urls, fetched 6, 304 0, reused 294",
-  "06:45:41 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 3, 304 0, reused 255",
-  "06:46:21 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:46:21 prospects: 1 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "06:46:22 replies: 12 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "06:46:22 - outreach: skipped (OUTREACH_MODE=off)",
-  "06:46:26 link checks: 2 pages, 0 new links won, 0 lost"
+  "15:35:54 connection dataforseo: connected",
+  "15:35:54 connection gmail: connected",
+  "15:35:59 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
+  "15:35:59 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
+  "15:36:03 crawl frenchyfab.com: 238/238 urls, fetched 1, 304 0, reused 237",
+  "15:36:04 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "15:36:05 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "15:36:06 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "15:36:08 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "15:36:10 crawl micegoneguide.com: 53/53 urls, fetched 1, 304 0, reused 52",
+  "15:36:11 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "15:36:15 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 3, 304 0, reused 255",
+  "15:36:51 prospects: 2 queries (0 brand-mention), 4 candidates, 2 qualified (0 unlinked mentions), 1 with email, 0 already linking",
+  "15:36:54 replies: 36 scanned, 1 replies, 0 failures, 0 delays; ok",
+  "15:36:54 - outreach: skipped (OUTREACH_MODE=off)",
+  "15:37:02 link checks: 7 pages, 0 new links won, 0 lost"
  ]
 }
