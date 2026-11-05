@@ -32,3 +32,9 @@ test('a rejected Verifalia login is a top owner action',()=>{
     const d=diagnose({...input,funnel:{ready:100}});assert.equal(d[0].code,'verifier_rejected');assert.equal(d[0].level,'action');
   }
 });
+test('permission problems get their own fix, distinct from a wrong password',()=>{
+  const p=diagnose({capabilities:{verifier:{ready:true,balance:{error:'permission_denied',endpoint:'credits_balance'}}},outreach:{},funnel:{ready:100}});
+  assert.equal(p[0].code,'verifier_permission');assert.match(p[0].message,/view the credits balance/);
+  const l=diagnose({capabilities:{verifier:{ready:true,balance:{error:'login_rejected'}}},outreach:{},funnel:{ready:100}});
+  assert.equal(l[0].code,'verifier_rejected');assert.match(l[0].fix,/two-factor/);
+});

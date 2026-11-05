@@ -159,6 +159,17 @@ export class RecipientVerifier{
     }
     return null;
   }
+  /**
+   * 401 = the login itself failed (wrong username/password, unconfirmed account, or 2FA on the user);
+   * 403 = login is fine but the user lacks a permission (per Verifalia's SDK: AuthorizationError).
+   * Recorded (no credentials) so the dashboard can say exactly what to change.
+   */
+  verifaliaDenied(status,endpoint){
+    const error=status===403?'permission_denied':'login_rejected';
+    this.verifaliaOff='verifalia_'+error;
+    this.state.verifier_balance={provider:'verifalia',error,http_status:status,endpoint,checked_at:new Date(this.now()).toISOString()};
+    return {reason:this.verifaliaOff};
+  }
   async verifalia(email){
     if(this.verifaliaOff)return {reason:this.verifaliaOff};
     const quality=Object.hasOwn(VERIFALIA_COST,this.env.VERIFALIA_QUALITY)?this.env.VERIFALIA_QUALITY:'High',cost=VERIFALIA_COST[quality];
@@ -167,7 +178,7 @@ export class RecipientVerifier{
     if(!paid){
       if(this.verifaliaFree==null){
         const b=await this.vcall('GET','/credits/balance');
-        if(b?.status===401||b?.status===403){this.verifaliaOff='verifalia_login_rejected';this.state.verifier_balance={provider:'verifalia',error:'login_rejected',checked_at:new Date(this.now()).toISOString()};return {reason:this.verifaliaOff}}
+        if(b?.status===401||b?.status===403)return this.verifaliaDenied(b.status,'credits_balance');
         const bal=b?.status===200?await b.json().catch(()=>null):null;
         if(!bal){return {reason:'verifalia_unavailable'}}
         this.verifaliaFree=Number(bal.freeCredits)||0;
@@ -179,7 +190,7 @@ export class RecipientVerifier{
     if(!paid){this.verifaliaFree-=cost;if(this.state.verifier_balance)this.state.verifier_balance.free_credits=this.verifaliaFree}
     const res=await this.vcall('POST','/email-validations?waitTime=30000',{entries:[{inputData:email}],quality});
     if(!res)return {reason:'verification_unavailable'};
-    if(res.status===401||res.status===403){this.verifaliaOff='verifalia_login_rejected';this.state.verifier_balance={provider:'verifalia',error:'login_rejected',checked_at:new Date(this.now()).toISOString()};return {reason:this.verifaliaOff}}
+    if(res.status===401||res.status===403)return this.verifaliaDenied(res.status,'submit_validation');
     if(res.status===402){this.verifaliaFree=0;this.verifaliaOff='verifalia_no_credits';return {reason:this.verifaliaOff}}
     if(res.status!==200&&res.status!==202)return {reason:'verification_unavailable'};
     let job=await res.json().catch(()=>null);const id=job?.overview?.id;
