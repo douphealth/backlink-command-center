@@ -38,3 +38,7 @@ test('permission problems get their own fix, distinct from a wrong password',()=
   const l=diagnose({capabilities:{verifier:{ready:true,balance:{error:'login_rejected'}}},outreach:{},funnel:{ready:100}});
   assert.equal(l[0].code,'verifier_rejected');assert.match(l[0].fix,/two-factor/);
 });
+test('a later successful Verifalia check clears the login warning even if old holds remain',()=>{
+  const d=diagnose({capabilities:{verifier:{ready:true,balance:{provider:'verifalia',free_credits:19}}},outreach:{holds:{mailbox_verifalia_login_rejected:8}},funnel:{ready:100}});
+  assert.ok(!d.some(x=>x.code==='verifier_rejected'),JSON.stringify(d));
+});
