@@ -21,3 +21,9 @@ test('self-diagnosis puts owner actions first with exact fixes and no private da
   const ready=diagnose({capabilities:{verifier:{ready:true}},outreach:{mode:'off',verified_ready:4},funnel:{ready:151},held:true});
   assert.equal(ready[0].code,'hold_with_verified');assert.match(ready[0].message,/4 verified inboxes/);
 });
+test('hold reasons surface as a decision only when the contact rule is the main blocker',()=>{
+  const d=diagnose({capabilities:{verifier:{ready:true}},outreach:{mode:'off',holds:{only_non_editorial_inbox_published:4,no_email_published:1}},funnel:{ready:150}});
+  assert.equal(d[0].code,'holds');assert.equal(d[0].level,'action');assert.match(d[0].message,/5 queued inboxes are held; most often \(4\)/);
+  const auto=diagnose({capabilities:{verifier:{ready:true}},outreach:{mode:'off',holds:{catch_all_domain:3}},funnel:{ready:150}});
+  assert.equal(auto.find(x=>x.code==='holds').level,'info');
+});

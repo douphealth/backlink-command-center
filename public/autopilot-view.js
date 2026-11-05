@@ -151,7 +151,7 @@ function learningPanel(h,s){
 function outreachLine(s,{escapeHTML:e,n,niceTime}){
   const o=s.outreach,v=s.capabilities?.verifier;
   const bal=v?.balance?` · Verifalia free credits left today: ${n(v.balance.free_credits)}`:'';
-  const verify=v?`<p class="ap-outreach"><b>Mailbox verifier:</b> ${v.ready?`${e((v.providers||[]).join(' → '))} · ${n(v.used_today)}/${n(v.daily_limit)} checks used today${bal}${v.catch_all_domains_skipped?` · ${n(v.catch_all_domains_skipped)} catch-all domains skipped`:''}`:v.key?'login saved, but the daily limit is 0 (set "Mailbox checks per day")':'not connected. Add a free Verifalia login under ⚙ Connect, or nothing can be sent'}${o?` · ${n(o.verified_ready)} of ${n(o.ready)} queued inboxes verified`:''}</p>`:'';
+  const verify=v?`<p class="ap-outreach"><b>Mailbox verifier:</b> ${v.ready?`${e((v.providers||[]).join(' → '))} · ${n(v.used_today)}/${n(v.daily_limit)} checks used today${bal}${v.catch_all_domains_skipped?` · ${n(v.catch_all_domains_skipped)} catch-all domains skipped`:''}`:v.key?'login saved, but the daily limit is 0 (set "Mailbox checks per day")':'not connected. Add a free Verifalia login under ⚙ Connect, or nothing can be sent'}${o?` · ${n(o.verified_ready)} of ${n(o.ready)} queued inboxes verified`:''}${o?.holds&&Object.keys(o.holds).length?`<br><small>Held: ${Object.entries(o.holds).sort((a,b)=>b[1]-a[1]).map(([k,c])=>`${e(k.replaceAll('_',' '))} ${n(c)}`).join(' · ')}</small>`:''}</p>`:'';
   if(!o||o.mode==='off')return verify;
   const next=o.next_send_at?niceTime(o.next_send_at):null;
   const why=o.sent_today>=o.cap_today?`today's warm-up limit is used (${n(o.sent_today)}/${n(o.cap_today)})`:o.sending_now?'sending during this run':`waiting for recipients' business hours (weekdays)`;

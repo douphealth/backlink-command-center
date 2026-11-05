@@ -42,7 +42,9 @@ export function outreachStatus(state,{limit,mode,qualifyVersion}){
  const from=sent>=cap?new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate()+1)):now;
  const next=ready.map(p=>nextSendWindow(p.domain,from)).filter(Boolean).sort((a,b)=>a-b)[0]||null;
  const verified=ready.filter(p=>usableVerification(p.recipient_proof?.verification,p.email)&&!suppressed(state,p.email,p.domain));
- return {mode,ready:ready.length,verified_ready:verified.length,pending_verification:ready.length-verified.length,
+ // Why queued inboxes are held, by reason only (no addresses): drives the dashboard and self-diagnosis.
+ const holds={};for(const p of ready)if(p.contact_quality?.status==='held'){const k=p.contact_quality.detail||p.contact_quality.reason||'unknown';holds[k]=(holds[k]||0)+1}
+ return {mode,ready:ready.length,verified_ready:verified.length,pending_verification:ready.length-verified.length,holds,
   sent_today:sent,cap_today:cap,next_send_at:mode==='off'?null:next?.toISOString()||null,
   sending_now:mode==='send'&&sent<cap&&verified.some(p=>sendWindowOpen(p.domain,now)),reply_health:state.reply_health?.status||'unverified'};
 }
@@ -105,7 +107,7 @@ export function applyProof(state,p,proof,{followup=false}={}){
   samePublisher(proof.evidence?.source,p.domain)&&proof.evidence?.email===e&&
   Number.isFinite(Date.parse(proof.evidence?.observed_at))&&Date.now()-Date.parse(proof.evidence.observed_at)>=0&&Date.now()-Date.parse(proof.evidence.observed_at)<DAY;
  if(!valid||suppressed(state,e,p.domain)||(followup&&e!==normalizeEmail(p.email))){
-  p.contact_quality={status:'held',reason:proof?.reason||'recipient_not_verified',checked_at:NOW()};delete p.recipient_proof;return false;
+  p.contact_quality={status:'held',reason:proof?.reason||'recipient_not_verified',...(proof?.detail?{detail:String(proof.detail).slice(0,60)}:{}),checked_at:NOW()};delete p.recipient_proof;return false;
  }
  p.email=e;p.email_source=proof.evidence.source;p.email_rank=proof.evidence.rank;
  p.recipient_proof={...proof,publisher_domain:p.domain};p.contact_quality={status:'verified',checked_at:NOW()};return true;
@@ -121,7 +123,7 @@ export async function preverify({state,mailer,max=5,deadline=Infinity,log=()=>{}
  const learned=assetStats(state);
  const queue=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION&&!suppressed(state,p.email,p.domain)&&
    !(state.contacted?.[p.domain]&&ageDays(state.contacted[p.domain])<90)&&!usableVerification(p.recipient_proof?.verification,p.email)&&
-   !(p.contact_quality?.status==='held'&&ageDays(p.contact_quality.checked_at)<3))
+   !(p.contact_quality?.status==='held'&&p.contact_quality.detail&&ageDays(p.contact_quality.checked_at)<3)) // holds without a recorded reason (older code) are re-checked now
   .map(p=>[p,linkLikelihood(p,{assets:learned})]).sort((a,b)=>b[1]-a[1]).slice(0,Math.max(0,max)).map(x=>x[0]);
  for(const p of queue){
   // A single slow mail server can take ~2 minutes to verify: never start one without that much time left.

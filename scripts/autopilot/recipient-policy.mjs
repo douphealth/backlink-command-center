@@ -193,12 +193,14 @@ export class RecipientVerifier{
     this.pages.set(url,pending);return pending;
   }
   async verify(p,{followup=false,deadline=Infinity}={}){
-    const fail=reason=>({ok:false,reason});if(isSuppressed(this.state,p.email,p.domain))return fail('suppressed');
+    // `detail` says exactly why (no addresses): it is aggregated on the dashboard to tune the pipeline.
+    const fail=(reason,detail)=>({ok:false,reason,...(detail?{detail}:{})}),published=new Set();let fetched=0;if(isSuppressed(this.state,p.email,p.domain))return fail('suppressed');
     if(!this.enabled)return fail('verifier_not_configured');if(!samePublisher(p.page_url,p.domain))return fail('publisher_mismatch');
     const origin=new URL(p.page_url).origin,queue=[p.email_source,p.page_url,origin+'/',origin+'/contact/',origin+'/contact-us/',origin+'/about/'],seen=new Set(),candidates=new Map();
     while(queue.length&&seen.size<6&&this.now()<deadline){
       const url=queue.shift();if(!url||seen.has(url)||!samePublisher(url,p.domain))continue;seen.add(url);
-      const page=await this.page(url,p.domain);if(!page)continue;
+      const page=await this.page(url,p.domain);if(!page)continue;fetched++;
+      for(const m of cleanPublisherHtml(page.body).matchAll(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}/gi)){const e=normalizeEmail(m[0].toLowerCase());if(e&&host(e.split('@')[1])===host(p.domain))published.add(e)}
       const source=/\/(?:author|writers?)\//i.test(new URL(url).pathname)?'author':/\/(?:contact(?:-us)?|about(?:-us)?|editorial|editors|team|write-for-us|contribute)(?:\/|$)/i.test(new URL(url).pathname)?'contact':'page';
       for(const c of extractEditorialCandidates(page.body,page.url,{domain:p.domain,author:p.author||'',source,now:this.now()}))if(!candidates.has(c.email)||candidates.get(c.email).rank<c.rank)candidates.set(c.email,c);
       for(const m of cleanPublisherHtml(page.body).matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)){
@@ -208,13 +210,15 @@ export class RecipientVerifier{
     }
     const hasContact=(p.history||[]).some(h=>h.type==='initial'&&h.mode!=='draft');
     const ranked=[...candidates.values()].filter(c=>(!followup&&!hasContact)||c.email===normalizeEmail(p.email)).sort((a,b)=>b.rank-a.rank);
-    if(!ranked.length)return fail('no_published_editorial_contact');let attempted=0;
-    for(const c of ranked){if(++attempted>3||this.now()>=deadline)break;if(isSuppressed(this.state,c.email,p.domain))continue;
+    if(!ranked.length)return fail('no_published_editorial_contact',!fetched?'publisher_pages_unreachable':published.size?'only_non_editorial_inbox_published':'no_email_published');
+    let attempted=0;const outcomes=[];
+    for(const c of ranked){if(++attempted>3||this.now()>=deadline)break;if(isSuppressed(this.state,c.email,p.domain)){outcomes.push('suppressed');continue}
       // A catch-all mail server accepts every address, so no provider can prove this inbox: don't spend a credit.
-      const seenCatchAll=this.state.catch_all_domains?.[c.email.split('@')[1]];if(seenCatchAll&&this.now()-Date.parse(seenCatchAll)<90*DAY)continue;
-      const mx=await checkMx(c.email.split('@')[1],this.resolveMx);if(!mx.ok)continue;
+      const seenCatchAll=this.state.catch_all_domains?.[c.email.split('@')[1]];if(seenCatchAll&&this.now()-Date.parse(seenCatchAll)<90*DAY){outcomes.push('catch_all_domain');continue}
+      const mx=await checkMx(c.email.split('@')[1],this.resolveMx);if(!mx.ok){outcomes.push('mx_'+mx.reason);continue}
       const v=await this.mailbox(c.email);if(usableVerification(v,c.email,this.now()))return {ok:true,email:c.email,evidence:c,verification:v};
+      outcomes.push(v.status==='unknown'?'mailbox_'+(v.reason||'unknown'):'mailbox_'+v.status);
     }
-    return fail('no_verified_mailbox');
+    return fail('no_verified_mailbox',outcomes[0]||'time_budget');
   }
 }
