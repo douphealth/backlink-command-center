@@ -89,3 +89,16 @@ test('owner daily cap still applies across providers',async()=>{
   assert.equal((await f.v.mailbox('b@journal.example')).reason,'verification_budget_exhausted');assert.equal(f.posts().length,1);
   const off=fixture({envChange:{EMAIL_VERIFICATION_ENABLED:'NO'}});assert.equal((await off.v.verify(prospect)).reason,'verifier_not_configured');assert.equal(off.calls.length,0);
 });
+
+test('pre-verify checks the best queued inboxes while outreach is paused and never sends',async()=>{
+  const {preverify}=await import('../../scripts/autopilot/outreach.mjs');
+  const t=new Date().toISOString(),sent=[],asked=[];
+  const mk=(id,score)=>({id,domain:id+'.example',site:'s.com',page_url:`https://${id}.example/r`,asset_url:'https://s.com/a',email:`editor@${id}.example`,qv:2,status:'ready',score,history:[]});
+  const state={prospects:{a:mk('a',40),b:mk('b',90),c:mk('c',70),d:{...mk('d',99),contact_quality:{status:'held',checked_at:t}}},contacted:{},suppression:{}};
+  const mailer={send:async m=>sent.push(m),authorizeRecipient:async p=>{asked.push(p.id);return p.id==='b'?{ok:true,email:p.email,evidence:{source:`https://${p.domain}/contact`,email:p.email,rank:95,observed_at:t},
+    verification:verifaliaVerdict(entry(p.email),p.email,Date.now())}:{ok:false,reason:'no_verified_mailbox'}}};
+  const r=await preverify({state,mailer,max:2});
+  assert.deepEqual(asked,['b','c']);assert.deepEqual(r,{checked:2,verified:1,held:1});assert.equal(sent.length,0);
+  assert.equal(state.prospects.b.contact_quality.status,'verified');assert.equal(state.prospects.c.contact_quality.status,'held');
+  assert.deepEqual((await preverify({state,mailer,max:5})).checked,1); // b already verified, c and d held recently: only a
+});
