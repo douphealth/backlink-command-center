@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-05T07:55:25.432Z",
- "duration_s": 255,
+ "generated_at": "2026-11-05T08:07:27.967Z",
+ "duration_s": 145,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 17.025326
+    "balance_usd": 16.929326000000003
    },
    "gmail": {
     "status": "connected"
@@ -102,7 +102,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 25766,
+   "ms": 16982,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -110,7 +110,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -135,18 +135,18 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 167492,
+   "ms": 103795,
    "result": {
-    "queries": 24,
+    "queries": 5,
     "mention_queries": 0,
-    "serp_results": 438,
-    "candidates": 47,
-    "qualified": 9,
+    "serp_results": 93,
+    "candidates": 20,
+    "qualified": 10,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 38,
-    "with_email": 3,
-    "contact_form": 2,
+    "rejected": 10,
+    "with_email": 4,
+    "contact_form": 4,
     "broken_links": 0,
     "from_queue": 0,
     "failed_queries": 2,
@@ -155,15 +155,15 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 16787,
+   "ms": 13113,
    "result": {
     "checked": 25,
-    "found": 1
+    "found": 4
    }
   },
   "replies": {
    "ok": true,
-   "ms": 821,
+   "ms": 938,
    "result": {
     "scanned": 0,
     "replies": 0,
@@ -179,7 +179,7 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 42612,
+   "ms": 8698,
    "result": {
     "checked": 5,
     "verified": 0,
@@ -205,20 +205,21 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.4768,
-  "month_usd": 0.5744,
+  "today_usd": 0.4968,
+  "month_usd": 0.5944,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 33
+  "calls_this_run": 11
  },
  "outreach": {
   "mode": "off",
-  "ready": 155,
+  "ready": 159,
   "verified_ready": 0,
-  "pending_verification": 155,
+  "pending_verification": 159,
   "holds": {
-   "no_email_published": 1,
-   "only_non_editorial_inbox_published": 4
+   "no_email_published": 3,
+   "only_non_editorial_inbox_published": 6,
+   "mailbox_verifalia_login_rejected": 1
   },
   "sent_today": 0,
   "cap_today": 12,
@@ -227,12 +228,12 @@
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 2498,
-  "qualified": 528,
-  "ready": 155,
-  "broken_link_ready": 3,
-  "contact_form_only": 103,
-  "no_contact": 219,
+  "prospects_evaluated": 2518,
+  "qualified": 538,
+  "ready": 159,
+  "broken_link_ready": 7,
+  "contact_form_only": 107,
+  "no_contact": 221,
   "contacted": 49,
   "replied": 1,
   "positive": 0,
@@ -452,12 +453,12 @@
   },
   {
    "date": "2026-11-05",
-   "prospects_evaluated": 2498,
-   "qualified": 528,
-   "ready": 155,
-   "broken_link_ready": 3,
-   "contact_form_only": 103,
-   "no_contact": 219,
+   "prospects_evaluated": 2518,
+   "qualified": 538,
+   "ready": 159,
+   "broken_link_ready": 7,
+   "contact_form_only": 107,
+   "no_contact": 221,
    "contacted": 49,
    "replied": 1,
    "positive": 0,
@@ -465,7 +466,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.4768
+   "spend_usd": 0.4968
   }
  ],
  "learning": {
@@ -484,9 +485,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 93,
-    "ready": 58,
-    "rate": 0.615
+    "queries": 94,
+    "ready": 60,
+    "rate": 0.629
    },
    {
     "footprint": "useful_websites",
@@ -525,6 +526,12 @@
     "rate": 0.417
    },
    {
+    "footprint": "further_reading",
+    "queries": 11,
+    "ready": 4,
+    "rate": 0.357
+   },
+   {
     "footprint": "blogs_to_follow",
     "queries": 9,
     "ready": 3,
@@ -538,27 +545,15 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 68,
+    "queries": 69,
     "ready": 22,
-    "rate": 0.324
+    "rate": 0.319
    },
    {
     "footprint": "recommended_tools",
     "queries": 1,
     "ready": 0,
     "rate": 0.25
-   },
-   {
-    "footprint": "further_reading",
-    "queries": 10,
-    "ready": 2,
-    "rate": 0.231
-   },
-   {
-    "footprint": "resources",
-    "queries": 102,
-    "ready": 14,
-    "rate": 0.143
    },
    {
     "footprint": "link_roundup",
@@ -571,6 +566,12 @@
     "queries": 4,
     "ready": 0,
     "rate": 0.143
+   },
+   {
+    "footprint": "resources",
+    "queries": 104,
+    "ready": 14,
+    "rate": 0.14
    },
    {
     "footprint": "weekly_roundup",
@@ -1389,7 +1390,7 @@
    ],
    "prospects": 3,
    "internal_link_suggestions": 4,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -1512,7 +1513,7 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "frenchyfab.com",
@@ -1687,7 +1688,7 @@
     "Cites 6 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 2,
    "internal_link_suggestions": 4,
    "promoting": true
   },
@@ -1743,9 +1744,9 @@
     "1 data table",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 6,
    "internal_link_suggestions": 4,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -1771,7 +1772,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "micegoneguide.com",
@@ -1797,7 +1798,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "micegoneguide.com",
@@ -1823,7 +1824,7 @@
    ],
    "prospects": 1,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "micegoneguide.com",
@@ -1847,9 +1848,9 @@
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
    ],
-   "prospects": 0,
+   "prospects": 2,
    "internal_link_suggestions": 3,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -1899,7 +1900,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -1924,7 +1925,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 4,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -2002,7 +2003,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2077,7 +2078,7 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 1,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2149,7 +2150,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 2,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2352,7 +2353,7 @@
    ],
    "prospects": 1,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "efficientgptprompts.com",
@@ -2501,7 +2502,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 4,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -2605,7 +2606,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2706,7 +2707,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -5792,7 +5793,7 @@
  },
  "tuning": {
   "max_queries": 28,
-  "updated_at": "2026-11-05T07:54:25.202Z"
+  "updated_at": "2026-11-05T08:07:04.969Z"
  },
  "wins": [
   {
@@ -5841,34 +5842,34 @@
   }
  ],
  "log": [
-  "07:51:11 connection dataforseo: connected",
-  "07:51:11 connection gmail: connected",
-  "07:51:12 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "07:51:14 crawl plantastichaven.com: 163/163 urls, fetched 4, 304 0, reused 159",
-  "07:51:15 crawl gearuptogrow.com: 107/107 urls, fetched 1, 304 0, reused 106",
-  "07:51:17 crawl frenchyfab.com: 238/238 urls, fetched 4, 304 0, reused 234",
-  "07:51:17 crawl mysticaldigits.com: 300/468 urls, fetched 6, 304 0, reused 294",
-  "07:51:17 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "07:51:17 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "07:51:18 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "07:51:23 crawl efficientgptprompts.com: 300/487 urls, fetched 1, 304 0, reused 299",
-  "07:51:37 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 3, 304 0, reused 255",
-  "07:51:37 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
-  "07:52:37 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:52:38 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:54:25 prospects: 0 from the saved queue, 0 saved for next run; 24 queries (0 brand-mention), 47 candidates, 9 qualified (0 unlinked mentions), 3 with email, 0 with a dead link we can replace, 0 already linking",
-  "07:54:25 self-tuning: next cycle runs up to 28 searches",
-  "07:54:41 broken links: 25 queued pages scanned, 1 with a dead link our page can replace",
-  "07:54:42 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "07:54:42 - outreach: skipped (OUTREACH_MODE=off)",
-  "07:55:25 pre-verify (nothing sent): 5 top inboxes checked, 0 verified, 5 held",
-  "07:55:25 link checks: 0 pages, 0 new links won, 0 lost"
+  "08:05:03 connection dataforseo: connected",
+  "08:05:03 connection gmail: connected",
+  "08:05:05 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "08:05:06 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
+  "08:05:07 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "08:05:08 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "08:05:09 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "08:05:10 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "08:05:11 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "08:05:11 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "08:05:17 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "08:05:20 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "08:05:21 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
+  "08:05:54 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:05:55 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:07:04 prospects: 0 from the saved queue, 0 saved for next run; 5 queries (0 brand-mention), 20 candidates, 10 qualified (0 unlinked mentions), 4 with email, 0 with a dead link we can replace, 0 already linking",
+  "08:07:04 self-tuning: next cycle runs up to 28 searches",
+  "08:07:18 broken links: 25 queued pages scanned, 4 with a dead link our page can replace",
+  "08:07:19 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "08:07:19 - outreach: skipped (OUTREACH_MODE=off)",
+  "08:07:27 pre-verify (nothing sent): 5 top inboxes checked, 0 verified, 5 held",
+  "08:07:27 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
    "level": "action",
    "code": "holds",
-   "message": "5 queued inboxes are held; most often (4) because the publisher shows only a generic inbox (e.g. hello@/info@) without editorial wording, which the contact rule rejects.",
+   "message": "10 queued inboxes are held; most often (6) because the publisher shows only a generic inbox (e.g. hello@/info@) without editorial wording, which the contact rule rejects.",
    "fix": "Decide whether a generic inbox on the publisher's own contact page may be emailed after a positive mailbox check (a deliberate safety rule today)."
   },
   {
