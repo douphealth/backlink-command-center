@@ -1,8 +1,10 @@
 # Recipient safety repair
 
-## Current containment
+## Outbound hold (lifted 2026-11-05 by the owner)
 
-The production Autopilot workflow forces `OUTREACH_MODE=off` inside `LINKFORGE_SETTINGS`. This takes precedence over older repository variables and dashboard settings. Research, reply reading and backlink checks remain available. Do not remove this hold merely because tests are green. Previously accepted messages may still be retried by Gmail; this hold only controls new Autopilot sends.
+The unconditional hold was lifted by the owner after the recipient-verification gate passed production checks: Verifalia authenticated, and 5 queued inboxes were verified Deliverable within 24 h. Sending now follows the dashboard's outreach mode, still subject to every rule below.
+
+**Emergency brake:** set repository variable `OUTREACH_HOLD=YES` (GitHub → Settings → Secrets and variables → Actions → Variables). The next cycle forces `OUTREACH_MODE=off`, and research, reply reading and backlink checks keep running. The dashboard's ■ Stop button pauses the whole schedule. Previously accepted messages may still be retried by Gmail; the brake only controls new Autopilot sends.
 
 ## Recipient eligibility
 

@@ -37,7 +37,7 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
     'Verifalia rejected the saved login (HTTP 401), so no inbox can be verified or emailed.',
     'Check, in this order: (1) the account email is confirmed; (2) you saved the Verifalia USERNAME shown in app.verifalia.com → Users (may differ from your sign-up email) and its password, with no extra spaces; (3) two-factor authentication is OFF for that user (create a dedicated API user without 2FA). Then re-save under ⚙ Connect and press Save & run now.');
   if(held&&outreach.mode==='off'&&(outreach.verified_ready||0)>0)
-    add('action','hold_with_verified',`${outreach.verified_ready} verified inboxes are ready, but the workflow's outbound safety hold keeps sending off.`,'When you are ready to send, ask to lift the hold (one line in .github/workflows/autopilot.yml).');
+    add('action','hold_with_verified',`${outreach.verified_ready} verified inboxes are ready, but outreach is off.`,'Set the outreach mode to Hands-free under ⚙ Connect, and make sure repository variable OUTREACH_HOLD is not YES.');
   const holds=outreach.holds||{},heldCount=Object.values(holds).reduce((a,b)=>a+b,0);
   if(heldCount>=3){
     const [top,n]=Object.entries(holds).sort((a,b)=>b[1]-a[1])[0];
