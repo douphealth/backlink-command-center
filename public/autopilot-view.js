@@ -45,7 +45,7 @@ const FIELDS=[
   {name:'ANTHROPIC_API_KEY',label:'Anthropic API key (optional)',type:'password',kind:'secret',help:'Claude writes a unique pitch for every page'},
   {name:'VERIFALIA_USERNAME',label:'Verifalia username (needed to send)',type:'text',kind:'secret',help:'Free plan: 25 credits every day, about 12 inbox checks. Create a dedicated user in the Verifalia client area',link:'https://verifalia.com/sign-up'},
   {name:'VERIFALIA_PASSWORD',label:'Verifalia password',type:'password',kind:'secret',help:'Only free daily credits are used, so verification never costs money'},
-  {name:'EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox checks per day',type:'number',kind:'setting',min:0,max:100,placeholder:'12',help:'Upper limit across providers. 0 turns verification (and so sending) off'},
+  {name:'EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox checks per day',type:'number',kind:'setting',min:0,max:100,placeholder:'12 (default)',help:'Leave blank for 12 a day (Verifalia free credits only). 0 turns verification, and so sending, off'},
   {name:'HUNTER_API_KEY',label:'Hunter API key (optional fallback)',type:'password',kind:'secret',help:'Used only when Verifalia\'s free credits for the day are used up. hunter.io → API keys',link:'https://hunter.io/api-keys'},
 ];
 // Settings travel as one encrypted secret (no Variables permission needed); this browser remembers them for display.
@@ -127,7 +127,9 @@ export async function renderAutopilot(h){
   const ixPanel=ix?`<div class="ap-gap">${panel('Indexation health',`${n(ix.total_issues)} sitemap URLs can't be indexed as they are. Fix these before building links to them. ${ix.note}`,
     ixRows.length?table(['Site','Critical','All issues','Healthy'],ixSites)+table(['URL','Problem','Fix'],ixRows):empty('No indexation problems found','Every crawled sitemap URL returns 200, is indexable and self-canonical.'))}</div>`:'';
   schedulePoll();
-  return intro('autopilot','')+status+banner+setup+kpiHtml+
+  const att=(s.attention||[]).filter(a=>a.level!=='info'||!(s.attention||[]).some(x=>x.level==='action'));
+  const attention=att.length?`<div class="${att.some(a=>a.level==='action')?'alert-warning':'ap-msg'} ap-missing"><strong>${att.some(a=>a.level==='action')?'Needs you:':'Autopilot notes:'}</strong><ul class="ap-list">${att.map(a=>`<li><b>${e(a.message)}</b> ${e(a.fix)}</li>`).join('')}</ul>${s.tuning?.max_queries?`<small>Self-tuning: up to ${n(s.tuning.max_queries)} searches next cycle.</small>`:''}</div>`:'';
+  return intro('autopilot','')+status+attention+banner+setup+kpiHtml+
     `<div class="overview-grid">${panel('Outreach funnel','Every number is a stored, verified record',funnel)}${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`+
     `<div class="ap-gap">${panel('Best URLs to promote','Linkability × real search demand; templated duplicates and thin pages are demoted',best.length?table(['#','URL & why','Score','Internal links','Prospects'],best):empty('No promotable URLs yet','The next crawl will rank your pages.'))}</div>`+
     ixPanel+learningPanel(h,s)+
@@ -261,7 +263,7 @@ export function bindAutopilot(reload){
     const secrets=values.filter(([f])=>f.kind==='secret');
     const settings={...savedSettings.get(),...Object.fromEntries(values.filter(([f])=>f.kind==='setting').map(([f,v])=>[f.name,v]))};
     // A positive daily limit is the owner's opt-in to paid mailbox checks; 0 switches them off.
-    if(settings.EMAIL_VERIFY_DAILY_LIMIT!=null)settings.EMAIL_VERIFICATION_ENABLED=Number(settings.EMAIL_VERIFY_DAILY_LIMIT)>0?'YES':'NO';
+    if(settings.EMAIL_VERIFY_DAILY_LIMIT!=null&&settings.EMAIL_VERIFY_DAILY_LIMIT!=='')settings.EMAIL_VERIFICATION_ENABLED=Number(settings.EMAIL_VERIFY_DAILY_LIMIT)>0?'YES':'NO';
     // The mode/limit dropdowns always carry a value, so only rewrite settings when the name is known.
     const writeSettings=!!settings.SENDER_NAME;
     if(!writeSettings&&!ui.configured?.secrets.has(control.SETTINGS_SECRET)){ui.err='Please enter your name for the emails.';return reload()}

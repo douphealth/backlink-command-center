@@ -46,6 +46,12 @@ export class DataForSEO{
     const est=ESTIMATE[kind]??0.05;
     return this.spend('day')+est<=this.dailyUsd&&this.spend('month')+est<=this.monthlyUsd;
   }
+  /** How many calls of this kind fit under both spend caps right now (for parallel batches). */
+  affordable(kind){
+    if(!this.canSpend(kind))return 0;
+    const est=ESTIMATE[kind]??0.05;
+    return Math.max(0,Math.floor(Math.min(this.dailyUsd-this.spend('day'),this.monthlyUsd-this.spend('month'))/est));
+  }
   async post(kind,endpoint,task){
     if(!this.canSpend(kind))return null;
     for(let attempt=0;attempt<2;attempt++){

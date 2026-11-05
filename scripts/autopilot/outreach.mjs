@@ -124,7 +124,8 @@ export async function preverify({state,mailer,max=5,deadline=Infinity,log=()=>{}
    !(p.contact_quality?.status==='held'&&ageDays(p.contact_quality.checked_at)<3))
   .map(p=>[p,linkLikelihood(p,{assets:learned})]).sort((a,b)=>b[1]-a[1]).slice(0,Math.max(0,max)).map(x=>x[0]);
  for(const p of queue){
-  if(Date.now()>deadline)break;stats.checked++;
+  // A single slow mail server can take ~2 minutes to verify: never start one without that much time left.
+  if(deadline-Date.now()<150e3)break;stats.checked++;
   let proof;try{proof=await mailer.authorizeRecipient(p,{state,followup:false,deadline})}catch{proof={ok:false,reason:'verification_error'}}
   if(applyProof(state,p,proof))stats.verified++;else stats.held++;
  }

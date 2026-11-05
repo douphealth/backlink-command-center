@@ -21,6 +21,7 @@ import {DataForSEO} from './dataforseo.mjs';
 import {gscDemand,dfsDemand} from './demand.mjs';
 import {discoverProspects,requalify,enrichBrokenLinks,freshQueryCount,QUALIFY_VERSION} from './prospect.mjs';
 import {indexationReport} from './indexation.mjs';
+import {autotune,diagnose,TUNING} from './health.mjs';
 import {PitchWriter} from './pitch.mjs';
 import {processReplies,runOutreach,preverify,checkLinks,gmailTransport,dailyCap,outreachStatus} from './outreach.mjs';
 import {assetStats,learningSummary} from './learn.mjs';
@@ -40,8 +41,18 @@ export function withDashboardSettings(env){
   const picked=Object.fromEntries(DASHBOARD_SETTINGS.filter(k=>typeof s?.[k]==='string'&&s[k].trim()).map(k=>[k,s[k].trim()]));
   return {...env,...picked};
 }
+/**
+ * Saving a Verifalia login is the opt-in: in free-credits-only mode verification cannot cost money,
+ * so it starts at 12 checks/day unless the dashboard explicitly set a limit (0 = off).
+ */
+export function verifierDefaults(env){
+  let s={};try{s=JSON.parse(env.LINKFORGE_SETTINGS||'{}')}catch{}
+  const explicit=['YES','NO'].includes(s.EMAIL_VERIFICATION_ENABLED)||env.EMAIL_VERIFICATION_ENABLED==='YES';
+  if(explicit||!(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD)||env.VERIFALIA_ALLOW_PAID==='YES')return env;
+  return {...env,EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:Number(env.EMAIL_VERIFY_DAILY_LIMIT)>0?env.EMAIL_VERIFY_DAILY_LIMIT:'12'};
+}
 export function loadConfig(env=process.env,argv=process.argv){
-  env=withDashboardSettings(env);
+  env=verifierDefaults(withDashboardSettings(env));
   const gmail=!!(env.GMAIL_ADDRESS&&env.GMAIL_APP_PASSWORD);
   const dryRun=argv.includes('--dry-run')||env.AUTOPILOT_DRY_RUN==='1';
   const mode=['off','draft','send'].includes(env.OUTREACH_MODE)?env.OUTREACH_MODE:gmail?'draft':'off';
@@ -54,7 +65,7 @@ export function loadConfig(env=process.env,argv=process.argv){
     outreach:{mode,gmail,fromAddress:env.GMAIL_ADDRESS||(dryRun?'dry-run@linkforge.invalid':''),senderName:env.SENDER_NAME||'',postalAddress:env.SENDER_POSTAL_ADDRESS||'',
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5'},
-    gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,preverifyMax:num(env.AUTOPILOT_PREVERIFY,5),
+    gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,preverifyMax:num(env.AUTOPILOT_PREVERIFY,5),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
     verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
       enabled:env.EMAIL_VERIFICATION_ENABLED==='YES',dailyLimit:Math.min(100,Math.max(0,Math.floor(num(env.EMAIL_VERIFY_DAILY_LIMIT,0))))},
   };
@@ -109,15 +120,19 @@ export function funnel(state){
 
 export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=fetch,mailer:injectedMailer,write=true,useCache=true}={}){
   const cfg=loadConfig(env,argv),started=Date.now(),deadline=started+cfg.minutes*60e3;
-  env=withDashboardSettings(env); // the recipient verifier reads its opt-in and budget from here
+  env=verifierDefaults(withDashboardSettings(env)); // the recipient verifier reads its opt-in and budget from here
   // Logs are published in the public summary: never let an address through.
   const logs=[],log=m=>{const line=String(m).replace(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi,'[email]');logs.push(`${new Date().toISOString().slice(11,19)} ${line}`);console.log(line)};
   const stages={};
-  const stage=async(name,enabled,fn,why='')=>{
+  // `until`: a hard end time for stages that only read or enrich state. The cycle always reaches
+  // the output step, so one slow publisher or provider can never cost the whole run's results.
+  const stage=async(name,enabled,fn,why='',{until}={})=>{
     if(!enabled){stages[name]={ok:null,skipped:why};log(`- ${name}: skipped (${why})`);return null}
-    const t=Date.now();
-    try{const r=await fn();stages[name]={ok:true,ms:Date.now()-t,...(r&&typeof r==='object'&&!Array.isArray(r)?{result:r}:{})};return r}
-    catch(e){stages[name]={ok:false,ms:Date.now()-t,error:String(e?.message||e).slice(0,200)};log(`! ${name} failed: ${e?.message}`);return null}
+    const t=Date.now();let timer;
+    try{const work=fn();
+      const r=until?await Promise.race([work,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error(`stopped at its time budget (${Math.round((Date.now()-t)/1000)} s); continues next cycle`)),Math.max(1000,until-Date.now()));timer.unref?.()})]):await work;
+      clearTimeout(timer);stages[name]={ok:true,ms:Date.now()-t,...(r&&typeof r==='object'&&!Array.isArray(r)?{result:r}:{})};return r}
+    catch(e){clearTimeout(timer);stages[name]={ok:false,ms:Date.now()-t,error:String(e?.message||e).slice(0,200)};log(`! ${name} failed: ${e?.message}`);return null}
   };
   const previous=await readJson(P.summary,{});
   // ---- Private state ----
@@ -164,11 +179,12 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   const indexation=crawl.length?indexationReport(crawl):previous.indexation||null;
   if(indexation)log(`indexation: ${indexation.total_issues} sitemap URLs with an indexing problem (${indexation.sites.reduce((n,x)=>n+x.critical,0)} critical)`);
   // ---- 4. Prospects ----
-  await stage('requalify',vaultOk,()=>requalify({state,dfs,fetchImpl,deadline:deadline-8*60e3,log}),privateWhy);
+  await stage('requalify',vaultOk,()=>requalify({state,dfs,fetchImpl,deadline:deadline-8*60e3,log}),privateWhy,{until:deadline-7*60e3});
   // Runs even with no fresh asset searches: brand-mention searches have their own schedule.
-  await stage('prospects',vaultOk&&dfs.enabled,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,deadline:deadline-6*60e3,log}),
-    !vaultOk?privateWhy:(dfs.authError||'DataForSEO credentials not set'));
-  await stage('broken_links',vaultOk,()=>enrichBrokenLinks({state,assets:ranked,sites:SITES,fetchImpl,deadline:deadline-5*60e3,log}),privateWhy);
+  await stage('prospects',vaultOk&&dfs.enabled,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,maxQueries:cfg.maxQueries??(state.tuning?.max_queries||TUNING.start),deadline:deadline-7*60e3,log}),
+    !vaultOk?privateWhy:(dfs.authError||'DataForSEO credentials not set'),{until:deadline-5.5*60e3});
+  if(vaultOk&&stages.prospects&&stages.prospects.ok!==null)log(`self-tuning: next cycle runs up to ${autotune(state,stages.prospects,{envQueries:cfg.maxQueries})} searches`);
+  await stage('broken_links',vaultOk,()=>enrichBrokenLinks({state,assets:ranked,sites:SITES,fetchImpl,deadline:deadline-5*60e3,log}),privateWhy,{until:deadline-4*60e3});
   // ---- 5. Mail ----
   // The production transport demands verified-mailbox proof for every recipient: without a verifier nothing could go out.
   const noVerifier=typeof mailer?.authorizeRecipient==='function'&&!verifierReady(cfg);
@@ -181,10 +197,10 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,template_fallbacks:writer.fallbacks};
     // Outreach paused (safety hold / mode off): spend today's free verification credits on the best queued inboxes instead.
     await stage('preverify',vaultOk&&gmailOk&&!noVerifier&&stages.outreach?.ok!==true&&typeof mailer?.authorizeRecipient==='function',
-      ()=>preverify({state,mailer,max:cfg.preverifyMax,deadline:deadline-90e3,log}),!vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':'runs only while outreach is paused');
+      ()=>preverify({state,mailer,max:cfg.preverifyMax,deadline:deadline-90e3,log}),!vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':'runs only while outreach is paused',{until:deadline-30e3});
   }finally{await mailer?.close?.().catch(()=>{})}
   // ---- 6. Link verification ----
-  await stage('link_checks',vaultOk,()=>checkLinks({state,ourDomains:SITES.map(s=>s.domain),fetchImpl,deadline,log}),privateWhy);
+  await stage('link_checks',vaultOk,()=>checkLinks({state,ourDomains:SITES.map(s=>s.domain),fetchImpl,deadline,log}),privateWhy,{until:deadline+90e3});
   // ---- Outputs ----
   if(vaultOk)prune(state);
   const f=vaultOk?funnel(state):previous.funnel||null;
@@ -209,11 +225,13 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     sites:crawl.map(s=>({domain:s.site,pages:s.pages.length,discovered:s.discovered,sitemaps:s.sitemaps.length,
       eligible:ranked.filter(a=>a.site===s.site).length,top:ranked.find(a=>a.site===s.site)?.url||null})),
     best_urls:ranked.slice(0,80).map(({terms,...a})=>({...a,prospects:prospectsByAsset.get(a.url)||0,internal_link_suggestions:internalByAsset.get(a.url)||0,promoting:chosen.some(c=>c.url===a.url)})),
-    internal_links:internal.slice(0,200),indexation,
+    internal_links:internal.slice(0,200),indexation,tuning:vaultOk?state.tuning||null:previous.tuning||null,
     wins:Object.values(state.prospects).filter(p=>p.status==='won'||p.status==='already_linked').map(p=>({site:p.site,publisher:p.domain,page_url:p.page_url,title:p.title,
       kind:p.status==='won'?'won':'existing',target:p.won?.target||p.existing_link?.url||null,anchor:p.won?.anchor||p.existing_link?.anchor||'',rel:p.won?.rel||p.existing_link?.rel||'',found_at:p.won?.found_at||p.found_at})).sort((a,b)=>String(b.found_at).localeCompare(String(a.found_at))).slice(0,200),
     log:logs.slice(-80),
   };
+  // Self-diagnosis: what Autopilot cannot fix by itself, with the exact fix.
+  summary.attention=diagnose({stages,capabilities:summary.capabilities,outreach:summary.outreach||{},funnel:summary.funnel||{},spend:summary.spend,held:cfg.outreach.mode==='off'});
   if(write&&!cfg.dryRun){
     await mkdir(dirname(P.summary),{recursive:true});
     await writeFile(P.summary,JSON.stringify(summary,null,1)+'\n');

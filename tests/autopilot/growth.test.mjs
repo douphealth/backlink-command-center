@@ -133,3 +133,29 @@ test('queued prospects are back-filled with dead-link evidence once per 30 days'
   assert.deepEqual(r,{checked:1,found:1});assert.equal(state.prospects.a.broken_link.host,'deadshoes.com');assert.equal(state.prospects.b.broken_link,undefined);
   assert.deepEqual(await enrichBrokenLinks({state,assets:[asset],sites:[site],fetchImpl:f,resolveHost:resolves}),{checked:0,found:0});
 });
+
+test('a saved Verifalia login turns free verification on at 12/day unless the owner set a limit',async()=>{
+  const {verifierDefaults}=await import('../../scripts/autopilot/run.mjs');
+  const v={VERIFALIA_USERNAME:'u',VERIFALIA_PASSWORD:'p',EMAIL_VERIFICATION_ENABLED:'NO',EMAIL_VERIFY_DAILY_LIMIT:'0'};
+  assert.equal(loadConfig(v,[]).verifier.enabled,true);assert.equal(loadConfig(v,[]).verifier.dailyLimit,12);
+  const off={...v,LINKFORGE_SETTINGS:JSON.stringify({EMAIL_VERIFICATION_ENABLED:'NO',EMAIL_VERIFY_DAILY_LIMIT:'0'})};
+  assert.equal(loadConfig(off,[]).verifier.enabled,false);
+  assert.equal(loadConfig({...v,VERIFALIA_ALLOW_PAID:'YES'},[]).verifier.enabled,false); // paid use needs an explicit opt-in
+  assert.equal(loadConfig({HUNTER_API_KEY:'k',EMAIL_VERIFICATION_ENABLED:'NO'},[]).verifier.enabled,false); // paid providers never default on
+  assert.equal(verifierDefaults({...v,EMAIL_VERIFY_DAILY_LIMIT:'5'}).EMAIL_VERIFY_DAILY_LIMIT,'5');
+});
+test('search results are never discarded: unqualified candidates are queued and processed first next run',async()=>{
+  const {discoverProspects}=await import('../../scripts/autopilot/prospect.mjs');
+  const s={domain:'gearuptofit.com',topic:'running shoes'};
+  const serps=[];const dfs={canSpend:()=>true,affordable:()=>10,serp:async q=>{serps.push(q);return [{url:`https://pub${serps.length}.example/resources`,domain:`pub${serps.length}.example`,title:'Running resources',rank:1}]},domainTraffic:async ds=>Object.fromEntries(ds.map(d=>[d,5000]))};
+  const state={queries:{},prospects:{},domains:{}};
+  const assets=[{site:s.domain,url:'https://gearuptofit.com/a',title:'Shoe Finder',type:'interactive_tool',linkability:80,promotion:90}];
+  const r1=await discoverProspects({assets,sites:[s],state,dfs,perAsset:6,maxQueries:6,deadline:Date.now()-1,fetchImpl:async()=>{throw Error('no fetch expected')}});
+  assert.equal(r1.queries,0); // deadline already passed: no paid search is even started
+  const r2=await discoverProspects({assets,sites:[s],state,dfs,perAsset:6,maxQueries:3,maxNewPerRun:1,fetchImpl:async()=>new Response('<p>x</p>',{status:404,headers:{'content-type':'text/html'}})});
+  assert.equal(r2.queries,3);assert.equal(serps.length,3);assert.equal(r2.deferred,1);assert.equal(state.candidate_queue.length,1); // 3 found, 2 processed (maxNewPerRun*2), 1 queued
+  const queued=state.candidate_queue[0].domain;
+  const r3=await discoverProspects({assets:[],sites:[s],state,dfs,maxQueries:0,fetchImpl:async()=>new Response('<p>x</p>',{status:404,headers:{'content-type':'text/html'}})});
+  assert.equal(r3.from_queue,1);assert.equal(r3.queries,0);assert.equal(state.candidate_queue.length,0);
+  assert.ok(Object.values(state.prospects).some(p=>p.domain===queued));
+});
