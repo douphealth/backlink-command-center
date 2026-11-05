@@ -28,7 +28,8 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
     add('action',`${k}_rejected`,`${label} rejected the saved login, so that part of the pipeline is stopped.`,`Re-enter the ${label} credentials under ⚙ Connect.`);
   if(!v.ready)add('action','verifier_off',v.key?'Inbox verification is switched off (daily limit is 0), so no email can ever be sent.':'No inbox verifier is connected, so no email can ever be sent.',
     v.key?'Set "Mailbox checks per day" to 12 under ⚙ Connect (or leave it blank).':'Add a free Verifalia login under ⚙ Connect.');
-  const denied=v.balance?.error||(Object.keys(outreach.holds||{}).find(k=>/verifalia_(login_rejected|permission_denied)/.test(k))||'').replace(/^mailbox_verifalia_/,'');
+  // The verifier's most recent answer is the truth: old hold reasons never override a later successful login.
+  const denied=v.balance?v.balance.error||'':(Object.keys(outreach.holds||{}).find(k=>/verifalia_(login_rejected|permission_denied)/.test(k))||'').replace(/^mailbox_verifalia_/,'');
   if(denied==='permission_denied')add('action','verifier_permission',
     `Verifalia accepted the login but the user is not allowed to ${v.balance?.endpoint==='submit_validation'?'submit email verifications':'view the credits balance'} (HTTP 403), so no inbox can be verified.`,
     'In app.verifalia.com → Users, edit the user saved under ⚙ Connect and allow both "view credits balance" and "submit/retrieve email validations" (or save your main account login instead). A browser app key will not work: it cannot read the balance.');

@@ -43,7 +43,10 @@ export function outreachStatus(state,{limit,mode,qualifyVersion}){
  const next=ready.map(p=>nextSendWindow(p.domain,from)).filter(Boolean).sort((a,b)=>a-b)[0]||null;
  const verified=ready.filter(p=>usableVerification(p.recipient_proof?.verification,p.email)&&!suppressed(state,p.email,p.domain));
  // Why queued inboxes are held, by reason only (no addresses): drives the dashboard and self-diagnosis.
- const holds={};for(const p of ready)if(p.contact_quality?.status==='held'){const k=p.contact_quality.detail||p.contact_quality.reason||'unknown';holds[k]=(holds[k]||0)+1}
+ // Our-side holds older than the verifier's latest successful answer are stale (e.g. a login that has since been fixed).
+ const fixedAt=state.verifier_balance&&!state.verifier_balance.error?Date.parse(state.verifier_balance.checked_at):0;
+ const holds={};for(const p of ready)if(p.contact_quality?.status==='held'){const k=p.contact_quality.detail||p.contact_quality.reason||'unknown';
+  if(!publisherHold(k)&&Date.parse(p.contact_quality.checked_at)<fixedAt)continue;holds[k]=(holds[k]||0)+1}
  return {mode,ready:ready.length,verified_ready:verified.length,pending_verification:ready.length-verified.length,holds,
   sent_today:sent,cap_today:cap,next_send_at:mode==='off'?null:next?.toISOString()||null,
   sending_now:mode==='send'&&sent<cap&&verified.some(p=>sendWindowOpen(p.domain,now)),reply_health:state.reply_health?.status||'unverified'};
@@ -113,6 +116,13 @@ export function applyProof(state,p,proof,{followup=false}={}){
  p.recipient_proof={...proof,publisher_domain:p.domain};p.contact_quality={status:'verified',checked_at:NOW()};return true;
 }
 /**
+ * Holds caused by the publisher (no address, wrong inbox type, DNS, catch-all, invalid/unknown mailbox) wait 3 days.
+ * Holds caused on our side (login, permissions, credits, provider outage, time budget) or with no recorded reason
+ * are re-checked on the next run: fixing a login must not leave inboxes stuck for days.
+ */
+export const OUR_SIDE_HOLD=/^(?:mailbox_(?:verifalia_|verification_|verifier_|recently_inconclusive$)|time_budget$|verification_error$|recipient_not_verified$)/;
+export const publisherHold=detail=>!!detail&&!OUR_SIDE_HOLD.test(detail);
+/**
  * While outreach is paused, verify the best queued inboxes (no email is sent). Uses the free
  * daily credits that would otherwise expire, shows real verified counts before sending is
  * released, and builds the permanent invalid / catch-all memory that saves credits later.
@@ -123,7 +133,7 @@ export async function preverify({state,mailer,max=5,deadline=Infinity,log=()=>{}
  const learned=assetStats(state);
  const queue=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION&&!suppressed(state,p.email,p.domain)&&
    !(state.contacted?.[p.domain]&&ageDays(state.contacted[p.domain])<90)&&!usableVerification(p.recipient_proof?.verification,p.email)&&
-   !(p.contact_quality?.status==='held'&&p.contact_quality.detail&&ageDays(p.contact_quality.checked_at)<3)) // holds without a recorded reason (older code) are re-checked now
+   !(p.contact_quality?.status==='held'&&publisherHold(p.contact_quality.detail)&&ageDays(p.contact_quality.checked_at)<3)) // only publisher-side holds wait 3 days
   .map(p=>[p,linkLikelihood(p,{assets:learned})]).sort((a,b)=>b[1]-a[1]).slice(0,Math.max(0,max)).map(x=>x[0]);
  for(const p of queue){
   // A single slow mail server can take ~2 minutes to verify: never start one without that much time left.
