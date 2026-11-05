@@ -167,7 +167,7 @@ export class RecipientVerifier{
     if(!paid){
       if(this.verifaliaFree==null){
         const b=await this.vcall('GET','/credits/balance');
-        if(b?.status===401||b?.status===403){this.verifaliaOff='verifalia_login_rejected';return {reason:this.verifaliaOff}}
+        if(b?.status===401||b?.status===403){this.verifaliaOff='verifalia_login_rejected';this.state.verifier_balance={provider:'verifalia',error:'login_rejected',checked_at:new Date(this.now()).toISOString()};return {reason:this.verifaliaOff}}
         const bal=b?.status===200?await b.json().catch(()=>null):null;
         if(!bal){return {reason:'verifalia_unavailable'}}
         this.verifaliaFree=Number(bal.freeCredits)||0;
@@ -179,7 +179,7 @@ export class RecipientVerifier{
     if(!paid){this.verifaliaFree-=cost;if(this.state.verifier_balance)this.state.verifier_balance.free_credits=this.verifaliaFree}
     const res=await this.vcall('POST','/email-validations?waitTime=30000',{entries:[{inputData:email}],quality});
     if(!res)return {reason:'verification_unavailable'};
-    if(res.status===401||res.status===403){this.verifaliaOff='verifalia_login_rejected';return {reason:this.verifaliaOff}}
+    if(res.status===401||res.status===403){this.verifaliaOff='verifalia_login_rejected';this.state.verifier_balance={provider:'verifalia',error:'login_rejected',checked_at:new Date(this.now()).toISOString()};return {reason:this.verifaliaOff}}
     if(res.status===402){this.verifaliaFree=0;this.verifaliaOff='verifalia_no_credits';return {reason:this.verifaliaOff}}
     if(res.status!==200&&res.status!==202)return {reason:'verification_unavailable'};
     let job=await res.json().catch(()=>null);const id=job?.overview?.id;

@@ -28,7 +28,8 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
     add('action',`${k}_rejected`,`${label} rejected the saved login, so that part of the pipeline is stopped.`,`Re-enter the ${label} credentials under ⚙ Connect.`);
   if(!v.ready)add('action','verifier_off',v.key?'Inbox verification is switched off (daily limit is 0), so no email can ever be sent.':'No inbox verifier is connected, so no email can ever be sent.',
     v.key?'Set "Mailbox checks per day" to 12 under ⚙ Connect (or leave it blank).':'Add a free Verifalia login under ⚙ Connect.');
-  if(stages.preverify?.ok===false&&/login/.test(stages.preverify.error||''))add('action','verifier_rejected','Verifalia rejected the login.','Re-enter the Verifalia username and password under ⚙ Connect.');
+  if(v.balance?.error==='login_rejected'||Object.keys(outreach.holds||{}).some(k=>/login_rejected/.test(k))||stages.preverify?.ok===false&&/login/.test(stages.preverify.error||''))
+    add('action','verifier_rejected','Verifalia rejected the saved login, so no inbox can be verified or emailed.','Under ⚙ Connect, re-enter the Verifalia USERNAME (not your sign-up email, unless they are the same) and password of an active user; confirm the account email first if Verifalia asked you to.');
   if(held&&outreach.mode==='off'&&(outreach.verified_ready||0)>0)
     add('action','hold_with_verified',`${outreach.verified_ready} verified inboxes are ready, but the workflow's outbound safety hold keeps sending off.`,'When you are ready to send, ask to lift the hold (one line in .github/workflows/autopilot.yml).');
   const holds=outreach.holds||{},heldCount=Object.values(holds).reduce((a,b)=>a+b,0);

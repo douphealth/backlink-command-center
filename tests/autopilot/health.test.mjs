@@ -27,3 +27,8 @@ test('hold reasons are reported with counts (owner already decided the contact r
   const auto=diagnose({capabilities:{verifier:{ready:true}},outreach:{mode:'off',holds:{catch_all_domain:3}},funnel:{ready:150}});
   assert.equal(auto.find(x=>x.code==='holds').level,'info');
 });
+test('a rejected Verifalia login is a top owner action',()=>{
+  for(const input of [{capabilities:{verifier:{ready:true,balance:{error:'login_rejected'}}},outreach:{}},{capabilities:{verifier:{ready:true}},outreach:{holds:{mailbox_verifalia_login_rejected:1}}}]){
+    const d=diagnose({...input,funnel:{ready:100}});assert.equal(d[0].code,'verifier_rejected');assert.equal(d[0].level,'action');
+  }
+});

@@ -119,3 +119,8 @@ test('held inboxes carry a precise, address-free reason that is aggregated publi
   const st=outreachStatus({prospects:{a:mk('a','only_non_editorial_inbox_published'),b:mk('b','only_non_editorial_inbox_published'),c:mk('c','no_email_published')}},{limit:12,mode:'off',qualifyVersion:2});
   assert.deepEqual(st.holds,{only_non_editorial_inbox_published:2,no_email_published:1});assert.doesNotMatch(JSON.stringify(st),/@/);
 });
+test('a rejected login is recorded for the dashboard and stops further Verifalia calls this run',async()=>{
+  const f=fixture();f.v.fetch=async()=>({status:401,json:async()=>({})});
+  assert.equal((await f.v.mailbox(email)).reason,'verifalia_login_rejected');assert.equal(f.state.verifier_balance.error,'login_rejected');
+  let calls=0;f.v.fetch=async()=>{calls++;return {status:401,json:async()=>({})}};await f.v.mailbox('x@journal.example');assert.equal(calls,0);
+});
