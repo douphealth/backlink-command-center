@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-05T08:17:11.382Z",
- "duration_s": 46,
+ "generated_at": "2026-11-05T08:20:40.819Z",
+ "duration_s": 44,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -33,7 +33,9 @@
    "balance": {
     "provider": "verifalia",
     "error": "login_rejected",
-    "checked_at": "2026-11-05T08:17:01.218Z"
+    "http_status": 401,
+    "endpoint": "credits_balance",
+    "checked_at": "2026-11-05T08:20:35.823Z"
    },
    "catch_all_domains_skipped": 0
   }
@@ -106,7 +108,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 17299,
+   "ms": 15009,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -139,7 +141,7 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 12,
+   "ms": 14,
    "result": {
     "queries": 0,
     "mention_queries": 0,
@@ -158,15 +160,15 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 12982,
+   "ms": 18329,
    "result": {
     "checked": 25,
-    "found": 2
+    "found": 1
    }
   },
   "replies": {
    "ok": true,
-   "ms": 868,
+   "ms": 591,
    "result": {
     "scanned": 0,
     "replies": 0,
@@ -182,7 +184,7 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 12354,
+   "ms": 8438,
    "result": {
     "checked": 5,
     "verified": 0,
@@ -220,9 +222,10 @@
   "verified_ready": 0,
   "pending_verification": 160,
   "holds": {
-   "mailbox_verifalia_login_rejected": 6,
+   "mailbox_verifalia_login_rejected": 8,
    "no_email_published": 3,
-   "only_non_editorial_inbox_published": 6
+   "only_non_editorial_inbox_published": 8,
+   "publisher_mismatch": 1
   },
   "sent_today": 0,
   "cap_today": 12,
@@ -234,7 +237,7 @@
   "prospects_evaluated": 2518,
   "qualified": 539,
   "ready": 160,
-  "broken_link_ready": 8,
+  "broken_link_ready": 9,
   "contact_form_only": 105,
   "no_contact": 223,
   "contacted": 49,
@@ -459,7 +462,7 @@
    "prospects_evaluated": 2518,
    "qualified": 539,
    "ready": 160,
-   "broken_link_ready": 8,
+   "broken_link_ready": 9,
    "contact_form_only": 105,
    "no_contact": 223,
    "contacted": 49,
@@ -5796,7 +5799,7 @@
  },
  "tuning": {
   "max_queries": 28,
-  "updated_at": "2026-11-05T08:16:45.096Z"
+  "updated_at": "2026-11-05T08:20:13.409Z"
  },
  "wins": [
   {
@@ -5845,38 +5848,38 @@
   }
  ],
  "log": [
-  "08:16:27 connection dataforseo: connected",
-  "08:16:27 connection gmail: connected",
-  "08:16:29 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
-  "08:16:31 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "08:16:34 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "08:16:35 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "08:16:37 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "08:16:38 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "08:16:39 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "08:16:43 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "08:16:43 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "08:16:44 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "08:16:45 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
-  "08:16:45 prospects: 0 from the saved queue, 0 saved for next run; 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "08:16:45 self-tuning: next cycle runs up to 28 searches",
-  "08:16:58 broken links: 25 queued pages scanned, 2 with a dead link our page can replace",
-  "08:16:58 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "08:16:58 - outreach: skipped (OUTREACH_MODE=off)",
-  "08:17:11 pre-verify (nothing sent): 5 top inboxes checked, 0 verified, 5 held",
-  "08:17:11 link checks: 0 pages, 0 new links won, 0 lost"
+  "08:19:58 connection dataforseo: connected",
+  "08:19:58 connection gmail: connected",
+  "08:20:00 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "08:20:00 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
+  "08:20:02 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "08:20:04 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "08:20:06 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "08:20:06 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "08:20:08 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "08:20:09 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "08:20:12 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "08:20:13 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "08:20:13 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
+  "08:20:13 prospects: 0 from the saved queue, 0 saved for next run; 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "08:20:13 self-tuning: next cycle runs up to 28 searches",
+  "08:20:31 broken links: 25 queued pages scanned, 1 with a dead link our page can replace",
+  "08:20:32 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "08:20:32 - outreach: skipped (OUTREACH_MODE=off)",
+  "08:20:40 pre-verify (nothing sent): 5 top inboxes checked, 0 verified, 5 held",
+  "08:20:40 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
    "level": "action",
    "code": "verifier_rejected",
-   "message": "Verifalia rejected the saved login, so no inbox can be verified or emailed.",
-   "fix": "Under ⚙ Connect, re-enter the Verifalia USERNAME (not your sign-up email, unless they are the same) and password of an active user; confirm the account email first if Verifalia asked you to."
+   "message": "Verifalia rejected the saved login (HTTP 401), so no inbox can be verified or emailed.",
+   "fix": "Check, in this order: (1) the account email is confirmed; (2) you saved the Verifalia USERNAME shown in app.verifalia.com → Users (may differ from your sign-up email) and its password, with no extra spaces; (3) two-factor authentication is OFF for that user (create a dedicated API user without 2FA). Then re-save under ⚙ Connect and press Save & run now."
   },
   {
    "level": "info",
    "code": "holds",
-   "message": "15 queued inboxes are held; most often (6) because mailbox verifalia login rejected.",
+   "message": "20 queued inboxes are held; most often (8) because mailbox verifalia login rejected.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   },
   {
