@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-05T07:42:44.893Z",
- "duration_s": 296,
+ "generated_at": "2026-11-05T07:55:25.432Z",
+ "duration_s": 255,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 17.136606
+    "balance_usd": 17.025326
    },
    "gmail": {
     "status": "connected"
@@ -102,7 +102,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 4994,
+   "ms": 25766,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -110,7 +110,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -135,35 +135,35 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 255727,
+   "ms": 167492,
    "result": {
     "queries": 24,
     "mention_queries": 0,
-    "serp_results": 422,
-    "candidates": 38,
-    "qualified": 7,
+    "serp_results": 438,
+    "candidates": 47,
+    "qualified": 9,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 37,
-    "with_email": 1,
-    "contact_form": 5,
+    "rejected": 38,
+    "with_email": 3,
+    "contact_form": 2,
     "broken_links": 0,
     "from_queue": 0,
-    "failed_queries": 12,
+    "failed_queries": 2,
     "deferred": 0
    }
   },
   "broken_links": {
    "ok": true,
-   "ms": 11336,
+   "ms": 16787,
    "result": {
     "checked": 25,
-    "found": 2
+    "found": 1
    }
   },
   "replies": {
    "ok": true,
-   "ms": 1010,
+   "ms": 821,
    "result": {
     "scanned": 0,
     "replies": 0,
@@ -179,7 +179,7 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 21285,
+   "ms": 42612,
    "result": {
     "checked": 5,
     "verified": 0,
@@ -205,17 +205,21 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.3808,
-  "month_usd": 0.4784,
+  "today_usd": 0.4768,
+  "month_usd": 0.5744,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 51
+  "calls_this_run": 33
  },
  "outreach": {
   "mode": "off",
-  "ready": 152,
+  "ready": 155,
   "verified_ready": 0,
-  "pending_verification": 152,
+  "pending_verification": 155,
+  "holds": {
+   "no_email_published": 1,
+   "only_non_editorial_inbox_published": 4
+  },
   "sent_today": 0,
   "cap_today": 12,
   "next_send_at": null,
@@ -223,12 +227,12 @@
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 2451,
-  "qualified": 519,
-  "ready": 152,
+  "prospects_evaluated": 2498,
+  "qualified": 528,
+  "ready": 155,
   "broken_link_ready": 3,
-  "contact_form_only": 101,
-  "no_contact": 215,
+  "contact_form_only": 103,
+  "no_contact": 219,
   "contacted": 49,
   "replied": 1,
   "positive": 0,
@@ -448,12 +452,12 @@
   },
   {
    "date": "2026-11-05",
-   "prospects_evaluated": 2451,
-   "qualified": 519,
-   "ready": 152,
+   "prospects_evaluated": 2498,
+   "qualified": 528,
+   "ready": 155,
    "broken_link_ready": 3,
-   "contact_form_only": 101,
-   "no_contact": 215,
+   "contact_form_only": 103,
+   "no_contact": 219,
    "contacted": 49,
    "replied": 1,
    "positive": 0,
@@ -461,7 +465,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.3808
+   "spend_usd": 0.4768
   }
  ],
  "learning": {
@@ -480,9 +484,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 92,
-    "ready": 57,
-    "rate": 0.611
+    "queries": 93,
+    "ready": 58,
+    "rate": 0.615
    },
    {
     "footprint": "useful_websites",
@@ -534,36 +538,36 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 66,
+    "queries": 68,
     "ready": 22,
-    "rate": 0.333
+    "rate": 0.324
    },
    {
-    "footprint": "helpful_resources",
-    "queries": 3,
+    "footprint": "recommended_tools",
+    "queries": 1,
     "ready": 0,
-    "rate": 0.167
-   },
-   {
-    "footprint": "link_roundup",
-    "queries": 3,
-    "ready": 0,
-    "rate": 0.167
-   },
-   {
-    "footprint": "best_of_web",
-    "queries": 3,
-    "ready": 0,
-    "rate": 0.167
-   },
-   {
-    "footprint": "resources",
-    "queries": 100,
-    "ready": 14,
-    "rate": 0.146
+    "rate": 0.25
    },
    {
     "footprint": "further_reading",
+    "queries": 10,
+    "ready": 2,
+    "rate": 0.231
+   },
+   {
+    "footprint": "resources",
+    "queries": 102,
+    "ready": 14,
+    "rate": 0.143
+   },
+   {
+    "footprint": "link_roundup",
+    "queries": 4,
+    "ready": 0,
+    "rate": 0.143
+   },
+   {
+    "footprint": "best_of_web",
     "queries": 4,
     "ready": 0,
     "rate": 0.143
@@ -573,6 +577,12 @@
     "queries": 5,
     "ready": 0,
     "rate": 0.125
+   },
+   {
+    "footprint": "helpful_resources",
+    "queries": 10,
+    "ready": 0,
+    "rate": 0.077
    },
    {
     "footprint": "mention",
@@ -1377,7 +1387,7 @@
     "2 data tables",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 3,
    "internal_link_suggestions": 4,
    "promoting": true
   },
@@ -1428,7 +1438,7 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -1500,7 +1510,7 @@
     "Cites 6 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 2,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -1679,7 +1689,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 4,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "plantastichaven.com",
@@ -1811,7 +1821,7 @@
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
    ],
-   "prospects": 0,
+   "prospects": 1,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -2065,7 +2075,7 @@
     "Cites 8 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 2,
    "internal_link_suggestions": 1,
    "promoting": true
   },
@@ -2116,7 +2126,7 @@
    ],
    "prospects": 1,
    "internal_link_suggestions": 1,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -2340,9 +2350,9 @@
     "Cites 4 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 0,
+   "prospects": 1,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "efficientgptprompts.com",
@@ -2609,11 +2619,11 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 11,
-   "words": 6860,
+   "words": 6887,
    "interactive": false,
-   "modified": "2026-11-04T07:25:02+00:00",
+   "modified": "2026-11-05T07:18:53+00:00",
    "reasons": [
-    "In-depth (6,860 words)",
+    "In-depth (6,887 words)",
     "2 data tables",
     "Cites 4 authoritative sources",
     "Recently updated"
@@ -2768,7 +2778,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2819,7 +2829,7 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 4,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -4886,6 +4896,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 8,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/homemade-meals-for-french-bulldogs/",
    "from_title": "Homemade Meals for French Bulldogs: Safe Planning",
    "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
@@ -4908,16 +4928,6 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
    "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/right-food-french-bulldog-guide/",
-   "from_title": "Choosing the Right Food for Your French Bulldog",
    "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
    "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
    "anchor": "food french",
@@ -5781,8 +5791,8 @@
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first)."
  },
  "tuning": {
-  "max_queries": 24,
-  "updated_at": "2026-11-05T07:42:11.184Z"
+  "max_queries": 28,
+  "updated_at": "2026-11-05T07:54:25.202Z"
  },
  "wins": [
   {
@@ -5831,45 +5841,41 @@
   }
  ],
  "log": [
-  "07:37:50 connection dataforseo: connected",
-  "07:37:50 connection gmail: connected",
-  "07:37:50 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "07:37:50 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
-  "07:37:51 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "07:37:52 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "07:37:52 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "07:37:53 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "07:37:53 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "07:37:53 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "07:37:54 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "07:37:55 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "07:37:55 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
-  "07:38:41 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:39:11 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:39:12 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:39:16 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:39:57 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:39:58 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:40:02 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:40:36 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:40:36 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:40:47 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:41:41 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:41:47 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:42:11 prospects: 0 from the saved queue, 0 saved for next run; 24 queries (0 brand-mention), 38 candidates, 7 qualified (0 unlinked mentions), 1 with email, 0 with a dead link we can replace, 0 already linking",
-  "07:42:11 self-tuning: next cycle runs up to 24 searches",
-  "07:42:22 broken links: 25 queued pages scanned, 2 with a dead link our page can replace",
-  "07:42:23 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "07:42:23 - outreach: skipped (OUTREACH_MODE=off)",
-  "07:42:44 pre-verify (nothing sent): 5 top inboxes checked, 0 verified, 5 held",
-  "07:42:44 link checks: 0 pages, 0 new links won, 0 lost"
+  "07:51:11 connection dataforseo: connected",
+  "07:51:11 connection gmail: connected",
+  "07:51:12 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "07:51:14 crawl plantastichaven.com: 163/163 urls, fetched 4, 304 0, reused 159",
+  "07:51:15 crawl gearuptogrow.com: 107/107 urls, fetched 1, 304 0, reused 106",
+  "07:51:17 crawl frenchyfab.com: 238/238 urls, fetched 4, 304 0, reused 234",
+  "07:51:17 crawl mysticaldigits.com: 300/468 urls, fetched 6, 304 0, reused 294",
+  "07:51:17 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "07:51:17 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "07:51:18 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "07:51:23 crawl efficientgptprompts.com: 300/487 urls, fetched 1, 304 0, reused 299",
+  "07:51:37 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 3, 304 0, reused 255",
+  "07:51:37 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
+  "07:52:37 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:52:38 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:54:25 prospects: 0 from the saved queue, 0 saved for next run; 24 queries (0 brand-mention), 47 candidates, 9 qualified (0 unlinked mentions), 3 with email, 0 with a dead link we can replace, 0 already linking",
+  "07:54:25 self-tuning: next cycle runs up to 28 searches",
+  "07:54:41 broken links: 25 queued pages scanned, 1 with a dead link our page can replace",
+  "07:54:42 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "07:54:42 - outreach: skipped (OUTREACH_MODE=off)",
+  "07:55:25 pre-verify (nothing sent): 5 top inboxes checked, 0 verified, 5 held",
+  "07:55:25 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
-   "level": "warn",
-   "code": "dataforseo_errors",
-   "message": "12 DataForSEO searches failed (provider errors); they are retried next cycle.",
-   "fix": "No action unless it persists for a day."
+   "level": "action",
+   "code": "holds",
+   "message": "5 queued inboxes are held; most often (4) because the publisher shows only a generic inbox (e.g. hello@/info@) without editorial wording, which the contact rule rejects.",
+   "fix": "Decide whether a generic inbox on the publisher's own contact page may be emailed after a positive mailbox check (a deliberate safety rule today)."
+  },
+  {
+   "level": "info",
+   "code": "spend_cap",
+   "message": "Today's DataForSEO spend cap is reached; prospecting resumes tomorrow.",
+   "fix": "Raise DATAFORSEO_DAILY_USD only if you want faster prospecting."
   }
  ]
 }
