@@ -34,12 +34,12 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
   const holds=outreach.holds||{},heldCount=Object.values(holds).reduce((a,b)=>a+b,0);
   if(heldCount>=3){
     const [top,n]=Object.entries(holds).sort((a,b)=>b[1]-a[1])[0];
-    const why={only_non_editorial_inbox_published:'the publisher shows only a generic inbox (e.g. hello@/info@) without editorial wording, which the contact rule rejects',
+    const why={only_non_editorial_inbox_published:'the only address is not on the publisher\'s contact/about page or is not an accepted inbox type',
       no_email_published:'the publisher publishes no email address at all (contact form only)',publisher_pages_unreachable:'the publisher pages could not be fetched',
       catch_all_domain:'the mail server accepts every address, so no inbox can be proven',mailbox_invalid:'the inbox does not exist',
       'mailbox_verifalia_free_credits_used_up':'today\'s free verification credits are used up','mailbox_verification_budget_exhausted':'today\'s verification limit is used up'}[top]||top.replaceAll('_',' ');
-    add(top==='only_non_editorial_inbox_published'&&n/heldCount>=0.5?'action':'info','holds',`${heldCount} queued inboxes are held; most often (${n}) because ${why}.`,
-      top==='only_non_editorial_inbox_published'?'Decide whether a generic inbox on the publisher\'s own contact page may be emailed after a positive mailbox check (a deliberate safety rule today).':'Handled automatically; held inboxes are re-checked after 3 days.');
+    add('info','holds',`${heldCount} queued inboxes are held; most often (${n}) because ${why}.`,
+      'Handled automatically; held inboxes are re-checked after 3 days.');
   }
   const p=stages.prospects;
   if(p?.ok&&p.result?.queries>=8&&!p.result?.qualified&&!p.result?.deferred)add('warn','no_qualified',`${p.result.queries} searches produced 0 qualified prospects this cycle.`,'Usually transient; if it repeats, the promoted pages may need stronger topical matches.');
