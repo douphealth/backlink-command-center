@@ -107,7 +107,7 @@ test('pre-verify checks the best queued inboxes while outreach is paused and nev
 
 test('held inboxes carry a precise, address-free reason that is aggregated publicly',async()=>{
   const {outreachStatus}=await import('../../scripts/autopilot/outreach.mjs');
-  const generic=fixture();generic.v.fetchPage=async u=>({status:200,url:u,body:'<p>Get in touch: hello@journal.example</p>'});
+  const generic=fixture();generic.v.fetchPage=async u=>({status:200,url:u,body:'<p>Site issues: webmaster@journal.example</p>'}); // not an accepted inbox type
   assert.deepEqual(await generic.v.verify(prospect),{ok:false,reason:'no_published_editorial_contact',detail:'only_non_editorial_inbox_published'});
   const none=fixture();none.v.fetchPage=async u=>({status:200,url:u,body:'<p>Use our contact form.</p>'});
   assert.equal((await none.v.verify(prospect)).detail,'no_email_published');

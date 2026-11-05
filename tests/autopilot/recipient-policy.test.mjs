@@ -30,7 +30,22 @@ test('literal published editorial address has provenance and role',()=>{
 });
 test('generic address on an article is not promoted without an editorial remit',()=>{
  assert.deepEqual(extractEditorialCandidates('<p>Call our business info@journal.example</p>',url,{...ctx,source:'page'}),[]);
- assert.deepEqual(extractEditorialCandidates('<p>General enquiries info@journal.example</p>',url,ctx),[]);
+});
+test('owner rule: a general inbox on the publisher\'s own contact page is a last-resort candidate',()=>{
+ const [c]=extractEditorialCandidates('<p>General enquiries info@journal.example</p>',url,ctx);
+ assert.equal(c.role,'contact_page_inbox');assert.equal(c.rank,60);
+ for(const local of ['sales','support','privacy','billing','press','jobs'])assert.deepEqual(extractEditorialCandidates(`<p>Contact ${local}@journal.example</p>`,url,ctx),[],local);
+ assert.deepEqual(extractEditorialCandidates('<p>Contact hello@gmail.com</p>',url,ctx),[]); // not own domain
+ assert.deepEqual(extractEditorialCandidates('<p>Contact hello@journal.example</p>','https://journal.example/blog/post/',{...ctx,source:'page'}),[]); // not a contact page
+ assert.deepEqual(extractEditorialCandidates('<p>No unsolicited pitches. hello@journal.example</p>',url,ctx),[]); // do-not-pitch respected
+});
+test('owner rule: the general inbox is never used while an editorial address exists',async()=>{
+ const both=html+'<p>'+'Our office is open on weekdays. '.repeat(12)+'</p><p>General: hello@journal.example</p>'; // generic inbox far from any editorial wording
+ const f=fixture({fetchPage:async u=>({status:200,url:u,body:both}),fetchImpl:async(u,o)=>{f.calls.push({u,o});return {status:200,json:async()=>data(new URL(u).searchParams.get('email'),{status:'invalid'})}}});
+ const r=await f.v.verify(prospect);assert.equal(r.ok,false);
+ assert.ok(f.calls.every(c=>!c.u.includes('hello%40')),'generic inbox must not be checked when an editorial one exists');
+ const only=fixture({fetchPage:async u=>({status:200,url:u,body:'<p>General enquiries: hello@journal.example</p>'})});
+ const g=await only.v.verify({...prospect,email:'hello@journal.example'});assert.equal(g.ok,true);assert.equal(g.evidence.role,'contact_page_inbox');
 });
 test('explicit editorial contact beats a generic inbox',()=>{
  const list=extractEditorialCandidates(html+'<p>Editorial enquiries: hello@journal.example</p>',url,ctx);

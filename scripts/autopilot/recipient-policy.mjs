@@ -21,6 +21,10 @@ const PLACEHOLDER=/(?:^|\.)(?:example\.(?:com|org|net)|invalid|test|localhost|yo
 const EDITOR=/^(?:editor|editors|editorial|submissions?|contribute|content|blog)(?:[._+-]|$)/;
 const PURPOSE=/\b(?:editorial|editor|article submissions?|contribut(?:e|ions|ors)|resource suggestions?|suggest (?:an? )?(?:article|resource))\b/i;
 const DENIED=/\b(?:no (?:unsolicited |link )?(?:pitches|submissions)|do not (?:pitch|contact)|not accept(?:ing)? (?:guest posts|pitches|submissions))\b/i;
+// Owner decision (Nov 2026): a site's general inbox may be used, strictly: own domain, published on its own
+// contact/about page, only when no editorial or named-author address exists, and only after a
+// Deliverable mailbox check (catch-all never). Sales/support/privacy etc. stay excluded via BAD_LOCAL.
+const GENERIC_INBOX=/^(?:hello|hi|contact|info|team|mail|office|enquiries|enquiry|inquiries)$/;
 const FREEMAIL=/^(?:gmail|outlook|hotmail|yahoo|protonmail|proton|icloud)\.(?:com|me)$/;
 const decode=s=>String(s||'').replace(/&#x([0-9a-f]+);/gi,(_,v)=>String.fromCodePoint(Math.min(0x10ffff,parseInt(v,16))))
  .replace(/&#([0-9]+);/g,(_,v)=>String.fromCodePoint(Math.min(0x10ffff,Number(v))))
@@ -45,6 +49,7 @@ export function extractEditorialCandidates(html,url,{domain,author='',source='pa
     if(named&&(purpose||source==='author'||/\b(?:author|writer)\b/i.test(context))){rank=100;role='named_author'}
     else if(EDITOR.test(local)&&purpose){rank=official?95:85;role='editorial'}
     else if(official&&purpose){rank=70;role='published_editorial_route'}
+    else if(source==='contact'&&GENERIC_INBOX.test(local)&&host(d)===host(domain)){rank=60;role='contact_page_inbox'}
     if(!rank)return;
     const c={email:e,rank,role,source:url,source_type:source,method,observed_at:new Date(now).toISOString(),context:context.slice(0,300)};
     if(!found.has(e)||found.get(e).rank<rank)found.set(e,c);
@@ -209,7 +214,9 @@ export class RecipientVerifier{
       }
     }
     const hasContact=(p.history||[]).some(h=>h.type==='initial'&&h.mode!=='draft');
-    const ranked=[...candidates.values()].filter(c=>(!followup&&!hasContact)||c.email===normalizeEmail(p.email)).sort((a,b)=>b.rank-a.rank);
+    let ranked=[...candidates.values()].filter(c=>(!followup&&!hasContact)||c.email===normalizeEmail(p.email)).sort((a,b)=>b.rank-a.rank);
+    // A general inbox is a last resort: never used while an editorial or named-author address exists.
+    if(ranked.some(c=>c.role!=='contact_page_inbox'))ranked=ranked.filter(c=>c.role!=='contact_page_inbox');
     if(!ranked.length)return fail('no_published_editorial_contact',!fetched?'publisher_pages_unreachable':published.size?'only_non_editorial_inbox_published':'no_email_published');
     let attempted=0;const outcomes=[];
     for(const c of ranked){if(++attempted>3||this.now()>=deadline)break;if(isSuppressed(this.state,c.email,p.domain)){outcomes.push('suppressed');continue}
