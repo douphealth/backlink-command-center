@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-05T11:34:35.079Z",
- "duration_s": 157,
+ "generated_at": "2026-11-05T18:53:45.370Z",
+ "duration_s": 113,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -33,8 +33,8 @@
    "balance": {
     "provider": "verifalia",
     "free_credits": 1,
-    "reset_in": "12:27:37",
-    "checked_at": "2026-11-05T11:32:22.868Z"
+    "reset_in": "05:07:31",
+    "checked_at": "2026-11-05T18:52:28.533Z"
    },
    "catch_all_domains_skipped": 4
   }
@@ -107,7 +107,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 7013,
+   "ms": 18225,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -115,7 +115,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -130,7 +130,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -140,7 +140,7 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 10,
+   "ms": 18,
    "result": {
     "queries": 0,
     "mention_queries": 0,
@@ -159,17 +159,17 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 10780,
+   "ms": 11901,
    "result": {
-    "checked": 25,
-    "found": 1
+    "checked": 22,
+    "found": 3
    }
   },
   "replies": {
    "ok": true,
-   "ms": 679,
+   "ms": 2500,
    "result": {
-    "scanned": 0,
+    "scanned": 34,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -179,15 +179,15 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 136445,
+   "ms": 68946,
    "result": {
-    "followups": 3,
+    "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 189,
+    "deferred": 6,
     "cap": 12,
-    "verification_held": 5
+    "verification_held": 24
    },
    "writer": {
     "claude": 0,
@@ -200,9 +200,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 1,
+   "ms": 10281,
    "result": {
-    "checked": 0,
+    "checked": 13,
     "won": 0,
     "lost": 0
    }
@@ -236,15 +236,15 @@
   },
   "sent_today": 3,
   "cap_today": 12,
-  "next_send_at": "2026-11-05T13:00:00.000Z",
-  "sending_now": false,
+  "next_send_at": "2026-11-05T18:53:45.373Z",
+  "sending_now": true,
   "reply_health": "ok"
  },
  "funnel": {
   "prospects_evaluated": 2518,
   "qualified": 539,
   "ready": 160,
-  "broken_link_ready": 13,
+  "broken_link_ready": 15,
   "contact_form_only": 105,
   "no_contact": 223,
   "contacted": 49,
@@ -469,7 +469,7 @@
    "prospects_evaluated": 2518,
    "qualified": 539,
    "ready": 160,
-   "broken_link_ready": 13,
+   "broken_link_ready": 15,
    "contact_form_only": 105,
    "no_contact": 223,
    "contacted": 49,
@@ -1318,7 +1318,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 11,
-   "words": 1341,
+   "words": 1349,
    "interactive": true,
    "modified": "2026-10-30T07:30:05+00:00",
    "reasons": [
@@ -3320,6 +3320,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/demystifying-numerology-delving-into-life-path-number-35/",
+   "from_title": "Life Path 35 Numerology: 2026 Guide to Meaning, Love & Career",
+   "to": "https://mysticaldigits.com/numerology-love-meter-calculator/",
+   "to_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
+   "anchor": "numerology love meter",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/compatibility-check-life-path-numbers-6-and-9/",
    "from_title": "Life Path 6 & 9 Compatibility: Love, Marriage & Karma 2026",
    "to": "https://mysticaldigits.com/numerology-love-meter-calculator/",
@@ -3342,16 +3352,6 @@
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/unlocking-the-transformational-energy-of-year-six/",
    "from_title": "Personal Year 6: 2026 Guide to Love, Hearth & Karmic Payoff",
-   "to": "https://mysticaldigits.com/numerology-love-meter-calculator/",
-   "to_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
-   "anchor": "numerology love meter",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/life-path-number-4-compatibility/",
-   "from_title": "Life Path 4 Compatibility: Who’s Your 2026 Love Match?",
    "to": "https://mysticaldigits.com/numerology-love-meter-calculator/",
    "to_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
    "anchor": "numerology love meter",
@@ -3670,8 +3670,8 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/training-games-and-activities-for-french-bulldog-puppies/",
-   "from_title": "2026 French Bulldog Training: 7 Fun Games & Tips",
+   "from": "https://frenchyfab.com/stop-french-bulldog-barking/",
+   "from_title": "Stop French Bulldog Barking: Causes and Calm Training Steps",
    "to": "https://frenchyfab.com/french-bulldog-training-aids/",
    "to_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "anchor": "french bulldog",
@@ -3680,8 +3680,8 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/21-day-french-bulldog-obedience-blueprint/",
-   "from_title": "2026 French Bulldog Training: 21-Day Proven Blueprint",
+   "from": "https://frenchyfab.com/training-games-and-activities-for-french-bulldog-puppies/",
+   "from_title": "2026 French Bulldog Training: 7 Fun Games & Tips",
    "to": "https://frenchyfab.com/french-bulldog-training-aids/",
    "to_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "anchor": "french bulldog",
@@ -4430,16 +4430,6 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/12-week-french-bulldog-blueprint/",
-   "from_title": "12-Week French Bulldog Puppy Training Plan: Socialization",
-   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
-   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
-   "anchor": "reward based",
-   "relevance": 6,
-   "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
    "from_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
    "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
@@ -4455,6 +4445,16 @@
    "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
    "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
    "anchor": "obedience training",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/leash-training-french-bulldogs/",
+   "from_title": "How to Leash Train a French Bulldog",
+   "to": "https://frenchyfab.com/reward-based-obedience-training-for-french-bulldogs/",
+   "to_title": "Reward-Based Obedience Training for French Bulldogs: Cues",
+   "anchor": "reward based",
    "relevance": 6,
    "from_strength": 0
   },
@@ -4480,6 +4480,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/stop-french-bulldog-barking/",
+   "from_title": "Stop French Bulldog Barking: Causes and Calm Training Steps",
+   "to": "https://frenchyfab.com/french-bulldog-training-classes/",
+   "to_title": "French Bulldog Training Classes: When to Join",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/training-games-and-activities-for-french-bulldog-puppies/",
    "from_title": "2026 French Bulldog Training: 7 Fun Games & Tips",
    "to": "https://frenchyfab.com/french-bulldog-training-classes/",
@@ -4492,16 +4502,6 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/21-day-french-bulldog-obedience-blueprint/",
    "from_title": "2026 French Bulldog Training: 21-Day Proven Blueprint",
-   "to": "https://frenchyfab.com/french-bulldog-training-classes/",
-   "to_title": "French Bulldog Training Classes: When to Join",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/teaching-calmness-and-relaxation-to-your-energetic-french-bulldog/",
-   "from_title": "Calm French Bulldog Training: Relaxation Cues, Routines",
    "to": "https://frenchyfab.com/french-bulldog-training-classes/",
    "to_title": "French Bulldog Training Classes: When to Join",
    "anchor": "french bulldog",
@@ -4540,6 +4540,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/stop-french-bulldog-barking/",
+   "from_title": "Stop French Bulldog Barking: Causes and Calm Training Steps",
+   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
+   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/training-games-and-activities-for-french-bulldog-puppies/",
    "from_title": "2026 French Bulldog Training: 7 Fun Games & Tips",
    "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
@@ -4552,16 +4562,6 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/21-day-french-bulldog-obedience-blueprint/",
    "from_title": "2026 French Bulldog Training: 21-Day Proven Blueprint",
-   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/teaching-calmness-and-relaxation-to-your-energetic-french-bulldog/",
-   "from_title": "Calm French Bulldog Training: Relaxation Cues, Routines",
    "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
    "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
    "anchor": "french bulldog",
@@ -5806,7 +5806,7 @@
  },
  "tuning": {
   "max_queries": 28,
-  "updated_at": "2026-11-05T11:32:07.167Z"
+  "updated_at": "2026-11-05T18:52:11.734Z"
  },
  "wins": [
   {
@@ -5855,26 +5855,26 @@
   }
  ],
  "log": [
-  "11:31:59 connection dataforseo: connected",
-  "11:31:59 connection gmail: connected",
-  "11:32:00 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
-  "11:32:01 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "11:32:04 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "11:32:04 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "11:32:04 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "11:32:04 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "11:32:04 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "11:32:04 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "11:32:05 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "11:32:06 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "11:32:07 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
-  "11:32:07 prospects: 0 from the saved queue, 0 saved for next run; 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "11:32:07 self-tuning: next cycle runs up to 28 searches",
-  "11:32:17 broken links: 25 queued pages scanned, 1 with a dead link our page can replace",
-  "11:32:18 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "11:34:35 outreach: 0 sent, 3 follow-ups, 0 drafts, 5 held for verification",
-  "11:34:35 - preverify: skipped (runs only while outreach is paused)",
-  "11:34:35 link checks: 0 pages, 0 new links won, 0 lost"
+  "18:51:53 connection dataforseo: connected",
+  "18:51:53 connection gmail: connected",
+  "18:51:55 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
+  "18:51:55 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "18:51:57 crawl gearuptogrow.com: 107/107 urls, fetched 1, 304 0, reused 106",
+  "18:51:59 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "18:51:59 crawl frenchyfab.com: 238/238 urls, fetched 5, 304 0, reused 233",
+  "18:52:00 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "18:52:02 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "18:52:02 crawl mysticaldigits.com: 300/468 urls, fetched 10, 304 0, reused 290",
+  "18:52:10 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "18:52:11 crawl efficientgptprompts.com: 300/487 urls, fetched 10, 304 0, reused 290",
+  "18:52:11 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
+  "18:52:11 prospects: 0 from the saved queue, 0 saved for next run; 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "18:52:11 self-tuning: next cycle runs up to 28 searches",
+  "18:52:23 broken links: 22 queued pages scanned, 3 with a dead link our page can replace",
+  "18:52:26 replies: 34 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "18:53:35 outreach: 0 sent, 0 follow-ups, 0 drafts, 24 held for verification",
+  "18:53:35 - preverify: skipped (runs only while outreach is paused)",
+  "18:53:45 link checks: 13 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
