@@ -49,7 +49,7 @@ jobs:
           path: .autopilot-cache
           key: autopilot-crawl-${{ github.run_id }}
           restore-keys: autopilot-crawl-
-      - name: Run Autopilot cycle (outbound safety hold)
+      - name: Run Autopilot cycle
         if: steps.due.outputs.due == 'true'
         env:
           AUTOPILOT_DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
@@ -79,13 +79,16 @@ jobs:
           HUNTER_API_KEY: ${{ secrets.HUNTER_API_KEY }}
           EMAIL_VERIFICATION_ENABLED: ${{ vars.EMAIL_VERIFICATION_ENABLED || 'NO' }}
           EMAIL_VERIFY_DAILY_LIMIT: ${{ vars.EMAIL_VERIFY_DAILY_LIMIT || '0' }}
-        # Reversible containment: never override this hold from dashboard settings.
-        # Research, mailbox reading and backlink checks remain enabled.
-        # Remove only after the recipient-verification gate passes production checks.
+          OUTREACH_HOLD: ${{ vars.OUTREACH_HOLD }}
+        # Outbound hold lifted by the owner on 2026-11-05 after the recipient-verification gate
+        # passed production checks (5 inboxes verified Deliverable via Verifalia).
+        # Emergency brake: set repository variable OUTREACH_HOLD=YES to force OUTREACH_MODE=off
+        # (research, mailbox reading and backlink checks keep running). The dashboard ■ Stop
+        # button pauses the whole schedule.
         run: |
           node --input-type=module -e "
           let settings={};try{settings=JSON.parse(process.env.LINKFORGE_SETTINGS||'{}')}catch{}
-          process.env.LINKFORGE_SETTINGS=JSON.stringify({...settings,OUTREACH_MODE:'off'});
+          if(process.env.OUTREACH_HOLD==='YES'){process.env.LINKFORGE_SETTINGS=JSON.stringify({...settings,OUTREACH_MODE:'off'});console.log('OUTREACH_HOLD=YES: outbound email is held')}
           const {runAutopilot}=await import('./scripts/autopilot/run.mjs');
           await runAutopilot();"
       - name: Guard against leaking private data
