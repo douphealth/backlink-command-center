@@ -124,3 +124,12 @@ test('a rejected login is recorded for the dashboard and stops further Verifalia
   assert.equal((await f.v.mailbox(email)).reason,'verifalia_login_rejected');assert.equal(f.state.verifier_balance.error,'login_rejected');
   let calls=0;f.v.fetch=async()=>{calls++;return {status:401,json:async()=>({})}};await f.v.mailbox('x@journal.example');assert.equal(calls,0);
 });
+
+test('401 (bad login) and 403 (missing permission) are told apart and published without credentials',async()=>{
+  const bad=fixture();bad.v.fetch=async()=>({status:401,json:async()=>({})});
+  assert.equal((await bad.v.mailbox(email)).reason,'verifalia_login_rejected');assert.deepEqual({e:bad.state.verifier_balance.error,s:bad.state.verifier_balance.http_status},{e:'login_rejected',s:401});
+  const perm=fixture();perm.v.fetch=async u=>({status:u.endsWith('/credits/balance')?403:200,json:async()=>({})});
+  assert.equal((await perm.v.mailbox(email)).reason,'verifalia_permission_denied');assert.equal(perm.state.verifier_balance.endpoint,'credits_balance');
+  const sub=fixture({post:async()=>json(403,{})});assert.equal((await sub.v.mailbox(email)).reason,'verifalia_permission_denied');assert.equal(sub.state.verifier_balance.endpoint,'submit_validation');
+  assert.doesNotMatch(JSON.stringify([bad.state.verifier_balance,perm.state.verifier_balance]),/lf-user|not-a-real-secret/);
+});

@@ -28,8 +28,13 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
     add('action',`${k}_rejected`,`${label} rejected the saved login, so that part of the pipeline is stopped.`,`Re-enter the ${label} credentials under ⚙ Connect.`);
   if(!v.ready)add('action','verifier_off',v.key?'Inbox verification is switched off (daily limit is 0), so no email can ever be sent.':'No inbox verifier is connected, so no email can ever be sent.',
     v.key?'Set "Mailbox checks per day" to 12 under ⚙ Connect (or leave it blank).':'Add a free Verifalia login under ⚙ Connect.');
-  if(v.balance?.error==='login_rejected'||Object.keys(outreach.holds||{}).some(k=>/login_rejected/.test(k))||stages.preverify?.ok===false&&/login/.test(stages.preverify.error||''))
-    add('action','verifier_rejected','Verifalia rejected the saved login, so no inbox can be verified or emailed.','Under ⚙ Connect, re-enter the Verifalia USERNAME (not your sign-up email, unless they are the same) and password of an active user; confirm the account email first if Verifalia asked you to.');
+  const denied=v.balance?.error||(Object.keys(outreach.holds||{}).find(k=>/verifalia_(login_rejected|permission_denied)/.test(k))||'').replace(/^mailbox_verifalia_/,'');
+  if(denied==='permission_denied')add('action','verifier_permission',
+    `Verifalia accepted the login but the user is not allowed to ${v.balance?.endpoint==='submit_validation'?'submit email verifications':'view the credits balance'} (HTTP 403), so no inbox can be verified.`,
+    'In app.verifalia.com → Users, edit the user saved under ⚙ Connect and allow both "view credits balance" and "submit/retrieve email validations" (or save your main account login instead). A browser app key will not work: it cannot read the balance.');
+  else if(denied==='login_rejected'||stages.preverify?.ok===false&&/login/.test(stages.preverify.error||''))add('action','verifier_rejected',
+    'Verifalia rejected the saved login (HTTP 401), so no inbox can be verified or emailed.',
+    'Check, in this order: (1) the account email is confirmed; (2) you saved the Verifalia USERNAME shown in app.verifalia.com → Users (may differ from your sign-up email) and its password, with no extra spaces; (3) two-factor authentication is OFF for that user (create a dedicated API user without 2FA). Then re-save under ⚙ Connect and press Save & run now.');
   if(held&&outreach.mode==='off'&&(outreach.verified_ready||0)>0)
     add('action','hold_with_verified',`${outreach.verified_ready} verified inboxes are ready, but the workflow's outbound safety hold keeps sending off.`,'When you are ready to send, ask to lift the hold (one line in .github/workflows/autopilot.yml).');
   const holds=outreach.holds||{},heldCount=Object.values(holds).reduce((a,b)=>a+b,0);
