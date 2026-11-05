@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-05T06:38:17.707Z",
- "duration_s": 19,
+ "generated_at": "2026-11-05T07:32:02.941Z",
+ "duration_s": 984,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -20,7 +20,19 @@
   "outreach_mode": "off",
   "claude": false,
   "gsc": false,
-  "daily_send_cap": 12
+  "daily_send_cap": 12,
+  "verifier": {
+   "ready": false,
+   "providers": [
+    "verifalia"
+   ],
+   "key": true,
+   "enabled": false,
+   "daily_limit": 0,
+   "used_today": 0,
+   "balance": null,
+   "catch_all_domains_skipped": 0
+  }
  },
  "setup": [
   {
@@ -50,6 +62,13 @@
    "done": true,
    "unlocks": "Signs every pitch with your real name",
    "required": true
+  },
+  {
+   "key": "VERIFALIA_USERNAME + VERIFALIA_PASSWORD + EMAIL_VERIFY_DAILY_LIMIT",
+   "label": "Mailbox verifier (needed to send)",
+   "done": false,
+   "unlocks": "Proves each editor inbox exists before any email goes out, so nothing bounces. Verifalia free plan: 25 credits every day, free credits only (Hunter key optional as fallback)",
+   "required": false
   },
   {
    "key": "OUTREACH_MODE = send",
@@ -83,7 +102,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 13080,
+   "ms": 17588,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -91,7 +110,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -116,25 +135,35 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 8,
+   "ms": 945820,
    "result": {
-    "queries": 0,
+    "queries": 62,
     "mention_queries": 0,
-    "serp_results": 0,
-    "candidates": 0,
+    "serp_results": 1092,
+    "candidates": 95,
     "qualified": 0,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 0,
+    "rejected": 18,
     "with_email": 0,
-    "contact_form": 0
+    "contact_form": 0,
+    "broken_links": 0,
+    "failed_queries": 9
+   }
+  },
+  "broken_links": {
+   "ok": true,
+   "ms": 16734,
+   "result": {
+    "checked": 25,
+    "found": 3
    }
   },
   "replies": {
    "ok": true,
-   "ms": 2641,
+   "ms": 1657,
    "result": {
-    "scanned": 22,
+    "scanned": 1,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -146,11 +175,15 @@
    "ok": null,
    "skipped": "OUTREACH_MODE=off"
   },
+  "preverify": {
+   "ok": null,
+   "skipped": "mailbox verifier not configured"
+  },
   "link_checks": {
    "ok": true,
-   "ms": 828,
+   "ms": 2,
    "result": {
-    "checked": 2,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -165,11 +198,11 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0,
-  "month_usd": 0.0976,
+  "today_usd": 0.2696,
+  "month_usd": 0.3671,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 0
+  "calls_this_run": 90
  },
  "outreach": {
   "mode": "off",
@@ -183,9 +216,10 @@
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 2389,
+  "prospects_evaluated": 2407,
   "qualified": 512,
   "ready": 151,
+  "broken_link_ready": 2,
   "contact_form_only": 96,
   "no_contact": 214,
   "contacted": 49,
@@ -407,9 +441,10 @@
   },
   {
    "date": "2026-11-05",
-   "prospects_evaluated": 2389,
+   "prospects_evaluated": 2407,
    "qualified": 512,
    "ready": 151,
+   "broken_link_ready": 2,
    "contact_form_only": 96,
    "no_contact": 214,
    "contacted": 49,
@@ -419,7 +454,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0
+   "spend_usd": 0.2696
   }
  ],
  "learning": {
@@ -429,12 +464,6 @@
     "queries": 10,
     "ready": 12,
     "rate": 1
-   },
-   {
-    "footprint": "intent",
-    "queries": 68,
-    "ready": 57,
-    "rate": 0.817
    },
    {
     "footprint": "statistics",
@@ -449,16 +478,22 @@
     "rate": 0.667
    },
    {
-    "footprint": "recommended_reading",
-    "queries": 9,
-    "ready": 6,
-    "rate": 0.583
+    "footprint": "intent",
+    "queries": 90,
+    "ready": 57,
+    "rate": 0.624
    },
    {
     "footprint": "tools",
     "queries": 8,
     "ready": 5,
     "rate": 0.545
+   },
+   {
+    "footprint": "recommended_reading",
+    "queries": 10,
+    "ready": 6,
+    "rate": 0.538
    },
    {
     "footprint": "inurl_resources",
@@ -473,16 +508,16 @@
     "rate": 0.462
    },
    {
-    "footprint": "best_guides",
-    "queries": 50,
-    "ready": 22,
-    "rate": 0.434
-   },
-   {
     "footprint": "inurl_links",
     "queries": 9,
     "ready": 4,
     "rate": 0.417
+   },
+   {
+    "footprint": "best_guides",
+    "queries": 64,
+    "ready": 22,
+    "rate": 0.343
    },
    {
     "footprint": "blogs_to_follow",
@@ -497,10 +532,28 @@
     "rate": 0.333
    },
    {
+    "footprint": "link_roundup",
+    "queries": 1,
+    "ready": 0,
+    "rate": 0.25
+   },
+   {
+    "footprint": "further_reading",
+    "queries": 2,
+    "ready": 0,
+    "rate": 0.2
+   },
+   {
+    "footprint": "helpful_resources",
+    "queries": 2,
+    "ready": 0,
+    "rate": 0.2
+   },
+   {
     "footprint": "resources",
-    "queries": 79,
+    "queries": 98,
     "ready": 14,
-    "rate": 0.183
+    "rate": 0.149
    },
    {
     "footprint": "mention",
@@ -986,7 +1039,7 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -1034,7 +1087,7 @@
    ],
    "prospects": 14,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1108,7 +1161,7 @@
    ],
    "prospects": 11,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "plantastichaven.com",
@@ -1133,7 +1186,7 @@
    ],
    "prospects": 7,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -1158,7 +1211,7 @@
    ],
    "prospects": 8,
    "internal_link_suggestions": 4,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1183,7 +1236,7 @@
    ],
    "prospects": 14,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1283,7 +1336,7 @@
    ],
    "prospects": 7,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1307,7 +1360,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 4,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -1356,7 +1409,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -1405,7 +1458,7 @@
    ],
    "prospects": 3,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1430,7 +1483,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "frenchyfab.com",
@@ -1480,7 +1533,7 @@
    ],
    "prospects": 6,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "micegoneguide.com",
@@ -1531,7 +1584,7 @@
    ],
    "prospects": 4,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "micegoneguide.com",
@@ -1557,7 +1610,7 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -1582,7 +1635,7 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 1,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1639,7 +1692,7 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1689,7 +1742,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -1715,7 +1768,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -1741,7 +1794,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -1790,7 +1843,7 @@
    ],
    "prospects": 6,
    "internal_link_suggestions": 3,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "micegoneguide.com",
@@ -1995,7 +2048,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 1,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2044,7 +2097,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 1,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -2067,7 +2120,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 2,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2672,7 +2725,7 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -2696,7 +2749,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2747,7 +2800,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 4,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -2798,7 +2851,7 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "frenchyfab.com",
@@ -2824,7 +2877,7 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -2848,7 +2901,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 1,
-   "promoting": false
+   "promoting": true
   }
  ],
  "internal_links": [
@@ -4853,6 +4906,861 @@
    "from_strength": 57
   }
  ],
+ "indexation": {
+  "sites": [
+   {
+    "site": "gearuptofit.com",
+    "checked": 300,
+    "healthy": 290,
+    "problems": 10,
+    "critical": 0,
+    "not_found": 0,
+    "server_error": 0,
+    "noindex": 0,
+    "canonical_mismatch": 0,
+    "redirect": 0,
+    "unreachable": 0,
+    "bot_blocked": 0,
+    "missing_canonical": 0,
+    "thin": 10
+   },
+   {
+    "site": "plantastichaven.com",
+    "checked": 163,
+    "healthy": 160,
+    "problems": 3,
+    "critical": 0,
+    "not_found": 0,
+    "server_error": 0,
+    "noindex": 0,
+    "canonical_mismatch": 0,
+    "redirect": 0,
+    "unreachable": 0,
+    "bot_blocked": 1,
+    "missing_canonical": 0,
+    "thin": 2
+   },
+   {
+    "site": "gearuptogrow.com",
+    "checked": 107,
+    "healthy": 104,
+    "problems": 3,
+    "critical": 0,
+    "not_found": 0,
+    "server_error": 0,
+    "noindex": 0,
+    "canonical_mismatch": 0,
+    "redirect": 0,
+    "unreachable": 0,
+    "bot_blocked": 0,
+    "missing_canonical": 0,
+    "thin": 3
+   },
+   {
+    "site": "affiliatemarketingforsuccess.com",
+    "checked": 258,
+    "healthy": 254,
+    "problems": 4,
+    "critical": 0,
+    "not_found": 0,
+    "server_error": 0,
+    "noindex": 0,
+    "canonical_mismatch": 0,
+    "redirect": 0,
+    "unreachable": 0,
+    "bot_blocked": 0,
+    "missing_canonical": 0,
+    "thin": 4
+   },
+   {
+    "site": "mysticaldigits.com",
+    "checked": 300,
+    "healthy": 295,
+    "problems": 5,
+    "critical": 0,
+    "not_found": 0,
+    "server_error": 0,
+    "noindex": 0,
+    "canonical_mismatch": 0,
+    "redirect": 0,
+    "unreachable": 0,
+    "bot_blocked": 0,
+    "missing_canonical": 0,
+    "thin": 5
+   },
+   {
+    "site": "frenchyfab.com",
+    "checked": 238,
+    "healthy": 233,
+    "problems": 5,
+    "critical": 0,
+    "not_found": 0,
+    "server_error": 0,
+    "noindex": 0,
+    "canonical_mismatch": 0,
+    "redirect": 1,
+    "unreachable": 0,
+    "bot_blocked": 0,
+    "missing_canonical": 0,
+    "thin": 4
+   },
+   {
+    "site": "micegoneguide.com",
+    "checked": 53,
+    "healthy": 52,
+    "problems": 1,
+    "critical": 1,
+    "not_found": 0,
+    "server_error": 0,
+    "noindex": 1,
+    "canonical_mismatch": 0,
+    "redirect": 0,
+    "unreachable": 0,
+    "bot_blocked": 0,
+    "missing_canonical": 0,
+    "thin": 0
+   },
+   {
+    "site": "efficientgptprompts.com",
+    "checked": 300,
+    "healthy": 295,
+    "problems": 5,
+    "critical": 1,
+    "not_found": 0,
+    "server_error": 0,
+    "noindex": 1,
+    "canonical_mismatch": 0,
+    "redirect": 0,
+    "unreachable": 0,
+    "bot_blocked": 0,
+    "missing_canonical": 0,
+    "thin": 4
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "checked": 158,
+    "healthy": 125,
+    "problems": 33,
+    "critical": 0,
+    "not_found": 0,
+    "server_error": 0,
+    "noindex": 0,
+    "canonical_mismatch": 0,
+    "redirect": 0,
+    "unreachable": 0,
+    "bot_blocked": 0,
+    "missing_canonical": 0,
+    "thin": 33
+   },
+   {
+    "site": "imagealchemy.app",
+    "checked": 26,
+    "healthy": 26,
+    "problems": 0,
+    "critical": 0,
+    "not_found": 0,
+    "server_error": 0,
+    "noindex": 0,
+    "canonical_mismatch": 0,
+    "redirect": 0,
+    "unreachable": 0,
+    "bot_blocked": 0,
+    "missing_canonical": 0,
+    "thin": 0
+   }
+  ],
+  "issues": [
+   {
+    "site": "efficientgptprompts.com",
+    "url": "https://efficientgptprompts.com/shop",
+    "issue": "noindex",
+    "label": "noindex but listed in sitemap",
+    "fix": "If the page should rank, remove the noindex (SEO plugin / X-Robots-Tag). If not, drop it from the sitemap.",
+    "severity": 3,
+    "status": 200
+   },
+   {
+    "site": "micegoneguide.com",
+    "url": "https://micegoneguide.com/rodent-proofing-for-new-constructions",
+    "issue": "noindex",
+    "label": "noindex but listed in sitemap",
+    "fix": "If the page should rank, remove the noindex (SEO plugin / X-Robots-Tag). If not, drop it from the sitemap.",
+    "severity": 3,
+    "status": 200
+   },
+   {
+    "site": "frenchyfab.com",
+    "url": "https://frenchyfab.com/french-bulldog-care",
+    "issue": "redirect",
+    "label": "Sitemap URL redirects",
+    "fix": "Replace the sitemap entry and internal links with the final URL (sitemaps should list only 200, canonical URLs).",
+    "severity": 5,
+    "status": 200,
+    "final_url": "https://frenchyfab.com/french-bulldog-care-guide/"
+   },
+   {
+    "site": "plantastichaven.com",
+    "url": "https://procare.plantastichaven.com",
+    "issue": "bot_blocked",
+    "label": "Blocks automated requests (401/403/429/challenge)",
+    "fix": "Confirm Googlebot is allowed in the firewall/CDN bot rules and use URL Inspection in Search Console.",
+    "severity": 6,
+    "status": 403
+   },
+   {
+    "site": "affiliatemarketingforsuccess.com",
+    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/ai-affiliate-funnels",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 167
+   },
+   {
+    "site": "affiliatemarketingforsuccess.com",
+    "url": "https://affiliatemarketingforsuccess.com/ai/detect-ai-writing",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 63
+   },
+   {
+    "site": "affiliatemarketingforsuccess.com",
+    "url": "https://affiliatemarketingforsuccess.com/blogging/start-affiliate-marketing-blog",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 235
+   },
+   {
+    "site": "affiliatemarketingforsuccess.com",
+    "url": "https://affiliatemarketingforsuccess.com/chatgpt-prompts/chatgpt-prompts-for-marketing",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 273
+   },
+   {
+    "site": "efficientgptprompts.com",
+    "url": "https://efficientgptprompts.com/refund-policy",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 139
+   },
+   {
+    "site": "efficientgptprompts.com",
+    "url": "https://efficientgptprompts.com/review-methodology",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 223
+   },
+   {
+    "site": "efficientgptprompts.com",
+    "url": "https://efficientgptprompts.com/teen-detective-story-ideas",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 99
+   },
+   {
+    "site": "efficientgptprompts.com",
+    "url": "https://efficientgptprompts.com/writing-prompt-pack",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 233
+   },
+   {
+    "site": "frenchyfab.com",
+    "url": "https://frenchyfab.com/free-french-bulldog-checklists",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 169
+   },
+   {
+    "site": "frenchyfab.com",
+    "url": "https://frenchyfab.com/french-bulldog-product-hub",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 257
+   },
+   {
+    "site": "frenchyfab.com",
+    "url": "https://frenchyfab.com/french-bulldog-training-hub",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 222
+   },
+   {
+    "site": "frenchyfab.com",
+    "url": "https://frenchyfab.com/frenchie-summer-safety",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 245
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/corrections-policy",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 176
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/editorial-standards",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 137
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/fitness-plan",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 209
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/medical-disclaimer",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 197
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/review/creatine-monohydrate-vs-creatine-hcl",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 177
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/runmatch-thank-you",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 65
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/runmatch-unsubscribe",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 88
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/running-shoe-decision-guide",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 248
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/strength-training-hub",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 230
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/tools",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 173
+   },
+   {
+    "site": "gearuptogrow.com",
+    "url": "https://gearuptogrow.com/about-the-editor",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 280
+   },
+   {
+    "site": "gearuptogrow.com",
+    "url": "https://gearuptogrow.com/focus-habit-reset",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 231
+   },
+   {
+    "site": "gearuptogrow.com",
+    "url": "https://gearuptogrow.com/review-methodology",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 244
+   },
+   {
+    "site": "mysticaldigits.com",
+    "url": "https://mysticaldigits.com/astrological-birth-chart",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 104
+   },
+   {
+    "site": "mysticaldigits.com",
+    "url": "https://mysticaldigits.com/blog-articles",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 282
+   },
+   {
+    "site": "mysticaldigits.com",
+    "url": "https://mysticaldigits.com/explore-the-power-of-numerology-through-birth-date",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 56
+   },
+   {
+    "site": "mysticaldigits.com",
+    "url": "https://mysticaldigits.com/numerology-chart",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 223
+   },
+   {
+    "site": "mysticaldigits.com",
+    "url": "https://mysticaldigits.com/pythagorean-numerology-calculator-guide",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 79
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/articles/best-browser-automation-skills-openclaw",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 224
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/articles/best-coding-agent-skills-openclaw",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 223
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/articles/best-devops-cloud-skills-openclaw",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 215
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/articles/best-marketing-sales-skills-openclaw",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 199
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/articles/best-notes-pkm-skills-openclaw",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 134
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/articles/best-productivity-skills-openclaw",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 216
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/articles/best-search-research-skills-openclaw",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 244
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/articles/best-skills-content-creators",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 142
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/articles/best-web-frontend-skills-openclaw",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 222
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/articles/multi-agent-orchestration-guide",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 287
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/articles/security-audit-checklist-openclaw-skills",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 258
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/glossary/what-are-ai-guardrails",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 177
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/glossary/what-is-agent-memory",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 203
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/glossary/what-is-agent-sandboxing",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 219
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/glossary/what-is-clawhub",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 203
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/glossary/what-is-context-window",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 212
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/glossary/what-is-llm-orchestration",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 186
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/glossary/what-is-multi-agent-system",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 177
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/glossary/what-is-openclaw-permissions",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 158
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/glossary/what-is-prompt-injection",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 293
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/glossary/what-is-tool-calling",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 261
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/ai-llms",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 235
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/browser-automation",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 128
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/coding-agents",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 128
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/compare",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 98
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/devops-cloud",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 174
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/health-fitness",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 83
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/marketing-sales",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 127
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/notes-pkm",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 110
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/productivity",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 181
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/search-research",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 162
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/web-frontend",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 130
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/tutorials",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 161
+   },
+   {
+    "site": "plantastichaven.com",
+    "url": "https://plantastichaven.com/plant-care-starter",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 234
+   },
+   {
+    "site": "plantastichaven.com",
+    "url": "https://plantastichaven.com/plant-care-tips",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 60
+   }
+  ],
+  "total_issues": 69,
+  "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first)."
+ },
  "wins": [
   {
    "site": "plantastichaven.com",
@@ -4900,21 +5808,33 @@
   }
  ],
  "log": [
-  "06:38:00 connection dataforseo: connected",
-  "06:38:00 connection gmail: connected",
-  "06:38:03 crawl plantastichaven.com: 163/163 urls, fetched 2, 304 0, reused 161",
-  "06:38:03 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "06:38:04 crawl gearuptogrow.com: 107/107 urls, fetched 1, 304 0, reused 106",
-  "06:38:08 crawl frenchyfab.com: 238/238 urls, fetched 1, 304 0, reused 237",
-  "06:38:08 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "06:38:09 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "06:38:10 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "06:38:11 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "06:38:12 crawl micegoneguide.com: 53/53 urls, fetched 3, 304 0, reused 50",
-  "06:38:13 crawl efficientgptprompts.com: 300/487 urls, fetched 3, 304 0, reused 297",
-  "06:38:14 prospects: 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 already linking",
-  "06:38:16 replies: 22 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "06:38:16 - outreach: skipped (OUTREACH_MODE=off)",
-  "06:38:17 link checks: 2 pages, 0 new links won, 0 lost"
+  "07:15:40 connection dataforseo: connected",
+  "07:15:40 connection gmail: connected",
+  "07:15:43 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
+  "07:15:44 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "07:15:47 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "07:15:48 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "07:15:49 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "07:15:50 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "07:15:51 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "07:15:51 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "07:15:56 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "07:15:58 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "07:15:58 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
+  "07:16:58 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:17:39 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:18:08 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:20:03 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:22:13 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:24:26 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:25:30 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:26:57 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:31:36 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:31:44 prospects: 62 queries (0 brand-mention), 95 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "07:32:01 broken links: 25 queued pages scanned, 3 with a dead link our page can replace",
+  "07:32:02 replies: 1 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "07:32:02 - outreach: skipped (OUTREACH_MODE=off)",
+  "07:32:02 - preverify: skipped (mailbox verifier not configured)",
+  "07:32:02 link checks: 0 pages, 0 new links won, 0 lost"
  ]
 }
