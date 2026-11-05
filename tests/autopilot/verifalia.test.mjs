@@ -96,11 +96,13 @@ test('pre-verify checks the best queued inboxes while outreach is paused and nev
   const mk=(id,score)=>({id,domain:id+'.example',site:'s.com',page_url:`https://${id}.example/r`,asset_url:'https://s.com/a',email:`editor@${id}.example`,qv:2,status:'ready',score,history:[]});
   const state={prospects:{a:mk('a',40),b:mk('b',90),c:mk('c',70),d:{...mk('d',99),contact_quality:{status:'held',detail:'no_email_published',checked_at:t}}},contacted:{},suppression:{}};
   const mailer={send:async m=>sent.push(m),authorizeRecipient:async p=>{asked.push(p.id);return p.id==='b'?{ok:true,email:p.email,evidence:{source:`https://${p.domain}/contact`,email:p.email,rank:95,observed_at:t},
-    verification:verifaliaVerdict(entry(p.email),p.email,Date.now())}:{ok:false,reason:'no_verified_mailbox'}}};
+    verification:verifaliaVerdict(entry(p.email),p.email,Date.now())}:{ok:false,reason:'no_verified_mailbox',detail:'mailbox_unknown'}}};
   const r=await preverify({state,mailer,max:2});
   assert.deepEqual(asked,['b','c']);assert.deepEqual(r,{checked:2,verified:1,held:1});assert.equal(sent.length,0);
   assert.equal(state.prospects.b.contact_quality.status,'verified');assert.equal(state.prospects.c.contact_quality.status,'held');
-  assert.deepEqual((await preverify({state,mailer,max:5})).checked,1); // b already verified, c and d held recently: only a
+  assert.deepEqual((await preverify({state,mailer,max:5})).checked,1); // b already verified, c and d held recently with a reason: only a
+  delete state.prospects.c.contact_quality.detail;
+  assert.equal((await preverify({state,mailer,max:5})).checked,1); // a hold with no recorded reason (older code) is re-checked now
 });
 
 test('held inboxes carry a precise, address-free reason that is aggregated publicly',async()=>{
