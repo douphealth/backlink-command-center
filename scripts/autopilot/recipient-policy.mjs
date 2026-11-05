@@ -178,7 +178,7 @@ export class RecipientVerifier{
     if(res.status===402){this.verifaliaFree=0;this.verifaliaOff='verifalia_no_credits';return {reason:this.verifaliaOff}}
     if(res.status!==200&&res.status!==202)return {reason:'verification_unavailable'};
     let job=await res.json().catch(()=>null);const id=job?.overview?.id;
-    for(let i=0;i<3&&id&&job?.overview?.status!=='Completed';i++){
+    for(let i=0;i<2&&id&&job?.overview?.status!=='Completed';i++){
       const r=await this.vcall('GET',`/email-validations/${encodeURIComponent(id)}?waitTime=30000`);
       if(!r||(r.status!==200&&r.status!==202))break;job=await r.json().catch(()=>null);
     }

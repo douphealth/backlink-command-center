@@ -178,7 +178,7 @@ export async function findContact(pageUrl,pageHtml,{fetchImpl=fetch,author=''}={
  * Run discovery for the chosen assets. Mutates `state.prospects` / `state.domains`.
  * Returns counters for the run report.
  */
-export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,resolveHost,perAsset=2,maxNewPerRun=60,deadline=Infinity,log=()=>{}}){
+export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,resolveHost,perAsset=2,maxNewPerRun=60,maxQueries=24,deadline=Infinity,log=()=>{}}){
   state.prospects??={};state.domains??={};state.queries??={};
   const ourDomains=sites.map(s=>s.domain),competitors=new Set(sites.flatMap(s=>s.competitors||[]));
   const bySite=new Map(sites.map(s=>[s.domain,s]));
@@ -187,24 +187,37 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     asset:{site:m.site.domain,url:`https://${m.site.domain}/`,title:brandOf(m.site),type:'brand'}}));
   const jobs=[...mentions,...pickQueries(assets,sites,state,{perAsset})];
   const stats={queries:0,mention_queries:0,serp_results:0,candidates:0,qualified:0,mentions:0,already_linked:0,rejected:0,with_email:0,contact_form:0,broken_links:0};
-  const fresh=[];
-  for(const job of jobs){
-    if(Date.now()>deadline||fresh.length>=maxNewPerRun*2||!dfs.canSpend('serp'))break;
+  // Paid search results are never thrown away: candidates a previous run could not qualify in time come first.
+  const fresh=(state.candidate_queue||[]).filter(c=>ageDays(c.queued_at)<14&&bySite.has(c.site)&&!knownDomain(state,c.site,c.domain));
+  stats.from_queue=fresh.length;state.candidate_queue=[];
+  // Searches get at most 40% of the time left, so their results can still be qualified in this run.
+  const serpUntil=Number.isFinite(deadline)?Date.now()+Math.max(0,deadline-Date.now())*0.4:Infinity;
+  const take=(job,results)=>{
     const site=bySite.get(job.asset.site);
-    const results=await dfs.serp(job.query);
-    if(results===null){stats.failed_queries=(stats.failed_queries||0)+1;continue} // provider error: retry next run
     state.queries[`${site.domain}|${job.query}`]=NOW();stats.queries++;stats.serp_results+=results.length;
     if(job.kind==='mention'){state.mentions_at[site.domain]=NOW();stats.mention_queries++}
+    const asset={site:job.asset.site,url:job.asset.url,title:job.asset.title,h1:job.asset.h1,type:job.asset.type,terms:(job.asset.terms||[]).slice(0,30)};
     for(const r of results){
       const domain=rootDomain(r.domain||hostOf(r.url));
       if(!domain||BLOCKED.test(domain)||GOVERNMENT.test(domain)||ACADEMIC.test(domain)||ourDomains.some(d=>sameSite(domain,d))||competitors.has(domain)||UGC.test(new URL(r.url).pathname))continue;
       if(knownDomain(state,site.domain,domain)||fresh.some(f=>f.domain===domain&&f.site===site.domain))continue;
-      fresh.push({site:site.domain,domain,url:normUrl(r.url),serp_title:r.title,query:job.query,footprint:job.footprint,kind:job.kind||'resource',rank:r.rank,asset:job.asset});
+      fresh.push({site:site.domain,domain,url:normUrl(r.url),serp_title:r.title,query:job.query,footprint:job.footprint,kind:job.kind||'resource',rank:r.rank,asset});
     }
+  };
+  // Live SERPs take ~10 s each: run them 4 at a time (never more than the spend cap allows).
+  for(let i=0;i<jobs.length;){
+    if(Date.now()>=serpUntil||Date.now()>=deadline||stats.queries>=maxQueries||fresh.length>=maxNewPerRun*2)break;
+    const n=Math.min(4,maxQueries-stats.queries,jobs.length-i,dfs.affordable?dfs.affordable('serp'):(dfs.canSpend('serp')?1:0));
+    if(n<=0)break;
+    const batch=jobs.slice(i,i+n);i+=n;
+    const results=await Promise.all(batch.map(j=>dfs.serp(j.query)));
+    batch.forEach((job,k)=>{if(results[k]===null)stats.failed_queries=(stats.failed_queries||0)+1;else take(job,results[k])}); // provider error: retried next run
   }
-  // One cheap request sizes every candidate domain; drop giants and dead sites before fetching anything.
-  const traffic=dfs.canSpend('traffic')?await dfs.domainTraffic([...new Set(fresh.map(f=>f.domain))]):null;
+  // One cheap request sizes every new candidate domain; drop giants and dead sites before fetching anything.
+  const unsized=[...new Set(fresh.filter(f=>!('etv' in f)).map(f=>f.domain))];
+  const traffic=unsized.length&&dfs.canSpend('traffic')?await dfs.domainTraffic(unsized):null;
   if(traffic)for(let i=fresh.length-1;i>=0;i--){
+    if('etv' in fresh[i])continue;
     const why=trafficVerdict(traffic[fresh[i].domain],fresh[i].kind);
     if(why){const f=fresh[i],id=hashId(`${f.site}|${f.url}`);state.prospects[id]={id,site:f.site,domain:f.domain,page_url:f.url,asset_url:f.asset.url,asset_title:f.asset.title,query:f.query,found_at:NOW(),history:[],status:'rejected',reason:why,etv:traffic[f.domain],qv:QUALIFY_VERSION};
       state.domains[`${f.site}|${f.domain}`]=id;stats.rejected++;fresh.splice(i,1)}
@@ -212,7 +225,7 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
   }
   stats.candidates=fresh.length;
   const checked=await pool(fresh.slice(0,maxNewPerRun*2),6,async c=>{
-    if(Date.now()>deadline)return null;
+    if(Date.now()>deadline)return {deferred:c};
     const res=await fetchPage(c.url,{fetchImpl,timeout:12000,maxBytes:500000});
     const id=hashId(`${c.site}|${c.url}`);
     const base={id,site:c.site,domain:c.domain,page_url:c.url,asset_url:c.asset.url,asset_title:c.asset.title,query:c.query,footprint:c.footprint,kind:c.kind,serp_rank:c.rank,etv:c.etv??null,found_at:NOW(),history:[]};
@@ -225,6 +238,7 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     // A mention is relevant by definition; it only has to really name us (search engines are fuzzy).
     if(mention){if(!mentionsUs(res.body,site))return {...rec,status:'rejected',reason:'Brand not actually mentioned'};rec.score=Math.max(rec.score,70)}
     else if(!q.qualified)return {...rec,status:'rejected',reason:q.reasons.join('; ')||'Low fit score'};
+    if(Date.now()>deadline)return {deferred:c};
     const contact=await findContact(rec.page_url,res.body,{fetchImpl,author:q.author});
     // Vendors that mention us may still link; for cold pitches they're competitors.
     if(contact.site_kind==='local_business'||(contact.site_kind==='software_vendor'&&!mention))return {...rec,qv:QUALIFY_VERSION,status:'rejected',reason:contact.site_kind==='software_vendor'?'Software vendor (competing product)':'Local service business'};
@@ -234,15 +248,18 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     if(status!=='no_contact'&&!mention&&Date.now()<deadline)broken=await findBrokenLink(res.body,rec.page_url,{terms:assetTerms(c.asset,site),ourDomains,fetchImpl,resolveHost,deadline}).catch(()=>null);
     return {...rec,...contact,qv:QUALIFY_VERSION,status,broken_link:broken,broken_checked_at:NOW()};
   });
+  // Anything not qualified this run (time or volume) is queued for the next one.
+  const deferred=[...checked.filter(x=>x?.deferred).map(x=>x.deferred),...fresh.slice(maxNewPerRun*2)];
+  state.candidate_queue=deferred.slice(0,300).map(c=>({...c,queued_at:c.queued_at||NOW()}));stats.deferred=state.candidate_queue.length;
   for(const p of checked){
-    if(!p||p.error)continue;
+    if(!p||p.error||p.deferred)continue;
     if(p.status==='rejected'||p.status==='already_linked')delete p.excerpt;
     state.prospects[p.id]=p;state.domains[`${p.site}|${p.domain}`]=p.id;
     if(p.status==='already_linked')stats.already_linked++;
     else if(p.status==='rejected')stats.rejected++;
     else{stats.qualified++;if(p.kind==='mention')stats.mentions++;if(p.email)stats.with_email++;else if(p.contact_form)stats.contact_form++;if(p.broken_link)stats.broken_links++}
   }
-  log(`prospects: ${stats.queries} queries (${stats.mention_queries} brand-mention), ${stats.candidates} candidates, ${stats.qualified} qualified (${stats.mentions} unlinked mentions), ${stats.with_email} with email, ${stats.broken_links} with a dead link we can replace, ${stats.already_linked} already linking`);
+  log(`prospects: ${stats.from_queue} from the saved queue, ${stats.deferred} saved for next run; ${stats.queries} queries (${stats.mention_queries} brand-mention), ${stats.candidates} candidates, ${stats.qualified} qualified (${stats.mentions} unlinked mentions), ${stats.with_email} with email, ${stats.broken_links} with a dead link we can replace, ${stats.already_linked} already linking`);
   return stats;
 }
 
