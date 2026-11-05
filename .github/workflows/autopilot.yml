@@ -71,6 +71,11 @@ jobs:
           DATAFORSEO_MONTHLY_USD: ${{ vars.DATAFORSEO_MONTHLY_USD }}
           LINKFORGE_CLAUDE_MODEL: ${{ vars.LINKFORGE_CLAUDE_MODEL }}
           # Verification is disabled until the owner supplies a real key and budget.
+          # Verifalia (primary) uses only its free daily credits unless VERIFALIA_ALLOW_PAID=YES; Hunter is the fallback.
+          VERIFALIA_USERNAME: ${{ secrets.VERIFALIA_USERNAME }}
+          VERIFALIA_PASSWORD: ${{ secrets.VERIFALIA_PASSWORD }}
+          VERIFALIA_QUALITY: ${{ vars.VERIFALIA_QUALITY }}
+          VERIFALIA_ALLOW_PAID: ${{ vars.VERIFALIA_ALLOW_PAID }}
           HUNTER_API_KEY: ${{ secrets.HUNTER_API_KEY }}
           EMAIL_VERIFICATION_ENABLED: ${{ vars.EMAIL_VERIFICATION_ENABLED || 'NO' }}
           EMAIL_VERIFY_DAILY_LIMIT: ${{ vars.EMAIL_VERIFY_DAILY_LIMIT || '0' }}

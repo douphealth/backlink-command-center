@@ -6,6 +6,7 @@ import {fetchPage,links,hostOf,sameSite,ageDays,NOW,sleep,DAY} from './util.mjs'
 import {QUALIFY_VERSION} from './prospect.mjs';
 import {assetStats,linkLikelihood} from './learn.mjs';
 import {RecipientVerifier,isSuppressed,usableVerification,samePublisher,normalizeEmail} from './recipient-policy.mjs';
+import {checkDead} from './broken.mjs';
 export const PER_ASSET_DAILY=2;
 const REGIONS=[
  [/\.(uk|ie|de|fr|es|it|nl|be|pt|gr|se|no|dk|fi|pl|cz|at|ch|eu|za|ro|hu|sk|si|hr|bg|lt|lv|ee|lu|cy|mt)$/,[7,16],1],
@@ -23,8 +24,14 @@ export function nextSendWindow(domain,from=new Date()){
  for(let h=0;h<24*8;h++){t.setUTCHours(t.getUTCHours()+1);if(sendWindowOpen(domain,t))return new Date(t)}return null;
 }
 export function dailyCap(state,limit){
- const cap=Math.max(0,Math.floor(Number(limit)||0));
- return Math.min(cap,5+2*Math.max(0,Math.floor(state.first_send_at?ageDays(state.first_send_at):0)));
+ const cap=Math.max(0,Math.floor(Number(limit)||0)),start=state.ramp_started_at||state.first_send_at;
+ return Math.min(cap,5+2*Math.max(0,Math.floor(start?ageDays(start):0)));
+}
+/** Newest real (non-draft) send, or null. */
+export const lastSendAt=state=>Object.values(state.prospects||{}).flatMap(p=>(p.history||[]).filter(h=>['initial','followup'].includes(h.type)&&h.mode!=='draft').map(h=>h.at)).sort().pop()||null;
+/** After a week without sending, the warm-up ramp starts again at 5/day: a sudden burst from a quiet inbox hurts deliverability. */
+export function restartRampIfIdle(state,days=7){
+ const last=lastSendAt(state);if(!last||ageDays(last)>days)state.ramp_started_at=NOW();
 }
 export const sentToday=state=>Object.values(state.prospects||{}).reduce((n,p)=>n+(p.history||[]).filter(h=>['initial','followup'].includes(h.type)&&h.mode!=='draft'&&String(h.at).startsWith(NOW().slice(0,10))).length,0);
 const draftedToday=state=>Object.values(state.prospects||{}).reduce((n,p)=>n+(p.history||[]).filter(h=>h.mode==='draft'&&String(h.at).startsWith(NOW().slice(0,10))).length,0);
@@ -92,10 +99,43 @@ export async function processReplies({state,imap,log=()=>{}}){
  log(`replies: ${stats.scanned} scanned, ${stats.replies} replies, ${stats.bounces} failures, ${stats.delays} delays; ${state.reply_health.status}`);
  return stats;
 }
+/** Accept a recipient proof only if it is complete, current, first-party and unsuppressed; record the outcome on the prospect. */
+export function applyProof(state,p,proof,{followup=false}={}){
+ const e=normalizeEmail(proof?.email),valid=proof?.ok===true&&e&&usableVerification(proof.verification,e)&&
+  samePublisher(proof.evidence?.source,p.domain)&&proof.evidence?.email===e&&
+  Number.isFinite(Date.parse(proof.evidence?.observed_at))&&Date.now()-Date.parse(proof.evidence.observed_at)>=0&&Date.now()-Date.parse(proof.evidence.observed_at)<DAY;
+ if(!valid||suppressed(state,e,p.domain)||(followup&&e!==normalizeEmail(p.email))){
+  p.contact_quality={status:'held',reason:proof?.reason||'recipient_not_verified',checked_at:NOW()};delete p.recipient_proof;return false;
+ }
+ p.email=e;p.email_source=proof.evidence.source;p.email_rank=proof.evidence.rank;
+ p.recipient_proof={...proof,publisher_domain:p.domain};p.contact_quality={status:'verified',checked_at:NOW()};return true;
+}
+/**
+ * While outreach is paused, verify the best queued inboxes (no email is sent). Uses the free
+ * daily credits that would otherwise expire, shows real verified counts before sending is
+ * released, and builds the permanent invalid / catch-all memory that saves credits later.
+ */
+export async function preverify({state,mailer,max=5,deadline=Infinity,log=()=>{}}){
+ const stats={checked:0,verified:0,held:0};
+ if(typeof mailer?.authorizeRecipient!=='function')return stats;
+ const learned=assetStats(state);
+ const queue=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION&&!suppressed(state,p.email,p.domain)&&
+   !(state.contacted?.[p.domain]&&ageDays(state.contacted[p.domain])<90)&&!usableVerification(p.recipient_proof?.verification,p.email)&&
+   !(p.contact_quality?.status==='held'&&ageDays(p.contact_quality.checked_at)<3))
+  .map(p=>[p,linkLikelihood(p,{assets:learned})]).sort((a,b)=>b[1]-a[1]).slice(0,Math.max(0,max)).map(x=>x[0]);
+ for(const p of queue){
+  if(Date.now()>deadline)break;stats.checked++;
+  let proof;try{proof=await mailer.authorizeRecipient(p,{state,followup:false,deadline})}catch{proof={ok:false,reason:'verification_error'}}
+  if(applyProof(state,p,proof))stats.verified++;else stats.held++;
+ }
+ log(`pre-verify (nothing sent): ${stats.checked} top inboxes checked, ${stats.verified} verified, ${stats.held} held`);
+ return stats;
+}
 export async function runOutreach({state,assets,sites,writer,mailer,config,deadline=Infinity,log=()=>{}}){
  state.contacted??={};state.suppression??={};
  const stats={followups:0,sent:0,drafted:0,skipped:0,deferred:0,cap:0,verification_held:0};
  if(!['send','draft'].includes(config.mode))return stats;
+ if(config.mode==='send')restartRampIfIdle(state);
  const cap=config.mode==='send'?dailyCap(state,config.dailyLimit):Math.max(0,Number(config.dailyLimit)||0);stats.cap=cap;
  // The production Gmail transport supplies authorizeRecipient and independently
  // requires its proof at SMTP. Injected in-memory test transports cannot send mail.
@@ -113,14 +153,8 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   if(Date.now()>deadline||++checked>24)return false;
   if(suppressed(state,p.email,p.domain))return false;
   let proof;try{proof=await verify(p,{state,followup,deadline})}catch{proof={ok:false,reason:'verification_error'}}
-  const e=normalizeEmail(proof?.email),valid=proof?.ok===true&&e&&usableVerification(proof.verification,e)&&
-   samePublisher(proof.evidence?.source,p.domain)&&proof.evidence?.email===e&&
-   Number.isFinite(Date.parse(proof.evidence?.observed_at))&&Date.now()-Date.parse(proof.evidence.observed_at)>=0&&Date.now()-Date.parse(proof.evidence.observed_at)<DAY;
-  if(!valid||suppressed(state,e,p.domain)||(followup&&e!==normalizeEmail(p.email))){
-   p.contact_quality={status:'held',reason:proof?.reason||'recipient_not_verified',checked_at:NOW()};delete p.recipient_proof;stats.verification_held++;return false;
-  }
-  p.email=e;p.email_source=proof.evidence.source;p.email_rank=proof.evidence.rank;
-  p.recipient_proof={...proof,publisher_domain:p.domain};p.contact_quality={status:'verified',checked_at:NOW()};return true;
+  if(!applyProof(state,p,proof,{followup})){stats.verification_held++;return false}
+  return true;
  };
  const deliver=async(p,{subject,body},type,inReplyTo)=>{
   if(suppressed(state,p.email,p.domain)||(requiresProof&&!usableVerification(p.recipient_proof?.verification,p.email)))throw Error('Recipient verification no longer valid');
@@ -150,6 +184,8 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   const site=siteBy.get(p.site);if(!site){p.status='stale_asset';stats.skipped++;continue}
   if(!await prepare(p,false))continue;
   const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title||site.domain,type:p.kind==='mention'?'brand':'resource',description:''};
+  // The email states that a link is dead: confirm it still is, seconds before writing it.
+  if(p.broken_link){const r=await (config.recheckBroken||(u=>checkDead(u)))(p.broken_link.url).catch(()=>null);if(!r?.dead){p.broken_link_cleared_at=NOW();delete p.broken_link}else stats.broken_link_pitches=(stats.broken_link_pitches||0)+1}
   const pitch=await writer.write(p,asset,site);p.writer=pitch.writer;
   try{await deliver(p,pitch,'initial');state.contacted[p.domain]=NOW();if(config.mode==='send')state.first_send_at??=NOW();
    p.status=config.mode==='send'?'sent':'drafted';p.next_link_check=new Date(Date.now()+5*DAY).toISOString();

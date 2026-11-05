@@ -19,9 +19,10 @@ import {crawlPortfolio} from './crawl.mjs';
 import {rankPortfolio,internalLinkPlan} from './score.mjs';
 import {DataForSEO} from './dataforseo.mjs';
 import {gscDemand,dfsDemand} from './demand.mjs';
-import {discoverProspects,requalify,QUALIFY_VERSION} from './prospect.mjs';
+import {discoverProspects,requalify,enrichBrokenLinks,freshQueryCount,QUALIFY_VERSION} from './prospect.mjs';
+import {indexationReport} from './indexation.mjs';
 import {PitchWriter} from './pitch.mjs';
-import {processReplies,runOutreach,checkLinks,gmailTransport,dailyCap,outreachStatus} from './outreach.mjs';
+import {processReplies,runOutreach,preverify,checkLinks,gmailTransport,dailyCap,outreachStatus} from './outreach.mjs';
 import {assetStats,learningSummary} from './learn.mjs';
 import {seal,open} from './vault.mjs';
 import {NOW,ageDays} from './util.mjs';
@@ -31,7 +32,8 @@ const P={summary:resolve(ROOT,'public/data/autopilot.json'),vault:resolve(ROOT,'
 const readJson=async(f,fallback)=>{try{return JSON.parse(await readFile(f,'utf8'))}catch{return fallback}};
 const num=(v,d)=>Number.isFinite(Number(v))&&String(v).trim()!==''?Number(v):d;
 
-const DASHBOARD_SETTINGS=['SENDER_NAME','OUTREACH_MODE','OUTREACH_DAILY_LIMIT'];
+// The verifier opt-in and budget are read by the recipient gate (recipient-policy.mjs).
+const DASHBOARD_SETTINGS=['SENDER_NAME','OUTREACH_MODE','OUTREACH_DAILY_LIMIT','EMAIL_VERIFICATION_ENABLED','EMAIL_VERIFY_DAILY_LIMIT'];
 /** The dashboard saves these as one JSON secret; it takes precedence over older repo variables. */
 export function withDashboardSettings(env){
   let s={};try{s=JSON.parse(env.LINKFORGE_SETTINGS||'{}')}catch{}
@@ -46,15 +48,18 @@ export function loadConfig(env=process.env,argv=process.argv){
   return {
     dryRun,
     minutes:num(env.AUTOPILOT_MINUTES,22),maxUrlsPerSite:num(env.AUTOPILOT_MAX_URLS_PER_SITE,300),
-    assetsPerSite:num(env.AUTOPILOT_ASSETS_PER_SITE,3),queriesPerAsset:num(env.AUTOPILOT_QUERIES_PER_ASSET,2),maxNewProspects:num(env.AUTOPILOT_MAX_NEW_PROSPECTS,60),
+    assetsPerSite:num(env.AUTOPILOT_ASSETS_PER_SITE,3),queriesPerAsset:num(env.AUTOPILOT_QUERIES_PER_ASSET,3),maxNewProspects:num(env.AUTOPILOT_MAX_NEW_PROSPECTS,60),
     dataKey:env.LINKFORGE_DATA_KEY||'',vaultResetAt:env.LINKFORGE_VAULT_RESET_AT||'',
     dfs:{login:env.DATAFORSEO_LOGIN||'',password:env.DATAFORSEO_PASSWORD||'',dailyUsd:num(env.DATAFORSEO_DAILY_USD,0.5),monthlyUsd:num(env.DATAFORSEO_MONTHLY_USD,10)},
     outreach:{mode,gmail,fromAddress:env.GMAIL_ADDRESS||(dryRun?'dry-run@linkforge.invalid':''),senderName:env.SENDER_NAME||'',postalAddress:env.SENDER_POSTAL_ADDRESS||'',
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5'},
-    gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,
+    gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,preverifyMax:num(env.AUTOPILOT_PREVERIFY,5),
+    verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
+      enabled:env.EMAIL_VERIFICATION_ENABLED==='YES',dailyLimit:Math.min(100,Math.max(0,Math.floor(num(env.EMAIL_VERIFY_DAILY_LIMIT,0))))},
   };
 }
+const verifierReady=cfg=>cfg.verifier.providers.length>0&&cfg.verifier.enabled&&cfg.verifier.dailyLimit>0;
 
 export function setupChecklist(cfg){
   const items=[
@@ -62,6 +67,7 @@ export function setupChecklist(cfg){
     {key:'DATAFORSEO_LOGIN + DATAFORSEO_PASSWORD',label:'DataForSEO API',done:!!(cfg.dfs.login&&cfg.dfs.password),unlocks:'Finds link prospects in Google and estimates page traffic',required:true},
     {key:'GMAIL_ADDRESS + GMAIL_APP_PASSWORD',label:'Gmail app password',done:cfg.outreach.gmail,unlocks:'Writes pitches into Gmail Drafts, reads replies, detects bounces',required:true},
     {key:'SENDER_NAME',label:'Sender name',done:!!cfg.outreach.senderName,unlocks:'Signs every pitch with your real name',required:true},
+    {key:'VERIFALIA_USERNAME + VERIFALIA_PASSWORD + EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox verifier (needed to send)',done:verifierReady(cfg),unlocks:'Proves each editor inbox exists before any email goes out, so nothing bounces. Verifalia free plan: 25 credits every day, free credits only (Hunter key optional as fallback)',required:false},
     {key:'OUTREACH_MODE = send',label:'Hands-free sending',done:cfg.outreach.mode==='send',unlocks:'Sends pitches and one follow-up automatically (warm-up ramp, daily cap)',required:false},
     {key:'ANTHROPIC_API_KEY',label:'Claude pitch writer',done:!!cfg.claude.apiKey,unlocks:'Writes a unique, page-specific email for every prospect',required:false},
     {key:'GSC_SERVICE_ACCOUNT_JSON',label:'Search Console',done:cfg.gsc,unlocks:'Exact impressions/positions to target striking-distance pages',required:false},
@@ -70,10 +76,14 @@ export function setupChecklist(cfg){
 }
 
 /** Pick assets to promote this run: top per site, rotating toward assets with the fewest prospects. */
-export function chooseAssets(ranked,state,{perSite=3,minLinkability=50}={}){
+export function chooseAssets(ranked,state,{perSite=3,minLinkability=50,sites=null}={}){
   const counts=new Map();for(const p of Object.values(state.prospects||{}))counts.set(p.asset_url,(counts.get(p.asset_url)||0)+(p.status==='rejected'?0:1));
+  // With sites given, skip assets whose searches are all on cooldown and rotate deeper into the ranking
+  // (otherwise the same top pages are chosen forever and prospecting stalls at 0 queries).
+  const siteBy=sites&&new Map(sites.map(x=>[x.domain,x]));
   const bySite=new Map();
-  for(const a of ranked){if(a.linkability<minLinkability)continue;const l=bySite.get(a.site)||[];if(l.length<perSite*2)l.push(a);bySite.set(a.site,l)}
+  for(const a of ranked){if(a.linkability<minLinkability)continue;if(siteBy&&!freshQueryCount(a,siteBy.get(a.site),state))continue;
+    const l=bySite.get(a.site)||[];if(l.length<perSite*(siteBy?4:2))l.push(a);bySite.set(a.site,l)}
   // Pages that earn replies get more prospecting; pages with a deep unused queue get less.
   const learned=assetStats(state);
   const value=a=>{const r=learned.get(a.url);return (r&&r.sent>=3?r.rate*3:1)/(1+(counts.get(a.url)||0)/10)};
@@ -92,13 +102,14 @@ export function funnel(state){
   const ps=Object.values(state.prospects||{}),by=s=>ps.filter(p=>s.includes(p.status)).length;
   const contacted=ps.filter(p=>(p.history||[]).some(h=>h.type==='initial')).length;
   return {prospects_evaluated:Object.keys(state.domains||{}).length,qualified:ps.filter(p=>!['rejected','already_linked'].includes(p.status)).length,
-    ready:by(['ready']),contact_form_only:by(['contact_form']),no_contact:by(['no_contact']),contacted,
+    ready:by(['ready']),broken_link_ready:ps.filter(p=>p.status==='ready'&&p.broken_link).length,contact_form_only:by(['contact_form']),no_contact:by(['no_contact']),contacted,
     replied:ps.filter(p=>p.replied_at).length,positive:by(['positive']),won:by(['won']),existing_links:by(['already_linked']),
     declined:by(['declined']),bounced:by(['bounced'])};
 }
 
 export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=fetch,mailer:injectedMailer,write=true,useCache=true}={}){
   const cfg=loadConfig(env,argv),started=Date.now(),deadline=started+cfg.minutes*60e3;
+  env=withDashboardSettings(env); // the recipient verifier reads its opt-in and budget from here
   // Logs are published in the public summary: never let an address through.
   const logs=[],log=m=>{const line=String(m).replace(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi,'[email]');logs.push(`${new Date().toISOString().slice(11,19)} ${line}`);console.log(line)};
   const stages={};
@@ -149,18 +160,28 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   const ranked=crawl.length?rankPortfolio(crawl,{demand}):(previous.best_urls||[]);
   const internal=crawl.length?internalLinkPlan(crawl,ranked):(previous.internal_links||[]);
   stages.rank={ok:true,result:{ranked:ranked.length,internal_suggestions:internal.length}};
-  const chosen=chooseAssets(ranked,state,{perSite:cfg.assetsPerSite});
+  const chosen=chooseAssets(ranked,state,{perSite:cfg.assetsPerSite,sites:SITES});
+  const indexation=crawl.length?indexationReport(crawl):previous.indexation||null;
+  if(indexation)log(`indexation: ${indexation.total_issues} sitemap URLs with an indexing problem (${indexation.sites.reduce((n,x)=>n+x.critical,0)} critical)`);
   // ---- 4. Prospects ----
   await stage('requalify',vaultOk,()=>requalify({state,dfs,fetchImpl,deadline:deadline-8*60e3,log}),privateWhy);
-  await stage('prospects',vaultOk&&dfs.enabled&&chosen.length>0,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,deadline:deadline-6*60e3,log}),
-    !vaultOk?privateWhy:!dfs.enabled?(dfs.authError||'DataForSEO credentials not set'):'no promotable assets');
+  // Runs even with no fresh asset searches: brand-mention searches have their own schedule.
+  await stage('prospects',vaultOk&&dfs.enabled,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,deadline:deadline-6*60e3,log}),
+    !vaultOk?privateWhy:(dfs.authError||'DataForSEO credentials not set'));
+  await stage('broken_links',vaultOk,()=>enrichBrokenLinks({state,assets:ranked,sites:SITES,fetchImpl,deadline:deadline-5*60e3,log}),privateWhy);
   // ---- 5. Mail ----
-  const mailWhy=!vaultOk?privateWhy:!mailer?'Gmail app password not set':!gmailOk?connections.gmail.error:cfg.outreach.mode==='off'?'OUTREACH_MODE=off':'';
+  // The production transport demands verified-mailbox proof for every recipient: without a verifier nothing could go out.
+  const noVerifier=typeof mailer?.authorizeRecipient==='function'&&!verifierReady(cfg);
+  const mailWhy=!vaultOk?privateWhy:!mailer?'Gmail app password not set':!gmailOk?connections.gmail.error
+    :cfg.outreach.mode==='off'?'OUTREACH_MODE=off':noVerifier?'mailbox verifier not configured (Verifalia login or Hunter key, plus a verification daily limit)':'';
   try{
     await stage('replies',vaultOk&&gmailOk,()=>processReplies({state,imap:mailer.imap,log}),mailWhy||'Gmail not set');
     const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',log});
-    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!!cfg.outreach.senderName,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:cfg.outreach,deadline:deadline-2*60e3,log}),mailWhy||'SENDER_NAME not set');
+    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:cfg.outreach,deadline:deadline-2*60e3,log}),mailWhy||'SENDER_NAME not set');
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,template_fallbacks:writer.fallbacks};
+    // Outreach paused (safety hold / mode off): spend today's free verification credits on the best queued inboxes instead.
+    await stage('preverify',vaultOk&&gmailOk&&!noVerifier&&stages.outreach?.ok!==true&&typeof mailer?.authorizeRecipient==='function',
+      ()=>preverify({state,mailer,max:cfg.preverifyMax,deadline:deadline-90e3,log}),!vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':'runs only while outreach is paused');
   }finally{await mailer?.close?.().catch(()=>{})}
   // ---- 6. Link verification ----
   await stage('link_checks',vaultOk,()=>checkLinks({state,ourDomains:SITES.map(s=>s.domain),fetchImpl,deadline,log}),privateWhy);
@@ -176,7 +197,9 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     schema:'linkforge-autopilot/1',generated_at:NOW(),duration_s:Math.round((Date.now()-started)/1000),dry_run:cfg.dryRun,
     schedule:"Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
     capabilities:{vault:vaultOk,dataforseo:dfs.enabled,gmail:cfg.outreach.gmail&&gmailOk,connections,outreach_mode:cfg.outreach.mode,claude:!!cfg.claude.apiKey,gsc:cfg.gsc,
-      daily_send_cap:cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit},
+      daily_send_cap:cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit,
+      verifier:{ready:verifierReady(cfg),providers:cfg.verifier.providers,key:cfg.verifier.providers.length>0,enabled:cfg.verifier.enabled,daily_limit:cfg.verifier.dailyLimit,
+        used_today:state.email_verifier_usage?.[NOW().slice(0,10)]||0,balance:state.verifier_balance||null,catch_all_domains_skipped:Object.keys(state.catch_all_domains||{}).length}},
     setup:setupChecklist(cfg),stages,
     totals:{sites:SITES.length,pages_crawled:crawl.reduce((n,s)=>n+s.pages.length,0),urls_discovered:crawl.reduce((n,s)=>n+(s.discovered||0),0),
       promotable:ranked.length,internal_suggestions:internal.length,promoting_now:chosen.length},
@@ -186,7 +209,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     sites:crawl.map(s=>({domain:s.site,pages:s.pages.length,discovered:s.discovered,sitemaps:s.sitemaps.length,
       eligible:ranked.filter(a=>a.site===s.site).length,top:ranked.find(a=>a.site===s.site)?.url||null})),
     best_urls:ranked.slice(0,80).map(({terms,...a})=>({...a,prospects:prospectsByAsset.get(a.url)||0,internal_link_suggestions:internalByAsset.get(a.url)||0,promoting:chosen.some(c=>c.url===a.url)})),
-    internal_links:internal.slice(0,200),
+    internal_links:internal.slice(0,200),indexation,
     wins:Object.values(state.prospects).filter(p=>p.status==='won'||p.status==='already_linked').map(p=>({site:p.site,publisher:p.domain,page_url:p.page_url,title:p.title,
       kind:p.status==='won'?'won':'existing',target:p.won?.target||p.existing_link?.url||null,anchor:p.won?.anchor||p.existing_link?.anchor||'',rel:p.won?.rel||p.existing_link?.rel||'',found_at:p.won?.found_at||p.found_at})).sort((a,b)=>String(b.found_at).localeCompare(String(a.found_at))).slice(0,200),
     log:logs.slice(-80),

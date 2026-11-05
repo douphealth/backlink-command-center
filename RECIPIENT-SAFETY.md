@@ -27,6 +27,18 @@ Set these in GitHub Actions settings, never in public files or issues:
 | Variable | `EMAIL_VERIFICATION_ENABLED` | `YES` only after the owner authorizes verification requests. Default `NO`. |
 | Variable | `EMAIL_VERIFY_DAILY_LIMIT` | Owner-approved positive integer attempt cap; maximum 100. Default `0`. |
 
+### Verifalia (primary, free) and Hunter (fallback)
+
+| Type | Name | Requirement |
+| --- | --- | --- |
+| Secret | `VERIFALIA_USERNAME` / `VERIFALIA_PASSWORD` | A Verifalia user (preferably a dedicated sub-user). HTTP Basic auth header; never in URLs. |
+| Variable | `VERIFALIA_QUALITY` | `Standard` (1 credit), `High` (2, default) or `Extreme` (4). |
+| Variable | `VERIFALIA_ALLOW_PAID` | `YES` lets checks use purchased credit packs. Default: free daily credits only, read from `/credits/balance` before any submission, so verification cannot cost money. |
+
+A send needs `classification=Deliverable`, `status=Success` and no disposable flag, for the exact address. `ServerIsCatchAll`, `Risky` and `Unknown` hold; `Undeliverable` suppresses the address. Each finished job is deleted from Verifalia right after it is read. A submission is never re-sent after an uncertain network error. Credit savers: catch-all domains are remembered for 90 days and skipped (no provider can prove an inbox there), inconclusive answers are not re-bought for 3 days, and checks happen only at send time for the highest-ranked prospect inside its send window. Hunter is called only when Verifalia has no free credits left that day or is unavailable. The owner's daily cap covers both providers.
+
+The dashboard (⚙ Connect) can store the key as the `HUNTER_API_KEY` secret and the daily limit in the encrypted `LINKFORGE_SETTINGS` secret. A limit above 0 records the owner's opt-in (`EMAIL_VERIFICATION_ENABLED=YES`), and 0 turns it off. Dashboard settings take precedence over repository variables. Without a usable verifier the outreach stage is skipped and reports why: no page fetches, no provider calls, no mail. This does not lift the workflow's outbound hold.
+
 The adapter uses the official `https://api.hunter.io/v2/email-verifier` endpoint with `X-API-KEY`. API keys do not go into URLs or logs. A provider response is not an inbox-placement guarantee. Provider costs are separate from DataForSEO costs; no paid calls are made without the opt-in and budget. Attempts are counted even on timeout; uncertain requests are not automatically retried. Usage is stored with the encrypted state at the normal cycle checkpoint, so the counter is not a crash-proof transactional billing ledger.
 
 ## Replies and recovery

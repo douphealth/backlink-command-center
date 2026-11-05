@@ -36,6 +36,8 @@ const steps=[
   ['DATAFORSEO_PASSWORD','DataForSEO API password (dashboard → API Access)',true],
   ['GMAIL_ADDRESS','Gmail address that sends outreach',false],
   ['GMAIL_APP_PASSWORD','Gmail App Password (myaccount.google.com/apppasswords, needs 2-Step Verification)',true],
+  ['VERIFALIA_USERNAME','Verifalia username: free inbox verification, 25 credits/day; required before anything is sent (verifalia.com/sign-up)',false],
+  ['VERIFALIA_PASSWORD','Verifalia password',true],
   ['ANTHROPIC_API_KEY','Anthropic API key for AI-written pitches (optional)',true],
   ['SENDER_POSTAL_ADDRESS','Postal address for the email footer (optional, recommended for CAN-SPAM)',false],
 ];
@@ -47,6 +49,8 @@ const sender=await ask('Sender name shown in emails (e.g. "Alex from GearUpToFit
 const mode=await ask('Outreach mode: draft (pitches land in Gmail Drafts) or send (fully hands-free)',{def:'draft'});
 if(['draft','send','off'].includes(mode))setVar('OUTREACH_MODE',mode);
 const limit=await ask('Max new pitches per day',{def:'12'});if(/^\d+$/.test(limit))setVar('OUTREACH_DAILY_LIMIT',limit);
+const checks=await ask('Mailbox checks per day (0 = verification and sending off; Verifalia free plan covers about 12)',{def:'12'});
+if(/^\d+$/.test(checks)){setVar('EMAIL_VERIFY_DAILY_LIMIT',checks);setVar('EMAIL_VERIFICATION_ENABLED',Number(checks)>0?'YES':'NO')}
 
 const run=await ask('Start the first Autopilot run now? (y/n)',{def:'y'});
 if(/^y/i.test(run)){const r=gh(['workflow','run','autopilot.yml']);console.log(r.status===0?'  ✓ Autopilot run started — results appear on your dashboard in ~5 minutes.':'  Could not start the workflow: '+r.stderr)}
