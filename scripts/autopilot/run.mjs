@@ -55,10 +55,11 @@ export function loadConfig(env=process.env,argv=process.argv){
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5'},
     gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,
-    verifier:{key:!!env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key',enabled:env.EMAIL_VERIFICATION_ENABLED==='YES',dailyLimit:Math.min(100,Math.max(0,Math.floor(num(env.EMAIL_VERIFY_DAILY_LIMIT,0))))},
+    verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
+      enabled:env.EMAIL_VERIFICATION_ENABLED==='YES',dailyLimit:Math.min(100,Math.max(0,Math.floor(num(env.EMAIL_VERIFY_DAILY_LIMIT,0))))},
   };
 }
-const verifierReady=cfg=>cfg.verifier.key&&cfg.verifier.enabled&&cfg.verifier.dailyLimit>0;
+const verifierReady=cfg=>cfg.verifier.providers.length>0&&cfg.verifier.enabled&&cfg.verifier.dailyLimit>0;
 
 export function setupChecklist(cfg){
   const items=[
@@ -66,7 +67,7 @@ export function setupChecklist(cfg){
     {key:'DATAFORSEO_LOGIN + DATAFORSEO_PASSWORD',label:'DataForSEO API',done:!!(cfg.dfs.login&&cfg.dfs.password),unlocks:'Finds link prospects in Google and estimates page traffic',required:true},
     {key:'GMAIL_ADDRESS + GMAIL_APP_PASSWORD',label:'Gmail app password',done:cfg.outreach.gmail,unlocks:'Writes pitches into Gmail Drafts, reads replies, detects bounces',required:true},
     {key:'SENDER_NAME',label:'Sender name',done:!!cfg.outreach.senderName,unlocks:'Signs every pitch with your real name',required:true},
-    {key:'HUNTER_API_KEY + EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox verifier (needed to send)',done:verifierReady(cfg),unlocks:'Proves each editor inbox exists before any email goes out, so nothing bounces (Hunter free plan: 50 credits/month)',required:false},
+    {key:'VERIFALIA_USERNAME + VERIFALIA_PASSWORD + EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox verifier (needed to send)',done:verifierReady(cfg),unlocks:'Proves each editor inbox exists before any email goes out, so nothing bounces. Verifalia free plan: 25 credits every day, free credits only (Hunter key optional as fallback)',required:false},
     {key:'OUTREACH_MODE = send',label:'Hands-free sending',done:cfg.outreach.mode==='send',unlocks:'Sends pitches and one follow-up automatically (warm-up ramp, daily cap)',required:false},
     {key:'ANTHROPIC_API_KEY',label:'Claude pitch writer',done:!!cfg.claude.apiKey,unlocks:'Writes a unique, page-specific email for every prospect',required:false},
     {key:'GSC_SERVICE_ACCOUNT_JSON',label:'Search Console',done:cfg.gsc,unlocks:'Exact impressions/positions to target striking-distance pages',required:false},
@@ -172,7 +173,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   // The production transport demands verified-mailbox proof for every recipient: without a verifier nothing could go out.
   const noVerifier=typeof mailer?.authorizeRecipient==='function'&&!verifierReady(cfg);
   const mailWhy=!vaultOk?privateWhy:!mailer?'Gmail app password not set':!gmailOk?connections.gmail.error
-    :cfg.outreach.mode==='off'?'OUTREACH_MODE=off':noVerifier?'mailbox verifier not configured (HUNTER_API_KEY + verification daily limit)':'';
+    :cfg.outreach.mode==='off'?'OUTREACH_MODE=off':noVerifier?'mailbox verifier not configured (Verifalia login or Hunter key, plus a verification daily limit)':'';
   try{
     await stage('replies',vaultOk&&gmailOk,()=>processReplies({state,imap:mailer.imap,log}),mailWhy||'Gmail not set');
     const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',log});
@@ -194,7 +195,8 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     schedule:"Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
     capabilities:{vault:vaultOk,dataforseo:dfs.enabled,gmail:cfg.outreach.gmail&&gmailOk,connections,outreach_mode:cfg.outreach.mode,claude:!!cfg.claude.apiKey,gsc:cfg.gsc,
       daily_send_cap:cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit,
-      verifier:{ready:verifierReady(cfg),key:cfg.verifier.key,enabled:cfg.verifier.enabled,daily_limit:cfg.verifier.dailyLimit,used_today:state.email_verifier_usage?.[NOW().slice(0,10)]||0}},
+      verifier:{ready:verifierReady(cfg),providers:cfg.verifier.providers,key:cfg.verifier.providers.length>0,enabled:cfg.verifier.enabled,daily_limit:cfg.verifier.dailyLimit,
+        used_today:state.email_verifier_usage?.[NOW().slice(0,10)]||0,balance:state.verifier_balance||null,catch_all_domains_skipped:Object.keys(state.catch_all_domains||{}).length}},
     setup:setupChecklist(cfg),stages,
     totals:{sites:SITES.length,pages_crawled:crawl.reduce((n,s)=>n+s.pages.length,0),urls_discovered:crawl.reduce((n,s)=>n+(s.discovered||0),0),
       promotable:ranked.length,internal_suggestions:internal.length,promoting_now:chosen.length},

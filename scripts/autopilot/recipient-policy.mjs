@@ -72,7 +72,23 @@ export function usableVerification(v,email,now=Date.now()){
 }
 export function hunterVerdict(data,email,now=Date.now()){
   const d=data?.data,valid=d?.email?.toLowerCase()===email&&d.status==='valid'&&d.regexp===true&&d.mx_records===true&&d.smtp_server===true&&d.smtp_check===true&&d.accept_all===false&&d.block===false&&d.disposable===false&&d.gibberish===false;
-  return {policy_version:POLICY_VERSION,email,status:valid?'valid':d?.status==='invalid'?'invalid':'unknown',provider:'hunter',checked_at:new Date(now).toISOString(),expires_at:new Date(now+DAY).toISOString(),smtp_check:valid,accept_all:d?.accept_all!==false,block:d?.block!==false,disposable:d?.disposable!==false};
+  return {policy_version:POLICY_VERSION,email,status:valid?'valid':d?.status==='invalid'?'invalid':'unknown',provider:'hunter',checked_at:new Date(now).toISOString(),expires_at:new Date(now+DAY).toISOString(),smtp_check:valid,accept_all:d?.accept_all!==false,block:d?.block!==false,disposable:d?.disposable!==false,catch_all:d?.accept_all===true};
+}
+/**
+ * Verifalia (verifalia.com): permanent free plan with daily free credits, HTTP Basic auth
+ * (credentials never in URLs), REST API v2.6 as used by its official SDK (npm "verifalia" 5.x).
+ * Only Deliverable + Success with no disposable flag counts; catch-all (ServerIsCatchAll),
+ * Risky and Unknown never authorize a send. Undeliverable is a definitive negative.
+ */
+export const VERIFALIA_API=['https://api-1.verifalia.com/v2.6','https://api-2.verifalia.com/v2.6','https://api-3.verifalia.com/v2.6'];
+export const VERIFALIA_COST={Standard:1,High:2,Extreme:4}; // credits per address (Verifalia result-quality levels)
+export function verifaliaVerdict(entry,email,now=Date.now()){
+  const e=entry||{},addr=normalizeEmail(String(e.emailAddress||e.inputData||'').toLowerCase());
+  const valid=addr===email&&e.classification==='Deliverable'&&e.status==='Success'&&e.isDisposableEmailAddress!==true;
+  const catchAll=e.status==='ServerIsCatchAll';
+  return {policy_version:POLICY_VERSION,email,status:valid?'valid':addr===email&&e.classification==='Undeliverable'?'invalid':catchAll?'accept_all':'unknown',
+    provider:'verifalia',provider_status:String(e.status||'').slice(0,60),checked_at:new Date(now).toISOString(),expires_at:new Date(now+DAY).toISOString(),
+    smtp_check:valid,accept_all:!valid,block:!valid,disposable:valid?false:e.isDisposableEmailAddress!==false,catch_all:catchAll};
 }
 export async function checkMx(domain,resolveMx){
   try{const records=await resolveMx(domain);
@@ -88,19 +104,88 @@ export class RecipientVerifier{
     Object.assign(this,{state,fetchPage,fetch:fetchImpl,env,now});this.resolveMx=resolveMx||((d)=>new Resolver({timeout:4000,tries:1}).resolveMx(d));
     state.email_verifications??={};state.email_verifier_usage??={};this.pages=new Map();
   }
-  get enabled(){return this.env.EMAIL_VERIFICATION_ENABLED==='YES'&&!!this.env.HUNTER_API_KEY&&this.env.HUNTER_API_KEY!=='test-api-key'&&Number(this.env.EMAIL_VERIFY_DAILY_LIMIT)>0}
+  /** Configured providers, cheapest first: Verifalia's free daily credits, then Hunter. */
+  get providers(){
+    const out=[];
+    if(this.env.VERIFALIA_USERNAME&&this.env.VERIFALIA_PASSWORD)out.push('verifalia');
+    if(this.env.HUNTER_API_KEY&&this.env.HUNTER_API_KEY!=='test-api-key')out.push('hunter');
+    return out;
+  }
+  get enabled(){return this.env.EMAIL_VERIFICATION_ENABLED==='YES'&&this.providers.length>0&&Number(this.env.EMAIL_VERIFY_DAILY_LIMIT)>0}
+  /** Count one provider request against the owner's daily cap (uncertain calls count too). */
+  spend(){
+    const day=new Date(this.now()).toISOString().slice(0,10),limit=Math.min(100,Math.floor(Number(this.env.EMAIL_VERIFY_DAILY_LIMIT)||0)),usage=this.state.email_verifier_usage;
+    if((usage[day]||0)>=limit)return false;usage[day]=(usage[day]||0)+1;return true;
+  }
   async mailbox(email){
     if(!this.enabled)return {status:'unknown',reason:'verifier_not_configured'};
-    const key=createHash('sha256').update(email).digest('hex'),cached=this.state.email_verifications[key];if(usableVerification(cached,email,this.now()))return cached;
-    const day=new Date(this.now()).toISOString().slice(0,10),limit=Math.min(100,Math.floor(Number(this.env.EMAIL_VERIFY_DAILY_LIMIT)||0)),usage=this.state.email_verifier_usage;
-    if((usage[day]||0)>=limit)return {status:'unknown',reason:'verification_budget_exhausted'};
-    usage[day]=(usage[day]||0)+1;
+    const key=createHash('sha256').update(email).digest('hex'),cached=this.state.email_verifications[key],nowMs=this.now();
+    if(usableVerification(cached,email,nowMs))return cached;
+    // Don't buy the same inconclusive answer again: unknown for 3 days, catch-all for 30.
+    const age=cached?nowMs-Date.parse(cached.checked_at):Infinity;
+    if(cached?.status==='unknown'&&age<3*DAY||cached?.catch_all&&age<30*DAY)return {...cached,reason:'recently_inconclusive'};
+    let last='verification_unavailable';
+    for(const provider of this.providers){
+      const r=await (provider==='verifalia'?this.verifalia(email):this.hunter(email));
+      if(r.verdict){
+        const v=r.verdict;this.state.email_verifications[key]=v;
+        if(v.status==='invalid'){this.state.suppression??={};this.state.suppression[email]={reason:'Mailbox verifier returned invalid',at:new Date(nowMs).toISOString()}}
+        if(v.catch_all){this.state.catch_all_domains??={};this.state.catch_all_domains[email.split('@')[1]]=new Date(nowMs).toISOString()}
+        return v;
+      }
+      last=r.reason;if(r.stop)break; // budget exhausted: no other provider either
+    }
+    return {status:'unknown',reason:last};
+  }
+  async hunter(email){
+    if(!this.spend())return {reason:'verification_budget_exhausted',stop:true};
     try{const response=await this.fetch('https://api.hunter.io/v2/email-verifier?email='+encodeURIComponent(email),{headers:{'X-API-KEY':this.env.HUNTER_API_KEY,Accept:'application/json'},redirect:'error',signal:AbortSignal.timeout(25000)});
-      if(response.status!==200)return {status:'unknown',reason:'verification_unavailable'};
-      const v=hunterVerdict(await response.json(),email,this.now());this.state.email_verifications[key]=v;
-      if(v.status==='invalid'){this.state.suppression??={};this.state.suppression[email]={reason:'Mailbox verifier returned invalid',at:new Date(this.now()).toISOString()}}
-      return v;
-    }catch{return {status:'unknown',reason:'verification_unavailable'}}
+      if(response.status!==200)return {reason:'verification_unavailable'};
+      return {verdict:hunterVerdict(await response.json(),email,this.now())};
+    }catch{return {reason:'verification_unavailable'}}
+  }
+  /** One Verifalia API call. Only idempotent GET/DELETE fail over to another endpoint; a POST is never re-sent. */
+  async vcall(method,path,body){
+    const auth='Basic '+Buffer.from(`${this.env.VERIFALIA_USERNAME}:${this.env.VERIFALIA_PASSWORD}`).toString('base64');
+    for(const base of method==='POST'?VERIFALIA_API.slice(0,1):VERIFALIA_API){
+      try{const r=await this.fetch(base+path,{method,headers:{Authorization:auth,Accept:'application/json',...(body?{'Content-Type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,redirect:'error',signal:AbortSignal.timeout(45000)});
+        if(r.status>=500&&method!=='POST')continue;return r}
+      catch{if(method==='POST')return null}
+    }
+    return null;
+  }
+  async verifalia(email){
+    if(this.verifaliaOff)return {reason:this.verifaliaOff};
+    const quality=Object.hasOwn(VERIFALIA_COST,this.env.VERIFALIA_QUALITY)?this.env.VERIFALIA_QUALITY:'High',cost=VERIFALIA_COST[quality];
+    // Free credits only, unless the owner explicitly allows paid credit packs: this provider can never cost money by default.
+    const paid=this.env.VERIFALIA_ALLOW_PAID==='YES';
+    if(!paid){
+      if(this.verifaliaFree==null){
+        const b=await this.vcall('GET','/credits/balance');
+        if(b?.status===401||b?.status===403){this.verifaliaOff='verifalia_login_rejected';return {reason:this.verifaliaOff}}
+        const bal=b?.status===200?await b.json().catch(()=>null):null;
+        if(!bal){return {reason:'verifalia_unavailable'}}
+        this.verifaliaFree=Number(bal.freeCredits)||0;
+        this.state.verifier_balance={provider:'verifalia',free_credits:this.verifaliaFree,reset_in:bal.freeCreditsResetIn||null,checked_at:new Date(this.now()).toISOString()};
+      }
+      if(this.verifaliaFree<cost)return {reason:'verifalia_free_credits_used_up'};
+    }
+    if(!this.spend())return {reason:'verification_budget_exhausted',stop:true};
+    if(!paid){this.verifaliaFree-=cost;if(this.state.verifier_balance)this.state.verifier_balance.free_credits=this.verifaliaFree}
+    const res=await this.vcall('POST','/email-validations?waitTime=30000',{entries:[{inputData:email}],quality});
+    if(!res)return {reason:'verification_unavailable'};
+    if(res.status===401||res.status===403){this.verifaliaOff='verifalia_login_rejected';return {reason:this.verifaliaOff}}
+    if(res.status===402){this.verifaliaFree=0;this.verifaliaOff='verifalia_no_credits';return {reason:this.verifaliaOff}}
+    if(res.status!==200&&res.status!==202)return {reason:'verification_unavailable'};
+    let job=await res.json().catch(()=>null);const id=job?.overview?.id;
+    for(let i=0;i<3&&id&&job?.overview?.status!=='Completed';i++){
+      const r=await this.vcall('GET',`/email-validations/${encodeURIComponent(id)}?waitTime=30000`);
+      if(!r||(r.status!==200&&r.status!==202))break;job=await r.json().catch(()=>null);
+    }
+    // Data minimisation: the job (with the address) is deleted from Verifalia once read.
+    if(id)await this.vcall('DELETE',`/email-validations/${encodeURIComponent(id)}`).catch(()=>null);
+    if(job?.overview?.status!=='Completed')return {reason:'verification_pending'};
+    return {verdict:verifaliaVerdict(job.entries?.data?.[0],email,this.now())};
   }
   async page(url,domain){
     if(!samePublisher(url,domain))return null;if(this.pages.has(url))return this.pages.get(url);
@@ -125,6 +210,8 @@ export class RecipientVerifier{
     const ranked=[...candidates.values()].filter(c=>(!followup&&!hasContact)||c.email===normalizeEmail(p.email)).sort((a,b)=>b.rank-a.rank);
     if(!ranked.length)return fail('no_published_editorial_contact');let attempted=0;
     for(const c of ranked){if(++attempted>3||this.now()>=deadline)break;if(isSuppressed(this.state,c.email,p.domain))continue;
+      // A catch-all mail server accepts every address, so no provider can prove this inbox: don't spend a credit.
+      const seenCatchAll=this.state.catch_all_domains?.[c.email.split('@')[1]];if(seenCatchAll&&this.now()-Date.parse(seenCatchAll)<90*DAY)continue;
       const mx=await checkMx(c.email.split('@')[1],this.resolveMx);if(!mx.ok)continue;
       const v=await this.mailbox(c.email);if(usableVerification(v,c.email,this.now()))return {ok:true,email:c.email,evidence:c,verification:v};
     }

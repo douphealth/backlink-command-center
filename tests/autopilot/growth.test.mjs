@@ -113,10 +113,12 @@ test('asset rotation skips pages whose searches are all on cooldown',()=>{
 });
 test('verifier opt-in and budget can come from the dashboard settings secret',()=>{
   const cfg=loadConfig({HUNTER_API_KEY:'k',LINKFORGE_SETTINGS:JSON.stringify({EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:'500'})},[]);
-  assert.deepEqual(cfg.verifier,{key:true,enabled:true,dailyLimit:100});
-  assert.equal(setupChecklist(cfg).find(x=>x.key.startsWith('HUNTER')).done,true);
+  assert.deepEqual(cfg.verifier,{providers:['hunter'],enabled:true,dailyLimit:100});
+  assert.equal(setupChecklist(cfg).find(x=>x.key.startsWith('VERIFALIA')).done,true);
+  const both=loadConfig({VERIFALIA_USERNAME:'u',VERIFALIA_PASSWORD:'p',HUNTER_API_KEY:'k',EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:'12'},[]);
+  assert.deepEqual(both.verifier.providers,['verifalia','hunter']);
   const off=loadConfig({HUNTER_API_KEY:'test-api-key',EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:'5'},[]);
-  assert.equal(setupChecklist(off).find(x=>x.key.startsWith('HUNTER')).done,false);
+  assert.equal(setupChecklist(off).find(x=>x.key.startsWith('VERIFALIA')).done,false);
 });
 test('dead-link prospects rank higher and are counted in the funnel',()=>{
   const p={score:60,etv:2000,email:'editor@x.com',email_rank:80,domain:'x.com'};

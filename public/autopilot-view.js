@@ -43,8 +43,10 @@ const FIELDS=[
   {name:'OUTREACH_MODE',label:'Outreach mode',type:'select',kind:'setting',options:[['send','Hands-free: send pitches + 1 follow-up automatically'],['draft','Safe: write pitches into Gmail Drafts'],['off','Research only']]},
   {name:'OUTREACH_DAILY_LIMIT',label:'Max new pitches per day',type:'number',kind:'setting',help:'Starts at 5/day and ramps up by 2/day to this limit'},
   {name:'ANTHROPIC_API_KEY',label:'Anthropic API key (optional)',type:'password',kind:'secret',help:'Claude writes a unique pitch for every page'},
-  {name:'HUNTER_API_KEY',label:'Hunter API key (needed to send)',type:'password',kind:'secret',help:'Every inbox is verified before any email goes out. hunter.io → API keys',link:'https://hunter.io/api-keys'},
-  {name:'EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox checks per day',type:'number',kind:'setting',min:0,max:100,placeholder:'3',help:'Each check uses Hunter credits. 0 turns verification (and so sending) off. Free plan: about 2–3 a day'},
+  {name:'VERIFALIA_USERNAME',label:'Verifalia username (needed to send)',type:'text',kind:'secret',help:'Free plan: 25 credits every day, about 12 inbox checks. Create a dedicated user in the Verifalia client area',link:'https://verifalia.com/sign-up'},
+  {name:'VERIFALIA_PASSWORD',label:'Verifalia password',type:'password',kind:'secret',help:'Only free daily credits are used, so verification never costs money'},
+  {name:'EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox checks per day',type:'number',kind:'setting',min:0,max:100,placeholder:'12',help:'Upper limit across providers. 0 turns verification (and so sending) off'},
+  {name:'HUNTER_API_KEY',label:'Hunter API key (optional fallback)',type:'password',kind:'secret',help:'Used only when Verifalia\'s free credits for the day are used up. hunter.io → API keys',link:'https://hunter.io/api-keys'},
 ];
 // Settings travel as one encrypted secret (no Variables permission needed); this browser remembers them for display.
 const local=(k,fallback)=>({get:()=>{try{return JSON.parse(localStorage.getItem(k))??fallback}catch{return fallback}},set:v=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}}});
@@ -146,7 +148,8 @@ function learningPanel(h,s){
 /** Plain answer to "why aren't more pitches going out?" */
 function outreachLine(s,{escapeHTML:e,n,niceTime}){
   const o=s.outreach,v=s.capabilities?.verifier;
-  const verify=v?`<p class="ap-outreach"><b>Mailbox verifier:</b> ${v.ready?`on · ${n(v.used_today)}/${n(v.daily_limit)} checks used today`:v.key?'key saved, but the daily limit is 0 (set "Mailbox checks per day")':'not connected. Add a Hunter API key under ⚙ Connect, or nothing can be sent'}${o?` · ${n(o.verified_ready)} of ${n(o.ready)} queued inboxes verified`:''}</p>`:'';
+  const bal=v?.balance?` · Verifalia free credits left today: ${n(v.balance.free_credits)}`:'';
+  const verify=v?`<p class="ap-outreach"><b>Mailbox verifier:</b> ${v.ready?`${e((v.providers||[]).join(' → '))} · ${n(v.used_today)}/${n(v.daily_limit)} checks used today${bal}${v.catch_all_domains_skipped?` · ${n(v.catch_all_domains_skipped)} catch-all domains skipped`:''}`:v.key?'login saved, but the daily limit is 0 (set "Mailbox checks per day")':'not connected. Add a free Verifalia login under ⚙ Connect, or nothing can be sent'}${o?` · ${n(o.verified_ready)} of ${n(o.ready)} queued inboxes verified`:''}</p>`:'';
   if(!o||o.mode==='off')return verify;
   const next=o.next_send_at?niceTime(o.next_send_at):null;
   const why=o.sent_today>=o.cap_today?`today's warm-up limit is used (${n(o.sent_today)}/${n(o.cap_today)})`:o.sending_now?'sending during this run':`waiting for recipients' business hours (weekdays)`;
