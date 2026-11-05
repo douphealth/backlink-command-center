@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-05T08:09:35.538Z",
- "duration_s": 112,
+ "generated_at": "2026-11-05T08:17:11.382Z",
+ "duration_s": 46,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 16.909326
+    "balance_usd": 16.889325999999997
    },
    "gmail": {
     "status": "connected"
@@ -30,7 +30,11 @@
    "enabled": true,
    "daily_limit": 12,
    "used_today": 0,
-   "balance": null,
+   "balance": {
+    "provider": "verifalia",
+    "error": "login_rejected",
+    "checked_at": "2026-11-05T08:17:01.218Z"
+   },
    "catch_all_domains_skipped": 0
   }
  },
@@ -102,7 +106,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 5386,
+   "ms": 17299,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -110,7 +114,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -125,7 +129,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -135,35 +139,34 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 87454,
+   "ms": 12,
    "result": {
-    "queries": 5,
+    "queries": 0,
     "mention_queries": 0,
-    "serp_results": 87,
-    "candidates": 20,
-    "qualified": 11,
+    "serp_results": 0,
+    "candidates": 0,
+    "qualified": 0,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 9,
-    "with_email": 5,
-    "contact_form": 2,
+    "rejected": 0,
+    "with_email": 0,
+    "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
-    "failed_queries": 1,
     "deferred": 0
    }
   },
   "broken_links": {
    "ok": true,
-   "ms": 9522,
+   "ms": 12982,
    "result": {
     "checked": 25,
-    "found": 4
+    "found": 2
    }
   },
   "replies": {
    "ok": true,
-   "ms": 2462,
+   "ms": 868,
    "result": {
     "scanned": 0,
     "replies": 0,
@@ -179,7 +182,7 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 5450,
+   "ms": 12354,
    "result": {
     "checked": 5,
     "verified": 0,
@@ -209,7 +212,7 @@
   "month_usd": 0.5944,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 10
+  "calls_this_run": 0
  },
  "outreach": {
   "mode": "off",
@@ -217,9 +220,9 @@
   "verified_ready": 0,
   "pending_verification": 160,
   "holds": {
-   "no_email_published": 2,
-   "only_non_editorial_inbox_published": 5,
-   "mailbox_verifalia_login_rejected": 3
+   "mailbox_verifalia_login_rejected": 6,
+   "no_email_published": 3,
+   "only_non_editorial_inbox_published": 6
   },
   "sent_today": 0,
   "cap_today": 12,
@@ -231,7 +234,7 @@
   "prospects_evaluated": 2518,
   "qualified": 539,
   "ready": 160,
-  "broken_link_ready": 7,
+  "broken_link_ready": 8,
   "contact_form_only": 105,
   "no_contact": 223,
   "contacted": 49,
@@ -456,7 +459,7 @@
    "prospects_evaluated": 2518,
    "qualified": 539,
    "ready": 160,
-   "broken_link_ready": 7,
+   "broken_link_ready": 8,
    "contact_form_only": 105,
    "no_contact": 223,
    "contacted": 49,
@@ -524,12 +527,6 @@
     "queries": 9,
     "ready": 4,
     "rate": 0.417
-   },
-   {
-    "footprint": "further_reading",
-    "queries": 11,
-    "ready": 4,
-    "rate": 0.357
    },
    {
     "footprint": "blogs_to_follow",
@@ -1696,7 +1693,7 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 4,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "plantastichaven.com",
@@ -1752,7 +1749,7 @@
    ],
    "prospects": 6,
    "internal_link_suggestions": 4,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "micegoneguide.com",
@@ -1854,7 +1851,7 @@
     "Recently updated",
     "One of 51 templated sibling pages — promote the hub first"
    ],
-   "prospects": 2,
+   "prospects": 0,
    "internal_link_suggestions": 3,
    "promoting": true
   },
@@ -2033,7 +2030,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "micegoneguide.com",
@@ -2108,7 +2105,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -5799,7 +5796,7 @@
  },
  "tuning": {
   "max_queries": 28,
-  "updated_at": "2026-11-05T08:09:18.014Z"
+  "updated_at": "2026-11-05T08:16:45.096Z"
  },
  "wins": [
   {
@@ -5848,33 +5845,38 @@
   }
  ],
  "log": [
-  "08:07:44 connection dataforseo: connected",
-  "08:07:44 connection gmail: connected",
-  "08:07:45 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
-  "08:07:46 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "08:07:48 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "08:07:48 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "08:07:48 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "08:07:48 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "08:07:48 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "08:07:48 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "08:07:48 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "08:07:50 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "08:07:50 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
-  "08:08:28 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "08:09:18 prospects: 0 from the saved queue, 0 saved for next run; 5 queries (0 brand-mention), 20 candidates, 11 qualified (0 unlinked mentions), 5 with email, 0 with a dead link we can replace, 0 already linking",
-  "08:09:18 self-tuning: next cycle runs up to 28 searches",
-  "08:09:27 broken links: 25 queued pages scanned, 4 with a dead link our page can replace",
-  "08:09:29 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "08:09:29 - outreach: skipped (OUTREACH_MODE=off)",
-  "08:09:35 pre-verify (nothing sent): 5 top inboxes checked, 0 verified, 5 held",
-  "08:09:35 link checks: 0 pages, 0 new links won, 0 lost"
+  "08:16:27 connection dataforseo: connected",
+  "08:16:27 connection gmail: connected",
+  "08:16:29 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
+  "08:16:31 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "08:16:34 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "08:16:35 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "08:16:37 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "08:16:38 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "08:16:39 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "08:16:43 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "08:16:43 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "08:16:44 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "08:16:45 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
+  "08:16:45 prospects: 0 from the saved queue, 0 saved for next run; 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "08:16:45 self-tuning: next cycle runs up to 28 searches",
+  "08:16:58 broken links: 25 queued pages scanned, 2 with a dead link our page can replace",
+  "08:16:58 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "08:16:58 - outreach: skipped (OUTREACH_MODE=off)",
+  "08:17:11 pre-verify (nothing sent): 5 top inboxes checked, 0 verified, 5 held",
+  "08:17:11 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
+   "level": "action",
+   "code": "verifier_rejected",
+   "message": "Verifalia rejected the saved login, so no inbox can be verified or emailed.",
+   "fix": "Under ⚙ Connect, re-enter the Verifalia USERNAME (not your sign-up email, unless they are the same) and password of an active user; confirm the account email first if Verifalia asked you to."
+  },
+  {
    "level": "info",
    "code": "holds",
-   "message": "10 queued inboxes are held; most often (5) because the only address is not on the publisher's contact/about page or is not an accepted inbox type.",
+   "message": "15 queued inboxes are held; most often (6) because mailbox verifalia login rejected.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   },
   {
