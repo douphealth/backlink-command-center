@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-05T11:26:11.704Z",
- "duration_s": 50,
+ "generated_at": "2026-11-05T11:34:35.079Z",
+ "duration_s": 157,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -17,7 +17,7 @@
     "status": "connected"
    }
   },
-  "outreach_mode": "off",
+  "outreach_mode": "send",
   "claude": false,
   "gsc": false,
   "daily_send_cap": 12,
@@ -29,14 +29,14 @@
    "key": true,
    "enabled": true,
    "daily_limit": 12,
-   "used_today": 8,
+   "used_today": 12,
    "balance": {
     "provider": "verifalia",
-    "free_credits": 9,
-    "reset_in": "12:34:09",
-    "checked_at": "2026-11-05T11:25:50.930Z"
+    "free_credits": 1,
+    "reset_in": "12:27:37",
+    "checked_at": "2026-11-05T11:32:22.868Z"
    },
-   "catch_all_domains_skipped": 3
+   "catch_all_domains_skipped": 4
   }
  },
  "setup": [
@@ -78,7 +78,7 @@
   {
    "key": "OUTREACH_MODE = send",
    "label": "Hands-free sending",
-   "done": false,
+   "done": true,
    "unlocks": "Sends pitches and one follow-up automatically (warm-up ramp, daily cap)",
    "required": false
   },
@@ -107,7 +107,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 13946,
+   "ms": 7013,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -115,7 +115,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -140,7 +140,7 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 13,
+   "ms": 10,
    "result": {
     "queries": 0,
     "mention_queries": 0,
@@ -159,7 +159,7 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 11360,
+   "ms": 10780,
    "result": {
     "checked": 25,
     "found": 1
@@ -167,7 +167,7 @@
   },
   "replies": {
    "ok": true,
-   "ms": 842,
+   "ms": 679,
    "result": {
     "scanned": 0,
     "replies": 0,
@@ -178,21 +178,29 @@
    }
   },
   "outreach": {
-   "ok": null,
-   "skipped": "OUTREACH_MODE=off"
+   "ok": true,
+   "ms": 136445,
+   "result": {
+    "followups": 3,
+    "sent": 0,
+    "drafted": 0,
+    "skipped": 0,
+    "deferred": 189,
+    "cap": 12,
+    "verification_held": 5
+   },
+   "writer": {
+    "claude": 0,
+    "template_fallbacks": 0
+   }
   },
   "preverify": {
-   "ok": true,
-   "ms": 21751,
-   "result": {
-    "checked": 5,
-    "verified": 2,
-    "held": 3
-   }
+   "ok": null,
+   "skipped": "runs only while outreach is paused"
   },
   "link_checks": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "checked": 0,
     "won": 0,
@@ -216,7 +224,7 @@
   "calls_this_run": 0
  },
  "outreach": {
-  "mode": "off",
+  "mode": "send",
   "ready": 160,
   "verified_ready": 5,
   "pending_verification": 155,
@@ -226,9 +234,9 @@
    "mailbox_accept_all": 3,
    "publisher_mismatch": 1
   },
-  "sent_today": 0,
+  "sent_today": 3,
   "cap_today": 12,
-  "next_send_at": null,
+  "next_send_at": "2026-11-05T13:00:00.000Z",
   "sending_now": false,
   "reply_health": "ok"
  },
@@ -236,7 +244,7 @@
   "prospects_evaluated": 2518,
   "qualified": 539,
   "ready": 160,
-  "broken_link_ready": 12,
+  "broken_link_ready": 13,
   "contact_form_only": 105,
   "no_contact": 223,
   "contacted": 49,
@@ -461,7 +469,7 @@
    "prospects_evaluated": 2518,
    "qualified": 539,
    "ready": 160,
-   "broken_link_ready": 12,
+   "broken_link_ready": 13,
    "contact_form_only": 105,
    "no_contact": 223,
    "contacted": 49,
@@ -5798,7 +5806,7 @@
  },
  "tuning": {
   "max_queries": 28,
-  "updated_at": "2026-11-05T11:25:37.679Z"
+  "updated_at": "2026-11-05T11:32:07.167Z"
  },
  "wins": [
   {
@@ -5847,34 +5855,28 @@
   }
  ],
  "log": [
-  "11:25:23 connection dataforseo: connected",
-  "11:25:23 connection gmail: connected",
-  "11:25:25 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "11:25:25 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
-  "11:25:27 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "11:25:28 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "11:25:28 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "11:25:28 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "11:25:28 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "11:25:30 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "11:25:31 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "11:25:37 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "11:25:37 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
-  "11:25:37 prospects: 0 from the saved queue, 0 saved for next run; 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "11:25:37 self-tuning: next cycle runs up to 28 searches",
-  "11:25:49 broken links: 25 queued pages scanned, 1 with a dead link our page can replace",
-  "11:25:49 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "11:25:49 - outreach: skipped (OUTREACH_MODE=off)",
-  "11:26:11 pre-verify (nothing sent): 5 top inboxes checked, 2 verified, 3 held",
-  "11:26:11 link checks: 0 pages, 0 new links won, 0 lost"
+  "11:31:59 connection dataforseo: connected",
+  "11:31:59 connection gmail: connected",
+  "11:32:00 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
+  "11:32:01 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "11:32:04 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "11:32:04 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "11:32:04 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
+  "11:32:04 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
+  "11:32:04 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "11:32:04 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "11:32:05 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "11:32:06 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "11:32:07 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
+  "11:32:07 prospects: 0 from the saved queue, 0 saved for next run; 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "11:32:07 self-tuning: next cycle runs up to 28 searches",
+  "11:32:17 broken links: 25 queued pages scanned, 1 with a dead link our page can replace",
+  "11:32:18 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "11:34:35 outreach: 0 sent, 3 follow-ups, 0 drafts, 5 held for verification",
+  "11:34:35 - preverify: skipped (runs only while outreach is paused)",
+  "11:34:35 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
-  {
-   "level": "action",
-   "code": "hold_with_verified",
-   "message": "5 verified inboxes are ready, but the workflow's outbound safety hold keeps sending off.",
-   "fix": "When you are ready to send, ask to lift the hold (one line in .github/workflows/autopilot.yml)."
-  },
   {
    "level": "info",
    "code": "holds",
