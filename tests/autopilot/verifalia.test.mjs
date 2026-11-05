@@ -94,11 +94,26 @@ test('pre-verify checks the best queued inboxes while outreach is paused and nev
   const {preverify}=await import('../../scripts/autopilot/outreach.mjs');
   const t=new Date().toISOString(),sent=[],asked=[];
   const mk=(id,score)=>({id,domain:id+'.example',site:'s.com',page_url:`https://${id}.example/r`,asset_url:'https://s.com/a',email:`editor@${id}.example`,qv:2,status:'ready',score,history:[]});
-  const state={prospects:{a:mk('a',40),b:mk('b',90),c:mk('c',70),d:{...mk('d',99),contact_quality:{status:'held',checked_at:t}}},contacted:{},suppression:{}};
+  const state={prospects:{a:mk('a',40),b:mk('b',90),c:mk('c',70),d:{...mk('d',99),contact_quality:{status:'held',detail:'no_email_published',checked_at:t}}},contacted:{},suppression:{}};
   const mailer={send:async m=>sent.push(m),authorizeRecipient:async p=>{asked.push(p.id);return p.id==='b'?{ok:true,email:p.email,evidence:{source:`https://${p.domain}/contact`,email:p.email,rank:95,observed_at:t},
     verification:verifaliaVerdict(entry(p.email),p.email,Date.now())}:{ok:false,reason:'no_verified_mailbox'}}};
   const r=await preverify({state,mailer,max:2});
   assert.deepEqual(asked,['b','c']);assert.deepEqual(r,{checked:2,verified:1,held:1});assert.equal(sent.length,0);
   assert.equal(state.prospects.b.contact_quality.status,'verified');assert.equal(state.prospects.c.contact_quality.status,'held');
   assert.deepEqual((await preverify({state,mailer,max:5})).checked,1); // b already verified, c and d held recently: only a
+});
+
+test('held inboxes carry a precise, address-free reason that is aggregated publicly',async()=>{
+  const {outreachStatus}=await import('../../scripts/autopilot/outreach.mjs');
+  const generic=fixture();generic.v.fetchPage=async u=>({status:200,url:u,body:'<p>Get in touch: hello@journal.example</p>'});
+  assert.deepEqual(await generic.v.verify(prospect),{ok:false,reason:'no_published_editorial_contact',detail:'only_non_editorial_inbox_published'});
+  const none=fixture();none.v.fetchPage=async u=>({status:200,url:u,body:'<p>Use our contact form.</p>'});
+  assert.equal((await none.v.verify(prospect)).detail,'no_email_published');
+  const down=fixture();down.v.fetchPage=async u=>({status:503,url:u,body:''});
+  assert.equal((await down.v.verify(prospect)).detail,'publisher_pages_unreachable');
+  const mx=fixture();mx.v.resolveMx=async()=>[];assert.equal((await mx.v.verify(prospect)).detail,'mx_no_explicit_mx');
+  const ca=fixture({extra:{status:'ServerIsCatchAll',classification:'Risky'}});assert.equal((await ca.v.verify(prospect)).detail,'mailbox_accept_all');
+  const t=new Date().toISOString(),mk=(id,detail)=>({id,domain:id+'.example',email:`editor@${id}.example`,status:'ready',qv:2,history:[],contact_quality:{status:'held',reason:'x',detail,checked_at:t}});
+  const st=outreachStatus({prospects:{a:mk('a','only_non_editorial_inbox_published'),b:mk('b','only_non_editorial_inbox_published'),c:mk('c','no_email_published')}},{limit:12,mode:'off',qualifyVersion:2});
+  assert.deepEqual(st.holds,{only_non_editorial_inbox_published:2,no_email_published:1});assert.doesNotMatch(JSON.stringify(st),/@/);
 });
