@@ -6,6 +6,11 @@
 import {sleep,NOW,ageDays} from './util.mjs';
 
 const API='https://api.dataforseo.com/v3/';
+/** A bare ASCII hostname DataForSEO accepts as a bulk target, or '' to drop it. */
+export function validTarget(d){
+  const h=String(d||'').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/[/:?#].*$/,'').replace(/\.$/,'');
+  return h.length<=253&&/^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(h)?h:'';
+}
 const ESTIMATE={serp:0.006,relevant_pages:0.025,traffic:0.03}; // calibrated from the ledger's real averages
 
 export class DataForSEO{
@@ -71,8 +76,10 @@ export class DataForSEO{
   }
   /** Estimated monthly organic visits per domain (one request for up to 1,000 domains). */
   async domainTraffic(domains,{location=2840,language='en'}={}){
-    if(!domains.length)return {};
-    const r=await this.post('traffic','dataforseo_labs/google/bulk_traffic_estimation/live',{targets:domains.slice(0,1000),location_code:location,language_code:language,item_types:['organic']});
+    // One malformed target (IDN, port, trailing dot, uppercase) fails the whole task with 40501 "Invalid Field: 'targets'".
+    const targets=[...new Set(domains.map(validTarget).filter(Boolean))].slice(0,1000);
+    if(!targets.length)return {};
+    const r=await this.post('traffic','dataforseo_labs/google/bulk_traffic_estimation/live',{targets,location_code:location,language_code:language,item_types:['organic']});
     if(!r)return null;
     return Object.fromEntries((r[0]?.items||[]).map(x=>[String(x.target).replace(/^www\./,''),Number(x.metrics?.organic?.etv||0)]));
   }

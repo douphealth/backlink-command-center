@@ -6,6 +6,7 @@ import {fetchPage,links,hostOf,sameSite,ageDays,NOW,sleep,DAY} from './util.mjs'
 import {QUALIFY_VERSION} from './prospect.mjs';
 import {assetStats,linkLikelihood} from './learn.mjs';
 import {RecipientVerifier,isSuppressed,usableVerification,samePublisher,normalizeEmail} from './recipient-policy.mjs';
+import {checkDead} from './broken.mjs';
 export const PER_ASSET_DAILY=2;
 const REGIONS=[
  [/\.(uk|ie|de|fr|es|it|nl|be|pt|gr|se|no|dk|fi|pl|cz|at|ch|eu|za|ro|hu|sk|si|hr|bg|lt|lv|ee|lu|cy|mt)$/,[7,16],1],
@@ -23,8 +24,14 @@ export function nextSendWindow(domain,from=new Date()){
  for(let h=0;h<24*8;h++){t.setUTCHours(t.getUTCHours()+1);if(sendWindowOpen(domain,t))return new Date(t)}return null;
 }
 export function dailyCap(state,limit){
- const cap=Math.max(0,Math.floor(Number(limit)||0));
- return Math.min(cap,5+2*Math.max(0,Math.floor(state.first_send_at?ageDays(state.first_send_at):0)));
+ const cap=Math.max(0,Math.floor(Number(limit)||0)),start=state.ramp_started_at||state.first_send_at;
+ return Math.min(cap,5+2*Math.max(0,Math.floor(start?ageDays(start):0)));
+}
+/** Newest real (non-draft) send, or null. */
+export const lastSendAt=state=>Object.values(state.prospects||{}).flatMap(p=>(p.history||[]).filter(h=>['initial','followup'].includes(h.type)&&h.mode!=='draft').map(h=>h.at)).sort().pop()||null;
+/** After a week without sending, the warm-up ramp starts again at 5/day: a sudden burst from a quiet inbox hurts deliverability. */
+export function restartRampIfIdle(state,days=7){
+ const last=lastSendAt(state);if(!last||ageDays(last)>days)state.ramp_started_at=NOW();
 }
 export const sentToday=state=>Object.values(state.prospects||{}).reduce((n,p)=>n+(p.history||[]).filter(h=>['initial','followup'].includes(h.type)&&h.mode!=='draft'&&String(h.at).startsWith(NOW().slice(0,10))).length,0);
 const draftedToday=state=>Object.values(state.prospects||{}).reduce((n,p)=>n+(p.history||[]).filter(h=>h.mode==='draft'&&String(h.at).startsWith(NOW().slice(0,10))).length,0);
@@ -96,6 +103,7 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
  state.contacted??={};state.suppression??={};
  const stats={followups:0,sent:0,drafted:0,skipped:0,deferred:0,cap:0,verification_held:0};
  if(!['send','draft'].includes(config.mode))return stats;
+ if(config.mode==='send')restartRampIfIdle(state);
  const cap=config.mode==='send'?dailyCap(state,config.dailyLimit):Math.max(0,Number(config.dailyLimit)||0);stats.cap=cap;
  // The production Gmail transport supplies authorizeRecipient and independently
  // requires its proof at SMTP. Injected in-memory test transports cannot send mail.
@@ -150,6 +158,8 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   const site=siteBy.get(p.site);if(!site){p.status='stale_asset';stats.skipped++;continue}
   if(!await prepare(p,false))continue;
   const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title||site.domain,type:p.kind==='mention'?'brand':'resource',description:''};
+  // The email states that a link is dead: confirm it still is, seconds before writing it.
+  if(p.broken_link){const r=await (config.recheckBroken||(u=>checkDead(u)))(p.broken_link.url).catch(()=>null);if(!r?.dead){p.broken_link_cleared_at=NOW();delete p.broken_link}else stats.broken_link_pitches=(stats.broken_link_pitches||0)+1}
   const pitch=await writer.write(p,asset,site);p.writer=pitch.writer;
   try{await deliver(p,pitch,'initial');state.contacted[p.domain]=NOW();if(config.mode==='send')state.first_send_at??=NOW();
    p.status=config.mode==='send'?'sent':'drafted';p.next_link_check=new Date(Date.now()+5*DAY).toISOString();

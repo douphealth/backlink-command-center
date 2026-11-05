@@ -4,6 +4,9 @@
 
 ### How it gets smarter
 
+- **Broken-link building:** every qualified prospect page is checked for dead outbound links (HTTP 404/410 or a domain that no longer exists, never 403/5xx/timeouts) that match the promoted page's topic. The pitch tells the editor which link is dead and offers your page as the replacement. That is a concrete favour, so it converts far better than a cold ask. The dead link is re-checked seconds before the email is written, and the claim is dropped if it was fixed. Queued prospects are back-filled once every 30 days.
+- **Link roundups and curated pages:** searches now include `"link roundup"`, `"weekly roundup"`, `"best of the web"`, `"further reading"`, `"helpful resources"` and `"recommended tools"` pages, which exist to link out. Pages whose searches are all on their 45-day cooldown are rotated out, so prospecting no longer stalls at 0 queries.
+- **Indexation health:** every crawled sitemap URL is classified (404/410, 5xx, noindex, canonical elsewhere, redirect, unreachable, bot-blocked, missing canonical, thin), with the exact fix shown on the dashboard. These pages are never promoted, because a link to a page Google can't index is wasted.
 - **Unlinked brand mentions first:** pages that already name one of your sites but don't link are found every 14 days per site. They get a short "thanks for mentioning us, could you link it?" email, which converts far better than a cold pitch.
 - **Link likelihood:** the send queue is ordered by evidence. That covers topical fit, whether the page is a resource page, the site's real audience size (independent sites over giants), whether the address is the article's author, how recently the page was updated, and how well the promoted page has performed so far.
 - **Learning loop:** every search pattern's yield (pitchable prospects per search) and every page's reply and link rate are tracked. The best patterns run first and well-performing pages get more prospecting. See "What Autopilot is learning" on the dashboard.
@@ -54,6 +57,7 @@ The setup script stores everything as **encrypted GitHub Actions secrets** (valu
 | `GMAIL_ADDRESS` / `GMAIL_APP_PASSWORD` | Drafts, sending, reply & bounce detection | myaccount.google.com/apppasswords (2-Step Verification required) |
 | `SENDER_NAME` (variable) | Signing pitches | Your name, e.g. "Alex from GearUpToFit" |
 | `OUTREACH_MODE` (variable) | `draft` (default) or `send` for hands-free | — |
+| `HUNTER_API_KEY` + mailbox checks per day | **Required to send anything.** Every inbox gets a fresh positive mailbox verification before an email goes out | hunter.io → API keys (free plan: 50 credits/month). Set both on the dashboard (⚙ Connect). A daily limit above 0 is the opt-in |
 | `ANTHROPIC_API_KEY` *(optional)* | Unique, page-specific pitches written by Claude | console.anthropic.com |
 | `GSC_SERVICE_ACCOUNT_JSON` *(optional)* | Exact impressions/positions → striking-distance targeting | Google Cloud service account with Search Console access |
 | `SENDER_POSTAL_ADDRESS` *(optional)* | CAN-SPAM footer | — |
@@ -73,7 +77,7 @@ Run a cycle on demand: **Actions → LinkForge Autopilot → Run workflow** (tic
 ## Guardrails (built in, not optional)
 
 - **Spend:** DataForSEO daily/monthly caps (`DATAFORSEO_DAILY_USD`, default $0.50; `DATAFORSEO_MONTHLY_USD`, default $10), provider-reported cost ledger, endpoints the account can't access are parked for 7 days.
-- **Deliverability:** warm-up ramp (5/day, +2/day) up to `OUTREACH_DAILY_LIMIT` (default 12), 15–45 s spacing, `List-Unsubscribe` header, plain-text mail.
+- **Deliverability:** every recipient is a literally published first-party editorial address with a positive mailbox verification under 24 h old (see `RECIPIENT-SAFETY.md`); warm-up ramp (5/day, +2/day, restarting at 5/day after a week without sending) up to `OUTREACH_DAILY_LIMIT` (default 12), 15–45 s spacing, `List-Unsubscribe` header, plain-text mail.
 - **Respect:** one contact per publisher domain per 90 days, one follow-up only, follow-ups stop on any reply, opt-out replies suppress the domain permanently, bounces switch to an alternate address or stop.
 - **Honesty:** pitches only state facts from the crawled asset; Claude output is rejected if it adds URLs, placeholders or runs long. A backlink counts only when the anchor is found on the live page.
 - **Privacy:** the public summary is checked in CI to contain no email addresses; private state is AES-256-GCM (PBKDF2-SHA256, 210k iterations).
@@ -88,12 +92,12 @@ Run a cycle on demand: **Actions → LinkForge Autopilot → Run workflow** (tic
 ## Development
 
 ```bash
-npm test                # 83 tests: Pages routing, legacy Worker, Autopilot engine (mocked network, SMTP/IMAP fakes)
+npm test                # 150 tests: Pages routing, legacy Worker, Autopilot engine (mocked network, SMTP/IMAP fakes)
 npm run build
 npm run autopilot:dry   # full cycle locally, nothing sent or written
 ```
 
-Engine code is in `scripts/autopilot/` (`run.mjs` orchestrates; `crawl`, `score`, `demand`, `prospect`, `pitch`, `mail`, `outreach`, `dataforseo`, `vault`). The workflow is in `.github/workflows/autopilot.yml`.
+Engine code is in `scripts/autopilot/` (`run.mjs` orchestrates; `crawl`, `score`, `indexation`, `demand`, `prospect`, `broken`, `pitch`, `mail`, `outreach`, `recipient-policy`, `dataforseo`, `vault`). The workflow is in `.github/workflows/autopilot.yml`.
 
 ## Legacy optional Worker
 

@@ -43,6 +43,8 @@ const FIELDS=[
   {name:'OUTREACH_MODE',label:'Outreach mode',type:'select',kind:'setting',options:[['send','Hands-free: send pitches + 1 follow-up automatically'],['draft','Safe: write pitches into Gmail Drafts'],['off','Research only']]},
   {name:'OUTREACH_DAILY_LIMIT',label:'Max new pitches per day',type:'number',kind:'setting',help:'Starts at 5/day and ramps up by 2/day to this limit'},
   {name:'ANTHROPIC_API_KEY',label:'Anthropic API key (optional)',type:'password',kind:'secret',help:'Claude writes a unique pitch for every page'},
+  {name:'HUNTER_API_KEY',label:'Hunter API key (needed to send)',type:'password',kind:'secret',help:'Every inbox is verified before any email goes out. hunter.io → API keys',link:'https://hunter.io/api-keys'},
+  {name:'EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox checks per day',type:'number',kind:'setting',min:0,max:100,placeholder:'3',help:'Each check uses Hunter credits. 0 turns verification (and so sending) off. Free plan: about 2–3 a day'},
 ];
 // Settings travel as one encrypted secret (no Variables permission needed); this browser remembers them for display.
 const local=(k,fallback)=>({get:()=>{try{return JSON.parse(localStorage.getItem(k))??fallback}catch{return fallback}},set:v=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}}});
@@ -105,7 +107,7 @@ export async function renderAutopilot(h){
     +(notConnected.length?`<div class="alert-warning ap-missing"><strong>Not connected yet: ${e(notConnected.join(' and '))}.</strong> Runs do research only until you fill in <b>step 2</b> below and press <b>Save &amp; run now</b>. ▶ Run by itself doesn't save credentials.</div>`:'')
     +(!rejectedMsgs.length&&!notConnected.length&&okList.length?`<div class="ap-msg">✓ Verified by the last run: ${e(okList.join(' and '))} logged in successfully.</div>`:'');
   const setup=ui.showConnect||needsSetup||rejectedMsgs.length||!control.diagnosisOk(ui.diag)?connectPanel(h):'';
-  const kpis=[['Best URLs to promote',t.promotable,'◎',`${n(t.promoting_now)} being promoted now`],['Internal link fixes',t.internal_suggestions,'⇄','Free ranking boosts on your own sites'],['Publishers contacted',f.contacted,'↗',`${n(f.ready)} ready · ${n(f.replied)} replied`],['Backlinks won',f.won,'◇',`+${n(f.existing_links)} existing links found`]];
+  const kpis=[['Best URLs to promote',t.promotable,'◎',`${n(t.promoting_now)} being promoted now`],['Internal link fixes',t.internal_suggestions,'⇄','Free ranking boosts on your own sites'],['Publishers contacted',f.contacted,'↗',`${n(f.ready)} ready${f.broken_link_ready?` (${n(f.broken_link_ready)} with a dead link to replace)`:''} · ${n(f.replied)} replied`],['Backlinks won',f.won,'◇',`+${n(f.existing_links)} existing links found`]];
   const kpiHtml=`<div class="kpi-grid">${kpis.map(([name,v,ico,note])=>`<div class="kpi"><div class="kpi-head">${e(name)}<span class="kpi-ico">${ico}</span></div><div class="kpi-value">${n(v)}</div><div class="kpi-foot">${e(note)}</div></div>`).join('')}</div>`;
   // Change since the previous day's record, so progress is visible even when totals look similar.
   const hist=s.history||[],prev=hist.length>1?hist[hist.length-2]:null;
@@ -117,18 +119,23 @@ export async function renderAutopilot(h){
   const best=(s.best_urls||[]).slice(0,40).map((a,i)=>`<tr><td><strong>${String(i+1).padStart(2,'0')}</strong></td><td>${external(a.url,a.title)}<small>${e(a.site)} · ${e(a.type.replaceAll('_',' '))}${a.promoting?' · promoting now':''}</small><small class="ap-why">${e((a.reasons||[]).join(' · '))}</small></td><td><strong>${n(a.promotion)}</strong><small>link ${n(a.linkability)}${a.demand!=null?' · demand '+n(a.demand):''}</small></td><td>${n(a.internal_inlinks)}<small>${n(a.internal_link_suggestions)} to add</small></td><td>${n(a.prospects)}</td></tr>`);
   const internal=(s.internal_links||[]).slice(0,60).map(x=>`<tr><td>${external(x.from,x.from_title||x.from)}<small>${e(x.site)}</small></td><td><strong>“${e(x.anchor)}”</strong></td><td>${external(x.to,x.to_title||x.to)}</td></tr>`);
   const wins=(s.wins||[]).map(w=>`<tr><td><strong>${e(w.publisher)}</strong><small>${e(w.site)}</small></td><td>${external(w.page_url,w.title||w.page_url)}</td><td>${w.target?external(w.target,new URL(w.target).pathname):'—'}<small>${e(w.anchor)}</small></td><td>${statusTag(w.kind==='won'?'won':'existing')} ${w.rel?`<small>${e(w.rel)}</small>`:''}</td><td>${e(niceTime(w.found_at))}</td></tr>`);
+  const ix=s.indexation;
+  const ixSites=(ix?.sites||[]).filter(x=>x.problems).sort((a,b)=>b.critical-a.critical||b.problems-a.problems).map(x=>`<tr><td><strong>${e(x.site)}</strong><small>${n(x.checked)} sitemap URLs checked</small></td><td><strong>${n(x.critical)}</strong><small>404 · error · noindex · canonical</small></td><td>${n(x.problems)}</td><td>${n(x.healthy)}</td></tr>`);
+  const ixRows=(ix?.issues||[]).slice(0,60).map(x=>`<tr><td>${external(x.url,new URL(x.url).pathname)}<small>${e(x.site)}</small></td><td><strong>${e(x.label)}</strong>${x.final_url?`<small>→ ${e(x.final_url)}</small>`:''}${x.canonical?`<small>canonical: ${e(x.canonical)}</small>`:''}${x.words?`<small>${n(x.words)} words</small>`:''}</td><td><small>${e(x.fix)}</small></td></tr>`);
+  const ixPanel=ix?`<div class="ap-gap">${panel('Indexation health',`${n(ix.total_issues)} sitemap URLs can't be indexed as they are. Fix these before building links to them. ${ix.note}`,
+    ixRows.length?table(['Site','Critical','All issues','Healthy'],ixSites)+table(['URL','Problem','Fix'],ixRows):empty('No indexation problems found','Every crawled sitemap URL returns 200, is indexable and self-canonical.'))}</div>`:'';
   schedulePoll();
   return intro('autopilot','')+status+banner+setup+kpiHtml+
     `<div class="overview-grid">${panel('Outreach funnel','Every number is a stored, verified record',funnel)}${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`+
     `<div class="ap-gap">${panel('Best URLs to promote','Linkability × real search demand; templated duplicates and thin pages are demoted',best.length?table(['#','URL & why','Score','Internal links','Prospects'],best):empty('No promotable URLs yet','The next crawl will rank your pages.'))}</div>`+
-    learningPanel(h,s)+
+    ixPanel+learningPanel(h,s)+
     `<div class="ap-gap">${panel('Internal link plan','Add these links on your own pages: highest-ROI, zero-cost ranking boost',internal.length?table(['On this page','Add anchor','Linking to'],internal):empty('No internal gaps found','Your best URLs are already well linked.'))}</div>`+
     `<div class="ap-gap">${panel('Backlinks','Won after outreach, or already linking to you (verified on the live page)',wins.length?table(['Publisher','Page','Links to','Status','Found'],wins):empty('No verified backlinks yet','Pitched pages are re-checked every 4 days for 150 days.'))}</div>`+
     `<div class="ap-gap">${privatePanel(h)}</div>`+
     `<details class="data-note"><summary><strong>Last run log</strong></summary><div class="pre-detail ap-log">${e((s.log||[]).join('\n'))}</div></details>`;
 }
 
-const FP_LABEL={mention:'Unlinked brand mentions',intent:'Same-topic articles',resources:'"{topic} resources"',intitle_resources:'intitle:resources',useful_links:'"useful links" pages',tools:'"{topic} tools"',free_tools:'"free {topic} tools"',best_resources:'"best {topic} resources"',useful_websites:'"useful websites"',statistics:'"{topic} statistics"',research_resources:'"research resources"',sources:'"{topic} sources"',blogs_to_follow:'"blogs to follow"',recommended_reading:'"recommended reading"',inurl_resources:'inurl:resources',inurl_links:'inurl:links',best_guides:'"best … guides"',k_resources:'"{page topic} resources"'};
+const FP_LABEL={link_roundup:'"link roundup" posts',weekly_roundup:'"weekly roundup" posts',best_of_web:'"best of the web" lists',further_reading:'"further reading" sections',helpful_resources:'"helpful resources" pages',recommended_tools:'"recommended tools" pages',mention:'Unlinked brand mentions',intent:'Same-topic articles',resources:'"{topic} resources"',intitle_resources:'intitle:resources',useful_links:'"useful links" pages',tools:'"{topic} tools"',free_tools:'"free {topic} tools"',best_resources:'"best {topic} resources"',useful_websites:'"useful websites"',statistics:'"{topic} statistics"',research_resources:'"research resources"',sources:'"{topic} sources"',blogs_to_follow:'"blogs to follow"',recommended_reading:'"recommended reading"',inurl_resources:'inurl:resources',inurl_links:'inurl:links',best_guides:'"best … guides"',k_resources:'"{page topic} resources"'};
 function learningPanel(h,s){
   const {escapeHTML:e,external,n,panel,table,empty}=h,L=s.learning;
   if(!L)return '';
@@ -138,10 +145,12 @@ function learningPanel(h,s){
 }
 /** Plain answer to "why aren't more pitches going out?" */
 function outreachLine(s,{escapeHTML:e,n,niceTime}){
-  const o=s.outreach;if(!o||o.mode==='off')return '';
+  const o=s.outreach,v=s.capabilities?.verifier;
+  const verify=v?`<p class="ap-outreach"><b>Mailbox verifier:</b> ${v.ready?`on · ${n(v.used_today)}/${n(v.daily_limit)} checks used today`:v.key?'key saved, but the daily limit is 0 (set "Mailbox checks per day")':'not connected. Add a Hunter API key under ⚙ Connect, or nothing can be sent'}${o?` · ${n(o.verified_ready)} of ${n(o.ready)} queued inboxes verified`:''}</p>`:'';
+  if(!o||o.mode==='off')return verify;
   const next=o.next_send_at?niceTime(o.next_send_at):null;
   const why=o.sent_today>=o.cap_today?`today's warm-up limit is used (${n(o.sent_today)}/${n(o.cap_today)})`:o.sending_now?'sending during this run':`waiting for recipients' business hours (weekdays)`;
-  return `<p class="ap-outreach"><b>Pitches:</b> ${n(o.ready)} ready · ${e(why)}${next&&!o.sending_now?` · next pitches from <b>${e(next)}</b>`:''}</p>`;
+  return `<p class="ap-outreach"><b>Pitches:</b> ${n(o.ready)} ready · ${e(why)}${next&&!o.sending_now?` · next pitches from <b>${e(next)}</b>`:''}</p>`+verify;
 }
 function fullyConfigured(){
   const c=ui.configured;if(!c)return false;
@@ -175,7 +184,7 @@ function connectPanel(h){
   const done=f=>fieldDone(f,c),settings=savedSettings.get();
   const field=f=>{const bad=ui.rejected?.has(f.name),ok=done(f)&&!bad,cur=f.kind==='setting'?settings[f.name]||'':'';
     const input=f.type==='select'?`<select class="selector" name="${f.name}">${f.options.map(([v,l])=>`<option value="${v}" ${(cur||'send')===v?'selected':''}>${e(l)}</option>`).join('')}</select>`
-      :`<input name="${f.name}" type="${f.type}" ${f.type==='number'?'min="1" max="50"':''} autocomplete="${f.type==='password'?'new-password':'off'}" value="${e(cur)}" placeholder="${ok&&!cur?(f.kind==='secret'?'Connected; leave blank to keep':'Saved; type to change'):f.type==='number'?'12':''}" ${f.required&&!ok?'required':''}>`;
+      :`<input name="${f.name}" type="${f.type}" ${f.type==='number'?`min="${f.min??1}" max="${f.max??50}"`:''} autocomplete="${f.type==='password'?'new-password':'off'}" value="${e(cur)}" placeholder="${ok&&!cur?(f.kind==='secret'?'Connected; leave blank to keep':'Saved; type to change'):f.placeholder||(f.type==='number'?'12':'')}" ${f.required&&!ok?'required':''}>`;
     return `<label class="ap-field"><span>${e(f.label)} ${bad?'<b class="ap-need">✗ rejected: re-enter</b>':ok?'<b class="ap-ok">✓ saved</b>':f.required?'<b class="ap-need">needed</b>':''}</span>${input}${f.help?`<small>${f.link?`<a href="${f.link}" target="_blank" rel="noopener">${e(f.help)} ↗</a>`:e(f.help)}</small>`:''}</label>`};
   return panel('Connect Autopilot','Two steps, once. Everything is encrypted in your browser before it reaches GitHub; nothing can read it back.',
     `<div class="panel-pad ap-connect">${tokenStep(h)}
@@ -199,7 +208,7 @@ function privatePanel(h){
   const active=new Set(['positive','won','replied','followed_up','sent','drafted','ready','contact_form','no_contact']);
   const rows=all.filter(p=>ui.filter==='all'||(ui.filter==='active'?active.has(p.status):p.status===ui.filter))
     .sort((a,b)=>STATUS_ORDER.indexOf(a.status)-STATUS_ORDER.indexOf(b.status)||(b.score||0)-(a.score||0)).slice(0,200)
-    .map(p=>{const last=(p.history||[]).at(-1);return `<tr><td><strong>${e(p.domain)}</strong><small>${e(p.site)} · fit ${n(p.score)}</small></td><td>${external(p.page_url,p.title||p.page_url)}<small>${e(p.reason||p.fit_section||p.query||'')}</small></td><td>${p.email?e(p.email):p.contact_form?external(p.contact_form,'Contact form'):'—'}</td><td>${external(p.asset_url,(p.asset_title||'').slice(0,60))}</td><td>${statusTag(p.status)}<small>${last?e(last.type+' · '+niceTime(last.at)):''}</small></td></tr>`});
+    .map(p=>{const last=(p.history||[]).at(-1);return `<tr><td><strong>${e(p.domain)}</strong><small>${e(p.site)} · fit ${n(p.score)}</small></td><td>${external(p.page_url,p.title||p.page_url)}<small>${e(p.reason||p.fit_section||p.query||'')}</small>${p.broken_link?`<small class="ap-why">Dead link to replace: “${e(p.broken_link.anchor||p.broken_link.host)}” (${e(p.broken_link.host)}, ${e(String(p.broken_link.reason).replaceAll('_',' '))})</small>`:''}</td><td>${p.email?e(p.email):p.contact_form?external(p.contact_form,'Contact form'):'—'}${p.contact_quality?`<small>${e(p.contact_quality.status==='verified'?'✓ inbox verified':'held: '+String(p.contact_quality.reason||'').replaceAll('_',' '))}</small>`:''}</td><td>${external(p.asset_url,(p.asset_title||'').slice(0,60))}</td><td>${statusTag(p.status)}<small>${last?e(last.type+' · '+niceTime(last.at)):''}</small></td></tr>`});
   const counts={};for(const p of all)counts[p.status]=(counts[p.status]||0)+1;
   const opts=['active','all',...STATUS_ORDER.filter(x=>counts[x])].map(x=>`<option value="${x}" ${ui.filter===x?'selected':''}>${x==='active'?'In progress':x==='all'?'All prospects':x.replaceAll('_',' ')} ${counts[x]?`(${counts[x]})`:''}</option>`).join('');
   return panel('Prospects & conversations',`${n(all.length)} publishers tracked · decrypted locally`,
@@ -248,6 +257,8 @@ export function bindAutopilot(reload){
     if(bad){ui.err=bad[0].name==='GMAIL_APP_PASSWORD'?'A Gmail app password is exactly 16 letters.':`${bad[0].label} doesn't look like an email address.`;return reload()}
     const secrets=values.filter(([f])=>f.kind==='secret');
     const settings={...savedSettings.get(),...Object.fromEntries(values.filter(([f])=>f.kind==='setting').map(([f,v])=>[f.name,v]))};
+    // A positive daily limit is the owner's opt-in to paid mailbox checks; 0 switches them off.
+    if(settings.EMAIL_VERIFY_DAILY_LIMIT!=null)settings.EMAIL_VERIFICATION_ENABLED=Number(settings.EMAIL_VERIFY_DAILY_LIMIT)>0?'YES':'NO';
     // The mode/limit dropdowns always carry a value, so only rewrite settings when the name is known.
     const writeSettings=!!settings.SENDER_NAME;
     if(!writeSettings&&!ui.configured?.secrets.has(control.SETTINGS_SECRET)){ui.err='Please enter your name for the emails.';return reload()}

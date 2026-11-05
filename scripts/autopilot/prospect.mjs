@@ -6,6 +6,7 @@
  *    detect existing links to us, and find the best editorial contact.
  */
 import {fetchPage,pool,tokens,keyPhrase,links,tagText,jsonLd,mainText,stripTags,extractEmails,rankEmail,hostOf,sameSite,rootDomain,normUrl,hashId,ageDays,NOW} from './util.mjs';
+import {findBrokenLink,assetTerms} from './broken.mjs';
 
 export const BLOCKED=/(^|\.)(reddit|quora|youtube|youtu|facebook|instagram|pinterest|tiktok|twitter|x|linkedin|threads|tumblr|amazon|ebay|walmart|etsy|target|bestbuy|aliexpress|temu|wikipedia|wikihow|wiktionary|medium|substack|github|stackexchange|stackoverflow|apple|google|bing|yahoo|msn|microsoft|play\.google|apps\.apple|yelp|tripadvisor|trustpilot|glassdoor|indeed|craigslist|scribd|slideshare|issuu|archive|imdb|britannica|dictionary|merriam-webster|cambridge|fandom|discord|telegram|whatsapp|twitch|vimeo|dailymotion|soundcloud|spotify|goodreads|zillow|webmd|healthline|mayoclinic|clevelandclinic|nytimes|washingtonpost|theguardian|bbc|cnn|forbes|businessinsider|wsj|usatoday|nbcnews|cbsnews|foxnews|reuters|apnews|bloomberg)\.[a-z.]+$/i;
 // Government sites essentially never add outreach links; skip them before spending a fetch.
@@ -30,12 +31,15 @@ export const FOOTPRINTS={
   statistics:'{t} statistics', research_resources:'{t} research resources', sources:'{t} sources',
   blogs_to_follow:'{t} blogs to follow', recommended_reading:'{t} recommended reading',
   inurl_resources:'{t} inurl:resources', inurl_links:'{t} inurl:links', best_guides:'best {k} guides', k_resources:'{k} resources',
+  // Curated link pages and roundups exist to link out: highest acceptance for new resources.
+  link_roundup:'{t} "link roundup"', weekly_roundup:'{t} "weekly roundup"', best_of_web:'{t} "best of the web"',
+  further_reading:'{k} "further reading"', helpful_resources:'{k} "helpful resources"', recommended_tools:'{t} "recommended tools"',
 };
 const BY_TYPE={
-  interactive_tool:['intent','tools','free_tools','best_resources','intitle_resources','useful_websites','inurl_resources','k_resources'],
-  methodology:['intent','statistics','research_resources','intitle_resources','sources','inurl_resources'],
-  research_candidate:['intent','statistics','research_resources','intitle_resources','sources','inurl_resources'],
-  default:['intent','resources','intitle_resources','useful_links','k_resources','inurl_resources','inurl_links','best_guides','blogs_to_follow','recommended_reading'],
+  interactive_tool:['intent','tools','free_tools','best_resources','intitle_resources','useful_websites','inurl_resources','k_resources','recommended_tools','helpful_resources','link_roundup'],
+  methodology:['intent','statistics','research_resources','intitle_resources','sources','inurl_resources','further_reading','helpful_resources'],
+  research_candidate:['intent','statistics','research_resources','intitle_resources','sources','inurl_resources','further_reading','helpful_resources'],
+  default:['intent','resources','intitle_resources','useful_links','k_resources','inurl_resources','inurl_links','best_guides','blogs_to_follow','recommended_reading','further_reading','helpful_resources','link_roundup','weekly_roundup','best_of_web'],
 };
 export function queriesFor(asset,site){
   const k=keyPhrase(asset.h1||asset.title,4)||site.topic,t=site.topic;
@@ -64,6 +68,12 @@ export function footprintYield(state,sites){
   for(const p of Object.values(state.prospects||{}))if(p.email&&['ready','sent','followed_up','replied','positive','won'].includes(p.status))row(p.footprint||footprintOf(p.query||'',bySite.get(p.site))).ready++;
   for(const v of Object.values(y))v.rate=(v.ready+1)/(v.queries+3);
   return y;
+}
+
+/** How many of this asset's searches are not on cooldown (0 = nothing new to search for it). */
+export function freshQueryCount(asset,site,state,{reuseDays=45}={}){
+  if(!site)return 0;
+  return queriesFor(asset,site).filter(x=>ageDays(state.queries?.[`${asset.site}|${x.q}`])>reuseDays).length;
 }
 
 /** Choose the most productive unused queries per asset (untried footprints get a fair chance). */
@@ -168,7 +178,7 @@ export async function findContact(pageUrl,pageHtml,{fetchImpl=fetch,author=''}={
  * Run discovery for the chosen assets. Mutates `state.prospects` / `state.domains`.
  * Returns counters for the run report.
  */
-export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,perAsset=2,maxNewPerRun=60,deadline=Infinity,log=()=>{}}){
+export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,resolveHost,perAsset=2,maxNewPerRun=60,deadline=Infinity,log=()=>{}}){
   state.prospects??={};state.domains??={};state.queries??={};
   const ourDomains=sites.map(s=>s.domain),competitors=new Set(sites.flatMap(s=>s.competitors||[]));
   const bySite=new Map(sites.map(s=>[s.domain,s]));
@@ -176,7 +186,7 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
   const mentions=mentionJobs(sites,state).map(m=>({query:m.query,footprint:'mention',kind:'mention',
     asset:{site:m.site.domain,url:`https://${m.site.domain}/`,title:brandOf(m.site),type:'brand'}}));
   const jobs=[...mentions,...pickQueries(assets,sites,state,{perAsset})];
-  const stats={queries:0,mention_queries:0,serp_results:0,candidates:0,qualified:0,mentions:0,already_linked:0,rejected:0,with_email:0,contact_form:0};
+  const stats={queries:0,mention_queries:0,serp_results:0,candidates:0,qualified:0,mentions:0,already_linked:0,rejected:0,with_email:0,contact_form:0,broken_links:0};
   const fresh=[];
   for(const job of jobs){
     if(Date.now()>deadline||fresh.length>=maxNewPerRun*2||!dfs.canSpend('serp'))break;
@@ -218,7 +228,11 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     const contact=await findContact(rec.page_url,res.body,{fetchImpl,author:q.author});
     // Vendors that mention us may still link; for cold pitches they're competitors.
     if(contact.site_kind==='local_business'||(contact.site_kind==='software_vendor'&&!mention))return {...rec,qv:QUALIFY_VERSION,status:'rejected',reason:contact.site_kind==='software_vendor'?'Software vendor (competing product)':'Local service business'};
-    return {...rec,...contact,qv:QUALIFY_VERSION,status:contact.email?'ready':contact.contact_form?'contact_form':'no_contact'};
+    const status=contact.email?'ready':contact.contact_form?'contact_form':'no_contact';
+    // A dead link on their page that our asset replaces is the strongest reason for an editor to reply.
+    let broken=null;
+    if(status!=='no_contact'&&!mention&&Date.now()<deadline)broken=await findBrokenLink(res.body,rec.page_url,{terms:assetTerms(c.asset,site),ourDomains,fetchImpl,resolveHost,deadline}).catch(()=>null);
+    return {...rec,...contact,qv:QUALIFY_VERSION,status,broken_link:broken,broken_checked_at:NOW()};
   });
   for(const p of checked){
     if(!p||p.error)continue;
@@ -226,9 +240,9 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     state.prospects[p.id]=p;state.domains[`${p.site}|${p.domain}`]=p.id;
     if(p.status==='already_linked')stats.already_linked++;
     else if(p.status==='rejected')stats.rejected++;
-    else{stats.qualified++;if(p.kind==='mention')stats.mentions++;if(p.email)stats.with_email++;else if(p.contact_form)stats.contact_form++}
+    else{stats.qualified++;if(p.kind==='mention')stats.mentions++;if(p.email)stats.with_email++;else if(p.contact_form)stats.contact_form++;if(p.broken_link)stats.broken_links++}
   }
-  log(`prospects: ${stats.queries} queries (${stats.mention_queries} brand-mention), ${stats.candidates} candidates, ${stats.qualified} qualified (${stats.mentions} unlinked mentions), ${stats.with_email} with email, ${stats.already_linked} already linking`);
+  log(`prospects: ${stats.queries} queries (${stats.mention_queries} brand-mention), ${stats.candidates} candidates, ${stats.qualified} qualified (${stats.mentions} unlinked mentions), ${stats.with_email} with email, ${stats.broken_links} with a dead link we can replace, ${stats.already_linked} already linking`);
   return stats;
 }
 
@@ -257,5 +271,27 @@ export async function requalify({state,dfs,fetchImpl=fetch,deadline=Infinity,log
     p.status=c.email?'ready':c.contact_form?'contact_form':'no_contact';if(c.email)stats.recontacted++;
   });
   log(`requalify: ${stats.checked} re-checked, ${stats.rejected} dropped, ${stats.no_followup} follow-ups cancelled, ${stats.recontacted} still ready`);
+  return stats;
+}
+
+/**
+ * Look for replaceable dead links on queued prospects found before broken-link
+ * detection existed (or not re-checked for 30 days). Free: plain page fetches only.
+ */
+export async function enrichBrokenLinks({state,assets,sites,fetchImpl=fetch,resolveHost,max=25,deadline=Infinity,log=()=>{}}){
+  const assetBy=new Map(assets.map(a=>[a.url,a])),siteBy=new Map(sites.map(s=>[s.domain,s])),ourDomains=sites.map(s=>s.domain);
+  const due=Object.values(state.prospects||{}).filter(p=>['ready','contact_form'].includes(p.status)&&p.kind!=='mention'&&!(p.history||[]).some(h=>h.type==='initial')&&ageDays(p.broken_checked_at)>30)
+    .sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,max);
+  const stats={checked:0,found:0};
+  await pool(due,4,async p=>{
+    if(Date.now()>deadline)return;
+    const site=siteBy.get(p.site),asset=assetBy.get(p.asset_url)||{url:p.asset_url,title:p.asset_title||''};
+    const res=await fetchPage(p.page_url,{fetchImpl,timeout:12000,maxBytes:500000});
+    stats.checked++;p.broken_checked_at=NOW();
+    if(res.status!==200||!res.body)return;
+    p.broken_link=await findBrokenLink(res.body,p.page_url,{terms:assetTerms(asset,site),ourDomains,fetchImpl,resolveHost,deadline}).catch(()=>null);
+    if(p.broken_link)stats.found++;
+  });
+  log(`broken links: ${stats.checked} queued pages scanned, ${stats.found} with a dead link our page can replace`);
   return stats;
 }

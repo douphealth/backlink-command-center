@@ -30,6 +30,7 @@ export function linkLikelihood(p,{assets=new Map()}={}){
   let s=Math.min(100,p.score||0)*.3;                                   // topical fit and page quality
   if(p.kind==='mention')s+=25;                                         // already knows and mentions us
   if(p.resource_page)s+=10;                                            // a page whose job is linking out
+  if(p.broken_link)s+=15;                                              // a dead link on their page we can replace
   s+=etv==null?6:etv>=1000&&etv<=300000?15:etv>=300&&etv<1_000_000?8:3; // independent, real audience
   s+=rank>=95?15:rank>=72?12:rank>=50?7:0;                             // author > editorial > generic inbox
   if((p.last_year_mentioned||0)>=year-1)s+=8;                         // recently maintained

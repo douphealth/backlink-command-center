@@ -27,6 +27,8 @@ Set these in GitHub Actions settings, never in public files or issues:
 | Variable | `EMAIL_VERIFICATION_ENABLED` | `YES` only after the owner authorizes verification requests. Default `NO`. |
 | Variable | `EMAIL_VERIFY_DAILY_LIMIT` | Owner-approved positive integer attempt cap; maximum 100. Default `0`. |
 
+The dashboard (⚙ Connect) can store the key as the `HUNTER_API_KEY` secret and the daily limit in the encrypted `LINKFORGE_SETTINGS` secret. A limit above 0 records the owner's opt-in (`EMAIL_VERIFICATION_ENABLED=YES`), and 0 turns it off. Dashboard settings take precedence over repository variables. Without a usable verifier the outreach stage is skipped and reports why: no page fetches, no provider calls, no mail. This does not lift the workflow's outbound hold.
+
 The adapter uses the official `https://api.hunter.io/v2/email-verifier` endpoint with `X-API-KEY`. API keys do not go into URLs or logs. A provider response is not an inbox-placement guarantee. Provider costs are separate from DataForSEO costs; no paid calls are made without the opt-in and budget. Attempts are counted even on timeout; uncertain requests are not automatically retried. Usage is stored with the encrypted state at the normal cycle checkpoint, so the counter is not a crash-proof transactional billing ledger.
 
 ## Replies and recovery
