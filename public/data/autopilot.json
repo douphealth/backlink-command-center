@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-06T00:30:07.259Z",
- "duration_s": 185,
+ "generated_at": "2026-11-06T08:09:27.973Z",
+ "duration_s": 349,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 16.889325999999997
+    "balance_usd": 16.779325999999998
    },
    "gmail": {
     "status": "connected"
@@ -107,7 +107,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 13201,
+   "ms": 20287,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -115,7 +115,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -130,7 +130,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -140,11 +140,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 163711,
+   "ms": 302791,
    "result": {
-    "queries": 28,
+    "queries": 32,
     "mention_queries": 0,
-    "serp_results": 499,
+    "serp_results": 560,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -154,7 +154,7 @@
     "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
-    "failed_queries": 2,
+    "failed_queries": 13,
     "deferred": 0
    }
   },
@@ -168,9 +168,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1470,
+   "ms": 1141,
    "result": {
-    "scanned": 11,
+    "scanned": 12,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -180,15 +180,15 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 4876,
+   "ms": 19371,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 193,
+    "deferred": 189,
     "cap": 12,
-    "verification_held": 1
+    "verification_held": 5
    },
    "writer": {
     "claude": 0,
@@ -218,11 +218,11 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.11,
-  "month_usd": 0.7044,
+  "today_usd": 0.232,
+  "month_usd": 0.8264,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 34
+  "calls_this_run": 61
  },
  "outreach": {
   "mode": "send",
@@ -497,7 +497,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.11
+   "spend_usd": 0.232
   }
  ],
  "learning": {
@@ -516,9 +516,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 101,
+    "queries": 103,
     "ready": 60,
-    "rate": 0.587
+    "rate": 0.575
    },
    {
     "footprint": "useful_websites",
@@ -570,9 +570,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 75,
+    "queries": 81,
     "ready": 23,
-    "rate": 0.308
+    "rate": 0.286
    },
    {
     "footprint": "recommended_tools",
@@ -582,27 +582,15 @@
    },
    {
     "footprint": "further_reading",
-    "queries": 15,
+    "queries": 26,
     "ready": 3,
-    "rate": 0.222
-   },
-   {
-    "footprint": "best_of_web",
-    "queries": 4,
-    "ready": 0,
-    "rate": 0.143
+    "rate": 0.138
    },
    {
     "footprint": "resources",
-    "queries": 110,
+    "queries": 112,
     "ready": 14,
-    "rate": 0.133
-   },
-   {
-    "footprint": "link_roundup",
-    "queries": 5,
-    "ready": 0,
-    "rate": 0.125
+    "rate": 0.13
    },
    {
     "footprint": "weekly_roundup",
@@ -611,10 +599,22 @@
     "rate": 0.125
    },
    {
-    "footprint": "helpful_resources",
-    "queries": 13,
+    "footprint": "link_roundup",
+    "queries": 6,
     "ready": 0,
-    "rate": 0.063
+    "rate": 0.111
+   },
+   {
+    "footprint": "best_of_web",
+    "queries": 7,
+    "ready": 0,
+    "rate": 0.1
+   },
+   {
+    "footprint": "helpful_resources",
+    "queries": 17,
+    "ready": 0,
+    "rate": 0.05
    },
    {
     "footprint": "mention",
@@ -2034,7 +2034,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2133,7 +2133,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -2205,7 +2205,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "imagealchemy.app",
@@ -2482,7 +2482,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -3078,6 +3078,16 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/review/scalenut-review/",
+   "from_title": "Scalenut Review 2026: AI SEO Platform, Pricing, Pros, Cons",
+   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
+   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
+   "anchor": "affiliate link",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/compliance/",
    "from_title": "Affiliate Marketing Compliance: 2026 Rules & Best Practices",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
@@ -3100,16 +3110,6 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/review/grammarly/",
    "from_title": "Grammarly Review 2026: Free vs Premium — Is It Worth It?",
-   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "anchor": "affiliate link",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/web-hosting/siteground-web-hosting-review-2025/",
-   "from_title": "SiteGround Review: Is It a Smart Hosting Choice for WordPress Sites?",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
    "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
    "anchor": "affiliate link",
@@ -5824,7 +5824,7 @@
  },
  "tuning": {
   "max_queries": 32,
-  "updated_at": "2026-11-06T00:30:00.831Z"
+  "updated_at": "2026-11-06T08:09:07.414Z"
  },
  "wins": [
   {
@@ -5873,35 +5873,52 @@
   }
  ],
  "log": [
-  "00:27:03 connection dataforseo: connected",
-  "00:27:03 connection gmail: connected",
-  "00:27:05 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "00:27:06 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
-  "00:27:07 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "00:27:08 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "00:27:09 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "00:27:10 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "00:27:11 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "00:27:11 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "00:27:11 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "00:27:16 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "00:27:17 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
-  "00:28:07 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "00:29:45 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "00:30:00 prospects: 0 from the saved queue, 0 saved for next run; 28 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "00:30:00 self-tuning: next cycle runs up to 32 searches",
-  "00:30:00 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "00:30:02 replies: 11 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "00:30:07 outreach: 0 sent, 0 follow-ups, 0 drafts, 1 held for verification",
-  "00:30:07 - preverify: skipped (runs only while outreach is paused)",
-  "00:30:07 link checks: 0 pages, 0 new links won, 0 lost"
+  "08:03:44 connection dataforseo: connected",
+  "08:03:44 connection gmail: connected",
+  "08:03:46 crawl gearuptofit.com: 300/878 urls, fetched 1, 304 0, reused 299",
+  "08:03:46 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
+  "08:03:48 crawl gearuptogrow.com: 107/107 urls, fetched 1, 304 0, reused 106",
+  "08:03:50 crawl micegoneguide.com: 53/53 urls, fetched 1, 304 0, reused 52",
+  "08:03:52 crawl frenchyfab.com: 238/238 urls, fetched 5, 304 0, reused 233",
+  "08:03:52 crawl mysticaldigits.com: 300/468 urls, fetched 2, 304 0, reused 298",
+  "08:03:53 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "08:03:55 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "08:03:57 crawl efficientgptprompts.com: 300/487 urls, fetched 6, 304 0, reused 294",
+  "08:04:04 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 3, 304 0, reused 255",
+  "08:04:04 indexation: 69 sitemap URLs with an indexing problem (2 critical)",
+  "08:05:09 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:05:11 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:05:41 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:05:47 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:06:43 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:06:47 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:06:47 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:06:51 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:08:03 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:08:03 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:08:32 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:08:33 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:09:03 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:09:07 prospects: 0 from the saved queue, 0 saved for next run; 32 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "08:09:07 self-tuning: next cycle runs up to 32 searches",
+  "08:09:07 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "08:09:08 replies: 12 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "08:09:27 outreach: 0 sent, 0 follow-ups, 0 drafts, 5 held for verification",
+  "08:09:27 - preverify: skipped (runs only while outreach is paused)",
+  "08:09:27 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
    "level": "warn",
    "code": "no_qualified",
-   "message": "28 searches produced 0 qualified prospects this cycle.",
+   "message": "32 searches produced 0 qualified prospects this cycle.",
    "fix": "Usually transient; if it repeats, the promoted pages may need stronger topical matches."
+  },
+  {
+   "level": "warn",
+   "code": "dataforseo_errors",
+   "message": "13 DataForSEO searches failed (provider errors); they are retried next cycle.",
+   "fix": "No action unless it persists for a day."
   },
   {
    "level": "info",
