@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-06T14:41:56.816Z",
- "duration_s": 356,
+ "generated_at": "2026-11-06T21:40:48.794Z",
+ "duration_s": 59,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 16.557326000000003
+    "balance_usd": 16.389325999999997
    },
    "gmail": {
     "status": "connected"
@@ -107,7 +107,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 18145,
+   "ms": 15648,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -115,7 +115,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 1350,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -125,12 +125,12 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 327
+    "internal_suggestions": 322
    }
   },
   "requalify": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -140,11 +140,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 275116,
+   "ms": 29739,
    "result": {
-    "queries": 32,
+    "queries": 1,
     "mention_queries": 0,
-    "serp_results": 564,
+    "serp_results": 19,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -154,13 +154,13 @@
     "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
-    "failed_queries": 7,
+    "failed_queries": 1,
     "deferred": 0
    }
   },
   "broken_links": {
    "ok": true,
-   "ms": 3,
+   "ms": 2,
    "result": {
     "checked": 0,
     "found": 0
@@ -168,9 +168,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1623,
+   "ms": 1732,
    "result": {
-    "scanned": 4,
+    "scanned": 18,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -180,15 +180,15 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 59979,
+   "ms": 9,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 3,
+    "deferred": 189,
     "cap": 12,
-    "verification_held": 24
+    "verification_held": 0
    },
    "writer": {
     "claude": 0,
@@ -201,9 +201,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 1,
+   "ms": 8410,
    "result": {
-    "checked": 0,
+    "checked": 9,
     "won": 0,
     "lost": 0
    }
@@ -214,15 +214,15 @@
   "pages_crawled": 1903,
   "urls_discovered": 2836,
   "promotable": 250,
-  "internal_suggestions": 327,
+  "internal_suggestions": 322,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.456,
-  "month_usd": 1.0504,
+  "today_usd": 0.4943,
+  "month_usd": 1.0887,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 50
+  "calls_this_run": 5
  },
  "outreach": {
   "mode": "send",
@@ -237,7 +237,7 @@
   },
   "sent_today": 5,
   "cap_today": 12,
-  "next_send_at": "2026-11-06T14:41:56.817Z",
+  "next_send_at": "2026-11-09T13:00:00.000Z",
   "sending_now": false,
   "reply_health": "ok"
  },
@@ -497,7 +497,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.456
+   "spend_usd": 0.4943
   }
  ],
  "learning": {
@@ -588,9 +588,9 @@
    },
    {
     "footprint": "further_reading",
-    "queries": 33,
+    "queries": 34,
     "ready": 3,
-    "rate": 0.111
+    "rate": 0.108
    },
    {
     "footprint": "link_roundup",
@@ -1506,7 +1506,7 @@
    "linkability": 95,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 10,
    "words": 2214,
    "interactive": true,
    "modified": "2026-10-03T06:26:18+00:00",
@@ -1633,7 +1633,7 @@
    "linkability": 94,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 8,
    "words": 1824,
    "interactive": true,
    "modified": "2026-10-03T06:40:50+00:00",
@@ -1724,38 +1724,6 @@
    "promoting": false
   },
   {
-   "site": "plantastichaven.com",
-   "url": "https://plantastichaven.com/spider-plant-family/",
-   "title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
-   "h1": "Spider Plant Family: Main Types and Easy Care Basics",
-   "description": "Learn the lowest safe temperature for philodendrons, cold-damage signs, winter placement, rescue steps, and frost-prevention care.",
-   "type": "general_article",
-   "promotion": 73,
-   "linkability": 63,
-   "demand": 86,
-   "metrics": {
-    "source": "dataforseo",
-    "url": "https://plantastichaven.com/spider-plant-family/",
-    "etv": 427.1230060979724,
-    "keywords": 27,
-    "striking": 1,
-    "top3": 0
-   },
-   "internal_inlinks": 30,
-   "words": 3254,
-   "interactive": false,
-   "modified": "2026-10-09T09:53:33+00:00",
-   "reasons": [
-    "~427 est. monthly visits from 27 keywords",
-    "In-depth (3,254 words)",
-    "3 data tables",
-    "Recently updated"
-   ],
-   "prospects": 5,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/web-hosting/web-hosting-comparison/",
    "title": "Web Hosting Comparison: The Practical Buyer’s Guide for WordPress and Affiliate Sites",
@@ -1816,7 +1784,7 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 6,
    "words": 1126,
    "interactive": true,
    "modified": "2026-10-03T06:17:15+00:00",
@@ -1842,7 +1810,7 @@
    "linkability": 92,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 11,
    "words": 2558,
    "interactive": true,
    "modified": "2026-10-03T06:15:52+00:00",
@@ -1881,6 +1849,31 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 3,
+   "promoting": false
+  },
+  {
+   "site": "plantastichaven.com",
+   "url": "https://plantastichaven.com/overwatered-spider-plant/",
+   "title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "h1": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "description": "Reviving an overwatered spider plant: unpot it, trim the mushy brown roots, repot into fresh free-draining mix, and hold off watering while it recovers.",
+   "type": "practical_guide",
+   "promotion": 71,
+   "linkability": 79,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 19,
+   "words": 2569,
+   "interactive": false,
+   "modified": "2026-10-22T04:58:51+00:00",
+   "reasons": [
+    "In-depth (2,569 words)",
+    "2 data tables",
+    "Cites 8 authoritative sources",
+    "Recently updated"
+   ],
+   "prospects": 7,
+   "internal_link_suggestions": 5,
    "promoting": false
   },
   {
@@ -1944,7 +1937,7 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 10,
    "words": 1536,
    "interactive": true,
    "modified": "2026-10-29T07:52:25+00:00",
@@ -1995,7 +1988,7 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
+   "internal_inlinks": 14,
    "words": 2161,
    "interactive": true,
    "modified": "2026-10-03T06:27:23+00:00",
@@ -2072,7 +2065,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 14,
-   "words": 1987,
+   "words": 1984,
    "interactive": true,
    "modified": "2026-10-24T09:10:11+00:00",
    "reasons": [
@@ -2205,7 +2198,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "imagealchemy.app",
@@ -2241,8 +2234,8 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
-   "words": 1660,
+   "internal_inlinks": 8,
+   "words": 1658,
    "interactive": true,
    "modified": "2026-10-25T07:53:36+00:00",
    "reasons": [
@@ -2294,7 +2287,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 10,
    "words": 1612,
    "interactive": true,
    "modified": "2026-10-03T06:40:47+00:00",
@@ -2546,7 +2539,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 6,
    "words": 2176,
    "interactive": true,
    "modified": "2026-10-03T06:40:36+00:00",
@@ -2573,7 +2566,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 2568,
    "interactive": true,
    "modified": "2026-10-03T06:27:34+00:00",
@@ -2687,7 +2680,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -3198,16 +3191,6 @@
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/spider-plant-family/",
-   "from_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
-   "to": "https://plantastichaven.com/string-of-pearls-plant-care/",
-   "to_title": "String of Pearls Plant Care: The Complete Guide to Growing Curio Rowleyanus Indoors - PlantasticHaven",
-   "anchor": "plant care",
-   "relevance": 4,
-   "from_strength": 73
-  },
-  {
-   "site": "plantastichaven.com",
    "from": "https://plantastichaven.com/mandarin-spider-plant/",
    "from_title": "Mandarin Spider Plant Care: Identification and Growing Tips",
    "to": "https://plantastichaven.com/string-of-pearls-plant-care/",
@@ -3230,6 +3213,16 @@
    "site": "plantastichaven.com",
    "from": "https://plantastichaven.com/spider-plant-hawaiian/",
    "from_title": "Hawaiian Spider Plant Care: Light, Water, and Identification Tips",
+   "to": "https://plantastichaven.com/string-of-pearls-plant-care/",
+   "to_title": "String of Pearls Plant Care: The Complete Guide to Growing Curio Rowleyanus Indoors - PlantasticHaven",
+   "anchor": "plant care",
+   "relevance": 4,
+   "from_strength": 54
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/how-to-start-a-philodendron/",
+   "from_title": "How to Start a Philodendron: Beginner Setup and Early Care Guide",
    "to": "https://plantastichaven.com/string-of-pearls-plant-care/",
    "to_title": "String of Pearls Plant Care: The Complete Guide to Growing Curio Rowleyanus Indoors - PlantasticHaven",
    "anchor": "plant care",
@@ -3857,56 +3850,6 @@
    "from_strength": 0
   },
   {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/overwatered-spider-plant/",
-   "from_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "to": "https://plantastichaven.com/spider-plant-family/",
-   "to_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 59
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "from_title": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer - PlantasticHaven",
-   "to": "https://plantastichaven.com/spider-plant-family/",
-   "to_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 59
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/mandarin-spider-plant/",
-   "from_title": "Mandarin Spider Plant Care: Identification and Growing Tips",
-   "to": "https://plantastichaven.com/spider-plant-family/",
-   "to_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 55
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/zebra-spider-plant/",
-   "from_title": "Zebra Spider Plant Care: Light, Water, and Troubleshooting",
-   "to": "https://plantastichaven.com/spider-plant-family/",
-   "to_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 54
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/spider-plant-hawaiian/",
-   "from_title": "Hawaiian Spider Plant Care: Light, Water, and Identification Tips",
-   "to": "https://plantastichaven.com/spider-plant-family/",
-   "to_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 54
-  },
-  {
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/review/namehero-hosting-review/",
    "from_title": "NameHero Hosting Review: Fast, Affordable WordPress Hosting for Growing Sites",
@@ -4048,6 +3991,16 @@
   },
   {
    "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/eco-friendly-mouse-proofing-techniques/",
+   "from_title": "Eco-Friendly Mouse Control: Proofing, Traps & Sanitation",
+   "to": "https://micegoneguide.com/diy-mouse-traps/",
+   "to_title": "Homemade Mouse Traps: DIY Designs, Risks & Safer Alternatives",
+   "anchor": "mouse traps",
+   "relevance": 5,
+   "from_strength": 67
+  },
+  {
+   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/risks-of-diy-mice-removal/",
    "from_title": "DIY Mouse Removal Risks: What Can Go Wrong and When to Call a Professional",
    "to": "https://micegoneguide.com/diy-mouse-traps/",
@@ -4088,16 +4041,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "from_title": "Where to Place Mouse Traps: Room-by-Room Guide to Safer Placement | Mice Gone Guide",
-   "to": "https://micegoneguide.com/diy-mouse-traps/",
-   "to_title": "Homemade Mouse Traps: DIY Designs, Risks & Safer Alternatives",
-   "anchor": "mouse traps",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "to": "https://micegoneguide.com/mouse-removal/",
@@ -4125,6 +4068,56 @@
    "anchor": "mouse removal",
    "relevance": 4,
    "from_strength": 65
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/zebra-spider-plant/",
+   "from_title": "Zebra Spider Plant Care: Light, Water, and Troubleshooting",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 5,
+   "from_strength": 54
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "from_title": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer - PlantasticHaven",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/mandarin-spider-plant/",
+   "from_title": "Mandarin Spider Plant Care: Identification and Growing Tips",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 55
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/spider-plant-hawaiian/",
+   "from_title": "Hawaiian Spider Plant Care: Light, Water, and Identification Tips",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 54
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/philodendron-cordatum-care/",
+   "from_title": "Philodendron Cordatum Care: 2026 Heartleaf Guide",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 52
   },
   {
    "site": "gearuptogrow.com",
@@ -4638,56 +4631,6 @@
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/zebra-spider-plant/",
-   "from_title": "Zebra Spider Plant Care: Light, Water, and Troubleshooting",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 5,
-   "from_strength": 54
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/spider-plant-family/",
-   "from_title": "How Cold Can Philodendron Tolerate? Safe Temperatures",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 73
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "from_title": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer - PlantasticHaven",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 59
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/mandarin-spider-plant/",
-   "from_title": "Mandarin Spider Plant Care: Identification and Growing Tips",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 55
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/spider-plant-hawaiian/",
-   "from_title": "Hawaiian Spider Plant Care: Light, Water, and Identification Tips",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 54
-  },
-  {
-   "site": "plantastichaven.com",
    "from": "https://plantastichaven.com/plants-that-look-like-spider-plants/",
    "from_title": "Plants That Look Like Spider Plants: 7 Lookalikes + ID Chart",
    "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
@@ -4965,6 +4908,56 @@
    "anchor": "food french",
    "relevance": 7,
    "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/right-food-french-bulldog-guide/",
+   "from_title": "Choosing the Right Food for Your French Bulldog",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 57
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/numerology-boundary-setting/",
+   "from_title": "9 Numerology Boundary Hacks for Empaths in 2026",
+   "to": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
+   "to_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
+   "anchor": "lucky numbers",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/how-to-find-your-true-zodiac-sign/",
+   "from_title": "How to Find Your Zodiac Sign: Dates, Cusps, and Birth-Chart Basics | Mystical Digits",
+   "to": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
+   "to_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
+   "anchor": "lucky numbers",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/find-your-lucky-mobile-number-based-on-date-of-birth/",
+   "from_title": "Find Your Lucky Mobile Number by DOB in 2026",
+   "to": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
+   "to_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
+   "anchor": "lucky numbers",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/the-power-and-symbolism-of-number-seven-in-numerology/",
+   "from_title": "Number 7 in Numerology: Meaning, Life Path Calculation and Symbolism | Mystical Digits",
+   "to": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
+   "to_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
+   "anchor": "lucky numbers meaning",
+   "relevance": 3,
+   "from_strength": 0
   }
  ],
  "indexation": {
@@ -5833,7 +5826,7 @@
  },
  "tuning": {
   "max_queries": 36,
-  "updated_at": "2026-11-06T14:40:55.204Z"
+  "updated_at": "2026-11-06T21:40:38.562Z"
  },
  "wins": [
   {
@@ -5882,46 +5875,42 @@
   }
  ],
  "log": [
-  "14:36:01 connection dataforseo: connected",
-  "14:36:01 connection gmail: connected",
-  "14:36:03 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "14:36:05 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
-  "14:36:07 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "14:36:09 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "14:36:10 crawl frenchyfab.com: 238/238 urls, fetched 0, 304 0, reused 238",
-  "14:36:11 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "14:36:12 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "14:36:14 crawl micegoneguide.com: 53/53 urls, fetched 0, 304 0, reused 53",
-  "14:36:16 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 2, 304 0, reused 256",
-  "14:36:19 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "14:36:20 indexation: 70 sitemap URLs with an indexing problem (3 critical)",
-  "14:36:53 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "14:37:49 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "14:38:24 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "14:39:02 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "14:40:13 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "14:40:13 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "14:40:49 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "14:40:55 prospects: 0 from the saved queue, 0 saved for next run; 32 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "14:40:55 self-tuning: next cycle runs up to 36 searches",
-  "14:40:55 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "14:40:56 replies: 4 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "14:41:56 outreach: 0 sent, 0 follow-ups, 0 drafts, 24 held for verification",
-  "14:41:56 - preverify: skipped (runs only while outreach is paused)",
-  "14:41:56 link checks: 0 pages, 0 new links won, 0 lost"
+  "21:39:51 connection dataforseo: connected",
+  "21:39:51 connection gmail: connected",
+  "21:39:55 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
+  "21:39:55 crawl gearuptofit.com: 300/878 urls, fetched 3, 304 0, reused 297",
+  "21:39:56 crawl plantastichaven.com: 163/163 urls, fetched 4, 304 0, reused 159",
+  "21:39:57 crawl micegoneguide.com: 53/53 urls, fetched 6, 304 0, reused 47",
+  "21:39:59 crawl frenchyfab.com: 238/238 urls, fetched 2, 304 0, reused 236",
+  "21:40:00 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "21:40:00 crawl mysticaldigits.com: 300/468 urls, fetched 2, 304 0, reused 298",
+  "21:40:01 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "21:40:03 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 6, 304 0, reused 252",
+  "21:40:07 crawl efficientgptprompts.com: 300/487 urls, fetched 12, 304 0, reused 288",
+  "21:40:07 dataforseo demand: gearuptofit.com 0 ranking pages",
+  "21:40:08 dataforseo demand: plantastichaven.com 86 ranking pages",
+  "21:40:08 indexation: 70 sitemap URLs with an indexing problem (3 critical)",
+  "21:40:36 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "21:40:38 prospects: 0 from the saved queue, 0 saved for next run; 1 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "21:40:38 self-tuning: next cycle runs up to 36 searches",
+  "21:40:38 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "21:40:40 replies: 18 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "21:40:40 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "21:40:40 - preverify: skipped (runs only while outreach is paused)",
+  "21:40:48 link checks: 9 pages, 0 new links won, 0 lost"
  ],
  "attention": [
-  {
-   "level": "warn",
-   "code": "no_qualified",
-   "message": "32 searches produced 0 qualified prospects this cycle.",
-   "fix": "Usually transient; if it repeats, the promoted pages may need stronger topical matches."
-  },
   {
    "level": "info",
    "code": "holds",
    "message": "16 queued inboxes are held; most often (8) because the only address is not on the publisher's contact/about page or is not an accepted inbox type.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
+  },
+  {
+   "level": "info",
+   "code": "spend_cap",
+   "message": "Today's DataForSEO spend cap is reached; prospecting resumes tomorrow.",
+   "fix": "Raise DATAFORSEO_DAILY_USD only if you want faster prospecting."
   }
  ]
 }
