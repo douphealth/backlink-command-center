@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-06T21:40:48.794Z",
- "duration_s": 59,
+ "generated_at": "2026-11-07T09:05:10.635Z",
+ "duration_s": 402,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 16.389325999999997
+    "balance_usd": 16.325006000000002
    },
    "gmail": {
     "status": "connected"
@@ -29,7 +29,7 @@
    "key": true,
    "enabled": true,
    "daily_limit": 12,
-   "used_today": 12,
+   "used_today": 0,
    "balance": {
     "provider": "verifalia",
     "free_credits": 1,
@@ -107,7 +107,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 15648,
+   "ms": 17584,
    "result": {
     "sites": 10,
     "pages": 1903
@@ -115,7 +115,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1350,
+   "ms": 2972,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -125,7 +125,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 322
+    "internal_suggestions": 317
    }
   },
   "requalify": {
@@ -140,11 +140,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 29739,
+   "ms": 374728,
    "result": {
-    "queries": 1,
-    "mention_queries": 0,
-    "serp_results": 19,
+    "queries": 30,
+    "mention_queries": 6,
+    "serp_results": 529,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -154,7 +154,7 @@
     "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
-    "failed_queries": 1,
+    "failed_queries": 14,
     "deferred": 0
    }
   },
@@ -168,9 +168,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1732,
+   "ms": 2068,
    "result": {
-    "scanned": 18,
+    "scanned": 16,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -180,7 +180,7 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 9,
+   "ms": 10,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -201,9 +201,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 8410,
+   "ms": 2,
    "result": {
-    "checked": 9,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -214,15 +214,15 @@
   "pages_crawled": 1903,
   "urls_discovered": 2836,
   "promotable": 250,
-  "internal_suggestions": 322,
+  "internal_suggestions": 317,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.4943,
-  "month_usd": 1.0887,
+  "today_usd": 0.2211,
+  "month_usd": 1.3098,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 5
+  "calls_this_run": 73
  },
  "outreach": {
   "mode": "send",
@@ -235,7 +235,7 @@
    "mailbox_accept_all": 3,
    "publisher_mismatch": 1
   },
-  "sent_today": 5,
+  "sent_today": 0,
   "cap_today": 12,
   "next_send_at": "2026-11-09T13:00:00.000Z",
   "sending_now": false,
@@ -498,6 +498,23 @@
    "declined": 0,
    "bounced": 6,
    "spend_usd": 0.4943
+  },
+  {
+   "date": "2026-11-07",
+   "prospects_evaluated": 2518,
+   "qualified": 539,
+   "ready": 160,
+   "broken_link_ready": 15,
+   "contact_form_only": 105,
+   "no_contact": 223,
+   "contacted": 49,
+   "replied": 1,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 4,
+   "declined": 0,
+   "bounced": 6,
+   "spend_usd": 0.2211
   }
  ],
  "learning": {
@@ -534,9 +551,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 116,
+    "queries": 119,
     "ready": 60,
-    "rate": 0.513
+    "rate": 0.5
    },
    {
     "footprint": "tools",
@@ -570,9 +587,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 90,
+    "queries": 94,
     "ready": 23,
-    "rate": 0.258
+    "rate": 0.247
    },
    {
     "footprint": "recommended_tools",
@@ -582,15 +599,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 124,
+    "queries": 127,
     "ready": 14,
-    "rate": 0.118
-   },
-   {
-    "footprint": "further_reading",
-    "queries": 34,
-    "ready": 3,
-    "rate": 0.108
+    "rate": 0.115
    },
    {
     "footprint": "link_roundup",
@@ -611,6 +622,12 @@
     "rate": 0.1
    },
    {
+    "footprint": "further_reading",
+    "queries": 39,
+    "ready": 3,
+    "rate": 0.095
+   },
+   {
     "footprint": "mention",
     "queries": 20,
     "ready": 0,
@@ -618,9 +635,9 @@
    },
    {
     "footprint": "helpful_resources",
-    "queries": 29,
+    "queries": 38,
     "ready": 0,
-    "rate": 0.031
+    "rate": 0.024
    }
   ],
   "assets": [
@@ -1310,7 +1327,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 9,
    "words": 3486,
    "interactive": true,
    "modified": "2026-09-06T06:47:08+00:00",
@@ -1558,12 +1575,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 14,
-   "words": 4266,
+   "words": 4270,
    "interactive": true,
    "modified": "2026-11-04T05:41:19+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,266 words)",
+    "In-depth (4,270 words)",
     "23 data tables",
     "Recently updated"
    ],
@@ -1582,7 +1599,7 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 18,
+   "internal_inlinks": 19,
    "words": 3850,
    "interactive": true,
    "modified": "2026-09-25T21:06:18+00:00",
@@ -1759,7 +1776,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 10,
-   "words": 1589,
+   "words": 1590,
    "interactive": true,
    "modified": "2026-11-03T18:13:53+00:00",
    "reasons": [
@@ -1988,7 +2005,7 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 14,
+   "internal_inlinks": 15,
    "words": 2161,
    "interactive": true,
    "modified": "2026-10-03T06:27:23+00:00",
@@ -2015,7 +2032,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 4194,
    "interactive": false,
    "modified": "2026-09-12T07:57:38+00:00",
@@ -2040,7 +2057,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 10,
    "words": 6004,
    "interactive": false,
    "modified": "2026-09-03T11:44:05+00:00",
@@ -2187,7 +2204,7 @@
    "linkability": 75,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 3272,
    "interactive": false,
    "modified": "2026-09-13T14:12:52+00:00",
@@ -2234,7 +2251,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 9,
    "words": 1658,
    "interactive": true,
    "modified": "2026-10-25T07:53:36+00:00",
@@ -2744,7 +2761,7 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 18,
+   "internal_inlinks": 17,
    "words": 692,
    "interactive": true,
    "modified": "2026-09-05T13:47:17+00:00",
@@ -3661,6 +3678,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/french-bulldog-training-aids/",
+   "to_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-classes/",
    "from_title": "French Bulldog Training Classes: When to Join",
    "to": "https://frenchyfab.com/french-bulldog-training-aids/",
@@ -3683,16 +3710,6 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/stop-french-bulldog-barking/",
    "from_title": "Stop French Bulldog Barking: Causes and Calm Training Steps",
-   "to": "https://frenchyfab.com/french-bulldog-training-aids/",
-   "to_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/training-games-and-activities-for-french-bulldog-puppies/",
-   "from_title": "2026 French Bulldog Training: 7 Fun Games & Tips",
    "to": "https://frenchyfab.com/french-bulldog-training-aids/",
    "to_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "anchor": "french bulldog",
@@ -4471,6 +4488,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/french-bulldog-training-classes/",
+   "to_title": "French Bulldog Training Classes: When to Join",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-training-aids/",
    "from_title": "French Bulldog Training Aids: Tools, Treats, Clickers",
    "to": "https://frenchyfab.com/french-bulldog-training-classes/",
@@ -4510,16 +4537,6 @@
    "from_strength": 0
   },
   {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/21-day-french-bulldog-obedience-blueprint/",
-   "from_title": "2026 French Bulldog Training: 21-Day Proven Blueprint",
-   "to": "https://frenchyfab.com/french-bulldog-training-classes/",
-   "to_title": "French Bulldog Training Classes: When to Join",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
    "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/reviews/",
    "from_title": "Reviews Hub | Running Shoes, Watches & Fitness Gear | GearUpToFit",
@@ -4528,6 +4545,16 @@
    "anchor": "fitness watch match",
    "relevance": 3,
    "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
+   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 74
   },
   {
    "site": "frenchyfab.com",
@@ -4563,16 +4590,6 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/training-games-and-activities-for-french-bulldog-puppies/",
    "from_title": "2026 French Bulldog Training: 7 Fun Games & Tips",
-   "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
-   "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/21-day-french-bulldog-obedience-blueprint/",
-   "from_title": "2026 French Bulldog Training: 21-Day Proven Blueprint",
    "to": "https://frenchyfab.com/french-bulldog-training-techniques/",
    "to_title": "French Bulldog Training: Motivation, Rewards, Consistency",
    "anchor": "french bulldog",
@@ -5826,7 +5843,7 @@
  },
  "tuning": {
   "max_queries": 36,
-  "updated_at": "2026-11-06T21:40:38.562Z"
+  "updated_at": "2026-11-07T09:05:08.468Z"
  },
  "wins": [
   {
@@ -5875,42 +5892,67 @@
   }
  ],
  "log": [
-  "21:39:51 connection dataforseo: connected",
-  "21:39:51 connection gmail: connected",
-  "21:39:55 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
-  "21:39:55 crawl gearuptofit.com: 300/878 urls, fetched 3, 304 0, reused 297",
-  "21:39:56 crawl plantastichaven.com: 163/163 urls, fetched 4, 304 0, reused 159",
-  "21:39:57 crawl micegoneguide.com: 53/53 urls, fetched 6, 304 0, reused 47",
-  "21:39:59 crawl frenchyfab.com: 238/238 urls, fetched 2, 304 0, reused 236",
-  "21:40:00 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "21:40:00 crawl mysticaldigits.com: 300/468 urls, fetched 2, 304 0, reused 298",
-  "21:40:01 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "21:40:03 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 6, 304 0, reused 252",
-  "21:40:07 crawl efficientgptprompts.com: 300/487 urls, fetched 12, 304 0, reused 288",
-  "21:40:07 dataforseo demand: gearuptofit.com 0 ranking pages",
-  "21:40:08 dataforseo demand: plantastichaven.com 86 ranking pages",
-  "21:40:08 indexation: 70 sitemap URLs with an indexing problem (3 critical)",
-  "21:40:36 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "21:40:38 prospects: 0 from the saved queue, 0 saved for next run; 1 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "21:40:38 self-tuning: next cycle runs up to 36 searches",
-  "21:40:38 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "21:40:40 replies: 18 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "21:40:40 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "21:40:40 - preverify: skipped (runs only while outreach is paused)",
-  "21:40:48 link checks: 9 pages, 0 new links won, 0 lost"
+  "08:58:32 connection dataforseo: connected",
+  "08:58:32 connection gmail: connected",
+  "08:58:35 crawl gearuptofit.com: 300/878 urls, fetched 1, 304 0, reused 299",
+  "08:58:35 crawl plantastichaven.com: 163/163 urls, fetched 2, 304 0, reused 161",
+  "08:58:36 crawl gearuptogrow.com: 107/107 urls, fetched 1, 304 0, reused 106",
+  "08:58:40 crawl frenchyfab.com: 238/238 urls, fetched 4, 304 0, reused 234",
+  "08:58:40 crawl micegoneguide.com: 53/53 urls, fetched 1, 304 0, reused 52",
+  "08:58:41 crawl mysticaldigits.com: 300/468 urls, fetched 6, 304 0, reused 294",
+  "08:58:41 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "08:58:42 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "08:58:45 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 6, 304 0, reused 252",
+  "08:58:50 crawl efficientgptprompts.com: 300/487 urls, fetched 8, 304 0, reused 292",
+  "08:58:51 dataforseo demand: gearuptogrow.com 4 ranking pages",
+  "08:58:51 dataforseo demand: affiliatemarketingforsuccess.com 0 ranking pages",
+  "08:58:51 dataforseo demand: mysticaldigits.com 1 ranking pages",
+  "08:58:51 dataforseo demand: frenchyfab.com 2 ranking pages",
+  "08:58:52 dataforseo demand: micegoneguide.com 17 ranking pages",
+  "08:58:52 dataforseo demand: efficientgptprompts.com 19 ranking pages",
+  "08:58:52 dataforseo demand: openclaw-skillshub.com 33 ranking pages",
+  "08:58:53 dataforseo demand: imagealchemy.app 0 ranking pages",
+  "08:58:53 indexation: 70 sitemap URLs with an indexing problem (3 critical)",
+  "08:59:21 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:59:24 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:59:46 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:59:51 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "09:00:30 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "09:01:05 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "09:01:41 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "09:01:41 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "09:02:13 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "09:02:17 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "09:03:24 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "09:03:26 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "09:04:02 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "09:04:41 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "09:05:08 prospects: 0 from the saved queue, 0 saved for next run; 30 queries (6 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "09:05:08 self-tuning: next cycle runs up to 36 searches",
+  "09:05:08 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "09:05:10 replies: 16 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "09:05:10 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "09:05:10 - preverify: skipped (runs only while outreach is paused)",
+  "09:05:10 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
+  {
+   "level": "warn",
+   "code": "no_qualified",
+   "message": "30 searches produced 0 qualified prospects this cycle.",
+   "fix": "Usually transient; if it repeats, the promoted pages may need stronger topical matches."
+  },
+  {
+   "level": "warn",
+   "code": "dataforseo_errors",
+   "message": "14 DataForSEO searches failed (provider errors); they are retried next cycle.",
+   "fix": "No action unless it persists for a day."
+  },
   {
    "level": "info",
    "code": "holds",
    "message": "16 queued inboxes are held; most often (8) because the only address is not on the publisher's contact/about page or is not an accepted inbox type.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
-  },
-  {
-   "level": "info",
-   "code": "spend_cap",
-   "message": "Today's DataForSEO spend cap is reached; prospecting resumes tomorrow.",
-   "fix": "Raise DATAFORSEO_DAILY_USD only if you want faster prospecting."
   }
  ]
 }
