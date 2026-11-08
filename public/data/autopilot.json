@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-08T06:28:56.187Z",
- "duration_s": 351,
+ "generated_at": "2026-11-08T13:50:22.802Z",
+ "duration_s": 272,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 15.431286
+    "balance_usd": 15.177286000000002
    },
    "gmail": {
     "status": "connected"
@@ -107,10 +107,10 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 20601,
+   "ms": 20508,
    "result": {
     "sites": 10,
-    "pages": 1810
+    "pages": 1806
    }
   },
   "demand": {
@@ -130,7 +130,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -140,11 +140,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 320371,
+   "ms": 245614,
    "result": {
     "queries": 36,
     "mention_queries": 0,
-    "serp_results": 620,
+    "serp_results": 632,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -154,13 +154,13 @@
     "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
-    "failed_queries": 12,
+    "failed_queries": 2,
     "deferred": 0
    }
   },
   "broken_links": {
    "ok": true,
-   "ms": 2,
+   "ms": 3,
    "result": {
     "checked": 0,
     "found": 0
@@ -168,9 +168,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 7583,
+   "ms": 1950,
    "result": {
-    "scanned": 2,
+    "scanned": 11,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -180,7 +180,7 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 10,
+   "ms": 9,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -201,9 +201,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 2,
+   "ms": 2585,
    "result": {
-    "checked": 0,
+    "checked": 2,
     "won": 0,
     "lost": 0
    }
@@ -211,18 +211,18 @@
  },
  "totals": {
   "sites": 10,
-  "pages_crawled": 1810,
-  "urls_discovered": 2743,
+  "pages_crawled": 1806,
+  "urls_discovered": 2739,
   "promotable": 250,
   "internal_suggestions": 314,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.14,
-  "month_usd": 1.7258,
+  "today_usd": 0.28,
+  "month_usd": 1.8658,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 65
+  "calls_this_run": 49
  },
  "outreach": {
   "mode": "send",
@@ -531,7 +531,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.14
+   "spend_usd": 0.28
   }
  ],
  "learning": {
@@ -579,16 +579,16 @@
     "rate": 0.462
    },
    {
-    "footprint": "intent",
-    "queries": 143,
-    "ready": 60,
-    "rate": 0.418
-   },
-   {
     "footprint": "inurl_links",
     "queries": 9,
     "ready": 4,
     "rate": 0.417
+   },
+   {
+    "footprint": "intent",
+    "queries": 151,
+    "ready": 60,
+    "rate": 0.396
    },
    {
     "footprint": "blogs_to_follow",
@@ -603,16 +603,16 @@
     "rate": 0.286
    },
    {
-    "footprint": "best_guides",
-    "queries": 112,
-    "ready": 23,
-    "rate": 0.209
-   },
-   {
     "footprint": "recommended_tools",
     "queries": 2,
     "ready": 0,
     "rate": 0.2
+   },
+   {
+    "footprint": "best_guides",
+    "queries": 118,
+    "ready": 23,
+    "rate": 0.198
    },
    {
     "footprint": "link_roundup",
@@ -634,15 +634,15 @@
    },
    {
     "footprint": "resources",
-    "queries": 152,
+    "queries": 161,
     "ready": 14,
-    "rate": 0.097
+    "rate": 0.091
    },
    {
     "footprint": "further_reading",
-    "queries": 53,
+    "queries": 58,
     "ready": 3,
-    "rate": 0.071
+    "rate": 0.066
    },
    {
     "footprint": "mention",
@@ -652,9 +652,9 @@
    },
    {
     "footprint": "helpful_resources",
-    "queries": 58,
+    "queries": 66,
     "ready": 0,
-    "rate": 0.016
+    "rate": 0.014
    }
   ],
   "assets": [
@@ -911,8 +911,8 @@
   },
   {
    "domain": "plantastichaven.com",
-   "pages": 163,
-   "discovered": 163,
+   "pages": 159,
+   "discovered": 159,
    "sitemaps": 5,
    "eligible": 25,
    "top": "https://plantastichaven.com/string-of-pearls-plant-care/"
@@ -994,10 +994,10 @@
    "linkability": 94,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 8,
    "words": 1710,
    "interactive": true,
-   "modified": "2026-10-05T16:00:44+00:00",
+   "modified": "2026-11-08T07:36:31+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "3 data tables",
@@ -1020,12 +1020,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 12,
-   "words": 2214,
+   "words": 2179,
    "interactive": true,
-   "modified": "2026-10-12T11:59:54+00:00",
+   "modified": "2026-11-08T06:25:55+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,214 words)",
+    "In-depth (2,179 words)",
     "3 data tables",
     "Cites 5 authoritative sources",
     "Recently updated"
@@ -1108,31 +1108,6 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/natural-mouse-repellents/",
-   "title": "Natural Mouse Repellents: What Helps and What Fails",
-   "h1": "Natural Mouse Repellents: Evidence, Limits, and Safer Next Steps",
-   "description": "Evidence limits of peppermint, vinegar and other mouse repellents. Prioritize sanitation, exclusion and trapping; natural does not mean effective or safe for every household.",
-   "type": "general_article",
-   "promotion": 80,
-   "linkability": 89,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 12,
-   "words": 1984,
-   "interactive": true,
-   "modified": "2026-10-24T09:10:11+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "2 data tables",
-    "Cites 7 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 1,
    "promoting": false
   },
   {
@@ -1228,7 +1203,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -1255,6 +1230,31 @@
    "promoting": false
   },
   {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/learning-development/learn-faster/",
+   "title": "Accelerated Learning: Learn Faster & Retain More",
+   "h1": "Accelerated Learning: Practical Ways to Learn Faster and Retain More",
+   "description": "Unlock accelerated learning with practical methods like active recall & spaced repetition. Learn faster, retain more, and boost your productivity.",
+   "type": "practical_guide",
+   "promotion": 78,
+   "linkability": 87,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 10,
+   "words": 1381,
+   "interactive": true,
+   "modified": "2026-11-08T07:19:22+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "2 data tables",
+    "Cites 6 authoritative sources",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/ai/how-teachers-detect-ai-writing/",
    "title": "How Teachers Detect AI Writing: 11 Methods That Actually Work (2026)",
@@ -1265,7 +1265,7 @@
    "linkability": 87,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 4,
+   "internal_inlinks": 5,
    "words": 2201,
    "interactive": false,
    "modified": "2026-09-13T19:08:04+00:00",
@@ -1316,10 +1316,10 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 22,
+   "internal_inlinks": 24,
    "words": 2075,
    "interactive": true,
-   "modified": "2026-10-15T10:10:56+00:00",
+   "modified": "2026-11-08T06:31:18+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "In-depth (2,075 words)",
@@ -1527,6 +1527,32 @@
    "promoting": false
   },
   {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "h1": "How to Get Rid of Mice",
+   "description": "Complete CDC-aligned home plan for how to get rid of mice: food storage, snap trap T-placement with chunky peanut butter, safe wet cleanup, and gap sealing.",
+   "type": "practical_guide",
+   "promotion": 75,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 43,
+   "words": 4517,
+   "interactive": false,
+   "modified": "2026-11-08T06:06:02+00:00",
+   "reasons": [
+    "In-depth (4,517 words)",
+    "4 data tables",
+    "Cites 4 authoritative sources",
+    "Recently updated",
+    "Flagship asset"
+   ],
+   "prospects": 5,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/ai/undetectable-alternatives/",
    "title": "7 Undetectable AI Alternatives: 2026 Humanizer Guide",
@@ -1678,23 +1704,23 @@
   },
   {
    "site": "plantastichaven.com",
-   "url": "https://plantastichaven.com/overwatered-spider-plant/",
-   "title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "h1": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "description": "Reviving an overwatered spider plant: unpot it, trim the mushy brown roots, repot into fresh free-draining mix, and hold off watering while it recovers.",
-   "type": "practical_guide",
+   "url": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
+   "h1": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer",
+   "description": "No. The ASPCA lists spider plants as non-toxic to cats and dogs. Why cats chew them, when eating a lot causes vomiting, and toxic look-alikes.",
+   "type": "general_article",
    "promotion": 71,
    "linkability": 79,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 19,
-   "words": 2569,
-   "interactive": false,
-   "modified": "2026-10-22T04:58:51+00:00",
+   "internal_inlinks": 7,
+   "words": 4229,
+   "interactive": true,
+   "modified": "2026-11-08T07:14:46+00:00",
    "reasons": [
-    "In-depth (2,569 words)",
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,229 words)",
     "2 data tables",
-    "Cites 8 authoritative sources",
     "Recently updated"
    ],
    "prospects": 7,
@@ -1721,7 +1747,7 @@
     "Recently updated"
    ],
    "prospects": 6,
-   "internal_link_suggestions": 3,
+   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -1809,7 +1835,7 @@
    "linkability": 76,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 238,
+   "internal_inlinks": 239,
    "words": 1657,
    "interactive": false,
    "modified": "2026-10-25T11:02:11+00:00",
@@ -1825,7 +1851,7 @@
   {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/learning-development/rapid-skill-learning/",
-   "title": "Rapid Skill Learning: Master New Abilities Faster | Gear Up to Grow",
+   "title": "Rapid Skill Learning: Master New Abilities Faster",
    "h1": "Rapid Skill Learning: A Practical System for Learning New Skills Faster",
    "description": "Unlock rapid skill learning with our 8-step system. Master new abilities faster using neuroscience-backed strategies and practical tips. Start learning today!",
    "type": "practical_guide",
@@ -1834,11 +1860,11 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 7,
-   "words": 2266,
+   "words": 2264,
    "interactive": false,
-   "modified": "2026-11-04T13:24:18+00:00",
+   "modified": "2026-11-08T06:26:36+00:00",
    "reasons": [
-    "In-depth (2,266 words)",
+    "In-depth (2,264 words)",
     "2 data tables",
     "Cites 16 authoritative sources",
     "Recently updated"
@@ -1914,31 +1940,6 @@
     "Recently updated"
    ],
    "prospects": 11,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/learning-development/self-expression/",
-   "title": "Self-Expression: Share Ideas Honestly & Clearly | Gear Up to Grow",
-   "h1": "Self-Expression: How to Share Ideas Honestly and Clearly",
-   "description": "Build more honest communication by expressing ideas, preferences, and values in a way that feels clear, grounded, and respectful.",
-   "type": "practical_guide",
-   "promotion": 67,
-   "linkability": 74,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 5,
-   "words": 3182,
-   "interactive": false,
-   "modified": "2026-09-28T09:50:21+00:00",
-   "reasons": [
-    "In-depth (3,182 words)",
-    "2 data tables",
-    "Cites 4 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 1,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -2023,10 +2024,10 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 11,
    "words": 2010,
    "interactive": true,
-   "modified": "2026-10-05T17:13:00+00:00",
+   "modified": "2026-11-08T07:36:40+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "In-depth (2,010 words)",
@@ -2099,7 +2100,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 7,
    "words": 4455,
    "interactive": false,
    "modified": "2026-09-03T13:33:15+00:00",
@@ -2141,7 +2142,7 @@
   {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/productivity/weekly-review-checklist/",
-   "title": "Weekly Review Checklist: Plan Your Week in 20 Minutes | Gear Up to Grow",
+   "title": "Weekly Review Checklist: Plan Your Week in 20 Minutes",
    "h1": "Weekly Review Checklist: Plan Your Week in 20 Minutes",
    "description": "A 20-minute weekly review checklist based on GTD: clear open loops, choose 3 outcomes, and schedule your week. Free template.",
    "type": "reference",
@@ -2149,10 +2150,10 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 34,
+   "internal_inlinks": 35,
    "words": 3075,
    "interactive": true,
-   "modified": "2026-10-15T10:11:22+00:00",
+   "modified": "2026-11-08T07:36:04+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "In-depth (3,075 words)",
@@ -2262,33 +2263,6 @@
    "promoting": true
   },
   {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "h1": "How to Get Rid of Mice",
-   "description": "Complete CDC-aligned home plan for how to get rid of mice: food storage, snap trap T-placement with chunky peanut butter, safe wet cleanup, and gap sealing.",
-   "type": "practical_guide",
-   "promotion": 63,
-   "linkability": 77,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 43,
-   "words": 4517,
-   "interactive": false,
-   "modified": "2026-11-08T06:06:02+00:00",
-   "reasons": [
-    "In-depth (4,517 words)",
-    "4 data tables",
-    "Cites 4 authoritative sources",
-    "Recently updated",
-    "Flagship asset",
-    "One of 42 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 5,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
    "site": "gearuptofit.com",
    "url": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
    "title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
@@ -2317,7 +2291,7 @@
   {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/productivity/improve-focus-7-day-protocol/",
-   "title": "7-Day Focus Reset: Improve Attention & Productivity | Gear Up to Grow",
+   "title": "7-Day Focus Reset: Improve Attention & Productivity",
    "h1": "7-Day Focus Reset: A Practical Attention Experiment",
    "description": "Feeling scattered? This 7-day focus reset protocol helps you reduce distractions, protect deep work, and rebuild concentration. Start your reset today!",
    "type": "reference",
@@ -2325,10 +2299,10 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 21,
+   "internal_inlinks": 22,
    "words": 1870,
    "interactive": false,
-   "modified": "2026-10-05T16:00:41+00:00",
+   "modified": "2026-11-08T07:36:45+00:00",
    "reasons": [
     "3 data tables",
     "Cites 6 authoritative sources",
@@ -2386,7 +2360,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -2423,12 +2397,12 @@
    "linkability": 69,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 17,
-   "words": 2395,
+   "internal_inlinks": 18,
+   "words": 2373,
    "interactive": false,
-   "modified": "2026-10-05T16:08:12+00:00",
+   "modified": "2026-11-08T06:25:28+00:00",
    "reasons": [
-    "In-depth (2,395 words)",
+    "In-depth (2,373 words)",
     "6 data tables",
     "Recently updated"
    ],
@@ -2460,6 +2434,57 @@
    "promoting": true
   },
   {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/focus-habit-reset/",
+   "title": "Focus and Habit Reset Guide - Gear Up to Grow",
+   "h1": "Focus and Habit Reset Guide",
+   "description": "A 14-day focus and habit reset: choose one behaviour, lower the starting cost, track completion and review on days 7 and 14 to rebuild momentum.",
+   "type": "practical_guide",
+   "promotion": 62,
+   "linkability": 64,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 743,
+   "interactive": false,
+   "modified": "2026-11-08T07:20:30+00:00",
+   "reasons": [
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/how-is-14-in-numerology/",
+   "title": "2026 Guide: Numerology Meaning of Number 14 Explained",
+   "h1": "2026 Guide: Numerology Meaning of Number 14 Explained",
+   "description": "Uncover the adventurous and freedom-loving energy of numerology number 14! Explore its potential for travel, experiencing new things, and embracing life's.",
+   "type": "practical_guide",
+   "promotion": 61,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 3090,
+   "interactive": false,
+   "modified": "2026-11-08T05:27:50+00:00",
+   "reasons": [
+    "In-depth (3,090 words)",
+    "1 data table",
+    "Cites 7 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (2 inbound)",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
    "site": "frenchyfab.com",
    "url": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
    "title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
@@ -2470,7 +2495,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 0,
+   "internal_inlinks": 1,
    "words": 1960,
    "interactive": false,
    "modified": "2026-11-07T19:35:24+00:00",
@@ -2478,7 +2503,7 @@
     "5 data tables",
     "Cites 5 authoritative sources",
     "Recently updated",
-    "Under-linked internally (0 inbound)",
+    "Under-linked internally (1 inbound)",
     "One of 153 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
@@ -2496,15 +2521,15 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 1,
-   "words": 1376,
+   "internal_inlinks": 0,
+   "words": 1374,
    "interactive": false,
    "modified": "2026-10-26T13:31:02+00:00",
    "reasons": [
     "1 data table",
     "Cites 6 authoritative sources",
     "Recently updated",
-    "Under-linked internally (1 inbound)",
+    "Under-linked internally (0 inbound)",
     "One of 153 templated sibling pages — promote the hub first"
    ],
    "prospects": 1,
@@ -2523,11 +2548,11 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 2,
-   "words": 2813,
+   "words": 2818,
    "interactive": false,
    "modified": "2026-10-26T13:30:48+00:00",
    "reasons": [
-    "In-depth (2,813 words)",
+    "In-depth (2,818 words)",
     "1 data table",
     "Recently updated",
     "Under-linked internally (2 inbound)",
@@ -2535,30 +2560,6 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/learning/",
-   "title": "Learning Hub: Active Recall & Spaced Repetition Systems",
-   "h1": "Learning Hub: The Complete Practical System",
-   "description": "Explore scientific study systems using active recall, spaced repetition calendars, deliberate practice, and frameworks for accelerated learning.",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 68,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 107,
-   "words": 3514,
-   "interactive": false,
-   "modified": "2026-10-05T16:10:44+00:00",
-   "reasons": [
-    "In-depth (3,514 words)",
-    "3 data tables",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -2614,7 +2615,7 @@
    "url": "https://gearuptogrow.com/productivity/free-time-blocking-template/",
    "title": "Free Time Blocking Template: Daily, Weekly, Deep Work",
    "h1": "Free Time Blocking Template: Daily, Weekly, and Deep Work Versions",
-   "description": "Download free time blocking templates for daily, weekly, and deep work planning, plus how to fill them in 20 minutes.",
+   "description": "Free time blocking templates for daily, weekly and deep work planning, with a step-by-step guide to filling them in in about 20 minutes.",
    "type": "general_article",
    "promotion": 60,
    "linkability": 80,
@@ -2623,7 +2624,7 @@
    "internal_inlinks": 13,
    "words": 3331,
    "interactive": true,
-   "modified": "2026-10-15T10:11:20+00:00",
+   "modified": "2026-11-08T07:35:52+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "In-depth (3,331 words)",
@@ -2683,7 +2684,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "frenchyfab.com",
@@ -2758,25 +2759,25 @@
   },
   {
    "site": "plantastichaven.com",
-   "url": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "title": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer - PlantasticHaven",
-   "h1": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer",
-   "description": "Are spider plants toxic to cats? No — the ASPCA lists Chlorophytum comosum as non-toxic to cats and dogs. ASPCA-verified answer, overeating symptoms, toxic lookalikes to avoid, myths debunked, and the best cat-proof planters.",
-   "type": "general_article",
+   "url": "https://plantastichaven.com/overwatered-spider-plant/",
+   "title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "h1": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "description": "Reviving an overwatered spider plant: unpot it, trim the mushy brown roots, repot into fresh free-draining mix, and hold off watering while it recovers.",
+   "type": "practical_guide",
    "promotion": 59,
    "linkability": 79,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 4,
-   "words": 4229,
-   "interactive": true,
-   "modified": "2026-10-12T13:10:23+00:00",
+   "internal_inlinks": 19,
+   "words": 2569,
+   "interactive": false,
+   "modified": "2026-10-22T04:58:51+00:00",
    "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,229 words)",
+    "In-depth (2,569 words)",
     "2 data tables",
+    "Cites 8 authoritative sources",
     "Recently updated",
-    "One of 160 templated sibling pages — promote the hub first"
+    "One of 156 templated sibling pages — promote the hub first"
    ],
    "prospects": 7,
    "internal_link_suggestions": 5,
@@ -2918,12 +2919,12 @@
    "internal_inlinks": 11,
    "words": 2472,
    "interactive": false,
-   "modified": "2026-10-12T13:12:29+00:00",
+   "modified": "2026-11-08T07:51:21+00:00",
    "reasons": [
     "Original method/data — citation-worthy",
     "In-depth (2,472 words)",
     "Recently updated",
-    "One of 160 templated sibling pages — promote the hub first"
+    "One of 156 templated sibling pages — promote the hub first"
    ],
    "prospects": 7,
    "internal_link_suggestions": 1,
@@ -2943,7 +2944,7 @@
    "internal_inlinks": 13,
    "words": 1700,
    "interactive": false,
-   "modified": "2026-10-05T16:01:01+00:00",
+   "modified": "2026-11-08T07:36:26+00:00",
    "reasons": [
     "3 data tables",
     "Cites 6 authoritative sources",
@@ -2952,14 +2953,14 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   }
  ],
  "internal_links": [
   {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/productivity/motivational-quotes/",
-   "from_title": "Motivational Quotes for Focus, Work, and Starting Again | Gear Up to Grow",
+   "from_title": "Motivational Quotes for Focus, Work, and Starting Again",
    "to": "https://gearuptogrow.com/productivity/focus-at-work-when-interrupted/",
    "to_title": "How to Focus at Work When You Keep Getting Interrupted",
    "anchor": "focus work",
@@ -2979,7 +2980,7 @@
   {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/productivity/improve-focus-7-day-protocol/",
-   "from_title": "7-Day Focus Reset: Improve Attention & Productivity | Gear Up to Grow",
+   "from_title": "7-Day Focus Reset: Improve Attention & Productivity",
    "to": "https://gearuptogrow.com/productivity/focus-at-work-when-interrupted/",
    "to_title": "How to Focus at Work When You Keep Getting Interrupted",
    "anchor": "focus work keep",
@@ -3107,16 +3108,6 @@
    "from_strength": 0
   },
   {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/electronic-and-ultrasonic-pest-repellers/",
-   "from_title": "Do Ultrasonic Mouse Repellents Work for Mice?",
-   "to": "https://micegoneguide.com/natural-mouse-repellents/",
-   "to_title": "Natural Mouse Repellents: What Helps and What Fails",
-   "anchor": "mouse repellents",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-strategies/",
    "from_title": "Affiliate Marketing Strategies (2026): 9 Systems of Affiliate Growth",
@@ -3218,8 +3209,8 @@
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/spider-plant-hawaiian/",
-   "from_title": "Hawaiian Spider Plant Care: Light, Water, and Identification Tips",
+   "from": "https://plantastichaven.com/how-to-start-a-philodendron/",
+   "from_title": "How to Start a Philodendron: Beginner Setup and Early Care Guide",
    "to": "https://plantastichaven.com/string-of-pearls-plant-care/",
    "to_title": "String of Pearls Plant Care: The Complete Guide to Growing Curio Rowleyanus Indoors - PlantasticHaven",
    "anchor": "plant care",
@@ -3228,8 +3219,8 @@
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/how-to-start-a-philodendron/",
-   "from_title": "How to Start a Philodendron: Beginner Setup and Early Care Guide",
+   "from": "https://plantastichaven.com/spider-plant-hawaiian/",
+   "from_title": "Hawaiian Spider Plant Care: Light, Water, and Identification Tips",
    "to": "https://plantastichaven.com/string-of-pearls-plant-care/",
    "to_title": "String of Pearls Plant Care: The Complete Guide to Growing Curio Rowleyanus Indoors - PlantasticHaven",
    "anchor": "plant care",
@@ -3507,6 +3498,56 @@
    "from_strength": 0
   },
   {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/safely-remove-mice/",
+   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 56
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "from_title": "How to Get Rid of Mice in an Apartment",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 56
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
+   "from_title": "Mouse Infestation Health Risks: Disease, Allergies & More",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 53
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
+   "from_title": "How to Get Rid of Mice in the Attic and Insulation",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 42
+  },
+  {
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-puppy-care/",
    "from_title": "French Bulldog Puppy Care: Week-by-Week First-Year Guide",
@@ -3698,53 +3739,53 @@
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/zebra-spider-plant/",
-   "from_title": "Zebra Spider Plant Care: Light, Water, and Troubleshooting",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 5,
-   "from_strength": 54
+   "from": "https://plantastichaven.com/plants-that-look-like-spider-plants/",
+   "from_title": "Plants That Look Like Spider Plants: 7 Lookalikes + ID Chart",
+   "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "to_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
+   "anchor": "spider plants",
+   "relevance": 9,
+   "from_strength": 0
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "from_title": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer - PlantasticHaven",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 59
+   "from": "https://plantastichaven.com/spider-plant-vs-dracaena/",
+   "from_title": "Spider Plant vs Dracaena: Differences, Care & Pet Safety",
+   "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "to_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
+   "anchor": "spider plants",
+   "relevance": 8,
+   "from_strength": 0
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/mandarin-spider-plant/",
-   "from_title": "Mandarin Spider Plant Care: Identification and Growing Tips",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 55
+   "from": "https://plantastichaven.com/best-indoor-plants/",
+   "from_title": "Best Indoor Plants by Light, Space & Pets | PlantasticHaven",
+   "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "to_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
+   "anchor": "toxic cats",
+   "relevance": 7,
+   "from_strength": 0
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/spider-plant-hawaiian/",
-   "from_title": "Hawaiian Spider Plant Care: Light, Water, and Identification Tips",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 54
+   "from": "https://plantastichaven.com/purple-spider-plant/",
+   "from_title": "Purple Spider Plant: What It Really Is and How to ID It",
+   "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "to_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
+   "anchor": "spider plants",
+   "relevance": 6,
+   "from_strength": 0
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/philodendron-cordatum-care/",
-   "from_title": "Philodendron Cordatum Care: 2026 Heartleaf Guide",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 52
+   "from": "https://plantastichaven.com/philodendron-micans-care/",
+   "from_title": "Philodendron Micans Care: Complete Velvet Leaf Guide",
+   "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "to_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
+   "anchor": "toxic cats",
+   "relevance": 6,
+   "from_strength": 0
   },
   {
    "site": "gearuptogrow.com",
@@ -3753,7 +3794,17 @@
    "to": "https://gearuptogrow.com/mental-wellness/daily-affirmations/",
    "to_title": "Daily Affirmations That Work: Evidence-Based Guide",
    "anchor": "affirmations feel",
-   "relevance": 6,
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptogrow.com",
+   "from": "https://gearuptogrow.com/mental-wellness/stress-relief/",
+   "from_title": "Stress Relief Ideas: Calm Now | Gear Up to Grow",
+   "to": "https://gearuptogrow.com/mental-wellness/daily-affirmations/",
+   "to_title": "Daily Affirmations That Work: Evidence-Based Guide",
+   "anchor": "daily affirmations feel",
+   "relevance": 3,
    "from_strength": 0
   },
   {
@@ -3791,15 +3842,15 @@
    "from": "https://gearuptogrow.com/learning/",
    "from_title": "Learning Hub: Active Recall & Spaced Repetition Systems",
    "to": "https://gearuptogrow.com/learning-development/rapid-skill-learning/",
-   "to_title": "Rapid Skill Learning: Master New Abilities Faster | Gear Up to Grow",
+   "to_title": "Rapid Skill Learning: Master New Abilities Faster",
    "anchor": "skill learning",
    "relevance": 4,
-   "from_strength": 61
+   "from_strength": 0
   },
   {
    "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/mental-wellness/",
-   "from_title": "Mental Wellness Hub: Stress Regulation & Burnout Recovery",
+   "from": "https://gearuptogrow.com/mental-wellness/burnout-vs-stress/",
+   "from_title": "Burnout vs Stress: How to Tell the Difference & Recover",
    "to": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
    "to_title": "Burnout at Work: Signs, Support, and Next Steps",
    "anchor": "burnout symptoms",
@@ -3808,8 +3859,8 @@
   },
   {
    "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/mental-wellness/burnout-vs-stress/",
-   "from_title": "Burnout vs Stress: How to Tell the Difference & Recover",
+   "from": "https://gearuptogrow.com/mental-wellness/",
+   "from_title": "Mental Wellness Hub: Stress Regulation & Burnout Recovery",
    "to": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
    "to_title": "Burnout at Work: Signs, Support, and Next Steps",
    "anchor": "burnout symptoms",
@@ -3967,56 +4018,6 @@
    "from_strength": 0
   },
   {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 59
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/safely-remove-mice/",
-   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 56
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 56
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
-   "from_title": "Mouse Infestation Health Risks: Disease, Allergies & More",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 53
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "from_title": "How to Get Rid of Mice in the Attic and Insulation",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 42
-  },
-  {
    "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
    "from_title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
@@ -4048,6 +4049,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/decode-your-personality-birth-number-7/",
+   "from_title": "Birth Number 7 Personality: Traits & Meanings | Mystical Digits",
+   "to": "https://mysticaldigits.com/revealing-birth-number-6-personality/",
+   "to_title": "Birth Number 6 Personality: 2026 Guide & Insights | Mystical Digits",
+   "anchor": "birth number",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/understanding-birth-number-5-personality/",
    "from_title": "Birth Number 5 Personality: Traits, Strengths & Challenges",
    "to": "https://mysticaldigits.com/revealing-birth-number-6-personality/",
@@ -4070,16 +4081,6 @@
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/understanding-birth-number-4-personality/",
    "from_title": "Birth Number 4 Personality: Traits & Insights for 2026",
-   "to": "https://mysticaldigits.com/revealing-birth-number-6-personality/",
-   "to_title": "Birth Number 6 Personality: 2026 Guide & Insights | Mystical Digits",
-   "anchor": "birth number",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/decode-your-personality-birth-number-7/",
-   "from_title": "Birth Number 7 Personality: Traits & Meanings | Mystical Digits",
    "to": "https://mysticaldigits.com/revealing-birth-number-6-personality/",
    "to_title": "Birth Number 6 Personality: 2026 Guide & Insights | Mystical Digits",
    "anchor": "birth number",
@@ -4288,18 +4289,18 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
-   "from_title": "Personal Year Calculator: How to Find Your Number (2026)",
+   "from": "https://mysticaldigits.com/how-is-14-in-numerology/",
+   "from_title": "2026 Guide: Numerology Meaning of Number 14 Explained",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
    "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
    "anchor": "personal year",
    "relevance": 5,
-   "from_strength": 57
+   "from_strength": 61
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-is-14-in-numerology/",
-   "from_title": "2026 Guide: Numerology Meaning of Number 14 Explained",
+   "from": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
+   "from_title": "Personal Year Calculator: How to Find Your Number (2026)",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
    "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
    "anchor": "personal year",
@@ -4358,53 +4359,53 @@
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/plants-that-look-like-spider-plants/",
-   "from_title": "Plants That Look Like Spider Plants: 7 Lookalikes + ID Chart",
-   "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "to_title": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer - PlantasticHaven",
-   "anchor": "spider plants",
-   "relevance": 9,
-   "from_strength": 0
+   "from": "https://plantastichaven.com/zebra-spider-plant/",
+   "from_title": "Zebra Spider Plant Care: Light, Water, and Troubleshooting",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 5,
+   "from_strength": 54
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/spider-plant-vs-dracaena/",
-   "from_title": "Spider Plant vs Dracaena: Differences, Care & Pet Safety",
-   "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "to_title": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer - PlantasticHaven",
-   "anchor": "spider plants",
-   "relevance": 8,
-   "from_strength": 0
+   "from": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "from_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 71
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/best-indoor-plants/",
-   "from_title": "Best Indoor Plants by Light, Space & Pets | PlantasticHaven",
-   "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "to_title": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer - PlantasticHaven",
-   "anchor": "toxic cats",
-   "relevance": 7,
-   "from_strength": 0
+   "from": "https://plantastichaven.com/mandarin-spider-plant/",
+   "from_title": "Mandarin Spider Plant Care: Identification and Growing Tips",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 55
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/philodendron-micans-care/",
-   "from_title": "Philodendron Micans Care: Complete Velvet Leaf Guide",
-   "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "to_title": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer - PlantasticHaven",
-   "anchor": "toxic cats",
-   "relevance": 6,
-   "from_strength": 0
+   "from": "https://plantastichaven.com/spider-plant-hawaiian/",
+   "from_title": "Hawaiian Spider Plant Care: Light, Water, and Identification Tips",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 54
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/purple-spider-plant/",
-   "from_title": "Purple Spider Plant: What It Is, Lookalikes & Care (Tradescantia)",
-   "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "to_title": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer - PlantasticHaven",
-   "anchor": "spider plants",
-   "relevance": 6,
-   "from_strength": 0
+   "from": "https://plantastichaven.com/philodendron-cordatum-care/",
+   "from_title": "Philodendron Cordatum Care: 2026 Heartleaf Guide",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 52
   },
   {
    "site": "frenchyfab.com",
@@ -4464,7 +4465,7 @@
    "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
    "anchor": "rid mice",
    "relevance": 5,
-   "from_strength": 63
+   "from_strength": 75
   },
   {
    "site": "micegoneguide.com",
@@ -4498,13 +4499,13 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
-   "from_title": "Mouse Infestation Health Risks: Disease, Allergies & More",
+   "from": "https://micegoneguide.com/natural-mouse-repellents/",
+   "from_title": "Natural Mouse Repellents: What Helps and What Fails",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
    "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 53
+   "from_strength": 54
   },
   {
    "site": "efficientgptprompts.com",
@@ -4728,18 +4729,18 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/natural-mouse-repellents/",
-   "from_title": "Natural Mouse Repellents: What Helps and What Fails",
+   "from": "https://micegoneguide.com/safely-remove-mice/",
+   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
    "to": "https://micegoneguide.com/mouse-cleanup-safety/",
    "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
    "anchor": "mouse cleanup safety",
    "relevance": 3,
-   "from_strength": 80
+   "from_strength": 56
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/safely-remove-mice/",
-   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "from": "https://micegoneguide.com/diy-mouse-traps/",
+   "from_title": "Homemade Mouse Traps: DIY Designs, Risks & Safer Alternatives",
    "to": "https://micegoneguide.com/mouse-cleanup-safety/",
    "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
    "anchor": "mouse cleanup safety",
@@ -4778,8 +4779,8 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/humane-mouse-traps/",
-   "from_title": "Humane Mouse Traps: Catch-and-Release Guide & Honest Limits",
+   "from": "https://micegoneguide.com/mouse-traps-baits/",
+   "from_title": "Mouse Traps and Baits: Safer Choices",
    "to": "https://micegoneguide.com/snap-traps-for-mice/",
    "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
    "anchor": "snap traps",
@@ -4788,8 +4789,8 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/best-mouse-traps-for-homes/",
-   "from_title": "Best Mouse Traps for Homes: Snap, Enclosed & Electronic",
+   "from": "https://micegoneguide.com/humane-mouse-traps/",
+   "from_title": "Humane Mouse Traps: Catch-and-Release Guide & Honest Limits",
    "to": "https://micegoneguide.com/snap-traps-for-mice/",
    "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
    "anchor": "snap traps",
@@ -4898,8 +4899,8 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-guidance-for-overcoming-challenges/",
-   "from_title": "Numerology Personal Growth: Overcoming Challenges [2026]",
+   "from": "https://mysticaldigits.com/decode-your-personality-birth-number-7/",
+   "from_title": "Birth Number 7 Personality: Traits & Meanings | Mystical Digits",
    "to": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
    "to_title": "Personal Year Calculator: How to Find Your Number (2026)",
    "anchor": "personal year",
@@ -4908,8 +4909,8 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-numerology-of-crystals-how-can-crystals-help-us-manifest-our-goals/",
-   "from_title": "Crystal Numerology Manifestation: 2026 Guide | Mystical Digits",
+   "from": "https://mysticaldigits.com/numerology-guidance-for-overcoming-challenges/",
+   "from_title": "Numerology Personal Growth: Overcoming Challenges [2026]",
    "to": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
    "to_title": "Personal Year Calculator: How to Find Your Number (2026)",
    "anchor": "personal year",
@@ -4977,8 +4978,8 @@
    },
    {
     "site": "plantastichaven.com",
-    "checked": 163,
-    "healthy": 160,
+    "checked": 159,
+    "healthy": 156,
     "problems": 3,
     "critical": 0,
     "not_found": 0,
@@ -4994,8 +4995,8 @@
    {
     "site": "gearuptogrow.com",
     "checked": 107,
-    "healthy": 104,
-    "problems": 3,
+    "healthy": 105,
+    "problems": 2,
     "critical": 0,
     "not_found": 0,
     "server_error": 0,
@@ -5005,7 +5006,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 3
+    "thin": 2
    },
    {
     "site": "affiliatemarketingforsuccess.com",
@@ -5386,16 +5387,6 @@
     "severity": 8,
     "status": 200,
     "words": 280
-   },
-   {
-    "site": "gearuptogrow.com",
-    "url": "https://gearuptogrow.com/focus-habit-reset",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 231
    },
    {
     "site": "gearuptogrow.com",
@@ -5828,12 +5819,12 @@
     "words": 60
    }
   ],
-  "total_issues": 71,
+  "total_issues": 70,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first)."
  },
  "tuning": {
-  "max_queries": 36,
-  "updated_at": "2026-11-08T06:28:47.197Z"
+  "max_queries": 40,
+  "updated_at": "2026-11-08T13:50:18.190Z"
  },
  "wins": [
   {
@@ -5882,38 +5873,28 @@
   }
  ],
  "log": [
-  "06:23:05 connection dataforseo: connected",
-  "06:23:05 connection gmail: connected",
-  "06:23:07 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "06:23:09 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "06:23:10 crawl plantastichaven.com: 163/163 urls, fetched 1, 304 0, reused 162",
-  "06:23:12 crawl frenchyfab.com: 155/155 urls, fetched 1, 304 0, reused 154",
-  "06:23:15 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 2, 304 0, reused 256",
-  "06:23:15 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "06:23:16 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "06:23:19 crawl micegoneguide.com: 43/43 urls, fetched 20, 304 0, reused 23",
-  "06:23:20 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "06:23:26 crawl mysticaldigits.com: 300/468 urls, fetched 187, 304 0, reused 113",
-  "06:23:26 indexation: 71 sitemap URLs with an indexing problem (3 critical)",
-  "06:24:23 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:24:26 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:24:26 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:25:20 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:25:22 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:25:54 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:26:22 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:26:30 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:27:43 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:27:45 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:28:19 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:28:20 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "06:28:47 prospects: 0 from the saved queue, 0 saved for next run; 36 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "06:28:47 self-tuning: next cycle runs up to 36 searches",
-  "06:28:47 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "06:28:54 replies: 2 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "06:28:54 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "06:28:54 - preverify: skipped (runs only while outreach is paused)",
-  "06:28:56 link checks: 0 pages, 0 new links won, 0 lost"
+  "13:45:51 connection dataforseo: connected",
+  "13:45:51 connection gmail: connected",
+  "13:45:58 crawl plantastichaven.com: 159/159 urls, fetched 33, 304 0, reused 126",
+  "13:45:58 crawl gearuptogrow.com: 107/107 urls, fetched 39, 304 0, reused 68",
+  "13:46:02 crawl frenchyfab.com: 155/155 urls, fetched 9, 304 0, reused 146",
+  "13:46:02 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 7, 304 0, reused 251",
+  "13:46:03 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "13:46:03 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "13:46:05 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "13:46:07 crawl mysticaldigits.com: 300/468 urls, fetched 7, 304 0, reused 293",
+  "13:46:09 crawl efficientgptprompts.com: 300/487 urls, fetched 4, 304 0, reused 296",
+  "13:46:12 crawl micegoneguide.com: 43/43 urls, fetched 6, 304 0, reused 37",
+  "13:46:12 indexation: 70 sitemap URLs with an indexing problem (3 critical)",
+  "13:48:59 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "13:49:29 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "13:50:18 prospects: 0 from the saved queue, 0 saved for next run; 36 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "13:50:18 self-tuning: next cycle runs up to 40 searches",
+  "13:50:18 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "13:50:20 replies: 11 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "13:50:20 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "13:50:20 - preverify: skipped (runs only while outreach is paused)",
+  "13:50:22 link checks: 2 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
