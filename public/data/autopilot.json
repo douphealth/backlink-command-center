@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-08T19:00:31.624Z",
- "duration_s": 335,
+ "generated_at": "2026-11-09T02:53:22.911Z",
+ "duration_s": 347,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 15.001286
+    "balance_usd": 14.845286000000002
    },
    "gmail": {
     "status": "connected"
@@ -107,10 +107,10 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 13489,
+   "ms": 16074,
    "result": {
     "sites": 10,
-    "pages": 1803
+    "pages": 1806
    }
   },
   "demand": {
@@ -125,7 +125,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 323
+    "internal_suggestions": 314
    }
   },
   "requalify": {
@@ -140,11 +140,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 308199,
+   "ms": 319678,
    "result": {
     "queries": 40,
     "mention_queries": 0,
-    "serp_results": 694,
+    "serp_results": 701,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -154,7 +154,7 @@
     "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
-    "failed_queries": 2,
+    "failed_queries": 6,
     "deferred": 0
    }
   },
@@ -168,9 +168,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 3323,
+   "ms": 4295,
    "result": {
-    "scanned": 16,
+    "scanned": 9,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -180,15 +180,15 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 10,
+   "ms": 5217,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 189,
+    "deferred": 188,
     "cap": 12,
-    "verification_held": 0
+    "verification_held": 1
    },
    "writer": {
     "claude": 0,
@@ -201,9 +201,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 7673,
+   "ms": 2,
    "result": {
-    "checked": 7,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -211,18 +211,18 @@
  },
  "totals": {
   "sites": 10,
-  "pages_crawled": 1803,
-  "urls_discovered": 2158,
+  "pages_crawled": 1806,
+  "urls_discovered": 2739,
   "promotable": 250,
-  "internal_suggestions": 323,
+  "internal_suggestions": 314,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.436,
-  "month_usd": 2.0218,
+  "today_usd": 0.158,
+  "month_usd": 2.1798,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 52
+  "calls_this_run": 56
  },
  "outreach": {
   "mode": "send",
@@ -532,6 +532,23 @@
    "declined": 0,
    "bounced": 6,
    "spend_usd": 0.436
+  },
+  {
+   "date": "2026-11-09",
+   "prospects_evaluated": 2518,
+   "qualified": 539,
+   "ready": 160,
+   "broken_link_ready": 15,
+   "contact_form_only": 105,
+   "no_contact": 223,
+   "contacted": 49,
+   "replied": 1,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 4,
+   "declined": 0,
+   "bounced": 6,
+   "spend_usd": 0.158
   }
  ],
  "learning": {
@@ -586,9 +603,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 160,
+    "queries": 168,
     "ready": 60,
-    "rate": 0.374
+    "rate": 0.357
    },
    {
     "footprint": "blogs_to_follow",
@@ -610,9 +627,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 124,
+    "queries": 132,
     "ready": 23,
-    "rate": 0.189
+    "rate": 0.178
    },
    {
     "footprint": "link_roundup",
@@ -634,15 +651,15 @@
    },
    {
     "footprint": "resources",
-    "queries": 169,
+    "queries": 174,
     "ready": 14,
-    "rate": 0.087
+    "rate": 0.085
    },
    {
     "footprint": "further_reading",
-    "queries": 67,
+    "queries": 76,
     "ready": 3,
-    "rate": 0.057
+    "rate": 0.051
    },
    {
     "footprint": "mention",
@@ -652,9 +669,9 @@
    },
    {
     "footprint": "helpful_resources",
-    "queries": 74,
+    "queries": 82,
     "ready": 0,
-    "rate": 0.013
+    "rate": 0.012
    }
   ],
   "assets": [
@@ -903,9 +920,9 @@
  "sites": [
   {
    "domain": "gearuptofit.com",
-   "pages": 297,
-   "discovered": 297,
-   "sitemaps": 6,
+   "pages": 300,
+   "discovered": 878,
+   "sitemaps": 7,
    "eligible": 25,
    "top": "https://gearuptofit.com/shoe-finder/methodology/"
   },
@@ -1216,7 +1233,7 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 290,
+   "internal_inlinks": 293,
    "words": 1406,
    "interactive": true,
    "modified": "2026-10-04T18:13:49.000Z",
@@ -1252,7 +1269,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1405,6 +1422,32 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
+   "title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
+   "h1": "How to Control Emotional Eating & Stop Cravings (2026 Guide)",
+   "description": "Self-help for emotional eaters is possible! Learn to identify triggers and develop healthy eating habits for lasting change.",
+   "type": "practical_guide",
+   "promotion": 77,
+   "linkability": 81,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 3307,
+   "interactive": false,
+   "modified": "2026-09-21T06:03:08+00:00",
+   "reasons": [
+    "In-depth (3,307 words)",
+    "1 data table",
+    "Cites 6 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "prospects": 7,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
    "title": "Email Marketing Template Generator: HTML & Plain Text",
@@ -1426,6 +1469,30 @@
    ],
    "prospects": 3,
    "internal_link_suggestions": 4,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/running-pace-calculator/",
+   "title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "h1": "Running Pace Calculator & Race Time Predictor (2026)",
+   "description": "Unbiased & Independent GearUpToFit is reader-supported. We adhere to strict testing standards. When you buy through links on our site, we may earn a commission at no cost to you. Interactive Running Tool &bull; Updated 2026 Accurately calculate your running … Continue reading &rarr;",
+   "type": "interactive_tool",
+   "promotion": 75,
+   "linkability": 83,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 1591,
+   "interactive": true,
+   "modified": "2026-09-08T13:32:42+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "2 data tables",
+    "Recently updated"
+   ],
+   "prospects": 9,
+   "internal_link_suggestions": 3,
    "promoting": false
   },
   {
@@ -1464,7 +1531,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 22,
+   "internal_inlinks": 25,
    "words": 999,
    "interactive": true,
    "modified": null,
@@ -1626,7 +1693,7 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 4,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1650,7 +1717,7 @@
    ],
    "prospects": 6,
    "internal_link_suggestions": 4,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "plantastichaven.com",
@@ -2213,6 +2280,32 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "h1": "Treadmill Workout for Weight Loss: 2026 Fat Burn Guide",
+   "description": "Treadmill for weight loss: Effective workouts, tips, and strategies to help you achieve your fitness goals and transform your health.",
+   "type": "general_article",
+   "promotion": 63,
+   "linkability": 65,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 6295,
+   "interactive": false,
+   "modified": "2026-09-21T06:18:07+00:00",
+   "reasons": [
+    "In-depth (6,295 words)",
+    "9 data tables",
+    "Recently updated",
+    "Under-linked internally (1 inbound)",
+    "Health/YMYL topic — pitch only to expert publishers"
+   ],
+   "prospects": 2,
+   "internal_link_suggestions": 3,
+   "promoting": false
+  },
+  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/productivity/improve-focus-7-day-protocol/",
    "title": "7-Day Focus Reset: Improve Attention & Productivity",
@@ -2379,7 +2472,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "mysticaldigits.com",
@@ -2877,81 +2970,6 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": true
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/productivity/how-to-recover-from-burnout-while-working/",
-   "title": "How to Recover from Burnout While Working",
-   "h1": "How to Recover from Burnout While Working",
-   "description": "Compare burnout and short-term stress without biomarker myths. Review work-pattern clues, red flags, recovery limits, and when to seek professional support.",
-   "type": "practical_guide",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 5,
-   "words": 1930,
-   "interactive": false,
-   "modified": "2026-11-08T07:36:11+00:00",
-   "reasons": [
-    "3 data tables",
-    "Cites 6 authoritative sources",
-    "Recently updated",
-    "One of 34 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/personal-development/morning-routine/",
-   "title": "Morning Routine: Realistic Guide | Gear Up to Grow",
-   "h1": "Morning Routine: A Practical System That Works on Hard Days",
-   "description": "A realistic, flexible morning routine framework that supports energy and cuts decision fatigue. Start with one small anchor and build from there.",
-   "type": "practical_guide",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 15,
-   "words": 1807,
-   "interactive": false,
-   "modified": "2026-11-08T07:36:09+00:00",
-   "reasons": [
-    "3 data tables",
-    "Cites 6 authoritative sources",
-    "Recently updated",
-    "One of 24 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "mysticaldigits.com",
-   "url": "https://mysticaldigits.com/free-numerology-love-compatibility-score/",
-   "title": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
-   "h1": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
-   "description": "Compare two people’s Life Path, Destiny, Soul Urge, and Personal Year numbers with a careful numerology love compatibility framework.",
-   "type": "interactive_tool",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 15,
-   "words": 3481,
-   "interactive": false,
-   "modified": "2026-11-07T20:04:39+00:00",
-   "reasons": [
-    "In-depth (3,481 words)",
-    "2 data tables",
-    "Recently updated",
-    "One of 299 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
    "promoting": false
   }
  ],
@@ -3403,6 +3421,36 @@
    "to": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
    "to_title": "Email Marketing Template Generator: HTML & Plain Text",
    "anchor": "write email reader",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/calculators/",
+   "from_title": "Free Fitness & Running Calculators | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/",
+   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running-training-plans/",
+   "from_title": "2026 Running Training Plans: 5K, 10K & Marathon Guide | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
    "relevance": 3,
    "from_strength": 0
   },
@@ -3984,6 +4032,36 @@
    "to_title": "Apple Watch SE (2nd gen) vs Google Pixel Watch 3: Which Should You Buy?",
    "anchor": "apple watch",
    "relevance": 10,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
+   "from_title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
+   "from_strength": 77
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/nutrition/",
+   "from_title": "Nutrition Articles | Fueling, Hydration, Supplements & Meal Planning | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/weight-loss-guide/",
+   "from_title": "Runner's Weight Loss Guide: Sustainable Fat Loss Tips 2026 | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
    "from_strength": 0
   },
   {
@@ -4895,75 +4973,15 @@
    "anchor": "life path",
    "relevance": 7,
    "from_strength": 56
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-secrets-of-life-path-number-11/",
-   "from_title": "Life Path Number 11 Meaning: 11/2 Traits, Strengths, Challenges &…",
-   "to": "https://mysticaldigits.com/compatibility-revealed-life-path-number-10/",
-   "to_title": "Life Path Number 10: 2026 Compatibility Guide & Traits",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 56
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/compatibility/",
-   "from_title": "Compatibility Guides: Life Path, Moon Sign & Relationship Reflection Tools",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/life-path-interpretation/",
-   "from_title": "Life Path Interpretation: Discover Your True Purpose | Mystical Digits",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/compatibility-of-life-path-1-and-5/",
-   "from_title": "Life Path 1 and 5 Compatibility: Key Insights & Dynamics",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/perfect-match-with-life-path-compatibility/",
-   "from_title": "Life Path Compatibility: Find Your Perfect Match in 2026",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/love-compatibility-life-path-one-and-seven/",
-   "from_title": "Life Path 1 & 7 Compatibility: Can Opposite Spirits Ignite Passion in 2026?",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
   }
  ],
  "indexation": {
   "sites": [
    {
     "site": "gearuptofit.com",
-    "checked": 297,
-    "healthy": 288,
-    "problems": 9,
+    "checked": 300,
+    "healthy": 290,
+    "problems": 10,
     "critical": 0,
     "not_found": 0,
     "server_error": 0,
@@ -4973,7 +4991,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 9
+    "thin": 10
    },
    {
     "site": "plantastichaven.com",
@@ -5316,6 +5334,16 @@
     "severity": 8,
     "status": 200,
     "words": 197
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/review/creatine-monohydrate-vs-creatine-hcl",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 177
    },
    {
     "site": "gearuptofit.com",
@@ -5808,12 +5836,12 @@
     "words": 60
    }
   ],
-  "total_issues": 69,
+  "total_issues": 70,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first)."
  },
  "tuning": {
   "max_queries": 40,
-  "updated_at": "2026-11-08T19:00:20.469Z"
+  "updated_at": "2026-11-09T02:53:13.246Z"
  },
  "wins": [
   {
@@ -5862,28 +5890,32 @@
   }
  ],
  "log": [
-  "18:54:58 connection dataforseo: connected",
-  "18:54:58 connection gmail: connected",
-  "18:55:01 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
-  "18:55:02 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 2, 304 0, reused 256",
-  "18:55:03 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "18:55:03 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
-  "18:55:06 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "18:55:06 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "18:55:07 crawl frenchyfab.com: 155/155 urls, fetched 3, 304 0, reused 152",
-  "18:55:08 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "18:55:11 crawl efficientgptprompts.com: 300/487 urls, fetched 8, 304 0, reused 292",
-  "18:55:12 crawl gearuptofit.com: 297/297 urls, fetched 1, 304 0, reused 296",
-  "18:55:12 indexation: 69 sitemap URLs with an indexing problem (3 critical)",
-  "18:58:01 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "18:58:45 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "19:00:20 prospects: 0 from the saved queue, 0 saved for next run; 40 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "19:00:20 self-tuning: next cycle runs up to 40 searches",
-  "19:00:20 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "19:00:23 replies: 16 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "19:00:23 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "19:00:23 - preverify: skipped (runs only while outreach is paused)",
-  "19:00:31 link checks: 7 pages, 0 new links won, 0 lost"
+  "02:47:37 connection dataforseo: connected",
+  "02:47:37 connection gmail: connected",
+  "02:47:39 crawl gearuptofit.com: 300/878 urls, fetched 4, 304 0, reused 296",
+  "02:47:39 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
+  "02:47:41 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "02:47:44 crawl frenchyfab.com: 155/155 urls, fetched 0, 304 0, reused 155",
+  "02:47:44 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "02:47:45 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "02:47:45 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
+  "02:47:46 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "02:47:46 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 2, 304 0, reused 256",
+  "02:47:53 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "02:47:53 indexation: 70 sitemap URLs with an indexing problem (3 critical)",
+  "02:48:51 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "02:48:53 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "02:49:25 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "02:51:08 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "02:52:24 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "02:52:53 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "02:53:13 prospects: 0 from the saved queue, 0 saved for next run; 40 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "02:53:13 self-tuning: next cycle runs up to 40 searches",
+  "02:53:13 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "02:53:17 replies: 9 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "02:53:22 outreach: 0 sent, 0 follow-ups, 0 drafts, 1 held for verification",
+  "02:53:22 - preverify: skipped (runs only while outreach is paused)",
+  "02:53:22 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
