@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-10T13:46:00.432Z",
- "duration_s": 453,
+ "generated_at": "2026-11-10T21:01:44.583Z",
+ "duration_s": 337,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 14.125286000000003
+    "balance_usd": 13.971286
    },
    "gmail": {
     "status": "connected"
@@ -107,7 +107,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 12039,
+   "ms": 20618,
    "result": {
     "sites": 10,
     "pages": 1806
@@ -125,7 +125,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 320
+    "internal_suggestions": 315
    }
   },
   "requalify": {
@@ -140,11 +140,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 305309,
+   "ms": 307062,
    "result": {
     "queries": 40,
     "mention_queries": 0,
-    "serp_results": 692,
+    "serp_results": 697,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -154,7 +154,7 @@
     "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
-    "failed_queries": 5,
+    "failed_queries": 8,
     "deferred": 0
    }
   },
@@ -168,9 +168,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 2398,
+   "ms": 3239,
    "result": {
-    "scanned": 43,
+    "scanned": 28,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -180,15 +180,15 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 131616,
+   "ms": 4608,
    "result": {
-    "followups": 2,
+    "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 3,
+    "deferred": 186,
     "cap": 12,
-    "verification_held": 22
+    "verification_held": 1
    },
    "writer": {
     "claude": 0,
@@ -214,15 +214,15 @@
   "pages_crawled": 1806,
   "urls_discovered": 2739,
   "promotable": 250,
-  "internal_suggestions": 320,
+  "internal_suggestions": 315,
   "promoting_now": 27
  },
  "spend": {
-  "today_usd": 0.31,
-  "month_usd": 2.8358,
+  "today_usd": 0.464,
+  "month_usd": 2.9898,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 59
+  "calls_this_run": 62
  },
  "outreach": {
   "mode": "send",
@@ -237,7 +237,7 @@
   },
   "sent_today": 2,
   "cap_today": 12,
-  "next_send_at": "2026-11-10T13:46:00.436Z",
+  "next_send_at": "2026-11-11T13:00:00.000Z",
   "sending_now": false,
   "reply_health": "ok"
  },
@@ -565,7 +565,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.31
+   "spend_usd": 0.464
   }
  ],
  "learning": {
@@ -619,16 +619,16 @@
     "rate": 0.385
    },
    {
-    "footprint": "intent",
-    "queries": 193,
-    "ready": 60,
-    "rate": 0.311
-   },
-   {
     "footprint": "blogs_to_follow",
     "queries": 10,
     "ready": 3,
     "rate": 0.308
+   },
+   {
+    "footprint": "intent",
+    "queries": 200,
+    "ready": 60,
+    "rate": 0.3
    },
    {
     "footprint": "sources",
@@ -644,21 +644,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 157,
+    "queries": 160,
     "ready": 23,
-    "rate": 0.15
-   },
-   {
-    "footprint": "weekly_roundup",
-    "queries": 8,
-    "ready": 0,
-    "rate": 0.091
-   },
-   {
-    "footprint": "best_of_web",
-    "queries": 8,
-    "ready": 0,
-    "rate": 0.091
+    "rate": 0.147
    },
    {
     "footprint": "link_roundup",
@@ -667,10 +655,22 @@
     "rate": 0.083
    },
    {
+    "footprint": "weekly_roundup",
+    "queries": 9,
+    "ready": 0,
+    "rate": 0.083
+   },
+   {
+    "footprint": "best_of_web",
+    "queries": 9,
+    "ready": 0,
+    "rate": 0.083
+   },
+   {
     "footprint": "resources",
-    "queries": 201,
+    "queries": 209,
     "ready": 14,
-    "rate": 0.074
+    "rate": 0.071
    },
    {
     "footprint": "mention",
@@ -680,15 +680,15 @@
    },
    {
     "footprint": "further_reading",
-    "queries": 109,
+    "queries": 117,
     "ready": 3,
-    "rate": 0.036
+    "rate": 0.033
    },
    {
     "footprint": "helpful_resources",
-    "queries": 120,
+    "queries": 132,
     "ready": 0,
-    "rate": 0.008
+    "rate": 0.007
    }
   ],
   "assets": [
@@ -1066,7 +1066,7 @@
    ],
    "prospects": 9,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1362,7 +1362,7 @@
    ],
    "prospects": 8,
    "internal_link_suggestions": 4,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1672,7 +1672,7 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
+   "internal_inlinks": 14,
    "words": 2047,
    "interactive": false,
    "modified": "2026-10-15T10:08:30+00:00",
@@ -1684,7 +1684,7 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 1,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1781,7 +1781,7 @@
    ],
    "prospects": 6,
    "internal_link_suggestions": 4,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1904,7 +1904,7 @@
    ],
    "prospects": 1,
    "internal_link_suggestions": 1,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -2108,7 +2108,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 15,
+   "internal_inlinks": 14,
    "words": 6887,
    "interactive": false,
    "modified": "2026-11-05T07:18:53+00:00",
@@ -2518,6 +2518,32 @@
   },
   {
    "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "h1": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "description": "Is homemade or commercial food best for your French Bulldog? We compare pros, cons, nutrition, cost, & time. Expert advice helps you choose! FrenchBulldogFood",
+   "type": "comparison",
+   "promotion": 61,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 2818,
+   "interactive": false,
+   "modified": "2026-11-10T13:50:14+00:00",
+   "reasons": [
+    "In-depth (2,818 words)",
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (2 inbound)",
+    "One of 153 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
    "url": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
    "title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
    "h1": "French Bulldog Food Sensitivities: The Guide to Diagnosis, Diet & Lifelong Relief",
@@ -2565,32 +2591,6 @@
     "One of 153 templated sibling pages — promote the hub first"
    ],
    "prospects": 1,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "h1": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "description": "Is homemade or commercial food best for your French Bulldog? We compare pros, cons, nutrition, cost, & time. Expert advice helps you choose! FrenchBulldogFood",
-   "type": "comparison",
-   "promotion": 61,
-   "linkability": 77,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2818,
-   "interactive": false,
-   "modified": "2026-10-26T13:30:48+00:00",
-   "reasons": [
-    "In-depth (2,818 words)",
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)",
-    "One of 153 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -3641,6 +3641,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 61
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
    "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
    "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
@@ -3653,16 +3663,6 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
    "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 61
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
    "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
    "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
    "anchor": "french bulldogs",
@@ -4151,6 +4151,56 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "anchor": "practical frenchie diet",
+   "relevance": 3,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "anchor": "practical frenchie diet",
+   "relevance": 3,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/high-protein-diet-french-bulldogs-muscle-fat-energy/",
+   "from_title": "High-Protein Diets for French Bulldogs: When They Help",
+   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "anchor": "practical frenchie diet",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-weight-guide/",
+   "from_title": "French Bulldog Weight: Healthy Range and Body Condition",
+   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "anchor": "practical frenchie diet",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-stress-signs-fixes/",
+   "from_title": "Low-Calorie Treats for French Bulldogs: Safe Rewards",
+   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "anchor": "practical frenchie diet",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/food-aggression-in-french-bulldogs/",
    "from_title": "French Bulldog Food Aggression: Safety, Management",
    "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
@@ -4247,56 +4297,6 @@
    "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
    "anchor": "french bulldog",
    "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/high-protein-diet-french-bulldogs-muscle-fat-energy/",
-   "from_title": "High-Protein Diets for French Bulldogs: When They Help",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-weight-guide/",
-   "from_title": "French Bulldog Weight: Healthy Range and Body Condition",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-stress-signs-fixes/",
-   "from_title": "Low-Calorie Treats for French Bulldogs: Safe Rewards",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
    "from_strength": 0
   },
   {
@@ -4641,16 +4641,6 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 8,
-   "from_strength": 61
-  },
-  {
-   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
    "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
    "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
@@ -4668,6 +4658,16 @@
    "anchor": "food french",
    "relevance": 7,
    "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "french bulldogs",
+   "relevance": 6,
+   "from_strength": 61
   },
   {
    "site": "frenchyfab.com",
@@ -4790,56 +4790,6 @@
    "from_strength": 0
   },
   {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-name-numbers-reading-calculator/",
-   "from_title": "Get Your FREE Numerology Name Numbers Reading Calculator Tool (Updated…",
-   "to": "https://mysticaldigits.com/find-your-lucky-name-with-the-ultimate-calculator/",
-   "to_title": "Lucky Name Calculator: Find Your 2026 Numerology Match",
-   "anchor": "name calculator",
-   "relevance": 4,
-   "from_strength": 55
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-business-name-calculator-boost-your-success/",
-   "from_title": "Business Name Numerology Calculator: 2026 Brand-Vibration Formula",
-   "to": "https://mysticaldigits.com/find-your-lucky-name-with-the-ultimate-calculator/",
-   "to_title": "Lucky Name Calculator: Find Your 2026 Numerology Match",
-   "anchor": "lucky name calculator",
-   "relevance": 3,
-   "from_strength": 55
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/find-your-lucky-mobile-number-based-on-date-of-birth/",
-   "from_title": "Find Your Lucky Mobile Number by DOB in 2026",
-   "to": "https://mysticaldigits.com/find-your-lucky-name-with-the-ultimate-calculator/",
-   "to_title": "Lucky Name Calculator: Find Your 2026 Numerology Match",
-   "anchor": "lucky name calculator",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
-   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
-   "to": "https://mysticaldigits.com/find-your-lucky-name-with-the-ultimate-calculator/",
-   "to_title": "Lucky Name Calculator: Find Your 2026 Numerology Match",
-   "anchor": "lucky name calculator",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-calculate-numerology-for-name/",
-   "from_title": "How to Calculate Numerology for Name (2026 Formula)",
-   "to": "https://mysticaldigits.com/find-your-lucky-name-with-the-ultimate-calculator/",
-   "to_title": "Lucky Name Calculator: Find Your 2026 Numerology Match",
-   "anchor": "lucky name calculator",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
    "site": "plantastichaven.com",
    "from": "https://plantastichaven.com/shop/",
    "from_title": "Houseplant Tools & Supplies: What to Buy & Skip | PlantasticHaven",
@@ -4891,8 +4841,8 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/astrology-who-will-i-marry/",
-   "from_title": "Astrology: Who Will I Marry? 2026 Insights | Mystical Digits",
+   "from": "https://mysticaldigits.com/the-power-of-number-9-in-numerology-revealed/",
+   "from_title": "Number 9 in Numerology: Meaning, Life Path Calculation and Limits | Mystical Digits",
    "to": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
    "to_title": "Personal Year Calculator: How to Find Your Number (2026)",
    "anchor": "personal year",
@@ -4901,8 +4851,8 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-predictions-how-to-use-numerology-to-forecast-your-future/",
-   "from_title": "Numerology Predictions: How to Forecast Your Future [2026]",
+   "from": "https://mysticaldigits.com/astrology-who-will-i-marry/",
+   "from_title": "Astrology: Who Will I Marry? 2026 Insights | Mystical Digits",
    "to": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
    "to_title": "Personal Year Calculator: How to Find Your Number (2026)",
    "anchor": "personal year",
@@ -4987,6 +4937,56 @@
    "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
    "anchor": "life path",
    "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/perfect-match-with-life-path-compatibility/",
+   "from_title": "Life Path Compatibility: Find Your Perfect Match in 2026",
+   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
+   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/love-compatibility-life-path-one-and-seven/",
+   "from_title": "Life Path 1 & 7 Compatibility: Can Opposite Spirits Ignite Passion in 2026?",
+   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
+   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/numerology-name-numbers-reading-calculator/",
+   "from_title": "Get Your FREE Numerology Name Numbers Reading Calculator Tool (Updated…",
+   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "anchor": "reading calculator",
+   "relevance": 6,
+   "from_strength": 55
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/a-comprehensive-guide-to-understanding-numerology/",
+   "from_title": "Numerology: A Complete Guide to Life Path Numbers and Core Meanings",
+   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "anchor": "personal numerology",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/numerology-dream-interpretation/",
+   "from_title": "Numerology Dream Interpretation: Decode Your 2026 Visions",
+   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "anchor": "personal numerology",
+   "relevance": 4,
    "from_strength": 0
   }
  ],
@@ -5892,7 +5892,7 @@
  },
  "tuning": {
   "max_queries": 40,
-  "updated_at": "2026-11-10T13:43:46.406Z"
+  "updated_at": "2026-11-10T21:01:36.514Z"
  },
  "wins": [
   {
@@ -5941,31 +5941,34 @@
   }
  ],
  "log": [
-  "13:38:28 connection dataforseo: connected",
-  "13:38:28 connection gmail: connected",
-  "13:38:30 crawl gearuptofit.com: 300/878 urls, fetched 4, 304 0, reused 296",
-  "13:38:31 crawl plantastichaven.com: 159/159 urls, fetched 2, 304 0, reused 157",
-  "13:38:32 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
-  "13:38:33 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
-  "13:38:34 crawl frenchyfab.com: 155/155 urls, fetched 2, 304 0, reused 153",
-  "13:38:34 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "13:38:35 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "13:38:35 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "13:38:40 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 13, 304 0, reused 245",
-  "13:38:40 crawl efficientgptprompts.com: 300/487 urls, fetched 10, 304 0, reused 290",
-  "13:38:41 indexation: 74 sitemap URLs with an indexing problem (7 critical)",
-  "13:40:07 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "13:41:11 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "13:41:19 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "13:42:27 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "13:43:03 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "13:43:46 prospects: 0 from the saved queue, 0 saved for next run; 40 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "13:43:46 self-tuning: next cycle runs up to 40 searches",
-  "13:43:46 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "13:43:48 replies: 43 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "13:46:00 outreach: 0 sent, 2 follow-ups, 0 drafts, 22 held for verification",
-  "13:46:00 - preverify: skipped (runs only while outreach is paused)",
-  "13:46:00 link checks: 0 pages, 0 new links won, 0 lost"
+  "20:56:08 connection dataforseo: connected",
+  "20:56:08 connection gmail: connected",
+  "20:56:11 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
+  "20:56:17 crawl gearuptogrow.com: 107/107 urls, fetched 5, 304 0, reused 102",
+  "20:56:18 crawl mysticaldigits.com: 300/468 urls, fetched 6, 304 0, reused 294",
+  "20:56:20 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 7, 304 0, reused 251",
+  "20:56:20 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "20:56:21 crawl frenchyfab.com: 155/155 urls, fetched 6, 304 0, reused 149",
+  "20:56:21 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "20:56:22 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "20:56:23 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
+  "20:56:29 crawl efficientgptprompts.com: 300/487 urls, fetched 1, 304 0, reused 299",
+  "20:56:29 indexation: 74 sitemap URLs with an indexing problem (7 critical)",
+  "20:57:02 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "20:57:36 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "20:58:13 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "20:59:10 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "20:59:51 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "20:59:53 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "20:59:59 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "21:01:12 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "21:01:36 prospects: 0 from the saved queue, 0 saved for next run; 40 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "21:01:36 self-tuning: next cycle runs up to 40 searches",
+  "21:01:36 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "21:01:39 replies: 28 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "21:01:44 outreach: 0 sent, 0 follow-ups, 0 drafts, 1 held for verification",
+  "21:01:44 - preverify: skipped (runs only while outreach is paused)",
+  "21:01:44 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
