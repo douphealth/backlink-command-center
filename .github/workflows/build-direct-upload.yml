@@ -1,0 +1,54 @@
+name: Build Cloudflare Pages Direct Upload ZIP
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release/cloudflare-direct-upload-20261028
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Build and validate app
+        run: |
+          npm run build
+          npm test
+          python3 -m unittest discover -s tests/gsc -p 'test_*.py'
+      - name: Compile Pages Functions into Advanced Mode Worker
+        run: |
+          ./node_modules/.bin/wrangler pages functions build functions --outdir .pages-function-build --output-routes-path public/_routes.json
+          test -s .pages-function-build/index.js
+          cp .pages-function-build/index.js public/_worker.js
+          test -s public/_worker.js
+          test -s public/index.html
+          node --check public/_worker.js
+      - name: Verify safe static assets and packaging
+        shell: bash
+        run: |
+          test -f public/app.js
+          test -f public/browser-store.js
+          test -f public/autopilot-view.js
+          test -f public/data/autopilot.json
+          test -f public/data/vault.json
+          test ! -e public/.env
+          test ! -e public/.dev.vars
+          mkdir -p release
+          (cd public && zip -q -r ../release/backlink-command-center-PAGES-DIRECT-UPLOAD.zip .)
+          unzip -l release/backlink-command-center-PAGES-DIRECT-UPLOAD.zip | grep -E '(^| )index.html$'
+          unzip -l release/backlink-command-center-PAGES-DIRECT-UPLOAD.zip | grep -E '(^| )_worker.js$'
+      - name: Upload verified Cloudflare Pages ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: backlink-command-center-pages-direct-upload
+          path: release/backlink-command-center-PAGES-DIRECT-UPLOAD.zip
+          if-no-files-found: error
+          retention-days: 14
