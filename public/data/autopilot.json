@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-11T16:31:49.148Z",
- "duration_s": 472,
+ "generated_at": "2026-11-11T23:36:59.325Z",
+ "duration_s": 237,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 13.659286000000002
+    "balance_usd": 13.509286000000003
    },
    "gmail": {
     "status": "connected"
@@ -107,7 +107,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 117143,
+   "ms": 14735,
    "result": {
     "sites": 10,
     "pages": 1806
@@ -140,11 +140,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 246806,
+   "ms": 208986,
    "result": {
     "queries": 40,
     "mention_queries": 0,
-    "serp_results": 664,
+    "serp_results": 699,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -154,7 +154,7 @@
     "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
-    "failed_queries": 2,
+    "failed_queries": 4,
     "deferred": 0
    }
   },
@@ -168,9 +168,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 3052,
+   "ms": 1849,
    "result": {
-    "scanned": 42,
+    "scanned": 12,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -180,15 +180,15 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 103709,
+   "ms": 5076,
    "result": {
-    "followups": 1,
+    "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 6,
+    "deferred": 185,
     "cap": 12,
-    "verification_held": 23
+    "verification_held": 1
    },
    "writer": {
     "claude": 0,
@@ -201,7 +201,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 3,
+   "ms": 2,
    "result": {
     "checked": 0,
     "won": 0,
@@ -215,14 +215,14 @@
   "urls_discovered": 2739,
   "promotable": 250,
   "internal_suggestions": 316,
-  "promoting_now": 25
+  "promoting_now": 22
  },
  "spend": {
-  "today_usd": 0.308,
-  "month_usd": 3.2978,
+  "today_usd": 0.464,
+  "month_usd": 3.4538,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 48
+  "calls_this_run": 52
  },
  "outreach": {
   "mode": "send",
@@ -238,7 +238,7 @@
   },
   "sent_today": 1,
   "cap_today": 12,
-  "next_send_at": "2026-11-11T16:31:49.150Z",
+  "next_send_at": "2026-11-12T13:00:00.000Z",
   "sending_now": false,
   "reply_health": "ok"
  },
@@ -583,7 +583,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.308
+   "spend_usd": 0.464
   }
  ],
  "learning": {
@@ -650,21 +650,21 @@
    },
    {
     "footprint": "intent",
-    "queries": 213,
+    "queries": 222,
     "ready": 60,
-    "rate": 0.282
+    "rate": 0.271
    },
    {
     "footprint": "recommended_tools",
-    "queries": 2,
+    "queries": 3,
     "ready": 0,
-    "rate": 0.2
+    "rate": 0.167
    },
    {
     "footprint": "best_guides",
-    "queries": 175,
+    "queries": 184,
     "ready": 23,
-    "rate": 0.135
+    "rate": 0.128
    },
    {
     "footprint": "link_roundup",
@@ -686,9 +686,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 224,
+    "queries": 231,
     "ready": 14,
-    "rate": 0.066
+    "rate": 0.064
    },
    {
     "footprint": "mention",
@@ -698,15 +698,15 @@
    },
    {
     "footprint": "further_reading",
-    "queries": 136,
+    "queries": 141,
     "ready": 3,
-    "rate": 0.029
+    "rate": 0.028
    },
    {
     "footprint": "helpful_resources",
-    "queries": 150,
+    "queries": 159,
     "ready": 0,
-    "rate": 0.007
+    "rate": 0.006
    }
   ],
   "assets": [
@@ -1058,7 +1058,7 @@
    ],
    "prospects": 10,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -1184,7 +1184,7 @@
    ],
    "prospects": 10,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2335,7 +2335,7 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 3,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -5904,7 +5904,7 @@
  },
  "tuning": {
   "max_queries": 40,
-  "updated_at": "2026-11-11T16:30:02.373Z"
+  "updated_at": "2026-11-11T23:36:49.388Z"
  },
  "wins": [
   {
@@ -5953,28 +5953,30 @@
   }
  ],
  "log": [
-  "16:23:58 connection dataforseo: connected",
-  "16:23:58 connection gmail: connected",
-  "16:24:04 crawl gearuptogrow.com: 107/107 urls, fetched 39, 304 0, reused 68",
-  "16:24:05 crawl plantastichaven.com: 159/159 urls, fetched 33, 304 0, reused 126",
-  "16:24:09 crawl frenchyfab.com: 155/155 urls, fetched 8, 304 0, reused 147",
-  "16:24:09 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "16:24:11 crawl mysticaldigits.com: 300/468 urls, fetched 11, 304 0, reused 289",
-  "16:24:12 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "16:24:14 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "16:24:15 crawl efficientgptprompts.com: 300/487 urls, fetched 5, 304 0, reused 295",
-  "16:24:18 crawl micegoneguide.com: 43/43 urls, fetched 6, 304 0, reused 37",
-  "16:25:55 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 248, 304 0, reused 10",
-  "16:25:55 indexation: 74 sitemap URLs with an indexing problem (7 critical)",
-  "16:29:03 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "16:29:55 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "16:30:02 prospects: 0 from the saved queue, 0 saved for next run; 40 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "16:30:02 self-tuning: next cycle runs up to 40 searches",
-  "16:30:02 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "16:30:05 replies: 42 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "16:31:49 outreach: 0 sent, 1 follow-ups, 0 drafts, 23 held for verification",
-  "16:31:49 - preverify: skipped (runs only while outreach is paused)",
-  "16:31:49 link checks: 0 pages, 0 new links won, 0 lost"
+  "23:33:05 connection dataforseo: connected",
+  "23:33:05 connection gmail: connected",
+  "23:33:08 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
+  "23:33:08 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "23:33:11 crawl frenchyfab.com: 155/155 urls, fetched 2, 304 0, reused 153",
+  "23:33:12 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "23:33:15 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "23:33:15 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "23:33:16 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 6, 304 0, reused 252",
+  "23:33:16 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
+  "23:33:16 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "23:33:20 crawl efficientgptprompts.com: 300/487 urls, fetched 8, 304 0, reused 292",
+  "23:33:20 indexation: 74 sitemap URLs with an indexing problem (7 critical)",
+  "23:34:05 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "23:34:38 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "23:35:13 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "23:36:27 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "23:36:49 prospects: 0 from the saved queue, 0 saved for next run; 40 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "23:36:49 self-tuning: next cycle runs up to 40 searches",
+  "23:36:49 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "23:36:51 replies: 12 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "23:36:56 outreach: 0 sent, 0 follow-ups, 0 drafts, 1 held for verification",
+  "23:36:56 - preverify: skipped (runs only while outreach is paused)",
+  "23:36:59 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
