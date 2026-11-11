@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-10T21:01:44.583Z",
- "duration_s": 337,
+ "generated_at": "2026-11-11T08:02:15.722Z",
+ "duration_s": 430,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 13.971286
+    "balance_usd": 13.817286000000003
    },
    "gmail": {
     "status": "connected"
@@ -29,7 +29,7 @@
    "key": true,
    "enabled": true,
    "daily_limit": 12,
-   "used_today": 2,
+   "used_today": 0,
    "balance": {
     "provider": "verifalia",
     "free_credits": 21,
@@ -107,10 +107,10 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 20618,
+   "ms": 65562,
    "result": {
     "sites": 10,
-    "pages": 1806
+    "pages": 1559
    }
   },
   "demand": {
@@ -124,8 +124,8 @@
   "rank": {
    "ok": true,
    "result": {
-    "ranked": 250,
-    "internal_suggestions": 315
+    "ranked": 235,
+    "internal_suggestions": 303
    }
   },
   "requalify": {
@@ -140,11 +140,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 307062,
+   "ms": 332365,
    "result": {
     "queries": 40,
     "mention_queries": 0,
-    "serp_results": 697,
+    "serp_results": 699,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -160,7 +160,7 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 2,
+   "ms": 3,
    "result": {
     "checked": 0,
     "found": 0
@@ -168,9 +168,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 3239,
+   "ms": 2486,
    "result": {
-    "scanned": 28,
+    "scanned": 24,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -180,15 +180,15 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 4608,
+   "ms": 19338,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 186,
+    "deferred": 182,
     "cap": 12,
-    "verification_held": 1
+    "verification_held": 5
    },
    "writer": {
     "claude": 0,
@@ -201,9 +201,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 2,
+   "ms": 7784,
    "result": {
-    "checked": 0,
+    "checked": 9,
     "won": 0,
     "lost": 0
    }
@@ -211,18 +211,18 @@
  },
  "totals": {
   "sites": 10,
-  "pages_crawled": 1806,
-  "urls_discovered": 2739,
-  "promotable": 250,
-  "internal_suggestions": 315,
-  "promoting_now": 27
+  "pages_crawled": 1559,
+  "urls_discovered": 2492,
+  "promotable": 235,
+  "internal_suggestions": 303,
+  "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.464,
-  "month_usd": 2.9898,
+  "today_usd": 0.158,
+  "month_usd": 3.1478,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 62
+  "calls_this_run": 64
  },
  "outreach": {
   "mode": "send",
@@ -235,7 +235,7 @@
    "mailbox_accept_all": 3,
    "publisher_mismatch": 1
   },
-  "sent_today": 2,
+  "sent_today": 0,
   "cap_today": 12,
   "next_send_at": "2026-11-11T13:00:00.000Z",
   "sending_now": false,
@@ -566,6 +566,23 @@
    "declined": 0,
    "bounced": 6,
    "spend_usd": 0.464
+  },
+  {
+   "date": "2026-11-11",
+   "prospects_evaluated": 2518,
+   "qualified": 539,
+   "ready": 160,
+   "broken_link_ready": 15,
+   "contact_form_only": 105,
+   "no_contact": 223,
+   "contacted": 49,
+   "replied": 1,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 4,
+   "declined": 0,
+   "bounced": 6,
+   "spend_usd": 0.158
   }
  ],
  "learning": {
@@ -626,9 +643,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 200,
+    "queries": 207,
     "ready": 60,
-    "rate": 0.3
+    "rate": 0.29
    },
    {
     "footprint": "sources",
@@ -644,9 +661,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 160,
+    "queries": 169,
     "ready": 23,
-    "rate": 0.147
+    "rate": 0.14
    },
    {
     "footprint": "link_roundup",
@@ -668,9 +685,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 209,
+    "queries": 218,
     "ready": 14,
-    "rate": 0.071
+    "rate": 0.068
    },
    {
     "footprint": "mention",
@@ -680,13 +697,13 @@
    },
    {
     "footprint": "further_reading",
-    "queries": 117,
+    "queries": 124,
     "ready": 3,
-    "rate": 0.033
+    "rate": 0.031
    },
    {
     "footprint": "helpful_resources",
-    "queries": 132,
+    "queries": 140,
     "ready": 0,
     "rate": 0.007
    }
@@ -961,11 +978,11 @@
   },
   {
    "domain": "affiliatemarketingforsuccess.com",
-   "pages": 258,
-   "discovered": 258,
-   "sitemaps": 5,
-   "eligible": 25,
-   "top": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/"
+   "pages": 11,
+   "discovered": 11,
+   "sitemaps": 3,
+   "eligible": 10,
+   "top": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/"
   },
   {
    "domain": "mysticaldigits.com",
@@ -1040,6 +1057,31 @@
    ],
    "prospects": 10,
    "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
+   "title": "Affiliate Growth Checklist: SEO, Trust & Revenue",
+   "h1": "Affiliate Growth Checklist: Build a Search, Trust, and Revenue System",
+   "description": "Use this affiliate growth checklist to assess niche fit, search intent, topical authority, internal links, trust, monetization, and weekly execution.",
+   "type": "reference",
+   "promotion": 83,
+   "linkability": 88,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 2071,
+   "interactive": true,
+   "modified": "2026-10-25T11:01:04+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,071 words)",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "prospects": 17,
+   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -1069,30 +1111,6 @@
    "promoting": true
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "h1": "Free Affiliate Link Generator: Branded & Trackable URLs",
-   "description": "Use the rebuilt Affiliate Link Generator for 2026 to create branded redirect slugs, UTM-tagged affiliate URLs, disclosure copy, and an SEO-safe link workflow.",
-   "type": "interactive_tool",
-   "promotion": 82,
-   "linkability": 91,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 1667,
-   "interactive": true,
-   "modified": "2026-11-04T05:40:26+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "2 data tables",
-    "Recently updated"
-   ],
-   "prospects": 11,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
    "site": "micegoneguide.com",
    "url": "https://micegoneguide.com/prevent-mice-in-kitchen/",
    "title": "How to Prevent Mice in the Kitchen: Food Storage & Sealing",
@@ -1104,12 +1122,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 42,
-   "words": 2209,
+   "words": 2208,
    "interactive": true,
    "modified": "2026-10-03T06:27:27+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,209 words)",
+    "In-depth (2,208 words)",
     "1 data table",
     "Cites 11 authoritative sources",
     "Recently updated"
@@ -1147,7 +1165,7 @@
   {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/personal-development/goal-achievement/",
-   "title": "Goal Achievement: A 7-Step Framework to Finish What You Start | Gear Up to Grow",
+   "title": "Goal Achievement: A 7-Step Framework to Finish Goals",
    "h1": "Goal Achievement: How to Turn Goals Into Finished Results",
    "description": "Turn goals into finished results with a 7-step goal achievement framework: weekly actions, tracking, and setback recovery.",
    "type": "reference",
@@ -1155,7 +1173,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 7,
    "words": 1899,
    "interactive": true,
    "modified": "2026-10-15T10:10:07+00:00",
@@ -1169,54 +1187,6 @@
    "promoting": false
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/review/neuronwriter-review/",
-   "title": "NeuronWriter Review 2026: NLP Content Scoring, Pricing & Alternatives",
-   "h1": "NeuronWriter Review (2026): Workflow, Limits, Pricing & Who Should Buy",
-   "description": "A 2026 NeuronWriter review covering NLP content scoring, plan limits and quotas, workflow, pricing, limitations, and honest alternatives.",
-   "type": "comparison",
-   "promotion": 79,
-   "linkability": 88,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 34,
-   "words": 1765,
-   "interactive": true,
-   "modified": "2026-10-30T07:45:22+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 14,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
-   "title": "Affiliate Growth Checklist: SEO, Trust & Revenue",
-   "h1": "Affiliate Growth Checklist: Build a Search, Trust, and Revenue System",
-   "description": "Use this affiliate growth checklist to assess niche fit, search intent, topical authority, internal links, trust, monetization, and weekly execution.",
-   "type": "reference",
-   "promotion": 79,
-   "linkability": 88,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 11,
-   "words": 2071,
-   "interactive": true,
-   "modified": "2026-10-25T11:01:04+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,071 words)",
-    "Recently updated"
-   ],
-   "prospects": 17,
-   "internal_link_suggestions": 1,
-   "promoting": false
-  },
-  {
    "site": "mysticaldigits.com",
    "url": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
    "title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
@@ -1227,8 +1197,8 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 1721,
+   "internal_inlinks": 7,
+   "words": 1724,
    "interactive": true,
    "modified": "2026-11-08T05:33:11+00:00",
    "reasons": [
@@ -1289,32 +1259,6 @@
    "promoting": false
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/ai/how-teachers-detect-ai-writing/",
-   "title": "How Teachers Detect AI Writing: 11 Methods That Actually Work (2026)",
-   "h1": "How Teachers Detect AI Writing: 11 Methods (2025 Guide)",
-   "description": "Teachers detect AI writing using advanced tools, strategies, and classroom policies. Stay ahead with 2025 AI detection insights and techniques for educators.",
-   "type": "methodology",
-   "promotion": 78,
-   "linkability": 87,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 7,
-   "words": 2200,
-   "interactive": false,
-   "modified": "2026-09-13T19:08:04+00:00",
-   "reasons": [
-    "Original method/data — citation-worthy",
-    "In-depth (2,200 words)",
-    "2 data tables",
-    "Cites 5 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 11,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
    "site": "plantastichaven.com",
    "url": "https://plantastichaven.com/string-of-pearls-plant-care/",
    "title": "String of Pearls Plant Care: The Complete Guide to Growing Curio Rowleyanus Indoors - PlantasticHaven",
@@ -1362,56 +1306,6 @@
    ],
    "prospects": 8,
    "internal_link_suggestions": 4,
-   "promoting": true
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/semrush-vs-ahrefs-for-affiliate-marketing/",
-   "title": "Semrush vs Ahrefs for Affiliates (2026): Head-to-Head",
-   "h1": "Semrush vs Ahrefs for Affiliate Marketing: 2026 Head-to-Head Data Battle",
-   "description": "Semrush vs Ahrefs for affiliates: 2026 pricing, keyword research, backlink index and workflows compared — plus when free SEO tools suffice.",
-   "type": "comparison",
-   "promotion": 77,
-   "linkability": 86,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 20,
-   "words": 3438,
-   "interactive": true,
-   "modified": "2026-10-03T19:51:14+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,438 words)",
-    "2 data tables",
-    "Recently updated"
-   ],
-   "prospects": 14,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/review/writesonic-vs-seowriting-ai/",
-   "title": "Writesonic vs SEOWriting.AI (2026): 100-Article Cost & Hallucination Matrix",
-   "h1": "Writesonic vs SEOWriting.AI (2026): 100-Article Cost & Hallucination Matrix",
-   "description": "Writesonic (4.1% hallucinations, 8.4 min editing) vs SEOWriting.AI (7.8% hallucinations, 14.2 min editing). 100-article cost matrix, true break-even math, and interactive calculator.",
-   "type": "comparison",
-   "promotion": 77,
-   "linkability": 86,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 14,
-   "words": 3486,
-   "interactive": true,
-   "modified": "2026-09-06T06:47:08+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,486 words)",
-    "6 data tables",
-    "Recently updated"
-   ],
-   "prospects": 14,
-   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -1425,8 +1319,8 @@
    "linkability": 85,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
-   "words": 1343,
+   "internal_inlinks": 11,
+   "words": 1345,
    "interactive": true,
    "modified": "2026-11-07T20:04:05+00:00",
    "reasons": [
@@ -1436,7 +1330,7 @@
    ],
    "prospects": 8,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -1465,29 +1359,6 @@
    "promoting": false
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
-   "title": "Email Marketing Template Generator: HTML & Plain Text",
-   "h1": "Write the email your reader actually needs.",
-   "description": "Create welcome, educational, affiliate recommendation, re-engagement, and follow-up emails. Preview HTML, export plain text, and check missing sending details.",
-   "type": "interactive_tool",
-   "promotion": 76,
-   "linkability": 84,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 13,
-   "words": 678,
-   "interactive": true,
-   "modified": "2026-09-05T13:47:24+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "Recently updated"
-   ],
-   "prospects": 3,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
    "site": "gearuptofit.com",
    "url": "https://gearuptofit.com/running/running-pace-calculator/",
    "title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
@@ -1509,31 +1380,6 @@
    ],
    "prospects": 9,
    "internal_link_suggestions": 3,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "h1": "9 Ways to Promote Affiliate Products Without a Website (2026)",
-   "description": "Discover 7 proven methods to succeed in affiliate marketing without a website. Leverage Instagram, email, and more to earn passive income in 2025. Start now!",
-   "type": "methodology",
-   "promotion": 75,
-   "linkability": 83,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 15,
-   "words": 2085,
-   "interactive": false,
-   "modified": "2026-09-25T14:57:36+00:00",
-   "reasons": [
-    "Original method/data — citation-worthy",
-    "In-depth (2,085 words)",
-    "2 data tables",
-    "Recently updated"
-   ],
-   "prospects": 2,
-   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -1571,11 +1417,11 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 43,
-   "words": 4517,
+   "words": 4523,
    "interactive": false,
    "modified": "2026-11-08T06:06:02+00:00",
    "reasons": [
-    "In-depth (4,517 words)",
+    "In-depth (4,523 words)",
     "4 data tables",
     "Cites 4 authoritative sources",
     "Recently updated",
@@ -1583,31 +1429,6 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/ai/undetectable-alternatives/",
-   "title": "7 Undetectable AI Alternatives: 2026 Humanizer Guide",
-   "h1": "10 Best Undetectable AI Alternatives (2026 Guide)",
-   "description": "Discover the top 7 undetectable AI alternatives for 2025. Bypass detection, modify tone & style, and create stealth content effortlessly. Try these tools today!",
-   "type": "comparison",
-   "promotion": 74,
-   "linkability": 82,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 10,
-   "words": 4949,
-   "interactive": false,
-   "modified": "2026-09-13T09:07:20+00:00",
-   "reasons": [
-    "In-depth (4,949 words)",
-    "5 data tables",
-    "Cites 6 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 2,
-   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -1621,13 +1442,13 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 4,
-   "words": 3585,
+   "internal_inlinks": 7,
+   "words": 3578,
    "interactive": true,
    "modified": "2026-11-07T19:35:50+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,585 words)",
+    "In-depth (3,578 words)",
     "19 data tables",
     "Recently updated"
    ],
@@ -1636,37 +1457,11 @@
    "promoting": false
   },
   {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "h1": "Best Brushes for French Bulldogs: Shiny Coats",
-   "description": "Brushes for French Bulldogs a hassle? Discover essential grooming tools for a healthy coat. Proven solution for shedding! See how today!",
-   "type": "general_article",
-   "promotion": 74,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 1,
-   "words": 4129,
-   "interactive": true,
-   "modified": "2026-11-07T19:40:32+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,129 words)",
-    "20 data tables",
-    "Recently updated",
-    "Under-linked internally (1 inbound)"
-   ],
-   "prospects": 2,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/health/cognitive-function/",
    "title": "Cognitive Function: How to Support Focus and Memory",
    "h1": "Cognitive Function Basics: How to Support Focus, Memory, and Mental Clarity",
-   "description": "How attention, memory, and processing actually work — and the lifestyle factors that measurably support them.",
+   "description": "How attention, memory and processing work, and the sleep, exercise, nutrition and stress factors that measurably support cognitive function.",
    "type": "practical_guide",
    "promotion": 73,
    "linkability": 81,
@@ -1687,52 +1482,53 @@
    "promoting": false
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "h1": "How to Choose a Profitable Affiliate Niche: 2026 Strategy",
-   "description": "Choose affiliate niche now & unlock your marketing goldmine! Frustrated? Discover proven steps for profit. Expert-approved. See how today!",
-   "type": "reference",
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "h1": "French Bulldog Supplements: What the Evidence Supports and What to Skip",
+   "description": "A French Bulldog supplement guide by need: joints, skin, gut and calm. What the evidence supports, ingredients to avoid, dosing cautions, and when to ask your vet.",
+   "type": "practical_guide",
    "promotion": 73,
-   "linkability": 81,
+   "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
-   "words": 6475,
+   "internal_inlinks": 2,
+   "words": 1374,
    "interactive": false,
-   "modified": "2026-09-12T09:23:40+00:00",
+   "modified": "2026-10-26T13:31:02+00:00",
    "reasons": [
-    "In-depth (6,475 words)",
-    "11 data tables",
+    "1 data table",
     "Cites 6 authoritative sources",
-    "Recently updated"
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
    ],
-   "prospects": 5,
+   "prospects": 1,
    "internal_link_suggestions": 5,
    "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/web-hosting/web-hosting-comparison/",
-   "title": "Web Hosting Comparison: The Practical Buyer’s Guide for WordPress and Affiliate Sites",
-   "h1": "Web Hosting Comparison 2025: Best WordPress Guides",
-   "description": "Clear comparison guide for site owners choosing hosting for SEO, conversions, speed, uptime, and monetization: best choice by use case, decision table, alternatives, workflow, and FAQs.",
-   "type": "comparison",
+   "url": "https://affiliatemarketingforsuccess.com/review-methodology-affiliate-marketing-for-success/",
+   "title": "Review Methodology | Affiliate Marketing for Success",
+   "h1": "How We Review Tools: Our Methodology",
+   "description": "Review how Affiliate Marketing for Success evaluates tools, affiliate programs, platforms, and strategies using practical criteria, evidence, and disclosure.",
+   "type": "methodology",
    "promotion": 72,
-   "linkability": 80,
+   "linkability": 76,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
-   "words": 2011,
+   "internal_inlinks": 2,
+   "words": 1657,
    "interactive": false,
-   "modified": "2026-09-25T17:56:37+00:00",
+   "modified": "2026-10-25T11:02:11+00:00",
    "reasons": [
-    "In-depth (2,011 words)",
+    "Original method/data — citation-worthy",
     "1 data table",
-    "Recently updated"
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
    ],
-   "prospects": 6,
-   "internal_link_suggestions": 4,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -1784,55 +1580,6 @@
    "promoting": true
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/email-marketing/craft-irresistible-email-newsletters/",
-   "title": "2026 Email Newsletters: Ultimate Guide to Boost Clicks",
-   "h1": "2026 Guide: How to Craft Irresistible Email Newsletters",
-   "description": "Learn proven strategies to create email newsletters that boost engagement and drive sales. Get expert tips on subject lines, content, and design for 2025.",
-   "type": "practical_guide",
-   "promotion": 69,
-   "linkability": 77,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 4194,
-   "interactive": false,
-   "modified": "2026-09-12T07:57:38+00:00",
-   "reasons": [
-    "In-depth (4,194 words)",
-    "7 data tables",
-    "Cites 6 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/info/how-to-make-a-social-media-marketing-plan/",
-   "title": "How To Make A Social Media Marketing Plan That Drives Results",
-   "h1": "Social Media Marketing Plan: 2025 Step-by-Step Guide",
-   "description": "Learn how to create a powerful social media marketing plan in 2025. Define goals, engage your audience, and boost results with expert strategies.",
-   "type": "practical_guide",
-   "promotion": 69,
-   "linkability": 77,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 10,
-   "words": 6004,
-   "interactive": false,
-   "modified": "2026-09-03T11:44:05+00:00",
-   "reasons": [
-    "In-depth (6,004 words)",
-    "Cites 9 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/health/focus-supplements/",
    "title": "Do Focus Supplements Work? Evidence, Risks, Safer Picks",
@@ -1855,30 +1602,6 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 1,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/review-methodology-affiliate-marketing-for-success/",
-   "title": "Review Methodology | Affiliate Marketing for Success",
-   "h1": "How We Review Tools: Our Methodology",
-   "description": "Review how Affiliate Marketing for Success evaluates tools, affiliate programs, platforms, and strategies using practical criteria, evidence, and disclosure.",
-   "type": "methodology",
-   "promotion": 68,
-   "linkability": 76,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 239,
-   "words": 1657,
-   "interactive": false,
-   "modified": "2026-10-25T11:02:11+00:00",
-   "reasons": [
-    "Original method/data — citation-worthy",
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -1911,7 +1634,7 @@
    "url": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
    "title": "Burnout at Work: Signs, Support, and Next Steps",
    "h1": "Burnout Symptoms: Signs, Support, and Next Steps",
-   "description": "Learn how the WHO defines work-related burnout, how to notice work strain, and when to seek qualified support.",
+   "description": "How the WHO defines work-related burnout, which signs of work strain to notice early, and when to seek qualified professional support.",
    "type": "practical_guide",
    "promotion": 68,
    "linkability": 75,
@@ -1927,30 +1650,6 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 2,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/email-marketing/getresponse-vs-tinyemail/",
-   "title": "GetResponse vs TinyEmail 2026: Boost Affiliate Revenue $12K+",
-   "h1": "GetResponse vs TinyEmail: 2026 Marketing Comparison",
-   "description": "Compare GetResponse and TinyEmail for affiliate marketing in 2025. Discover key features, pricing, and which tool suits your needs. Make the right choice today!",
-   "type": "comparison",
-   "promotion": 68,
-   "linkability": 75,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 3272,
-   "interactive": false,
-   "modified": "2026-09-13T14:12:52+00:00",
-   "reasons": [
-    "In-depth (3,272 words)",
-    "5 data tables",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -1998,52 +1697,6 @@
    ],
    "prospects": 13,
    "internal_link_suggestions": 1,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/seo/answer-engine-optimization/",
-   "title": "Answer Engine Optimization (AEO): Examples and Publishing Checklist",
-   "h1": "Answer Engine Optimization (AEO): Examples and Publishing Checklist",
-   "description": "Write clearer answers with practical affiliate-publishing examples, evidence checks, schema limits and a step-by-step AEO editing method.",
-   "type": "reference",
-   "promotion": 66,
-   "linkability": 73,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 20,
-   "words": 1107,
-   "interactive": false,
-   "modified": "2026-09-13T08:04:36+00:00",
-   "reasons": [
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/seo/doing-an-seo-audit/",
-   "title": "2026 SEO Audit Guide: 47-Point Checklist to Dominate",
-   "h1": "2026 SEO Audit Checklist: 47-Point Technical Guide",
-   "description": "Boost rankings today! Learn how to perform an SEO audit. Identify issues, optimize content, and enhance search engine performance now!",
-   "type": "reference",
-   "promotion": 66,
-   "linkability": 73,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 10,
-   "words": 2905,
-   "interactive": false,
-   "modified": "2026-09-03T10:44:17+00:00",
-   "reasons": [
-    "In-depth (2,905 words)",
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -2098,81 +1751,6 @@
    "promoting": false
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/blogging/content-marketing-must-educate-and-convert-the-customer/",
-   "title": "Content Marketing Must Educate And Convert The Customer: 2026 ...",
-   "h1": "Content Marketing: How to Educate and Convert in 2026",
-   "description": "Learn a proven content marketing strategy to educate and convert leads. Discover 9 actionable steps to boost engagement and drive results in 2025.",
-   "type": "general_article",
-   "promotion": 65,
-   "linkability": 72,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 14,
-   "words": 6887,
-   "interactive": false,
-   "modified": "2026-11-05T07:18:53+00:00",
-   "reasons": [
-    "In-depth (6,887 words)",
-    "2 data tables",
-    "Cites 4 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/blogging/promote-your-blog-to-increase-traffic/",
-   "title": "Blog Promotion Strategies 2026: 9 Proven Tactics to 100K+ Views",
-   "h1": "9 Blog Promotion Tactics for 100K+ Views (2026 Guide)",
-   "description": "Discover proven 2025 strategies to promote your blog & boost traffic. From SEO to social media, learn actionable tips to grow your audience. Start now!",
-   "type": "general_article",
-   "promotion": 65,
-   "linkability": 72,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 8,
-   "words": 4455,
-   "interactive": false,
-   "modified": "2026-09-03T13:33:15+00:00",
-   "reasons": [
-    "In-depth (4,455 words)",
-    "15 data tables",
-    "Cites 6 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/info/paraphrase-text-using-nlp/",
-   "title": "7 Proven Ways to Paraphrase Text with NLP in 2026",
-   "h1": "How to Paraphrase Text Using NLP: 7 AI Methods (2026 Guide)",
-   "description": "Discover the best NLP paraphrasing tools to enhance your writing. Learn how to paraphrase text effectively and avoid plagiarism with our 2024 guide.",
-   "type": "general_article",
-   "promotion": 65,
-   "linkability": 72,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 3,
-   "words": 2972,
-   "interactive": false,
-   "modified": "2026-09-03T12:25:05+00:00",
-   "reasons": [
-    "In-depth (2,972 words)",
-    "1 data table",
-    "Cites 3 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/productivity/weekly-review-checklist/",
    "title": "Weekly Review Checklist: Plan Your Week in 20 Minutes",
@@ -2193,30 +1771,6 @@
     "3 data tables",
     "Recently updated",
     "One of 34 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/tools/content-idea-generator/",
-   "title": "Content Idea Generator: Evidence-First Content Briefs",
-   "h1": "Don’t just generate a headline. Plan something worth publishing.",
-   "description": "Generate useful content ideas with reader goals, evidence assets, outlines, and next steps. Check title overlap and export a practical content shortlist.",
-   "type": "interactive_tool",
-   "promotion": 64,
-   "linkability": 84,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 17,
-   "words": 691,
-   "interactive": true,
-   "modified": "2026-09-05T13:47:17+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "Recently updated",
-    "One of 6 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
@@ -2268,30 +1822,6 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/tools/commission-calculator/",
-   "title": "Affiliate Commission Calculator: Profit & Recurring Revenue",
-   "h1": "Know what your affiliate funnel could earn—and what it could cost.",
-   "description": "Calculate affiliate commissions, recurring revenue, churn, costs, and profit. Compare scenarios and download a month-by-month forecast.",
-   "type": "interactive_tool",
-   "promotion": 63,
-   "linkability": 83,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 610,
-   "interactive": true,
-   "modified": "2026-09-05T13:47:04+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "Recently updated",
-    "One of 6 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -2380,8 +1910,8 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
-   "words": 1807,
+   "internal_inlinks": 6,
+   "words": 1813,
    "interactive": true,
    "modified": "2026-11-08T05:33:11+00:00",
    "reasons": [
@@ -2391,31 +1921,6 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "mysticaldigits.com",
-   "url": "https://mysticaldigits.com/ancestor-attributes-calculator/",
-   "title": "Ancestor Attributes Calculators: What They Can Suggest and What They…",
-   "h1": "Ancestor Attributes Calculators: What They Can Suggest and What They…",
-   "description": "Frustrated with family history? Ancestor attributes calculator unlocks your heritage. Proven tool reveals ethnicity & traits. See how to transform your lineage",
-   "type": "interactive_tool",
-   "promotion": 62,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 1259,
-   "interactive": false,
-   "modified": "2026-11-07T19:59:10+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)",
-    "One of 299 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -2467,182 +1972,6 @@
    "promoting": false
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-a-web-host/",
-   "title": "How to Choose a Web Host (2026): Decision Guide by Use Case",
-   "h1": "How to Choose a Web Host (2026): A WordPress Decision Guide by Use Case",
-   "description": "Choose web hosting by what you are actually building: affiliate blogs, first sites on a budget, or scaling WordPress. With 2026 pricing and renewal traps.",
-   "type": "practical_guide",
-   "promotion": 62,
-   "linkability": 69,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 1013,
-   "interactive": false,
-   "modified": "2026-09-16T18:01:41+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "mysticaldigits.com",
-   "url": "https://mysticaldigits.com/how-is-14-in-numerology/",
-   "title": "2026 Guide: Numerology Meaning of Number 14 Explained",
-   "h1": "2026 Guide: Numerology Meaning of Number 14 Explained",
-   "description": "Uncover the adventurous and freedom-loving energy of numerology number 14! Explore its potential for travel, experiencing new things, and embracing life's.",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 77,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 3090,
-   "interactive": false,
-   "modified": "2026-11-08T05:27:50+00:00",
-   "reasons": [
-    "In-depth (3,090 words)",
-    "1 data table",
-    "Cites 7 authoritative sources",
-    "Recently updated",
-    "Under-linked internally (2 inbound)",
-    "One of 299 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "h1": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "description": "Is homemade or commercial food best for your French Bulldog? We compare pros, cons, nutrition, cost, & time. Expert advice helps you choose! FrenchBulldogFood",
-   "type": "comparison",
-   "promotion": 61,
-   "linkability": 77,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2818,
-   "interactive": false,
-   "modified": "2026-11-10T13:50:14+00:00",
-   "reasons": [
-    "In-depth (2,818 words)",
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)",
-    "One of 153 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "h1": "French Bulldog Food Sensitivities: The Guide to Diagnosis, Diet & Lifelong Relief",
-   "description": "Read our guide to french bulldog food sensitivities: the ultimate 2025 definitive guide to diagnosis, diet & lifelong relief.",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 77,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 1,
-   "words": 1960,
-   "interactive": false,
-   "modified": "2026-11-07T19:35:24+00:00",
-   "reasons": [
-    "5 data tables",
-    "Cites 5 authoritative sources",
-    "Recently updated",
-    "Under-linked internally (1 inbound)",
-    "One of 153 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "h1": "French Bulldog Supplements: What the Evidence Supports and What to Skip",
-   "description": "A French Bulldog supplement guide by need: joints, skin, gut and calm. What the evidence supports, ingredients to avoid, dosing cautions, and when to ask your vet.",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 77,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 0,
-   "words": 1374,
-   "interactive": false,
-   "modified": "2026-10-26T13:31:02+00:00",
-   "reasons": [
-    "1 data table",
-    "Cites 6 authoritative sources",
-    "Recently updated",
-    "Under-linked internally (0 inbound)",
-    "One of 153 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 1,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/make-money-online/optimize-your-sales-funnel/",
-   "title": "Sales Funnel Optimization 2026: Step-by-Step Proven Guide",
-   "h1": "Sales Funnel Optimization: 2026 Conversion Guide",
-   "description": "Discover 7 proven sales funnel optimization strategies to increase conversions in 2025. Maximize revenue with actionable tactics tailored for marketers. Try them today!",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 68,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 10,
-   "words": 2808,
-   "interactive": false,
-   "modified": "2026-09-12T08:00:48+00:00",
-   "reasons": [
-    "In-depth (2,808 words)",
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/make-money-online/how-to-make-money-with-clickbank-the-ultimate-guide/",
-   "title": "How to Make Money With ClickBank: 2026 Proven Strategy",
-   "h1": "How to Make Money With ClickBank: 2026 Ultimate Guide",
-   "description": "Discover proven strategies to make money with ClickBank in 2025. Learn how to find profitable products, avoid common pitfalls, and start earning fast.",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 68,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 10,
-   "words": 2891,
-   "interactive": false,
-   "modified": "2026-09-03T12:30:51+00:00",
-   "reasons": [
-    "In-depth (2,891 words)",
-    "3 data tables",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/productivity/free-time-blocking-template/",
    "title": "Free Time Blocking Template: Daily, Weekly, Deep Work",
@@ -2680,8 +2009,8 @@
    "linkability": 80,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 17,
-   "words": 1634,
+   "internal_inlinks": 18,
+   "words": 1633,
    "interactive": true,
    "modified": "2026-11-07T20:01:22+00:00",
    "reasons": [
@@ -2716,6 +2045,31 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
+   "title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
+   "h1": "French Bulldog Breeding Guide: Health Testing, BOAS Grading and Ethics",
+   "description": "What responsible French Bulldog breeding involves: DNA and health screening, BOAS grading, why most litters need a C-section, real costs, and the ethical questions.",
+   "type": "practical_guide",
+   "promotion": 60,
+   "linkability": 76,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 1195,
+   "interactive": false,
+   "modified": "2026-09-25T09:58:07+00:00",
+   "reasons": [
+    "Cites 3 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (2 inbound)",
+    "One of 153 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
    "promoting": false
   },
   {
@@ -2827,8 +2181,8 @@
    "linkability": 79,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
-   "words": 1130,
+   "internal_inlinks": 11,
+   "words": 1127,
    "interactive": false,
    "modified": "2026-10-05T18:42:26+00:00",
    "reasons": [
@@ -2853,11 +2207,11 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 10,
-   "words": 2213,
+   "words": 2212,
    "interactive": false,
    "modified": "2026-10-03T06:26:18+00:00",
    "reasons": [
-    "In-depth (2,213 words)",
+    "In-depth (2,212 words)",
     "Cites 4 authoritative sources",
     "Recently updated",
     "One of 42 templated sibling pages — promote the hub first"
@@ -2986,6 +2340,680 @@
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/personal-development/morning-routine/",
+   "title": "Morning Routine: Realistic Guide | Gear Up to Grow",
+   "h1": "Morning Routine: A Practical System That Works on Hard Days",
+   "description": "A realistic, flexible morning routine framework that supports energy and cuts decision fatigue. Start with one small anchor and build from there.",
+   "type": "practical_guide",
+   "promotion": 58,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 15,
+   "words": 1807,
+   "interactive": false,
+   "modified": "2026-11-08T07:36:09+00:00",
+   "reasons": [
+    "3 data tables",
+    "Cites 6 authoritative sources",
+    "Recently updated",
+    "One of 24 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/free-numerology-love-compatibility-score/",
+   "title": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
+   "h1": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
+   "description": "Compare two people’s Life Path, Destiny, Soul Urge, and Personal Year numbers with a careful numerology love compatibility framework.",
+   "type": "interactive_tool",
+   "promotion": 58,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 15,
+   "words": 3481,
+   "interactive": false,
+   "modified": "2026-11-07T20:04:39+00:00",
+   "reasons": [
+    "In-depth (3,481 words)",
+    "2 data tables",
+    "Recently updated",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/ancestor-attributes-calculator/",
+   "title": "Ancestor Attributes Calculators: What They Can Suggest and What They…",
+   "h1": "Ancestor Attributes Calculators: What They Can Suggest and What They…",
+   "description": "Frustrated with family history? Ancestor attributes calculator unlocks your heritage. Proven tool reveals ethnicity & traits. See how to transform your lineage",
+   "type": "interactive_tool",
+   "promotion": 58,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 1262,
+   "interactive": false,
+   "modified": "2026-11-07T19:59:10+00:00",
+   "reasons": [
+    "1 data table",
+    "Recently updated",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "h1": "Best Brushes for French Bulldogs: Shiny Coats",
+   "description": "Brushes for French Bulldogs a hassle? Discover essential grooming tools for a healthy coat. Proven solution for shedding! See how today!",
+   "type": "general_article",
+   "promotion": 58,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 4,
+   "words": 4134,
+   "interactive": true,
+   "modified": "2026-11-07T19:40:32+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,134 words)",
+    "20 data tables",
+    "Recently updated",
+    "One of 153 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 2,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "h1": "Homemade Food for French Bulldogs: When You Need a Veterinary Nutritionist",
+   "description": "Thinking of homemade food or recipes for your Frenchie? What a balanced home-cooked diet needs, mistakes to avoid, and why a vet nutritionist should formulate it.",
+   "type": "practical_guide",
+   "promotion": 58,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 4,
+   "words": 1656,
+   "interactive": false,
+   "modified": "2026-10-12T13:02:55+00:00",
+   "reasons": [
+    "1 data table",
+    "Recently updated",
+    "One of 153 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/mouse-cleanup-safety/",
+   "title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
+   "h1": "Mouse Cleanup Safety Hub: Contamination, Disposal, and Next Steps",
+   "description": "Ventilate, glove up, soak droppings and urine with disinfectant, then wipe. Never sweep or vacuum. Cleanup, dead-mouse disposal, fabrics, and when to get help.",
+   "type": "practical_guide",
+   "promotion": 58,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 42,
+   "words": 1606,
+   "interactive": false,
+   "modified": "2026-11-08T05:54:55+00:00",
+   "reasons": [
+    "2 data tables",
+    "Cites 9 authoritative sources",
+    "Recently updated",
+    "One of 42 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 2,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/snap-traps-for-mice/",
+   "title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "h1": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "description": "How snap traps work, how to set and place them along wall runways, baiting tips, and safe use around children and pets — based on CDC, NPS, and UC guidance.",
+   "type": "practical_guide",
+   "promotion": 58,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 7,
+   "words": 1823,
+   "interactive": false,
+   "modified": "2026-10-03T06:40:50+00:00",
+   "reasons": [
+    "Cites 4 authoritative sources",
+    "Recently updated",
+    "One of 42 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 4,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/productivity/best-todo-list-apps/",
+   "title": "Best To-Do List Apps in 2026: An Honest Comparison",
+   "h1": "Best To-Do List Apps in 2026: An Honest Comparison",
+   "description": "The 7 best to-do list apps in 2026, compared honestly: Todoist for most people, TickTick for value, Microsoft To Do if you want free. Quiz + verified pricing.",
+   "type": "comparison",
+   "promotion": 58,
+   "linkability": 73,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 6290,
+   "interactive": false,
+   "modified": "2026-10-22T13:17:03+00:00",
+   "reasons": [
+    "In-depth (6,290 words)",
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (2 inbound)",
+    "One of 34 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/watch-match/compare",
+   "title": "179 Watch Comparisons: Apple, Garmin, Samsung, Coros, Polar & More",
+   "h1": "Watch comparisons",
+   "description": "Side-by-side comparisons of the most popular fitness watches: battery life, weight, price, features and phone support, with a verdict, who should pick each and who should skip it.",
+   "type": "comparison",
+   "promotion": 58,
+   "linkability": 64,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 270,
+   "words": 2013,
+   "interactive": false,
+   "modified": "2026-10-20",
+   "reasons": [
+    "In-depth (2,013 words)",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "imagealchemy.app",
+   "url": "https://imagealchemy.app/glossary/chroma-subsampling",
+   "title": "What Is Chroma Subsampling? (4:4:4 vs 4:2:0 Explained)",
+   "h1": "Chroma subsampling",
+   "description": "Chroma subsampling reduces color data to shrink image files. Learn the difference between 4:4:4, 4:2:2 and 4:2:0 and what it costs you.",
+   "type": "comparison",
+   "promotion": 58,
+   "linkability": 64,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 6,
+   "words": 758,
+   "interactive": false,
+   "modified": "2026-09-16",
+   "reasons": [
+    "Recently updated"
+   ],
+   "prospects": 6,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "plantastichaven.com",
+   "url": "https://plantastichaven.com/houseplant-pest-control/",
+   "title": "Houseplant Pest Control: Identify Pests Before Treating",
+   "h1": "Houseplant Pest Control: Identify the Pest Before Choosing Treatment",
+   "description": "Identify the pest first — fungus gnats, spider mites, mealybugs and scale each need a different fix, including BTI for larvae and pet-safe precautions.",
+   "type": "reference",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 42,
+   "words": 1173,
+   "interactive": false,
+   "modified": "2026-10-12T13:14:02+00:00",
+   "reasons": [
+    "1 data table",
+    "Cites 4 authoritative sources",
+    "Recently updated",
+    "One of 156 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 5,
+   "internal_link_suggestions": 2,
+   "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/productivity/deep-work/",
+   "title": "Deep Work: Practical Focus System & Guide | Gear Up to Grow",
+   "h1": "Deep Work: Practical Focus System",
+   "description": "A practical deep work system: schedule focused blocks, cut distractions and protect time for the work that matters most, even on ordinary days.",
+   "type": "practical_guide",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 20,
+   "words": 2618,
+   "interactive": false,
+   "modified": "2026-10-15T10:08:22+00:00",
+   "reasons": [
+    "In-depth (2,618 words)",
+    "5 data tables",
+    "Cites 6 authoritative sources",
+    "Recently updated",
+    "One of 34 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
+   "title": "Personal Year Calculator: How to Find Your Number (2026)",
+   "h1": "Personal Year Number in Numerology: 2026 Guide & Meaning",
+   "description": "Calculate your personal year number step by step: birth month + day + current year, reduce to a single digit, with worked examples and what each year means.",
+   "type": "interactive_tool",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 19,
+   "words": 2157,
+   "interactive": false,
+   "modified": "2026-11-08T05:34:15+00:00",
+   "reasons": [
+    "In-depth (2,157 words)",
+    "1 data table",
+    "Recently updated",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/compatibility-revealed-life-path-number-10/",
+   "title": "Life Path Number 10: 2026 Compatibility Guide & Traits",
+   "h1": "Life Path Number 10: 2026 Compatibility Guide & Traits",
+   "description": "Discover Life Path 10 compatibility: Explore relationship dynamics, ideal partner numbers, and expert tips for harmonious matches. Free guide included.",
+   "type": "practical_guide",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 5,
+   "words": 3458,
+   "interactive": false,
+   "modified": "2026-11-08T05:28:55+00:00",
+   "reasons": [
+    "In-depth (3,458 words)",
+    "1 data table",
+    "Recently updated",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
+   "title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
+   "h1": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
+   "description": "Discover if Life Path 5 & 8 thrive in love & career. Expert analysis of their communication, challenges, and spiritual synergy. Download free guide now!",
+   "type": "practical_guide",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 6,
+   "words": 3431,
+   "interactive": false,
+   "modified": "2026-11-08T05:28:55+00:00",
+   "reasons": [
+    "In-depth (3,431 words)",
+    "3 data tables",
+    "Cites 3 authoritative sources",
+    "Recently updated",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/how-is-14-in-numerology/",
+   "title": "2026 Guide: Numerology Meaning of Number 14 Explained",
+   "h1": "2026 Guide: Numerology Meaning of Number 14 Explained",
+   "description": "Uncover the adventurous and freedom-loving energy of numerology number 14! Explore its potential for travel, experiencing new things, and embracing life's.",
+   "type": "practical_guide",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 3093,
+   "interactive": false,
+   "modified": "2026-11-08T05:27:50+00:00",
+   "reasons": [
+    "In-depth (3,093 words)",
+    "1 data table",
+    "Cites 7 authoritative sources",
+    "Recently updated",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "h1": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "description": "A grounded guide to free personal numerology reading calculator | mystical digits, with meanings, examples, common mistakes, and reflection-first next steps.",
+   "type": "interactive_tool",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 30,
+   "words": 4665,
+   "interactive": false,
+   "modified": "2026-11-07T21:03:12+00:00",
+   "reasons": [
+    "In-depth (4,665 words)",
+    "1 data table",
+    "Recently updated",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/astrology-for-beginners-guide/",
+   "title": "Astrology for Beginners: Birth Charts, Signs, Houses, and Safe Interpretation | Mystical Digits",
+   "h1": "Astrology for Beginners: Birth Charts, Signs, Houses, and Safe…",
+   "description": "A clear beginner guide to astrology basics with responsible boundaries, practical learning steps, and reminders not to treat charts as fixed fate.",
+   "type": "practical_guide",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 8,
+   "words": 6198,
+   "interactive": false,
+   "modified": "2026-11-07T19:58:54+00:00",
+   "reasons": [
+    "In-depth (6,198 words)",
+    "2 data tables",
+    "Cites 4 authoritative sources",
+    "Recently updated",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 7,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "h1": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "description": "Is homemade or commercial food best for your French Bulldog? We compare pros, cons, nutrition, cost, & time. Expert advice helps you choose! FrenchBulldogFood",
+   "type": "comparison",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 2818,
+   "interactive": false,
+   "modified": "2026-11-10T13:50:14+00:00",
+   "reasons": [
+    "In-depth (2,818 words)",
+    "1 data table",
+    "Recently updated",
+    "One of 153 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "h1": "French Bulldog Food Sensitivities: The Guide to Diagnosis, Diet & Lifelong Relief",
+   "description": "Read our guide to french bulldog food sensitivities: the ultimate 2025 definitive guide to diagnosis, diet & lifelong relief.",
+   "type": "practical_guide",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 1958,
+   "interactive": false,
+   "modified": "2026-11-07T19:35:24+00:00",
+   "reasons": [
+    "5 data tables",
+    "Cites 5 authoritative sources",
+    "Recently updated",
+    "One of 153 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "h1": "Best Dog Food for French Bulldogs: Diet Comparison Guide",
+   "description": "Compare food for French Bulldogs by nutritional adequacy, life stage, body condition, digestion, and veterinary needs—without marketing hype.",
+   "type": "comparison",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 15,
+   "words": 1678,
+   "interactive": false,
+   "modified": "2026-10-21T06:19:18+00:00",
+   "reasons": [
+    "1 data table",
+    "Recently updated",
+    "One of 153 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
+   "title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
+   "h1": "Best Harness for Pulling French Bulldogs: Airway Comfort",
+   "description": "Compare French Bulldog harnesses by throat clearance, shoulder movement, stability, fit, and reward-based loose-leash training.",
+   "type": "practical_guide",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 155,
+   "words": 1981,
+   "interactive": false,
+   "modified": "2026-10-19T17:01:01+00:00",
+   "reasons": [
+    "3 data tables",
+    "Cites 4 authoritative sources",
+    "Recently updated",
+    "One of 153 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/french-bulldog-healthy-treats-guide/",
+   "title": "Healthy Treats for French Bulldogs: Calories and Safe Picks",
+   "h1": "Healthy Treats for French Bulldogs: Calories and Safe Picks",
+   "description": "Soft, low-calorie treat picks for French Bulldogs, a simple way to count treat calories, and the foods that can seriously harm them.",
+   "type": "practical_guide",
+   "promotion": 57,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 15,
+   "words": 1449,
+   "interactive": false,
+   "modified": "2026-10-08T10:25:18+00:00",
+   "reasons": [
+    "Cites 12 authoritative sources",
+    "Recently updated",
+    "One of 153 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "plantastichaven.com",
+   "url": "https://plantastichaven.com/philodendron-white-knight-care/",
+   "title": "Philodendron White Knight Care: Light, Water, Soil, Variegation & Identification - PlantasticHaven",
+   "h1": "Philodendron White Knight Care: Light, Water, Soil, Variegation & Identification",
+   "description": "Philodendron White Knight care guide: bright indirect light, chunky soil, watering, and how to tell it from White Wizard by its burgundy stems.",
+   "type": "reference",
+   "promotion": 57,
+   "linkability": 72,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 2624,
+   "interactive": false,
+   "modified": "2026-11-03T18:06:58+00:00",
+   "reasons": [
+    "In-depth (2,624 words)",
+    "4 data tables",
+    "Recently updated",
+    "Under-linked internally (2 inbound)",
+    "One of 156 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/productivity/pomodoro-technique-vs-deep-work/",
+   "title": "Pomodoro vs Deep Work: Which Focus Method Should You Use?",
+   "h1": "Pomodoro vs. Deep Work: How to Choose and Combine Them",
+   "description": "Compare the Pomodoro technique and deep work blocks. Learn which focus method is better for writing, administrative tasks, and complex problem-solving.",
+   "type": "comparison",
+   "promotion": 56,
+   "linkability": 76,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 13,
+   "words": 2331,
+   "interactive": false,
+   "modified": "2026-11-08T07:35:55+00:00",
+   "reasons": [
+    "In-depth (2,331 words)",
+    "2 data tables",
+    "Cites 3 authoritative sources",
+    "Recently updated",
+    "One of 34 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/personal-development/development-plan/",
+   "title": "Personal Development Plan Template (12-Month Example)",
+   "h1": "How to Create a Personal Development Plan You Will Actually Use",
+   "description": "Free personal development plan template with a 5-layer framework, a 12-month timeline and worked examples. Build a PDP you will actually use.",
+   "type": "general_article",
+   "promotion": 56,
+   "linkability": 76,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 14,
+   "words": 2826,
+   "interactive": true,
+   "modified": "2026-11-08T07:35:50+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,826 words)",
+    "2 data tables",
+    "Recently updated",
+    "One of 24 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/personal-development/visualization/",
+   "title": "Practical Visualization: Science-Backed Methods",
+   "h1": "How to Use Visualization in a Practical Way",
+   "description": "Use visualization to prepare for goals, steady your focus, and rehearse useful actions without turning it into wishful thinking.",
+   "type": "methodology",
+   "promotion": 56,
+   "linkability": 76,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 941,
+   "interactive": false,
+   "modified": "2026-10-15T11:26:52+00:00",
+   "reasons": [
+    "Original method/data — citation-worthy",
+    "1 data table",
+    "Recently updated",
+    "One of 24 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
   }
  ],
  "internal_links": [
@@ -3040,56 +3068,6 @@
    "from_strength": 57
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/web-hosting/web-hosting-comparison/",
-   "from_title": "Web Hosting Comparison: The Practical Buyer’s Guide for WordPress and Affiliate Sites",
-   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "anchor": "affiliate link",
-   "relevance": 4,
-   "from_strength": 72
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/review/writesonic-review/",
-   "from_title": "Writesonic Review: AI Writing, Chat, and Marketing Content for Busy Teams",
-   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "anchor": "affiliate link",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/review/seowriting-ai-review/",
-   "from_title": "SEOWriting.ai review: AI SEO content quality, limits, and best use cases",
-   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "anchor": "affiliate link",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/review/scalenut-review/",
-   "from_title": "Scalenut Review 2026: AI SEO Platform, Pricing, Pros, Cons",
-   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "anchor": "affiliate link",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/compliance/",
-   "from_title": "Affiliate Marketing Compliance: 2026 Rules & Best Practices",
-   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "anchor": "affiliate link",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
    "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/shoe-finder/",
    "from_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
@@ -3136,16 +3114,6 @@
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
    "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
    "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-strategies/",
-   "from_title": "Affiliate Marketing Strategies (2026): 9 Systems of Affiliate Growth",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
-   "to_title": "Affiliate Growth Checklist: SEO, Trust & Revenue",
-   "anchor": "affiliate growth",
    "relevance": 4,
    "from_strength": 0
   },
@@ -3282,7 +3250,7 @@
   {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/productivity/best-habit-tracker-apps/",
-   "from_title": "Best Habit Tracker Apps in 2026: An Honest Comparison | Gear Up to Grow",
+   "from_title": "Best Habit Tracker Apps in 2026: An Honest Comparison",
    "to": "https://gearuptogrow.com/personal-development/habit-stacking/",
    "to_title": "Habit Stacking: Examples, Templates & How To Start",
    "anchor": "habit stacking",
@@ -3292,61 +3260,11 @@
   {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/personal-development/success-habits/",
-   "from_title": "Success Habits That Actually Compound Over Time | Gear Up to Grow",
+   "from_title": "Success Habits That Actually Compound Over Time",
    "to": "https://gearuptogrow.com/personal-development/habit-stacking/",
    "to_title": "Habit Stacking: Examples, Templates & How To Start",
    "anchor": "habit stacking",
    "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-tools/",
-   "from_title": "Best Affiliate Marketing Tools 2026: Lean Stack by Stage",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/semrush-vs-ahrefs-for-affiliate-marketing/",
-   "to_title": "Semrush vs Ahrefs for Affiliates (2026): Head-to-Head",
-   "anchor": "semrush ahrefs",
-   "relevance": 8,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/recommended-tools-for-affiliate-site-builders/",
-   "from_title": "Best Affiliate Marketing Tools for Beginners (2026)",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/semrush-vs-ahrefs-for-affiliate-marketing/",
-   "to_title": "Semrush vs Ahrefs for Affiliates (2026): Head-to-Head",
-   "anchor": "affiliate marketing",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/seo/benefits-of-an-effective-seo-strategy/",
-   "from_title": "7 SEO Strategy Benefits: 2026 Guide to Dominate Google",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/semrush-vs-ahrefs-for-affiliate-marketing/",
-   "to_title": "Semrush vs Ahrefs for Affiliates (2026): Head-to-Head",
-   "anchor": "affiliate marketing",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/niche-specific-affiliate-gap-analysis/",
-   "from_title": "How Can a Niche-Specific Affiliate Gap Analysis Help US Publishers Dominate?",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/semrush-vs-ahrefs-for-affiliate-marketing/",
-   "to_title": "Semrush vs Ahrefs for Affiliates (2026): Head-to-Head",
-   "anchor": "affiliate marketing",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/best-affiliate-programs-for-beginners-with-high-commission/",
-   "from_title": "Best Affiliate Programs for Beginners (2026): Top 8 Compared",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/semrush-vs-ahrefs-for-affiliate-marketing/",
-   "to_title": "Semrush vs Ahrefs for Affiliates (2026): Head-to-Head",
-   "anchor": "affiliate marketing",
-   "relevance": 5,
    "from_strength": 0
   },
   {
@@ -3400,56 +3318,6 @@
    "from_strength": 0
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-write-niche-specific-content/",
-   "from_title": "How to Write Niche Specific Content: Proven Blueprint for Affi...",
-   "to": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
-   "to_title": "Email Marketing Template Generator: HTML & Plain Text",
-   "anchor": "write email reader",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/blogging/how-to-write-a-high-ranking-blog-post/",
-   "from_title": "How to Write High-Ranking Blog Posts in 2026 (Proven)",
-   "to": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
-   "to_title": "Email Marketing Template Generator: HTML & Plain Text",
-   "anchor": "write email reader",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/ai/prompt-engineering-nlp/",
-   "from_title": "Master Prompt Engineering & NLP for Affiliate Marketing 2026",
-   "to": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
-   "to_title": "Email Marketing Template Generator: HTML & Plain Text",
-   "anchor": "write email reader",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/blogging/wordpress-blogging-tips/",
-   "from_title": "WordPress Blogging Tips: 15 Fixes That Actually Grow Traffic (2026)",
-   "to": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
-   "to_title": "Email Marketing Template Generator: HTML & Plain Text",
-   "anchor": "write email reader",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/blogging/how-to-brand-storytelling/",
-   "from_title": "Brand Storytelling for Bloggers: A Step-by-Step Framework to B...",
-   "to": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
-   "to_title": "Email Marketing Template Generator: HTML & Plain Text",
-   "anchor": "write email reader",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
    "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/calculators/",
    "from_title": "Free Fitness & Running Calculators | GearUpToFit",
@@ -3476,46 +3344,6 @@
    "to": "https://gearuptofit.com/running/running-pace-calculator/",
    "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
    "anchor": "running pace calculator",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/start-here/",
-   "from_title": "Start Affiliate Marketing in 2026: The Step-by-Step Roadmap",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/kit-vs-beehiiv-for-affiliate-newsletters/",
-   "from_title": "Kit vs beehiiv 2026: Best for Affiliate Newsletters?",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-niche-selection-mistakes/",
-   "from_title": "Affiliate Marketing 2026: 7 Niche Selection Mistakes to Avoid",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/ai/boost-affiliate-earnings-perplexity-ai/",
-   "from_title": "How to Use Perplexity AI to Boost Your Affiliate Earnings in 2026",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
    "relevance": 3,
    "from_strength": 0
   },
@@ -3571,13 +3399,13 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "from_title": "How to Get Rid of Mice in the Attic and Insulation",
+   "from": "https://micegoneguide.com/diseases-from-mice/",
+   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 42
+   "from_strength": 53
   },
   {
    "site": "frenchyfab.com",
@@ -3630,56 +3458,6 @@
    "from_strength": 56
   },
   {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "from_title": "French Bulldog Socialization Training: A Practical Plan",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 61
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 61
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 61
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
-   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 59
-  },
-  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/mental-wellness/",
    "from_title": "Mental Wellness Hub: Stress Regulation & Burnout Recovery",
@@ -3690,93 +3468,53 @@
    "from_strength": 0
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/how-to-start/criteria-for-profitable-affiliate-niches/",
-   "from_title": "7 Proven Criteria for Profitable Affiliate Marketing Niches in 2026",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "profitable affiliate",
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/supplements-for-french-bulldogs-what-you-need-to-know/",
+   "from_title": "Best French Bulldog Supplements: What May Help, What to Skip",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
    "relevance": 7,
    "from_strength": 0
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/best-affiliate-marketing-niches-2025/",
-   "from_title": "Best Affiliate Marketing Niches: 8 Durable Picks (2026)",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "affiliate niche",
-   "relevance": 4,
-   "from_strength": 0
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 57
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-success/",
-   "from_title": "2026 Affiliate Marketing Success Guide: The 5 Pillars to Win",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "choose profitable affiliate",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/seo/mastering-seo-best-practices/",
-   "from_title": "Affiliate SEO best practices: ranking, revenue, and AI visibility cleanup",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "choose profitable affiliate",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-vs-dropshipping/",
-   "from_title": "Affiliate Marketing Vs Dropshipping: 2026 Winner? (2026 Analysis)",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "choose profitable affiliate",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/review/namehero-hosting-review/",
-   "from_title": "NameHero Hosting Review: Fast, Affordable WordPress Hosting for Growing Sites",
-   "to": "https://affiliatemarketingforsuccess.com/web-hosting/web-hosting-comparison/",
-   "to_title": "Web Hosting Comparison: The Practical Buyer’s Guide for WordPress and Affiliate Sites",
-   "anchor": "web hosting",
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/recognizing-and-managing-arthritis-in-french-bulldogs/",
+   "from_title": "French Bulldog Arthritis Symptoms: Signs, Comfort, Mobility",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
    "relevance": 5,
    "from_strength": 0
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-a-web-host/",
-   "from_title": "How to Choose a Web Host (2026): Decision Guide by Use Case",
-   "to": "https://affiliatemarketingforsuccess.com/web-hosting/web-hosting-comparison/",
-   "to_title": "Web Hosting Comparison: The Practical Buyer’s Guide for WordPress and Affiliate Sites",
-   "anchor": "web hosting",
-   "relevance": 4,
-   "from_strength": 62
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/how-to-start/the-truth-about-web-hosting/",
-   "from_title": "Web Hosting Providers 2026: Avoid Overpaying (Proven Guide)",
-   "to": "https://affiliatemarketingforsuccess.com/web-hosting/web-hosting-comparison/",
-   "to_title": "Web Hosting Comparison: The Practical Buyer’s Guide for WordPress and Affiliate Sites",
-   "anchor": "web hosting",
-   "relevance": 4,
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/essential-vitamins-and-minerals-for-french-bulldogs/",
+   "from_title": "French Bulldog Vitamins: Nutrition Basics, Deficiencies",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
    "from_strength": 0
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/web-hosting/siteground-web-hosting-review-2025/",
-   "from_title": "SiteGround Review: Is It a Smart Hosting Choice for WordPress Sites?",
-   "to": "https://affiliatemarketingforsuccess.com/web-hosting/web-hosting-comparison/",
-   "to_title": "Web Hosting Comparison: The Practical Buyer’s Guide for WordPress and Affiliate Sites",
-   "anchor": "web hosting",
-   "relevance": 4,
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
+   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
    "from_strength": 0
   },
   {
@@ -3852,7 +3590,7 @@
   {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/mental-wellness/mindfulness-exercises/",
-   "from_title": "Mindfulness Exercises for Stress: 10-Minute Daily Practice | Gear Up to Grow",
+   "from_title": "Mindfulness Exercises for Stress: 10-Minute Daily Practice",
    "to": "https://gearuptogrow.com/mental-wellness/daily-affirmations/",
    "to_title": "Daily Affirmations That Work: Evidence-Based Guide",
    "anchor": "daily affirmations feel",
@@ -3862,7 +3600,7 @@
   {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/personal-development/journaling-self-improvement/",
-   "from_title": "Journaling for Self-Improvement: A Practical Guide | Gear Up to Grow",
+   "from_title": "Journaling for Self-Improvement: A Practical Guide",
    "to": "https://gearuptogrow.com/mental-wellness/daily-affirmations/",
    "to_title": "Daily Affirmations That Work: Evidence-Based Guide",
    "anchor": "daily affirmations feel",
@@ -3942,7 +3680,7 @@
   {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/productivity/best-habit-tracker-apps/",
-   "from_title": "Best Habit Tracker Apps in 2026: An Honest Comparison | Gear Up to Grow",
+   "from_title": "Best Habit Tracker Apps in 2026: An Honest Comparison",
    "to": "https://gearuptogrow.com/productivity/habit-stacking-executive-dysfunction/",
    "to_title": "Habit Stacking for Executive Dysfunction",
    "anchor": "habit stacking",
@@ -3952,7 +3690,7 @@
   {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/personal-development/success-habits/",
-   "from_title": "Success Habits That Actually Compound Over Time | Gear Up to Grow",
+   "from_title": "Success Habits That Actually Compound Over Time",
    "to": "https://gearuptogrow.com/productivity/habit-stacking-executive-dysfunction/",
    "to_title": "Habit Stacking for Executive Dysfunction",
    "anchor": "habit stacking",
@@ -4150,156 +3888,6 @@
    "from_strength": 0
   },
   {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/high-protein-diet-french-bulldogs-muscle-fat-energy/",
-   "from_title": "High-Protein Diets for French Bulldogs: When They Help",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-weight-guide/",
-   "from_title": "French Bulldog Weight: Healthy Range and Body Condition",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-stress-signs-fixes/",
-   "from_title": "Low-Calorie Treats for French Bulldogs: Safe Rewards",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/food-aggression-in-french-bulldogs/",
-   "from_title": "French Bulldog Food Aggression: Safety, Management",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/complete-guide-french-bulldog-nutrition/",
-   "from_title": "What Do French Bulldogs Eat? Diet, Portions & Food Guide",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 61
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/supplements-for-french-bulldogs-what-you-need-to-know/",
-   "from_title": "Best French Bulldog Supplements: What May Help, What to Skip",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 61
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/recognizing-and-managing-arthritis-in-french-bulldogs/",
-   "from_title": "French Bulldog Arthritis Symptoms: Signs, Comfort, Mobility",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/essential-vitamins-and-minerals-for-french-bulldogs/",
-   "from_title": "French Bulldog Vitamins: Nutrition Basics, Deficiencies",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
-   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/navigating-lifes-journey-personal-year-6-numerology/",
    "from_title": "Personal Year 6 Numerology: Love, Growth & Harmony in 2026",
@@ -4321,16 +3909,6 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-is-14-in-numerology/",
-   "from_title": "2026 Guide: Numerology Meaning of Number 14 Explained",
-   "to": "https://mysticaldigits.com/personal-year-numerology/",
-   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "anchor": "personal year",
-   "relevance": 5,
-   "from_strength": 61
-  },
-  {
-   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
    "from_title": "Personal Year Calculator: How to Find Your Number (2026)",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
@@ -4348,6 +3926,66 @@
    "anchor": "personal year",
    "relevance": 5,
    "from_strength": 57
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/life-transition-numbers/",
+   "from_title": "2026 Life Transition Numbers Guide | Mystical Digits",
+   "to": "https://mysticaldigits.com/personal-year-numerology/",
+   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
+   "anchor": "personal year",
+   "relevance": 5,
+   "from_strength": 56
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-genetic-testing-complete-guide/",
+   "from_title": "French Bulldog Genetic Testing: DNA Tests, Health Screening, and Breeder Questions",
+   "to": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
+   "to_title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 56
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/legal-considerations-for-french-bulldog-ownership/",
+   "from_title": "French Bulldog Ownership: 7 Legal Facts You Need to Know",
+   "to": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
+   "to_title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/why-do-french-bulldogs-have-no-tail/",
+   "from_title": "Do French Bulldogs Have Tails? Short Tails, Care & Health",
+   "to": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
+   "to_title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-heat-cycle-guide/",
+   "from_title": "French Bulldog Heat Cycle: How Long, How Often & Signs",
+   "to": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
+   "to_title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-c-section-guide/",
+   "from_title": "Do French Bulldogs Need C-Sections? Risks, Costs & Recovery",
+   "to": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
+   "to_title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 0
   },
   {
    "site": "plantastichaven.com",
@@ -4401,6 +4039,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-genetic-testing-complete-guide/",
+   "from_title": "French Bulldog Genetic Testing: DNA Tests, Health Screening, and Breeder Questions",
+   "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "to_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 56
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/understanding-skin-allergies-in-french-bulldogs/",
    "from_title": "French Bulldog Skin Allergies: Relief Tips",
    "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
@@ -4440,16 +4088,6 @@
    "from_strength": 0
   },
   {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "from_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
-   "to_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
    "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
@@ -4481,6 +4119,16 @@
   },
   {
    "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/prevent-mice-in-kitchen/",
+   "from_title": "How to Prevent Mice in the Kitchen: Food Storage & Sealing",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 82
+  },
+  {
+   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
    "from_title": "Does Peppermint Oil Repel Mice? What the Evidence Shows",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
@@ -4488,16 +4136,6 @@
    "anchor": "rid mice",
    "relevance": 4,
    "from_strength": 55
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/natural-mouse-repellents/",
-   "from_title": "Natural Mouse Repellents: What Helps and What Fails",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 54
   },
   {
    "site": "efficientgptprompts.com",
@@ -4641,6 +4279,56 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 73
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
+   "from_title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 60
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
    "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
    "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
@@ -4667,7 +4355,7 @@
    "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
    "anchor": "french bulldogs",
    "relevance": 6,
-   "from_strength": 61
+   "from_strength": 57
   },
   {
    "site": "frenchyfab.com",
@@ -4988,6 +4676,346 @@
    "anchor": "personal numerology",
    "relevance": 4,
    "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/the-enigmatic-power-of-26-numerology/",
+   "from_title": "Numerology Number 26: Symbolism & Meaning | Mystical Digits",
+   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "anchor": "personal numerology",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
+   "from_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
+   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "anchor": "personal numerology reading",
+   "relevance": 3,
+   "from_strength": 79
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "anchor": "practical frenchie diet",
+   "relevance": 3,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "anchor": "practical frenchie diet",
+   "relevance": 3,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/high-protein-diet-french-bulldogs-muscle-fat-energy/",
+   "from_title": "High-Protein Diets for French Bulldogs: When They Help",
+   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "anchor": "practical frenchie diet",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-weight-guide/",
+   "from_title": "French Bulldog Weight: Healthy Range and Body Condition",
+   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "anchor": "practical frenchie diet",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-stress-signs-fixes/",
+   "from_title": "Low-Calorie Treats for French Bulldogs: Safe Rewards",
+   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "anchor": "practical frenchie diet",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/food-aggression-in-french-bulldogs/",
+   "from_title": "French Bulldog Food Aggression: Safety, Management",
+   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/complete-guide-french-bulldog-nutrition/",
+   "from_title": "What Do French Bulldogs Eat? Diet, Portions & Food Guide",
+   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "to_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "anchor": "dog food",
+   "relevance": 10,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
+   "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
+   "to": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "to_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "anchor": "dog food",
+   "relevance": 10,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-food-for-french-bulldogs-with-sensitive-stomach/",
+   "from_title": "Best Dog Food for a French Bulldog With a Sensitive Stomach",
+   "to": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "to_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "anchor": "dog food",
+   "relevance": 9,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/nutritious-dog-food-toppers-french-bulldogs/",
+   "from_title": "French Bulldog Nutrition for Picky Eaters: Food Toppers",
+   "to": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "to_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "anchor": "dog food",
+   "relevance": 8,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "to": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "to_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "anchor": "french bulldogs",
+   "relevance": 6,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/leash-training-french-bulldogs/",
+   "from_title": "How to Leash Train a French Bulldog",
+   "to": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
+   "to_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
+   "anchor": "french bulldogs",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "from_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "to": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
+   "to_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "from_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "to": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
+   "to_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-exercise-requirements-and-tips/",
+   "from_title": "French Bulldog Exercise: Safe Daily Needs & Tips",
+   "to": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
+   "to_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-hiking/",
+   "from_title": "French Bulldog Hiking: Heat Safety, Trail Distance, Gear",
+   "to": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
+   "to_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-stress-signs-fixes/",
+   "from_title": "Low-Calorie Treats for French Bulldogs: Safe Rewards",
+   "to": "https://frenchyfab.com/french-bulldog-healthy-treats-guide/",
+   "to_title": "Healthy Treats for French Bulldogs: Calories and Safe Picks",
+   "anchor": "treats french",
+   "relevance": 8,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-dog-treat-recipes-french-bulldogs/",
+   "from_title": "Homemade French Bulldog Treats: 4 Safe, Simple Recipes",
+   "to": "https://frenchyfab.com/french-bulldog-healthy-treats-guide/",
+   "to_title": "Healthy Treats for French Bulldogs: Calories and Safe Picks",
+   "anchor": "treats french",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-weight-guide/",
+   "from_title": "French Bulldog Weight: Healthy Range and Body Condition",
+   "to": "https://frenchyfab.com/french-bulldog-healthy-treats-guide/",
+   "to_title": "Healthy Treats for French Bulldogs: Calories and Safe Picks",
+   "anchor": "french bulldogs",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "to": "https://frenchyfab.com/french-bulldog-healthy-treats-guide/",
+   "to_title": "Healthy Treats for French Bulldogs: Calories and Safe Picks",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "to": "https://frenchyfab.com/french-bulldog-healthy-treats-guide/",
+   "to_title": "Healthy Treats for French Bulldogs: Calories and Safe Picks",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/house-plants-with-variegated-leaves/",
+   "from_title": "House Plants With Variegated Leaves: 25 That Thrive",
+   "to": "https://plantastichaven.com/philodendron-white-knight-care/",
+   "to_title": "Philodendron White Knight Care: Light, Water, Soil, Variegation & Identification - PlantasticHaven",
+   "anchor": "philodendron white",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/how-to-propagate-a-philodendron-birkin/",
+   "from_title": "Philodendron Birkin Propagation: 5 Proven Methods (2026)",
+   "to": "https://plantastichaven.com/philodendron-white-knight-care/",
+   "to_title": "Philodendron White Knight Care: Light, Water, Soil, Variegation & Identification - PlantasticHaven",
+   "anchor": "philodendron white knight",
+   "relevance": 3,
+   "from_strength": 58
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/pothos-care-guide/",
+   "from_title": "Pothos Care: How to Grow Fuller, Healthier Vines Indoors",
+   "to": "https://plantastichaven.com/philodendron-white-knight-care/",
+   "to_title": "Philodendron White Knight Care: Light, Water, Soil, Variegation & Identification - PlantasticHaven",
+   "anchor": "philodendron white knight",
+   "relevance": 3,
+   "from_strength": 54
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/transform-your-home-with-philodendrons/",
+   "from_title": "Transform Your Home with Philodendrons: Complete Care & Styling Guide",
+   "to": "https://plantastichaven.com/philodendron-white-knight-care/",
+   "to_title": "Philodendron White Knight Care: Light, Water, Soil, Variegation & Identification - PlantasticHaven",
+   "anchor": "philodendron white knight",
+   "relevance": 3,
+   "from_strength": 51
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/pink-spider-plant/",
+   "from_title": "Pink Spider Plant: What It Is and How to Identify Yours",
+   "to": "https://plantastichaven.com/philodendron-white-knight-care/",
+   "to_title": "Philodendron White Knight Care: Light, Water, Soil, Variegation & Identification - PlantasticHaven",
+   "anchor": "philodendron white knight",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/french-bulldog-hydration-tips/",
+   "to_title": "How Much Water Should a French Bulldog Drink? Hydration Guide",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "to": "https://frenchyfab.com/french-bulldog-hydration-tips/",
+   "to_title": "How Much Water Should a French Bulldog Drink? Hydration Guide",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 73
   }
  ],
  "indexation": {
@@ -5042,19 +5070,19 @@
    },
    {
     "site": "affiliatemarketingforsuccess.com",
-    "checked": 258,
-    "healthy": 248,
-    "problems": 10,
-    "critical": 6,
+    "checked": 11,
+    "healthy": 10,
+    "problems": 1,
+    "critical": 1,
     "not_found": 0,
-    "server_error": 6,
+    "server_error": 1,
     "noindex": 0,
     "canonical_mismatch": 0,
     "redirect": 0,
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 4
+    "thin": 0
    },
    {
     "site": "mysticaldigits.com",
@@ -5164,51 +5192,6 @@
     "status": 500
    },
    {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-mistakes",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 500
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/building-an-affiliate-marketing-website",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 500
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/enhance-your-affiliate-marketing-content",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 500
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-create-an-affiliate-marketing-strategy",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 500
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/blog",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 500
-   },
-   {
     "site": "efficientgptprompts.com",
     "url": "https://efficientgptprompts.com/shop",
     "issue": "noindex",
@@ -5235,46 +5218,6 @@
     "fix": "Confirm Googlebot is allowed in the firewall/CDN bot rules and use URL Inspection in Search Console.",
     "severity": 6,
     "status": 403
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/ai-affiliate-funnels",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 167
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/ai/detect-ai-writing",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 63
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/blogging/start-affiliate-marketing-blog",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 235
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/chatgpt-prompts/chatgpt-prompts-for-marketing",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 273
    },
    {
     "site": "efficientgptprompts.com",
@@ -5887,12 +5830,12 @@
     "words": 60
    }
   ],
-  "total_issues": 74,
+  "total_issues": 65,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first)."
  },
  "tuning": {
   "max_queries": 40,
-  "updated_at": "2026-11-10T21:01:36.514Z"
+  "updated_at": "2026-11-11T08:01:46.028Z"
  },
  "wins": [
   {
@@ -5941,34 +5884,34 @@
   }
  ],
  "log": [
-  "20:56:08 connection dataforseo: connected",
-  "20:56:08 connection gmail: connected",
-  "20:56:11 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
-  "20:56:17 crawl gearuptogrow.com: 107/107 urls, fetched 5, 304 0, reused 102",
-  "20:56:18 crawl mysticaldigits.com: 300/468 urls, fetched 6, 304 0, reused 294",
-  "20:56:20 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 7, 304 0, reused 251",
-  "20:56:20 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "20:56:21 crawl frenchyfab.com: 155/155 urls, fetched 6, 304 0, reused 149",
-  "20:56:21 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "20:56:22 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "20:56:23 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
-  "20:56:29 crawl efficientgptprompts.com: 300/487 urls, fetched 1, 304 0, reused 299",
-  "20:56:29 indexation: 74 sitemap URLs with an indexing problem (7 critical)",
-  "20:57:02 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "20:57:36 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "20:58:13 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "20:59:10 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "20:59:51 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "20:59:53 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "20:59:59 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "21:01:12 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "21:01:36 prospects: 0 from the saved queue, 0 saved for next run; 40 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "21:01:36 self-tuning: next cycle runs up to 40 searches",
-  "21:01:36 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "21:01:39 replies: 28 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "21:01:44 outreach: 0 sent, 0 follow-ups, 0 drafts, 1 held for verification",
-  "21:01:44 - preverify: skipped (runs only while outreach is paused)",
-  "21:01:44 link checks: 0 pages, 0 new links won, 0 lost"
+  "07:55:07 connection dataforseo: connected",
+  "07:55:07 connection gmail: connected",
+  "07:55:15 crawl gearuptogrow.com: 107/107 urls, fetched 61, 304 0, reused 46",
+  "07:55:24 crawl plantastichaven.com: 159/159 urls, fetched 123, 304 0, reused 36",
+  "07:55:25 crawl gearuptofit.com: 300/878 urls, fetched 292, 304 0, reused 8",
+  "07:55:34 crawl frenchyfab.com: 155/155 urls, fetched 126, 304 0, reused 29",
+  "07:55:41 crawl affiliatemarketingforsuccess.com: 11/11 urls, fetched 7, 304 0, reused 4",
+  "07:55:44 crawl micegoneguide.com: 43/43 urls, fetched 36, 304 0, reused 7",
+  "07:55:45 crawl openclaw-skillshub.com: 158/158 urls, fetched 158, 304 0, reused 0",
+  "07:55:46 crawl imagealchemy.app: 26/26 urls, fetched 26, 304 0, reused 0",
+  "07:55:52 crawl mysticaldigits.com: 300/468 urls, fetched 278, 304 0, reused 22",
+  "07:56:13 crawl efficientgptprompts.com: 300/487 urls, fetched 239, 304 0, reused 61",
+  "07:56:13 indexation: 65 sitemap URLs with an indexing problem (2 critical)",
+  "07:56:52 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:58:50 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:59:22 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:59:54 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:59:56 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:59:57 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:01:20 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:01:21 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "08:01:46 prospects: 0 from the saved queue, 0 saved for next run; 40 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "08:01:46 self-tuning: next cycle runs up to 40 searches",
+  "08:01:46 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "08:01:48 replies: 24 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "08:02:07 outreach: 0 sent, 0 follow-ups, 0 drafts, 5 held for verification",
+  "08:02:07 - preverify: skipped (runs only while outreach is paused)",
+  "08:02:15 link checks: 9 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
