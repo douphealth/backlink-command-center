@@ -183,3 +183,12 @@ test('follow-up adds a new, verifiable reason and an easy one-word reply',async(
   const b=followupPitch({title:'X',broken_link:{anchor:'shoe fit guide',host:'deadshoes.com',reason:'not_found'}},asset,{senderName:'Alex'});
   assert.match(b.body,/"shoe fit guide" \(deadshoes\.com\) on that page still returns a "page not found" error/);
 });
+test('every dropped search result is counted by reason',async()=>{
+  const {discoverProspects}=await import('../../scripts/autopilot/prospect.mjs');
+  const s={domain:'gearuptofit.com',topic:'running shoes'};
+  const res=[{url:'https://www.reddit.com/r/running/x',domain:'www.reddit.com'},{url:'https://gearuptofit.com/a',domain:'gearuptofit.com'},{url:'https://known.example/x',domain:'known.example'},{url:'https://fresh.example/forum/x',domain:'fresh.example'},{url:'https://new.example/resources',domain:'new.example'}];
+  const dfs={canSpend:()=>true,affordable:()=>5,serp:async()=>res,domainTraffic:async ds=>Object.fromEntries(ds.map(d=>[d,5000]))};
+  const state={queries:{},prospects:{},domains:{'gearuptofit.com|known.example':'x'}};
+  const r=await discoverProspects({assets:[{site:s.domain,url:'https://gearuptofit.com/a',title:'Shoe Finder',type:'interactive_tool',linkability:80}],sites:[s],state,dfs,perAsset:1,maxQueries:1,fetchImpl:async()=>new Response('',{status:404,headers:{'content-type':'text/html'}})});
+  assert.deepEqual(r.filtered,{platform_or_giant:1,own_site:1,already_evaluated:1,forum_or_ugc:1});assert.equal(r.new_domains,1);
+});

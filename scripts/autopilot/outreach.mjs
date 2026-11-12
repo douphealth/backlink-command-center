@@ -110,7 +110,12 @@ export function applyProof(state,p,proof,{followup=false}={}){
   samePublisher(proof.evidence?.source,p.domain)&&proof.evidence?.email===e&&
   Number.isFinite(Date.parse(proof.evidence?.observed_at))&&Date.now()-Date.parse(proof.evidence.observed_at)>=0&&Date.now()-Date.parse(proof.evidence.observed_at)<DAY;
  if(!valid||suppressed(state,e,p.domain)||(followup&&e!==normalizeEmail(p.email))){
-  p.contact_quality={status:'held',reason:proof?.reason||'recipient_not_verified',...(proof?.detail?{detail:String(proof.detail).slice(0,60)}:{}),checked_at:NOW()};delete p.recipient_proof;return false;
+  const detail=proof?.detail?String(proof.detail).slice(0,60):undefined,prev=p.contact_quality;
+  p.contact_quality={status:'held',reason:proof?.reason||'recipient_not_verified',...(detail?{detail}:{}),checked_at:NOW()};delete p.recipient_proof;
+  // Two publisher-side failures in a row: this publisher has no verifiable editorial inbox. Retire it from the
+  // ready queue (record kept) so each cycle's checks go to prospects that can actually be emailed.
+  if(!followup&&p.status==='ready'&&publisherHold(detail)&&prev?.status==='held'&&publisherHold(prev.detail)){p.status='contact_unverifiable';p.reason=`No verifiable editorial inbox (${detail})`}
+  return false;
  }
  p.email=e;p.email_source=proof.evidence.source;p.email_rank=proof.evidence.rank;
  p.recipient_proof={...proof,publisher_domain:p.domain};p.contact_quality={status:'verified',checked_at:NOW()};return true;
