@@ -23,7 +23,7 @@ import {discoverProspects,requalify,enrichBrokenLinks,freshQueryCount,QUALIFY_VE
 import {indexationReport} from './indexation.mjs';
 import {autotune,diagnose,TUNING} from './health.mjs';
 import {PitchWriter} from './pitch.mjs';
-import {processReplies,runOutreach,preverify,checkLinks,gmailTransport,dailyCap,outreachStatus} from './outreach.mjs';
+import {processReplies,runOutreach,preverify,screenQueue,checkLinks,gmailTransport,dailyCap,outreachStatus} from './outreach.mjs';
 import {assetStats,learningSummary} from './learn.mjs';
 import {seal,open} from './vault.mjs';
 import {NOW,ageDays} from './util.mjs';
@@ -192,6 +192,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     :cfg.outreach.mode==='off'?'OUTREACH_MODE=off':noVerifier?'mailbox verifier not configured (Verifalia login or Hunter key, plus a verification daily limit)':'';
   try{
     await stage('replies',vaultOk&&gmailOk,()=>processReplies({state,imap:mailer.imap,log}),mailWhy||'Gmail not set');
+    await stage('screen',vaultOk&&!!mailer,()=>screenQueue({state,mailer,deadline:deadline-4*60e3,log}),privateWhy,{until:deadline-3.5*60e3});
     const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',log});
     await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:cfg.outreach,deadline:deadline-2*60e3,log}),mailWhy||'SENDER_NAME not set');
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,template_fallbacks:writer.fallbacks};

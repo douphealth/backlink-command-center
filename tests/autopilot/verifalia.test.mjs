@@ -144,3 +144,19 @@ test('holds caused on our side are re-checked next run and hidden once the verif
   state.prospects.c=mk('c','mailbox_verifalia_login_rejected');
   assert.deepEqual(outreachStatus(state,{limit:12,mode:'off',qualifyVersion:2}).holds,{no_email_published:2}); // stale login hold hidden
 });
+test('free queue screening retires unsendable prospects, upgrades addresses and spends no credits',async()=>{
+  const {screenQueue}=await import('../../scripts/autopilot/outreach.mjs');
+  const pages={'a.example':'<p>Use our form.</p>','b.example':'<h1>Editorial submissions</h1><a href="mailto:editor@b.example">Editor</a>','c.example':''};
+  const st={prospects:{},suppression:{},email_verifications:{},email_verifier_usage:{}};
+  for(const id of ['a','b','c'])st.prospects[id]={id,domain:id+'.example',page_url:`https://${id}.example/r`,email:`old@${id}.example`,status:'ready',score:50,history:[]};
+  const calls=[];
+  const v=new RecipientVerifier({state:st,env:{},now:()=>Date.now(),fetchImpl:async(...a)=>{calls.push(a);return json(500,{})},
+    fetchPage:async u=>{const h=new URL(u).hostname,body=pages[h];return body?{status:200,url:u,body}:{status:503,url:u,body:''}},resolveMx:async()=>[]});
+  const mailer={screenRecipient:(p,o)=>v.verify(p,{...o,screenOnly:true})};
+  const r=await screenQueue({state:st,mailer});
+  assert.deepEqual(r,{screened:3,kept:1,retired:1,address_updated:1});
+  assert.equal(st.prospects.a.status,'contact_unverifiable');assert.equal(st.prospects.b.email,'editor@b.example');
+  assert.equal(st.prospects.c.status,'ready'); // unreachable pages: retried later, never retired
+  assert.equal(calls.length,0,'screening must not call any paid provider');
+  assert.equal((await screenQueue({state:st,mailer})).screened,1); // only c is due again: a retired, b screened for 14 days
+});

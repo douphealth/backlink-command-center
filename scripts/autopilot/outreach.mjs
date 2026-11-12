@@ -2,7 +2,7 @@
 import {createHash} from 'node:crypto';
 import {buildMessage,newMessageId,smtpSend,Imap,classifyReply} from './mail.mjs';
 import {followupPitch} from './pitch.mjs';
-import {fetchPage,links,hostOf,sameSite,ageDays,NOW,sleep,DAY} from './util.mjs';
+import {fetchPage,links,hostOf,sameSite,ageDays,NOW,sleep,DAY,pool} from './util.mjs';
 import {QUALIFY_VERSION} from './prospect.mjs';
 import {assetStats,linkLikelihood} from './learn.mjs';
 import {RecipientVerifier,isSuppressed,usableVerification,samePublisher,normalizeEmail} from './recipient-policy.mjs';
@@ -128,6 +128,28 @@ export function applyProof(state,p,proof,{followup=false}={}){
 export const OUR_SIDE_HOLD=/^(?:mailbox_(?:verifalia_|verification_|verifier_|recently_inconclusive$)|time_budget$|verification_error$|recipient_not_verified$)/;
 export const publisherHold=detail=>!!detail&&!OUR_SIDE_HOLD.test(detail);
 /**
+ * Free queue screening (no verification credits): every ready prospect is checked against the strict,
+ * first-party recipient rules once every 14 days. Prospects that cannot pass leave the ready queue at once;
+ * the rest carry their best strictly qualified address, so outreach's checks go only to sendable inboxes.
+ */
+export async function screenQueue({state,mailer,max=40,deadline=Infinity,log=()=>{}}){
+ const stats={screened:0,kept:0,retired:0,address_updated:0};
+ if(typeof mailer?.screenRecipient!=='function')return stats;
+ const due=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&ageDays(p.screened_at)>14&&!suppressed(state,p.email,p.domain))
+  .sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,max);
+ await pool(due,4,async p=>{
+  if(Date.now()>deadline)return;
+  let r;try{r=await mailer.screenRecipient(p,{state,deadline})}catch{return}
+  stats.screened++;
+  // A temporarily unreachable publisher is not marked screened: it is retried next cycle.
+  if(r?.ok||publisherHold(r?.detail)&&r.detail!=='publisher_pages_unreachable')p.screened_at=NOW();
+  if(r?.ok){stats.kept++;const e=normalizeEmail(r.email);if(e&&e!==normalizeEmail(p.email)){p.email=e;p.email_source=r.evidence?.source;p.email_rank=r.evidence?.rank;stats.address_updated++}}
+  else if(publisherHold(r?.detail)&&r.detail!=='publisher_pages_unreachable'){p.status='contact_unverifiable';p.reason=`No verifiable editorial inbox (${r.detail})`;p.contact_quality={status:'held',reason:r.reason,detail:r.detail,checked_at:NOW()};stats.retired++}
+ });
+ log(`queue screening (free, nothing sent): ${stats.screened} checked, ${stats.kept} sendable, ${stats.retired} retired, ${stats.address_updated} switched to a better published address`);
+ return stats;
+}
+/**
  * While outreach is paused, verify the best queued inboxes (no email is sent). Uses the free
  * daily credits that would otherwise expire, shows real verified counts before sending is
  * released, and builds the permanent invalid / catch-all memory that saves credits later.
@@ -249,6 +271,10 @@ export function gmailTransport(env){
   authorizeRecipient:async(p,{state,followup,deadline})=>{
    if(!verifiers.has(state))verifiers.set(state,new RecipientVerifier({state,fetchPage,env}));
    return verifiers.get(state).verify(p,{followup,deadline});
+  },
+  screenRecipient:async(p,{state,deadline})=>{
+   if(!verifiers.has(state))verifiers.set(state,new RecipientVerifier({state,fetchPage,env}));
+   return verifiers.get(state).verify(p,{deadline,screenOnly:true});
   },
   send:async({to,raw,recipientProof:p})=>{
    if(!usableVerification(p?.verification,to)||p?.email!==normalizeEmail(to)||!samePublisher(p?.evidence?.source,p?.publisher_domain))throw Error('SMTP blocked: verified recipient evidence required');
