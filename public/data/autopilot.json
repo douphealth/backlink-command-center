@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-12T07:32:59.073Z",
- "duration_s": 304,
+ "generated_at": "2026-11-12T16:59:28.624Z",
+ "duration_s": 241,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 13.353285999999997
+    "balance_usd": 13.195286000000003
    },
    "gmail": {
     "status": "connected"
@@ -107,7 +107,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 16910,
+   "ms": 14426,
    "result": {
     "sites": 10,
     "pages": 1806
@@ -115,7 +115,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
@@ -125,7 +125,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 316
+    "internal_suggestions": 317
    }
   },
   "requalify": {
@@ -140,11 +140,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 246099,
+   "ms": 175434,
    "result": {
     "queries": 40,
     "mention_queries": 0,
-    "serp_results": 712,
+    "serp_results": 689,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -154,13 +154,13 @@
     "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
-    "failed_queries": 5,
+    "failed_queries": 1,
     "deferred": 0
    }
   },
   "broken_links": {
    "ok": true,
-   "ms": 3,
+   "ms": 2,
    "result": {
     "checked": 0,
     "found": 0
@@ -168,9 +168,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1535,
+   "ms": 5367,
    "result": {
-    "scanned": 15,
+    "scanned": 31,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -180,15 +180,15 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 19743,
+   "ms": 41344,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 181,
+    "deferred": 6,
     "cap": 12,
-    "verification_held": 5
+    "verification_held": 24
    },
    "writer": {
     "claude": 0,
@@ -201,9 +201,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 15471,
+   "ms": 2723,
    "result": {
-    "checked": 9,
+    "checked": 2,
     "won": 0,
     "lost": 0
    }
@@ -214,15 +214,15 @@
   "pages_crawled": 1806,
   "urls_discovered": 2739,
   "promotable": 250,
-  "internal_suggestions": 316,
+  "internal_suggestions": 317,
   "promoting_now": 21
  },
  "spend": {
-  "today_usd": 0.158,
-  "month_usd": 3.6118,
+  "today_usd": 0.312,
+  "month_usd": 3.7658,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 54
+  "calls_this_run": 45
  },
  "outreach": {
   "mode": "send",
@@ -230,15 +230,15 @@
   "verified_ready": 0,
   "pending_verification": 160,
   "holds": {
-   "no_email_published": 4,
+   "no_email_published": 5,
    "only_non_editorial_inbox_published": 8,
-   "mailbox_accept_all": 2,
+   "mailbox_accept_all": 1,
    "publisher_mismatch": 1,
    "catch_all_domain": 1
   },
   "sent_today": 0,
   "cap_today": 12,
-  "next_send_at": "2026-11-12T13:00:00.000Z",
+  "next_send_at": "2026-11-12T16:59:28.626Z",
   "sending_now": false,
   "reply_health": "ok"
  },
@@ -600,7 +600,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.158
+   "spend_usd": 0.312
   }
  ],
  "learning": {
@@ -637,9 +637,9 @@
    },
    {
     "footprint": "tools",
-    "queries": 9,
+    "queries": 10,
     "ready": 5,
-    "rate": 0.5
+    "rate": 0.462
    },
    {
     "footprint": "intitle_resources",
@@ -667,9 +667,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 227,
+    "queries": 229,
     "ready": 60,
-    "rate": 0.265
+    "rate": 0.263
    },
    {
     "footprint": "recommended_tools",
@@ -679,9 +679,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 188,
+    "queries": 192,
     "ready": 23,
-    "rate": 0.126
+    "rate": 0.123
    },
    {
     "footprint": "link_roundup",
@@ -703,9 +703,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 236,
+    "queries": 240,
     "ready": 14,
-    "rate": 0.063
+    "rate": 0.062
    },
    {
     "footprint": "mention",
@@ -715,15 +715,15 @@
    },
    {
     "footprint": "further_reading",
-    "queries": 147,
+    "queries": 162,
     "ready": 3,
-    "rate": 0.027
+    "rate": 0.024
    },
    {
     "footprint": "helpful_resources",
-    "queries": 170,
+    "queries": 183,
     "ready": 0,
-    "rate": 0.006
+    "rate": 0.005
    }
   ],
   "assets": [
@@ -1214,7 +1214,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 29,
+   "internal_inlinks": 30,
    "words": 1761,
    "interactive": true,
    "modified": "2026-10-30T07:45:22+00:00",
@@ -1238,7 +1238,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 13,
    "words": 2071,
    "interactive": true,
    "modified": "2026-10-25T11:01:04+00:00",
@@ -1296,7 +1296,7 @@
    ],
    "prospects": 10,
    "internal_link_suggestions": 1,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -1334,7 +1334,7 @@
    "linkability": 87,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 2192,
    "interactive": false,
    "modified": "2026-09-13T19:08:04+00:00",
@@ -1372,7 +1372,7 @@
    ],
    "prospects": 7,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -1410,7 +1410,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 24,
+   "internal_inlinks": 23,
    "words": 3431,
    "interactive": true,
    "modified": "2026-10-03T19:51:14+00:00",
@@ -1497,7 +1497,7 @@
    ],
    "prospects": 7,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1544,7 +1544,7 @@
    ],
    "prospects": 9,
    "internal_link_suggestions": 3,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1557,7 +1557,7 @@
    "linkability": 83,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 11,
    "words": 2085,
    "interactive": false,
    "modified": "2026-09-25T14:57:36+00:00",
@@ -1568,7 +1568,7 @@
     "Recently updated"
    ],
    "prospects": 2,
-   "internal_link_suggestions": 4,
+   "internal_link_suggestions": 5,
    "promoting": false
   },
   {
@@ -1592,7 +1592,7 @@
    ],
    "prospects": 7,
    "internal_link_suggestions": 1,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "micegoneguide.com",
@@ -1743,7 +1743,7 @@
    ],
    "prospects": 1,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1792,7 +1792,7 @@
    ],
    "prospects": 7,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -1853,7 +1853,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 15,
+   "internal_inlinks": 13,
    "words": 6004,
    "interactive": false,
    "modified": "2026-09-03T11:44:05+00:00",
@@ -1902,7 +1902,7 @@
    "linkability": 76,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 239,
+   "internal_inlinks": 243,
    "words": 1657,
    "interactive": false,
    "modified": "2026-10-25T11:02:11+00:00",
@@ -2192,7 +2192,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 4,
+   "internal_inlinks": 5,
    "words": 2972,
    "interactive": false,
    "modified": "2026-09-03T12:25:05+00:00",
@@ -2584,7 +2584,7 @@
    "linkability": 80,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 17,
+   "internal_inlinks": 16,
    "words": 1633,
    "interactive": true,
    "modified": "2026-11-07T20:01:22+00:00",
@@ -2620,31 +2620,6 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
-   "title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
-   "h1": "French Bulldog Breeding Guide: Health Testing, BOAS Grading and Ethics",
-   "description": "What responsible French Bulldog breeding involves: DNA and health screening, BOAS grading, why most litters need a C-section, real costs, and the ethical questions.",
-   "type": "practical_guide",
-   "promotion": 60,
-   "linkability": 76,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 1195,
-   "interactive": false,
-   "modified": "2026-09-25T09:58:07+00:00",
-   "reasons": [
-    "Cites 3 authoritative sources",
-    "Recently updated",
-    "Under-linked internally (2 inbound)",
-    "One of 153 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
    "promoting": false
   },
   {
@@ -2717,7 +2692,7 @@
    ],
    "prospects": 7,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "frenchyfab.com",
@@ -3015,6 +2990,30 @@
    "prospects": 2,
    "internal_link_suggestions": 5,
    "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "h1": "Homemade Food for French Bulldogs: When You Need a Veterinary Nutritionist",
+   "description": "Thinking of homemade food or recipes for your Frenchie? What a balanced home-cooked diet needs, mistakes to avoid, and why a vet nutritionist should formulate it.",
+   "type": "practical_guide",
+   "promotion": 58,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 4,
+   "words": 1656,
+   "interactive": false,
+   "modified": "2026-10-12T13:02:55+00:00",
+   "reasons": [
+    "1 data table",
+    "Recently updated",
+    "One of 153 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
   }
  ],
  "internal_links": [
@@ -3080,6 +3079,26 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/enhance-your-affiliate-marketing-content/",
+   "from_title": "How to Improve Affiliate Content: 9-Point Upgrade Checklist",
+   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
+   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
+   "anchor": "affiliate link",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/building-an-affiliate-marketing-website/",
+   "from_title": "How to Build an Affiliate Marketing Website: 10-Step Guide",
+   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
+   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
+   "anchor": "affiliate link",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/review/copy-ai-review/",
    "from_title": "Copy.ai Review: AI Copywriting and Go-to-Market Workflows for Marketing Teams",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
@@ -3092,26 +3111,6 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/review/writesonic-review/",
    "from_title": "Writesonic Review: AI Writing, Chat, and Marketing Content for Busy Teams",
-   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "anchor": "affiliate link",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/review/seowriting-ai-review/",
-   "from_title": "SEOWriting.ai review: AI SEO content quality, limits, and best use cases",
-   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "anchor": "affiliate link",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/review/scalenut-review/",
-   "from_title": "Scalenut Review 2026: AI SEO Platform, Pricing, Pros, Cons",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
    "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
    "anchor": "affiliate link",
@@ -3505,6 +3504,16 @@
    "to": "https://gearuptofit.com/running/running-pace-calculator/",
    "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
    "anchor": "running pace calculator",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/building-an-affiliate-marketing-website/",
+   "from_title": "How to Build an Affiliate Marketing Website: 10-Step Guide",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
+   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
+   "anchor": "promote affiliate products",
    "relevance": 3,
    "from_strength": 0
   },
@@ -3920,8 +3929,8 @@
   },
   {
    "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/mental-wellness/burnout-vs-stress/",
-   "from_title": "Burnout vs Stress: How to Tell the Difference & Recover",
+   "from": "https://gearuptogrow.com/mental-wellness/",
+   "from_title": "Mental Wellness Hub: Stress Regulation & Burnout Recovery",
    "to": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
    "to_title": "Burnout at Work: Signs, Support, and Next Steps",
    "anchor": "burnout symptoms",
@@ -3930,8 +3939,8 @@
   },
   {
    "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/mental-wellness/",
-   "from_title": "Mental Wellness Hub: Stress Regulation & Burnout Recovery",
+   "from": "https://gearuptogrow.com/mental-wellness/burnout-vs-stress/",
+   "from_title": "Burnout vs Stress: How to Tell the Difference & Recover",
    "to": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
    "to_title": "Burnout at Work: Signs, Support, and Next Steps",
    "anchor": "burnout symptoms",
@@ -4227,56 +4236,6 @@
    "anchor": "personal year",
    "relevance": 5,
    "from_strength": 56
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-genetic-testing-complete-guide/",
-   "from_title": "French Bulldog Genetic Testing: DNA Tests, Health Screening, and Breeder Questions",
-   "to": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
-   "to_title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 56
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/legal-considerations-for-french-bulldog-ownership/",
-   "from_title": "French Bulldog Ownership: 7 Legal Facts You Need to Know",
-   "to": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
-   "to_title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/why-do-french-bulldogs-have-no-tail/",
-   "from_title": "Do French Bulldogs Have Tails? Short Tails, Care & Health",
-   "to": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
-   "to_title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-heat-cycle-guide/",
-   "from_title": "French Bulldog Heat Cycle: How Long, How Often & Signs",
-   "to": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
-   "to_title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-c-section-guide/",
-   "from_title": "Do French Bulldogs Need C-Sections? Risks, Costs & Recovery",
-   "to": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
-   "to_title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
   },
   {
    "site": "plantastichaven.com",
@@ -4590,16 +4549,6 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
-   "from_title": "French Bulldog Breeding: Health Screening, Ethics and Costs",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 60
-  },
-  {
-   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
    "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
    "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
@@ -4617,6 +4566,16 @@
    "anchor": "french bulldogs",
    "relevance": 4,
    "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 57
   },
   {
    "site": "frenchyfab.com",
@@ -4890,6 +4849,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/unlocking-compatibility-between-life-paths-1-and-11/",
+   "from_title": "Life Path 1 & 11 Compatibility: Key Insights for 2026",
+   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
+   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/compatibility/",
    "from_title": "Compatibility Guides: Life Path, Moon Sign & Relationship Reflection Tools",
    "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
@@ -4922,16 +4891,6 @@
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/perfect-match-with-life-path-compatibility/",
    "from_title": "Life Path Compatibility: Find Your Perfect Match in 2026",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/love-compatibility-life-path-one-and-seven/",
-   "from_title": "Life Path 1 & 7 Compatibility: Can Opposite Spirits Ignite Passion in 2026?",
    "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
    "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
    "anchor": "life path",
@@ -5017,6 +4976,46 @@
    "anchor": "practical frenchie diet",
    "relevance": 3,
    "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-weight-guide/",
+   "from_title": "French Bulldog Weight: Healthy Range and Body Condition",
+   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "anchor": "practical frenchie diet",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-stress-signs-fixes/",
+   "from_title": "Low-Calorie Treats for French Bulldogs: Safe Rewards",
+   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "anchor": "practical frenchie diet",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/food-aggression-in-french-bulldogs/",
+   "from_title": "French Bulldog Food Aggression: Safety, Management",
+   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/complete-guide-french-bulldog-nutrition/",
+   "from_title": "What Do French Bulldogs Eat? Diet, Portions & Food Guide",
+   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
   }
  ],
  "indexation": {
@@ -5072,11 +5071,11 @@
    {
     "site": "affiliatemarketingforsuccess.com",
     "checked": 258,
-    "healthy": 248,
-    "problems": 10,
-    "critical": 6,
+    "healthy": 254,
+    "problems": 4,
+    "critical": 0,
     "not_found": 0,
-    "server_error": 6,
+    "server_error": 0,
     "noindex": 0,
     "canonical_mismatch": 0,
     "redirect": 0,
@@ -5183,60 +5182,6 @@
    }
   ],
   "issues": [
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 500
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-mistakes",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 500
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/building-an-affiliate-marketing-website",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 500
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/enhance-your-affiliate-marketing-content",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 500
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-create-an-affiliate-marketing-strategy",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 500
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/blog",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 500
-   },
    {
     "site": "efficientgptprompts.com",
     "url": "https://efficientgptprompts.com/shop",
@@ -5916,12 +5861,12 @@
     "words": 60
    }
   ],
-  "total_issues": 74,
+  "total_issues": 68,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first)."
  },
  "tuning": {
   "max_queries": 40,
-  "updated_at": "2026-11-12T07:32:22.238Z"
+  "updated_at": "2026-11-12T16:58:39.173Z"
  },
  "wins": [
   {
@@ -5970,31 +5915,27 @@
   }
  ],
  "log": [
-  "07:27:58 connection dataforseo: connected",
-  "07:27:58 connection gmail: connected",
-  "07:28:01 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
-  "07:28:02 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "07:28:05 crawl frenchyfab.com: 155/155 urls, fetched 0, 304 0, reused 155",
-  "07:28:06 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "07:28:09 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "07:28:10 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "07:28:11 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "07:28:11 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 7, 304 0, reused 251",
-  "07:28:12 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
-  "07:28:15 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "07:28:16 indexation: 74 sitemap URLs with an indexing problem (7 critical)",
-  "07:28:54 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:29:31 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:30:42 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:31:16 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:31:53 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "07:32:22 prospects: 0 from the saved queue, 0 saved for next run; 40 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "07:32:22 self-tuning: next cycle runs up to 40 searches",
-  "07:32:22 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "07:32:23 replies: 15 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "07:32:43 outreach: 0 sent, 0 follow-ups, 0 drafts, 5 held for verification",
-  "07:32:43 - preverify: skipped (runs only while outreach is paused)",
-  "07:32:59 link checks: 9 pages, 0 new links won, 0 lost"
+  "16:55:28 connection dataforseo: connected",
+  "16:55:28 connection gmail: connected",
+  "16:55:32 crawl gearuptogrow.com: 107/107 urls, fetched 3, 304 0, reused 104",
+  "16:55:32 crawl plantastichaven.com: 159/159 urls, fetched 4, 304 0, reused 155",
+  "16:55:36 crawl frenchyfab.com: 155/155 urls, fetched 9, 304 0, reused 146",
+  "16:55:37 crawl mysticaldigits.com: 300/468 urls, fetched 6, 304 0, reused 294",
+  "16:55:38 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
+  "16:55:38 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "16:55:39 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "16:55:40 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 10, 304 0, reused 248",
+  "16:55:41 crawl gearuptofit.com: 300/878 urls, fetched 1, 304 0, reused 299",
+  "16:55:43 crawl efficientgptprompts.com: 300/487 urls, fetched 5, 304 0, reused 295",
+  "16:55:43 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
+  "16:56:33 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "16:58:39 prospects: 0 from the saved queue, 0 saved for next run; 40 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "16:58:39 self-tuning: next cycle runs up to 40 searches",
+  "16:58:39 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "16:58:44 replies: 31 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "16:59:25 outreach: 0 sent, 0 follow-ups, 0 drafts, 24 held for verification",
+  "16:59:25 - preverify: skipped (runs only while outreach is paused)",
+  "16:59:28 link checks: 2 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
