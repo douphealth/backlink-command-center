@@ -7,6 +7,7 @@ import {QUALIFY_VERSION} from './prospect.mjs';
 import {assetStats,linkLikelihood} from './learn.mjs';
 import {RecipientVerifier,isSuppressed,usableVerification,samePublisher,normalizeEmail} from './recipient-policy.mjs';
 import {checkDead} from './broken.mjs';
+import {normUrl as normUrlKey} from './util.mjs';
 export const PER_ASSET_DAILY=2;
 const REGIONS=[
  [/\.(uk|ie|de|fr|es|it|nl|be|pt|gr|se|no|dk|fi|pl|cz|at|ch|eu|za|ro|hu|sk|si|hr|bg|lt|lv|ee|lu|cy|mt)$/,[7,16],1],
@@ -233,6 +234,7 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   const last=state.contacted[p.domain];
   if(suppressed(state,p.email,p.domain)||(last&&ageDays(last)<90)){p.status='skipped_duplicate';stats.skipped++;continue}
   const site=siteBy.get(p.site);if(!site){p.status='stale_asset';stats.skipped++;continue}
+  if(config.blockedAssets?.has(normUrlKey(p.asset_url))){stats.asset_not_indexable=(stats.asset_not_indexable||0)+1;continue} // wait until the page is fixed
   if(!await prepare(p,false))continue;
   const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title||site.domain,type:p.kind==='mention'?'brand':'resource',description:''};
   // The email states that a link is dead: confirm it still is, seconds before writing it.

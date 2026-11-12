@@ -46,6 +46,8 @@ const FIELDS=[
   {name:'VERIFALIA_USERNAME',label:'Verifalia username (needed to send)',type:'text',kind:'secret',help:'Free plan: 25 credits every day, about 12 inbox checks. Create a dedicated user in the Verifalia client area',link:'https://verifalia.com/sign-up'},
   {name:'VERIFALIA_PASSWORD',label:'Verifalia password',type:'password',kind:'secret',help:'Only free daily credits are used, so verification never costs money'},
   {name:'EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox checks per day',type:'number',kind:'setting',min:0,max:100,placeholder:'24 (default)',help:'Leave blank for 24 a day (Verifalia Standard checks, free credits only). 0 turns verification, and so sending, off'},
+  {name:'GSC_SERVICE_ACCOUNT_JSON',label:'Google Search Console service-account JSON',type:'textarea',kind:'secret',help:'Paste the whole JSON key file. Add its client_email as a user on each Search Console property. Unlocks the Google index monitor and clicks tracking'},
+  {name:'BING_WEBMASTER_API_KEY',label:'Bing Webmaster Tools API key',type:'password',kind:'secret',help:'Bing Webmaster Tools → Settings → API access. New and changed pages are submitted to Bing daily',link:'https://www.bing.com/webmasters'},
   {name:'HUNTER_API_KEY',label:'Hunter API key (optional fallback)',type:'password',kind:'secret',help:'Used only when Verifalia\'s free credits for the day are used up. hunter.io → API keys',link:'https://hunter.io/api-keys'},
 ];
 // Settings travel as one encrypted secret (no Variables permission needed); this browser remembers them for display.
@@ -124,6 +126,14 @@ export async function renderAutopilot(h){
   const ix=s.indexation;
   const ixSites=(ix?.sites||[]).filter(x=>x.problems).sort((a,b)=>b.critical-a.critical||b.problems-a.problems).map(x=>`<tr><td><strong>${e(x.site)}</strong><small>${n(x.checked)} sitemap URLs checked</small></td><td><strong>${n(x.critical)}</strong><small>404 · error · noindex · canonical</small></td><td>${n(x.problems)}</td><td>${n(x.healthy)}</td></tr>`);
   const ixRows=(ix?.issues||[]).slice(0,60).map(x=>`<tr><td>${external(x.url,new URL(x.url).pathname)}<small>${e(x.site)}</small></td><td><strong>${e(x.label)}</strong>${x.final_url?`<small>→ ${e(x.final_url)}</small>`:''}${x.canonical?`<small>canonical: ${e(x.canonical)}</small>`:''}${x.words?`<small>${n(x.words)} words</small>`:''}</td><td><small>${e(x.fix)}</small></td></tr>`);
+  const sp=s.search_performance||[],gi=s.google_index,bg=s.bing,hs=s.history||[];
+  const trend=k=>{const v=hs.filter(h=>h[k]!=null);if(v.length<2)return '';const d=v.at(-1)[k]-v[0][k];return `<small class="ap-delta ${d>0?'up':d<0?'down':''}">${d>0?'+':''}${n(d)} since ${e(v[0].date)}</small>`};
+  const spPanel=sp.length?`<div class="ap-gap">${panel('Google search performance',`Last 7 days to ${e(sp[0].to)} (Search Console data lags ~3 days). Clicks: ${n(sp.reduce((a,x)=>a+x.clicks,0))} ${trend('search_clicks_7d')} · Impressions: ${n(sp.reduce((a,x)=>a+x.impressions,0))} ${trend('search_impressions_7d')}`,
+    table(['Site','Clicks','Impressions','Avg position','Pages with impressions','Striking distance (4–20)'],[...sp].sort((a,b)=>b.impressions-a.impressions).map(x=>`<tr><td><strong>${e(x.site)}</strong></td><td>${n(x.clicks)}</td><td>${n(x.impressions)}</td><td>${x.position||'—'}</td><td>${n(x.pages_with_impressions)}</td><td>${n(x.striking_distance)}</td></tr>`)))}</div>`:'';
+  const giPanel=gi?`<div class="ap-gap">${panel('Google index status (URL Inspection)',`${n(gi.sites.reduce((a,x)=>a+x.indexed,0))} indexed · ${n(gi.sites.reduce((a,x)=>a+x.not_indexed,0))} not indexed of ${n(gi.sites.reduce((a,x)=>a+x.checked,0))} important pages checked (rotating, re-checked every 3–14 days)`,
+    table(['Site','Checked','Indexed','Unknown to Google','Discovered, not indexed','Crawled, not indexed','Other'],gi.sites.filter(x=>x.checked).map(x=>`<tr><td><strong>${e(x.site)}</strong></td><td>${n(x.checked)}</td><td>${n(x.indexed)}</td><td>${n(x.unknown||0)}</td><td>${n(x.discovered_not_indexed||0)}</td><td>${n(x.crawled_not_indexed||0)}</td><td>${n(x.not_indexed-(x.unknown||0)-(x.discovered_not_indexed||0)-(x.crawled_not_indexed||0))}</td></tr>`))+
+    (gi.pages.length?table(['Page Google is ignoring','Status','Fix'],gi.pages.slice(0,40).map(x=>`<tr><td>${external(x.url,x.title||new URL(x.url).pathname)}<small>${e(x.site)}${x.promotion?` · promotion ${n(x.promotion)}`:''}</small></td><td><strong>${e(x.class.replaceAll('_',' '))}</strong><small>${e(x.coverage)}</small></td><td><small>${e(x.fix)}</small></td></tr>`)):''))}</div>`:'';
+  const bgLine=bg?`<div class="ap-msg"><strong>Bing URL submission:</strong> ${n(bg.submitted_total)} URLs submitted so far${bg.last_run?.submitted?` (${n(bg.last_run.submitted)} this cycle)`:''}.${Object.keys(bg.errors||{}).length?` Issues: ${e(Object.entries(bg.errors).map(([d,x])=>d+': '+x.error).join(' · '))}. Add/verify those sites in Bing Webmaster Tools (import from Search Console works).`:''}</div>`:'';
   const ixPanel=ix?`<div class="ap-gap">${panel('Indexation health',`${n(ix.total_issues)} sitemap URLs can't be indexed as they are. Fix these before building links to them. ${ix.note}`,
     ixRows.length?table(['Site','Critical','All issues','Healthy'],ixSites)+table(['URL','Problem','Fix'],ixRows):empty('No indexation problems found','Every crawled sitemap URL returns 200, is indexable and self-canonical.'))}</div>`:'';
   schedulePoll();
@@ -132,7 +142,7 @@ export async function renderAutopilot(h){
   return intro('autopilot','')+status+attention+banner+setup+kpiHtml+
     `<div class="overview-grid">${panel('Outreach funnel','Every number is a stored, verified record',funnel)}${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`+
     `<div class="ap-gap">${panel('Best URLs to promote','Linkability × real search demand; templated duplicates and thin pages are demoted',best.length?table(['#','URL & why','Score','Internal links','Prospects'],best):empty('No promotable URLs yet','The next crawl will rank your pages.'))}</div>`+
-    ixPanel+learningPanel(h,s)+
+    spPanel+giPanel+bgLine+ixPanel+learningPanel(h,s)+
     `<div class="ap-gap">${panel('Internal link plan','Add these links on your own pages: highest-ROI, zero-cost ranking boost',internal.length?table(['On this page','Add anchor','Linking to'],internal):empty('No internal gaps found','Your best URLs are already well linked.'))}</div>`+
     `<div class="ap-gap">${panel('Backlinks','Won after outreach, or already linking to you (verified on the live page)',wins.length?table(['Publisher','Page','Links to','Status','Found'],wins):empty('No verified backlinks yet','Pitched pages are re-checked every 4 days for 150 days.'))}</div>`+
     `<div class="ap-gap">${privatePanel(h)}</div>`+
@@ -188,7 +198,7 @@ function connectPanel(h){
   const c=ui.configured||{secrets:new Set()};
   const done=f=>fieldDone(f,c),settings=savedSettings.get();
   const field=f=>{const bad=ui.rejected?.has(f.name),ok=done(f)&&!bad,cur=f.kind==='setting'?settings[f.name]||'':'';
-    const input=f.type==='select'?`<select class="selector" name="${f.name}">${f.options.map(([v,l])=>`<option value="${v}" ${(cur||'send')===v?'selected':''}>${e(l)}</option>`).join('')}</select>`
+    const input=f.type==='textarea'?`<textarea name="${f.name}" rows="4" spellcheck="false" autocomplete="off" placeholder="${ok?'Connected; leave blank to keep':'{ \"type\": \"service_account\", ... }'}"></textarea>`:f.type==='select'?`<select class="selector" name="${f.name}">${f.options.map(([v,l])=>`<option value="${v}" ${(cur||'send')===v?'selected':''}>${e(l)}</option>`).join('')}</select>`
       :`<input name="${f.name}" type="${f.type}" ${f.type==='number'?`min="${f.min??1}" max="${f.max??50}"`:''} autocomplete="${f.type==='password'?'new-password':'off'}" value="${e(cur)}" placeholder="${ok&&!cur?(f.kind==='secret'?'Connected; leave blank to keep':'Saved; type to change'):f.placeholder||(f.type==='number'?'12':'')}" ${f.required&&!ok?'required':''}>`;
     return `<label class="ap-field"><span>${e(f.label)} ${bad?'<b class="ap-need">✗ rejected: re-enter</b>':ok?'<b class="ap-ok">✓ saved</b>':f.required?'<b class="ap-need">needed</b>':''}</span>${input}${f.help?`<small>${f.link?`<a href="${f.link}" target="_blank" rel="noopener">${e(f.help)} ↗</a>`:e(f.help)}</small>`:''}</label>`};
   return panel('Connect Autopilot','Two steps, once. Everything is encrypted in your browser before it reaches GitHub; nothing can read it back.',
@@ -259,6 +269,8 @@ export function bindAutopilot(reload){
     ev.preventDefault();
     const form=new FormData(ev.target),values=FIELDS.map(f=>[f,String(form.get(f.name)||'').trim()]).filter(([,v])=>v);
     const bad=values.find(([f,v])=>(f.type==='email'&&!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(v))||(f.name==='GMAIL_APP_PASSWORD'&&v.replace(/\s+/g,'').length!==16));
+    const gscJson=values.find(([f])=>f.name==='GSC_SERVICE_ACCOUNT_JSON');
+    if(gscJson){try{const j=JSON.parse(gscJson[1]);if(j.type!=='service_account'||!j.private_key||!j.client_email)throw 0}catch{ui.err='The Search Console field must be the complete service-account JSON key file (type "service_account").';return reload()}}
     if(bad){ui.err=bad[0].name==='GMAIL_APP_PASSWORD'?'A Gmail app password is exactly 16 letters.':`${bad[0].label} doesn't look like an email address.`;return reload()}
     const secrets=values.filter(([f])=>f.kind==='secret');
     const settings={...savedSettings.get(),...Object.fromEntries(values.filter(([f])=>f.kind==='setting').map(([f,v])=>[f.name,v]))};
