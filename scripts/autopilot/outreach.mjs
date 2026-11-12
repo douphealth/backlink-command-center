@@ -193,6 +193,7 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
    continue;
   }
   const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title};
+  if(p.broken_link){const r=await (config.recheckBroken||(u=>checkDead(u)))(p.broken_link.url).catch(()=>null);if(!r?.dead){p.broken_link_cleared_at=NOW();delete p.broken_link}}
   try{await deliver(p,followupPitch(p,asset,{senderName:config.senderName}),'followup',initial.message_id);p.status='followed_up';stats.followups++;budget--;await sleep(config.gapMs())}
   catch{p.status='delivery_uncertain';p.no_followup=true;log('follow-up held after uncertain delivery; no automatic retry');break}
  }

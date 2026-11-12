@@ -174,3 +174,12 @@ test('spend estimate is learned from real charges',async()=>{
   const d=new DataForSEO({login:'l',password:'p',state:st,dailyUsd:0.5,monthlyUsd:10});
   assert.equal(d.estimate('serp'),0.02);assert.equal(d.affordable('serp'),22); // (0.5-0.06)/0.02
 });
+test('follow-up adds a new, verifiable reason and an easy one-word reply',async()=>{
+  const {followupPitch}=await import('../../scripts/autopilot/pitch.mjs');
+  const f=followupPitch({title:'Best Running Resources',author:'Jane Doe',last_subject:'Resource for your page'},asset,{senderName:'Alex'});
+  assert.equal(f.subject,'Re: Resource for your page');assert.match(f.body,/^Hi Jane,/);
+  assert.match(f.body,/One detail I didn't mention: it is a free interactive tool/);assert.match(f.body,/reply "no"/);
+  assert.deepEqual(f.body.match(/https?:\/\/\S+/g),[asset.url]);assert.doesNotMatch(f.body,/top of your inbox/);
+  const b=followupPitch({title:'X',broken_link:{anchor:'shoe fit guide',host:'deadshoes.com',reason:'not_found'}},asset,{senderName:'Alex'});
+  assert.match(b.body,/"shoe fit guide" \(deadshoes\.com\) on that page still returns a "page not found" error/);
+});

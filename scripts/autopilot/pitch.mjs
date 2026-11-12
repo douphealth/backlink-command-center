@@ -64,10 +64,17 @@ export function mentionPitch(p,asset,{senderName,site}){
       `Would you consider turning the mention into a link, so readers can find it in one click? Here's the address: ${asset.url}`,'',
       `Thanks again for including us.`,'',`Best,`,senderName,site.domain,'',OPT_OUT].join('\n'),writer:'template'};
 }
+/**
+ * One follow-up that adds a NEW reason to reply (a re-checked dead link, or a verifiable fact about the page)
+ * instead of "bumping this up", and makes answering a one-word reply.
+ */
 export function followupPitch(p,asset,{senderName}){
-  const name=firstName(p.author);
+  const name=firstName(p.author),b=p.broken_link,facts=assetFacts(asset);
+  const reason=b?`The link to ${b.anchor&&b.anchor.length>=3?`"${short(b.anchor,60)}" (${b.host})`:`the ${b.host} link`} on that page still ${DEAD[b.reason]||'does not work'}, so this could replace it.`
+    :facts.length?`One detail I didn't mention: ${facts[0]}.`:'';
   return {subject:/^re:/i.test(p.last_subject||'')?p.last_subject:`Re: ${p.last_subject||short(asset.title)}`,
-    body:[`Hi ${name||'there'},`,'',`Just bringing this back to the top of your inbox in case it got buried: ${short(asset.title,100)} (${asset.url}) could be a good fit for "${short(p.title,80)}".`,'',`No worries if it is not a match. I will not follow up again.`,'',`Best,`,senderName].join('\n'),writer:'template'};
+    body:[`Hi ${name||'there'},`,'',`Following up on my note about "${short(p.title,80)}".${reason?' '+reason:''}`,'',`Here it is again: ${asset.url}`,'',
+      `If it's not a fit, just reply "no" and I won't email again.`,'',`Best,`,senderName].join('\n'),writer:'template'};
 }
 
 const SCHEMA={type:'object',properties:{subject:{type:'string'},body:{type:'string'}},required:['subject','body'],additionalProperties:false};
