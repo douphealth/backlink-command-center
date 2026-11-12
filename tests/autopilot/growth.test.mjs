@@ -137,7 +137,7 @@ test('queued prospects are back-filled with dead-link evidence once per 30 days'
 test('a saved Verifalia login turns free verification on at 12/day unless the owner set a limit',async()=>{
   const {verifierDefaults}=await import('../../scripts/autopilot/run.mjs');
   const v={VERIFALIA_USERNAME:'u',VERIFALIA_PASSWORD:'p',EMAIL_VERIFICATION_ENABLED:'NO',EMAIL_VERIFY_DAILY_LIMIT:'0'};
-  assert.equal(loadConfig(v,[]).verifier.enabled,true);assert.equal(loadConfig(v,[]).verifier.dailyLimit,12);
+  assert.equal(loadConfig(v,[]).verifier.enabled,true);assert.equal(loadConfig(v,[]).verifier.dailyLimit,24);
   const off={...v,LINKFORGE_SETTINGS:JSON.stringify({EMAIL_VERIFICATION_ENABLED:'NO',EMAIL_VERIFY_DAILY_LIMIT:'0'})};
   assert.equal(loadConfig(off,[]).verifier.enabled,false);
   assert.equal(loadConfig({...v,VERIFALIA_ALLOW_PAID:'YES'},[]).verifier.enabled,false); // paid use needs an explicit opt-in

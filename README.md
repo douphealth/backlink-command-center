@@ -57,7 +57,7 @@ The setup script stores everything as **encrypted GitHub Actions secrets** (valu
 | `GMAIL_ADDRESS` / `GMAIL_APP_PASSWORD` | Drafts, sending, reply & bounce detection | myaccount.google.com/apppasswords (2-Step Verification required) |
 | `SENDER_NAME` (variable) | Signing pitches | Your name, e.g. "Alex from GearUpToFit" |
 | `OUTREACH_MODE` (variable) | `draft` (default) or `send` for hands-free | — |
-| `VERIFALIA_USERNAME` / `VERIFALIA_PASSWORD` + mailbox checks per day | **Required to send anything.** Every inbox gets a fresh positive mailbox verification before an email goes out | verifalia.com free plan: 25 credits **every day** (High quality = 2 credits, so about 12 checks/day, roughly 15× Hunter's free 50/month). Only free credits are used unless `VERIFALIA_ALLOW_PAID=YES`. Set on the dashboard (⚙ Connect); a daily limit above 0 is the opt-in |
+| `VERIFALIA_USERNAME` / `VERIFALIA_PASSWORD` + mailbox checks per day | **Required to send anything.** Every inbox gets a fresh positive mailbox verification before an email goes out | verifalia.com free plan: 25 credits **every day** (Standard quality = 1 credit, so about 24 checks/day by default). Only free credits are used unless `VERIFALIA_ALLOW_PAID=YES`. Set on the dashboard (⚙ Connect); a daily limit above 0 is the opt-in |
 | `HUNTER_API_KEY` *(optional)* | Fallback verifier when the day's Verifalia free credits are used up | hunter.io → API keys |
 | `ANTHROPIC_API_KEY` *(optional)* | Unique, page-specific pitches written by Claude | console.anthropic.com |
 | `GSC_SERVICE_ACCOUNT_JSON` *(optional)* | Exact impressions/positions → striking-distance targeting | Google Cloud service account with Search Console access |
