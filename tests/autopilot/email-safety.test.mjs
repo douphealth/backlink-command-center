@@ -91,3 +91,17 @@ test('mailbox scanning paginates oldest-first and scopes cursor to UIDVALIDITY',
  const batch=await imap.recentHeaders(new Date(),{max:2,cursor:{mailbox:'[Gmail]/All Mail',uidvalidity:'99',uid:900}});
  assert.equal(batch.complete,false);assert.equal(batch.cursor.uid,11);assert.ok(calls.some(x=>x.startsWith('UID SEARCH SINCE')));assert.ok(calls.some(x=>x.startsWith('UID FETCH 10,11')));
 });
+test('old follow-ups that fail current recipient rules are retired and cannot starve new pitches',async()=>{
+  const old=new Date(Date.now()-9*86400000).toISOString(),prospects={};
+  for(let i=0;i<20;i++)prospects['f'+i]={...p('f'+i),status:'sent',history:[{type:'initial',at:old,mode:'send',message_id:'<lf-'+i+'>'}]};
+  prospects.n={...p('n')};
+  const f=fixture(prospects);
+  f.args.mailer.authorizeRecipient=async q=>q.id==='n'?proof(q):{ok:false,reason:'no_published_editorial_contact',detail:'only_non_editorial_inbox_published'};
+  const r=await runOutreach(f.args);
+  assert.equal(r.sent,1,'the new pitch must get a verification turn');assert.equal(r.followups_retired,8);
+  assert.equal(Object.values(prospects).filter(x=>x.no_followup).length,8);
+  const again=await runOutreach(f.args);assert.equal(again.followups_retired,8); // the next 8, never the same ones again
+  const transient={...p('t'),status:'sent',history:[{type:'initial',at:old,mode:'send',message_id:'<lf-t>'}]};
+  const g=fixture({t:transient});g.args.mailer.authorizeRecipient=async()=>({ok:false,reason:'no_verified_mailbox',detail:'mailbox_verifalia_free_credits_used_up'});
+  await runOutreach(g.args);assert.ok(!transient.no_followup,'our-side holds must not retire a follow-up');
+});

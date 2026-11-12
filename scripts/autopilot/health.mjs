@@ -13,8 +13,10 @@ export function autotune(state,prospects,{envQueries}={}){
   if(envQueries!=null)return state.tuning.max_queries=envQueries; // an explicit owner setting always wins
   let q=Number(state.tuning.max_queries)||TUNING.start;
   const r=prospects?.result||{};
+  const yieldPerQuery=r.queries?(r.candidates||0)/r.queries:null;
   if(prospects?.ok===false&&/time budget/.test(prospects.error||'')||r.deferred>0)q-=TUNING.step;      // ran out of time
-  else if(prospects?.ok&&r.queries>=q&&(r.failed_queries||0)<=r.queries/4)q+=TUNING.step;              // used it all, cleanly
+  else if(r.queries>=8&&yieldPerQuery<0.2)q=Math.floor(q/2);                                         // searches find almost nothing new: stop paying for them
+  else if(prospects?.ok&&r.queries>=q&&yieldPerQuery>=1&&(r.failed_queries||0)<=r.queries/4)q+=TUNING.step; // productive and used it all
   state.tuning.max_queries=Math.max(TUNING.minQueries,Math.min(TUNING.maxQueries,q));
   state.tuning.updated_at=new Date().toISOString();
   return state.tuning.max_queries;
@@ -49,7 +51,8 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
       'Handled automatically; held inboxes are re-checked after 3 days.');
   }
   const p=stages.prospects;
-  if(p?.ok&&p.result?.queries>=8&&!p.result?.qualified&&!p.result?.deferred)add('warn','no_qualified',`${p.result.queries} searches produced 0 qualified prospects this cycle.`,'Usually transient; if it repeats, the promoted pages may need stronger topical matches.');
+  if(p?.ok&&p.result?.queries>=8&&!p.result?.candidates&&!p.result?.from_queue)add('warn','discovery_saturated',`${p.result.queries} searches found no site that has not been evaluated already.`,'Handled automatically: search volume is halved and long-tail searches built from each page\'s own phrases take priority.');
+  else if(p?.ok&&p.result?.queries>=8&&!p.result?.qualified&&!p.result?.deferred)add('warn','no_qualified',`${p.result.queries} searches produced 0 qualified prospects this cycle.`,'Usually transient; if it repeats, the promoted pages may need stronger topical matches.');
   if(p?.result&&(p.result.failed_queries||0)>Math.max(2,p.result.queries/3))add('warn','dataforseo_errors',`${p.result.failed_queries} DataForSEO searches failed (provider errors); they are retried next cycle.`,'No action unless it persists for a day.');
   if(spend.daily_cap_usd&&spend.today_usd>=spend.daily_cap_usd*0.95)add('info','spend_cap','Today\'s DataForSEO spend cap is reached; prospecting resumes tomorrow.','Raise DATAFORSEO_DAILY_USD only if you want faster prospecting.');
   for(const [name,s] of Object.entries(stages))if(s?.ok===false&&!['prospects','preverify'].includes(name))add('warn',`stage_${name}`,`The ${name.replace('_',' ')} stage failed: ${String(s.error||'').slice(0,120)}`,'It retries automatically next cycle.');

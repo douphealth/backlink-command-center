@@ -32,7 +32,9 @@ jobs:
           node -e "
           const fs=require('fs');let last=0;
           try{last=Date.parse(JSON.parse(fs.readFileSync('public/data/autopilot.json','utf8')).generated_at)||0}catch{}
-          const hours=(Date.now()-last)/36e5,due=process.env.EVENT!=='schedule'||hours>=Number(process.env.MIN_HOURS);
+          const now=new Date(),h=now.getUTCHours(),weekday=now.getUTCDay()>0&&now.getUTCDay()<6;
+          // Extra cycles every 2 h on weekdays 07-21 UTC: the EU and US send windows, so verified inboxes get emailed the same day.
+          const hours=(Date.now()-last)/36e5,due=process.env.EVENT!=='schedule'||hours>=Number(process.env.MIN_HOURS)||(weekday&&h>=7&&h<21&&hours>=2);
           console.log('Last cycle '+hours.toFixed(1)+' h ago; due: '+due);
           fs.appendFileSync(process.env.GITHUB_OUTPUT,'due='+due+String.fromCharCode(10))"
       - uses: actions/setup-node@v4

@@ -34,7 +34,16 @@ export const FOOTPRINTS={
   // Curated link pages and roundups exist to link out: highest acceptance for new resources.
   link_roundup:'{t} "link roundup"', weekly_roundup:'{t} "weekly roundup"', best_of_web:'{t} "best of the web"',
   further_reading:'{k} "further reading"', helpful_resources:'{k} "helpful resources"', recommended_tools:'{t} "recommended tools"',
+  // Long-tail: built from the promoted page's own distinctive phrases ({b}), so searches reach past the
+  // same top-20 sites that every short topic query returns (discovery saturated on those in Nov 2026).
+  phrase_resources:'"{b}" resources', phrase_links:'"{b}" "useful links"', phrase_blog:'"{b}" blog',
 };
+const PHRASE_FPS=['phrase_resources','phrase_links','phrase_blog'];
+/** Distinctive two-word phrases from the page's own top terms (not the site topic itself). */
+export function assetPhrases(asset,site,max=3){
+  const topic=new Set(tokens(site?.topic||''));
+  return (asset.terms||[]).filter(t=>/^[a-z0-9]+ [a-z0-9]+$/.test(t)&&!t.split(' ').every(w=>topic.has(w))).slice(0,max);
+}
 const BY_TYPE={
   interactive_tool:['intent','tools','free_tools','best_resources','intitle_resources','useful_websites','inurl_resources','k_resources','recommended_tools','helpful_resources','link_roundup'],
   methodology:['intent','statistics','research_resources','intitle_resources','sources','inurl_resources','further_reading','helpful_resources'],
@@ -48,12 +57,15 @@ export function queriesFor(asset,site){
     const q=FOOTPRINTS[fp].replace('{t}',t).replace('{k}',k).trim();
     if(q.length>3&&!seen.has(q)){seen.add(q);out.push({q,fp})}
   }
+  for(const b of assetPhrases(asset,site))for(const fp of PHRASE_FPS){
+    const q=FOOTPRINTS[fp].replace('{b}',b);if(!seen.has(q)){seen.add(q);out.push({q,fp})}
+  }
   return out;
 }
 /** Best guess of the footprint behind an older query string (before footprints were recorded). */
 export function footprintOf(query,site){
   for(const [fp,tpl] of Object.entries(FOOTPRINTS)){if(fp==='intent')continue;
-    const re=new RegExp('^'+tpl.replace(/[.*+?^$()|[\]\\]/g,'\\$&').replace('\\{t\\}',`(${site?.topic?.replace(/[.*+?^$()|[\]\\]/g,'\\$&')||'.+'})`).replace(/\{t\}|\{k\}/g,'.+')+'$','i');
+    const re=new RegExp('^'+tpl.replace(/[.*+?^$()|[\]\\]/g,'\\$&').replace('\\{t\\}',`(${site?.topic?.replace(/[.*+?^$()|[\]\\]/g,'\\$&')||'.+'})`).replace(/\{t\}|\{k\}|\{b\}/g,'.+')+'$','i');
     if(re.test(query))return fp}
   return /^"[^"]+"( OR "[^"]+")? -site:/.test(query)?'mention':'intent';
 }
@@ -80,9 +92,12 @@ export function freshQueryCount(asset,site,state,{reuseDays=45}={}){
 export function pickQueries(assets,sites,state,{perAsset=2,reuseDays=45}={}){
   state.queries??={};
   const bySite=new Map(sites.map(s=>[s.domain,s])),out=[],yieldBy=footprintYield(state,sites);
+  // Rank by pitchable yield x novelty (share of results that are sites never evaluated before).
+  const nov=fp=>{const x=state.fp_novelty?.[fp];return x?(x.n+1)/(x.q+2):0.5};
+  const score=fp=>(yieldBy[fp]?.rate??1/3)*nov(fp);
   for(const a of assets){
     const fresh=queriesFor(a,bySite.get(a.site)).filter(x=>ageDays(state.queries[`${a.site}|${x.q}`])>reuseDays)
-      .sort((x,y)=>(yieldBy[y.fp]?.rate??1/3)-(yieldBy[x.fp]?.rate??1/3));
+      .sort((x,y)=>score(y.fp)-score(x.fp));
     for(const x of fresh.slice(0,perAsset))out.push({asset:a,query:x.q,footprint:x.fp});
   }
   return out;
@@ -178,7 +193,7 @@ export async function findContact(pageUrl,pageHtml,{fetchImpl=fetch,author=''}={
  * Run discovery for the chosen assets. Mutates `state.prospects` / `state.domains`.
  * Returns counters for the run report.
  */
-export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,resolveHost,perAsset=2,maxNewPerRun=60,maxQueries=24,deadline=Infinity,log=()=>{}}){
+export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,resolveHost,perAsset=2,maxNewPerRun=60,maxQueries=24,serpDepth=50,deadline=Infinity,log=()=>{}}){
   state.prospects??={};state.domains??={};state.queries??={};
   const ourDomains=sites.map(s=>s.domain),competitors=new Set(sites.flatMap(s=>s.competitors||[]));
   const bySite=new Map(sites.map(s=>[s.domain,s]));
@@ -197,12 +212,16 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     state.queries[`${site.domain}|${job.query}`]=NOW();stats.queries++;stats.serp_results+=results.length;
     if(job.kind==='mention'){state.mentions_at[site.domain]=NOW();stats.mention_queries++}
     const asset={site:job.asset.site,url:job.asset.url,title:job.asset.title,h1:job.asset.h1,type:job.asset.type,terms:(job.asset.terms||[]).slice(0,30)};
+    const before=fresh.length;state.fp_novelty??={};
     for(const r of results){
       const domain=rootDomain(r.domain||hostOf(r.url));
       if(!domain||BLOCKED.test(domain)||GOVERNMENT.test(domain)||ACADEMIC.test(domain)||ourDomains.some(d=>sameSite(domain,d))||competitors.has(domain)||UGC.test(new URL(r.url).pathname))continue;
       if(knownDomain(state,site.domain,domain)||fresh.some(f=>f.domain===domain&&f.site===site.domain))continue;
       fresh.push({site:site.domain,domain,url:normUrl(r.url),serp_title:r.title,query:job.query,footprint:job.footprint,kind:job.kind||'resource',rank:r.rank,asset});
     }
+    // Novelty learning: how many never-seen sites each search pattern still finds (old data halves over time).
+    const nv=state.fp_novelty[job.footprint]??={q:0,n:0};if(nv.q>=40){nv.q/=2;nv.n/=2}nv.q++;nv.n+=Math.min(1,(fresh.length-before)/3);
+    stats.new_domains=(stats.new_domains||0)+(fresh.length-before);
   };
   // Live SERPs take ~10 s each: run them 4 at a time (never more than the spend cap allows).
   for(let i=0;i<jobs.length;){
@@ -210,7 +229,7 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     const n=Math.min(4,maxQueries-stats.queries,jobs.length-i,dfs.affordable?dfs.affordable('serp'):(dfs.canSpend('serp')?1:0));
     if(n<=0)break;
     const batch=jobs.slice(i,i+n);i+=n;
-    const results=await Promise.all(batch.map(j=>dfs.serp(j.query)));
+    const results=await Promise.all(batch.map(j=>dfs.serp(j.query,{depth:serpDepth})));
     batch.forEach((job,k)=>{if(results[k]===null)stats.failed_queries=(stats.failed_queries||0)+1;else take(job,results[k])}); // provider error: retried next run
   }
   // One cheap request sizes every new candidate domain; drop giants and dead sites before fetching anything.

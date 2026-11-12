@@ -40,16 +40,21 @@ export class DataForSEO{
   }
   spend(period){const key=period==='day'?NOW().slice(0,10):NOW().slice(0,7);
     return this.state.ledger.filter(x=>x.at.startsWith(key)).reduce((n,x)=>n+Number(x.cost||0),0)}
+  /** Expected cost of one call: the average of the last 20 real charges of this kind, else the calibrated default. */
+  estimate(kind){
+    const recent=this.state.ledger.filter(x=>x.kind===kind).slice(-20);
+    return recent.length>=3?recent.reduce((n,x)=>n+Number(x.cost||0),0)/recent.length:(ESTIMATE[kind]??0.05);
+  }
   canSpend(kind){
     if(!this.enabled)return false;
     const b=this.state.dfs_blocked[kind];if(b&&ageDays(b)<7)return false;
-    const est=ESTIMATE[kind]??0.05;
+    const est=this.estimate(kind);
     return this.spend('day')+est<=this.dailyUsd&&this.spend('month')+est<=this.monthlyUsd;
   }
   /** How many calls of this kind fit under both spend caps right now (for parallel batches). */
   affordable(kind){
     if(!this.canSpend(kind))return 0;
-    const est=ESTIMATE[kind]??0.05;
+    const est=Math.max(1e-4,this.estimate(kind));
     return Math.max(0,Math.floor(Math.min(this.dailyUsd-this.spend('day'),this.monthlyUsd-this.spend('month'))/est));
   }
   async post(kind,endpoint,task){
