@@ -34,7 +34,7 @@ Set these in GitHub Actions settings, never in public files or issues:
 | Type | Name | Requirement |
 | --- | --- | --- |
 | Secret | `VERIFALIA_USERNAME` / `VERIFALIA_PASSWORD` | A Verifalia user (preferably a dedicated sub-user). HTTP Basic auth header; never in URLs. |
-| Variable | `VERIFALIA_QUALITY` | `Standard` (1 credit), `High` (2, default) or `Extreme` (4). |
+| Variable | `VERIFALIA_QUALITY` | `Standard` (1 credit, default), `High` (2) or `Extreme` (4). |
 | Variable | `VERIFALIA_ALLOW_PAID` | `YES` lets checks use purchased credit packs. Default: free daily credits only, read from `/credits/balance` before any submission, so verification cannot cost money. |
 
 A send needs `classification=Deliverable`, `status=Success` and no disposable flag, for the exact address. `ServerIsCatchAll`, `Risky` and `Unknown` hold; `Undeliverable` suppresses the address. Each finished job is deleted from Verifalia right after it is read. A submission is never re-sent after an uncertain network error. Credit savers: catch-all domains are remembered for 90 days and skipped (no provider can prove an inbox there), inconclusive answers are not re-bought for 3 days, and checks happen only at send time for the highest-ranked prospect inside its send window. Hunter is called only when Verifalia has no free credits left that day or is unavailable. The owner's daily cap covers both providers.

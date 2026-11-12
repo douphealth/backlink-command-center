@@ -172,7 +172,9 @@ export class RecipientVerifier{
   }
   async verifalia(email){
     if(this.verifaliaOff)return {reason:this.verifaliaOff};
-    const quality=Object.hasOwn(VERIFALIA_COST,this.env.VERIFALIA_QUALITY)?this.env.VERIFALIA_QUALITY:'High',cost=VERIFALIA_COST[quality];
+    // Standard (1 credit) by default: twice as many free checks per day as High; a Deliverable answer is still a
+    // positive mailbox check, and inconclusive answers hold. VERIFALIA_QUALITY=High|Extreme for more passes.
+    const quality=Object.hasOwn(VERIFALIA_COST,this.env.VERIFALIA_QUALITY)?this.env.VERIFALIA_QUALITY:'Standard',cost=VERIFALIA_COST[quality];
     // Free credits only, unless the owner explicitly allows paid credit packs: this provider can never cost money by default.
     const paid=this.env.VERIFALIA_ALLOW_PAID==='YES';
     if(!paid){

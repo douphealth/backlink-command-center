@@ -28,11 +28,11 @@ test('deliverable inbox passes with Basic auth, no credentials in URLs, and the 
   const f=fixture(),r=await f.v.verify(prospect);
   assert.equal(r.ok,true);assert.equal(r.verification.provider,'verifalia');assert.ok(usableVerification(r.verification,email,now));
   const post=f.posts()[0];assert.equal(post.u,VERIFALIA_API[0]+'/email-validations?waitTime=30000');
-  assert.deepEqual(JSON.parse(post.body),{entries:[{inputData:email}],quality:'High'});
+  assert.deepEqual(JSON.parse(post.body),{entries:[{inputData:email}],quality:'Standard'});
   assert.equal(post.headers.Authorization,'Basic '+Buffer.from('lf-user:not-a-real-secret').toString('base64'));
   assert.ok(f.calls.every(c=>!c.u.includes('not-a-real-secret')&&!c.u.includes('lf-user')));
   assert.ok(f.calls.some(c=>c.method==='DELETE'&&c.u.endsWith('/email-validations/job-1')));
-  assert.equal(f.state.verifier_balance.free_credits,23); // High quality costs 2 credits
+  assert.equal(f.state.verifier_balance.free_credits,24); // Standard quality costs 1 credit
 });
 test('only Deliverable + Success for the exact address counts; catch-all, risky, disposable and mismatches never do',()=>{
   assert.equal(verifaliaVerdict(entry(),email,now).status,'valid');
@@ -43,7 +43,7 @@ test('only Deliverable + Success for the exact address counts; catch-all, risky,
   assert.equal(verifaliaVerdict(entry(email,{status:'ServerIsCatchAll',classification:'Risky'}),email,now).catch_all,true);
 });
 test('free credits only: no submission when today\'s free credits cannot cover the check',async()=>{
-  const f=fixture({free:1});const r=await f.v.mailbox(email);
+  const f=fixture({free:1,envChange:{VERIFALIA_QUALITY:'High'}});const r=await f.v.mailbox(email);
   assert.equal(r.reason,'verifalia_free_credits_used_up');assert.equal(f.posts().length,0);
   const std=fixture({free:1,envChange:{VERIFALIA_QUALITY:'Standard'}});assert.equal((await std.v.mailbox(email)).status,'valid');
   const paid=fixture({free:0,envChange:{VERIFALIA_ALLOW_PAID:'YES'}});assert.equal((await paid.v.mailbox(email)).status,'valid');
@@ -54,7 +54,7 @@ test('falls back to Hunter when Verifalia free credits are used up',async()=>{
   assert.equal(r.status,'valid');assert.equal(r.provider,'hunter');assert.equal(f.posts().length,0);
 });
 test('balance is read once per run and decremented locally',async()=>{
-  const f=fixture({free:4});await f.v.mailbox('a@journal.example');await f.v.mailbox('b@journal.example');
+  const f=fixture({free:4,envChange:{VERIFALIA_QUALITY:'High'}});await f.v.mailbox('a@journal.example');await f.v.mailbox('b@journal.example');
   assert.equal((await f.v.mailbox('c@journal.example')).reason,'verifalia_free_credits_used_up');
   assert.equal(f.calls.filter(c=>c.u.endsWith('/credits/balance')).length,1);assert.equal(f.posts().length,2);
 });

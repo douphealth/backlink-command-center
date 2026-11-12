@@ -49,7 +49,7 @@ export function verifierDefaults(env){
   let s={};try{s=JSON.parse(env.LINKFORGE_SETTINGS||'{}')}catch{}
   const explicit=['YES','NO'].includes(s.EMAIL_VERIFICATION_ENABLED)||env.EMAIL_VERIFICATION_ENABLED==='YES';
   if(explicit||!(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD)||env.VERIFALIA_ALLOW_PAID==='YES')return env;
-  return {...env,EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:Number(env.EMAIL_VERIFY_DAILY_LIMIT)>0?env.EMAIL_VERIFY_DAILY_LIMIT:'12'};
+  return {...env,EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:Number(env.EMAIL_VERIFY_DAILY_LIMIT)>0?env.EMAIL_VERIFY_DAILY_LIMIT:'24'};
 }
 export function loadConfig(env=process.env,argv=process.argv){
   env=verifierDefaults(withDashboardSettings(env));

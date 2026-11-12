@@ -45,7 +45,7 @@ const FIELDS=[
   {name:'ANTHROPIC_API_KEY',label:'Anthropic API key (optional)',type:'password',kind:'secret',help:'Claude writes a unique pitch for every page'},
   {name:'VERIFALIA_USERNAME',label:'Verifalia username (needed to send)',type:'text',kind:'secret',help:'Free plan: 25 credits every day, about 12 inbox checks. Create a dedicated user in the Verifalia client area',link:'https://verifalia.com/sign-up'},
   {name:'VERIFALIA_PASSWORD',label:'Verifalia password',type:'password',kind:'secret',help:'Only free daily credits are used, so verification never costs money'},
-  {name:'EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox checks per day',type:'number',kind:'setting',min:0,max:100,placeholder:'12 (default)',help:'Leave blank for 12 a day (Verifalia free credits only). 0 turns verification, and so sending, off'},
+  {name:'EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox checks per day',type:'number',kind:'setting',min:0,max:100,placeholder:'24 (default)',help:'Leave blank for 24 a day (Verifalia Standard checks, free credits only). 0 turns verification, and so sending, off'},
   {name:'HUNTER_API_KEY',label:'Hunter API key (optional fallback)',type:'password',kind:'secret',help:'Used only when Verifalia\'s free credits for the day are used up. hunter.io → API keys',link:'https://hunter.io/api-keys'},
 ];
 // Settings travel as one encrypted secret (no Variables permission needed); this browser remembers them for display.
