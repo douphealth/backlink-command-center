@@ -31,7 +31,7 @@ function offlineCard(h){
 const ago=t=>{if(!t)return 'never';const m=Math.round((Date.now()-Date.parse(t))/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':Math.round(m/1440)+' d ago'};
 function nextRun(last){const t=Math.max(Date.parse(last||0)+5*36e5,Date.now());const d=new Date(t);if(d.getUTCMinutes()>23)d.setUTCHours(d.getUTCHours()+1);d.setUTCMinutes(23,0,0);return d}
 
-const STATUS_ORDER=['positive','won','replied','followed_up','sent','drafted','ready','contact_form','no_contact','already_linked','declined','bounced','skipped_duplicate','rejected'];
+const STATUS_ORDER=['positive','won','replied','followed_up','sent','drafted','ready','contact_form','no_contact','contact_unverifiable','already_linked','declined','bounced','skipped_duplicate','rejected'];
 const ui={filter:'active',vault:null,error:'',control:null,configured:null,tokenError:'',showConnect:false,msg:'',err:'',busy:'',settleUntil:0};
 let reloadView=null,pollTimer=null;
 const FIELDS=[

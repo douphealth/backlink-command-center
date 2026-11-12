@@ -213,10 +213,20 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     if(job.kind==='mention'){state.mentions_at[site.domain]=NOW();stats.mention_queries++}
     const asset={site:job.asset.site,url:job.asset.url,title:job.asset.title,h1:job.asset.h1,type:job.asset.type,terms:(job.asset.terms||[]).slice(0,30)};
     const before=fresh.length;state.fp_novelty??={};
+    const drop=k=>{stats.filtered??={};stats.filtered[k]=(stats.filtered[k]||0)+1};
     for(const r of results){
       const domain=rootDomain(r.domain||hostOf(r.url));
-      if(!domain||BLOCKED.test(domain)||GOVERNMENT.test(domain)||ACADEMIC.test(domain)||ourDomains.some(d=>sameSite(domain,d))||competitors.has(domain)||UGC.test(new URL(r.url).pathname))continue;
-      if(knownDomain(state,site.domain,domain)||fresh.some(f=>f.domain===domain&&f.site===site.domain))continue;
+      // Every dropped result is counted by reason, so a stalled pipeline shows exactly where (published, no URLs).
+      if(!domain){drop('no_domain');continue}
+      if(BLOCKED.test(domain)){drop('platform_or_giant');continue}
+      if(GOVERNMENT.test(domain)||ACADEMIC.test(domain)){drop('gov_or_edu');continue}
+      if(ourDomains.some(d=>sameSite(domain,d))){drop('own_site');continue}
+      if(competitors.has(domain)){drop('competitor');continue}
+      let path='';try{path=new URL(r.url).pathname}catch{drop('bad_url');continue}
+      if(UGC.test(path)){drop('forum_or_ugc');continue}
+      if(state.domains?.[`${site.domain}|${domain}`]){drop('already_evaluated');continue}
+      if(state.suppression?.[domain]||state.contacted?.[domain]){drop('contacted_or_suppressed');continue}
+      if(fresh.some(f=>f.domain===domain&&f.site===site.domain)){drop('duplicate_this_run');continue}
       fresh.push({site:site.domain,domain,url:normUrl(r.url),serp_title:r.title,query:job.query,footprint:job.footprint,kind:job.kind||'resource',rank:r.rank,asset});
     }
     // Novelty learning: how many never-seen sites each search pattern still finds (old data halves over time).

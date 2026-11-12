@@ -105,3 +105,10 @@ test('old follow-ups that fail current recipient rules are retired and cannot st
   const g=fixture({t:transient});g.args.mailer.authorizeRecipient=async()=>({ok:false,reason:'no_verified_mailbox',detail:'mailbox_verifalia_free_credits_used_up'});
   await runOutreach(g.args);assert.ok(!transient.no_followup,'our-side holds must not retire a follow-up');
 });
+test('a prospect failing publisher-side checks twice leaves the ready queue; our-side failures never do',async()=>{
+  const {applyProof}=await import('../../scripts/autopilot/outreach.mjs');
+  const q={...p('q')},st={suppression:{}};const fail=detail=>({ok:false,reason:'no_published_editorial_contact',detail});
+  applyProof(st,q,fail('no_email_published'));assert.equal(q.status,'ready');
+  applyProof(st,q,fail('only_non_editorial_inbox_published'));assert.equal(q.status,'contact_unverifiable');
+  const r={...p('r')};applyProof(st,r,fail('mailbox_verifalia_free_credits_used_up'));applyProof(st,r,fail('mailbox_verifalia_free_credits_used_up'));assert.equal(r.status,'ready');
+});
