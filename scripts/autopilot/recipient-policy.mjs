@@ -208,10 +208,14 @@ export class RecipientVerifier{
     const pending=Promise.resolve().then(()=>this.fetchPage(url,{timeout:8000,maxBytes:300000,redirects:2})).then(r=>r.status===200&&r.body&&samePublisher(r.url,domain)?r:null).catch(()=>null);
     this.pages.set(url,pending);return pending;
   }
-  async verify(p,{followup=false,deadline=Infinity}={}){
+  /**
+   * screenOnly: apply every free, first-party rule (pages, address type, suppression) and stop before DNS and
+   * the paid mailbox check. Used to clean the ready queue without spending verification credits.
+   */
+  async verify(p,{followup=false,deadline=Infinity,screenOnly=false}={}){
     // `detail` says exactly why (no addresses): it is aggregated on the dashboard to tune the pipeline.
     const fail=(reason,detail)=>({ok:false,reason,...(detail?{detail}:{})}),published=new Set();let fetched=0;if(isSuppressed(this.state,p.email,p.domain))return fail('suppressed');
-    if(!this.enabled)return fail('verifier_not_configured');if(!samePublisher(p.page_url,p.domain))return fail('publisher_mismatch');
+    if(!this.enabled&&!screenOnly)return fail('verifier_not_configured');if(!samePublisher(p.page_url,p.domain))return fail('publisher_mismatch');
     const origin=new URL(p.page_url).origin,queue=[p.email_source,p.page_url,origin+'/',origin+'/contact/',origin+'/contact-us/',origin+'/about/'],seen=new Set(),candidates=new Map();
     while(queue.length&&seen.size<6&&this.now()<deadline){
       const url=queue.shift();if(!url||seen.has(url)||!samePublisher(url,p.domain))continue;seen.add(url);
@@ -229,6 +233,7 @@ export class RecipientVerifier{
     // A general inbox is a last resort: never used while an editorial or named-author address exists.
     if(ranked.some(c=>c.role!=='contact_page_inbox'))ranked=ranked.filter(c=>c.role!=='contact_page_inbox');
     if(!ranked.length)return fail('no_published_editorial_contact',!fetched?'publisher_pages_unreachable':published.size?'only_non_editorial_inbox_published':'no_email_published');
+    if(screenOnly){const c=ranked.find(x=>!isSuppressed(this.state,x.email,p.domain));return c?{ok:true,screened:true,email:c.email,evidence:c}:fail('no_published_editorial_contact','suppressed')}
     let attempted=0;const outcomes=[];
     for(const c of ranked){if(++attempted>3||this.now()>=deadline)break;if(isSuppressed(this.state,c.email,p.domain)){outcomes.push('suppressed');continue}
       // A catch-all mail server accepts every address, so no provider can prove this inbox: don't spend a credit.
