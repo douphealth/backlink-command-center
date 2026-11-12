@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-12T19:44:15.785Z",
- "duration_s": 61,
+ "generated_at": "2026-11-12T19:52:23.100Z",
+ "duration_s": 253,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -29,14 +29,14 @@
    "key": true,
    "enabled": true,
    "daily_limit": 12,
-   "used_today": 3,
+   "used_today": 12,
    "balance": {
     "provider": "verifalia",
-    "free_credits": 19,
-    "reset_in": "04:15:45",
-    "checked_at": "2026-11-12T19:44:14.712Z"
+    "free_credits": 1,
+    "reset_in": "04:10:50",
+    "checked_at": "2026-11-12T19:49:09.207Z"
    },
-   "catch_all_domains_skipped": 12
+   "catch_all_domains_skipped": 15
   }
  },
  "setup": [
@@ -107,7 +107,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 13599,
+   "ms": 16000,
    "result": {
     "sites": 10,
     "pages": 1806
@@ -140,7 +140,7 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 19,
+   "ms": 22,
    "result": {
     "queries": 0,
     "mention_queries": 0,
@@ -167,9 +167,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1956,
+   "ms": 815,
    "result": {
-    "scanned": 1,
+    "scanned": 0,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -177,18 +177,28 @@
     "delays": 0
    }
   },
+  "screen": {
+   "ok": true,
+   "ms": 27937,
+   "result": {
+    "screened": 40,
+    "kept": 13,
+    "retired": 26,
+    "address_updated": 2
+   }
+  },
   "outreach": {
    "ok": true,
-   "ms": 43397,
+   "ms": 206651,
    "result": {
     "followups": 0,
-    "sent": 0,
+    "sent": 4,
     "drafted": 0,
     "skipped": 0,
     "deferred": 6,
     "cap": 12,
-    "verification_held": 24,
-    "followups_retired": 8
+    "verification_held": 20,
+    "followups_retired": 4
    },
    "writer": {
     "claude": 0,
@@ -226,28 +236,30 @@
  },
  "outreach": {
   "mode": "send",
-  "ready": 143,
+  "ready": 111,
   "verified_ready": 0,
-  "pending_verification": 143,
+  "pending_verification": 111,
   "holds": {
-   "publisher_mismatch": 1,
-   "only_non_editorial_inbox_published": 1,
-   "mailbox_accept_all": 1
+   "mailbox_accept_all": 3,
+   "mailbox_verifalia_free_credits_used_up": 6,
+   "mailbox_unknown": 1,
+   "no_email_published": 3,
+   "publisher_mismatch": 1
   },
-  "sent_today": 2,
+  "sent_today": 6,
   "cap_today": 12,
-  "next_send_at": "2026-11-12T19:44:15.786Z",
+  "next_send_at": "2026-11-12T19:52:23.102Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
   "prospects_evaluated": 2518,
   "qualified": 539,
-  "ready": 143,
+  "ready": 111,
   "broken_link_ready": 6,
   "contact_form_only": 105,
   "no_contact": 223,
-  "contacted": 51,
+  "contacted": 55,
   "replied": 1,
   "positive": 0,
   "won": 0,
@@ -587,11 +599,11 @@
    "date": "2026-11-12",
    "prospects_evaluated": 2518,
    "qualified": 539,
-   "ready": 143,
+   "ready": 111,
    "broken_link_ready": 6,
    "contact_form_only": 105,
    "no_contact": 223,
-   "contacted": 51,
+   "contacted": 55,
    "replied": 1,
    "positive": 0,
    "won": 0,
@@ -610,12 +622,6 @@
     "rate": 0.625
    },
    {
-    "footprint": "useful_links",
-    "queries": 17,
-    "ready": 11,
-    "rate": 0.6
-   },
-   {
     "footprint": "useful_websites",
     "queries": 4,
     "ready": 3,
@@ -626,6 +632,12 @@
     "queries": 10,
     "ready": 6,
     "rate": 0.538
+   },
+   {
+    "footprint": "useful_links",
+    "queries": 17,
+    "ready": 9,
+    "rate": 0.5
    },
    {
     "footprint": "tools",
@@ -642,14 +654,14 @@
    {
     "footprint": "recommended_reading",
     "queries": 10,
-    "ready": 5,
-    "rate": 0.462
+    "ready": 4,
+    "rate": 0.385
    },
    {
     "footprint": "inurl_links",
     "queries": 10,
-    "ready": 4,
-    "rate": 0.385
+    "ready": 3,
+    "rate": 0.308
    },
    {
     "footprint": "sources",
@@ -658,16 +670,16 @@
     "rate": 0.286
    },
    {
-    "footprint": "intent",
-    "queries": 229,
-    "ready": 57,
-    "rate": 0.25
-   },
-   {
     "footprint": "blogs_to_follow",
     "queries": 10,
     "ready": 2,
     "rate": 0.231
+   },
+   {
+    "footprint": "intent",
+    "queries": 229,
+    "ready": 50,
+    "rate": 0.22
    },
    {
     "footprint": "recommended_tools",
@@ -684,8 +696,8 @@
    {
     "footprint": "best_guides",
     "queries": 192,
-    "ready": 23,
-    "rate": 0.123
+    "ready": 19,
+    "rate": 0.103
    },
    {
     "footprint": "link_roundup",
@@ -706,22 +718,22 @@
     "rate": 0.077
    },
    {
-    "footprint": "resources",
-    "queries": 248,
-    "ready": 11,
-    "rate": 0.048
-   },
-   {
     "footprint": "mention",
     "queries": 20,
     "ready": 0,
     "rate": 0.043
    },
    {
+    "footprint": "resources",
+    "queries": 248,
+    "ready": 8,
+    "rate": 0.036
+   },
+   {
     "footprint": "further_reading",
     "queries": 162,
-    "ready": 3,
-    "rate": 0.024
+    "ready": 1,
+    "rate": 0.012
    },
    {
     "footprint": "helpful_resources",
@@ -757,6 +769,14 @@
    },
    {
     "url": "https://gearuptofit.com/review/resistance-bands-vs-free-weights/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://frenchyfab.com/french-bulldog-training-aids/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -844,6 +864,14 @@
     "rate": 0.25
    },
    {
+    "url": "https://openclaw-skillshub.com/articles/openclaw-provider-apis-guide/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
     "url": "https://efficientgptprompts.com/body-horror-writing-ideas/",
     "sent": 1,
     "replied": 0,
@@ -868,15 +896,15 @@
     "rate": 0.25
    },
    {
-    "url": "https://gearuptogrow.com/productivity/interleaving-vs-blocked-practice/",
-    "sent": 2,
+    "url": "https://affiliatemarketingforsuccess.com/web-hosting/web-hosting-comparison/",
+    "sent": 1,
     "replied": 0,
     "positive": 0,
     "won": 0,
-    "rate": 0.2
+    "rate": 0.25
    },
    {
-    "url": "https://affiliatemarketingforsuccess.com/review/neuronwriter-review/",
+    "url": "https://gearuptogrow.com/productivity/interleaving-vs-blocked-practice/",
     "sent": 2,
     "replied": 0,
     "positive": 0,
@@ -946,6 +974,14 @@
     "positive": 0,
     "won": 0,
     "rate": 0.2
+   },
+   {
+    "url": "https://affiliatemarketingforsuccess.com/review/neuronwriter-review/",
+    "sent": 3,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.167
    },
    {
     "url": "https://imagealchemy.app/learn/compress-images-without-uploading",
@@ -5878,7 +5914,7 @@
  },
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-12T19:43:30.423Z"
+  "updated_at": "2026-11-12T19:48:27.687Z"
  },
  "wins": [
   {
@@ -5927,32 +5963,33 @@
   }
  ],
  "log": [
-  "19:43:16 connection dataforseo: connected",
-  "19:43:16 connection gmail: connected",
-  "19:43:18 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "19:43:18 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
-  "19:43:20 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "19:43:21 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
-  "19:43:21 crawl frenchyfab.com: 155/155 urls, fetched 0, 304 0, reused 155",
-  "19:43:22 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "19:43:23 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "19:43:23 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "19:43:26 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "19:43:30 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "19:43:30 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
-  "19:43:30 prospects: 0 from the saved queue, 0 saved for next run; 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "19:43:30 self-tuning: next cycle runs up to 20 searches",
-  "19:43:30 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "19:43:32 replies: 1 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "19:44:15 outreach: 0 sent, 0 follow-ups, 0 drafts, 24 held for verification, 8 follow-ups retired (address no longer verifiable)",
-  "19:44:15 - preverify: skipped (runs only while outreach is paused)",
-  "19:44:15 link checks: 0 pages, 0 new links won, 0 lost"
+  "19:48:11 connection dataforseo: connected",
+  "19:48:11 connection gmail: connected",
+  "19:48:13 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
+  "19:48:14 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
+  "19:48:15 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "19:48:17 crawl frenchyfab.com: 155/155 urls, fetched 0, 304 0, reused 155",
+  "19:48:18 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "19:48:20 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "19:48:21 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "19:48:21 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "19:48:22 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
+  "19:48:27 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
+  "19:48:27 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
+  "19:48:27 prospects: 0 from the saved queue, 0 saved for next run; 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "19:48:27 self-tuning: next cycle runs up to 20 searches",
+  "19:48:27 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "19:48:28 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "19:48:56 queue screening (free, nothing sent): 40 checked, 13 sendable, 26 retired, 2 switched to a better published address",
+  "19:52:23 outreach: 4 sent, 0 follow-ups, 0 drafts, 20 held for verification, 4 follow-ups retired (address no longer verifiable)",
+  "19:52:23 - preverify: skipped (runs only while outreach is paused)",
+  "19:52:23 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
    "level": "info",
    "code": "holds",
-   "message": "3 queued inboxes are held; most often (1) because publisher mismatch.",
+   "message": "14 queued inboxes are held; most often (6) because today's free verification credits are used up.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   },
   {
