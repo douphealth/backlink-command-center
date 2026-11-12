@@ -22,11 +22,13 @@ import {gscDemand,dfsDemand} from './demand.mjs';
 import {discoverProspects,requalify,enrichBrokenLinks,freshQueryCount,QUALIFY_VERSION} from './prospect.mjs';
 import {indexationReport} from './indexation.mjs';
 import {autotune,diagnose,TUNING} from './health.mjs';
+import {gscClient,monitorIndex,indexReport,searchPerformance} from './searchconsole.mjs';
+import {submitToBing} from './bing.mjs';
 import {PitchWriter} from './pitch.mjs';
 import {processReplies,runOutreach,preverify,screenQueue,checkLinks,gmailTransport,dailyCap,outreachStatus} from './outreach.mjs';
 import {assetStats,learningSummary} from './learn.mjs';
 import {seal,open} from './vault.mjs';
-import {NOW,ageDays} from './util.mjs';
+import {NOW,ageDays,normUrl} from './util.mjs';
 
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'../..');
 const P={summary:resolve(ROOT,'public/data/autopilot.json'),vault:resolve(ROOT,'public/data/vault.json'),cache:resolve(ROOT,'.autopilot-cache/crawl.json')};
@@ -65,7 +67,7 @@ export function loadConfig(env=process.env,argv=process.argv){
     outreach:{mode,gmail,fromAddress:env.GMAIL_ADDRESS||(dryRun?'dry-run@linkforge.invalid':''),senderName:env.SENDER_NAME||'',postalAddress:env.SENDER_POSTAL_ADDRESS||'',
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5'},
-    gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,preverifyMax:num(env.AUTOPILOT_PREVERIFY,5),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
+    gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,bing:!!env.BING_WEBMASTER_API_KEY,preverifyMax:num(env.AUTOPILOT_PREVERIFY,5),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
     verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
       enabled:env.EMAIL_VERIFICATION_ENABLED==='YES',dailyLimit:Math.min(100,Math.max(0,Math.floor(num(env.EMAIL_VERIFY_DAILY_LIMIT,0))))},
   };
@@ -81,7 +83,8 @@ export function setupChecklist(cfg){
     {key:'VERIFALIA_USERNAME + VERIFALIA_PASSWORD + EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox verifier (needed to send)',done:verifierReady(cfg),unlocks:'Proves each editor inbox exists before any email goes out, so nothing bounces. Verifalia free plan: 25 credits every day, free credits only (Hunter key optional as fallback)',required:false},
     {key:'OUTREACH_MODE = send',label:'Hands-free sending',done:cfg.outreach.mode==='send',unlocks:'Sends pitches and one follow-up automatically (warm-up ramp, daily cap)',required:false},
     {key:'ANTHROPIC_API_KEY',label:'Claude pitch writer',done:!!cfg.claude.apiKey,unlocks:'Writes a unique, page-specific email for every prospect',required:false},
-    {key:'GSC_SERVICE_ACCOUNT_JSON',label:'Search Console',done:cfg.gsc,unlocks:'Exact impressions/positions to target striking-distance pages',required:false},
+    {key:'GSC_SERVICE_ACCOUNT_JSON',label:'Search Console',done:cfg.gsc,unlocks:'Real index status of every important page, clicks/impressions tracking, striking-distance targeting',required:false},
+    {key:'BING_WEBMASTER_API_KEY',label:'Bing Webmaster API',done:cfg.bing,unlocks:'Daily submission of new, changed and non-indexed pages to Bing (also feeds Copilot, DuckDuckGo and ChatGPT search)',required:false},
   ];
   return items;
 }
@@ -173,9 +176,27 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   });
   // ---- 3. Rank + internal links ----
   const ranked=crawl.length?rankPortfolio(crawl,{demand}):(previous.best_urls||[]);
-  const internal=crawl.length?internalLinkPlan(crawl,ranked):(previous.internal_links||[]);
+  // ---- 3b. Google index monitor + search performance (Search Console, read-only) ----
+  let gsc=null,search=previous.search_performance||null;
+  if(cfg.gsc){try{gsc=await gscClient(env,{fetchImpl})}catch(e){log('gsc: '+String(e.message).slice(0,120))}}
+  const priority=new Map(SITES.map(s=>[s.domain,[...(s.assets||[]),...ranked.filter(a=>a.site===s.domain).slice(0,25).map(a=>a.url)]]));
+  await stage('index_monitor',vaultOk&&!!gsc,()=>monitorIndex({state,client:gsc,sites:SITES,priority,crawl,deadline:started+cfg.minutes*0.55*60e3,log}),
+    !vaultOk?privateWhy:'Search Console not connected (GSC_SERVICE_ACCOUNT_JSON)',{until:started+cfg.minutes*0.6*60e3});
+  await stage('search_performance',!!gsc,async()=>{search=await searchPerformance({client:gsc,sites:SITES,log});return {sites:search.length,clicks_7d:search.reduce((n,x)=>n+x.clicks,0),impressions_7d:search.reduce((n,x)=>n+x.impressions,0)}},
+    'Search Console not connected',{until:started+cfg.minutes*0.65*60e3});
+  // Pages Google ignores get named in the reasons and go first in the internal link plan (the fastest free fix).
+  const label={unknown:'unknown to Google',discovered_not_indexed:'discovered, not indexed',crawled_not_indexed:'crawled, not indexed'};
+  for(const a of ranked){const x=state.index_status?.[normUrl(a.url)];if(!x)continue;a.google_index=x.class;
+    if(x.class!=='indexed'&&label[x.class]&&!(a.reasons||[]).some(r=>/^Google:/.test(r)))(a.reasons??=[]).unshift(`Google: ${label[x.class]} (fix below)`)}
+  const notIndexed=a=>a.google_index&&a.google_index!=='indexed'?1:0;
+  const linkTargets=[...ranked].sort((a,b)=>notIndexed(b)-notIndexed(a)||b.promotion-a.promotion);
+  const internal=crawl.length?internalLinkPlan(crawl,linkTargets):(previous.internal_links||[]);
   stages.rank={ok:true,result:{ranked:ranked.length,internal_suggestions:internal.length}};
-  const chosen=chooseAssets(ranked,state,{perSite:cfg.assetsPerSite,sites:SITES});
+  // A link to a page Google will not index as itself (noindex, canonical elsewhere, redirect, 404) is wasted:
+  // such pages are neither promoted nor pitched until fixed. Unknown / not-yet-indexed pages stay eligible.
+  const UNLINKABLE=new Set(['noindex','canonical_elsewhere','redirect','not_found']);
+  const blockedAssets=new Set(Object.entries(state.index_status||{}).filter(([,x])=>UNLINKABLE.has(x.class)).map(([k])=>k));
+  const chosen=chooseAssets(ranked.filter(a=>!blockedAssets.has(normUrl(a.url))),state,{perSite:cfg.assetsPerSite,sites:SITES});
   const indexation=crawl.length?indexationReport(crawl):previous.indexation||null;
   if(indexation)log(`indexation: ${indexation.total_issues} sitemap URLs with an indexing problem (${indexation.sites.reduce((n,x)=>n+x.critical,0)} critical)`);
   // ---- 4. Prospects ----
@@ -183,6 +204,8 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   // Runs even with no fresh asset searches: brand-mention searches have their own schedule.
   await stage('prospects',vaultOk&&dfs.enabled,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,maxQueries:cfg.maxQueries??(state.tuning?.max_queries||TUNING.start),serpDepth:cfg.serpDepth,deadline:deadline-7*60e3,log}),
     !vaultOk?privateWhy:(dfs.authError||'DataForSEO credentials not set'),{until:deadline-5.5*60e3});
+  await stage('bing_submit',vaultOk&&!!env.BING_WEBMASTER_API_KEY&&crawl.length>0,()=>submitToBing({state,env,sites:SITES,crawl,ranked,fetchImpl,deadline:deadline-6*60e3,log}),
+    !vaultOk?privateWhy:'Bing Webmaster API key not set (BING_WEBMASTER_API_KEY)',{until:deadline-5.5*60e3});
   if(vaultOk&&stages.prospects&&stages.prospects.ok!==null)log(`self-tuning: next cycle runs up to ${autotune(state,stages.prospects,{envQueries:cfg.maxQueries})} searches`);
   await stage('broken_links',vaultOk,()=>enrichBrokenLinks({state,assets:ranked,sites:SITES,fetchImpl,deadline:deadline-5*60e3,log}),privateWhy,{until:deadline-4*60e3});
   // ---- 5. Mail ----
@@ -194,7 +217,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     await stage('replies',vaultOk&&gmailOk,()=>processReplies({state,imap:mailer.imap,log}),mailWhy||'Gmail not set');
     await stage('screen',vaultOk&&!!mailer,()=>screenQueue({state,mailer,deadline:deadline-4*60e3,log}),privateWhy,{until:deadline-3.5*60e3});
     const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',log});
-    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:cfg.outreach,deadline:deadline-2*60e3,log}),mailWhy||'SENDER_NAME not set');
+    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets},deadline:deadline-2*60e3,log}),mailWhy||'SENDER_NAME not set');
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,template_fallbacks:writer.fallbacks};
     // Outreach paused (safety hold / mode off): spend today's free verification credits on the best queued inboxes instead.
     await stage('preverify',vaultOk&&gmailOk&&!noVerifier&&stages.outreach?.ok!==true&&typeof mailer?.authorizeRecipient==='function',
@@ -207,7 +230,9 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   const f=vaultOk?funnel(state):previous.funnel||null;
   const today=NOW().slice(0,10);
   const history=(previous.history||[]).filter(h=>h.date!==today&&ageDays(h.date)<120);
-  if(f)history.push({date:today,...f,spend_usd:Number(dfs.spend('day').toFixed(4))});
+  if(f)history.push({date:today,...f,spend_usd:Number(dfs.spend('day').toFixed(4)),
+    ...(search?.length?{search_clicks_7d:search.reduce((n,x)=>n+x.clicks,0),search_impressions_7d:search.reduce((n,x)=>n+x.impressions,0),striking_distance_pages:search.reduce((n,x)=>n+x.striking_distance,0)}:{}),
+    ...(state.index_status?{google_indexed:Object.values(state.index_status).filter(x=>x.class==='indexed').length,google_not_indexed:Object.values(state.index_status).filter(x=>x.class!=='indexed').length}:{})});
   const prospectsByAsset=new Map();for(const p of Object.values(state.prospects))if(p.status!=='rejected')prospectsByAsset.set(p.asset_url,(prospectsByAsset.get(p.asset_url)||0)+1);
   const internalByAsset=new Map();for(const s of internal)internalByAsset.set(s.to,(internalByAsset.get(s.to)||0)+1);
   const summary={
@@ -226,7 +251,9 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     sites:crawl.map(s=>({domain:s.site,pages:s.pages.length,discovered:s.discovered,sitemaps:s.sitemaps.length,
       eligible:ranked.filter(a=>a.site===s.site).length,top:ranked.find(a=>a.site===s.site)?.url||null})),
     best_urls:ranked.slice(0,80).map(({terms,...a})=>({...a,prospects:prospectsByAsset.get(a.url)||0,internal_link_suggestions:internalByAsset.get(a.url)||0,promoting:chosen.some(c=>c.url===a.url)})),
-    internal_links:internal.slice(0,200),indexation,tuning:vaultOk?state.tuning||null:previous.tuning||null,
+    internal_links:internal.slice(0,200),indexation,search_performance:search,
+    google_index:vaultOk&&state.index_status?indexReport(state,SITES,ranked):previous.google_index||null,
+    bing:vaultOk&&state.bing?{submitted_total:Object.keys(state.bing.submitted||{}).length,last_run:stages.bing_submit?.result||null,errors:state.bing.errors||{}}:previous.bing||null,tuning:vaultOk?state.tuning||null:previous.tuning||null,
     wins:Object.values(state.prospects).filter(p=>p.status==='won'||p.status==='already_linked').map(p=>({site:p.site,publisher:p.domain,page_url:p.page_url,title:p.title,
       kind:p.status==='won'?'won':'existing',target:p.won?.target||p.existing_link?.url||null,anchor:p.won?.anchor||p.existing_link?.anchor||'',rel:p.won?.rel||p.existing_link?.rel||'',found_at:p.won?.found_at||p.found_at})).sort((a,b)=>String(b.found_at).localeCompare(String(a.found_at))).slice(0,200),
     log:logs.slice(-80),

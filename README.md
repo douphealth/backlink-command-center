@@ -6,6 +6,9 @@
 
 - **Broken-link building:** every qualified prospect page is checked for dead outbound links (HTTP 404/410 or a domain that no longer exists, never 403/5xx/timeouts) that match the promoted page's topic. The pitch tells the editor which link is dead and offers your page as the replacement. That is a concrete favour, so it converts far better than a cold ask. The dead link is re-checked seconds before the email is written, and the claim is dropped if it was fixed. Queued prospects are back-filled once every 30 days.
 - **Link roundups and curated pages:** searches now include `"link roundup"`, `"weekly roundup"`, `"best of the web"`, `"further reading"`, `"helpful resources"` and `"recommended tools"` pages, which exist to link out. Pages whose searches are all on their 45-day cooldown are rotated out, so prospecting no longer stalls at 0 queries.
+- **Google index monitor (Search Console URL Inspection API):** the real index status of every important page, re-checked every 3 to 14 days (60 per site per day, well inside Google's 2,000/day quota). Pages Google ignores go first in the internal-link plan and Bing submission, and the dashboard shows each one with its fix. Pages Google cannot index as themselves (noindex, canonical elsewhere, redirect, 404) are never promoted or pitched until fixed.
+- **Measurable results:** 7-day clicks, impressions, average position and striking-distance pages per site, tracked daily in the dashboard history.
+- **Bing URL submission:** once a day per site, up to the site's quota, most valuable first.
 - **Indexation health:** every crawled sitemap URL is classified (404/410, 5xx, noindex, canonical elsewhere, redirect, unreachable, bot-blocked, missing canonical, thin), with the exact fix shown on the dashboard. These pages are never promoted, because a link to a page Google can't index is wasted.
 - **Unlinked brand mentions first:** pages that already name one of your sites but don't link are found every 14 days per site. They get a short "thanks for mentioning us, could you link it?" email, which converts far better than a cold pitch.
 - **Link likelihood:** the send queue is ordered by evidence. That covers topical fit, whether the page is a resource page, the site's real audience size (independent sites over giants), whether the address is the article's author, how recently the page was updated, and how well the promoted page has performed so far.
@@ -61,6 +64,7 @@ The setup script stores everything as **encrypted GitHub Actions secrets** (valu
 | `HUNTER_API_KEY` *(optional)* | Fallback verifier when the day's Verifalia free credits are used up | hunter.io → API keys |
 | `ANTHROPIC_API_KEY` *(optional)* | Unique, page-specific pitches written by Claude | console.anthropic.com |
 | `GSC_SERVICE_ACCOUNT_JSON` *(optional)* | Exact impressions/positions → striking-distance targeting | Google Cloud service account with Search Console access |
+| `BING_WEBMASTER_API_KEY` *(optional)* | Daily submission of new, changed and Google-ignored pages to Bing (Bing also feeds Copilot, DuckDuckGo, Yahoo and ChatGPT search) | Bing Webmaster Tools → Settings → API access. Sites must be added/verified in Bing (import from Search Console works) |
 | `SENDER_POSTAL_ADDRESS` *(optional)* | CAN-SPAM footer | — |
 
 You can also add them by hand under **GitHub → Settings → Secrets and variables → Actions**. The dashboard's Autopilot page shows exactly which ones are still missing.

@@ -112,3 +112,7 @@ test('a prospect failing publisher-side checks twice leaves the ready queue; our
   applyProof(st,q,fail('only_non_editorial_inbox_published'));assert.equal(q.status,'contact_unverifiable');
   const r={...p('r')};applyProof(st,r,fail('mailbox_verifalia_free_credits_used_up'));applyProof(st,r,fail('mailbox_verifalia_free_credits_used_up'));assert.equal(r.status,'ready');
 });
+test('prospects for a page Google cannot index as itself are not pitched',async()=>{
+  const f=fixture();f.args.config.blockedAssets=new Set(['https://owned.example/tool']);
+  const r=await runOutreach(f.args);assert.equal(r.sent,0);assert.equal(r.asset_not_indexable,1);assert.equal(f.state.prospects.a.status,'ready');
+});
