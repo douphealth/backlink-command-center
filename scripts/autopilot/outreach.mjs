@@ -177,11 +177,21 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   if(config.mode==='send')await mailer.send({to:p.email,raw,recipientProof:p.recipient_proof});else await mailer.draft(raw);
   p.history??=[];p.history.push({type,at:NOW(),message_id:messageId,subject,to:p.email,mode:config.mode,writer:p.writer||'template'});p.last_subject=subject;
  };
+ let fuChecks=0;
  if(config.mode==='send')for(const p of Object.values(state.prospects||{})){
   if(budget<=0||Date.now()>deadline||checked>=24)break;
   if(p.status!=='sent'||p.replied_at||p.no_followup||(p.qv||1)<QUALIFY_VERSION||suppressed(state,p.email,p.domain))continue;
   const initial=p.history.find(h=>h.type==='initial'&&h.mode!=='draft');if(!initial||ageDays(initial.at)<config.followupDays)continue;
-  if(outOfHours(p)){stats.deferred++;continue}if(!await prepare(p,true))continue;
+  if(outOfHours(p)){stats.deferred++;continue}
+  // Follow-ups get at most 8 of the run's 24 verification checks, so new pitches always get a turn.
+  if(++fuChecks>8)break;
+  if(!await prepare(p,true)){
+   // The original address no longer passes the recipient rules (most were sent before they existed):
+   // retire the follow-up for good instead of re-checking it every cycle.
+   const d=p.contact_quality?.detail;
+   if(publisherHold(d)&&d!=='publisher_pages_unreachable'){p.no_followup=true;p.no_followup_reason=`Recipient no longer verifiable (${d})`;stats.followups_retired=(stats.followups_retired||0)+1}
+   continue;
+  }
   const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title};
   try{await deliver(p,followupPitch(p,asset,{senderName:config.senderName}),'followup',initial.message_id);p.status='followed_up';stats.followups++;budget--;await sleep(config.gapMs())}
   catch{p.status='delivery_uncertain';p.no_followup=true;log('follow-up held after uncertain delivery; no automatic retry');break}
@@ -205,7 +215,7 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
    config.mode==='send'?stats.sent++:stats.drafted++;budget--;perAsset.set(p.asset_url,(perAsset.get(p.asset_url)||0)+1);if(config.mode==='send')await sleep(config.gapMs());
   }catch{p.status='delivery_uncertain';p.no_followup=true;state.contacted[p.domain]=NOW();log('delivery uncertain; recipient held without retry');break}
  }
- log(`outreach: ${stats.sent} sent, ${stats.followups} follow-ups, ${stats.drafted} drafts, ${stats.verification_held} held for verification`);return stats;
+ log(`outreach: ${stats.sent} sent, ${stats.followups} follow-ups, ${stats.drafted} drafts, ${stats.verification_held} held for verification${stats.followups_retired?`, ${stats.followups_retired} follow-ups retired (address no longer verifiable)`:''}`);return stats;
 }
 /** Existing link checking is unchanged; attribution hardening remains in PR 25. */
 export async function checkLinks({state,ourDomains,fetchImpl=fetch,max=60,deadline=Infinity,log=()=>{}}){

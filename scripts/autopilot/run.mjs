@@ -65,7 +65,7 @@ export function loadConfig(env=process.env,argv=process.argv){
     outreach:{mode,gmail,fromAddress:env.GMAIL_ADDRESS||(dryRun?'dry-run@linkforge.invalid':''),senderName:env.SENDER_NAME||'',postalAddress:env.SENDER_POSTAL_ADDRESS||'',
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5'},
-    gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,preverifyMax:num(env.AUTOPILOT_PREVERIFY,5),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
+    gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,preverifyMax:num(env.AUTOPILOT_PREVERIFY,5),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
     verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
       enabled:env.EMAIL_VERIFICATION_ENABLED==='YES',dailyLimit:Math.min(100,Math.max(0,Math.floor(num(env.EMAIL_VERIFY_DAILY_LIMIT,0))))},
   };
@@ -181,7 +181,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   // ---- 4. Prospects ----
   await stage('requalify',vaultOk,()=>requalify({state,dfs,fetchImpl,deadline:deadline-8*60e3,log}),privateWhy,{until:deadline-7*60e3});
   // Runs even with no fresh asset searches: brand-mention searches have their own schedule.
-  await stage('prospects',vaultOk&&dfs.enabled,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,maxQueries:cfg.maxQueries??(state.tuning?.max_queries||TUNING.start),deadline:deadline-7*60e3,log}),
+  await stage('prospects',vaultOk&&dfs.enabled,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,maxQueries:cfg.maxQueries??(state.tuning?.max_queries||TUNING.start),serpDepth:cfg.serpDepth,deadline:deadline-7*60e3,log}),
     !vaultOk?privateWhy:(dfs.authError||'DataForSEO credentials not set'),{until:deadline-5.5*60e3});
   if(vaultOk&&stages.prospects&&stages.prospects.ok!==null)log(`self-tuning: next cycle runs up to ${autotune(state,stages.prospects,{envQueries:cfg.maxQueries})} searches`);
   await stage('broken_links',vaultOk,()=>enrichBrokenLinks({state,assets:ranked,sites:SITES,fetchImpl,deadline:deadline-5*60e3,log}),privateWhy,{until:deadline-4*60e3});

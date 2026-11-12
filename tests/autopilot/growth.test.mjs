@@ -159,3 +159,18 @@ test('search results are never discarded: unqualified candidates are queued and 
   assert.equal(r3.from_queue,1);assert.equal(r3.queries,0);assert.equal(state.candidate_queue.length,0);
   assert.ok(Object.values(state.prospects).some(p=>p.domain===queued));
 });
+test('long-tail queries come from the page\'s own phrases and novelty steers footprint order',async()=>{
+  const {queriesFor,assetPhrases,pickQueries}=await import('../../scripts/autopilot/prospect.mjs');
+  const s={domain:'gearuptofit.com',topic:'running shoes'};
+  const a={site:s.domain,url:'https://gearuptofit.com/a',title:'Trail Shoe Guide',type:'practical_guide',terms:['trail','running shoes','trail running','rock plate','shoe']};
+  assert.deepEqual(assetPhrases(a,s),['trail running','rock plate']);
+  const qs=queriesFor(a,s).map(x=>x.q);assert.ok(qs.includes('"trail running" resources')&&qs.includes('"rock plate" "useful links"'));
+  const state={queries:{},prospects:{},fp_novelty:{intent:{q:30,n:0},phrase_resources:{q:4,n:4}}};
+  assert.equal(pickQueries([a],[s],state,{perAsset:1})[0].footprint,'phrase_resources');
+});
+test('spend estimate is learned from real charges',async()=>{
+  const {DataForSEO}=await import('../../scripts/autopilot/dataforseo.mjs');
+  const st={ledger:[1,2,3].map(()=>({at:new Date().toISOString(),kind:'serp',cost:0.02}))};
+  const d=new DataForSEO({login:'l',password:'p',state:st,dailyUsd:0.5,monthlyUsd:10});
+  assert.equal(d.estimate('serp'),0.02);assert.equal(d.affordable('serp'),22); // (0.5-0.06)/0.02
+});
