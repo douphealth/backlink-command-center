@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-12T19:52:23.100Z",
- "duration_s": 253,
+ "generated_at": "2026-11-13T03:31:39.875Z",
+ "duration_s": 209,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -28,8 +28,8 @@
    ],
    "key": true,
    "enabled": true,
-   "daily_limit": 12,
-   "used_today": 12,
+   "daily_limit": 24,
+   "used_today": 0,
    "balance": {
     "provider": "verifalia",
     "free_credits": 1,
@@ -93,7 +93,14 @@
    "key": "GSC_SERVICE_ACCOUNT_JSON",
    "label": "Search Console",
    "done": false,
-   "unlocks": "Exact impressions/positions to target striking-distance pages",
+   "unlocks": "Real index status of every important page, clicks/impressions tracking, striking-distance targeting",
+   "required": false
+  },
+  {
+   "key": "BING_WEBMASTER_API_KEY",
+   "label": "Bing Webmaster API",
+   "done": false,
+   "unlocks": "Daily submission of new, changed and non-indexed pages to Bing (also feeds Copilot, DuckDuckGo and ChatGPT search)",
    "required": false
   }
  ],
@@ -107,7 +114,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 16000,
+   "ms": 16399,
    "result": {
     "sites": 10,
     "pages": 1806
@@ -115,11 +122,19 @@
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 155
    }
+  },
+  "index_monitor": {
+   "ok": null,
+   "skipped": "Search Console not connected (GSC_SERVICE_ACCOUNT_JSON)"
+  },
+  "search_performance": {
+   "ok": null,
+   "skipped": "Search Console not connected"
   },
   "rank": {
    "ok": true,
@@ -140,11 +155,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 22,
+   "ms": 150945,
    "result": {
-    "queries": 0,
+    "queries": 20,
     "mention_queries": 0,
-    "serp_results": 0,
+    "serp_results": 759,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -154,8 +169,17 @@
     "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
+    "filtered": {
+     "platform_or_giant": 759
+    },
+    "new_domains": 0,
+    "failed_queries": 3,
     "deferred": 0
    }
+  },
+  "bing_submit": {
+   "ok": null,
+   "skipped": "Bing Webmaster API key not set (BING_WEBMASTER_API_KEY)"
   },
   "broken_links": {
    "ok": true,
@@ -167,9 +191,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 815,
+   "ms": 2213,
    "result": {
-    "scanned": 0,
+    "scanned": 7,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -179,26 +203,26 @@
   },
   "screen": {
    "ok": true,
-   "ms": 27937,
+   "ms": 22240,
    "result": {
     "screened": 40,
-    "kept": 13,
-    "retired": 26,
-    "address_updated": 2
+    "kept": 18,
+    "retired": 19,
+    "address_updated": 3
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 206651,
+   "ms": 15705,
    "result": {
     "followups": 0,
-    "sent": 4,
+    "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 6,
+    "deferred": 95,
     "cap": 12,
-    "verification_held": 20,
-    "followups_retired": 4
+    "verification_held": 3,
+    "followups_retired": 3
    },
    "writer": {
     "claude": 0,
@@ -211,7 +235,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "checked": 0,
     "won": 0,
@@ -228,35 +252,34 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.498,
-  "month_usd": 3.9518,
+  "today_usd": 0.16,
+  "month_usd": 4.1118,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 0
+  "calls_this_run": 30
  },
  "outreach": {
   "mode": "send",
-  "ready": 111,
+  "ready": 92,
   "verified_ready": 0,
-  "pending_verification": 111,
+  "pending_verification": 92,
   "holds": {
    "mailbox_accept_all": 3,
    "mailbox_verifalia_free_credits_used_up": 6,
    "mailbox_unknown": 1,
-   "no_email_published": 3,
    "publisher_mismatch": 1
   },
-  "sent_today": 6,
+  "sent_today": 0,
   "cap_today": 12,
-  "next_send_at": "2026-11-12T19:52:23.102Z",
+  "next_send_at": "2026-11-13T13:00:00.000Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
   "prospects_evaluated": 2518,
   "qualified": 539,
-  "ready": 111,
-  "broken_link_ready": 6,
+  "ready": 92,
+  "broken_link_ready": 4,
   "contact_form_only": 105,
   "no_contact": 223,
   "contacted": 55,
@@ -611,6 +634,23 @@
    "declined": 0,
    "bounced": 6,
    "spend_usd": 0.498
+  },
+  {
+   "date": "2026-11-13",
+   "prospects_evaluated": 2518,
+   "qualified": 539,
+   "ready": 92,
+   "broken_link_ready": 4,
+   "contact_form_only": 105,
+   "no_contact": 223,
+   "contacted": 55,
+   "replied": 1,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 4,
+   "declined": 0,
+   "bounced": 6,
+   "spend_usd": 0.16
   }
  ],
  "learning": {
@@ -628,18 +668,6 @@
     "rate": 0.571
    },
    {
-    "footprint": "inurl_resources",
-    "queries": 10,
-    "ready": 6,
-    "rate": 0.538
-   },
-   {
-    "footprint": "useful_links",
-    "queries": 17,
-    "ready": 9,
-    "rate": 0.5
-   },
-   {
     "footprint": "tools",
     "queries": 10,
     "ready": 5,
@@ -647,6 +675,12 @@
    },
    {
     "footprint": "intitle_resources",
+    "queries": 10,
+    "ready": 5,
+    "rate": 0.462
+   },
+   {
+    "footprint": "inurl_resources",
     "queries": 10,
     "ready": 5,
     "rate": 0.462
@@ -676,10 +710,16 @@
     "rate": 0.231
    },
    {
+    "footprint": "useful_links",
+    "queries": 29,
+    "ready": 6,
+    "rate": 0.219
+   },
+   {
     "footprint": "intent",
     "queries": 229,
-    "ready": 50,
-    "rate": 0.22
+    "ready": 43,
+    "rate": 0.19
    },
    {
     "footprint": "recommended_tools",
@@ -696,8 +736,8 @@
    {
     "footprint": "best_guides",
     "queries": 192,
-    "ready": 19,
-    "rate": 0.103
+    "ready": 16,
+    "rate": 0.087
    },
    {
     "footprint": "link_roundup",
@@ -725,9 +765,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 248,
+    "queries": 253,
     "ready": 8,
-    "rate": 0.036
+    "rate": 0.035
    },
    {
     "footprint": "further_reading",
@@ -2671,6 +2711,31 @@
    "promoting": true
   },
   {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
+   "title": "French Bulldog Characteristics: Traits, Care and Health",
+   "h1": "French Bulldog Characteristics: Traits, Care Needs, Health, and Owner Fit",
+   "description": "Your French Bulldog care questions answered! Discover essential tips & health insights. Transform your pup's life with our proven guide. See how now!",
+   "type": "practical_guide",
+   "promotion": 60,
+   "linkability": 76,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 1893,
+   "interactive": false,
+   "modified": "2026-10-25T09:20:06+00:00",
+   "reasons": [
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (2 inbound)",
+    "One of 153 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
    "site": "imagealchemy.app",
    "url": "https://imagealchemy.app/learn/jpeg-quality-guide",
    "title": "What JPEG Quality Should You Use? Settings That Work (2026)",
@@ -3038,30 +3103,6 @@
    "prospects": 2,
    "internal_link_suggestions": 5,
    "promoting": false
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "h1": "Homemade Food for French Bulldogs: When You Need a Veterinary Nutritionist",
-   "description": "Thinking of homemade food or recipes for your Frenchie? What a balanced home-cooked diet needs, mistakes to avoid, and why a vet nutritionist should formulate it.",
-   "type": "practical_guide",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 4,
-   "words": 1656,
-   "interactive": false,
-   "modified": "2026-10-12T13:02:55+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated",
-    "One of 153 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": true
   }
  ],
  "internal_links": [
@@ -3687,6 +3728,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
+   "from_title": "French Bulldog Characteristics: Traits, Care and Health",
+   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "to_title": "French Bulldog Socialization Training: A Practical Plan",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 60
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
    "from_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
    "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
@@ -3699,16 +3750,6 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-weight-management-framework/",
    "from_title": "Fat French Bulldog? How to Help Your Frenchie Lose Weight",
-   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "to_title": "French Bulldog Socialization Training: A Practical Plan",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 56
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
-   "from_title": "French Bulldog Characteristics: Traits, Care and Health",
    "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
    "to_title": "French Bulldog Socialization Training: A Practical Plan",
    "anchor": "french bulldog",
@@ -4286,6 +4327,56 @@
    "from_strength": 56
   },
   {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/why-do-french-bulldogs-have-no-tail/",
+   "from_title": "Do French Bulldogs Have Tails? Short Tails, Care & Health",
+   "to": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
+   "to_title": "French Bulldog Characteristics: Traits, Care and Health",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
+   "to_title": "French Bulldog Characteristics: Traits, Care and Health",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "to": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
+   "to_title": "French Bulldog Characteristics: Traits, Care and Health",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 73
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
+   "to": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
+   "to_title": "French Bulldog Characteristics: Traits, Care and Health",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "from_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "to": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
+   "to_title": "French Bulldog Characteristics: Traits, Care and Health",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 58
+  },
+  {
    "site": "plantastichaven.com",
    "from": "https://plantastichaven.com/zebra-spider-plant/",
    "from_title": "Zebra Spider Plant Care: Light, Water, and Troubleshooting",
@@ -4597,6 +4688,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
+   "from_title": "French Bulldog Characteristics: Traits, Care and Health",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 60
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
    "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
    "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
@@ -4614,16 +4715,6 @@
    "anchor": "french bulldogs",
    "relevance": 4,
    "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 57
   },
   {
    "site": "frenchyfab.com",
@@ -5014,56 +5105,6 @@
    "anchor": "practical frenchie diet",
    "relevance": 3,
    "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/high-protein-diet-french-bulldogs-muscle-fat-energy/",
-   "from_title": "High-Protein Diets for French Bulldogs: When They Help",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-weight-guide/",
-   "from_title": "French Bulldog Weight: Healthy Range and Body Condition",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-stress-signs-fixes/",
-   "from_title": "Low-Calorie Treats for French Bulldogs: Safe Rewards",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/food-aggression-in-french-bulldogs/",
-   "from_title": "French Bulldog Food Aggression: Safety, Management",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/complete-guide-french-bulldog-nutrition/",
-   "from_title": "What Do French Bulldogs Eat? Diet, Portions & Food Guide",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
   }
  ],
  "indexation": {
@@ -5912,9 +5953,12 @@
   "total_issues": 68,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first)."
  },
+ "search_performance": null,
+ "google_index": null,
+ "bing": null,
  "tuning": {
-  "max_queries": 20,
-  "updated_at": "2026-11-12T19:48:27.687Z"
+  "max_queries": 10,
+  "updated_at": "2026-11-13T03:30:59.706Z"
  },
  "wins": [
   {
@@ -5963,40 +6007,46 @@
   }
  ],
  "log": [
-  "19:48:11 connection dataforseo: connected",
-  "19:48:11 connection gmail: connected",
-  "19:48:13 crawl gearuptofit.com: 300/878 urls, fetched 0, 304 0, reused 300",
-  "19:48:14 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
-  "19:48:15 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "19:48:17 crawl frenchyfab.com: 155/155 urls, fetched 0, 304 0, reused 155",
-  "19:48:18 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "19:48:20 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "19:48:21 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "19:48:21 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "19:48:22 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "19:48:27 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
-  "19:48:27 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
-  "19:48:27 prospects: 0 from the saved queue, 0 saved for next run; 0 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "19:48:27 self-tuning: next cycle runs up to 20 searches",
-  "19:48:27 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "19:48:28 replies: 0 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "19:48:56 queue screening (free, nothing sent): 40 checked, 13 sendable, 26 retired, 2 switched to a better published address",
-  "19:52:23 outreach: 4 sent, 0 follow-ups, 0 drafts, 20 held for verification, 4 follow-ups retired (address no longer verifiable)",
-  "19:52:23 - preverify: skipped (runs only while outreach is paused)",
-  "19:52:23 link checks: 0 pages, 0 new links won, 0 lost"
+  "03:28:12 connection dataforseo: connected",
+  "03:28:12 connection gmail: connected",
+  "03:28:14 crawl plantastichaven.com: 159/159 urls, fetched 4, 304 0, reused 155",
+  "03:28:15 crawl gearuptofit.com: 300/878 urls, fetched 3, 304 0, reused 297",
+  "03:28:19 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
+  "03:28:19 crawl frenchyfab.com: 155/155 urls, fetched 10, 304 0, reused 145",
+  "03:28:23 crawl micegoneguide.com: 43/43 urls, fetched 1, 304 0, reused 42",
+  "03:28:23 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 4, 304 0, reused 254",
+  "03:28:23 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "03:28:24 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "03:28:26 crawl mysticaldigits.com: 300/468 urls, fetched 10, 304 0, reused 290",
+  "03:28:28 crawl efficientgptprompts.com: 300/487 urls, fetched 33, 304 0, reused 267",
+  "03:28:28 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "03:28:28 - search_performance: skipped (Search Console not connected)",
+  "03:28:28 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
+  "03:28:56 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "03:30:49 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "03:30:54 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "03:30:59 prospects: 0 from the saved queue, 0 saved for next run; 20 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "03:30:59 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "03:30:59 self-tuning: next cycle runs up to 10 searches",
+  "03:30:59 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "03:31:01 replies: 7 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "03:31:24 queue screening (free, nothing sent): 40 checked, 18 sendable, 19 retired, 3 switched to a better published address",
+  "03:31:39 outreach: 0 sent, 0 follow-ups, 0 drafts, 3 held for verification, 3 follow-ups retired (address no longer verifiable)",
+  "03:31:39 - preverify: skipped (runs only while outreach is paused)",
+  "03:31:39 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
-   "level": "info",
-   "code": "holds",
-   "message": "14 queued inboxes are held; most often (6) because today's free verification credits are used up.",
-   "fix": "Handled automatically; held inboxes are re-checked after 3 days."
+   "level": "warn",
+   "code": "discovery_saturated",
+   "message": "20 searches found no site that has not been evaluated already.",
+   "fix": "Handled automatically: search volume is halved and long-tail searches built from each page's own phrases take priority."
   },
   {
    "level": "info",
-   "code": "spend_cap",
-   "message": "Today's DataForSEO spend cap is reached; prospecting resumes tomorrow.",
-   "fix": "Raise DATAFORSEO_DAILY_USD only if you want faster prospecting."
+   "code": "holds",
+   "message": "11 queued inboxes are held; most often (6) because today's free verification credits are used up.",
+   "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   }
  ]
 }
