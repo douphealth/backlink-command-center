@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-15T01:09:17.222Z",
- "duration_s": 59,
+ "generated_at": "2026-11-15T07:59:57.975Z",
+ "duration_s": 100,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 12.155045999999999
+    "balance_usd": 12.075046
    },
    "gmail": {
     "status": "connected"
@@ -114,7 +114,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 14920,
+   "ms": 13058,
    "result": {
     "sites": 10,
     "pages": 1806
@@ -155,11 +155,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 39305,
+   "ms": 71476,
    "result": {
     "queries": 8,
     "mention_queries": 0,
-    "serp_results": 385,
+    "serp_results": 376,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -169,8 +169,9 @@
     "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
+    "failed_queries": 2,
     "filtered": {
-     "platform_or_giant": 385
+     "platform_or_giant": 376
     },
     "new_domains": 0,
     "deferred": 0
@@ -182,7 +183,7 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 3,
+   "ms": 2,
    "result": {
     "checked": 0,
     "found": 0
@@ -190,9 +191,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1692,
+   "ms": 2032,
    "result": {
-    "scanned": 11,
+    "scanned": 3,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -202,7 +203,7 @@
   },
   "screen": {
    "ok": true,
-   "ms": 172,
+   "ms": 194,
    "result": {
     "screened": 2,
     "kept": 0,
@@ -212,7 +213,7 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 8,
+   "ms": 6,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -233,7 +234,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 1,
+   "ms": 0,
    "result": {
     "checked": 0,
     "won": 0,
@@ -250,11 +251,11 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.08,
-  "month_usd": 4.5141,
+  "today_usd": 0.16,
+  "month_usd": 4.5941,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 9
+  "calls_this_run": 13
  },
  "outreach": {
   "mode": "send",
@@ -683,7 +684,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.08
+   "spend_usd": 0.16
   }
  ],
  "learning": {
@@ -732,9 +733,9 @@
    },
    {
     "footprint": "useful_links",
-    "queries": 35,
+    "queries": 36,
     "ready": 6,
-    "rate": 0.184
+    "rate": 0.179
    },
    {
     "footprint": "blogs_to_follow",
@@ -744,9 +745,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 231,
+    "queries": 233,
     "ready": 33,
-    "rate": 0.145
+    "rate": 0.144
    },
    {
     "footprint": "recommended_tools",
@@ -780,15 +781,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 192,
+    "queries": 193,
     "ready": 13,
-    "rate": 0.072
-   },
-   {
-    "footprint": "phrase_blog",
-    "queries": 17,
-    "ready": 0,
-    "rate": 0.05
+    "rate": 0.071
    },
    {
     "footprint": "mention",
@@ -797,8 +792,14 @@
     "rate": 0.043
    },
    {
+    "footprint": "phrase_blog",
+    "queries": 20,
+    "ready": 0,
+    "rate": 0.043
+   },
+   {
     "footprint": "resources",
-    "queries": 269,
+    "queries": 270,
     "ready": 7,
     "rate": 0.029
    },
@@ -1236,7 +1237,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "plantastichaven.com",
@@ -1476,7 +1477,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 34,
+   "internal_inlinks": 33,
    "words": 1772,
    "interactive": true,
    "modified": "2026-10-30T07:45:22+00:00",
@@ -1638,6 +1639,31 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/review/writesonic-vs-seowriting-ai/",
+   "title": "Writesonic vs SEOWriting.AI (2026): 100-Article Cost & Hallucination Matrix",
+   "h1": "Writesonic vs SEOWriting.AI (2026): 100-Article Cost & Hallucination Matrix",
+   "description": "Writesonic (4.1% hallucinations, 8.4 min editing) vs SEOWriting.AI (7.8% hallucinations, 14.2 min editing). 100-article cost matrix, true break-even math, and interactive calculator.",
+   "type": "comparison",
+   "promotion": 77,
+   "linkability": 86,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 11,
+   "words": 3514,
+   "interactive": true,
+   "modified": "2026-11-15T07:33:08+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (3,514 words)",
+    "6 data tables",
+    "Recently updated"
+   ],
+   "prospects": 14,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/semrush-vs-ahrefs-for-affiliate-marketing/",
    "title": "Semrush vs Ahrefs for Affiliates (2026): Head-to-Head",
    "h1": "Semrush vs Ahrefs for Affiliate Marketing: 2026 Head-to-Head Data Battle",
@@ -1647,7 +1673,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 18,
+   "internal_inlinks": 19,
    "words": 3294,
    "interactive": true,
    "modified": "2026-10-03T19:51:14+00:00",
@@ -1659,31 +1685,6 @@
    ],
    "prospects": 14,
    "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/review/writesonic-vs-seowriting-ai/",
-   "title": "Writesonic vs SEOWriting.AI (2026): 100-Article Cost & Hallucination Matrix",
-   "h1": "Writesonic vs SEOWriting.AI (2026): 100-Article Cost & Hallucination Matrix",
-   "description": "Writesonic (4.1% hallucinations, 8.4 min editing) vs SEOWriting.AI (7.8% hallucinations, 14.2 min editing). 100-article cost matrix, true break-even math, and interactive calculator.",
-   "type": "comparison",
-   "promotion": 77,
-   "linkability": 86,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 11,
-   "words": 3486,
-   "interactive": true,
-   "modified": "2026-09-06T06:47:08+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,486 words)",
-    "6 data tables",
-    "Recently updated"
-   ],
-   "prospects": 14,
-   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -2433,7 +2434,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 10,
    "words": 2972,
    "interactive": false,
    "modified": "2026-09-03T12:25:05+00:00",
@@ -6042,7 +6043,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 8,
-  "updated_at": "2026-11-15T01:09:15.243Z"
+  "updated_at": "2026-11-15T07:59:55.636Z"
  },
  "wins": [
   {
@@ -6091,30 +6092,32 @@
   }
  ],
  "log": [
-  "01:08:20 connection dataforseo: connected",
-  "01:08:20 connection gmail: connected",
-  "01:08:24 crawl gearuptofit.com: 300/882 urls, fetched 0, 304 0, reused 300",
-  "01:08:25 crawl gearuptogrow.com: 107/107 urls, fetched 37, 304 0, reused 70",
-  "01:08:27 crawl plantastichaven.com: 159/159 urls, fetched 33, 304 0, reused 126",
-  "01:08:28 crawl micegoneguide.com: 43/43 urls, fetched 6, 304 0, reused 37",
-  "01:08:30 crawl mysticaldigits.com: 300/468 urls, fetched 9, 304 0, reused 291",
-  "01:08:31 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "01:08:32 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "01:08:32 crawl frenchyfab.com: 155/155 urls, fetched 10, 304 0, reused 145",
-  "01:08:34 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 231, 304 0, reused 27",
-  "01:08:35 crawl efficientgptprompts.com: 300/487 urls, fetched 13, 304 0, reused 287",
-  "01:08:35 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "01:08:35 - search_performance: skipped (Search Console not connected)",
-  "01:08:35 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
-  "01:09:15 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "01:09:15 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "01:09:15 self-tuning: next cycle runs up to 8 searches",
-  "01:09:15 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "01:09:16 replies: 11 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "01:09:17 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
-  "01:09:17 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "01:09:17 - preverify: skipped (runs only while outreach is paused)",
-  "01:09:17 link checks: 0 pages, 0 new links won, 0 lost"
+  "07:58:30 connection dataforseo: connected",
+  "07:58:30 connection gmail: connected",
+  "07:58:32 crawl gearuptofit.com: 300/882 urls, fetched 0, 304 0, reused 300",
+  "07:58:33 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
+  "07:58:34 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "07:58:36 crawl frenchyfab.com: 155/155 urls, fetched 0, 304 0, reused 155",
+  "07:58:37 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "07:58:38 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "07:58:38 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "07:58:40 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
+  "07:58:42 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 4, 304 0, reused 254",
+  "07:58:44 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "07:58:44 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "07:58:44 - search_performance: skipped (Search Console not connected)",
+  "07:58:44 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
+  "07:59:16 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:59:49 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "07:59:55 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "07:59:55 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "07:59:55 self-tuning: next cycle runs up to 8 searches",
+  "07:59:55 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "07:59:57 replies: 3 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "07:59:57 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
+  "07:59:57 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "07:59:57 - preverify: skipped (runs only while outreach is paused)",
+  "07:59:57 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
