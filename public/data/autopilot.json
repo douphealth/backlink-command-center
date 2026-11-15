@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-15T15:46:42.141Z",
- "duration_s": 99,
+ "generated_at": "2026-11-15T21:08:55.307Z",
+ "duration_s": 75,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 11.833046000000003
+    "balance_usd": 11.771045999999998
    },
    "gmail": {
     "status": "connected"
@@ -114,7 +114,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 12446,
+   "ms": 15371,
    "result": {
     "sites": 10,
     "pages": 1806
@@ -155,11 +155,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 70650,
+   "ms": 56118,
    "result": {
     "queries": 8,
     "mention_queries": 0,
-    "serp_results": 296,
+    "serp_results": 383,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -170,9 +170,10 @@
     "broken_links": 0,
     "from_queue": 0,
     "filtered": {
-     "platform_or_giant": 296
+     "platform_or_giant": 383
     },
     "new_domains": 0,
+    "failed_queries": 2,
     "deferred": 0
    }
   },
@@ -182,7 +183,7 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "checked": 0,
     "found": 0
@@ -190,9 +191,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 2088,
+   "ms": 1143,
    "result": {
-    "scanned": 22,
+    "scanned": 2,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -202,7 +203,7 @@
   },
   "screen": {
    "ok": true,
-   "ms": 227,
+   "ms": 285,
    "result": {
     "screened": 2,
     "kept": 0,
@@ -212,7 +213,7 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 9,
+   "ms": 7,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -233,9 +234,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 11192,
+   "ms": 1,
    "result": {
-    "checked": 9,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -250,11 +251,11 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.222,
-  "month_usd": 4.6561,
+  "today_usd": 0.302,
+  "month_usd": 4.7361,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 10
+  "calls_this_run": 12
  },
  "outreach": {
   "mode": "send",
@@ -683,7 +684,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.222
+   "spend_usd": 0.302
   }
  ],
  "learning": {
@@ -732,9 +733,9 @@
    },
    {
     "footprint": "useful_links",
-    "queries": 40,
+    "queries": 42,
     "ready": 6,
-    "rate": 0.163
+    "rate": 0.156
    },
    {
     "footprint": "blogs_to_follow",
@@ -792,13 +793,13 @@
    },
    {
     "footprint": "phrase_blog",
-    "queries": 21,
+    "queries": 22,
     "ready": 0,
-    "rate": 0.042
+    "rate": 0.04
    },
    {
     "footprint": "resources",
-    "queries": 273,
+    "queries": 277,
     "ready": 7,
     "rate": 0.029
    },
@@ -810,7 +811,7 @@
    },
    {
     "footprint": "helpful_resources",
-    "queries": 184,
+    "queries": 185,
     "ready": 0,
     "rate": 0.005
    }
@@ -1868,7 +1869,7 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 7,
    "words": 3580,
    "interactive": true,
    "modified": "2026-11-07T19:35:50+00:00",
@@ -3982,8 +3983,8 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-weight-guide/",
-   "from_title": "French Bulldog Weight: Healthy Range and Body Condition",
+   "from": "https://frenchyfab.com/french-bulldog-stress-signs-fixes/",
+   "from_title": "Low-Calorie Treats for French Bulldogs: Safe Rewards",
    "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
    "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
    "anchor": "practical frenchie diet",
@@ -3992,8 +3993,8 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-stress-signs-fixes/",
-   "from_title": "Low-Calorie Treats for French Bulldogs: Safe Rewards",
+   "from": "https://frenchyfab.com/nutritious-dog-food-toppers-french-bulldogs/",
+   "from_title": "French Bulldog Nutrition for Picky Eaters: Food Toppers",
    "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
    "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
    "anchor": "practical frenchie diet",
@@ -6042,7 +6043,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 8,
-  "updated_at": "2026-11-15T15:46:28.551Z"
+  "updated_at": "2026-11-15T21:08:53.774Z"
  },
  "wins": [
   {
@@ -6091,30 +6092,32 @@
   }
  ],
  "log": [
-  "15:45:05 connection dataforseo: connected",
-  "15:45:05 connection gmail: connected",
-  "15:45:07 crawl gearuptofit.com: 300/885 urls, fetched 0, 304 0, reused 300",
-  "15:45:07 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
-  "15:45:10 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "15:45:11 crawl frenchyfab.com: 155/155 urls, fetched 5, 304 0, reused 150",
-  "15:45:12 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "15:45:12 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
-  "15:45:13 crawl mysticaldigits.com: 300/468 urls, fetched 5, 304 1, reused 294",
-  "15:45:13 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "15:45:13 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "15:45:17 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 0, 304 0, reused 258",
-  "15:45:17 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "15:45:17 - search_performance: skipped (Search Console not connected)",
-  "15:45:17 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
-  "15:46:28 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "15:46:28 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "15:46:28 self-tuning: next cycle runs up to 8 searches",
-  "15:46:28 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "15:46:30 replies: 22 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "15:46:30 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
-  "15:46:30 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "15:46:30 - preverify: skipped (runs only while outreach is paused)",
-  "15:46:42 link checks: 9 pages, 0 new links won, 0 lost"
+  "21:07:42 connection dataforseo: connected",
+  "21:07:42 connection gmail: connected",
+  "21:07:44 crawl plantastichaven.com: 159/159 urls, fetched 4, 304 0, reused 155",
+  "21:07:47 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
+  "21:07:51 crawl mysticaldigits.com: 300/468 urls, fetched 5, 304 0, reused 295",
+  "21:07:51 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 6, 304 0, reused 252",
+  "21:07:52 crawl frenchyfab.com: 155/155 urls, fetched 8, 304 0, reused 147",
+  "21:07:52 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "21:07:53 crawl gearuptofit.com: 300/885 urls, fetched 1, 304 0, reused 299",
+  "21:07:53 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "21:07:57 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
+  "21:07:57 crawl efficientgptprompts.com: 300/487 urls, fetched 5, 304 0, reused 295",
+  "21:07:57 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "21:07:57 - search_performance: skipped (Search Console not connected)",
+  "21:07:57 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
+  "21:08:33 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "21:08:42 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "21:08:53 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "21:08:53 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "21:08:53 self-tuning: next cycle runs up to 8 searches",
+  "21:08:53 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "21:08:54 replies: 2 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "21:08:55 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
+  "21:08:55 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "21:08:55 - preverify: skipped (runs only while outreach is paused)",
+  "21:08:55 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
