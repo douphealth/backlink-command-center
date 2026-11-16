@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-16T08:08:43.038Z",
- "duration_s": 107,
+ "generated_at": "2026-11-16T18:48:03.605Z",
+ "duration_s": 307,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 11.691046
+    "balance_usd": 11.619045999999997
    },
    "gmail": {
     "status": "connected"
@@ -29,14 +29,14 @@
    "key": true,
    "enabled": true,
    "daily_limit": 24,
-   "used_today": 0,
+   "used_today": 13,
    "balance": {
     "provider": "verifalia",
-    "free_credits": 6,
-    "reset_in": "03:24:42",
-    "checked_at": "2026-11-13T20:35:17.954Z"
+    "free_credits": 12,
+    "reset_in": "05:15:20",
+    "checked_at": "2026-11-16T18:44:39.693Z"
    },
-   "catch_all_domains_skipped": 20
+   "catch_all_domains_skipped": 30
   }
  },
  "setup": [
@@ -114,7 +114,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 19379,
+   "ms": 14715,
    "result": {
     "sites": 10,
     "pages": 1806
@@ -155,11 +155,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 71435,
+   "ms": 57880,
    "result": {
     "queries": 8,
     "mention_queries": 0,
-    "serp_results": 336,
+    "serp_results": 342,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -170,7 +170,7 @@
     "broken_links": 0,
     "from_queue": 0,
     "filtered": {
-     "platform_or_giant": 336
+     "platform_or_giant": 342
     },
     "new_domains": 0,
     "deferred": 0
@@ -190,9 +190,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1305,
+   "ms": 2251,
    "result": {
-    "scanned": 8,
+    "scanned": 37,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -202,7 +202,7 @@
   },
   "screen": {
    "ok": true,
-   "ms": 342,
+   "ms": 170,
    "result": {
     "screened": 2,
     "kept": 0,
@@ -212,15 +212,15 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 9,
+   "ms": 225278,
    "result": {
     "followups": 0,
-    "sent": 0,
+    "sent": 3,
     "drafted": 0,
-    "skipped": 0,
-    "deferred": 48,
+    "skipped": 1,
+    "deferred": 0,
     "cap": 12,
-    "verification_held": 0
+    "verification_held": 21
    },
    "writer": {
     "claude": 0,
@@ -233,9 +233,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 11954,
+   "ms": 4401,
    "result": {
-    "checked": 9,
+    "checked": 2,
     "won": 0,
     "lost": 0
    }
@@ -250,38 +250,36 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.072,
-  "month_usd": 4.8081,
+  "today_usd": 0.144,
+  "month_usd": 4.8801,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 8
+  "calls_this_run": 9
  },
  "outreach": {
   "mode": "send",
-  "ready": 48,
+  "ready": 38,
   "verified_ready": 0,
-  "pending_verification": 48,
+  "pending_verification": 38,
   "holds": {
-   "mailbox_unknown": 2,
-   "mailbox_accept_all": 5,
-   "mailbox_invalid": 1,
-   "publisher_mismatch": 1,
-   "mx_dns_unverified": 1
+   "mailbox_accept_all": 10,
+   "publisher_pages_unreachable": 2,
+   "publisher_mismatch": 1
   },
-  "sent_today": 0,
+  "sent_today": 3,
   "cap_today": 12,
-  "next_send_at": "2026-11-16T13:00:00.000Z",
+  "next_send_at": "2026-11-16T18:48:03.607Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
   "prospects_evaluated": 2518,
   "qualified": 539,
-  "ready": 48,
+  "ready": 38,
   "broken_link_ready": 0,
   "contact_form_only": 105,
   "no_contact": 223,
-  "contacted": 66,
+  "contacted": 69,
   "replied": 1,
   "positive": 0,
   "won": 0,
@@ -689,18 +687,18 @@
    "date": "2026-11-16",
    "prospects_evaluated": 2518,
    "qualified": 539,
-   "ready": 48,
+   "ready": 38,
    "broken_link_ready": 0,
    "contact_form_only": 105,
    "no_contact": 223,
-   "contacted": 66,
+   "contacted": 69,
    "replied": 1,
    "positive": 0,
    "won": 0,
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.072
+   "spend_usd": 0.144
   }
  ],
  "learning": {
@@ -762,8 +760,8 @@
    {
     "footprint": "intent",
     "queries": 234,
-    "ready": 33,
-    "rate": 0.143
+    "ready": 31,
+    "rate": 0.135
    },
    {
     "footprint": "recommended_tools",
@@ -797,9 +795,9 @@
    },
    {
     "footprint": "best_guides",
-    "queries": 193,
-    "ready": 13,
-    "rate": 0.071
+    "queries": 194,
+    "ready": 11,
+    "rate": 0.061
    },
    {
     "footprint": "mention",
@@ -809,15 +807,15 @@
    },
    {
     "footprint": "phrase_blog",
-    "queries": 24,
+    "queries": 29,
     "ready": 0,
-    "rate": 0.037
+    "rate": 0.031
    },
    {
     "footprint": "resources",
-    "queries": 278,
-    "ready": 7,
-    "rate": 0.028
+    "queries": 279,
+    "ready": 6,
+    "rate": 0.025
    },
    {
     "footprint": "further_reading",
@@ -827,7 +825,7 @@
    },
    {
     "footprint": "helpful_resources",
-    "queries": 185,
+    "queries": 186,
     "ready": 0,
     "rate": 0.005
    }
@@ -946,6 +944,14 @@
     "rate": 0.25
    },
    {
+    "url": "https://efficientgptprompts.com/ai-prompt-framework-youtube-script-retention-hooks/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
     "url": "https://openclaw-skillshub.com/articles/openclaw-provider-apis-guide/",
     "sent": 1,
     "replied": 0,
@@ -978,6 +984,14 @@
     "rate": 0.25
    },
    {
+    "url": "https://efficientgptprompts.com/best-ai-prompts-for-founders-2026-guide/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
     "url": "https://affiliatemarketingforsuccess.com/web-hosting/web-hosting-comparison/",
     "sent": 1,
     "replied": 0,
@@ -987,14 +1001,6 @@
    },
    {
     "url": "https://gearuptogrow.com/productivity/interleaving-vs-blocked-practice/",
-    "sent": 2,
-    "replied": 0,
-    "positive": 0,
-    "won": 0,
-    "rate": 0.2
-   },
-   {
-    "url": "https://affiliatemarketingforsuccess.com/ai/how-teachers-detect-ai-writing/",
     "sent": 2,
     "replied": 0,
     "positive": 0,
@@ -1107,6 +1113,14 @@
    },
    {
     "url": "https://affiliatemarketingforsuccess.com/review/neuronwriter-review/",
+    "sent": 3,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.167
+   },
+   {
+    "url": "https://affiliatemarketingforsuccess.com/ai/how-teachers-detect-ai-writing/",
     "sent": 3,
     "replied": 0,
     "positive": 0,
@@ -1278,7 +1292,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 3,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -3041,14 +3055,14 @@
    "linkability": 76,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 1,
+   "internal_inlinks": 2,
    "words": 1893,
    "interactive": false,
    "modified": "2026-11-15T15:01:14+00:00",
    "reasons": [
     "1 data table",
     "Recently updated",
-    "Under-linked internally (1 inbound)",
+    "Under-linked internally (2 inbound)",
     "One of 153 templated sibling pages — promote the hub first"
    ],
    "prospects": 0,
@@ -3191,12 +3205,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 155,
-   "words": 3403,
+   "words": 3398,
    "interactive": true,
-   "modified": "2026-11-07T19:28:44+00:00",
+   "modified": "2026-11-16T08:30:10+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,403 words)",
+    "In-depth (3,398 words)",
     "3 data tables",
     "Recently updated",
     "One of 153 templated sibling pages — promote the hub first"
@@ -3849,8 +3863,8 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-weight-management-framework/",
-   "from_title": "Fat French Bulldog? How to Help Your Frenchie Lose Weight",
+   "from": "https://frenchyfab.com/french-bulldog-separation-anxiety/",
+   "from_title": "French Bulldog Separation Anxiety: Signs, Training Plan",
    "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
    "to_title": "French Bulldog Socialization Training: A Practical Plan",
    "anchor": "french bulldog",
@@ -6059,7 +6073,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 8,
-  "updated_at": "2026-11-16T08:08:29.351Z"
+  "updated_at": "2026-11-16T18:44:11.497Z"
  },
  "wins": [
   {
@@ -6108,30 +6122,30 @@
   }
  ],
  "log": [
-  "08:06:57 connection dataforseo: connected",
-  "08:06:57 connection gmail: connected",
-  "08:07:01 crawl gearuptofit.com: 300/885 urls, fetched 3, 304 0, reused 297",
-  "08:07:01 crawl plantastichaven.com: 159/159 urls, fetched 4, 304 0, reused 155",
-  "08:07:03 crawl gearuptogrow.com: 107/107 urls, fetched 1, 304 0, reused 106",
-  "08:07:05 crawl frenchyfab.com: 155/155 urls, fetched 9, 304 0, reused 146",
-  "08:07:06 crawl micegoneguide.com: 43/43 urls, fetched 1, 304 0, reused 42",
-  "08:07:07 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "08:07:08 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "08:07:10 crawl mysticaldigits.com: 300/468 urls, fetched 10, 304 0, reused 290",
-  "08:07:12 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 8, 304 0, reused 250",
-  "08:07:17 crawl efficientgptprompts.com: 300/487 urls, fetched 33, 304 0, reused 267",
-  "08:07:17 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "08:07:17 - search_performance: skipped (Search Console not connected)",
-  "08:07:17 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
-  "08:08:29 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "08:08:29 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "08:08:29 self-tuning: next cycle runs up to 8 searches",
-  "08:08:29 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "08:08:30 replies: 8 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "08:08:31 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
-  "08:08:31 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "08:08:31 - preverify: skipped (runs only while outreach is paused)",
-  "08:08:43 link checks: 9 pages, 0 new links won, 0 lost"
+  "18:42:58 connection dataforseo: connected",
+  "18:42:58 connection gmail: connected",
+  "18:42:59 crawl gearuptofit.com: 300/885 urls, fetched 0, 304 0, reused 300",
+  "18:43:00 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
+  "18:43:03 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "18:43:03 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
+  "18:43:06 crawl mysticaldigits.com: 300/468 urls, fetched 6, 304 0, reused 294",
+  "18:43:06 crawl frenchyfab.com: 155/155 urls, fetched 6, 304 0, reused 149",
+  "18:43:07 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "18:43:08 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "18:43:11 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 2, 304 0, reused 256",
+  "18:43:13 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "18:43:13 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "18:43:13 - search_performance: skipped (Search Console not connected)",
+  "18:43:13 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
+  "18:44:11 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "18:44:11 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "18:44:11 self-tuning: next cycle runs up to 8 searches",
+  "18:44:11 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "18:44:13 replies: 37 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "18:44:13 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
+  "18:47:59 outreach: 3 sent, 0 follow-ups, 0 drafts, 21 held for verification",
+  "18:47:59 - preverify: skipped (runs only while outreach is paused)",
+  "18:48:03 link checks: 2 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
@@ -6143,7 +6157,7 @@
   {
    "level": "info",
    "code": "holds",
-   "message": "10 queued inboxes are held; most often (5) because mailbox accept all.",
+   "message": "13 queued inboxes are held; most often (10) because mailbox accept all.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   }
  ]
