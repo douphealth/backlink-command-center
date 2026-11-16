@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-15T21:08:55.307Z",
- "duration_s": 75,
+ "generated_at": "2026-11-16T08:08:43.038Z",
+ "duration_s": 107,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 11.771045999999998
+    "balance_usd": 11.691046
    },
    "gmail": {
     "status": "connected"
@@ -114,7 +114,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 15371,
+   "ms": 19379,
    "result": {
     "sites": 10,
     "pages": 1806
@@ -155,11 +155,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 56118,
+   "ms": 71435,
    "result": {
     "queries": 8,
     "mention_queries": 0,
-    "serp_results": 383,
+    "serp_results": 336,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -170,10 +170,9 @@
     "broken_links": 0,
     "from_queue": 0,
     "filtered": {
-     "platform_or_giant": 383
+     "platform_or_giant": 336
     },
     "new_domains": 0,
-    "failed_queries": 2,
     "deferred": 0
    }
   },
@@ -183,7 +182,7 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "checked": 0,
     "found": 0
@@ -191,9 +190,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1143,
+   "ms": 1305,
    "result": {
-    "scanned": 2,
+    "scanned": 8,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -203,7 +202,7 @@
   },
   "screen": {
    "ok": true,
-   "ms": 285,
+   "ms": 342,
    "result": {
     "screened": 2,
     "kept": 0,
@@ -213,7 +212,7 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 7,
+   "ms": 9,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -234,9 +233,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 1,
+   "ms": 11954,
    "result": {
-    "checked": 0,
+    "checked": 9,
     "won": 0,
     "lost": 0
    }
@@ -251,11 +250,11 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.302,
-  "month_usd": 4.7361,
+  "today_usd": 0.072,
+  "month_usd": 4.8081,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 12
+  "calls_this_run": 8
  },
  "outreach": {
   "mode": "send",
@@ -685,6 +684,23 @@
    "declined": 0,
    "bounced": 6,
    "spend_usd": 0.302
+  },
+  {
+   "date": "2026-11-16",
+   "prospects_evaluated": 2518,
+   "qualified": 539,
+   "ready": 48,
+   "broken_link_ready": 0,
+   "contact_form_only": 105,
+   "no_contact": 223,
+   "contacted": 66,
+   "replied": 1,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 4,
+   "declined": 0,
+   "bounced": 6,
+   "spend_usd": 0.072
   }
  ],
  "learning": {
@@ -732,22 +748,22 @@
     "rate": 0.231
    },
    {
-    "footprint": "useful_links",
-    "queries": 42,
-    "ready": 6,
-    "rate": 0.156
-   },
-   {
     "footprint": "blogs_to_follow",
     "queries": 10,
     "ready": 1,
     "rate": 0.154
    },
    {
+    "footprint": "useful_links",
+    "queries": 44,
+    "ready": 6,
+    "rate": 0.149
+   },
+   {
     "footprint": "intent",
-    "queries": 233,
+    "queries": 234,
     "ready": 33,
-    "rate": 0.144
+    "rate": 0.143
    },
    {
     "footprint": "recommended_tools",
@@ -793,19 +809,19 @@
    },
    {
     "footprint": "phrase_blog",
-    "queries": 22,
+    "queries": 24,
     "ready": 0,
-    "rate": 0.04
+    "rate": 0.037
    },
    {
     "footprint": "resources",
-    "queries": 277,
+    "queries": 278,
     "ready": 7,
-    "rate": 0.029
+    "rate": 0.028
    },
    {
     "footprint": "further_reading",
-    "queries": 162,
+    "queries": 164,
     "ready": 1,
     "rate": 0.012
    },
@@ -1598,12 +1614,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 5,
-   "words": 2188,
+   "words": 2222,
    "interactive": false,
-   "modified": "2026-09-13T19:08:04+00:00",
+   "modified": "2026-11-16T07:34:54+00:00",
    "reasons": [
     "Original method/data — citation-worthy",
-    "In-depth (2,188 words)",
+    "In-depth (2,222 words)",
     "2 data tables",
     "Cites 5 authoritative sources",
     "Recently updated"
@@ -2375,6 +2391,31 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/blogging/11-things-to-outsource-as-a-blogger-for-more-time-and-efficiency/",
+   "title": "11 Things To Outsource As A Blogger For More Time And Efficiency",
+   "h1": "11 Things to Outsource as a Blogger for Faster Scaling",
+   "description": "Stop wasting time! Discover 11 blogging tasks you can easily outsource to skyrocket your efficiency and grow your blog faster. Get more traffic now!",
+   "type": "general_article",
+   "promotion": 65,
+   "linkability": 72,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 9,
+   "words": 3117,
+   "interactive": false,
+   "modified": "2026-11-16T07:21:46+00:00",
+   "reasons": [
+    "In-depth (3,117 words)",
+    "1 data table",
+    "Cites 8 authoritative sources",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/blogging/content-marketing-must-educate-and-convert-the-customer/",
    "title": "Content Marketing Must Educate And Convert The Customer: 2026 ...",
    "h1": "Content Marketing: How to Educate and Convert in 2026",
@@ -2392,31 +2433,6 @@
     "In-depth (6,887 words)",
     "2 data tables",
     "Cites 4 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/blogging/promote-your-blog-to-increase-traffic/",
-   "title": "Blog Promotion Strategies 2026: 9 Proven Tactics to 100K+ Views",
-   "h1": "9 Blog Promotion Tactics for 100K+ Views (2026 Guide)",
-   "description": "Discover proven 2025 strategies to promote your blog & boost traffic. From SEO to social media, learn actionable tips to grow your audience. Start now!",
-   "type": "general_article",
-   "promotion": 65,
-   "linkability": 72,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 7,
-   "words": 4455,
-   "interactive": false,
-   "modified": "2026-09-03T13:33:15+00:00",
-   "reasons": [
-    "In-depth (4,455 words)",
-    "15 data tables",
-    "Cites 6 authoritative sources",
     "Recently updated"
    ],
    "prospects": 0,
@@ -6043,7 +6059,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 8,
-  "updated_at": "2026-11-15T21:08:53.774Z"
+  "updated_at": "2026-11-16T08:08:29.351Z"
  },
  "wins": [
   {
@@ -6092,32 +6108,30 @@
   }
  ],
  "log": [
-  "21:07:42 connection dataforseo: connected",
-  "21:07:42 connection gmail: connected",
-  "21:07:44 crawl plantastichaven.com: 159/159 urls, fetched 4, 304 0, reused 155",
-  "21:07:47 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
-  "21:07:51 crawl mysticaldigits.com: 300/468 urls, fetched 5, 304 0, reused 295",
-  "21:07:51 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 6, 304 0, reused 252",
-  "21:07:52 crawl frenchyfab.com: 155/155 urls, fetched 8, 304 0, reused 147",
-  "21:07:52 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "21:07:53 crawl gearuptofit.com: 300/885 urls, fetched 1, 304 0, reused 299",
-  "21:07:53 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "21:07:57 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
-  "21:07:57 crawl efficientgptprompts.com: 300/487 urls, fetched 5, 304 0, reused 295",
-  "21:07:57 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "21:07:57 - search_performance: skipped (Search Console not connected)",
-  "21:07:57 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
-  "21:08:33 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "21:08:42 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "21:08:53 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "21:08:53 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "21:08:53 self-tuning: next cycle runs up to 8 searches",
-  "21:08:53 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "21:08:54 replies: 2 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "21:08:55 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
-  "21:08:55 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "21:08:55 - preverify: skipped (runs only while outreach is paused)",
-  "21:08:55 link checks: 0 pages, 0 new links won, 0 lost"
+  "08:06:57 connection dataforseo: connected",
+  "08:06:57 connection gmail: connected",
+  "08:07:01 crawl gearuptofit.com: 300/885 urls, fetched 3, 304 0, reused 297",
+  "08:07:01 crawl plantastichaven.com: 159/159 urls, fetched 4, 304 0, reused 155",
+  "08:07:03 crawl gearuptogrow.com: 107/107 urls, fetched 1, 304 0, reused 106",
+  "08:07:05 crawl frenchyfab.com: 155/155 urls, fetched 9, 304 0, reused 146",
+  "08:07:06 crawl micegoneguide.com: 43/43 urls, fetched 1, 304 0, reused 42",
+  "08:07:07 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "08:07:08 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "08:07:10 crawl mysticaldigits.com: 300/468 urls, fetched 10, 304 0, reused 290",
+  "08:07:12 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 8, 304 0, reused 250",
+  "08:07:17 crawl efficientgptprompts.com: 300/487 urls, fetched 33, 304 0, reused 267",
+  "08:07:17 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "08:07:17 - search_performance: skipped (Search Console not connected)",
+  "08:07:17 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
+  "08:08:29 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "08:08:29 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "08:08:29 self-tuning: next cycle runs up to 8 searches",
+  "08:08:29 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "08:08:30 replies: 8 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "08:08:31 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
+  "08:08:31 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "08:08:31 - preverify: skipped (runs only while outreach is paused)",
+  "08:08:43 link checks: 9 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
