@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-17T12:11:35.130Z",
- "duration_s": 139,
+ "generated_at": "2026-11-17T21:08:59.962Z",
+ "duration_s": 56,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 11.479045999999997
+    "balance_usd": 11.417046
    },
    "gmail": {
     "status": "connected"
@@ -114,7 +114,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 35830,
+   "ms": 15222,
    "result": {
     "sites": 10,
     "pages": 1806
@@ -122,7 +122,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 0,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 2
@@ -145,7 +145,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -155,11 +155,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 95185,
+   "ms": 30080,
    "result": {
     "queries": 8,
     "mention_queries": 0,
-    "serp_results": 301,
+    "serp_results": 350,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -170,7 +170,7 @@
     "broken_links": 0,
     "from_queue": 0,
     "filtered": {
-     "platform_or_giant": 301
+     "platform_or_giant": 350
     },
     "new_domains": 0,
     "deferred": 0
@@ -190,9 +190,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 5108,
+   "ms": 1993,
    "result": {
-    "scanned": 35,
+    "scanned": 26,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -202,7 +202,7 @@
   },
   "screen": {
    "ok": true,
-   "ms": 315,
+   "ms": 675,
    "result": {
     "screened": 2,
     "kept": 0,
@@ -212,7 +212,7 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 11,
+   "ms": 9,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -233,9 +233,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 2,
+   "ms": 6307,
    "result": {
-    "checked": 0,
+    "checked": 9,
     "won": 0,
     "lost": 0
    }
@@ -250,11 +250,11 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.13,
-  "month_usd": 5.0101,
+  "today_usd": 0.202,
+  "month_usd": 5.0821,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 10
+  "calls_this_run": 8
  },
  "outreach": {
   "mode": "send",
@@ -268,7 +268,7 @@
   },
   "sent_today": 0,
   "cap_today": 12,
-  "next_send_at": "2026-11-17T13:00:00.000Z",
+  "next_send_at": "2026-11-18T13:00:00.000Z",
   "sending_now": false,
   "reply_health": "ok"
  },
@@ -715,7 +715,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.13
+   "spend_usd": 0.202
   }
  ],
  "learning": {
@@ -776,9 +776,9 @@
    },
    {
     "footprint": "useful_links",
-    "queries": 51,
+    "queries": 53,
     "ready": 6,
-    "rate": 0.13
+    "rate": 0.125
    },
    {
     "footprint": "recommended_tools",
@@ -824,13 +824,13 @@
    },
    {
     "footprint": "phrase_blog",
-    "queries": 31,
+    "queries": 33,
     "ready": 0,
-    "rate": 0.029
+    "rate": 0.028
    },
    {
     "footprint": "resources",
-    "queries": 284,
+    "queries": 287,
     "ready": 6,
     "rate": 0.024
    },
@@ -842,7 +842,7 @@
    },
    {
     "footprint": "helpful_resources",
-    "queries": 187,
+    "queries": 188,
     "ready": 0,
     "rate": 0.005
    }
@@ -1524,7 +1524,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 33,
+   "internal_inlinks": 32,
    "words": 1772,
    "interactive": true,
    "modified": "2026-10-30T07:45:22+00:00",
@@ -1916,7 +1916,7 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 3576,
    "interactive": true,
    "modified": "2026-11-07T19:35:50+00:00",
@@ -2431,7 +2431,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 8,
    "words": 3117,
    "interactive": false,
    "modified": "2026-11-16T07:21:46+00:00",
@@ -2863,6 +2863,33 @@
    "promoting": true
   },
   {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/how-is-14-in-numerology/",
+   "title": "2026 Guide: Numerology Meaning of Number 14 Explained",
+   "h1": "2026 Guide: Numerology Meaning of Number 14 Explained",
+   "description": "Uncover the adventurous and freedom-loving energy of numerology number 14! Explore its potential for travel, experiencing new things, and embracing life's.",
+   "type": "practical_guide",
+   "promotion": 61,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 3091,
+   "interactive": false,
+   "modified": "2026-11-08T05:27:50+00:00",
+   "reasons": [
+    "In-depth (3,091 words)",
+    "1 data table",
+    "Cites 7 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (2 inbound)",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/make-money-online/optimize-your-sales-funnel/",
    "title": "Sales Funnel Optimization 2026: Step-by-Step Proven Guide",
@@ -2972,7 +2999,7 @@
    "linkability": 80,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
+   "internal_inlinks": 12,
    "words": 1631,
    "interactive": true,
    "modified": "2026-11-07T20:01:22+00:00",
@@ -3204,32 +3231,6 @@
     "In-depth (2,217 words)",
     "2 data tables",
     "Cites 52 authoritative sources",
-    "Recently updated",
-    "One of 42 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/how-to-remove-mice-droppings-safely/",
-   "title": "How to Clean Up Mouse Droppings Safely: Do Not Vacuum First | Mice Gone Guide",
-   "h1": "How to Clean Up Mouse Droppings Safely",
-   "description": "CDC wet-cleanup method for mouse droppings: ventilate, wear gloves, soak with disinfectant or bleach solution for 5 minutes, then wipe up and dispose safely.",
-   "type": "practical_guide",
-   "promotion": 59,
-   "linkability": 79,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 42,
-   "words": 3106,
-   "interactive": false,
-   "modified": "2026-11-08T05:53:51+00:00",
-   "reasons": [
-    "In-depth (3,106 words)",
-    "1 data table",
-    "Cites 9 authoritative sources",
     "Recently updated",
     "One of 42 templated sibling pages — promote the hub first"
    ],
@@ -3871,8 +3872,8 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-separation-anxiety/",
-   "from_title": "French Bulldog Separation Anxiety: Signs, Training Plan",
+   "from": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
+   "from_title": "French Bulldog Characteristics: Traits, Care and Health",
    "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
    "to_title": "French Bulldog Socialization Training: A Practical Plan",
    "anchor": "french bulldog",
@@ -3881,8 +3882,8 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
-   "from_title": "French Bulldog Characteristics: Traits, Care and Health",
+   "from": "https://frenchyfab.com/french-bulldog-separation-anxiety/",
+   "from_title": "French Bulldog Separation Anxiety: Signs, Training Plan",
    "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
    "to_title": "French Bulldog Socialization Training: A Practical Plan",
    "anchor": "french bulldog",
@@ -4661,6 +4662,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/how-is-14-in-numerology/",
+   "from_title": "2026 Guide: Numerology Meaning of Number 14 Explained",
+   "to": "https://mysticaldigits.com/personal-year-numerology/",
+   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
+   "anchor": "personal year",
+   "relevance": 5,
+   "from_strength": 61
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
    "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
@@ -4673,16 +4684,6 @@
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
    "from_title": "Personal Year Calculator: How to Find Your Number (2026)",
-   "to": "https://mysticaldigits.com/personal-year-numerology/",
-   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "anchor": "personal year",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-is-14-in-numerology/",
-   "from_title": "2026 Guide: Numerology Meaning of Number 14 Explained",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
    "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
    "anchor": "personal year",
@@ -6091,7 +6092,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 8,
-  "updated_at": "2026-11-17T12:11:29.065Z"
+  "updated_at": "2026-11-17T21:08:50.893Z"
  },
  "wins": [
   {
@@ -6140,30 +6141,30 @@
   }
  ],
  "log": [
-  "12:09:17 connection dataforseo: connected",
-  "12:09:17 connection gmail: connected",
-  "12:09:22 crawl gearuptogrow.com: 107/107 urls, fetched 63, 304 0, reused 44",
-  "12:09:33 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 10, 304 0, reused 248",
-  "12:09:34 crawl plantastichaven.com: 159/159 urls, fetched 120, 304 0, reused 39",
-  "12:09:36 crawl gearuptofit.com: 300/885 urls, fetched 292, 304 0, reused 8",
-  "12:09:45 crawl frenchyfab.com: 155/155 urls, fetched 108, 304 0, reused 47",
-  "12:09:51 crawl efficientgptprompts.com: 300/487 urls, fetched 240, 304 0, reused 60",
-  "12:09:51 crawl openclaw-skillshub.com: 158/158 urls, fetched 158, 304 0, reused 0",
-  "12:09:51 crawl micegoneguide.com: 43/43 urls, fetched 36, 304 0, reused 7",
-  "12:09:52 crawl mysticaldigits.com: 300/468 urls, fetched 257, 304 0, reused 43",
-  "12:09:53 crawl imagealchemy.app: 26/26 urls, fetched 26, 304 0, reused 0",
-  "12:09:53 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "12:09:53 - search_performance: skipped (Search Console not connected)",
-  "12:09:53 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
-  "12:11:29 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "12:11:29 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "12:11:29 self-tuning: next cycle runs up to 8 searches",
-  "12:11:29 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "12:11:34 replies: 35 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "12:11:34 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
-  "12:11:34 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "12:11:34 - preverify: skipped (runs only while outreach is paused)",
-  "12:11:35 link checks: 0 pages, 0 new links won, 0 lost"
+  "21:08:05 connection dataforseo: connected",
+  "21:08:05 connection gmail: connected",
+  "21:08:08 crawl gearuptofit.com: 300/885 urls, fetched 0, 304 0, reused 300",
+  "21:08:08 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
+  "21:08:09 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
+  "21:08:11 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 5, 304 0, reused 253",
+  "21:08:12 crawl frenchyfab.com: 155/155 urls, fetched 11, 304 0, reused 144",
+  "21:08:13 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "21:08:14 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "21:08:16 crawl mysticaldigits.com: 300/468 urls, fetched 10, 304 1, reused 289",
+  "21:08:19 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "21:08:20 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
+  "21:08:20 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "21:08:20 - search_performance: skipped (Search Console not connected)",
+  "21:08:20 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
+  "21:08:50 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "21:08:50 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "21:08:50 self-tuning: next cycle runs up to 8 searches",
+  "21:08:50 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "21:08:52 replies: 26 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "21:08:53 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
+  "21:08:53 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "21:08:53 - preverify: skipped (runs only while outreach is paused)",
+  "21:08:59 link checks: 9 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
