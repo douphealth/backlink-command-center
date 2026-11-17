@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-17T02:34:16.216Z",
- "duration_s": 133,
+ "generated_at": "2026-11-17T12:11:35.130Z",
+ "duration_s": 139,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 11.547046000000002
+    "balance_usd": 11.479045999999997
    },
    "gmail": {
     "status": "connected"
@@ -114,7 +114,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 20231,
+   "ms": 35830,
    "result": {
     "sites": 10,
     "pages": 1806
@@ -145,7 +145,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -155,11 +155,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 100002,
+   "ms": 95185,
    "result": {
     "queries": 8,
     "mention_queries": 0,
-    "serp_results": 326,
+    "serp_results": 301,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -170,7 +170,7 @@
     "broken_links": 0,
     "from_queue": 0,
     "filtered": {
-     "platform_or_giant": 326
+     "platform_or_giant": 301
     },
     "new_domains": 0,
     "deferred": 0
@@ -190,9 +190,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1432,
+   "ms": 5108,
    "result": {
-    "scanned": 10,
+    "scanned": 35,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -202,7 +202,7 @@
   },
   "screen": {
    "ok": true,
-   "ms": 376,
+   "ms": 315,
    "result": {
     "screened": 2,
     "kept": 0,
@@ -212,7 +212,7 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 9,
+   "ms": 11,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -233,9 +233,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 8756,
+   "ms": 2,
    "result": {
-    "checked": 7,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -250,11 +250,11 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.068,
-  "month_usd": 4.9481,
+  "today_usd": 0.13,
+  "month_usd": 5.0101,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 9
+  "calls_this_run": 10
  },
  "outreach": {
   "mode": "send",
@@ -715,7 +715,7 @@
    "existing_links": 4,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.068
+   "spend_usd": 0.13
   }
  ],
  "learning": {
@@ -769,16 +769,16 @@
     "rate": 0.154
    },
    {
-    "footprint": "useful_links",
-    "queries": 46,
-    "ready": 6,
-    "rate": 0.143
-   },
-   {
     "footprint": "intent",
     "queries": 234,
     "ready": 31,
     "rate": 0.135
+   },
+   {
+    "footprint": "useful_links",
+    "queries": 51,
+    "ready": 6,
+    "rate": 0.13
    },
    {
     "footprint": "recommended_tools",
@@ -824,9 +824,9 @@
    },
    {
     "footprint": "phrase_blog",
-    "queries": 29,
+    "queries": 31,
     "ready": 0,
-    "rate": 0.031
+    "rate": 0.029
    },
    {
     "footprint": "resources",
@@ -836,7 +836,7 @@
    },
    {
     "footprint": "further_reading",
-    "queries": 164,
+    "queries": 165,
     "ready": 1,
     "rate": 0.012
    },
@@ -1272,8 +1272,8 @@
    "linkability": 90,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 300,
-   "words": 1828,
+   "internal_inlinks": 299,
+   "words": 1827,
    "interactive": true,
    "modified": "2026-11-07T19:51:12+00:00",
    "reasons": [
@@ -1424,12 +1424,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 42,
-   "words": 2215,
+   "words": 2207,
    "interactive": true,
    "modified": "2026-10-03T06:27:27+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,215 words)",
+    "In-depth (2,207 words)",
     "1 data table",
     "Cites 11 authoritative sources",
     "Recently updated"
@@ -1487,7 +1487,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 3,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -1572,8 +1572,8 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
-   "words": 1721,
+   "internal_inlinks": 6,
+   "words": 1722,
    "interactive": true,
    "modified": "2026-11-08T05:33:11+00:00",
    "reasons": [
@@ -1891,7 +1891,7 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 4949,
    "interactive": false,
    "modified": "2026-09-13T09:07:20+00:00",
@@ -1916,13 +1916,13 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
-   "words": 3580,
+   "internal_inlinks": 8,
+   "words": 3576,
    "interactive": true,
    "modified": "2026-11-07T19:35:50+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,580 words)",
+    "In-depth (3,576 words)",
     "19 data tables",
     "Recently updated"
    ],
@@ -2008,28 +2008,28 @@
   },
   {
    "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "h1": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "description": "Is homemade or commercial food best for your French Bulldog? We compare pros, cons, nutrition, cost, & time. Expert advice helps you choose! FrenchBulldogFood",
-   "type": "comparison",
+   "url": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "h1": "French Bulldog Supplements: What the Evidence Supports and What to Skip",
+   "description": "A French Bulldog supplement guide by need: joints, skin, gut and calm. What the evidence supports, ingredients to avoid, dosing cautions, and when to ask your vet.",
+   "type": "practical_guide",
    "promotion": 73,
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2814,
+   "internal_inlinks": 1,
+   "words": 1378,
    "interactive": false,
-   "modified": "2026-11-10T13:50:14+00:00",
+   "modified": "2026-10-26T13:31:02+00:00",
    "reasons": [
-    "In-depth (2,814 words)",
     "1 data table",
+    "Cites 6 authoritative sources",
     "Recently updated",
-    "Under-linked internally (2 inbound)"
+    "Under-linked internally (1 inbound)"
    ],
-   "prospects": 0,
+   "prospects": 1,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2139,11 +2139,11 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 7,
-   "words": 2558,
+   "words": 2557,
    "interactive": false,
    "modified": "2026-10-15T10:08:15+00:00",
    "reasons": [
-    "In-depth (2,558 words)",
+    "In-depth (2,557 words)",
     "4 data tables",
     "Cites 8 authoritative sources",
     "Recently updated"
@@ -2212,7 +2212,7 @@
    "linkability": 75,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 10,
    "words": 3272,
    "interactive": false,
    "modified": "2026-09-13T14:12:52+00:00",
@@ -2383,7 +2383,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 11,
-   "words": 1344,
+   "words": 1345,
    "interactive": true,
    "modified": "2026-11-07T20:04:05+00:00",
    "reasons": [
@@ -2418,7 +2418,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2629,11 +2629,11 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 43,
-   "words": 4515,
+   "words": 4517,
    "interactive": false,
    "modified": "2026-11-08T06:06:02+00:00",
    "reasons": [
-    "In-depth (4,515 words)",
+    "In-depth (4,517 words)",
     "4 data tables",
     "Cites 4 authoritative sources",
     "Recently updated",
@@ -2641,7 +2641,7 @@
     "One of 42 templated sibling pages — promote the hub first"
    ],
    "prospects": 5,
-   "internal_link_suggestions": 5,
+   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -2667,7 +2667,7 @@
     "Health/YMYL topic — pitch only to expert publishers"
    ],
    "prospects": 2,
-   "internal_link_suggestions": 3,
+   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -2753,8 +2753,8 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
-   "words": 1806,
+   "internal_inlinks": 5,
+   "words": 1812,
    "interactive": true,
    "modified": "2026-11-08T05:33:11+00:00",
    "reasons": [
@@ -2848,8 +2848,8 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
-   "words": 1774,
+   "internal_inlinks": 12,
+   "words": 1773,
    "interactive": false,
    "modified": "2026-10-05T18:30:17+00:00",
    "reasons": [
@@ -2861,32 +2861,6 @@
    "prospects": 0,
    "internal_link_suggestions": 5,
    "promoting": true
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "h1": "French Bulldog Supplements: What the Evidence Supports and What to Skip",
-   "description": "A French Bulldog supplement guide by need: joints, skin, gut and calm. What the evidence supports, ingredients to avoid, dosing cautions, and when to ask your vet.",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 77,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 1378,
-   "interactive": false,
-   "modified": "2026-10-26T13:31:02+00:00",
-   "reasons": [
-    "1 data table",
-    "Cites 6 authoritative sources",
-    "Recently updated",
-    "Under-linked internally (2 inbound)",
-    "One of 153 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 1,
-   "internal_link_suggestions": 5,
-   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2999,7 +2973,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 13,
-   "words": 1633,
+   "words": 1631,
    "interactive": true,
    "modified": "2026-11-07T20:01:22+00:00",
    "reasons": [
@@ -3059,31 +3033,6 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 3,
-   "promoting": true
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
-   "title": "French Bulldog Characteristics: Traits, Care and Health",
-   "h1": "French Bulldog Characteristics: Traits, Care Needs, Health, and Owner Fit",
-   "description": "Your French Bulldog care questions answered! Discover essential tips & health insights. Transform your pup's life with our proven guide. See how now!",
-   "type": "practical_guide",
-   "promotion": 60,
-   "linkability": 76,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 1893,
-   "interactive": false,
-   "modified": "2026-11-15T15:01:14+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)",
-    "One of 153 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
    "promoting": true
   },
   {
@@ -3235,6 +3184,58 @@
    "prospects": 7,
    "internal_link_suggestions": 5,
    "promoting": false
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
+   "title": "How to Get Rid of Mice in Walls (Without Opening Drywall)",
+   "h1": "How to Get Rid of Mice in Walls Safely",
+   "description": "Hear scratching in your walls? How to confirm it is mice, trap the routes they use, seal the entry gaps, and know when a pro needs to open the wall.",
+   "type": "practical_guide",
+   "promotion": 59,
+   "linkability": 79,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 42,
+   "words": 2217,
+   "interactive": false,
+   "modified": "2026-11-08T05:54:06+00:00",
+   "reasons": [
+    "In-depth (2,217 words)",
+    "2 data tables",
+    "Cites 52 authoritative sources",
+    "Recently updated",
+    "One of 42 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://micegoneguide.com/how-to-remove-mice-droppings-safely/",
+   "title": "How to Clean Up Mouse Droppings Safely: Do Not Vacuum First | Mice Gone Guide",
+   "h1": "How to Clean Up Mouse Droppings Safely",
+   "description": "CDC wet-cleanup method for mouse droppings: ventilate, wear gloves, soak with disinfectant or bleach solution for 5 minutes, then wipe up and dispose safely.",
+   "type": "practical_guide",
+   "promotion": 59,
+   "linkability": 79,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 42,
+   "words": 3106,
+   "interactive": false,
+   "modified": "2026-11-08T05:53:51+00:00",
+   "reasons": [
+    "In-depth (3,106 words)",
+    "1 data table",
+    "Cites 9 authoritative sources",
+    "Recently updated",
+    "One of 42 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
   }
  ],
  "internal_links": [
@@ -3280,8 +3281,8 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/calculate-your-psychic-number-with-our-calculator/",
-   "from_title": "Psychic Number Calculator: Find Your Core Number in 2026",
+   "from": "https://mysticaldigits.com/street-address-residence-number-compatibility-calculator/",
+   "from_title": "Street Address Compatibility Calculators: How House Number Numerology Is…",
    "to": "https://mysticaldigits.com/life-path-number-calculator/",
    "to_title": "Life Path Number Calculator (Free) | Mystical Digits",
    "anchor": "life path",
@@ -3440,16 +3441,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/best-bait-for-mouse-traps/",
-   "from_title": "Best Bait for Mouse Traps: Peanut Butter, Setup & Mistakes",
-   "to": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "to_title": "Where to Place Mouse Traps: Room-by-Room Placement Guide",
-   "anchor": "mouse traps",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/mouse-elimination-plan/",
    "from_title": "Mouse Elimination Plan: Safe 7-Day Home Checklist",
    "to": "https://micegoneguide.com/where-to-place-mouse-traps/",
@@ -3467,6 +3458,16 @@
    "anchor": "mouse traps",
    "relevance": 4,
    "from_strength": 59
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/humane-mouse-traps/",
+   "from_title": "Humane Mouse Traps: Catch-and-Release Guide & Honest Limits",
+   "to": "https://micegoneguide.com/where-to-place-mouse-traps/",
+   "to_title": "Where to Place Mouse Traps: Room-by-Room Placement Guide",
+   "anchor": "mouse traps",
+   "relevance": 4,
+   "from_strength": 57
   },
   {
    "site": "gearuptofit.com",
@@ -3860,16 +3861,6 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
-   "from_title": "French Bulldog Characteristics: Traits, Care and Health",
-   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "to_title": "French Bulldog Socialization Training: A Practical Plan",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 60
-  },
-  {
-   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
    "from_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
    "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
@@ -3882,6 +3873,16 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-separation-anxiety/",
    "from_title": "French Bulldog Separation Anxiety: Signs, Training Plan",
+   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "to_title": "French Bulldog Socialization Training: A Practical Plan",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 56
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
+   "from_title": "French Bulldog Characteristics: Traits, Care and Health",
    "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
    "to_title": "French Bulldog Socialization Training: A Practical Plan",
    "anchor": "french bulldog",
@@ -4000,52 +4001,52 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 58
+   "from": "https://frenchyfab.com/supplements-for-french-bulldogs-what-you-need-to-know/",
+   "from_title": "Best French Bulldog Supplements: What May Help, What to Skip",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
+   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
    "from_strength": 57
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/high-protein-diet-french-bulldogs-muscle-fat-energy/",
-   "from_title": "High-Protein Diets for French Bulldogs: When They Help",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
+   "from": "https://frenchyfab.com/recognizing-and-managing-arthritis-in-french-bulldogs/",
+   "from_title": "French Bulldog Arthritis Symptoms: Signs, Comfort, Mobility",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
    "from_strength": 0
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-stress-signs-fixes/",
-   "from_title": "Low-Calorie Treats for French Bulldogs: Safe Rewards",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
+   "from": "https://frenchyfab.com/essential-vitamins-and-minerals-for-french-bulldogs/",
+   "from_title": "French Bulldog Vitamins: Nutrition Basics, Deficiencies",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
    "from_strength": 0
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/nutritious-dog-food-toppers-french-bulldogs/",
-   "from_title": "French Bulldog Nutrition for Picky Eaters: Food Toppers",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
+   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
+   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
    "from_strength": 0
   },
   {
@@ -4400,16 +4401,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "from_title": "How to Get Rid of Mice in the Attic and Insulation",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 61
-  },
-  {
-   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
    "from_title": "How to Get Rid of Mice in Walls (Without Opening Drywall)",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
@@ -4440,13 +4431,23 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
+   "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
+   "from_title": "Mouse Infestation Health Risks: Disease, Allergies & More",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "anchor": "rid mice",
    "relevance": 4,
-   "from_strength": 56
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness/",
+   "from_title": "Fitness Articles | Workouts, HIIT, Strength Training & Exercise Guides | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 5,
+   "from_strength": 0
   },
   {
    "site": "gearuptofit.com",
@@ -4530,8 +4531,8 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-essence-and-significance-of-numerology-number-four-revealed/",
-   "from_title": "Numerology Number 4 in 2026: The Blueprint for Structure, Income &…",
+   "from": "https://mysticaldigits.com/revealing-the-birth-number-3-personality/",
+   "from_title": "Birth Number 3 Personality: Traits, Love & Career in 2026",
    "to": "https://mysticaldigits.com/revealing-birth-number-6-personality/",
    "to_title": "Birth Number 6 Personality: 2026 Guide & Insights | Mystical Digits",
    "anchor": "birth number",
@@ -4580,13 +4581,13 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
+   "from": "https://micegoneguide.com/diseases-from-mice/",
+   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
    "to_title": "How to Get Rid of Mice in the Attic and Insulation",
    "anchor": "rid mice",
    "relevance": 5,
-   "from_strength": 56
+   "from_strength": 0
   },
   {
    "site": "micegoneguide.com",
@@ -4597,56 +4598,6 @@
    "anchor": "rid mice",
    "relevance": 4,
    "from_strength": 63
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/supplements-for-french-bulldogs-what-you-need-to-know/",
-   "from_title": "Best French Bulldog Supplements: What May Help, What to Skip",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/recognizing-and-managing-arthritis-in-french-bulldogs/",
-   "from_title": "French Bulldog Arthritis Symptoms: Signs, Comfort, Mobility",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/essential-vitamins-and-minerals-for-french-bulldogs/",
-   "from_title": "French Bulldog Vitamins: Nutrition Basics, Deficiencies",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
-   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
   },
   {
    "site": "efficientgptprompts.com",
@@ -4777,56 +4728,6 @@
    "anchor": "copper mesh",
    "relevance": 5,
    "from_strength": 82
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/why-do-french-bulldogs-have-no-tail/",
-   "from_title": "Do French Bulldogs Have Tails? Short Tails, Care & Health",
-   "to": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
-   "to_title": "French Bulldog Characteristics: Traits, Care and Health",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "from_title": "French Bulldog Socialization Training: A Practical Plan",
-   "to": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
-   "to_title": "French Bulldog Characteristics: Traits, Care and Health",
-   "anchor": "french bulldog",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "to": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
-   "to_title": "French Bulldog Characteristics: Traits, Care and Health",
-   "anchor": "french bulldog",
-   "relevance": 4,
-   "from_strength": 73
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "to": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
-   "to_title": "French Bulldog Characteristics: Traits, Care and Health",
-   "anchor": "french bulldog",
-   "relevance": 4,
-   "from_strength": 61
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
-   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
-   "to": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
-   "to_title": "French Bulldog Characteristics: Traits, Care and Health",
-   "anchor": "french bulldog",
-   "relevance": 4,
-   "from_strength": 59
   },
   {
    "site": "plantastichaven.com",
@@ -5030,16 +4931,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "to_title": "How to Get Rid of Mice in Walls (Without Opening Drywall)",
-   "anchor": "rid mice",
-   "relevance": 6,
-   "from_strength": 56
-  },
-  {
-   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
@@ -5047,16 +4938,6 @@
    "anchor": "rid mice",
    "relevance": 5,
    "from_strength": 63
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "from_title": "How to Get Rid of Mice in the Attic and Insulation",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "to_title": "How to Get Rid of Mice in Walls (Without Opening Drywall)",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 61
   },
   {
    "site": "micegoneguide.com",
@@ -5080,13 +4961,33 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "from_title": "How to Get Rid of Mice in an Apartment",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
+   "to_title": "How to Get Rid of Mice in Walls (Without Opening Drywall)",
+   "anchor": "rid mice",
+   "relevance": 5,
+   "from_strength": 56
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
+   "from_title": "How to Get Rid of Mice in the Attic and Insulation",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
+   "to_title": "How to Get Rid of Mice in Walls (Without Opening Drywall)",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 61
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/diseases-from-mice/",
+   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
    "to": "https://micegoneguide.com/how-to-remove-mice-droppings-safely/",
    "to_title": "How to Clean Up Mouse Droppings Safely: Do Not Vacuum First | Mice Gone Guide",
    "anchor": "mouse droppings",
    "relevance": 6,
-   "from_strength": 59
+   "from_strength": 0
   },
   {
    "site": "micegoneguide.com",
@@ -5110,23 +5011,23 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
-   "from_title": "Does Peppermint Oil Repel Mice? What the Evidence Shows",
-   "to": "https://micegoneguide.com/how-to-remove-mice-droppings-safely/",
-   "to_title": "How to Clean Up Mouse Droppings Safely: Do Not Vacuum First | Mice Gone Guide",
-   "anchor": "droppings safely",
-   "relevance": 5,
-   "from_strength": 55
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/diseases-from-mice/",
-   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
+   "from": "https://micegoneguide.com/mouse-elimination-plan/",
+   "from_title": "Mouse Elimination Plan: Safe 7-Day Home Checklist",
    "to": "https://micegoneguide.com/how-to-remove-mice-droppings-safely/",
    "to_title": "How to Clean Up Mouse Droppings Safely: Do Not Vacuum First | Mice Gone Guide",
    "anchor": "mouse droppings",
-   "relevance": 5,
-   "from_strength": 0
+   "relevance": 4,
+   "from_strength": 60
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "to": "https://micegoneguide.com/how-to-remove-mice-droppings-safely/",
+   "to_title": "How to Clean Up Mouse Droppings Safely: Do Not Vacuum First | Mice Gone Guide",
+   "anchor": "clean mouse droppings",
+   "relevance": 4,
+   "from_strength": 59
   },
   {
    "site": "micegoneguide.com",
@@ -5150,26 +5051,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 56
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
-   "from_title": "How to Get Rid of Mice in the Attic and Insulation",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 61
-  },
-  {
-   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
    "from_title": "How to Get Rid of Mice in Walls (Without Opening Drywall)",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
@@ -5177,6 +5058,26 @@
    "anchor": "rid mice",
    "relevance": 4,
    "from_strength": 59
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-car/",
+   "from_title": "How to Get Rid of Mice in Your Car: Engine Bay, Cabin & Air Vents",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 58
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
+   "from_title": "How to Get Rid of Mice in an Apartment",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 56
   },
   {
    "site": "micegoneguide.com",
@@ -5237,6 +5138,106 @@
    "anchor": "numerology love",
    "relevance": 6,
    "from_strength": 65
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/exploring-your-path-the-essence-of-number-five/",
+   "from_title": "Numerology Number 5: Meaning, Freedom & Adventure",
+   "to": "https://mysticaldigits.com/free-numerology-love-compatibility-score/",
+   "to_title": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
+   "anchor": "love compatibility",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 73
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
+   "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-food-for-french-bulldogs-with-sensitive-stomach/",
+   "from_title": "Best Dog Food for a French Bulldog With a Sensitive Stomach",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
+   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "french bulldogs",
+   "relevance": 6,
+   "from_strength": 57
   }
  ],
  "indexation": {
@@ -6090,7 +6091,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 8,
-  "updated_at": "2026-11-17T02:34:05.554Z"
+  "updated_at": "2026-11-17T12:11:29.065Z"
  },
  "wins": [
   {
@@ -6139,30 +6140,30 @@
   }
  ],
  "log": [
-  "02:32:05 connection dataforseo: connected",
-  "02:32:05 connection gmail: connected",
-  "02:32:08 crawl plantastichaven.com: 159/159 urls, fetched 2, 304 0, reused 157",
-  "02:32:09 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
-  "02:32:13 crawl frenchyfab.com: 155/155 urls, fetched 5, 304 0, reused 150",
-  "02:32:13 crawl mysticaldigits.com: 300/468 urls, fetched 5, 304 0, reused 295",
-  "02:32:15 crawl gearuptofit.com: 300/885 urls, fetched 4, 304 0, reused 296",
-  "02:32:16 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "02:32:17 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "02:32:17 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
-  "02:32:20 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 2, 304 0, reused 256",
-  "02:32:25 crawl efficientgptprompts.com: 300/487 urls, fetched 9, 304 0, reused 291",
-  "02:32:25 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "02:32:25 - search_performance: skipped (Search Console not connected)",
-  "02:32:25 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
-  "02:34:05 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "02:34:05 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "02:34:05 self-tuning: next cycle runs up to 8 searches",
-  "02:34:05 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "02:34:06 replies: 10 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "02:34:07 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
-  "02:34:07 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "02:34:07 - preverify: skipped (runs only while outreach is paused)",
-  "02:34:16 link checks: 7 pages, 0 new links won, 0 lost"
+  "12:09:17 connection dataforseo: connected",
+  "12:09:17 connection gmail: connected",
+  "12:09:22 crawl gearuptogrow.com: 107/107 urls, fetched 63, 304 0, reused 44",
+  "12:09:33 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 10, 304 0, reused 248",
+  "12:09:34 crawl plantastichaven.com: 159/159 urls, fetched 120, 304 0, reused 39",
+  "12:09:36 crawl gearuptofit.com: 300/885 urls, fetched 292, 304 0, reused 8",
+  "12:09:45 crawl frenchyfab.com: 155/155 urls, fetched 108, 304 0, reused 47",
+  "12:09:51 crawl efficientgptprompts.com: 300/487 urls, fetched 240, 304 0, reused 60",
+  "12:09:51 crawl openclaw-skillshub.com: 158/158 urls, fetched 158, 304 0, reused 0",
+  "12:09:51 crawl micegoneguide.com: 43/43 urls, fetched 36, 304 0, reused 7",
+  "12:09:52 crawl mysticaldigits.com: 300/468 urls, fetched 257, 304 0, reused 43",
+  "12:09:53 crawl imagealchemy.app: 26/26 urls, fetched 26, 304 0, reused 0",
+  "12:09:53 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "12:09:53 - search_performance: skipped (Search Console not connected)",
+  "12:09:53 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
+  "12:11:29 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "12:11:29 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "12:11:29 self-tuning: next cycle runs up to 8 searches",
+  "12:11:29 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "12:11:34 replies: 35 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "12:11:34 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
+  "12:11:34 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "12:11:34 - preverify: skipped (runs only while outreach is paused)",
+  "12:11:35 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
