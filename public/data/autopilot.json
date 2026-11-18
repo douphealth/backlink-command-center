@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-17T21:08:59.962Z",
- "duration_s": 56,
+ "generated_at": "2026-11-18T03:02:28.126Z",
+ "duration_s": 229,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 11.417046
+    "balance_usd": 11.345046000000004
    },
    "gmail": {
     "status": "connected"
@@ -114,7 +114,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 15222,
+   "ms": 118597,
    "result": {
     "sites": 10,
     "pages": 1806
@@ -122,7 +122,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 0,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 2
@@ -155,11 +155,11 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 30080,
+   "ms": 107034,
    "result": {
     "queries": 8,
     "mention_queries": 0,
-    "serp_results": 350,
+    "serp_results": 302,
     "candidates": 0,
     "qualified": 0,
     "mentions": 0,
@@ -170,7 +170,7 @@
     "broken_links": 0,
     "from_queue": 0,
     "filtered": {
-     "platform_or_giant": 350
+     "platform_or_giant": 302
     },
     "new_domains": 0,
     "deferred": 0
@@ -190,9 +190,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1993,
+   "ms": 1578,
    "result": {
-    "scanned": 26,
+    "scanned": 8,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -202,7 +202,7 @@
   },
   "screen": {
    "ok": true,
-   "ms": 675,
+   "ms": 411,
    "result": {
     "screened": 2,
     "kept": 0,
@@ -212,7 +212,7 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 9,
+   "ms": 10,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -233,9 +233,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 6307,
+   "ms": 2,
    "result": {
-    "checked": 9,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -250,11 +250,11 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.202,
-  "month_usd": 5.0821,
+  "today_usd": 0.062,
+  "month_usd": 5.1441,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 8
+  "calls_this_run": 10
  },
  "outreach": {
   "mode": "send",
@@ -716,6 +716,23 @@
    "declined": 0,
    "bounced": 6,
    "spend_usd": 0.202
+  },
+  {
+   "date": "2026-11-18",
+   "prospects_evaluated": 2518,
+   "qualified": 539,
+   "ready": 38,
+   "broken_link_ready": 0,
+   "contact_form_only": 105,
+   "no_contact": 223,
+   "contacted": 69,
+   "replied": 1,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 4,
+   "declined": 0,
+   "bounced": 6,
+   "spend_usd": 0.062
   }
  ],
  "learning": {
@@ -775,16 +792,16 @@
     "rate": 0.135
    },
    {
-    "footprint": "useful_links",
-    "queries": 53,
-    "ready": 6,
-    "rate": 0.125
-   },
-   {
     "footprint": "recommended_tools",
     "queries": 5,
     "ready": 0,
     "rate": 0.125
+   },
+   {
+    "footprint": "useful_links",
+    "queries": 54,
+    "ready": 6,
+    "rate": 0.123
    },
    {
     "footprint": "inurl_links",
@@ -824,13 +841,13 @@
    },
    {
     "footprint": "phrase_blog",
-    "queries": 33,
+    "queries": 37,
     "ready": 0,
-    "rate": 0.028
+    "rate": 0.025
    },
    {
     "footprint": "resources",
-    "queries": 287,
+    "queries": 290,
     "ready": 6,
     "rate": 0.024
    },
@@ -1373,7 +1390,7 @@
    "linkability": 91,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 8,
    "words": 1667,
    "interactive": true,
    "modified": "2026-11-04T05:40:26+00:00",
@@ -1524,8 +1541,8 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 32,
-   "words": 1772,
+   "internal_inlinks": 29,
+   "words": 1769,
    "interactive": true,
    "modified": "2026-10-30T07:45:22+00:00",
    "reasons": [
@@ -1609,31 +1626,6 @@
    "promoting": false
   },
   {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/learning-development/learn-faster/",
-   "title": "Accelerated Learning: Learn Faster & Retain More",
-   "h1": "Accelerated Learning: Practical Ways to Learn Faster and Retain More",
-   "description": "Unlock accelerated learning with practical methods like active recall & spaced repetition. Learn faster, retain more, and boost your productivity.",
-   "type": "practical_guide",
-   "promotion": 78,
-   "linkability": 87,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 10,
-   "words": 1381,
-   "interactive": true,
-   "modified": "2026-11-08T07:19:22+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "2 data tables",
-    "Cites 6 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/ai/how-teachers-detect-ai-writing/",
    "title": "How Teachers Detect AI Writing: 11 Methods That Actually Work (2026)",
@@ -1671,12 +1663,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 24,
-   "words": 2076,
+   "words": 2107,
    "interactive": true,
    "modified": "2026-11-11T14:40:09+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,076 words)",
+    "In-depth (2,107 words)",
     "3 data tables",
     "Recently updated"
    ],
@@ -1695,7 +1687,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 10,
    "words": 3514,
    "interactive": true,
    "modified": "2026-11-15T07:33:08+00:00",
@@ -1720,7 +1712,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 19,
+   "internal_inlinks": 20,
    "words": 3294,
    "interactive": true,
    "modified": "2026-10-03T19:51:14+00:00",
@@ -1796,8 +1788,8 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 13,
-   "words": 679,
+   "internal_inlinks": 11,
+   "words": 680,
    "interactive": true,
    "modified": "2026-09-05T13:47:24+00:00",
    "reasons": [
@@ -1843,7 +1835,7 @@
    "linkability": 83,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 14,
+   "internal_inlinks": 10,
    "words": 2085,
    "interactive": false,
    "modified": "2026-09-25T14:57:36+00:00",
@@ -1878,31 +1870,6 @@
    ],
    "prospects": 7,
    "internal_link_suggestions": 1,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/ai/undetectable-alternatives/",
-   "title": "7 Undetectable AI Alternatives: 2026 Humanizer Guide",
-   "h1": "10 Best Undetectable AI Alternatives (2026 Guide)",
-   "description": "Discover the top 7 undetectable AI alternatives for 2025. Bypass detection, modify tone & style, and create stealth content effortlessly. Try these tools today!",
-   "type": "comparison",
-   "promotion": 74,
-   "linkability": 82,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 7,
-   "words": 4949,
-   "interactive": false,
-   "modified": "2026-09-13T09:07:20+00:00",
-   "reasons": [
-    "In-depth (4,949 words)",
-    "5 data tables",
-    "Cites 6 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 2,
-   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -1954,7 +1921,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -1983,6 +1950,31 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/ai/undetectable-alternatives/",
+   "title": "7 Undetectable AI Alternatives: 2026 Humanizer Guide",
+   "h1": "10 Best Undetectable AI Alternatives (2026 Guide)",
+   "description": "Discover the top 7 undetectable AI alternatives for 2025. Bypass detection, modify tone & style, and create stealth content effortlessly. Try these tools today!",
+   "type": "comparison",
+   "promotion": 73,
+   "linkability": 81,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 6,
+   "words": 4949,
+   "interactive": false,
+   "modified": "2026-09-13T09:07:20+00:00",
+   "reasons": [
+    "In-depth (4,949 words)",
+    "5 data tables",
+    "Cites 6 authoritative sources",
+    "Recently updated"
+   ],
+   "prospects": 2,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
    "title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
    "h1": "How to Choose a Profitable Affiliate Niche: 2026 Strategy",
@@ -1992,7 +1984,7 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 6213,
    "interactive": false,
    "modified": "2026-09-12T09:23:40+00:00",
@@ -2018,7 +2010,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 1,
-   "words": 1378,
+   "words": 1371,
    "interactive": false,
    "modified": "2026-10-26T13:31:02+00:00",
    "reasons": [
@@ -2089,7 +2081,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 7,
    "words": 4194,
    "interactive": false,
    "modified": "2026-09-12T07:57:38+00:00",
@@ -2114,7 +2106,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 12,
    "words": 6004,
    "interactive": false,
    "modified": "2026-09-03T11:44:05+00:00",
@@ -2178,6 +2170,30 @@
   },
   {
    "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/learning-development/learn-faster/",
+   "title": "Accelerated Learning: Learn Faster & Retain More",
+   "h1": "Accelerated Learning: Practical Ways to Learn Faster and Retain More",
+   "description": "Unlock accelerated learning with practical methods like active recall & spaced repetition. Learn faster, retain more, and boost your productivity.",
+   "type": "practical_guide",
+   "promotion": 68,
+   "linkability": 75,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 10,
+   "words": 1379,
+   "interactive": false,
+   "modified": "2026-11-08T07:19:22+00:00",
+   "reasons": [
+    "2 data tables",
+    "Cites 6 authoritative sources",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/learning-development/rapid-skill-learning/",
    "title": "Rapid Skill Learning: Master New Abilities Faster",
    "h1": "Rapid Skill Learning: A Practical System for Learning New Skills Faster",
@@ -2212,7 +2228,7 @@
    "linkability": 75,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 8,
    "words": 3272,
    "interactive": false,
    "modified": "2026-09-13T14:12:52+00:00",
@@ -2274,28 +2290,6 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/seo/answer-engine-optimization/",
-   "title": "Answer Engine Optimization (AEO): Examples and Publishing Checklist",
-   "h1": "Answer Engine Optimization (AEO): Examples and Publishing Checklist",
-   "description": "Write clearer answers with practical affiliate-publishing examples, evidence checks, schema limits and a step-by-step AEO editing method.",
-   "type": "reference",
-   "promotion": 66,
-   "linkability": 73,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 21,
-   "words": 1108,
-   "interactive": false,
-   "modified": "2026-09-13T08:04:36+00:00",
-   "reasons": [
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/seo/doing-an-seo-audit/",
    "title": "2026 SEO Audit Guide: 47-Point Checklist to Dominate",
    "h1": "2026 SEO Audit Checklist: 47-Point Technical Guide",
@@ -2305,7 +2299,7 @@
    "linkability": 73,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 13,
    "words": 2905,
    "interactive": false,
    "modified": "2026-09-03T10:44:17+00:00",
@@ -2431,7 +2425,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 9,
    "words": 3117,
    "interactive": false,
    "modified": "2026-11-16T07:21:46+00:00",
@@ -2456,7 +2450,7 @@
    "linkability": 72,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 12,
    "words": 6887,
    "interactive": false,
    "modified": "2026-11-05T07:18:53+00:00",
@@ -2464,6 +2458,28 @@
     "In-depth (6,887 words)",
     "2 data tables",
     "Cites 4 authoritative sources",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/seo/answer-engine-optimization/",
+   "title": "Answer Engine Optimization (AEO): Examples and Publishing Checklist",
+   "h1": "Answer Engine Optimization (AEO): Examples and Publishing Checklist",
+   "description": "Write clearer answers with practical affiliate-publishing examples, evidence checks, schema limits and a step-by-step AEO editing method.",
+   "type": "reference",
+   "promotion": 65,
+   "linkability": 72,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 20,
+   "words": 1101,
+   "interactive": false,
+   "modified": "2026-09-13T08:04:36+00:00",
+   "reasons": [
     "Recently updated"
    ],
    "prospects": 0,
@@ -2519,7 +2535,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2533,7 +2549,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 17,
-   "words": 695,
+   "words": 692,
    "interactive": true,
    "modified": "2026-09-05T13:47:17+00:00",
    "reasons": [
@@ -2825,8 +2841,8 @@
    "linkability": 69,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
-   "words": 1016,
+   "internal_inlinks": 10,
+   "words": 1021,
    "interactive": false,
    "modified": "2026-09-16T18:01:41+00:00",
    "reasons": [
@@ -2900,7 +2916,7 @@
    "linkability": 68,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 10,
    "words": 2667,
    "interactive": false,
    "modified": "2026-09-12T08:00:48+00:00",
@@ -3898,7 +3914,7 @@
    "to_title": "Spaced Repetition: A Simple Review Schedule That Works",
    "anchor": "spaced repetition",
    "relevance": 4,
-   "from_strength": 78
+   "from_strength": 68
   },
   {
    "site": "gearuptogrow.com",
@@ -6092,7 +6108,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 8,
-  "updated_at": "2026-11-17T21:08:50.893Z"
+  "updated_at": "2026-11-18T03:02:26.006Z"
  },
  "wins": [
   {
@@ -6141,30 +6157,30 @@
   }
  ],
  "log": [
-  "21:08:05 connection dataforseo: connected",
-  "21:08:05 connection gmail: connected",
-  "21:08:08 crawl gearuptofit.com: 300/885 urls, fetched 0, 304 0, reused 300",
-  "21:08:08 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
-  "21:08:09 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
-  "21:08:11 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 5, 304 0, reused 253",
-  "21:08:12 crawl frenchyfab.com: 155/155 urls, fetched 11, 304 0, reused 144",
-  "21:08:13 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "21:08:14 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
-  "21:08:16 crawl mysticaldigits.com: 300/468 urls, fetched 10, 304 1, reused 289",
-  "21:08:19 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "21:08:20 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
-  "21:08:20 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "21:08:20 - search_performance: skipped (Search Console not connected)",
-  "21:08:20 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
-  "21:08:50 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "21:08:50 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "21:08:50 self-tuning: next cycle runs up to 8 searches",
-  "21:08:50 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "21:08:52 replies: 26 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "21:08:53 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
-  "21:08:53 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "21:08:53 - preverify: skipped (runs only while outreach is paused)",
-  "21:08:59 link checks: 9 pages, 0 new links won, 0 lost"
+  "02:58:39 connection dataforseo: connected",
+  "02:58:39 connection gmail: connected",
+  "02:58:42 crawl gearuptofit.com: 300/885 urls, fetched 0, 304 0, reused 300",
+  "02:58:47 crawl plantastichaven.com: 159/159 urls, fetched 33, 304 0, reused 126",
+  "02:58:49 crawl mysticaldigits.com: 300/468 urls, fetched 8, 304 0, reused 292",
+  "02:58:49 crawl gearuptogrow.com: 107/107 urls, fetched 37, 304 0, reused 70",
+  "02:58:51 crawl frenchyfab.com: 155/155 urls, fetched 10, 304 0, reused 145",
+  "02:58:52 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "02:58:53 crawl imagealchemy.app: 26/26 urls, fetched 0, 304 0, reused 26",
+  "02:58:53 crawl micegoneguide.com: 43/43 urls, fetched 6, 304 0, reused 37",
+  "02:59:01 crawl efficientgptprompts.com: 300/487 urls, fetched 13, 304 0, reused 287",
+  "03:00:38 crawl affiliatemarketingforsuccess.com: 258/258 urls, fetched 223, 304 0, reused 35",
+  "03:00:38 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "03:00:38 - search_performance: skipped (Search Console not connected)",
+  "03:00:38 indexation: 68 sitemap URLs with an indexing problem (1 critical)",
+  "03:02:26 prospects: 0 from the saved queue, 0 saved for next run; 8 queries (0 brand-mention), 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "03:02:26 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "03:02:26 self-tuning: next cycle runs up to 8 searches",
+  "03:02:26 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "03:02:27 replies: 8 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "03:02:27 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
+  "03:02:28 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "03:02:28 - preverify: skipped (runs only while outreach is paused)",
+  "03:02:28 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
