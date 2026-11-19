@@ -4,6 +4,9 @@
 
 ### How it gets smarter
 
+- **Competitor link gap (new, first source every cycle):** one DataForSEO Backlinks call returns up to 200 pages that already link to a competitor *from inside their content* (dofollow, English, not sidebar/footer, spam score ≤ 30, links out to 3+ sites). Each one is paired with the owned page that shares a specific subject with that link, and the pitch names the exact link the editor already chose and offers ours as a second option. It never claims ours is better. Competitors come from `functions/_lib/sites.js` plus domains that keep ranking in each site's own searches; big profiles are paged across runs. Set `AUTOPILOT_LINKGAP_CALLS` (0–4, default 1) to change the volume.
+- **Google redirect links handled:** since 2026-11-06 DataForSEO returns every Google result as `google.com/goto?url=…`. The publisher is recovered from the breadcrumb and its page from the redirect, the exact breadcrumb path, or the publisher's sitemap (`scripts/autopilot/serp-unwrap.mjs`). Searches burned during the outage were reopened once, and a `serp_format` alert now fires if ≥ 90% of results are ever discarded again.
+- **Honest descriptions:** a page is called "a free interactive tool" only if it is one (software reviews carrying `SoftwareApplication` schema and guides with an embedded widget no longer qualify).
 - **Broken-link building:** every qualified prospect page is checked for dead outbound links (HTTP 404/410 or a domain that no longer exists, never 403/5xx/timeouts) that match the promoted page's topic. The pitch tells the editor which link is dead and offers your page as the replacement. That is a concrete favour, so it converts far better than a cold ask. The dead link is re-checked seconds before the email is written, and the claim is dropped if it was fixed. Queued prospects are back-filled once every 30 days.
 - **Link roundups and curated pages:** searches now include `"link roundup"`, `"weekly roundup"`, `"best of the web"`, `"further reading"`, `"helpful resources"` and `"recommended tools"` pages, which exist to link out. Pages whose searches are all on their 45-day cooldown are rotated out, so prospecting no longer stalls at 0 queries.
 - **Google index monitor (Search Console URL Inspection API):** the real index status of every important page, re-checked every 3 to 14 days (60 per site per day, well inside Google's 2,000/day quota). Pages Google ignores go first in the internal-link plan and Bing submission, and the dashboard shows each one with its fix. Pages Google cannot index as themselves (noindex, canonical elsewhere, redirect, 404) are never promoted or pitched until fixed.
@@ -97,7 +100,7 @@ Run a cycle on demand: **Actions → LinkForge Autopilot → Run workflow** (tic
 ## Development
 
 ```bash
-npm test                # 150 tests: Pages routing, legacy Worker, Autopilot engine (mocked network, SMTP/IMAP fakes)
+npm test                # 200 tests: Pages routing, legacy Worker, Autopilot engine (mocked network, SMTP/IMAP fakes)
 npm run build
 npm run autopilot:dry   # full cycle locally, nothing sent or written
 ```

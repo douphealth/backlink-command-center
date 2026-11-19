@@ -33,7 +33,9 @@ export const SITES = [
     ],
     "competitors": [
       "collegeinfogeek.com",
-      "examstudyexpert.com"
+      "examstudyexpert.com",
+      "retrievalpractice.org",
+      "magneticmemorymethod.com"
     ]
   },
   {
@@ -42,7 +44,9 @@ export const SITES = [
     "assets": [
       "https://affiliatemarketingforsuccess.com/affiliate-marketing/"
     ],
-    "competitors": []
+    "competitors": [
+      "kristian-larsen.com"
+    ]
   },
   {
     "domain": "mysticaldigits.com",
@@ -51,7 +55,10 @@ export const SITES = [
       "https://mysticaldigits.com/life-path-number-calculator/",
       "https://blueprint.mysticaldigits.com/"
     ],
-    "competitors": []
+    "competitors": [
+      "worldnumerology.com",
+      "seventhlifepath.com"
+    ]
   },
   {
     "domain": "frenchyfab.com",
@@ -59,7 +66,9 @@ export const SITES = [
     "assets": [
       "https://frenchyfab.com/french-bulldog-care/"
     ],
-    "competitors": []
+    "competitors": [
+      "frenchbulldogclub.org"
+    ]
   },
   {
     "domain": "micegoneguide.com",
@@ -68,7 +77,11 @@ export const SITES = [
       "https://micegoneguide.com/how-to-get-rid-of-mice/",
       "https://elimination.micegoneguide.com/"
     ],
-    "competitors": []
+    "competitors": [
+      "victorpest.com",
+      "earthkind.com",
+      "skedaddlewildlife.com"
+    ]
   },
   {
     "domain": "efficientgptprompts.com",
@@ -77,7 +90,10 @@ export const SITES = [
       "https://promptgrade.efficientgptprompts.com/",
       "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/"
     ],
-    "competitors": []
+    "competitors": [
+      "promptingguide.ai",
+      "gptpromptmaker.com"
+    ]
   },
   {
     "domain": "openclaw-skillshub.com",
@@ -94,6 +110,8 @@ export const SITES = [
     "assets": [
       "https://imagealchemy.app/"
     ],
-    "competitors": []
+    "competitors": [
+      "iloveimg.com"
+    ]
   }
 ];

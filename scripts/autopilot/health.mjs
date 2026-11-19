@@ -51,6 +51,15 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
       'Handled automatically; held inboxes are re-checked after 3 days.');
   }
   const p=stages.prospects;
+  // Guard against a silent provider format change: in Nov 2026 every Google result arrived as a google.com
+  // redirect link and 100% were dropped as "platforms" for two weeks while queries were still paid for.
+  const pr=p?.result||{},plat=pr.filtered?.platform_or_giant||0;
+  if(pr.serp_results>=30&&plat>=pr.serp_results*0.9)add('action','serp_format',`${plat} of ${pr.serp_results} search results were discarded as platforms, which means the search provider's result format has probably changed.`,
+    'Prospecting from searches is effectively stopped. Check one raw DataForSEO SERP response for the url/domain fields and update scripts/autopilot/serp-unwrap.mjs.');
+  if(pr.linkgap_failed&&!pr.linkgap_calls)add('info','linkgap_unavailable','Competitor link-gap mining could not run (DataForSEO Backlinks API refused or failed).',
+    'If your DataForSEO plan lacks the Backlinks API, activate it at app.dataforseo.com (it is retried automatically after 7 days).');
+  if(capabilities.claude===false&&(funnel.contacted||0)>=20)add('warn','templates_only',`All ${funnel.contacted} pitches so far were fixed templates (${funnel.replied||0} replies).`,
+    'Add an Anthropic API key under ⚙ Connect so every pitch is written for that exact page and link.');
   if(p?.ok&&p.result?.queries>=8&&!p.result?.candidates&&!p.result?.from_queue)add('warn','discovery_saturated',`${p.result.queries} searches found no site that has not been evaluated already.`,'Handled automatically: search volume is halved and long-tail searches built from each page\'s own phrases take priority.');
   else if(p?.ok&&p.result?.queries>=8&&!p.result?.qualified&&!p.result?.deferred)add('warn','no_qualified',`${p.result.queries} searches produced 0 qualified prospects this cycle.`,'Usually transient; if it repeats, the promoted pages may need stronger topical matches.');
   if(p?.result&&(p.result.failed_queries||0)>Math.max(2,p.result.queries/3))add('warn','dataforseo_errors',`${p.result.failed_queries} DataForSEO searches failed (provider errors); they are retried next cycle.`,'No action unless it persists for a day.');

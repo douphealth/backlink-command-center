@@ -7,6 +7,7 @@
  */
 import {fetchPage,pool,tokens,keyPhrase,links,tagText,jsonLd,mainText,stripTags,extractEmails,rankEmail,hostOf,sameSite,rootDomain,normUrl,hashId,ageDays,NOW} from './util.mjs';
 import {findBrokenLink,assetTerms} from './broken.mjs';
+import {resolveWrapped} from './serp-unwrap.mjs';
 
 export const BLOCKED=/(^|\.)(reddit|quora|youtube|youtu|facebook|instagram|pinterest|tiktok|twitter|x|linkedin|threads|tumblr|amazon|ebay|walmart|etsy|target|bestbuy|aliexpress|temu|wikipedia|wikihow|wiktionary|medium|substack|github|stackexchange|stackoverflow|apple|google|bing|yahoo|msn|microsoft|play\.google|apps\.apple|yelp|tripadvisor|trustpilot|glassdoor|indeed|craigslist|scribd|slideshare|issuu|archive|imdb|britannica|dictionary|merriam-webster|cambridge|fandom|discord|telegram|whatsapp|twitch|vimeo|dailymotion|soundcloud|spotify|goodreads|zillow|webmd|healthline|mayoclinic|clevelandclinic|nytimes|washingtonpost|theguardian|bbc|cnn|forbes|businessinsider|wsj|usatoday|nbcnews|cbsnews|foxnews|reuters|apnews|bloomberg)\.[a-z.]+$/i;
 // Government sites essentially never add outreach links; skip them before spending a fetch.
@@ -15,6 +16,8 @@ const GOVERNMENT=/(\.gov|\.mil|\.gov\.[a-z]{2}|\.gc\.ca|\.nhs\.uk|amsadobe\.com)
 const ACADEMIC=/(\.edu|\.edu\.[a-z]{2}|\.ac\.[a-z]{2})$/i;
 // Bump when qualification rules change: older prospects are re-checked before any (follow-up) email.
 export const QUALIFY_VERSION=2;
+// Hosting previews, page builders and link farms that DataForSEO reports as referring domains.
+const JUNK_HOST=/(hostingersite\.com|wpcomstaging\.com|wpengine\.com|alibaba\.com|aliexpress\.[a-z.]+|translate\.goog|ampproject\.org|webcache\.|archive\.ph|feedspot\.com|scoop\.it|flipboard\.com|muckrack\.com|similarweb\.com|semrush\.com|ahrefs\.com|moz\.com)$/i;
 // Estimated monthly organic visits: giants don't answer, near-zero sites add no value.
 export const TRAFFIC_BAND={min:50,max:1_000_000};
 export const trafficVerdict=(etv,kind)=>etv==null?null:etv>(kind==='mention'?5_000_000:TRAFFIC_BAND.max)?'Very large brand (unlikely to add outreach links)':etv<(kind==='mention'?10:TRAFFIC_BAND.min)?'Almost no search traffic':null;
@@ -67,6 +70,7 @@ export function footprintOf(query,site){
   for(const [fp,tpl] of Object.entries(FOOTPRINTS)){if(fp==='intent')continue;
     const re=new RegExp('^'+tpl.replace(/[.*+?^$()|[\]\\]/g,'\\$&').replace('\\{t\\}',`(${site?.topic?.replace(/[.*+?^$()|[\]\\]/g,'\\$&')||'.+'})`).replace(/\{t\}|\{k\}|\{b\}/g,'.+')+'$','i');
     if(re.test(query))return fp}
+  if(/^linkgap:/.test(query))return 'link_gap';
   return /^"[^"]+"( OR "[^"]+")? -site:/.test(query)?'mention':'intent';
 }
 /**
@@ -122,7 +126,7 @@ export function knownDomain(state,site,domain){
   return !!(state.domains?.[`${site}|${domain}`]||state.suppression?.[domain]||state.contacted?.[domain]);
 }
 
-export function qualifyPage(url,html,{asset,site,ourDomains}){
+export function qualifyPage(url,html,{asset,site,ourDomains,provenLinker=false}){
   const title=tagText(html,'title')[0]||'',h1=tagText(html,'h1')[0]||'',h2=tagText(html,'h2').slice(0,30);
   const text=mainText(html);
   const outs=links(html,url),host=hostOf(url);
@@ -141,7 +145,8 @@ export function qualifyPage(url,html,{asset,site,ourDomains}){
   const authorRaw=ld.map(x=>x.author).find(Boolean);
   const author=String((Array.isArray(authorRaw)?authorRaw[0]:authorRaw)?.name||authorRaw||'').trim();
   const year=Math.max(0,...[...text.matchAll(/\b(20[12]\d)\b/g)].map(m=>Number(m[1])).filter(y=>y<=new Date().getUTCFullYear()));
-  let score=Math.round(relevance*55+Math.min(20,ext.size*1.2)+(resource?15:0)+(fitSection?.n?5:0)+(year>=new Date().getUTCFullYear()-1?5:0));
+  // A page that already links to a competing resource from its content has shown it adds links like ours.
+  let score=Math.round(relevance*55+Math.min(20,ext.size*1.2)+(resource?15:0)+(provenLinker?12:0)+(fitSection?.n?5:0)+(year>=new Date().getUTCFullYear()-1?5:0));
   const reasons=[];
   if(ecommerce){score=0;reasons.push('Store/product page')}
   if(words<250){score=Math.min(score,30);reasons.push('Thin page')}
@@ -189,11 +194,56 @@ export async function findContact(pageUrl,pageHtml,{fetchImpl=fetch,author=''}={
   return {email:ranked[0]?.email||null,email_rank:ranked[0]?.rank??null,email_source:ranked[0]?.source||null,alternates:ranked.slice(1,3).map(x=>x.email),contact_form:form,site_kind:kind};
 }
 
+/* ---------- Competitor link gap: pages that already link to a competing resource from their content ---------- */
+const CONTENT_LOCATIONS=new Set(['article','main','section','details','']);
+/**
+ * Competitor targets due for mining: configured competitors first, then domains that keep ranking in
+ * this site's own topic searches. Large link profiles are paged (offset) across runs.
+ */
+export function linkGapTargets(sites,state,{max=1,serpHostMin=2}={}){
+  state.linkgap??={};
+  const out=[];
+  for(const s of sites){
+    const auto=Object.entries(state.serp_hosts?.[s.domain]||{})
+      .filter(([h,n])=>n>=serpHostMin&&!BLOCKED.test(h)&&!GOVERNMENT.test(h)&&!ACADEMIC.test(h)&&!JUNK_HOST.test(h)&&!sites.some(x=>sameSite(h,x.domain)))
+      .sort((a,b)=>b[1]-a[1]).slice(0,6).map(([h])=>h);
+    for(const t of [...new Set([...(s.competitors||[]),...auto])]){
+      const g=state.linkgap[`${s.domain}|${t}`];
+      const more=g&&g.offset<g.total&&ageDays(g.at)<=90;
+      if(!g||(more&&ageDays(g.at)>7)||ageDays(g.at)>90)out.push({site:s,target:t,offset:more?g.offset:0,configured:(s.competitors||[]).includes(t)?1:0,last:g?.at||''});
+    }
+  }
+  out.sort((a,b)=>String(a.last).localeCompare(String(b.last))||b.configured-a.configured);
+  const per=new Set(),pick=[];
+  for(const j of out){if(per.has(j.site.domain))continue;per.add(j.site.domain);pick.push(j);if(pick.length>=max)break}
+  return pick;
+}
+// Words too broad to prove two pages share a subject (beyond the site's own topic words).
+const GENERIC=new Set('plant plants care guide guides tips home house indoor easy simple online tool tools calculator free help learn learning practice beginner beginners basics step steps list ideas info information resource resources article blog'.split(' '));
+/**
+ * Which promoted page answers what the competitor link was about, and how strongly.
+ * 'specific': the link context and the page share a specific subject word plus one more word (e.g. "snake plant" + "watering").
+ * 'topic': only the site topic matches; offered only for hub pages and tools, and pitched as an extra resource, never "same topic".
+ */
+export function pairAsset(link,assets,site){
+  const ctx=new Set(tokens(`${link.title} ${link.anchor} ${link.text_pre} ${link.text_post} ${(()=>{try{return new URL(link.url_to).pathname.replace(/[-_/.]/g,' ')}catch{return ''}})()}`));
+  const topic=new Set(tokens(site.topic));
+  let best=null,bestN=0;
+  for(const a of assets){if(a.site!==site.domain)continue;
+    const want=new Set([...tokens(keyPhrase(a.h1||a.title,6)),...(a.terms||[]).filter(t=>!t.includes(' ')).slice(0,15)]);
+    const hit=[...want].filter(w=>ctx.has(w)),specific=hit.filter(w=>!topic.has(w)&&!GENERIC.has(w));
+    const n=specific.length?hit.length+specific.length:0;
+    if(specific.length&&hit.length>=2&&n>bestN){best=a;bestN=n}}
+  if(best)return {asset:best,match:'specific'};
+  const hub=assets.find(a=>a.site===site.domain&&(a.type==='interactive_tool'||a.type==='reference'));
+  return hub&&[...topic].some(w=>ctx.has(w))?{asset:hub,match:'topic'}:null;
+}
+
 /**
  * Run discovery for the chosen assets. Mutates `state.prospects` / `state.domains`.
  * Returns counters for the run report.
  */
-export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,resolveHost,perAsset=2,maxNewPerRun=60,maxQueries=24,serpDepth=50,deadline=Infinity,log=()=>{}}){
+export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,resolveHost,perAsset=2,maxNewPerRun=60,maxQueries=24,serpDepth=50,linkGapCalls=1,pairPool=null,deadline=Infinity,log=()=>{}}){
   state.prospects??={};state.domains??={};state.queries??={};
   const ourDomains=sites.map(s=>s.domain),competitors=new Set(sites.flatMap(s=>s.competitors||[]));
   const bySite=new Map(sites.map(s=>[s.domain,s]));
@@ -205,6 +255,51 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
   // Paid search results are never thrown away: candidates a previous run could not qualify in time come first.
   const fresh=(state.candidate_queue||[]).filter(c=>ageDays(c.queued_at)<14&&bySite.has(c.site)&&!knownDomain(state,c.site,c.domain));
   stats.from_queue=fresh.length;state.candidate_queue=[];
+  state.serp_hosts??={};state.unresolved??={};
+  for(const [d,t] of Object.entries(state.unresolved))if(ageDays(t)>30)delete state.unresolved[d];
+  /** Shared admission rules for every discovery source; returns false (and counts why) when a result is dropped. */
+  const admit=(site,domain,path,drop)=>{
+    if(!domain){drop('no_domain');return false}
+    if(BLOCKED.test(domain)||JUNK_HOST.test(domain)){drop('platform_or_giant');return false}
+    if(GOVERNMENT.test(domain)||ACADEMIC.test(domain)){drop('gov_or_edu');return false}
+    if(ourDomains.some(d=>sameSite(domain,d))){drop('own_site');return false}
+    if(competitors.has(domain)){drop('competitor');return false}
+    if(UGC.test(path)){drop('forum_or_ugc');return false}
+    if(state.domains?.[`${site.domain}|${domain}`]){drop('already_evaluated');return false}
+    if(state.suppression?.[domain]||state.contacted?.[domain]){drop('contacted_or_suppressed');return false}
+    if(state.unresolved[domain]){drop('page_unresolvable_recently');return false}
+    if(fresh.some(f=>f.domain===domain&&f.site===site.domain)){drop('duplicate_this_run');return false}
+    return true;
+  };
+  const dropBy=k=>{stats.filtered??={};stats.filtered[k]=(stats.filtered[k]||0)+1};
+  // ---- Competitor link gap first: one Backlinks call yields up to 200 proven in-niche linkers (≈$0.03). ----
+  stats.linkgap_calls=0;stats.linkgap_candidates=0;
+  if(typeof dfs.backlinks==='function'&&linkGapCalls>0&&fresh.length<150){
+    for(const job of linkGapTargets(sites,state,{max:linkGapCalls})){
+      if(Date.now()>=deadline||!dfs.canSpend('backlinks'))break;
+      const r=await dfs.backlinks(job.target,{offset:job.offset});
+      if(!r){stats.linkgap_failed=(stats.linkgap_failed||0)+1;continue}
+      stats.linkgap_calls++;
+      state.linkgap[`${job.site.domain}|${job.target}`]={at:NOW(),offset:job.offset+r.items.length,total:r.total};
+      state.queries[`${job.site.domain}|linkgap:${job.target}:${job.offset}`]=NOW();
+      const before=fresh.length;
+      for(const l of r.items){
+        const domain=rootDomain(l.domain_from||hostOf(l.url_from));let path='';
+        try{path=new URL(l.url_from).pathname}catch{dropBy('bad_url');continue}
+        if(!CONTENT_LOCATIONS.has(l.location)){dropBy('sitewide_or_sidebar_link');continue}
+        if(l.spam!=null&&l.spam>30){dropBy('spam_score');continue}
+        if(l.external_links!=null&&l.external_links<3){dropBy('rarely_links_out');continue}
+        if(!admit(job.site,domain,path,dropBy))continue;
+        const pair=pairAsset(l,pairPool||assets,job.site);if(!pair){dropBy('off_topic_link');continue}
+        const asset=pair.asset;
+        fresh.push({site:job.site.domain,domain,url:normUrl(l.url_from),serp_title:l.title,query:`linkgap:${job.target}`,footprint:'link_gap',kind:'linkgap',rank:null,
+          asset:{site:asset.site,url:asset.url,title:asset.title,h1:asset.h1,type:asset.type,terms:(asset.terms||[]).slice(0,30)},
+          competitor_link:{url:l.url_to,host:hostOf(l.url_to),anchor:String(l.anchor||'').slice(0,120),context:`${l.text_pre} … ${l.text_post}`.replace(/\s+/g,' ').trim().slice(0,300),dead:!!l.broken_to,match:pair.match}});
+      }
+      stats.linkgap_candidates+=fresh.length-before;
+      log(`link gap: ${job.target} (for ${job.site.domain}) ${r.items.length} referring pages from offset ${job.offset}/${r.total}, ${fresh.length-before} new candidates`);
+    }
+  }
   // Searches get at most 40% of the time left, so their results can still be qualified in this run.
   const serpUntil=Number.isFinite(deadline)?Date.now()+Math.max(0,deadline-Date.now())*0.4:Infinity;
   const take=(job,results)=>{
@@ -213,21 +308,18 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     if(job.kind==='mention'){state.mentions_at[site.domain]=NOW();stats.mention_queries++}
     const asset={site:job.asset.site,url:job.asset.url,title:job.asset.title,h1:job.asset.h1,type:job.asset.type,terms:(job.asset.terms||[]).slice(0,30)};
     const before=fresh.length;state.fp_novelty??={};
-    const drop=k=>{stats.filtered??={};stats.filtered[k]=(stats.filtered[k]||0)+1};
+    const drop=dropBy;
+    const hosts=state.serp_hosts[site.domain]??={};
     for(const r of results){
       const domain=rootDomain(r.domain||hostOf(r.url));
       // Every dropped result is counted by reason, so a stalled pipeline shows exactly where (published, no URLs).
-      if(!domain){drop('no_domain');continue}
-      if(BLOCKED.test(domain)){drop('platform_or_giant');continue}
-      if(GOVERNMENT.test(domain)||ACADEMIC.test(domain)){drop('gov_or_edu');continue}
-      if(ourDomains.some(d=>sameSite(domain,d))){drop('own_site');continue}
-      if(competitors.has(domain)){drop('competitor');continue}
-      let path='';try{path=new URL(r.url).pathname}catch{drop('bad_url');continue}
-      if(UGC.test(path)){drop('forum_or_ugc');continue}
-      if(state.domains?.[`${site.domain}|${domain}`]){drop('already_evaluated');continue}
-      if(state.suppression?.[domain]||state.contacted?.[domain]){drop('contacted_or_suppressed');continue}
-      if(fresh.some(f=>f.domain===domain&&f.site===site.domain)){drop('duplicate_this_run');continue}
-      fresh.push({site:site.domain,domain,url:normUrl(r.url),serp_title:r.title,query:job.query,footprint:job.footprint,kind:job.kind||'resource',rank:r.rank,asset});
+      // Wrapped Google results have no URL yet: their path comes from the breadcrumb and the page is resolved before qualifying.
+      let path='';
+      if(r.url){try{path=new URL(r.url).pathname}catch{drop('bad_url');continue}}else path='/'+(r.crumb?.segments||[]).join('/')+'/';
+      // Domains that keep ranking for this site's own topic are its real competitors: their backlinks get mined.
+      if(job.kind!=='mention'&&domain&&!BLOCKED.test(domain)&&!ourDomains.some(d=>sameSite(domain,d))&&Object.keys(hosts).length<400)hosts[domain]=(hosts[domain]||0)+1;
+      if(!admit(site,domain,path,drop))continue;
+      fresh.push({site:site.domain,domain,url:r.url?normUrl(r.url):null,goto:r.goto||null,crumb:r.crumb||null,serp_title:r.title,query:job.query,footprint:job.footprint,kind:job.kind||'resource',rank:r.rank,asset});
     }
     // Novelty learning: how many never-seen sites each search pattern still finds (old data halves over time).
     const nv=state.fp_novelty[job.footprint]??={q:0,n:0};if(nv.q>=40){nv.q/=2;nv.n/=2}nv.q++;nv.n+=Math.min(1,(fresh.length-before)/3);
@@ -235,7 +327,8 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
   };
   // Live SERPs take ~10 s each: run them 4 at a time (never more than the spend cap allows).
   for(let i=0;i<jobs.length;){
-    if(Date.now()>=serpUntil||Date.now()>=deadline||stats.queries>=maxQueries||fresh.length>=maxNewPerRun*2)break;
+    // A full candidate list stops topic searches, never the (fortnightly, highest-converting) brand-mention searches.
+    if(Date.now()>=serpUntil||Date.now()>=deadline||stats.queries>=maxQueries||(fresh.length>=maxNewPerRun*2&&jobs[i].kind!=='mention'))break;
     const n=Math.min(4,maxQueries-stats.queries,jobs.length-i,dfs.affordable?dfs.affordable('serp'):(dfs.canSpend('serp')?1:0));
     if(n<=0)break;
     const batch=jobs.slice(i,i+n);i+=n;
@@ -255,13 +348,20 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
   stats.candidates=fresh.length;
   const checked=await pool(fresh.slice(0,maxNewPerRun*2),6,async c=>{
     if(Date.now()>deadline)return {deferred:c};
-    const res=await fetchPage(c.url,{fetchImpl,timeout:12000,maxBytes:500000});
-    const id=hashId(`${c.site}|${c.url}`);
-    const base={id,site:c.site,domain:c.domain,page_url:c.url,asset_url:c.asset.url,asset_title:c.asset.title,query:c.query,footprint:c.footprint,kind:c.kind,serp_rank:c.rank,etv:c.etv??null,found_at:NOW(),history:[]};
+    let url=c.url,res=null;
+    if(!url){
+      const found=await resolveWrapped({...c,title:c.serp_title},{fetchImpl}).catch(()=>null);
+      if(!found){state.unresolved[c.domain]=NOW();return {unresolved:c}}
+      url=found.url;res=found.page||null;stats.resolved=(stats.resolved||0)+1;(stats.resolved_via??={})[found.via]=(stats.resolved_via[found.via]||0)+1;
+    }
+    res??=await fetchPage(url,{fetchImpl,timeout:12000,maxBytes:500000});
+    const id=hashId(`${c.site}|${url}`);
+    const base={id,site:c.site,domain:c.domain,page_url:url,asset_url:c.asset.url,asset_title:c.asset.title,query:c.query,footprint:c.footprint,kind:c.kind,serp_rank:c.rank,etv:c.etv??null,found_at:NOW(),history:[],
+      ...(c.competitor_link?{competitor_link:c.competitor_link}:{})};
     if(res.status!==200||!res.body)return {...base,status:'rejected',reason:`HTTP ${res.status||res.error}`};
     const site=bySite.get(c.site),mention=c.kind==='mention';
-    const q=qualifyPage(res.url,res.body,{asset:c.asset,site,ourDomains});
-    const rec={...base,page_url:normUrl(res.url)||c.url,title:q.title||c.serp_title,score:q.score,relevance:q.relevance,external_domains:q.external_domains,
+    const q=qualifyPage(res.url,res.body,{asset:c.asset,site,ourDomains,provenLinker:c.kind==='linkgap'});
+    const rec={...base,page_url:normUrl(res.url)||url,title:q.title||c.serp_title,score:q.score,relevance:q.relevance,external_domains:q.external_domains,
       resource_page:q.resource_page,fit_section:q.fit_section,author:q.author,excerpt:q.excerpt,last_year_mentioned:q.last_year_mentioned};
     if(q.linksToUs)return {...rec,status:'already_linked',reason:'Already links to us',existing_link:{url:q.linksToUs.url,anchor:q.linksToUs.anchor,rel:q.linksToUs.rel}};
     // A mention is relevant by definition; it only has to really name us (search engines are fuzzy).
@@ -281,6 +381,7 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
   const deferred=[...checked.filter(x=>x?.deferred).map(x=>x.deferred),...fresh.slice(maxNewPerRun*2)];
   state.candidate_queue=deferred.slice(0,300).map(c=>({...c,queued_at:c.queued_at||NOW()}));stats.deferred=state.candidate_queue.length;
   for(const p of checked){
+    if(p?.unresolved){stats.unresolved=(stats.unresolved||0)+1;continue}
     if(!p||p.error||p.deferred)continue;
     if(p.status==='rejected'||p.status==='already_linked')delete p.excerpt;
     state.prospects[p.id]=p;state.domains[`${p.site}|${p.domain}`]=p.id;
@@ -288,7 +389,7 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     else if(p.status==='rejected')stats.rejected++;
     else{stats.qualified++;if(p.kind==='mention')stats.mentions++;if(p.email)stats.with_email++;else if(p.contact_form)stats.contact_form++;if(p.broken_link)stats.broken_links++}
   }
-  log(`prospects: ${stats.from_queue} from the saved queue, ${stats.deferred} saved for next run; ${stats.queries} queries (${stats.mention_queries} brand-mention), ${stats.candidates} candidates, ${stats.qualified} qualified (${stats.mentions} unlinked mentions), ${stats.with_email} with email, ${stats.broken_links} with a dead link we can replace, ${stats.already_linked} already linking`);
+  log(`prospects: ${stats.from_queue} from the saved queue, ${stats.deferred} saved for next run; ${stats.linkgap_calls} competitor link-gap pulls (${stats.linkgap_candidates} candidates); ${stats.queries} queries (${stats.mention_queries} brand-mention), ${stats.resolved||0} Google-wrapped results resolved, ${stats.unresolved||0} unresolvable; ${stats.candidates} candidates, ${stats.qualified} qualified (${stats.mentions} unlinked mentions), ${stats.with_email} with email, ${stats.broken_links} with a dead link we can replace, ${stats.already_linked} already linking`);
   return stats;
 }
 
