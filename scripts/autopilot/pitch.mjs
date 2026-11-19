@@ -13,7 +13,8 @@ const KIND={interactive_tool:'free interactive tool',methodology:'transparent me
 /** Verifiable facts about our asset, from the crawl (never invented). */
 export function assetFacts(asset){
   const f=[];
-  if(asset.interactive)f.push('it is a free interactive tool (no sign-up needed)');
+  // Only a page that IS a tool is called one: guides with an embedded widget and software reviews are described as what they are.
+  if(asset.interactive&&(asset.type==='interactive_tool'||!asset.type))f.push('it is a free interactive tool (no sign-up needed)');
   else if(asset.words>=1500)f.push(`it is an in-depth ${Math.round(asset.words/100)*100}-word guide`);
   const tables=(asset.reasons||[]).map(r=>String(r).match(/^(\d+) data tables?$/)).find(Boolean);
   if(tables)f.push(`it includes ${tables[1]} data table${tables[1]==='1'?'':'s'}`);
@@ -30,8 +31,31 @@ const valueLine=(asset,site)=>{
   const facts=assetFacts(asset);
   return [d&&d.length>=40?(/[.!?]$/.test(d)?d:d+'.'):`It covers ${site.topic} in practical detail.`,facts.length?sentence(facts.join(', and ')):''].filter(Boolean).join(' ');
 };
+/** A readable label for the competitor link the editor already chose ("Doctors of Running's review" or the host). */
+export function linkLabel(c){
+  const a=String(c?.anchor||'').trim();
+  const usable=a.length>=4&&a.length<=60&&/[a-z]{3}/i.test(a)&&!/https?:|www\.|\.(com|net|org|io)\b|\+\d|^(here|this|link|click|read more|source|website)$/i.test(a);
+  return usable?`"${a}" (${c.host})`:c?.host||'another site';
+}
+/**
+ * The editor already links to a competing resource from this page: point to that exact link and offer ours
+ * as a second option for the same readers. Never claims ours is better and never criticises the other site.
+ */
+export function alternativePitch(p,asset,{senderName,site}){
+  const c=p.competitor_link,name=firstName(p.author),kind=KIND[asset.type]||'resource';
+  // "Same topic" is claimed only when the competitor link and our page share specific subject words.
+  const opener=c.match==='specific'?`so I thought you might want a second option on the same topic.`
+    :`If you ever add another ${short(site.topic,40)} resource there, this one might be useful to the same readers.`;
+  return {subject:`Another ${kind} for "${short(p.title,44)}"`,
+    body:[`Hi ${name||'there'},`,'',
+      c.match==='specific'?`In "${short(p.title,90)}" you link to ${linkLabel(c)}, ${opener}`:`In "${short(p.title,90)}" you link to ${linkLabel(c)}. ${opener}`,'',
+      `${short(asset.title,100)}: ${asset.url}`,'',valueLine(asset,site),'',
+      `If it's useful, it could sit next to the existing link. Either way, thanks for maintaining the page.`,'',
+      `Best,`,senderName,site.domain,'',OPT_OUT].join('\n'),writer:'template'};
+}
 export function templatePitch(p,asset,{senderName,site}){
   if(p.broken_link)return brokenLinkPitch(p,asset,{senderName,site});
+  if(p.kind==='linkgap'&&p.competitor_link?.host)return alternativePitch(p,asset,{senderName,site});
   const name=firstName(p.author),kind=KIND[asset.type]||'resource',pick=parseInt(hashId(p.id),36)%3;
   const subject=[`Resource for your "${short(p.title,48)}" page`,`A ${kind} for your ${short(site.topic,30)} readers`,`Suggestion for "${short(p.title,48)}"`][pick];
   const where=p.fit_section?`your "${short(p.fit_section,70)}" section in "${short(p.title,70)}"`:`"${short(p.title,90)}"`;
@@ -89,6 +113,7 @@ Rules:
 - Sign off with the sender name and website provided.
 - Subject: under 60 characters, specific, lowercase-friendly, no clickbait.
 - If situation is "unlinked_mention": the editor already mentions our brand without a link. Thank them briefly and ask them to turn the mention into a link to our URL. Do not pitch anything else.
+- If situation is "alternative_to_linked_resource": the editor's page already links to competitor_link (name it by its anchor text if it reads naturally, otherwise by its site name; never give its URL). Open with that specific link, then say in one sentence what our resource adds for the same readers, using only the provided facts. Offer it as an additional option next to the existing link. If competitor_link.same_subject is false, do not claim the two cover the same subject: present ours only as another resource the same readers may find useful. Never say ours is better and never criticise the other site.
 - If situation is "broken_link_replacement": open by telling the editor which link on their page is dead (use its anchor text and site name from broken_link, never its URL, and state the problem exactly as given in broken_link.problem). Then offer our page as a replacement covering the same topic. The helpful tip comes first; the ask is secondary.
 - End with this exact line: P.S. Not relevant for you? Just reply "no" and I won't email again.`;
 
@@ -109,8 +134,9 @@ export class PitchWriter{
     if(!this.client)return template;
     const facts={editor_page:{title:p.title,url:p.page_url,author:p.author||null,relevant_section:p.fit_section||null,excerpt:(p.excerpt||'').slice(0,1500)},
       our_asset:{title:asset.title,url:asset.url,kind:KIND[asset.type]||'resource',description:asset.description||'',facts:[...assetFacts(asset),...(asset.reasons||[]).filter(r=>!INTERNAL_NOTE.test(r))],free_tool:!!asset.interactive},
+      ...(p.kind==='linkgap'&&p.competitor_link?.host&&!p.broken_link?{competitor_link:{site:p.competitor_link.host,anchor:p.competitor_link.anchor||null,surrounding_text:p.competitor_link.context||null,same_subject:p.competitor_link.match==='specific'}}:{}),
       ...(p.broken_link&&p.kind!=='mention'?{broken_link:{anchor:p.broken_link.anchor||null,site:p.broken_link.host,problem:DEAD[p.broken_link.reason]||'no longer works'}}:{}),
-      sender:{name:this.senderName,website:site.domain},topic:site.topic,situation:p.kind==='mention'?'unlinked_mention':p.broken_link?'broken_link_replacement':'resource_suggestion'};
+      sender:{name:this.senderName,website:site.domain},topic:site.topic,situation:p.kind==='mention'?'unlinked_mention':p.broken_link?'broken_link_replacement':p.kind==='linkgap'&&p.competitor_link?.host?'alternative_to_linked_resource':'resource_suggestion'};
     try{
       const res=await this.client.beta.messages.create({
         model:this.model,max_tokens:2000,betas:['server-side-fallback-2026-07-01'],fallbacks:'default',

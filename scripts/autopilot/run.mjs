@@ -67,6 +67,7 @@ export function loadConfig(env=process.env,argv=process.argv){
     outreach:{mode,gmail,fromAddress:env.GMAIL_ADDRESS||(dryRun?'dry-run@linkforge.invalid':''),senderName:env.SENDER_NAME||'',postalAddress:env.SENDER_POSTAL_ADDRESS||'',
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5'},
+    linkGapCalls:Math.max(0,Math.min(4,num(env.AUTOPILOT_LINKGAP_CALLS,1))),
     gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,bing:!!env.BING_WEBMASTER_API_KEY,preverifyMax:num(env.AUTOPILOT_PREVERIFY,5),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
     verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
       enabled:env.EMAIL_VERIFICATION_ENABLED==='YES',dailyLimit:Math.min(100,Math.max(0,Math.floor(num(env.EMAIL_VERIFY_DAILY_LIMIT,0))))},
@@ -104,6 +105,25 @@ export function chooseAssets(ranked,state,{perSite=3,minLinkability=50,sites=nul
   const out=[];
   for(const list of bySite.values())out.push(...list.sort((x,y)=>value(y)-value(x)||y.promotion-x.promotion).slice(0,perSite));
   return out.sort((a,b)=>b.promotion-a.promotion);
+}
+
+/**
+ * From 2026-11-06 Google SERPs arrived with every result wrapped as google.com/goto, so all of them were
+ * dropped as "google.com" while each query was still stamped as used (45-day cooldown), novelty learning
+ * recorded zero new sites, and self-tuning cut searches to the minimum. Undo that once: reopen the queries,
+ * forget the poisoned novelty data and restore the normal search volume.
+ */
+export const SERP_OUTAGE_FROM=Date.parse('2026-11-05T19:00:00Z');
+export function repairSerpOutage(state){
+  state.migrations??={};
+  if(state.migrations.serp_goto_2026_11)return null;
+  let reopened=0;
+  for(const [k,t] of Object.entries(state.queries||{}))if(Date.parse(t)>=SERP_OUTAGE_FROM&&!k.includes('|linkgap:')){delete state.queries[k];reopened++}
+  for(const [k,t] of Object.entries(state.mentions_at||{}))if(Date.parse(t)>=SERP_OUTAGE_FROM)delete state.mentions_at[k];
+  state.fp_novelty={};
+  if(state.tuning)state.tuning.max_queries=TUNING.start;
+  state.migrations.serp_goto_2026_11=NOW();
+  return {queries_reopened:reopened};
 }
 
 function prune(state){
@@ -149,6 +169,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     else vaultOk=true;
   }
   const privateWhy=!cfg.dataKey?'LINKFORGE_DATA_KEY not set':'vault could not be opened';
+  if(vaultOk){const fixed=repairSerpOutage(state);if(fixed)log(`repair: ${fixed.queries_reopened} searches burned by the Google redirect-link outage reopened; search volume restored to ${TUNING.start}`)}
   const dfs=new DataForSEO({...cfg.dfs,state,fetchImpl,log});
   // ---- 0. Connections: free checks that saved credentials really work (nothing is charged or sent) ----
   const mailer=injectedMailer||(cfg.dryRun?dryMailer(log):gmailTransport(env));
@@ -202,7 +223,8 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   // ---- 4. Prospects ----
   await stage('requalify',vaultOk,()=>requalify({state,dfs,fetchImpl,deadline:deadline-8*60e3,log}),privateWhy,{until:deadline-7*60e3});
   // Runs even with no fresh asset searches: brand-mention searches have their own schedule.
-  await stage('prospects',vaultOk&&dfs.enabled,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,maxQueries:cfg.maxQueries??(state.tuning?.max_queries||TUNING.start),serpDepth:cfg.serpDepth,deadline:deadline-7*60e3,log}),
+  await stage('prospects',vaultOk&&dfs.enabled,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,linkGapCalls:cfg.linkGapCalls,
+    pairPool:ranked.filter(a=>!blockedAssets.has(normUrl(a.url))&&a.linkability>=50),maxQueries:cfg.maxQueries??(state.tuning?.max_queries||TUNING.start),serpDepth:cfg.serpDepth,deadline:deadline-7*60e3,log}),
     !vaultOk?privateWhy:(dfs.authError||'DataForSEO credentials not set'),{until:deadline-5.5*60e3});
   await stage('bing_submit',vaultOk&&!!env.BING_WEBMASTER_API_KEY&&crawl.length>0,()=>submitToBing({state,env,sites:SITES,crawl,ranked,fetchImpl,deadline:deadline-6*60e3,log}),
     !vaultOk?privateWhy:'Bing Webmaster API key not set (BING_WEBMASTER_API_KEY)',{until:deadline-5.5*60e3});

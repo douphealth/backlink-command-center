@@ -29,6 +29,7 @@ export function linkLikelihood(p,{assets=new Map()}={}){
   const etv=p.etv;
   let s=Math.min(100,p.score||0)*.3;                                   // topical fit and page quality
   if(p.kind==='mention')s+=25;                                         // already knows and mentions us
+  if(p.kind==='linkgap')s+=12;                                         // already links to a competing resource from its content
   if(p.resource_page)s+=10;                                            // a page whose job is linking out
   if(p.broken_link)s+=15;                                              // a dead link on their page we can replace
   s+=etv==null?6:etv>=1000&&etv<=300000?15:etv>=300&&etv<1_000_000?8:3; // independent, real audience

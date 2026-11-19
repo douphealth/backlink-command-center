@@ -63,7 +63,7 @@ export function extractFeatures(url,html,domain){
   // Newsletter, search, comment and login forms are not tools.
   const appHtml=html.replace(/<form\b[\s\S]*?<\/form>/gi,f=>/subscribe|newsletter|mailchimp|convertkit|comment|search|login|type=["']?email/i.test(f)?'':f);
   const inputs=(appHtml.match(/<(input|select|textarea)\b[^>]*>/gi)||[]).filter(t=>!/type\s*=\s*["']?(hidden|search|email|submit|checkbox)/i.test(t)).length;
-  const interactive=inputs>=3||/<canvas\b|data-calculator|class=["'][^"']*(calculator|quiz|finder|tool-app)/i.test(html)||types.some(t=>/WebApplication|SoftwareApplication/.test(t));
+  const interactive=inputs>=3||/<canvas\b|data-calculator|class=["'][^"']*(calculator|quiz|finder|tool-app)/i.test(html)||(types.some(t=>/WebApplication|SoftwareApplication/.test(t))&&!types.some(t=>/Review|Product/.test(t))); // a review describes someone else's software
   return {
     title,h1,description:(metaContent(html,'description')||metaContent(html,'og:description')).slice(0,300),
     words,h2_count:h2.length,h3_count:h3,h2:h2.slice(0,12),

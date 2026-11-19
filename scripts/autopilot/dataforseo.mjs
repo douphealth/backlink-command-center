@@ -4,6 +4,7 @@
  * account cannot access are parked for 7 days instead of failing every run.
  */
 import {sleep,NOW,ageDays} from './util.mjs';
+import {unwrapItem,carouselItems,isGoogleHost} from './serp-unwrap.mjs';
 
 const API='https://api.dataforseo.com/v3/';
 /** A bare ASCII hostname DataForSEO accepts as a bulk target, or '' to drop it. */
@@ -11,7 +12,7 @@ export function validTarget(d){
   const h=String(d||'').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/[/:?#].*$/,'').replace(/\.$/,'');
   return h.length<=253&&/^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(h)?h:'';
 }
-const ESTIMATE={serp:0.006,relevant_pages:0.025,traffic:0.03}; // calibrated from the ledger's real averages
+const ESTIMATE={serp:0.006,relevant_pages:0.025,traffic:0.03,backlinks:0.03}; // calibrated from the ledger's real averages
 
 export class DataForSEO{
   constructor({login,password,state,dailyUsd=0.5,monthlyUsd=10,fetchImpl=fetch,log=()=>{}}){
@@ -83,7 +84,28 @@ export class DataForSEO{
   async serp(keyword,{depth=20,location=2840,language='en'}={}){
     const r=await this.post('serp','serp/google/organic/live/advanced',{keyword,location_code:location,language_code:language,depth});
     if(!r)return null; // failed or not allowed: the caller should retry later, not mark the query as done
-    return (r[0]?.items||[]).filter(x=>x.type==='organic').map(x=>({url:x.url,domain:x.domain,title:x.title,description:x.description,rank:x.rank_absolute}));
+    const items=r[0]?.items||[];
+    // Google now wraps result links (google.com/goto?url=…); the publisher is recovered from the breadcrumb.
+    const organic=items.filter(x=>x.type==='organic').map(unwrapItem);
+    const usable=organic.filter(x=>x.domain&&!isGoogleHost(x.domain));
+    if(organic.length>=3&&!usable.length){this.log(`dataforseo: "${keyword}" returned only unrecoverable Google redirect links; retried next run`);return null}
+    this.wrapped=(this.wrapped||0)+organic.filter(x=>x.goto).length;
+    const seen=new Set(usable.map(x=>x.domain));
+    return [...usable,...carouselItems(items).filter(x=>!seen.has(x.domain)&&seen.add(x.domain))];
+  }
+  /**
+   * Pages that link to a competitor from inside their content (one per referring domain): proven
+   * in-niche linkers. `offset` pages through big link profiles across runs.
+   */
+  async backlinks(target,{limit=200,offset=0}={}){
+    const r=await this.post('backlinks','backlinks/backlinks/live',{target,mode:'one_per_domain',limit,offset,
+      filters:[['dofollow','=',true],'and',['item_type','=','anchor'],'and',['page_from_language','=','en'],'and',['is_lost','=',false]],
+      order_by:['rank,desc'],include_subdomains:true,exclude_internal_backlinks:true});
+    if(!r)return null;
+    const res=r[0]||{};
+    return {total:Number(res.total_count||0),items:(res.items||[]).map(x=>({url_from:x.url_from,domain_from:x.domain_from,title:x.page_from_title||'',url_to:x.url_to,anchor:x.anchor||'',
+      text_pre:x.text_pre||'',text_post:x.text_post||'',location:x.semantic_location||'',spam:x.backlink_spam_score??null,external_links:x.page_from_external_links??null,
+      broken_to:[404,410].includes(Number(x.url_to_status_code)),platform:x.domain_from_platform_type||[]}))};
   }
   /** Estimated monthly organic visits per domain (one request for up to 1,000 domains). */
   async domainTraffic(domains,{location=2840,language='en'}={}){
