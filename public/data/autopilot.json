@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-21T11:30:42.565Z",
- "duration_s": 111,
+ "generated_at": "2026-11-21T19:34:38.100Z",
+ "duration_s": 45,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 6.67248
+    "balance_usd": 6.435279999999999
    },
    "gmail": {
     "status": "connected"
@@ -114,15 +114,15 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 38875,
+   "ms": 15899,
    "result": {
     "sites": 10,
-    "pages": 1728
+    "pages": 1731
    }
   },
   "demand": {
    "ok": true,
-   "ms": 2910,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 158
@@ -140,12 +140,12 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 325
+    "internal_suggestions": 312
    }
   },
   "requalify": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -155,44 +155,33 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 64200,
+   "ms": 17671,
    "result": {
-    "queries": 4,
+    "queries": 0,
     "mention_queries": 0,
-    "serp_results": 171,
-    "candidates": 89,
-    "qualified": 6,
+    "serp_results": 0,
+    "candidates": 39,
+    "qualified": 13,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 106,
-    "with_email": 4,
-    "contact_form": 1,
+    "rejected": 107,
+    "with_email": 3,
+    "contact_form": 5,
     "broken_links": 0,
     "from_queue": 0,
     "linkgap_calls": 1,
-    "linkgap_candidates": 49,
+    "linkgap_candidates": 120,
     "filtered": {
-     "rarely_links_out": 11,
-     "already_evaluated": 13,
-     "forum_or_ugc": 1,
-     "off_topic_link": 28,
-     "sitewide_or_sidebar_link": 105,
-     "gov_or_edu": 43,
-     "competitor": 1,
-     "spam_score": 1,
-     "duplicate_this_run": 22,
-     "platform_or_giant": 9,
-     "page_unresolvable_recently": 1
+     "rarely_links_out": 29,
+     "gov_or_edu": 10,
+     "spam_score": 8,
+     "sitewide_or_sidebar_link": 4,
+     "off_topic_link": 21,
+     "already_evaluated": 5,
+     "platform_or_giant": 2,
+     "forum_or_ugc": 1
     },
-    "new_domains": 87,
-    "resolved": 44,
-    "resolved_via": {
-     "breadcrumb": 11,
-     "redirect": 25,
-     "sitemap": 8
-    },
-    "deferred": 0,
-    "unresolved": 24
+    "deferred": 0
    }
   },
   "bing_submit": {
@@ -201,7 +190,7 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 2,
+   "ms": 3,
    "result": {
     "checked": 0,
     "found": 0
@@ -209,9 +198,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1609,
+   "ms": 4083,
    "result": {
-    "scanned": 9,
+    "scanned": 18,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -221,23 +210,23 @@
   },
   "screen": {
    "ok": true,
-   "ms": 1786,
+   "ms": 4431,
    "result": {
-    "screened": 5,
+    "screened": 4,
     "kept": 1,
-    "retired": 3,
+    "retired": 2,
     "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 10,
+   "ms": 8,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 39,
+    "deferred": 40,
     "cap": 12,
     "verification_held": 0
    },
@@ -252,9 +241,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 2,
+   "ms": 1563,
    "result": {
-    "checked": 0,
+    "checked": 3,
     "won": 0,
     "lost": 0
    }
@@ -262,24 +251,24 @@
  },
  "totals": {
   "sites": 10,
-  "pages_crawled": 1728,
-  "urls_discovered": 2083,
+  "pages_crawled": 1731,
+  "urls_discovered": 2581,
   "promotable": 250,
-  "internal_suggestions": 325,
+  "internal_suggestions": 312,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.3316,
-  "month_usd": 6.1998,
+  "today_usd": 0.3892,
+  "month_usd": 6.2574,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 17
+  "calls_this_run": 2
  },
  "outreach": {
   "mode": "send",
-  "ready": 39,
+  "ready": 40,
   "verified_ready": 0,
-  "pending_verification": 39,
+  "pending_verification": 40,
   "holds": {
    "mailbox_recently_inconclusive": 4,
    "publisher_mismatch": 1,
@@ -294,12 +283,12 @@
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 3498,
-  "qualified": 632,
-  "ready": 39,
+  "prospects_evaluated": 3618,
+  "qualified": 645,
+  "ready": 40,
   "broken_link_ready": 2,
-  "contact_form_only": 127,
-  "no_contact": 249,
+  "contact_form_only": 132,
+  "no_contact": 254,
   "contacted": 74,
   "replied": 2,
   "positive": 0,
@@ -791,12 +780,12 @@
   },
   {
    "date": "2026-11-21",
-   "prospects_evaluated": 3498,
-   "qualified": 632,
-   "ready": 39,
+   "prospects_evaluated": 3618,
+   "qualified": 645,
+   "ready": 40,
    "broken_link_ready": 2,
-   "contact_form_only": 127,
-   "no_contact": 249,
+   "contact_form_only": 132,
+   "no_contact": 254,
    "contacted": 74,
    "replied": 2,
    "positive": 0,
@@ -804,16 +793,16 @@
    "existing_links": 6,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.3316
+   "spend_usd": 0.3892
   }
  ],
  "learning": {
   "footprints": [
    {
     "footprint": "link_gap",
-    "queries": 6,
-    "ready": 12,
-    "rate": 1.444
+    "queries": 7,
+    "ready": 13,
+    "rate": 1.4
    },
    {
     "footprint": "statistics",
@@ -1310,9 +1299,9 @@
  "sites": [
   {
    "domain": "gearuptofit.com",
-   "pages": 297,
-   "discovered": 297,
-   "sitemaps": 6,
+   "pages": 300,
+   "discovered": 795,
+   "sitemaps": 7,
    "eligible": 25,
    "top": "https://gearuptofit.com/shoe-finder/methodology/"
   },
@@ -1436,7 +1425,7 @@
     "Cites 4 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 10,
+   "prospects": 11,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -1624,7 +1613,7 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 290,
+   "internal_inlinks": 293,
    "words": 1406,
    "interactive": true,
    "modified": "2026-10-04T18:13:49.000Z",
@@ -1688,6 +1677,32 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
+   "title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
+   "h1": "How to Control Emotional Eating & Stop Cravings (2026 Guide)",
+   "description": "Self-help for emotional eaters is possible! Learn to identify triggers and develop healthy eating habits for lasting change.",
+   "type": "practical_guide",
+   "promotion": 77,
+   "linkability": 81,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 3309,
+   "interactive": false,
+   "modified": "2026-09-21T06:03:08+00:00",
+   "reasons": [
+    "In-depth (3,309 words)",
+    "1 data table",
+    "Cites 6 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "prospects": 7,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
    "title": "Email Marketing Template Generator: HTML & Plain Text",
@@ -1734,6 +1749,30 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/running-pace-calculator/",
+   "title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "h1": "Running Pace Calculator & Race Time Predictor (2026)",
+   "description": "Unbiased & Independent GearUpToFit is reader-supported. We adhere to strict testing standards. When you buy through links on our site, we may earn a commission at no cost to you. Interactive Running Tool &bull; Updated 2026 Accurately calculate your running … Continue reading &rarr;",
+   "type": "interactive_tool",
+   "promotion": 75,
+   "linkability": 83,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 1591,
+   "interactive": true,
+   "modified": "2026-09-08T13:32:42+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "2 data tables",
+    "Recently updated"
+   ],
+   "prospects": 12,
+   "internal_link_suggestions": 3,
+   "promoting": false
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
    "title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
@@ -1744,7 +1783,7 @@
    "linkability": 83,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 10,
    "words": 2085,
    "interactive": false,
    "modified": "2026-09-25T14:57:36+00:00",
@@ -1756,7 +1795,7 @@
    ],
    "prospects": 2,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1783,6 +1822,32 @@
   },
   {
    "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/how-to-breathe-while-running/",
+   "title": "Master Breathing & Improve Running Performance with Proven Techniques | GearUpToFit",
+   "h1": "How to Breathe While Running: Breathing Techniques for Runners",
+   "description": "Unlock the benefits of nasal breathing for runners. Enhance your endurance and performance with effective breathing techniques!",
+   "type": "practical_guide",
+   "promotion": 75,
+   "linkability": 79,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 2819,
+   "interactive": false,
+   "modified": "2026-09-21T06:30:06+00:00",
+   "reasons": [
+    "In-depth (2,819 words)",
+    "3 data tables",
+    "Cites 3 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "gearuptofit.com",
    "url": "https://gearuptofit.com/shoe-finder/",
    "title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
    "h1": "Running Shoe Finder Quiz: Find the Right Running Shoes for Your Feet, Mileage, Terrain and Budget",
@@ -1792,7 +1857,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 22,
+   "internal_inlinks": 25,
    "words": 999,
    "interactive": true,
    "modified": null,
@@ -1965,7 +2030,7 @@
    "linkability": 80,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 6,
    "words": 3394,
    "interactive": false,
    "modified": "2026-09-13T19:07:43+00:00",
@@ -2073,7 +2138,7 @@
    ],
    "prospects": 3,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2240,7 +2305,7 @@
     "Cites 16 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 2,
+   "prospects": 5,
    "internal_link_suggestions": 1,
    "promoting": false
   },
@@ -2584,6 +2649,32 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "h1": "Treadmill Workout for Weight Loss: 2026 Fat Burn Guide",
+   "description": "Treadmill for weight loss: Effective workouts, tips, and strategies to help you achieve your fitness goals and transform your health.",
+   "type": "general_article",
+   "promotion": 63,
+   "linkability": 65,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 6295,
+   "interactive": false,
+   "modified": "2026-09-21T06:18:07+00:00",
+   "reasons": [
+    "In-depth (6,295 words)",
+    "9 data tables",
+    "Recently updated",
+    "Under-linked internally (1 inbound)",
+    "Health/YMYL topic — pitch only to expert publishers"
+   ],
+   "prospects": 2,
+   "internal_link_suggestions": 4,
+   "promoting": false
+  },
+  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/focus-habit-reset/",
    "title": "Focus and Habit Reset Guide - Gear Up to Grow",
@@ -2603,7 +2694,7 @@
     "Recently updated",
     "Under-linked internally (2 inbound)"
    ],
-   "prospects": 0,
+   "prospects": 1,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -2700,7 +2791,7 @@
     "6 data tables",
     "Recently updated"
    ],
-   "prospects": 3,
+   "prospects": 11,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -3234,105 +3325,6 @@
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": true
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "h1": "Best Brushes for French Bulldogs: Shiny Coats",
-   "description": "Brushes for French Bulldogs a hassle? Discover essential grooming tools for a healthy coat. Proven solution for shedding! See how today!",
-   "type": "general_article",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 6,
-   "words": 4137,
-   "interactive": true,
-   "modified": "2026-11-07T19:40:32+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,137 words)",
-    "20 data tables",
-    "Recently updated",
-    "One of 153 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 2,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "h1": "Homemade Food for French Bulldogs: When You Need a Veterinary Nutritionist",
-   "description": "Thinking of homemade food or recipes for your Frenchie? What a balanced home-cooked diet needs, mistakes to avoid, and why a vet nutritionist should formulate it.",
-   "type": "practical_guide",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 8,
-   "words": 1659,
-   "interactive": false,
-   "modified": "2026-10-12T13:02:55+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated",
-    "One of 153 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/mouse-cleanup-safety/",
-   "title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
-   "h1": "Mouse Cleanup Safety Hub: Contamination, Disposal, and Next Steps",
-   "description": "Ventilate, glove up, soak droppings and urine with disinfectant, then wipe. Never sweep or vacuum. Cleanup, dead-mouse disposal, fabrics, and when to get help.",
-   "type": "practical_guide",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 42,
-   "words": 1606,
-   "interactive": false,
-   "modified": "2026-11-08T05:54:55+00:00",
-   "reasons": [
-    "2 data tables",
-    "Cites 9 authoritative sources",
-    "Recently updated",
-    "One of 42 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 2,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/snap-traps-for-mice/",
-   "title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "h1": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "description": "How snap traps work, how to set and place them along wall runways, baiting tips, and safe use around children and pets — based on CDC, NPS, and UC guidance.",
-   "type": "practical_guide",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 7,
-   "words": 1823,
-   "interactive": false,
-   "modified": "2026-10-03T06:40:50+00:00",
-   "reasons": [
-    "Cites 4 authoritative sources",
-    "Recently updated",
-    "One of 42 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 4,
-   "internal_link_suggestions": 5,
-   "promoting": false
   }
  ],
  "internal_links": [
@@ -3683,6 +3675,36 @@
    "to": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
    "to_title": "Email Marketing Template Generator: HTML & Plain Text",
    "anchor": "write email reader",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/calculators/",
+   "from_title": "Free Fitness & Running Calculators | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/",
+   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running-training-plans/",
+   "from_title": "2026 Running Training Plans: 5K, 10K & Marathon Guide | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
    "relevance": 3,
    "from_strength": 0
   },
@@ -4404,6 +4426,46 @@
    "to_title": "Apple Watch SE (2nd gen) vs Google Pixel Watch 3: Which Should You Buy?",
    "anchor": "apple watch",
    "relevance": 10,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness/",
+   "from_title": "Fitness Articles | Workouts, HIIT, Strength Training & Exercise Guides | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
+   "from_title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
+   "from_strength": 77
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/nutrition/",
+   "from_title": "Nutrition Articles | Fueling, Hydration, Supplements & Meal Planning | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/weight-loss-guide/",
+   "from_title": "Runner's Weight Loss Guide: Sustainable Fat Loss Tips 2026 | GearUpToFit",
+   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
+   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
    "from_strength": 0
   },
   {
@@ -5265,84 +5327,14 @@
    "anchor": "french bulldog",
    "relevance": 5,
    "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "to": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "to_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "anchor": "dog food",
-   "relevance": 10,
-   "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
-   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
-   "to": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "to_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "anchor": "dog food",
-   "relevance": 10,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
-   "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
-   "to": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "to_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "anchor": "dog food",
-   "relevance": 10,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-food-for-french-bulldogs-with-sensitive-stomach/",
-   "from_title": "Best Dog Food for a French Bulldog With a Sensitive Stomach",
-   "to": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "to_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "anchor": "dog food",
-   "relevance": 9,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "from_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "to": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "to_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "anchor": "food french",
-   "relevance": 8,
-   "from_strength": 57
   }
  ],
  "indexation": {
   "sites": [
    {
     "site": "gearuptofit.com",
-    "checked": 297,
-    "healthy": 288,
+    "checked": 300,
+    "healthy": 291,
     "problems": 9,
     "critical": 0,
     "not_found": 0,
@@ -6198,7 +6190,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 24,
-  "updated_at": "2026-11-21T11:30:39.065Z"
+  "updated_at": "2026-11-21T19:34:27.833Z"
  },
  "wins": [
   {
@@ -6269,41 +6261,31 @@
   }
  ],
  "log": [
-  "11:28:52 connection dataforseo: connected",
-  "11:28:52 connection gmail: connected",
-  "11:28:57 crawl gearuptogrow.com: 107/107 urls, fetched 37, 304 0, reused 70",
-  "11:28:57 crawl plantastichaven.com: 159/159 urls, fetched 32, 304 0, reused 127",
-  "11:29:01 crawl frenchyfab.com: 155/155 urls, fetched 9, 304 0, reused 146",
-  "11:29:02 crawl mysticaldigits.com: 300/468 urls, fetched 6, 304 0, reused 294",
-  "11:29:03 crawl micegoneguide.com: 43/43 urls, fetched 6, 304 0, reused 37",
-  "11:29:03 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "11:29:04 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "11:29:05 crawl gearuptofit.com: 297/297 urls, fetched 1, 304 0, reused 296",
-  "11:29:08 crawl efficientgptprompts.com: 300/487 urls, fetched 13, 304 0, reused 287",
-  "11:29:31 crawl affiliatemarketingforsuccess.com: 181/181 urls, fetched 142, 304 0, reused 39",
-  "11:29:32 dataforseo demand: gearuptofit.com 0 ranking pages",
-  "11:29:32 dataforseo demand: plantastichaven.com 88 ranking pages",
-  "11:29:32 dataforseo demand: gearuptogrow.com 4 ranking pages",
-  "11:29:33 dataforseo demand: affiliatemarketingforsuccess.com 0 ranking pages",
-  "11:29:33 dataforseo demand: mysticaldigits.com 0 ranking pages",
-  "11:29:33 dataforseo demand: frenchyfab.com 2 ranking pages",
-  "11:29:33 dataforseo demand: micegoneguide.com 17 ranking pages",
-  "11:29:34 dataforseo demand: efficientgptprompts.com 19 ranking pages",
-  "11:29:34 dataforseo demand: openclaw-skillshub.com 32 ranking pages",
-  "11:29:34 dataforseo demand: imagealchemy.app 2 ranking pages",
-  "11:29:34 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "11:29:34 - search_performance: skipped (Search Console not connected)",
-  "11:29:34 indexation: 69 sitemap URLs with an indexing problem (1 critical)",
-  "11:29:35 link gap: examstudyexpert.com (for gearuptogrow.com) 200 referring pages from offset 0/910, 49 new candidates",
-  "11:30:39 prospects: 0 from the saved queue, 0 saved for next run; 1 competitor link-gap pulls (49 candidates); 4 queries (0 brand-mention), 44 Google-wrapped results resolved, 24 unresolvable; 89 candidates, 6 qualified (0 unlinked mentions), 4 with email, 0 with a dead link we can replace, 0 already linking",
-  "11:30:39 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "11:30:39 self-tuning: next cycle runs up to 24 searches",
-  "11:30:39 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "11:30:40 replies: 9 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "11:30:42 queue screening (free, nothing sent): 5 checked, 1 sendable, 3 retired, 0 switched to a better published address",
-  "11:30:42 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "11:30:42 - preverify: skipped (runs only while outreach is paused)",
-  "11:30:42 link checks: 0 pages, 0 new links won, 0 lost"
+  "19:33:53 connection dataforseo: connected",
+  "19:33:53 connection gmail: connected",
+  "19:33:57 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "19:33:58 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
+  "19:34:00 crawl gearuptofit.com: 300/795 urls, fetched 4, 304 0, reused 296",
+  "19:34:01 crawl frenchyfab.com: 155/155 urls, fetched 1, 304 0, reused 154",
+  "19:34:04 crawl mysticaldigits.com: 300/468 urls, fetched 6, 304 0, reused 294",
+  "19:34:04 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "19:34:05 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "19:34:06 crawl affiliatemarketingforsuccess.com: 181/181 urls, fetched 5, 304 0, reused 176",
+  "19:34:07 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
+  "19:34:09 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "19:34:10 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "19:34:10 - search_performance: skipped (Search Console not connected)",
+  "19:34:10 indexation: 69 sitemap URLs with an indexing problem (1 critical)",
+  "19:34:11 link gap: retrievalpractice.org (for gearuptogrow.com) 200 referring pages from offset 0/1033, 120 new candidates",
+  "19:34:27 prospects: 0 from the saved queue, 0 saved for next run; 1 competitor link-gap pulls (120 candidates); 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 39 candidates, 13 qualified (0 unlinked mentions), 3 with email, 0 with a dead link we can replace, 0 already linking",
+  "19:34:27 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "19:34:27 self-tuning: next cycle runs up to 24 searches",
+  "19:34:27 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "19:34:31 replies: 18 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "19:34:36 queue screening (free, nothing sent): 4 checked, 1 sendable, 2 retired, 0 switched to a better published address",
+  "19:34:36 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "19:34:36 - preverify: skipped (runs only while outreach is paused)",
+  "19:34:38 link checks: 3 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
