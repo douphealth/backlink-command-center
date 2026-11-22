@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-22T16:30:54.554Z",
- "duration_s": 115,
+ "generated_at": "2026-11-22T22:38:14.012Z",
+ "duration_s": 82,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 6.284559999999999
+    "balance_usd": 6.198880000000003
    },
    "gmail": {
     "status": "connected"
@@ -114,7 +114,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 17250,
+   "ms": 19261,
    "result": {
     "sites": 10,
     "pages": 1731
@@ -122,7 +122,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 158
@@ -145,7 +145,7 @@
   },
   "requalify": {
    "ok": true,
-   "ms": 1,
+   "ms": 3,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -155,45 +155,32 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 80784,
+   "ms": 33008,
    "result": {
-    "queries": 3,
+    "queries": 0,
     "mention_queries": 0,
-    "serp_results": 146,
-    "candidates": 85,
-    "qualified": 13,
+    "serp_results": 0,
+    "candidates": 36,
+    "qualified": 22,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 89,
-    "with_email": 7,
-    "contact_form": 1,
-    "broken_links": 1,
+    "rejected": 102,
+    "with_email": 13,
+    "contact_form": 4,
+    "broken_links": 2,
     "from_queue": 0,
     "linkgap_calls": 1,
-    "linkgap_candidates": 49,
+    "linkgap_candidates": 124,
     "filtered": {
-     "off_topic_link": 23,
-     "rarely_links_out": 1,
-     "forum_or_ugc": 2,
-     "spam_score": 42,
-     "already_evaluated": 18,
-     "sitewide_or_sidebar_link": 2,
-     "platform_or_giant": 30,
-     "contacted_or_suppressed": 1,
-     "page_unresolvable_recently": 4,
-     "duplicate_this_run": 2,
-     "gov_or_edu": 13
+     "rarely_links_out": 24,
+     "platform_or_giant": 2,
+     "sitewide_or_sidebar_link": 7,
+     "spam_score": 35,
+     "own_site": 1,
+     "off_topic_link": 1,
+     "already_evaluated": 6
     },
-    "new_domains": 79,
-    "failed_queries": 1,
-    "resolved": 30,
-    "resolved_via": {
-     "redirect": 15,
-     "sitemap": 10,
-     "breadcrumb": 5
-    },
-    "deferred": 0,
-    "unresolved": 26
+    "deferred": 0
    }
   },
   "bing_submit": {
@@ -202,7 +189,7 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 2,
+   "ms": 4,
    "result": {
     "checked": 0,
     "found": 0
@@ -210,9 +197,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1023,
+   "ms": 1680,
    "result": {
-    "scanned": 11,
+    "scanned": 4,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -222,23 +209,23 @@
   },
   "screen": {
    "ok": true,
-   "ms": 4544,
+   "ms": 10876,
    "result": {
-    "screened": 8,
-    "kept": 2,
-    "retired": 5,
+    "screened": 14,
+    "kept": 6,
+    "retired": 6,
     "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 11,
+   "ms": 16,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 47,
+    "deferred": 57,
     "cap": 12,
     "verification_held": 0
    },
@@ -253,9 +240,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 9769,
+   "ms": 15438,
    "result": {
-    "checked": 13,
+    "checked": 11,
     "won": 0,
     "lost": 0
    }
@@ -270,17 +257,17 @@
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.1788,
-  "month_usd": 6.4362,
+  "today_usd": 0.2369,
+  "month_usd": 6.4943,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 8
+  "calls_this_run": 2
  },
  "outreach": {
   "mode": "send",
-  "ready": 47,
+  "ready": 54,
   "verified_ready": 0,
-  "pending_verification": 47,
+  "pending_verification": 54,
   "holds": {
    "mailbox_recently_inconclusive": 4,
    "publisher_mismatch": 1,
@@ -295,12 +282,12 @@
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 3871,
-  "qualified": 678,
-  "ready": 47,
-  "broken_link_ready": 2,
-  "contact_form_only": 139,
-  "no_contact": 264,
+  "prospects_evaluated": 3995,
+  "qualified": 700,
+  "ready": 54,
+  "broken_link_ready": 3,
+  "contact_form_only": 143,
+  "no_contact": 269,
   "contacted": 74,
   "replied": 2,
   "positive": 0,
@@ -809,12 +796,12 @@
   },
   {
    "date": "2026-11-22",
-   "prospects_evaluated": 3871,
-   "qualified": 678,
-   "ready": 47,
-   "broken_link_ready": 2,
-   "contact_form_only": 139,
-   "no_contact": 264,
+   "prospects_evaluated": 3995,
+   "qualified": 700,
+   "ready": 54,
+   "broken_link_ready": 3,
+   "contact_form_only": 143,
+   "no_contact": 269,
    "contacted": 74,
    "replied": 2,
    "positive": 0,
@@ -822,16 +809,16 @@
    "existing_links": 6,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.1788
+   "spend_usd": 0.2369
   }
  ],
  "learning": {
   "footprints": [
    {
     "footprint": "link_gap",
-    "queries": 9,
-    "ready": 14,
-    "rate": 1.25
+    "queries": 10,
+    "ready": 21,
+    "rate": 1.692
    },
    {
     "footprint": "statistics",
@@ -1435,7 +1422,7 @@
     "Recently updated",
     "Flagship asset"
    ],
-   "prospects": 12,
+   "prospects": 17,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -1633,7 +1620,7 @@
     "Has an interactive tool/quiz — earns links naturally",
     "Recently updated"
    ],
-   "prospects": 2,
+   "prospects": 3,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -1758,7 +1745,7 @@
    ],
    "prospects": 8,
    "internal_link_suggestions": 3,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2173,7 +2160,7 @@
    ],
    "prospects": 3,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2484,7 +2471,7 @@
     "Recently updated",
     "One of 299 templated sibling pages — promote the hub first"
    ],
-   "prospects": 8,
+   "prospects": 9,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -2971,7 +2958,7 @@
     "Recently updated",
     "One of 299 templated sibling pages — promote the hub first"
    ],
-   "prospects": 9,
+   "prospects": 10,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -3333,7 +3320,7 @@
     "Recently updated",
     "One of 299 templated sibling pages — promote the hub first"
    ],
-   "prospects": 0,
+   "prospects": 1,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -4615,8 +4602,8 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-to-use-numerology-to-overcome-challenges/",
-   "from_title": "Mystical Digits: Use Numerology to Overcome Challenges in 7 Steps",
+   "from": "https://mysticaldigits.com/decode-your-personality-birth-number-7/",
+   "from_title": "Birth Number 7 Personality: Traits & Meanings | Mystical Digits",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
    "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
    "anchor": "personal year",
@@ -5165,6 +5152,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/decode-your-personality-birth-number-7/",
+   "from_title": "Birth Number 7 Personality: Traits & Meanings | Mystical Digits",
+   "to": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
+   "to_title": "Personal Year Calculator: How to Find Your Number (2026)",
+   "anchor": "personal year",
+   "relevance": 8,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/numerology-and-anniversary-date-selection/",
    "from_title": "Numerology Anniversary Dates 2026: 7-Step Guide",
    "to": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
@@ -5177,16 +5174,6 @@
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/the-power-of-number-9-in-numerology-revealed/",
    "from_title": "Number 9 in Numerology: Meaning, Life Path Calculation and Limits | Mystical Digits",
-   "to": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
-   "to_title": "Personal Year Calculator: How to Find Your Number (2026)",
-   "anchor": "personal year",
-   "relevance": 8,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/astrology-who-will-i-marry/",
-   "from_title": "Astrology: Who Will I Marry? 2026 Insights | Mystical Digits",
    "to": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
    "to_title": "Personal Year Calculator: How to Find Your Number (2026)",
    "anchor": "personal year",
@@ -6225,7 +6212,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 24,
-  "updated_at": "2026-11-22T16:30:39.162Z"
+  "updated_at": "2026-11-22T22:37:45.816Z"
  },
  "wins": [
   {
@@ -6296,32 +6283,31 @@
   }
  ],
  "log": [
-  "16:29:00 connection dataforseo: connected",
-  "16:29:00 connection gmail: connected",
-  "16:29:04 crawl plantastichaven.com: 159/159 urls, fetched 5, 304 0, reused 154",
-  "16:29:05 crawl gearuptogrow.com: 107/107 urls, fetched 1, 304 0, reused 106",
-  "16:29:09 crawl frenchyfab.com: 155/155 urls, fetched 8, 304 0, reused 147",
-  "16:29:11 crawl mysticaldigits.com: 300/468 urls, fetched 9, 304 0, reused 291",
-  "16:29:12 crawl micegoneguide.com: 43/43 urls, fetched 1, 304 0, reused 42",
-  "16:29:13 crawl gearuptofit.com: 300/795 urls, fetched 3, 304 0, reused 297",
-  "16:29:13 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "16:29:14 crawl imagealchemy.app: 28/28 urls, fetched 3, 304 0, reused 25",
-  "16:29:17 crawl affiliatemarketingforsuccess.com: 181/181 urls, fetched 9, 304 0, reused 172",
-  "16:29:18 crawl efficientgptprompts.com: 300/487 urls, fetched 33, 304 0, reused 267",
-  "16:29:18 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "16:29:18 - search_performance: skipped (Search Console not connected)",
-  "16:29:18 indexation: 69 sitemap URLs with an indexing problem (1 critical)",
-  "16:29:19 link gap: kristian-larsen.com (for affiliatemarketingforsuccess.com) 120 referring pages from offset 0/122, 49 new candidates",
-  "16:30:07 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
-  "16:30:39 prospects: 0 from the saved queue, 0 saved for next run; 1 competitor link-gap pulls (49 candidates); 3 queries (0 brand-mention), 30 Google-wrapped results resolved, 26 unresolvable; 85 candidates, 13 qualified (0 unlinked mentions), 7 with email, 1 with a dead link we can replace, 0 already linking",
-  "16:30:39 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "16:30:39 self-tuning: next cycle runs up to 24 searches",
-  "16:30:39 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "16:30:40 replies: 11 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "16:30:44 queue screening (free, nothing sent): 8 checked, 2 sendable, 5 retired, 0 switched to a better published address",
-  "16:30:44 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "16:30:44 - preverify: skipped (runs only while outreach is paused)",
-  "16:30:54 link checks: 13 pages, 0 new links won, 0 lost"
+  "22:36:53 connection dataforseo: connected",
+  "22:36:53 connection gmail: connected",
+  "22:36:56 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
+  "22:36:57 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
+  "22:37:03 crawl frenchyfab.com: 155/155 urls, fetched 8, 304 0, reused 147",
+  "22:37:04 crawl gearuptofit.com: 300/795 urls, fetched 0, 304 0, reused 300",
+  "22:37:04 crawl mysticaldigits.com: 300/468 urls, fetched 14, 304 0, reused 286",
+  "22:37:04 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "22:37:05 crawl affiliatemarketingforsuccess.com: 181/181 urls, fetched 0, 304 0, reused 181",
+  "22:37:05 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "22:37:06 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
+  "22:37:12 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "22:37:12 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "22:37:12 - search_performance: skipped (Search Console not connected)",
+  "22:37:12 indexation: 69 sitemap URLs with an indexing problem (1 critical)",
+  "22:37:14 link gap: worldnumerology.com (for mysticaldigits.com) 200 referring pages from offset 0/438, 124 new candidates",
+  "22:37:45 prospects: 0 from the saved queue, 0 saved for next run; 1 competitor link-gap pulls (124 candidates); 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 36 candidates, 22 qualified (0 unlinked mentions), 13 with email, 2 with a dead link we can replace, 0 already linking",
+  "22:37:45 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "22:37:45 self-tuning: next cycle runs up to 24 searches",
+  "22:37:45 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "22:37:47 replies: 4 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "22:37:58 queue screening (free, nothing sent): 14 checked, 6 sendable, 6 retired, 0 switched to a better published address",
+  "22:37:58 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "22:37:58 - preverify: skipped (runs only while outreach is paused)",
+  "22:38:14 link checks: 11 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
