@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-23T03:52:30.876Z",
- "duration_s": 131,
+ "generated_at": "2026-11-23T15:10:42.648Z",
+ "duration_s": 489,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 6.140799999999999
+    "balance_usd": 5.480060000000002
    },
    "gmail": {
     "status": "connected"
@@ -29,14 +29,14 @@
    "key": true,
    "enabled": true,
    "daily_limit": 24,
-   "used_today": 1,
+   "used_today": 20,
    "balance": {
     "provider": "verifalia",
-    "free_credits": 24,
-    "reset_in": "20:07:35",
-    "checked_at": "2026-11-23T03:52:24.394Z"
+    "free_credits": 5,
+    "reset_in": "08:55:44",
+    "checked_at": "2026-11-23T15:04:16.000Z"
    },
-   "catch_all_domains_skipped": 40
+   "catch_all_domains_skipped": 46
   }
  },
  "setup": [
@@ -114,10 +114,10 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 11277,
+   "ms": 19405,
    "result": {
     "sites": 10,
-    "pages": 1731
+    "pages": 1663
    }
   },
   "demand": {
@@ -155,44 +155,33 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 92394,
+   "ms": 58427,
    "result": {
-    "queries": 8,
+    "queries": 0,
     "mention_queries": 0,
-    "serp_results": 287,
-    "candidates": 97,
-    "qualified": 28,
+    "serp_results": 0,
+    "candidates": 72,
+    "qualified": 35,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 126,
-    "with_email": 15,
-    "contact_form": 6,
+    "rejected": 114,
+    "with_email": 17,
+    "contact_form": 11,
     "broken_links": 2,
     "from_queue": 0,
     "linkgap_calls": 1,
-    "linkgap_candidates": 59,
+    "linkgap_candidates": 149,
     "filtered": {
-     "sitewide_or_sidebar_link": 7,
-     "rarely_links_out": 8,
-     "own_site": 1,
-     "already_evaluated": 65,
-     "spam_score": 105,
-     "off_topic_link": 3,
-     "forum_or_ugc": 5,
-     "platform_or_giant": 56,
-     "page_unresolvable_recently": 26,
-     "duplicate_this_run": 30,
-     "contacted_or_suppressed": 2
+     "already_evaluated": 12,
+     "spam_score": 6,
+     "rarely_links_out": 20,
+     "sitewide_or_sidebar_link": 4,
+     "platform_or_giant": 1,
+     "gov_or_edu": 2,
+     "off_topic_link": 5,
+     "own_site": 1
     },
-    "new_domains": 120,
-    "resolved": 48,
-    "resolved_via": {
-     "redirect": 32,
-     "sitemap": 7,
-     "breadcrumb": 9
-    },
-    "deferred": 0,
-    "unresolved": 25
+    "deferred": 0
    }
   },
   "bing_submit": {
@@ -201,7 +190,7 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 3,
+   "ms": 5,
    "result": {
     "checked": 0,
     "found": 0
@@ -209,9 +198,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1800,
+   "ms": 4376,
    "result": {
-    "scanned": 6,
+    "scanned": 41,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -221,25 +210,26 @@
   },
   "screen": {
    "ok": true,
-   "ms": 14732,
+   "ms": 8489,
    "result": {
-    "screened": 17,
-    "kept": 6,
-    "retired": 9,
+    "screened": 19,
+    "kept": 10,
+    "retired": 7,
     "address_updated": 1
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 8431,
+   "ms": 392288,
    "result": {
-    "followups": 0,
-    "sent": 0,
+    "followups": 2,
+    "sent": 7,
     "drafted": 0,
-    "skipped": 0,
-    "deferred": 62,
+    "skipped": 1,
+    "deferred": 0,
     "cap": 12,
-    "verification_held": 1
+    "verification_held": 15,
+    "followups_retired": 1
    },
    "writer": {
     "claude": 0,
@@ -262,18 +252,18 @@
  },
  "totals": {
   "sites": 10,
-  "pages_crawled": 1731,
-  "urls_discovered": 2581,
+  "pages_crawled": 1663,
+  "urls_discovered": 2513,
   "promotable": 250,
   "internal_suggestions": 313,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.1367,
-  "month_usd": 6.631,
+  "today_usd": 0.1978,
+  "month_usd": 6.6921,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 10
+  "calls_this_run": 2
  },
  "outreach": {
   "mode": "send",
@@ -282,24 +272,26 @@
   "pending_verification": 60,
   "holds": {
    "publisher_mismatch": 1,
+   "mailbox_recently_inconclusive": 2,
+   "mailbox_accept_all": 8,
    "mailbox_unknown": 5,
-   "mailbox_accept_all": 5,
-   "mailbox_invalid": 1
+   "mx_dns_unverified": 1,
+   "mailbox_invalid": 2
   },
-  "sent_today": 0,
+  "sent_today": 9,
   "cap_today": 12,
-  "next_send_at": "2026-11-23T03:52:30.880Z",
+  "next_send_at": "2026-11-23T15:10:42.652Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 4149,
-  "qualified": 728,
+  "prospects_evaluated": 4298,
+  "qualified": 763,
   "ready": 60,
-  "broken_link_ready": 3,
-  "contact_form_only": 149,
-  "no_contact": 276,
-  "contacted": 74,
+  "broken_link_ready": 2,
+  "contact_form_only": 160,
+  "no_contact": 283,
+  "contacted": 81,
   "replied": 2,
   "positive": 0,
   "won": 0,
@@ -824,29 +816,29 @@
   },
   {
    "date": "2026-11-23",
-   "prospects_evaluated": 4149,
-   "qualified": 728,
+   "prospects_evaluated": 4298,
+   "qualified": 763,
    "ready": 60,
-   "broken_link_ready": 3,
-   "contact_form_only": 149,
-   "no_contact": 276,
-   "contacted": 74,
+   "broken_link_ready": 2,
+   "contact_form_only": 160,
+   "no_contact": 283,
+   "contacted": 81,
    "replied": 2,
    "positive": 0,
    "won": 0,
    "existing_links": 6,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.1367
+   "spend_usd": 0.1978
   }
  ],
  "learning": {
   "footprints": [
    {
     "footprint": "link_gap",
-    "queries": 11,
-    "ready": 25,
-    "rate": 1.857
+    "queries": 12,
+    "ready": 33,
+    "rate": 2.267
    },
    {
     "footprint": "statistics",
@@ -1193,6 +1185,62 @@
     "rate": 0.25
    },
    {
+    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://gearuptofit.com/running/how-to-breathe-while-running/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://mysticaldigits.com/calculate-your-soul-number-with-our-free-calculator/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://frenchyfab.com/breeding-french-bulldogs-guide/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://frenchyfab.com/french-bulldog-healthy-treats-guide/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
     "url": "https://gearuptogrow.com/productivity/interleaving-vs-blocked-practice/",
     "sent": 2,
     "replied": 0,
@@ -1373,8 +1421,8 @@
   },
   {
    "domain": "affiliatemarketingforsuccess.com",
-   "pages": 181,
-   "discovered": 181,
+   "pages": 113,
+   "discovered": 113,
    "sitemaps": 5,
    "eligible": 25,
    "top": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/"
@@ -1516,7 +1564,7 @@
    "linkability": 91,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
+   "internal_inlinks": 4,
    "words": 1669,
    "interactive": true,
    "modified": "2026-11-04T05:40:26+00:00",
@@ -1616,7 +1664,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 5,
    "words": 2071,
    "interactive": true,
    "modified": "2026-10-25T11:01:04+00:00",
@@ -1712,7 +1760,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 7,
    "words": 3514,
    "interactive": true,
    "modified": "2026-11-15T07:33:08+00:00",
@@ -1763,7 +1811,7 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 5,
    "words": 677,
    "interactive": true,
    "modified": "2026-09-05T13:47:24+00:00",
@@ -1772,7 +1820,7 @@
     "Recently updated"
    ],
    "prospects": 8,
-   "internal_link_suggestions": 3,
+   "internal_link_suggestions": 2,
    "promoting": false
   },
   {
@@ -1786,7 +1834,7 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 7,
    "words": 691,
    "interactive": true,
    "modified": "2026-09-05T13:47:17+00:00",
@@ -1796,7 +1844,7 @@
    ],
    "prospects": 4,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -1833,7 +1881,7 @@
    "linkability": 83,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 7,
    "words": 2085,
    "interactive": false,
    "modified": "2026-09-25T14:57:36+00:00",
@@ -1844,7 +1892,7 @@
     "Recently updated"
    ],
    "prospects": 9,
-   "internal_link_suggestions": 5,
+   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -1858,7 +1906,7 @@
    "linkability": 83,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 5,
    "words": 610,
    "interactive": true,
    "modified": "2026-09-05T13:47:04+00:00",
@@ -1966,7 +2014,7 @@
     "19 data tables",
     "Recently updated"
    ],
-   "prospects": 8,
+   "prospects": 11,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -2006,7 +2054,7 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 5,
    "words": 6198,
    "interactive": false,
    "modified": "2026-09-12T09:23:40+00:00",
@@ -2017,7 +2065,7 @@
     "Recently updated"
    ],
    "prospects": 7,
-   "internal_link_suggestions": 4,
+   "internal_link_suggestions": 3,
    "promoting": false
   },
   {
@@ -2041,7 +2089,7 @@
     "Recently updated",
     "Under-linked internally (2 inbound)"
    ],
-   "prospects": 1,
+   "prospects": 2,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -2056,7 +2104,7 @@
    "linkability": 80,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 5,
    "words": 2011,
    "interactive": false,
    "modified": "2026-09-25T17:56:37+00:00",
@@ -2066,7 +2114,7 @@
     "Recently updated"
    ],
    "prospects": 6,
-   "internal_link_suggestions": 3,
+   "internal_link_suggestions": 2,
    "promoting": false
   },
   {
@@ -2080,7 +2128,7 @@
    "linkability": 80,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 3,
    "words": 3394,
    "interactive": false,
    "modified": "2026-09-13T19:07:43+00:00",
@@ -2169,29 +2217,6 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/ai/best-chatgpt-alternatives/",
-   "title": "Best ChatGPT Alternatives for Writing, Research, SEO, Codin…",
-   "h1": "Best ChatGPT Alternatives: 2025 Guide to AI Tools",
-   "description": "Practical guide for people who use ChatGPT but need complementary AI tools for specific workflows: best tools, decision framework, SEO workflow, mistakes to avoid, FAQs, and safe recommendations.",
-   "type": "comparison",
-   "promotion": 71,
-   "linkability": 79,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 7,
-   "words": 1941,
-   "interactive": false,
-   "modified": "2026-10-25T11:01:40+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 12,
-   "internal_link_suggestions": 0,
-   "promoting": true
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
    "title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
    "h1": "Best Surfer SEO Alternatives: 2025 Content Optimization Guide",
@@ -2201,7 +2226,7 @@
    "linkability": 79,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
+   "internal_inlinks": 3,
    "words": 1873,
    "interactive": false,
    "modified": "2026-09-25T17:56:08+00:00",
@@ -2210,8 +2235,8 @@
     "Recently updated"
    ],
    "prospects": 7,
-   "internal_link_suggestions": 5,
-   "promoting": true
+   "internal_link_suggestions": 4,
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2224,7 +2249,7 @@
    "linkability": 78,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 7,
    "words": 3542,
    "interactive": true,
    "modified": "2026-11-20T17:41:25+00:00",
@@ -2233,6 +2258,32 @@
     "In-depth (3,542 words)",
     "3 data tables",
     "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/ai/claude-ai-for-affiliate-marketers/",
+   "title": "AI Strategies & Claude AI Tools for Affiliate Revenue Growth 2026",
+   "h1": "Claude AI for Affiliate Marketing: 2025 Anthropic Guide",
+   "description": "Discover how Claude AI enhances productivity by managing tasks, optimizing schedules, and building better habits. Start streamlining your workflow today!",
+   "type": "commercial",
+   "promotion": 70,
+   "linkability": 73,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 4653,
+   "interactive": true,
+   "modified": "2026-10-29T06:26:29+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,653 words)",
+    "6 data tables",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
@@ -2297,7 +2348,7 @@
    "linkability": 76,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 167,
+   "internal_inlinks": 100,
    "words": 1657,
    "interactive": false,
    "modified": "2026-10-25T11:02:11+00:00",
@@ -2417,7 +2468,7 @@
    "linkability": 73,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 7,
    "words": 1110,
    "interactive": false,
    "modified": "2026-09-13T08:04:36+00:00",
@@ -2529,49 +2580,24 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/blogging/11-things-to-outsource-as-a-blogger-for-more-time-and-efficiency/",
-   "title": "11 Things To Outsource As A Blogger For More Time And Efficiency",
-   "h1": "11 Things to Outsource as a Blogger for Faster Scaling",
-   "description": "Stop wasting time! Discover 11 blogging tasks you can easily outsource to skyrocket your efficiency and grow your blog faster. Get more traffic now!",
-   "type": "general_article",
+   "url": "https://affiliatemarketingforsuccess.com/blogging/automate-your-blog-with-artificial-intelligence/",
+   "title": "AI Blog Automation: 2026 Step-by-Step Guide",
+   "h1": "AI Blog Automation Guide: Scale Content & Traffic in 2026",
+   "description": "Discover how to automate your blog with AI in 2025. Save time, boost content output, and enhance quality effortlessly. Start your AI blogging journey today!",
+   "type": "practical_guide",
    "promotion": 65,
-   "linkability": 72,
+   "linkability": 68,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 3117,
+   "internal_inlinks": 1,
+   "words": 2555,
    "interactive": false,
-   "modified": "2026-11-16T07:21:46+00:00",
+   "modified": "2026-09-25T14:58:55+00:00",
    "reasons": [
-    "In-depth (3,117 words)",
+    "In-depth (2,555 words)",
     "1 data table",
-    "Cites 8 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/info/paraphrase-text-using-nlp/",
-   "title": "7 Proven Ways to Paraphrase Text with NLP in 2026",
-   "h1": "How to Paraphrase Text Using NLP: 7 AI Methods (2026 Guide)",
-   "description": "Discover the best NLP paraphrasing tools to enhance your writing. Learn how to paraphrase text effectively and avoid plagiarism with our 2024 guide.",
-   "type": "general_article",
-   "promotion": 65,
-   "linkability": 72,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 5,
-   "words": 2766,
-   "interactive": false,
-   "modified": "2026-09-03T12:25:05+00:00",
-   "reasons": [
-    "In-depth (2,766 words)",
-    "1 data table",
-    "Cites 3 authoritative sources",
-    "Recently updated"
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
@@ -2598,30 +2624,6 @@
     "3 data tables",
     "Recently updated",
     "One of 34 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/blogging/storytelling-in-content-marketing/",
-   "title": "Storytelling in Content Marketing: 2026 Trust Guide",
-   "h1": "Storytelling in Content Marketing: 2026 Trust Guide",
-   "description": "Learn how storytelling in content marketing boosts engagement & conversions. Discover 7 proven techniques with real examples. Start crafting compelling stories today!",
-   "type": "practical_guide",
-   "promotion": 64,
-   "linkability": 71,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 8,
-   "words": 4807,
-   "interactive": false,
-   "modified": "2026-11-14T07:47:32+00:00",
-   "reasons": [
-    "In-depth (4,807 words)",
-    "1 data table",
-    "Recently updated"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
@@ -2686,10 +2688,33 @@
    "linkability": 70,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
+   "internal_inlinks": 4,
    "words": 1137,
    "interactive": false,
    "modified": "2026-11-13T07:31:57+00:00",
+   "reasons": [
+    "1 data table",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/blogging/update-old-blog-content/",
+   "title": "How to Update Old Blog Content for SEO (2026): 7-Step Workflow",
+   "h1": "How to Update Old Blog Content for SEO (2026): A 7-Step Refresh Workflow",
+   "description": "A seven-step workflow for refreshing old posts: find decay in Search Console, prioritise by impressions and CTR, update, then re-index and measure.",
+   "type": "practical_guide",
+   "promotion": 63,
+   "linkability": 70,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 1063,
+   "interactive": false,
+   "modified": "2026-09-16T18:01:48+00:00",
    "reasons": [
     "1 data table",
     "Recently updated"
@@ -2856,12 +2881,34 @@
    "linkability": 69,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 5,
    "words": 1019,
    "interactive": false,
    "modified": "2026-09-16T18:01:41+00:00",
    "reasons": [
     "1 data table",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/seo/generative-engine-optimization/",
+   "title": "Generative Engine Optimization (GEO): A Practical Publisher Guide",
+   "h1": "Generative Engine Optimization (GEO): A Practical Publisher Guide",
+   "description": "Improve AI search discoverability with verifiable comparisons, clear answers, internal links and a practical citation measurement workflow.",
+   "type": "practical_guide",
+   "promotion": 62,
+   "linkability": 69,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 8,
+   "words": 1213,
+   "interactive": false,
+   "modified": "2026-09-13T08:04:24+00:00",
+   "reasons": [
     "Recently updated"
    ],
    "prospects": 0,
@@ -2901,7 +2948,7 @@
    "linkability": 68,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
+   "internal_inlinks": 3,
    "words": 2639,
    "interactive": false,
    "modified": "2026-11-20T21:37:42+00:00",
@@ -2925,7 +2972,7 @@
    "linkability": 68,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 5,
    "words": 2871,
    "interactive": false,
    "modified": "2026-11-20T21:37:19+00:00",
@@ -3081,7 +3128,7 @@
     "Recently updated",
     "One of 153 templated sibling pages — promote the hub first"
    ],
-   "prospects": 7,
+   "prospects": 10,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -3137,29 +3184,6 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/web-hosting/siteground-web-hosting-review-2025/",
-   "title": "SiteGround Review: Is It a Smart Hosting Choice for WordPress Sites?",
-   "h1": "SiteGround Review 2025: Is It the Best WordPress Hosting?",
-   "description": "SiteGround review for bloggers, small businesses, and affiliate marketers choosing beginner-friendly WordPress hosting: verdict, best use cases, alternatives, workflow, risks, FAQs, and affiliate-safe CTAs.",
-   "type": "commercial",
-   "promotion": 59,
-   "linkability": 66,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 7,
-   "words": 1804,
-   "interactive": false,
-   "modified": "2026-09-25T17:57:01+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/email-marketing/getresponse-review-2025/",
    "title": "GetResponse Review (2026): Email Marketing, Funnels & Automation Tested",
    "h1": "GetResponse Review (2026): Email Marketing, Funnels & Automation Tested",
@@ -3169,7 +3193,7 @@
    "linkability": 66,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 16,
+   "internal_inlinks": 12,
    "words": 1831,
    "interactive": false,
    "modified": "2026-09-25T17:51:02+00:00",
@@ -3324,6 +3348,32 @@
     "One of 24 templated sibling pages — promote the hub first"
    ],
    "prospects": 1,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/review/surfer-ai/",
+   "title": "Surfer AI Review 2026: SEO Uses, Pricing, Pros, Cons",
+   "h1": "Surfer AI Review (2025): Is the AI SEO Writer Worth It?",
+   "description": "Surfer AI review for SEO content workflows: use cases, pricing checks, limitations, alternatives, disclosure, and evidence verified for 2026.",
+   "type": "commercial",
+   "promotion": 58,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 7,
+   "words": 2199,
+   "interactive": true,
+   "modified": "2026-11-04T07:26:27+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,199 words)",
+    "3 data tables",
+    "Recently updated",
+    "One of 25 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -3490,16 +3540,6 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/ai/best-chatgpt-alternatives/",
-   "from_title": "Best ChatGPT Alternatives for Writing, Research, SEO, Codin…",
-   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "anchor": "affiliate link",
-   "relevance": 4,
-   "from_strength": 71
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
    "from_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
@@ -3520,13 +3560,23 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/web-hosting/siteground-web-hosting-review-2025/",
-   "from_title": "SiteGround Review: Is It a Smart Hosting Choice for WordPress Sites?",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/compliance/",
+   "from_title": "Affiliate Marketing Compliance: 2026 Rules & Best Practices",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
    "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
    "anchor": "affiliate link",
    "relevance": 4,
-   "from_strength": 59
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/building-an-affiliate-marketing-website/",
+   "from_title": "How to Build an Affiliate Marketing Website: 10-Step Guide",
+   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
+   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
+   "anchor": "affiliate link",
+   "relevance": 4,
+   "from_strength": 0
   },
   {
    "site": "gearuptofit.com",
@@ -3719,16 +3769,6 @@
    "from_strength": 0
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/blogging/wordpress-blogging-tips/",
-   "from_title": "WordPress Blogging Tips: 15 Fixes That Actually Grow Traffic (2026)",
-   "to": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
-   "to_title": "Email Marketing Template Generator: HTML & Plain Text",
-   "anchor": "write email reader",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
    "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/calculators/",
    "from_title": "Free Fitness & Running Calculators | GearUpToFit",
@@ -3792,16 +3832,6 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/review/skool-affiliate-program-review/",
    "from_title": "Skool Affiliate Program Review 2026: 40% Recurring",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-niche-selection-mistakes/",
-   "from_title": "Affiliate Marketing 2026: 7 Niche Selection Mistakes to Avoid",
    "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
    "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
    "anchor": "promote affiliate products",
@@ -3960,16 +3990,6 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/seo/mastering-seo-best-practices/",
-   "from_title": "Affiliate SEO best practices: ranking, revenue, and AI visibility cleanup",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "choose profitable affiliate",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-vs-dropshipping/",
    "from_title": "Affiliate Marketing Vs Dropshipping: 2026 Winner? (2026 Analysis)",
    "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
@@ -4047,16 +4067,6 @@
    "anchor": "web hosting",
    "relevance": 4,
    "from_strength": 62
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/web-hosting/siteground-web-hosting-review-2025/",
-   "from_title": "SiteGround Review: Is It a Smart Hosting Choice for WordPress Sites?",
-   "to": "https://affiliatemarketingforsuccess.com/web-hosting/web-hosting-comparison/",
-   "to_title": "Web Hosting Comparison: The Practical Buyer’s Guide for WordPress and Affiliate Sites",
-   "anchor": "web hosting",
-   "relevance": 4,
-   "from_strength": 59
   },
   {
    "site": "plantastichaven.com",
@@ -4216,22 +4226,12 @@
    "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
    "anchor": "surfer seo",
    "relevance": 4,
-   "from_strength": 0
+   "from_strength": 58
   },
   {
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/best-ai-writing-tools-affiliate-marketers/",
    "from_title": "Best AI Writing Tools for Affiliate Marketers (2026): Compared by Workflow",
-   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
-   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
-   "anchor": "surfer seo",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/best-affiliate-gap-analysis-tools/",
-   "from_title": "Best Affiliate Gap Analysis Tools in 2026",
    "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
    "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
    "anchor": "surfer seo",
@@ -4247,6 +4247,56 @@
    "anchor": "surfer seo",
    "relevance": 4,
    "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
+   "from_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
+   "to_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
+   "anchor": "affiliate marketing",
+   "relevance": 5,
+   "from_strength": 75
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-long-it-takes-to-become-an-affiliate-marketer/",
+   "from_title": "Affiliate Marketing Timeline 2026: 73% Fail Before This",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
+   "to_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
+   "anchor": "affiliate marketing",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
+   "from_title": "Affiliate Growth Checklist: SEO, Trust & Revenue",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
+   "to_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
+   "anchor": "affiliate marketing",
+   "relevance": 4,
+   "from_strength": 79
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/ai/claude-ai-for-affiliate-marketers/",
+   "from_title": "AI Strategies & Claude AI Tools for Affiliate Revenue Growth 2026",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
+   "to_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
+   "anchor": "affiliate marketing",
+   "relevance": 4,
+   "from_strength": 70
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/review-methodology-affiliate-marketing-for-success/",
+   "from_title": "Review Methodology | Affiliate Marketing for Success",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
+   "to_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
+   "anchor": "affiliate marketing",
+   "relevance": 4,
+   "from_strength": 68
   },
   {
    "site": "gearuptogrow.com",
@@ -5431,9 +5481,9 @@
    },
    {
     "site": "affiliatemarketingforsuccess.com",
-    "checked": 181,
-    "healthy": 177,
-    "problems": 4,
+    "checked": 113,
+    "healthy": 111,
+    "problems": 2,
     "critical": 0,
     "not_found": 0,
     "server_error": 0,
@@ -5443,7 +5493,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 4
+    "thin": 2
    },
    {
     "site": "mysticaldigits.com",
@@ -5583,16 +5633,6 @@
    },
    {
     "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/ai/detect-ai-writing",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 63
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
     "url": "https://affiliatemarketingforsuccess.com/blogging/start-affiliate-marketing-blog",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
@@ -5600,16 +5640,6 @@
     "severity": 8,
     "status": 200,
     "words": 235
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/chatgpt-prompts/chatgpt-prompts-for-marketing",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 273
    },
    {
     "site": "efficientgptprompts.com",
@@ -6232,7 +6262,7 @@
     "words": 60
    }
   ],
-  "total_issues": 69,
+  "total_issues": 67,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first)."
  },
  "search_performance": null,
@@ -6240,7 +6270,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 24,
-  "updated_at": "2026-11-23T03:52:05.721Z"
+  "updated_at": "2026-11-23T15:03:57.474Z"
  },
  "wins": [
   {
@@ -6311,43 +6341,43 @@
   }
  ],
  "log": [
-  "03:50:21 connection dataforseo: connected",
-  "03:50:21 connection gmail: connected",
-  "03:50:23 crawl gearuptofit.com: 300/795 urls, fetched 0, 304 0, reused 300",
-  "03:50:24 crawl plantastichaven.com: 159/159 urls, fetched 1, 304 0, reused 158",
-  "03:50:26 crawl gearuptogrow.com: 107/107 urls, fetched 0, 304 0, reused 107",
-  "03:50:26 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
-  "03:50:27 crawl frenchyfab.com: 155/155 urls, fetched 0, 304 0, reused 155",
-  "03:50:28 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "03:50:29 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "03:50:31 crawl mysticaldigits.com: 300/468 urls, fetched 10, 304 0, reused 290",
-  "03:50:32 crawl affiliatemarketingforsuccess.com: 181/181 urls, fetched 1, 304 0, reused 180",
-  "03:50:32 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "03:50:33 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "03:50:33 - search_performance: skipped (Search Console not connected)",
-  "03:50:33 indexation: 69 sitemap URLs with an indexing problem (1 critical)",
-  "03:50:34 link gap: seventhlifepath.com (for mysticaldigits.com) 200 referring pages from offset 0/245, 59 new candidates",
-  "03:52:05 prospects: 0 from the saved queue, 0 saved for next run; 1 competitor link-gap pulls (59 candidates); 8 queries (0 brand-mention), 48 Google-wrapped results resolved, 25 unresolvable; 97 candidates, 28 qualified (0 unlinked mentions), 15 with email, 2 with a dead link we can replace, 0 already linking",
-  "03:52:05 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "03:52:05 self-tuning: next cycle runs up to 24 searches",
-  "03:52:05 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "03:52:07 replies: 6 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "03:52:22 queue screening (free, nothing sent): 17 checked, 6 sendable, 9 retired, 1 switched to a better published address",
-  "03:52:30 outreach: 0 sent, 0 follow-ups, 0 drafts, 1 held for verification",
-  "03:52:30 - preverify: skipped (runs only while outreach is paused)",
-  "03:52:30 link checks: 0 pages, 0 new links won, 0 lost"
+  "15:02:39 connection dataforseo: connected",
+  "15:02:39 connection gmail: connected",
+  "15:02:42 crawl plantastichaven.com: 159/159 urls, fetched 2, 304 0, reused 157",
+  "15:02:43 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
+  "15:02:47 crawl frenchyfab.com: 155/155 urls, fetched 4, 304 0, reused 151",
+  "15:02:48 crawl mysticaldigits.com: 300/468 urls, fetched 4, 304 0, reused 296",
+  "15:02:49 crawl gearuptofit.com: 300/795 urls, fetched 0, 304 0, reused 300",
+  "15:02:49 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "15:02:51 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "15:02:52 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
+  "15:02:56 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 5, 304 0, reused 108",
+  "15:02:58 crawl efficientgptprompts.com: 300/487 urls, fetched 9, 304 0, reused 291",
+  "15:02:58 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "15:02:58 - search_performance: skipped (Search Console not connected)",
+  "15:02:59 indexation: 67 sitemap URLs with an indexing problem (1 critical)",
+  "15:03:00 link gap: frenchbulldogclub.org (for frenchyfab.com) 200 referring pages from offset 0/494, 149 new candidates",
+  "15:03:57 prospects: 0 from the saved queue, 0 saved for next run; 1 competitor link-gap pulls (149 candidates); 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 72 candidates, 35 qualified (0 unlinked mentions), 17 with email, 2 with a dead link we can replace, 0 already linking",
+  "15:03:57 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "15:03:57 self-tuning: next cycle runs up to 24 searches",
+  "15:03:57 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "15:04:01 replies: 41 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "15:04:10 queue screening (free, nothing sent): 19 checked, 10 sendable, 7 retired, 1 switched to a better published address",
+  "15:10:42 outreach: 7 sent, 2 follow-ups, 0 drafts, 15 held for verification, 1 follow-ups retired (address no longer verifiable)",
+  "15:10:42 - preverify: skipped (runs only while outreach is paused)",
+  "15:10:42 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
    "level": "warn",
    "code": "templates_only",
-   "message": "All 74 pitches so far were fixed templates (2 replies).",
+   "message": "All 81 pitches so far were fixed templates (2 replies).",
    "fix": "Add an Anthropic API key under ⚙ Connect so every pitch is written for that exact page and link."
   },
   {
    "level": "info",
    "code": "holds",
-   "message": "12 queued inboxes are held; most often (5) because mailbox unknown.",
+   "message": "19 queued inboxes are held; most often (8) because mailbox accept all.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   }
  ]
