@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-24T14:07:41.098Z",
- "duration_s": 442,
+ "generated_at": "2026-11-24T23:35:22.371Z",
+ "duration_s": 95,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 5.078023999999999
+    "balance_usd": 4.821308000000002
    },
    "gmail": {
     "status": "connected"
@@ -114,10 +114,10 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 20919,
+   "ms": 15803,
    "result": {
     "sites": 10,
-    "pages": 1663
+    "pages": 1658
    }
   },
   "demand": {
@@ -140,7 +140,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 313
+    "internal_suggestions": 304
    }
   },
   "requalify": {
@@ -155,44 +155,44 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 87095,
+   "ms": 70267,
    "result": {
-    "queries": 4,
+    "queries": 3,
     "mention_queries": 0,
-    "serp_results": 172,
-    "candidates": 110,
-    "qualified": 16,
+    "serp_results": 69,
+    "candidates": 69,
+    "qualified": 15,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 154,
-    "with_email": 10,
-    "contact_form": 0,
-    "broken_links": 2,
+    "rejected": 98,
+    "with_email": 6,
+    "contact_form": 1,
+    "broken_links": 0,
     "from_queue": 0,
     "linkgap_calls": 1,
-    "linkgap_candidates": 107,
+    "linkgap_candidates": 89,
     "filtered": {
-     "rarely_links_out": 17,
-     "off_topic_link": 46,
-     "own_site": 1,
-     "gov_or_edu": 5,
-     "already_evaluated": 60,
-     "forum_or_ugc": 8,
-     "platform_or_giant": 15,
-     "sitewide_or_sidebar_link": 3,
-     "spam_score": 11,
-     "page_unresolvable_recently": 11,
-     "duplicate_this_run": 9
+     "off_topic_link": 57,
+     "rarely_links_out": 13,
+     "sitewide_or_sidebar_link": 8,
+     "spam_score": 19,
+     "already_evaluated": 28,
+     "platform_or_giant": 9,
+     "forum_or_ugc": 4,
+     "page_unresolvable_recently": 3,
+     "gov_or_edu": 2,
+     "duplicate_this_run": 4
     },
-    "new_domains": 79,
-    "resolved": 35,
+    "new_domains": 33,
+    "failed_queries": 1,
+    "resolved": 19,
     "resolved_via": {
-     "redirect": 23,
-     "sitemap": 5,
-     "breadcrumb": 7
+     "redirect": 9,
+     "breadcrumb": 6,
+     "sitemap": 4
     },
     "deferred": 0,
-    "unresolved": 16
+    "unresolved": 9
    }
   },
   "bing_submit": {
@@ -209,38 +209,37 @@
   },
   "replies": {
    "ok": true,
-   "ms": 3671,
+   "ms": 2138,
    "result": {
-    "scanned": 42,
-    "replies": 1,
-    "positive": 1,
+    "scanned": 37,
+    "replies": 0,
+    "positive": 0,
     "negative": 0,
     "bounces": 0,
-    "delays": 0,
-    "conditional": 1
+    "delays": 0
    }
   },
   "screen": {
    "ok": true,
-   "ms": 12001,
+   "ms": 1705,
    "result": {
-    "screened": 12,
-    "kept": 5,
-    "retired": 5,
-    "address_updated": 0
+    "screened": 8,
+    "kept": 3,
+    "retired": 3,
+    "address_updated": 1
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 303160,
+   "ms": 18,
    "result": {
     "followups": 0,
-    "sent": 6,
+    "sent": 0,
     "drafted": 0,
-    "skipped": 2,
-    "deferred": 0,
+    "skipped": 0,
+    "deferred": 56,
     "cap": 12,
-    "verification_held": 18
+    "verification_held": 0
    },
    "writer": {
     "claude": 0,
@@ -253,9 +252,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 11443,
+   "ms": 3249,
    "result": {
-    "checked": 10,
+    "checked": 4,
     "won": 0,
     "lost": 0
    }
@@ -263,24 +262,24 @@
  },
  "totals": {
   "sites": 10,
-  "pages_crawled": 1663,
-  "urls_discovered": 2513,
+  "pages_crawled": 1658,
+  "urls_discovered": 2507,
   "promotable": 250,
-  "internal_suggestions": 313,
+  "internal_suggestions": 304,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.1642,
-  "month_usd": 6.8563,
+  "today_usd": 0.242,
+  "month_usd": 6.9341,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
   "calls_this_run": 8
  },
  "outreach": {
   "mode": "send",
-  "ready": 52,
+  "ready": 55,
   "verified_ready": 0,
-  "pending_verification": 52,
+  "pending_verification": 55,
   "holds": {
    "mailbox_unknown": 5,
    "publisher_mismatch": 1,
@@ -289,17 +288,17 @@
   },
   "sent_today": 6,
   "cap_today": 12,
-  "next_send_at": "2026-11-24T14:07:41.102Z",
+  "next_send_at": "2026-11-25T03:00:00.000Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 4597,
-  "qualified": 788,
-  "ready": 52,
+  "prospects_evaluated": 4710,
+  "qualified": 803,
+  "ready": 55,
   "broken_link_ready": 3,
-  "contact_form_only": 164,
-  "no_contact": 289,
+  "contact_form_only": 165,
+  "no_contact": 297,
   "contacted": 87,
   "replied": 3,
   "positive": 1,
@@ -842,12 +841,12 @@
   },
   {
    "date": "2026-11-24",
-   "prospects_evaluated": 4597,
-   "qualified": 788,
-   "ready": 52,
+   "prospects_evaluated": 4710,
+   "qualified": 803,
+   "ready": 55,
    "broken_link_ready": 3,
-   "contact_form_only": 164,
-   "no_contact": 289,
+   "contact_form_only": 165,
+   "no_contact": 297,
    "contacted": 87,
    "replied": 3,
    "positive": 1,
@@ -855,16 +854,16 @@
    "existing_links": 6,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.1642
+   "spend_usd": 0.242
   }
  ],
  "learning": {
   "footprints": [
    {
     "footprint": "link_gap",
-    "queries": 14,
-    "ready": 31,
-    "rate": 1.882
+    "queries": 15,
+    "ready": 34,
+    "rate": 1.944
    },
    {
     "footprint": "statistics",
@@ -904,9 +903,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 96,
+    "queries": 97,
     "ready": 28,
-    "rate": 0.293
+    "rate": 0.29
    },
    {
     "footprint": "recommended_tools",
@@ -982,9 +981,9 @@
    },
    {
     "footprint": "resources",
-    "queries": 130,
+    "queries": 132,
     "ready": 5,
-    "rate": 0.045
+    "rate": 0.044
    },
    {
     "footprint": "mention",
@@ -1464,18 +1463,18 @@
   {
    "domain": "gearuptofit.com",
    "pages": 300,
-   "discovered": 795,
+   "discovered": 794,
    "sitemaps": 7,
    "eligible": 25,
    "top": "https://gearuptofit.com/shoe-finder/methodology/"
   },
   {
    "domain": "plantastichaven.com",
-   "pages": 159,
-   "discovered": 159,
-   "sitemaps": 5,
+   "pages": 154,
+   "discovered": 154,
+   "sitemaps": 4,
    "eligible": 25,
-   "top": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/"
+   "top": "https://plantastichaven.com/overwatered-spider-plant/"
   },
   {
    "domain": "gearuptogrow.com",
@@ -1696,6 +1695,31 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/running-calorie-calculator/",
+   "title": "Running Calorie Calculator: Pace & Incline | Gear Up to Fit",
+   "h1": "Running Calorie Calculator: Net vs. Gross, Incline & Fueling Lab",
+   "description": "Calculate exact Net and Gross calories burned running by weight, pace, distance, treadmill incline, and terrain using ACSM VO2, Minetti slope, and MET models.",
+   "type": "interactive_tool",
+   "promotion": 79,
+   "linkability": 88,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 4,
+   "words": 4693,
+   "interactive": true,
+   "modified": "2026-09-26T17:36:21+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,693 words)",
+    "2 data tables",
+    "Recently updated"
+   ],
+   "prospects": 5,
+   "internal_link_suggestions": 2,
+   "promoting": true
+  },
+  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/personal-development/goal-achievement/",
    "title": "Goal Achievement: A 7-Step Framework to Finish Goals",
@@ -1802,7 +1826,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 11,
    "words": 3514,
    "interactive": true,
    "modified": "2026-11-15T07:33:08+00:00",
@@ -1813,32 +1837,6 @@
     "Recently updated"
    ],
    "prospects": 14,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
-   "title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
-   "h1": "How to Control Emotional Eating & Stop Cravings (2026 Guide)",
-   "description": "Self-help for emotional eaters is possible! Learn to identify triggers and develop healthy eating habits for lasting change.",
-   "type": "practical_guide",
-   "promotion": 77,
-   "linkability": 81,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 1,
-   "words": 3309,
-   "interactive": false,
-   "modified": "2026-09-21T06:03:08+00:00",
-   "reasons": [
-    "In-depth (3,309 words)",
-    "1 data table",
-    "Cites 6 authoritative sources",
-    "Recently updated",
-    "Under-linked internally (1 inbound)"
-   ],
-   "prospects": 7,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -1886,7 +1884,7 @@
    ],
    "prospects": 8,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -1899,7 +1897,7 @@
    "linkability": 83,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 3,
+   "internal_inlinks": 4,
    "words": 1591,
    "interactive": true,
    "modified": "2026-09-08T13:32:42+00:00",
@@ -1909,7 +1907,7 @@
     "Recently updated"
    ],
    "prospects": 12,
-   "internal_link_suggestions": 3,
+   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -1956,9 +1954,9 @@
     "Has an interactive tool/quiz — earns links naturally",
     "Recently updated"
    ],
-   "prospects": 5,
+   "prospects": 8,
    "internal_link_suggestions": 1,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -1997,7 +1995,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 25,
+   "internal_inlinks": 26,
    "words": 999,
    "interactive": true,
    "modified": null,
@@ -2021,17 +2019,17 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 43,
-   "words": 4515,
+   "words": 4364,
    "interactive": false,
-   "modified": "2026-11-08T06:06:02+00:00",
+   "modified": "2026-11-24T20:46:20+00:00",
    "reasons": [
-    "In-depth (4,515 words)",
+    "In-depth (4,364 words)",
     "4 data tables",
-    "Cites 4 authoritative sources",
+    "Cites 9 authoritative sources",
     "Recently updated",
     "Flagship asset"
    ],
-   "prospects": 7,
+   "prospects": 8,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -2185,6 +2183,57 @@
    "promoting": true
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/fitness-and-health-calculators/daily-calorie-intake-calculation-tool/",
+   "title": "Master Your Daily Calorie Needs for Fast Weight Loss | GearUpToFit",
+   "h1": "Daily Calorie Calculator 2026: TDEE, BMR & Weight Loss Tool",
+   "description": "Calculate your daily calorie needs for weight loss or maintenance with our personalized calorie intake estimator and tips. Boost your health today!",
+   "type": "general_article",
+   "promotion": 72,
+   "linkability": 76,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 2137,
+   "interactive": true,
+   "modified": "2026-09-30T07:18:35+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,137 words)",
+    "2 data tables",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "plantastichaven.com",
+   "url": "https://plantastichaven.com/overwatered-spider-plant/",
+   "title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "h1": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "description": "Reviving an overwatered spider plant: unpot it, trim the mushy brown roots, repot into fresh free-draining mix, and hold off watering while it recovers.",
+   "type": "practical_guide",
+   "promotion": 71,
+   "linkability": 79,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 17,
+   "words": 2556,
+   "interactive": false,
+   "modified": "2026-11-24T21:13:41+00:00",
+   "reasons": [
+    "In-depth (2,556 words)",
+    "2 data tables",
+    "Cites 8 authoritative sources",
+    "Recently updated"
+   ],
+   "prospects": 10,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
    "site": "plantastichaven.com",
    "url": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
    "title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
@@ -2206,31 +2255,6 @@
     "Recently updated"
    ],
    "prospects": 8,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "plantastichaven.com",
-   "url": "https://plantastichaven.com/overwatered-spider-plant/",
-   "title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "h1": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "description": "Reviving an overwatered spider plant: unpot it, trim the mushy brown roots, repot into fresh free-draining mix, and hold off watering while it recovers.",
-   "type": "practical_guide",
-   "promotion": 71,
-   "linkability": 79,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 19,
-   "words": 2569,
-   "interactive": false,
-   "modified": "2026-10-22T04:58:51+00:00",
-   "reasons": [
-    "In-depth (2,569 words)",
-    "2 data tables",
-    "Cites 8 authoritative sources",
-    "Recently updated"
-   ],
-   "prospects": 10,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -2555,7 +2579,7 @@
    "linkability": 67,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 293,
+   "internal_inlinks": 294,
    "words": 1406,
    "interactive": false,
    "modified": "2026-10-04T18:13:49.000Z",
@@ -2644,6 +2668,31 @@
    "promoting": true
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/fitness/hiit-training-guide-losing-weight-in-a-short-time-is-possible/",
+   "title": "Ultimate HIIT Training Guide for Rapid Fat Loss & Boosted Metabolism | GearUpToFit",
+   "h1": "HIIT for Weight Loss: 2026 Fat Loss & Metabolism Guide",
+   "description": "Beginner HIIT workouts for busy schedules. Achieve weight loss and fitness goals with high-intensity interval training. Start transforming today!",
+   "type": "practical_guide",
+   "promotion": 65,
+   "linkability": 68,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 3305,
+   "interactive": false,
+   "modified": "2026-09-23T08:08:39+00:00",
+   "reasons": [
+    "In-depth (3,305 words)",
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 4,
+   "promoting": true
+  },
+  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/productivity/weekly-review-checklist/",
    "title": "Weekly Review Checklist: Plan Your Week in 20 Minutes",
@@ -2715,7 +2764,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2761,32 +2810,6 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
-   "title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
-   "h1": "Treadmill Workout for Weight Loss: 2026 Fat Burn Guide",
-   "description": "Treadmill for weight loss: Effective workouts, tips, and strategies to help you achieve your fitness goals and transform your health.",
-   "type": "general_article",
-   "promotion": 63,
-   "linkability": 65,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 1,
-   "words": 6295,
-   "interactive": false,
-   "modified": "2026-09-21T06:18:07+00:00",
-   "reasons": [
-    "In-depth (6,295 words)",
-    "9 data tables",
-    "Recently updated",
-    "Under-linked internally (1 inbound)",
-    "Health/YMYL topic — pitch only to expert publishers"
-   ],
-   "prospects": 2,
-   "internal_link_suggestions": 4,
    "promoting": false
   },
   {
@@ -2884,7 +2907,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 1,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -2975,6 +2998,33 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
+   "title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
+   "h1": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
+   "description": "Discover if Life Path 5 & 8 thrive in love & career. Expert analysis of their communication, challenges, and spiritual synergy. Download free guide now!",
+   "type": "practical_guide",
+   "promotion": 61,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 3434,
+   "interactive": false,
+   "modified": "2026-11-08T05:28:55+00:00",
+   "reasons": [
+    "In-depth (3,434 words)",
+    "3 data tables",
+    "Cites 3 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (2 inbound)",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
    "promoting": true
   },
   {
@@ -3121,7 +3171,7 @@
     "Recently updated",
     "One of 42 templated sibling pages — promote the hub first"
    ],
-   "prospects": 5,
+   "prospects": 8,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -3217,7 +3267,7 @@
     "Recently updated",
     "One of 42 templated sibling pages — promote the hub first"
    ],
-   "prospects": 4,
+   "prospects": 5,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -3301,7 +3351,7 @@
    "linkability": 78,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 9,
    "words": 2472,
    "interactive": false,
    "modified": "2026-11-08T07:51:21+00:00",
@@ -3309,7 +3359,7 @@
     "Original method/data — citation-worthy",
     "In-depth (2,472 words)",
     "Recently updated",
-    "One of 156 templated sibling pages — promote the hub first"
+    "One of 151 templated sibling pages — promote the hub first"
    ],
    "prospects": 8,
    "internal_link_suggestions": 1,
@@ -3401,7 +3451,7 @@
    "linkability": 78,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 7,
    "words": 2199,
    "interactive": true,
    "modified": "2026-11-04T07:26:27+00:00",
@@ -3438,56 +3488,6 @@
     "One of 299 templated sibling pages — promote the hub first"
    ],
    "prospects": 1,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "mysticaldigits.com",
-   "url": "https://mysticaldigits.com/ancestor-attributes-calculator/",
-   "title": "Ancestor Attributes Calculators: What They Can Suggest and What They…",
-   "h1": "Ancestor Attributes Calculators: What They Can Suggest and What They…",
-   "description": "Frustrated with family history? Ancestor attributes calculator unlocks your heritage. Proven tool reveals ethnicity & traits. See how to transform your lineage",
-   "type": "interactive_tool",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 3,
-   "words": 1263,
-   "interactive": false,
-   "modified": "2026-11-07T19:59:10+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated",
-    "One of 299 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": true
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "h1": "Best Brushes for French Bulldogs: Shiny Coats",
-   "description": "Brushes for French Bulldogs a hassle? Discover essential grooming tools for a healthy coat. Proven solution for shedding! See how today!",
-   "type": "general_article",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 3,
-   "words": 4137,
-   "interactive": true,
-   "modified": "2026-11-07T19:40:32+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,137 words)",
-    "20 data tables",
-    "Recently updated",
-    "One of 153 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 2,
    "internal_link_suggestions": 5,
    "promoting": false
   }
@@ -3694,6 +3694,26 @@
    "from_strength": 0
   },
   {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/daily-calorie-intake-calculation-tool/",
+   "from_title": "Master Your Daily Calorie Needs for Fast Weight Loss | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-calorie-calculator/",
+   "to_title": "Running Calorie Calculator: Pace & Incline | Gear Up to Fit",
+   "anchor": "calorie calculator",
+   "relevance": 4,
+   "from_strength": 72
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/calculators/",
+   "from_title": "Free Fitness & Running Calculators | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-calorie-calculator/",
+   "to_title": "Running Calorie Calculator: Pace & Incline | Gear Up to Fit",
+   "anchor": "running calorie calculator",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-strategies/",
    "from_title": "Affiliate Marketing Strategies (2026): 9 Systems of Affiliate Growth",
@@ -3701,6 +3721,16 @@
    "to_title": "Affiliate Growth Checklist: SEO, Trust & Revenue",
    "anchor": "affiliate growth",
    "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/numerology-calculators/",
+   "from_title": "Free Numerology Calculators: Birth Date, Name and House Number Tools | Mystical Digits",
+   "to": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
+   "to_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
+   "anchor": "life path",
+   "relevance": 7,
    "from_strength": 0
   },
   {
@@ -3742,16 +3772,6 @@
    "anchor": "life path",
    "relevance": 5,
    "from_strength": 65
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/revealing-birth-number-6-personality/",
-   "from_title": "Birth Number 6 Personality: 2026 Guide & Insights | Mystical Digits",
-   "to": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
-   "to_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
-   "anchor": "life path",
-   "relevance": 5,
-   "from_strength": 62
   },
   {
    "site": "gearuptogrow.com",
@@ -3822,6 +3842,16 @@
    "anchor": "running pace calculator",
    "relevance": 4,
    "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/running-calorie-calculator/",
+   "from_title": "Running Calorie Calculator: Pace & Incline | Gear Up to Fit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
+   "relevance": 3,
+   "from_strength": 79
   },
   {
    "site": "gearuptofit.com",
@@ -4105,6 +4135,56 @@
   },
   {
    "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "from_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 71
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/philodendron-cordatum-care/",
+   "from_title": "Philodendron Cordatum Care: 2026 Heartleaf Guide",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 52
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/how-often-to-water-pothos/",
+   "from_title": "Pothos Watering Guide: How Often to Water Pothos Indoors",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 52
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/how-to-make-spider-plant-bushier/",
+   "from_title": "Bushy Spider Plant: 7 Proven Tips for Lush Growth [2026]",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 51
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/airplane-plant-vs-spider-plant/",
+   "from_title": "Airplane Plant vs Spider Plant: Same Plant, Two Names",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 51
+  },
+  {
+   "site": "plantastichaven.com",
    "from": "https://plantastichaven.com/plants-that-look-like-spider-plants/",
    "from_title": "Plants That Look Like Spider Plants: 7 Lookalikes + ID Chart",
    "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
@@ -4152,56 +4232,6 @@
    "anchor": "toxic cats",
    "relevance": 6,
    "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/zebra-spider-plant/",
-   "from_title": "Zebra Spider Plant Care: Light, Water, and Troubleshooting",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 5,
-   "from_strength": 54
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "from_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 71
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/mandarin-spider-plant/",
-   "from_title": "Mandarin Spider Plant Care: Identification and Growing Tips",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 55
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/spider-plant-hawaiian/",
-   "from_title": "Hawaiian Spider Plant Care: Light, Water, and Identification Tips",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 54
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/philodendron-cordatum-care/",
-   "from_title": "Philodendron Cordatum Care: 2026 Heartleaf Guide",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 52
   },
   {
    "site": "gearuptogrow.com",
@@ -4495,6 +4525,46 @@
   },
   {
    "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness/",
+   "from_title": "Fitness Articles | Workouts, HIIT, Strength Training & Exercise Guides | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness/hiit-training-guide-losing-weight-in-a-short-time-is-possible/",
+   "to_title": "Ultimate HIIT Training Guide for Rapid Fat Loss & Boosted Metabolism | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/daily-calorie-intake-calculation-tool/",
+   "from_title": "Master Your Daily Calorie Needs for Fast Weight Loss | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness/hiit-training-guide-losing-weight-in-a-short-time-is-possible/",
+   "to_title": "Ultimate HIIT Training Guide for Rapid Fat Loss & Boosted Metabolism | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
+   "from_strength": 72
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/nutrition/",
+   "from_title": "Nutrition Articles | Fueling, Hydration, Supplements & Meal Planning | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness/hiit-training-guide-losing-weight-in-a-short-time-is-possible/",
+   "to_title": "Ultimate HIIT Training Guide for Rapid Fat Loss & Boosted Metabolism | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/weight-loss-guide/",
+   "from_title": "Runner's Weight Loss Guide: Sustainable Fat Loss Tips 2026 | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness/hiit-training-guide-losing-weight-in-a-short-time-is-possible/",
+   "to_title": "Ultimate HIIT Training Guide for Rapid Fat Loss & Boosted Metabolism | GearUpToFit",
+   "anchor": "weight loss",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-7",
    "from_title": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch 7: Which Should You Buy?",
    "to": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-ultra",
@@ -4594,46 +4664,6 @@
    "from_strength": 0
   },
   {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/fitness/",
-   "from_title": "Fitness Articles | Workouts, HIIT, Strength Training & Exercise Guides | GearUpToFit",
-   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
-   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
-   "anchor": "weight loss",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
-   "from_title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
-   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
-   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
-   "anchor": "weight loss",
-   "relevance": 4,
-   "from_strength": 77
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/nutrition/",
-   "from_title": "Nutrition Articles | Fueling, Hydration, Supplements & Meal Planning | GearUpToFit",
-   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
-   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
-   "anchor": "weight loss",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/weight-loss-guide/",
-   "from_title": "Runner's Weight Loss Guide: Sustainable Fat Loss Tips 2026 | GearUpToFit",
-   "to": "https://gearuptofit.com/running/treadmill-weight-loss-workout/",
-   "to_title": "High-Intensity Treadmill Workout for Rapid Fat Loss Success | GearUpToFit",
-   "anchor": "weight loss",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/decode-your-personality-birth-number-7/",
    "from_title": "Birth Number 7 Personality: Traits & Meanings | Mystical Digits",
@@ -4691,6 +4721,56 @@
    "to_title": "How Fitness Watch Match scores watches — methodology",
    "anchor": "fitness watch",
    "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/unlocking-compatibility-between-life-paths-1-and-11/",
+   "from_title": "Life Path 1 & 11 Compatibility: Key Insights for 2026",
+   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
+   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/the-mysteries-revealed-delving-into-life-path-number-3/",
+   "from_title": "Life Path 3 Meaning: Creativity, Expression, and Balanced Growth | Mystical Digits",
+   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
+   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/numerology-and-anniversary-date-selection/",
+   "from_title": "Numerology Anniversary Dates 2026: 7-Step Guide",
+   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
+   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/compatibility-of-life-path-1-and-5/",
+   "from_title": "Life Path 1 and 5 Compatibility: Key Insights & Dynamics",
+   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
+   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/compatibility/",
+   "from_title": "Compatibility Guides: Life Path, Moon Sign & Relationship Reflection Tools",
+   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
+   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
+   "anchor": "life path",
+   "relevance": 7,
    "from_strength": 0
   },
   {
@@ -5365,133 +5445,53 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/unlocking-compatibility-between-life-paths-1-and-11/",
-   "from_title": "Life Path 1 & 11 Compatibility: Key Insights for 2026",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
+   "from": "https://mysticaldigits.com/numerology-name-numbers-reading-calculator/",
+   "from_title": "Get Your FREE Numerology Name Numbers Reading Calculator Tool (Updated…",
+   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "anchor": "reading calculator",
+   "relevance": 6,
+   "from_strength": 55
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/a-comprehensive-guide-to-understanding-numerology/",
+   "from_title": "Numerology: A Complete Guide to Life Path Numbers and Core Meanings",
+   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "anchor": "personal numerology",
+   "relevance": 4,
    "from_strength": 0
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-mysteries-revealed-delving-into-life-path-number-3/",
-   "from_title": "Life Path 3 Meaning: Creativity, Expression, and Balanced Growth | Mystical Digits",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
+   "from": "https://mysticaldigits.com/numerology-dream-interpretation/",
+   "from_title": "Numerology Dream Interpretation: Decode Your 2026 Visions",
+   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "anchor": "personal numerology",
+   "relevance": 4,
    "from_strength": 0
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-and-anniversary-date-selection/",
-   "from_title": "Numerology Anniversary Dates 2026: 7-Step Guide",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
+   "from": "https://mysticaldigits.com/the-enigmatic-power-of-26-numerology/",
+   "from_title": "Numerology Number 26: Symbolism & Meaning | Mystical Digits",
+   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "anchor": "personal numerology",
+   "relevance": 4,
    "from_strength": 0
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/compatibility-of-life-path-1-and-5/",
-   "from_title": "Life Path 1 and 5 Compatibility: Key Insights & Dynamics",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/compatibility/",
-   "from_title": "Compatibility Guides: Life Path, Moon Sign & Relationship Reflection Tools",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
+   "from": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
+   "from_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
+   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
+   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
+   "anchor": "personal numerology reading",
    "relevance": 3,
-   "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/high-protein-diet-french-bulldogs-muscle-fat-energy/",
-   "from_title": "High-Protein Diets for French Bulldogs: When They Help",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-stress-signs-fixes/",
-   "from_title": "Low-Calorie Treats for French Bulldogs: Safe Rewards",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/nutritious-dog-food-toppers-french-bulldogs/",
-   "from_title": "French Bulldog Nutrition for Picky Eaters: Food Toppers",
-   "to": "https://frenchyfab.com/homemade-diet-vs-commercial-dog-food-for-french-bulldogs/",
-   "to_title": "Practical Frenchie Diet Options: Homemade vs. Commercial",
-   "anchor": "practical frenchie diet",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/food-aggression-in-french-bulldogs/",
-   "from_title": "French Bulldog Food Aggression: Safety, Management",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/complete-guide-french-bulldog-nutrition/",
-   "from_title": "What Do French Bulldogs Eat? Diet, Portions & Food Guide",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 58
+   "from_strength": 79
   }
  ],
  "indexation": {
@@ -5499,10 +5499,10 @@
    {
     "site": "gearuptofit.com",
     "checked": 300,
-    "healthy": 291,
-    "problems": 9,
-    "critical": 1,
-    "not_found": 1,
+    "healthy": 292,
+    "problems": 8,
+    "critical": 0,
+    "not_found": 0,
     "server_error": 0,
     "noindex": 0,
     "canonical_mismatch": 0,
@@ -5514,8 +5514,8 @@
    },
    {
     "site": "plantastichaven.com",
-    "checked": 159,
-    "healthy": 156,
+    "checked": 154,
+    "healthy": 151,
     "problems": 3,
     "critical": 0,
     "not_found": 0,
@@ -5658,15 +5658,6 @@
    }
   ],
   "issues": [
-   {
-    "site": "gearuptofit.com",
-    "url": "https://gearuptofit.com/fitness-plan",
-    "issue": "not_found",
-    "label": "404/410 in sitemap",
-    "fix": "Restore the page or 301-redirect it to the closest live page, then remove the old URL from the sitemap.",
-    "severity": 1,
-    "status": 404
-   },
    {
     "site": "efficientgptprompts.com",
     "url": "https://efficientgptprompts.com/shop",
@@ -6326,7 +6317,7 @@
     "words": 60
    }
   ],
-  "total_issues": 67,
+  "total_issues": 66,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first)."
  },
  "search_performance": null,
@@ -6334,7 +6325,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 24,
-  "updated_at": "2026-11-24T14:02:10.804Z"
+  "updated_at": "2026-11-24T23:35:15.137Z"
  },
  "wins": [
   {
@@ -6405,31 +6396,32 @@
   }
  ],
  "log": [
-  "14:00:22 connection dataforseo: connected",
-  "14:00:22 connection gmail: connected",
-  "14:00:28 crawl plantastichaven.com: 159/159 urls, fetched 35, 304 0, reused 124",
-  "14:00:28 crawl gearuptogrow.com: 107/107 urls, fetched 39, 304 0, reused 68",
-  "14:00:33 crawl frenchyfab.com: 155/155 urls, fetched 20, 304 0, reused 135",
-  "14:00:33 crawl gearuptofit.com: 300/795 urls, fetched 1, 304 0, reused 299",
-  "14:00:34 crawl mysticaldigits.com: 300/468 urls, fetched 12, 304 0, reused 288",
-  "14:00:35 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "14:00:36 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "14:00:39 crawl micegoneguide.com: 43/43 urls, fetched 6, 304 0, reused 37",
-  "14:00:42 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 83, 304 0, reused 30",
-  "14:00:43 crawl efficientgptprompts.com: 300/487 urls, fetched 13, 304 0, reused 287",
-  "14:00:43 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "14:00:43 - search_performance: skipped (Search Console not connected)",
-  "14:00:43 indexation: 67 sitemap URLs with an indexing problem (2 critical)",
-  "14:00:44 link gap: earthkind.com (for micegoneguide.com) 200 referring pages from offset 0/567, 107 new candidates",
-  "14:02:10 prospects: 0 from the saved queue, 0 saved for next run; 1 competitor link-gap pulls (107 candidates); 4 queries (0 brand-mention), 35 Google-wrapped results resolved, 16 unresolvable; 110 candidates, 16 qualified (0 unlinked mentions), 10 with email, 2 with a dead link we can replace, 0 already linking",
-  "14:02:10 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "14:02:10 self-tuning: next cycle runs up to 24 searches",
-  "14:02:10 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "14:02:14 replies: 42 scanned, 1 replies, 0 failures, 0 delays; ok",
-  "14:02:26 queue screening (free, nothing sent): 12 checked, 5 sendable, 5 retired, 0 switched to a better published address",
-  "14:07:29 outreach: 6 sent, 0 follow-ups, 0 drafts, 18 held for verification",
-  "14:07:29 - preverify: skipped (runs only while outreach is paused)",
-  "14:07:41 link checks: 10 pages, 0 new links won, 0 lost"
+  "23:33:48 connection dataforseo: connected",
+  "23:33:48 connection gmail: connected",
+  "23:33:50 crawl gearuptofit.com: 300/794 urls, fetched 5, 304 0, reused 295",
+  "23:33:52 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
+  "23:33:54 crawl plantastichaven.com: 154/154 urls, fetched 14, 304 0, reused 140",
+  "23:33:56 crawl frenchyfab.com: 155/155 urls, fetched 2, 304 0, reused 153",
+  "23:33:57 crawl mysticaldigits.com: 300/468 urls, fetched 11, 304 0, reused 289",
+  "23:33:58 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "23:33:58 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "23:34:00 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 4, 304 0, reused 109",
+  "23:34:00 crawl micegoneguide.com: 43/43 urls, fetched 2, 304 0, reused 41",
+  "23:34:04 crawl efficientgptprompts.com: 300/487 urls, fetched 1, 304 0, reused 299",
+  "23:34:04 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "23:34:04 - search_performance: skipped (Search Console not connected)",
+  "23:34:04 indexation: 66 sitemap URLs with an indexing problem (1 critical)",
+  "23:34:05 link gap: skedaddlewildlife.com (for micegoneguide.com) 200 referring pages from offset 0/597, 89 new candidates",
+  "23:34:36 dataforseo: serp/google/organic/live/advanced failed 40101 Internal SE Server Error.",
+  "23:35:15 prospects: 0 from the saved queue, 0 saved for next run; 1 competitor link-gap pulls (89 candidates); 3 queries (0 brand-mention), 19 Google-wrapped results resolved, 9 unresolvable; 69 candidates, 15 qualified (0 unlinked mentions), 6 with email, 0 with a dead link we can replace, 0 already linking",
+  "23:35:15 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "23:35:15 self-tuning: next cycle runs up to 24 searches",
+  "23:35:15 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "23:35:17 replies: 37 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "23:35:18 queue screening (free, nothing sent): 8 checked, 3 sendable, 3 retired, 1 switched to a better published address",
+  "23:35:19 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "23:35:19 - preverify: skipped (runs only while outreach is paused)",
+  "23:35:22 link checks: 4 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
