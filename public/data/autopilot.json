@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-24T02:26:34.142Z",
- "duration_s": 88,
+ "generated_at": "2026-11-24T14:07:41.098Z",
+ "duration_s": 442,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 5.418979999999998
+    "balance_usd": 5.078023999999999
    },
    "gmail": {
     "status": "connected"
@@ -29,14 +29,14 @@
    "key": true,
    "enabled": true,
    "daily_limit": 24,
-   "used_today": 0,
+   "used_today": 15,
    "balance": {
     "provider": "verifalia",
-    "free_credits": 5,
-    "reset_in": "08:55:44",
-    "checked_at": "2026-11-23T15:04:16.000Z"
+    "free_credits": 10,
+    "reset_in": "09:57:22",
+    "checked_at": "2026-11-24T14:02:37.773Z"
    },
-   "catch_all_domains_skipped": 46
+   "catch_all_domains_skipped": 50
   }
  },
  "setup": [
@@ -114,7 +114,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 42672,
+   "ms": 20919,
    "result": {
     "sites": 10,
     "pages": 1663
@@ -140,7 +140,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 314
+    "internal_suggestions": 313
    }
   },
   "requalify": {
@@ -155,33 +155,44 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 24152,
+   "ms": 87095,
    "result": {
-    "queries": 0,
+    "queries": 4,
     "mention_queries": 0,
-    "serp_results": 0,
-    "candidates": 43,
-    "qualified": 9,
+    "serp_results": 172,
+    "candidates": 110,
+    "qualified": 16,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 120,
-    "with_email": 5,
-    "contact_form": 4,
-    "broken_links": 1,
+    "rejected": 154,
+    "with_email": 10,
+    "contact_form": 0,
+    "broken_links": 2,
     "from_queue": 0,
     "linkgap_calls": 1,
-    "linkgap_candidates": 129,
+    "linkgap_candidates": 107,
     "filtered": {
-     "rarely_links_out": 23,
-     "spam_score": 8,
+     "rarely_links_out": 17,
+     "off_topic_link": 46,
+     "own_site": 1,
+     "gov_or_edu": 5,
+     "already_evaluated": 60,
+     "forum_or_ugc": 8,
+     "platform_or_giant": 15,
      "sitewide_or_sidebar_link": 3,
-     "forum_or_ugc": 6,
-     "off_topic_link": 25,
-     "gov_or_edu": 2,
-     "already_evaluated": 3,
-     "own_site": 1
+     "spam_score": 11,
+     "page_unresolvable_recently": 11,
+     "duplicate_this_run": 9
     },
-    "deferred": 0
+    "new_domains": 79,
+    "resolved": 35,
+    "resolved_via": {
+     "redirect": 23,
+     "sitemap": 5,
+     "breadcrumb": 7
+    },
+    "deferred": 0,
+    "unresolved": 16
    }
   },
   "bing_submit": {
@@ -198,37 +209,38 @@
   },
   "replies": {
    "ok": true,
-   "ms": 3296,
+   "ms": 3671,
    "result": {
-    "scanned": 35,
-    "replies": 0,
-    "positive": 0,
+    "scanned": 42,
+    "replies": 1,
+    "positive": 1,
     "negative": 0,
     "bounces": 0,
-    "delays": 0
+    "delays": 0,
+    "conditional": 1
    }
   },
   "screen": {
    "ok": true,
-   "ms": 8059,
+   "ms": 12001,
    "result": {
-    "screened": 7,
-    "kept": 3,
-    "retired": 2,
-    "address_updated": 1
+    "screened": 12,
+    "kept": 5,
+    "retired": 5,
+    "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 12,
+   "ms": 303160,
    "result": {
     "followups": 0,
-    "sent": 0,
+    "sent": 6,
     "drafted": 0,
-    "skipped": 0,
-    "deferred": 63,
+    "skipped": 2,
+    "deferred": 0,
     "cap": 12,
-    "verification_held": 0
+    "verification_held": 18
    },
    "writer": {
     "claude": 0,
@@ -241,7 +253,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 8099,
+   "ms": 11443,
    "result": {
     "checked": 10,
     "won": 0,
@@ -254,45 +266,43 @@
   "pages_crawled": 1663,
   "urls_discovered": 2513,
   "promotable": 250,
-  "internal_suggestions": 314,
+  "internal_suggestions": 313,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.0587,
-  "month_usd": 6.7508,
+  "today_usd": 0.1642,
+  "month_usd": 6.8563,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 2
+  "calls_this_run": 8
  },
  "outreach": {
   "mode": "send",
-  "ready": 63,
+  "ready": 52,
   "verified_ready": 0,
-  "pending_verification": 63,
+  "pending_verification": 52,
   "holds": {
-   "publisher_mismatch": 1,
-   "mailbox_recently_inconclusive": 2,
-   "mailbox_accept_all": 8,
    "mailbox_unknown": 5,
-   "mx_dns_unverified": 1,
-   "mailbox_invalid": 2
+   "publisher_mismatch": 1,
+   "mailbox_accept_all": 6,
+   "mailbox_recently_inconclusive": 1
   },
-  "sent_today": 0,
+  "sent_today": 6,
   "cap_today": 12,
-  "next_send_at": "2026-11-24T03:00:00.000Z",
+  "next_send_at": "2026-11-24T14:07:41.102Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 4427,
-  "qualified": 772,
-  "ready": 63,
-  "broken_link_ready": 2,
+  "prospects_evaluated": 4597,
+  "qualified": 788,
+  "ready": 52,
+  "broken_link_ready": 3,
   "contact_form_only": 164,
-  "no_contact": 283,
-  "contacted": 81,
-  "replied": 2,
-  "positive": 0,
+  "no_contact": 289,
+  "contacted": 87,
+  "replied": 3,
+  "positive": 1,
   "won": 0,
   "existing_links": 6,
   "declined": 0,
@@ -832,29 +842,29 @@
   },
   {
    "date": "2026-11-24",
-   "prospects_evaluated": 4427,
-   "qualified": 772,
-   "ready": 63,
-   "broken_link_ready": 2,
+   "prospects_evaluated": 4597,
+   "qualified": 788,
+   "ready": 52,
+   "broken_link_ready": 3,
    "contact_form_only": 164,
-   "no_contact": 283,
-   "contacted": 81,
-   "replied": 2,
-   "positive": 0,
+   "no_contact": 289,
+   "contacted": 87,
+   "replied": 3,
+   "positive": 1,
    "won": 0,
    "existing_links": 6,
    "declined": 0,
    "bounced": 6,
-   "spend_usd": 0.0587
+   "spend_usd": 0.1642
   }
  ],
  "learning": {
   "footprints": [
    {
     "footprint": "link_gap",
-    "queries": 13,
-    "ready": 36,
-    "rate": 2.313
+    "queries": 14,
+    "ready": 31,
+    "rate": 1.882
    },
    {
     "footprint": "statistics",
@@ -876,9 +886,9 @@
    },
    {
     "footprint": "useful_links",
-    "queries": 16,
+    "queries": 17,
     "ready": 6,
-    "rate": 0.368
+    "rate": 0.35
    },
    {
     "footprint": "sources",
@@ -894,9 +904,9 @@
    },
    {
     "footprint": "intent",
-    "queries": 95,
-    "ready": 26,
-    "rate": 0.276
+    "queries": 96,
+    "ready": 28,
+    "rate": 0.293
    },
    {
     "footprint": "recommended_tools",
@@ -923,16 +933,10 @@
     "rate": 0.167
    },
    {
-    "footprint": "phrase_blog",
-    "queries": 3,
-    "ready": 0,
-    "rate": 0.167
-   },
-   {
     "footprint": "best_guides",
-    "queries": 69,
+    "queries": 70,
     "ready": 10,
-    "rate": 0.153
+    "rate": 0.151
    },
    {
     "footprint": "further_reading",
@@ -948,6 +952,12 @@
    },
    {
     "footprint": "best_of_web",
+    "queries": 4,
+    "ready": 0,
+    "rate": 0.143
+   },
+   {
+    "footprint": "phrase_blog",
     "queries": 4,
     "ready": 0,
     "rate": 0.143
@@ -984,6 +994,14 @@
    }
   ],
   "assets": [
+   {
+    "url": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
+    "sent": 1,
+    "replied": 1,
+    "positive": 1,
+    "won": 0,
+    "rate": 1
+   },
    {
     "url": "https://gearuptofit.com/watch-match/",
     "sent": 1,
@@ -1058,14 +1076,6 @@
    },
    {
     "url": "https://micegoneguide.com/prevent-mice-in-kitchen/",
-    "sent": 1,
-    "replied": 0,
-    "positive": 0,
-    "won": 0,
-    "rate": 0.25
-   },
-   {
-    "url": "https://micegoneguide.com/rats-vs-mice-whats-the-difference/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -1217,14 +1227,6 @@
     "rate": 0.25
    },
    {
-    "url": "https://affiliatemarketingforsuccess.com/affiliate-growth-checklist/",
-    "sent": 1,
-    "replied": 0,
-    "positive": 0,
-    "won": 0,
-    "rate": 0.25
-   },
-   {
     "url": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
     "sent": 1,
     "replied": 0,
@@ -1233,7 +1235,31 @@
     "rate": 0.25
    },
    {
+    "url": "https://mysticaldigits.com/how-is-14-in-numerology/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
     "url": "https://mysticaldigits.com/calculate-your-soul-number-with-our-free-calculator/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://mysticaldigits.com/calculate-your-psychic-number-with-our-calculator/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -1250,6 +1276,22 @@
    },
    {
     "url": "https://frenchyfab.com/french-bulldog-healthy-treats-guide/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://affiliatemarketingforsuccess.com/tools/content-idea-generator/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -1290,6 +1332,14 @@
    },
    {
     "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
+    "sent": 2,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.2
+   },
+   {
+    "url": "https://micegoneguide.com/rats-vs-mice-whats-the-difference/",
     "sent": 2,
     "replied": 0,
     "positive": 0,
@@ -1423,7 +1473,7 @@
    "domain": "plantastichaven.com",
    "pages": 159,
    "discovered": 159,
-   "sitemaps": 4,
+   "sitemaps": 5,
    "eligible": 25,
    "top": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/"
   },
@@ -1580,8 +1630,8 @@
    "linkability": 91,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 4,
-   "words": 1669,
+   "internal_inlinks": 6,
+   "words": 1667,
    "interactive": true,
    "modified": "2026-11-04T05:40:26+00:00",
    "reasons": [
@@ -1704,7 +1754,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 8,
    "words": 1723,
    "interactive": true,
    "modified": "2026-11-08T05:33:11+00:00",
@@ -1752,7 +1802,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 12,
    "words": 3514,
    "interactive": true,
    "modified": "2026-11-15T07:33:08+00:00",
@@ -1804,7 +1854,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 5,
-   "words": 677,
+   "words": 679,
    "interactive": true,
    "modified": "2026-09-05T13:47:24+00:00",
    "reasons": [
@@ -1826,15 +1876,15 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
-   "words": 691,
+   "internal_inlinks": 8,
+   "words": 690,
    "interactive": true,
    "modified": "2026-09-05T13:47:17+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "Recently updated"
    ],
-   "prospects": 4,
+   "prospects": 8,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -1873,7 +1923,7 @@
    "linkability": 83,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 6,
    "words": 2085,
    "interactive": false,
    "modified": "2026-09-25T14:57:36+00:00",
@@ -1884,7 +1934,7 @@
     "Recently updated"
    ],
    "prospects": 9,
-   "internal_link_suggestions": 4,
+   "internal_link_suggestions": 3,
    "promoting": false
   },
   {
@@ -1899,7 +1949,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 5,
-   "words": 610,
+   "words": 608,
    "interactive": true,
    "modified": "2026-09-05T13:47:04+00:00",
    "reasons": [
@@ -1981,7 +2031,7 @@
     "Recently updated",
     "Flagship asset"
    ],
-   "prospects": 6,
+   "prospects": 7,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -2046,7 +2096,7 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
+   "internal_inlinks": 9,
    "words": 6198,
    "interactive": false,
    "modified": "2026-09-12T09:23:40+00:00",
@@ -2120,7 +2170,7 @@
    "linkability": 80,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 3,
+   "internal_inlinks": 6,
    "words": 3394,
    "interactive": false,
    "modified": "2026-09-13T19:07:43+00:00",
@@ -2130,7 +2180,7 @@
     "Cites 6 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 1,
+   "prospects": 2,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -2218,8 +2268,8 @@
    "linkability": 79,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 3,
-   "words": 1873,
+   "internal_inlinks": 5,
+   "words": 1876,
    "interactive": false,
    "modified": "2026-09-25T17:56:08+00:00",
    "reasons": [
@@ -2241,7 +2291,7 @@
    "linkability": 78,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 4,
    "words": 3542,
    "interactive": true,
    "modified": "2026-11-20T17:41:25+00:00",
@@ -2266,7 +2316,7 @@
    "linkability": 73,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 1,
+   "internal_inlinks": 2,
    "words": 4653,
    "interactive": true,
    "modified": "2026-10-29T06:26:29+00:00",
@@ -2275,7 +2325,7 @@
     "In-depth (4,653 words)",
     "6 data tables",
     "Recently updated",
-    "Under-linked internally (1 inbound)"
+    "Under-linked internally (2 inbound)"
    ],
    "prospects": 0,
    "internal_link_suggestions": 0,
@@ -2460,8 +2510,8 @@
    "linkability": 73,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
-   "words": 1110,
+   "internal_inlinks": 8,
+   "words": 1106,
    "interactive": false,
    "modified": "2026-09-13T08:04:36+00:00",
    "reasons": [
@@ -2483,7 +2533,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 5,
-   "words": 729,
+   "words": 725,
    "interactive": true,
    "modified": "2026-09-05T13:47:30+00:00",
    "reasons": [
@@ -2594,31 +2644,6 @@
    "promoting": true
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/blogging/automate-your-blog-with-artificial-intelligence/",
-   "title": "AI Blog Automation: 2026 Step-by-Step Guide",
-   "h1": "AI Blog Automation Guide: Scale Content & Traffic in 2026",
-   "description": "Discover how to automate your blog with AI in 2025. Save time, boost content output, and enhance quality effortlessly. Start your AI blogging journey today!",
-   "type": "practical_guide",
-   "promotion": 65,
-   "linkability": 68,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 1,
-   "words": 2555,
-   "interactive": false,
-   "modified": "2026-09-25T14:58:55+00:00",
-   "reasons": [
-    "In-depth (2,555 words)",
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (1 inbound)"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/productivity/weekly-review-checklist/",
    "title": "Weekly Review Checklist: Plan Your Week in 20 Minutes",
@@ -2703,7 +2728,7 @@
    "linkability": 70,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 4,
+   "internal_inlinks": 3,
    "words": 1137,
    "interactive": false,
    "modified": "2026-11-13T07:31:57+00:00",
@@ -2727,7 +2752,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 4,
-   "words": 1063,
+   "words": 1062,
    "interactive": false,
    "modified": "2026-09-16T18:01:48+00:00",
    "reasons": [
@@ -2896,8 +2921,8 @@
    "linkability": 69,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
-   "words": 1019,
+   "internal_inlinks": 4,
+   "words": 1009,
    "interactive": false,
    "modified": "2026-09-16T18:01:41+00:00",
    "reasons": [
@@ -2920,7 +2945,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 8,
-   "words": 1213,
+   "words": 1204,
    "interactive": false,
    "modified": "2026-09-13T08:04:24+00:00",
    "reasons": [
@@ -2963,7 +2988,7 @@
    "linkability": 68,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 3,
+   "internal_inlinks": 5,
    "words": 2639,
    "interactive": false,
    "modified": "2026-11-20T21:37:42+00:00",
@@ -2994,6 +3019,30 @@
    "reasons": [
     "In-depth (2,871 words)",
     "3 data tables",
+    "Recently updated"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/blogging/how-to-write-a-high-ranking-blog-post/",
+   "title": "How to Write High-Ranking Blog Posts in 2026 (Proven)",
+   "h1": "How to Write High-Ranking Blog Posts (2025 SEO Guide)",
+   "description": "Rank higher in 2025! Follow our step-by-step guide to write SEO-optimized blog posts that drive more traffic. Start writing today!",
+   "type": "practical_guide",
+   "promotion": 61,
+   "linkability": 68,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 5,
+   "words": 5564,
+   "interactive": false,
+   "modified": "2026-11-19T07:26:25+00:00",
+   "reasons": [
+    "In-depth (5,564 words)",
+    "1 data table",
     "Recently updated"
    ],
    "prospects": 0,
@@ -3072,9 +3121,9 @@
     "Recently updated",
     "One of 42 templated sibling pages — promote the hub first"
    ],
-   "prospects": 2,
+   "prospects": 5,
    "internal_link_suggestions": 0,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "imagealchemy.app",
@@ -3168,7 +3217,7 @@
     "Recently updated",
     "One of 42 templated sibling pages — promote the hub first"
    ],
-   "prospects": 3,
+   "prospects": 4,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -3183,7 +3232,7 @@
    "linkability": 66,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 9,
    "words": 1831,
    "interactive": false,
    "modified": "2026-09-25T17:51:02+00:00",
@@ -3352,7 +3401,7 @@
    "linkability": 78,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 6,
    "words": 2199,
    "interactive": true,
    "modified": "2026-11-04T07:26:27+00:00",
@@ -3752,7 +3801,7 @@
    "to_title": "Email Marketing Template Generator: HTML & Plain Text",
    "anchor": "write email reader",
    "relevance": 3,
-   "from_strength": 0
+   "from_strength": 61
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -3818,16 +3867,6 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/start-here/",
    "from_title": "Start Affiliate Marketing in 2026: The Step-by-Step Roadmap",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/review/skool-affiliate-program-review/",
-   "from_title": "Skool Affiliate Program Review 2026: 40% Recurring",
    "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
    "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
    "anchor": "promote affiliate products",
@@ -5443,6 +5482,16 @@
    "anchor": "french bulldog",
    "relevance": 7,
    "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 58
   }
  ],
  "indexation": {
@@ -6285,7 +6334,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 24,
-  "updated_at": "2026-11-24T02:26:14.510Z"
+  "updated_at": "2026-11-24T14:02:10.804Z"
  },
  "wins": [
   {
@@ -6356,43 +6405,43 @@
   }
  ],
  "log": [
-  "02:25:07 connection dataforseo: connected",
-  "02:25:07 connection gmail: connected",
-  "02:25:16 crawl gearuptogrow.com: 107/107 urls, fetched 63, 304 0, reused 44",
-  "02:25:18 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 12, 304 0, reused 101",
-  "02:25:22 crawl gearuptofit.com: 300/795 urls, fetched 292, 304 0, reused 8",
-  "02:25:24 crawl plantastichaven.com: 159/159 urls, fetched 117, 304 0, reused 42",
-  "02:25:27 crawl frenchyfab.com: 155/155 urls, fetched 100, 304 0, reused 55",
-  "02:25:35 crawl openclaw-skillshub.com: 158/158 urls, fetched 158, 304 0, reused 0",
-  "02:25:37 crawl micegoneguide.com: 43/43 urls, fetched 36, 304 0, reused 7",
-  "02:25:38 crawl imagealchemy.app: 28/28 urls, fetched 25, 304 0, reused 3",
-  "02:25:47 crawl efficientgptprompts.com: 300/487 urls, fetched 240, 304 0, reused 60",
-  "02:25:50 crawl mysticaldigits.com: 300/468 urls, fetched 239, 304 0, reused 61",
-  "02:25:50 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "02:25:50 - search_performance: skipped (Search Console not connected)",
-  "02:25:50 indexation: 67 sitemap URLs with an indexing problem (2 critical)",
-  "02:25:51 link gap: victorpest.com (for micegoneguide.com) 200 referring pages from offset 0/725, 129 new candidates",
-  "02:26:14 prospects: 0 from the saved queue, 0 saved for next run; 1 competitor link-gap pulls (129 candidates); 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 43 candidates, 9 qualified (0 unlinked mentions), 5 with email, 1 with a dead link we can replace, 0 already linking",
-  "02:26:14 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "02:26:14 self-tuning: next cycle runs up to 24 searches",
-  "02:26:14 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "02:26:17 replies: 35 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "02:26:25 queue screening (free, nothing sent): 7 checked, 3 sendable, 2 retired, 1 switched to a better published address",
-  "02:26:25 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "02:26:25 - preverify: skipped (runs only while outreach is paused)",
-  "02:26:34 link checks: 10 pages, 0 new links won, 0 lost"
+  "14:00:22 connection dataforseo: connected",
+  "14:00:22 connection gmail: connected",
+  "14:00:28 crawl plantastichaven.com: 159/159 urls, fetched 35, 304 0, reused 124",
+  "14:00:28 crawl gearuptogrow.com: 107/107 urls, fetched 39, 304 0, reused 68",
+  "14:00:33 crawl frenchyfab.com: 155/155 urls, fetched 20, 304 0, reused 135",
+  "14:00:33 crawl gearuptofit.com: 300/795 urls, fetched 1, 304 0, reused 299",
+  "14:00:34 crawl mysticaldigits.com: 300/468 urls, fetched 12, 304 0, reused 288",
+  "14:00:35 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
+  "14:00:36 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "14:00:39 crawl micegoneguide.com: 43/43 urls, fetched 6, 304 0, reused 37",
+  "14:00:42 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 83, 304 0, reused 30",
+  "14:00:43 crawl efficientgptprompts.com: 300/487 urls, fetched 13, 304 0, reused 287",
+  "14:00:43 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "14:00:43 - search_performance: skipped (Search Console not connected)",
+  "14:00:43 indexation: 67 sitemap URLs with an indexing problem (2 critical)",
+  "14:00:44 link gap: earthkind.com (for micegoneguide.com) 200 referring pages from offset 0/567, 107 new candidates",
+  "14:02:10 prospects: 0 from the saved queue, 0 saved for next run; 1 competitor link-gap pulls (107 candidates); 4 queries (0 brand-mention), 35 Google-wrapped results resolved, 16 unresolvable; 110 candidates, 16 qualified (0 unlinked mentions), 10 with email, 2 with a dead link we can replace, 0 already linking",
+  "14:02:10 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "14:02:10 self-tuning: next cycle runs up to 24 searches",
+  "14:02:10 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "14:02:14 replies: 42 scanned, 1 replies, 0 failures, 0 delays; ok",
+  "14:02:26 queue screening (free, nothing sent): 12 checked, 5 sendable, 5 retired, 0 switched to a better published address",
+  "14:07:29 outreach: 6 sent, 0 follow-ups, 0 drafts, 18 held for verification",
+  "14:07:29 - preverify: skipped (runs only while outreach is paused)",
+  "14:07:41 link checks: 10 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
    "level": "warn",
    "code": "templates_only",
-   "message": "All 81 pitches so far were fixed templates (2 replies).",
+   "message": "All 87 pitches so far were fixed templates (3 replies).",
    "fix": "Add an Anthropic API key under ⚙ Connect so every pitch is written for that exact page and link."
   },
   {
    "level": "info",
    "code": "holds",
-   "message": "19 queued inboxes are held; most often (8) because mailbox accept all.",
+   "message": "13 queued inboxes are held; most often (6) because mailbox accept all.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   }
  ]
