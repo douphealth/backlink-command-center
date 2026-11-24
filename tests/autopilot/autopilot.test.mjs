@@ -7,7 +7,7 @@ import {discoverSite,extractFeatures,crawlable} from '../../scripts/autopilot/cr
 import {rankPortfolio,internalLinkPlan,linkability} from '../../scripts/autopilot/score.mjs';
 import {qualifyPage,queriesFor,BLOCKED} from '../../scripts/autopilot/prospect.mjs';
 import {DataForSEO} from '../../scripts/autopilot/dataforseo.mjs';
-import {smtpSend,Imap,parseFetch,classifyReply,buildMessage} from '../../scripts/autopilot/mail.mjs';
+import {smtpSend,Imap,parseFetch,classifyReply,replyCondition,buildMessage} from '../../scripts/autopilot/mail.mjs';
 import {runOutreach,processReplies,checkLinks,dailyCap} from '../../scripts/autopilot/outreach.mjs';
 import {templatePitch,validPitch} from '../../scripts/autopilot/pitch.mjs';
 import {runAutopilot,chooseAssets} from '../../scripts/autopilot/run.mjs';
@@ -403,4 +403,20 @@ test("weekday is judged in the recipient's time zone",async()=>{
   assert.equal(sendWindowOpen('blog.com.au',new Date('2026-10-25T22:00:00Z')),true,'Sunday 22:00 UTC is Monday 08:00 in Sydney');
   assert.equal(sendWindowOpen('blog.com.au',new Date('2026-10-23T22:00:00Z')),false,'Friday 22:00 UTC is Saturday in Sydney');
   assert.equal(sendWindowOpen('blog.com',new Date('2026-10-26T15:00:00Z')),true,'Monday US');
+});
+
+test('conditional yeses are recognised and flagged for the owner', () => {
+  const quoted = '\n\nOn Mon, Nov 23, 2026 at 8:39 PM Alex <a@b.com> wrote:\n> If it is useful, it could sit next to the existing link. Not relevant? Just reply "no".';
+  const r = body => ({from: 'ed@pub.com', subject: 'Re: guide', body: body + quoted});
+  const swap = r('Hi Alex,\n\nYes, I can do that if you mention us on your blog.');
+  assert.equal(classifyReply(swap), 'positive');
+  assert.equal(replyCondition(swap), 'reciprocal');
+  assert.equal(classifyReply(r('Sure, happy to.')), 'positive');
+  assert.equal(replyCondition(r('Sure, happy to.')), null);
+  assert.equal(replyCondition(r('We can add it, our fee is $50 per link.')), 'paid');
+  assert.equal(replyCondition(r('Please send a guest post instead.')), 'guest_post');
+  // Quoted original text (which contains "no" and "link") must not affect the result.
+  assert.equal(classifyReply(r('Thanks, I will review it next week.')), 'neutral');
+  assert.equal(replyCondition(r('Thanks, I will review it next week.')), null);
+  assert.equal(classifyReply(r('No thanks.')), 'negative');
 });
