@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-23T15:10:42.648Z",
- "duration_s": 489,
+ "generated_at": "2026-11-24T02:26:34.142Z",
+ "duration_s": 88,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -11,7 +11,7 @@
   "connections": {
    "dataforseo": {
     "status": "connected",
-    "balance_usd": 5.480060000000002
+    "balance_usd": 5.418979999999998
    },
    "gmail": {
     "status": "connected"
@@ -29,7 +29,7 @@
    "key": true,
    "enabled": true,
    "daily_limit": 24,
-   "used_today": 20,
+   "used_today": 0,
    "balance": {
     "provider": "verifalia",
     "free_credits": 5,
@@ -114,7 +114,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 19405,
+   "ms": 42672,
    "result": {
     "sites": 10,
     "pages": 1663
@@ -122,7 +122,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 158
@@ -140,7 +140,7 @@
    "ok": true,
    "result": {
     "ranked": 250,
-    "internal_suggestions": 313
+    "internal_suggestions": 314
    }
   },
   "requalify": {
@@ -155,30 +155,30 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 58427,
+   "ms": 24152,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
-    "candidates": 72,
-    "qualified": 35,
+    "candidates": 43,
+    "qualified": 9,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 114,
-    "with_email": 17,
-    "contact_form": 11,
-    "broken_links": 2,
+    "rejected": 120,
+    "with_email": 5,
+    "contact_form": 4,
+    "broken_links": 1,
     "from_queue": 0,
     "linkgap_calls": 1,
-    "linkgap_candidates": 149,
+    "linkgap_candidates": 129,
     "filtered": {
-     "already_evaluated": 12,
-     "spam_score": 6,
-     "rarely_links_out": 20,
-     "sitewide_or_sidebar_link": 4,
-     "platform_or_giant": 1,
+     "rarely_links_out": 23,
+     "spam_score": 8,
+     "sitewide_or_sidebar_link": 3,
+     "forum_or_ugc": 6,
+     "off_topic_link": 25,
      "gov_or_edu": 2,
-     "off_topic_link": 5,
+     "already_evaluated": 3,
      "own_site": 1
     },
     "deferred": 0
@@ -190,7 +190,7 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 5,
+   "ms": 3,
    "result": {
     "checked": 0,
     "found": 0
@@ -198,9 +198,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 4376,
+   "ms": 3296,
    "result": {
-    "scanned": 41,
+    "scanned": 35,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -210,26 +210,25 @@
   },
   "screen": {
    "ok": true,
-   "ms": 8489,
+   "ms": 8059,
    "result": {
-    "screened": 19,
-    "kept": 10,
-    "retired": 7,
+    "screened": 7,
+    "kept": 3,
+    "retired": 2,
     "address_updated": 1
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 392288,
+   "ms": 12,
    "result": {
-    "followups": 2,
-    "sent": 7,
+    "followups": 0,
+    "sent": 0,
     "drafted": 0,
-    "skipped": 1,
-    "deferred": 0,
+    "skipped": 0,
+    "deferred": 63,
     "cap": 12,
-    "verification_held": 15,
-    "followups_retired": 1
+    "verification_held": 0
    },
    "writer": {
     "claude": 0,
@@ -242,9 +241,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 3,
+   "ms": 8099,
    "result": {
-    "checked": 0,
+    "checked": 10,
     "won": 0,
     "lost": 0
    }
@@ -255,21 +254,21 @@
   "pages_crawled": 1663,
   "urls_discovered": 2513,
   "promotable": 250,
-  "internal_suggestions": 313,
+  "internal_suggestions": 314,
   "promoting_now": 30
  },
  "spend": {
-  "today_usd": 0.1978,
-  "month_usd": 6.6921,
+  "today_usd": 0.0587,
+  "month_usd": 6.7508,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
   "calls_this_run": 2
  },
  "outreach": {
   "mode": "send",
-  "ready": 60,
+  "ready": 63,
   "verified_ready": 0,
-  "pending_verification": 60,
+  "pending_verification": 63,
   "holds": {
    "publisher_mismatch": 1,
    "mailbox_recently_inconclusive": 2,
@@ -278,18 +277,18 @@
    "mx_dns_unverified": 1,
    "mailbox_invalid": 2
   },
-  "sent_today": 9,
+  "sent_today": 0,
   "cap_today": 12,
-  "next_send_at": "2026-11-23T15:10:42.652Z",
+  "next_send_at": "2026-11-24T03:00:00.000Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 4298,
-  "qualified": 763,
-  "ready": 60,
+  "prospects_evaluated": 4427,
+  "qualified": 772,
+  "ready": 63,
   "broken_link_ready": 2,
-  "contact_form_only": 160,
+  "contact_form_only": 164,
   "no_contact": 283,
   "contacted": 81,
   "replied": 2,
@@ -830,15 +829,32 @@
    "declined": 0,
    "bounced": 6,
    "spend_usd": 0.1978
+  },
+  {
+   "date": "2026-11-24",
+   "prospects_evaluated": 4427,
+   "qualified": 772,
+   "ready": 63,
+   "broken_link_ready": 2,
+   "contact_form_only": 164,
+   "no_contact": 283,
+   "contacted": 81,
+   "replied": 2,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 6,
+   "declined": 0,
+   "bounced": 6,
+   "spend_usd": 0.0587
   }
  ],
  "learning": {
   "footprints": [
    {
     "footprint": "link_gap",
-    "queries": 12,
-    "ready": 33,
-    "rate": 2.267
+    "queries": 13,
+    "ready": 36,
+    "rate": 2.313
    },
    {
     "footprint": "statistics",
@@ -1407,7 +1423,7 @@
    "domain": "plantastichaven.com",
    "pages": 159,
    "discovered": 159,
-   "sitemaps": 5,
+   "sitemaps": 4,
    "eligible": 25,
    "top": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/"
   },
@@ -1489,7 +1505,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 300,
-   "words": 1825,
+   "words": 1830,
    "interactive": true,
    "modified": "2026-11-07T19:51:12+00:00",
    "reasons": [
@@ -1589,12 +1605,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 42,
-   "words": 2211,
+   "words": 2215,
    "interactive": true,
    "modified": "2026-10-03T06:27:27+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,211 words)",
+    "In-depth (2,215 words)",
     "1 data table",
     "Cites 11 authoritative sources",
     "Recently updated"
@@ -1689,7 +1705,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 7,
-   "words": 1724,
+   "words": 1723,
    "interactive": true,
    "modified": "2026-11-08T05:33:11+00:00",
    "reasons": [
@@ -1698,30 +1714,6 @@
    ],
    "prospects": 5,
    "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/watch-match/",
-   "title": "Fitness Watch Match — Find the Right Watch for Your Training",
-   "h1": "Fitness Watch Match — Find the Right Watch for Your Training",
-   "description": "Compare fitness watches by GPS accuracy, battery life, heart-rate features, training metrics, recovery insights, mapping, comfort, phone compatibility and budget. Free, spec-based, no signup.",
-   "type": "practical_guide",
-   "promotion": 79,
-   "linkability": 81,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 293,
-   "words": 1406,
-   "interactive": true,
-   "modified": "2026-10-04T18:13:49.000Z",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "Recently updated",
-    "Flagship asset"
-   ],
-   "prospects": 11,
-   "internal_link_suggestions": 2,
    "promoting": false
   },
   {
@@ -1979,17 +1971,17 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 43,
-   "words": 4514,
+   "words": 4515,
    "interactive": false,
    "modified": "2026-11-08T06:06:02+00:00",
    "reasons": [
-    "In-depth (4,514 words)",
+    "In-depth (4,515 words)",
     "4 data tables",
     "Cites 4 authoritative sources",
     "Recently updated",
     "Flagship asset"
    ],
-   "prospects": 5,
+   "prospects": 6,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -2054,7 +2046,7 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
+   "internal_inlinks": 6,
    "words": 6198,
    "interactive": false,
    "modified": "2026-09-12T09:23:40+00:00",
@@ -2503,6 +2495,29 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/watch-match/",
+   "title": "Fitness Watch Match — Find the Right Watch for Your Training",
+   "h1": "Fitness Watch Match — Find the Right Watch for Your Training",
+   "description": "Compare fitness watches by GPS accuracy, battery life, heart-rate features, training metrics, recovery insights, mapping, comfort, phone compatibility and budget. Free, spec-based, no signup.",
+   "type": "practical_guide",
+   "promotion": 66,
+   "linkability": 67,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 293,
+   "words": 1406,
+   "interactive": false,
+   "modified": "2026-10-04T18:13:49.000Z",
+   "reasons": [
+    "Recently updated",
+    "Flagship asset"
+   ],
+   "prospects": 11,
+   "internal_link_suggestions": 2,
+   "promoting": false
+  },
+  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/productivity/habit-stacking-executive-dysfunction/",
    "title": "Habit Stacking for Executive Dysfunction",
@@ -2540,8 +2555,8 @@
    "linkability": 85,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 10,
-   "words": 1348,
+   "internal_inlinks": 11,
+   "words": 1346,
    "interactive": true,
    "modified": "2026-11-07T20:04:05+00:00",
    "reasons": [
@@ -2711,7 +2726,7 @@
    "linkability": 70,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 3,
+   "internal_inlinks": 4,
    "words": 1063,
    "interactive": false,
    "modified": "2026-09-16T18:01:48+00:00",
@@ -2809,8 +2824,8 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
-   "words": 1809,
+   "internal_inlinks": 7,
+   "words": 1816,
    "interactive": true,
    "modified": "2026-11-08T05:33:11+00:00",
    "reasons": [
@@ -3024,7 +3039,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 13,
-   "words": 1631,
+   "words": 1627,
    "interactive": true,
    "modified": "2026-11-07T20:01:22+00:00",
    "reasons": [
@@ -3057,7 +3072,7 @@
     "Recently updated",
     "One of 42 templated sibling pages — promote the hub first"
    ],
-   "prospects": 0,
+   "prospects": 2,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -3134,31 +3149,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/rats-vs-mice-whats-the-difference/",
-   "title": "Rats vs Mice: Key Differences in Signs, Size, and Behavior",
-   "h1": "Rats vs Mice: How to Tell the Difference",
-   "description": "Compare house mice, roof rats and Norway rats using combined visible traits. Juvenile overlap and lookalikes limit identification from household signs.",
-   "type": "comparison",
-   "promotion": 59,
-   "linkability": 79,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 1127,
-   "interactive": false,
-   "modified": "2026-10-05T18:42:26+00:00",
-   "reasons": [
-    "1 data table",
-    "Cites 8 authoritative sources",
-    "Recently updated",
-    "One of 42 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 6,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
    "url": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
    "title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
    "h1": "How to Get Rid of Mice in the Garage and Keep Them Out",
@@ -3168,12 +3158,12 @@
    "linkability": 79,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
-   "words": 2213,
+   "internal_inlinks": 10,
+   "words": 2217,
    "interactive": false,
    "modified": "2026-10-03T06:26:18+00:00",
    "reasons": [
-    "In-depth (2,213 words)",
+    "In-depth (2,217 words)",
     "Cites 4 authoritative sources",
     "Recently updated",
     "One of 42 templated sibling pages — promote the hub first"
@@ -3389,11 +3379,11 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 17,
-   "words": 3480,
+   "words": 3476,
    "interactive": false,
    "modified": "2026-11-07T20:04:39+00:00",
    "reasons": [
-    "In-depth (3,480 words)",
+    "In-depth (3,476 words)",
     "2 data tables",
     "Recently updated",
     "One of 299 templated sibling pages — promote the hub first"
@@ -3413,7 +3403,7 @@
    "linkability": 78,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 4,
+   "internal_inlinks": 3,
    "words": 1263,
    "interactive": false,
    "modified": "2026-11-07T19:59:10+00:00",
@@ -3425,6 +3415,32 @@
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": true
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "h1": "Best Brushes for French Bulldogs: Shiny Coats",
+   "description": "Brushes for French Bulldogs a hassle? Discover essential grooming tools for a healthy coat. Proven solution for shedding! See how today!",
+   "type": "general_article",
+   "promotion": 58,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 4137,
+   "interactive": true,
+   "modified": "2026-11-07T19:40:32+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,137 words)",
+    "20 data tables",
+    "Recently updated",
+    "One of 153 templated sibling pages — promote the hub first"
+   ],
+   "prospects": 2,
+   "internal_link_suggestions": 5,
+   "promoting": false
   }
  ],
  "internal_links": [
@@ -3460,23 +3476,23 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/compatibility/",
-   "from_title": "Compatibility Guides: Life Path, Moon Sign & Relationship Reflection Tools",
+   "from": "https://mysticaldigits.com/street-address-residence-number-compatibility-calculator/",
+   "from_title": "Street Address Compatibility Calculators: How House Number Numerology Is…",
    "to": "https://mysticaldigits.com/life-path-number-calculator/",
    "to_title": "Life Path Number Calculator (Free) | Mystical Digits",
    "anchor": "life path",
    "relevance": 8,
-   "from_strength": 0
+   "from_strength": 55
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/embrace-the-journey-life-path-number-fourteen/",
-   "from_title": "Life Path Number 14: 2026 Deep Dive into the Karmic Force of 14/5",
+   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
+   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
    "to": "https://mysticaldigits.com/life-path-number-calculator/",
    "to_title": "Life Path Number Calculator (Free) | Mystical Digits",
    "anchor": "life path",
    "relevance": 8,
-   "from_strength": 0
+   "from_strength": 54
   },
   {
    "site": "gearuptogrow.com",
@@ -3689,26 +3705,6 @@
    "from_strength": 62
   },
   {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/methodology",
-   "from_title": "How Fitness Watch Match scores watches — methodology",
-   "to": "https://gearuptofit.com/watch-match/",
-   "to_title": "Fitness Watch Match — Find the Right Watch for Your Training",
-   "anchor": "fitness watch",
-   "relevance": 7,
-   "from_strength": 62
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/reviews/",
-   "from_title": "Reviews Hub | Running Shoes, Watches & Fitness Gear | GearUpToFit",
-   "to": "https://gearuptofit.com/watch-match/",
-   "to_title": "Fitness Watch Match — Find the Right Watch for Your Training",
-   "anchor": "fitness watch",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/productivity/habit-stacking-executive-dysfunction/",
    "from_title": "Habit Stacking for Executive Dysfunction",
@@ -3880,16 +3876,6 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 56
-  },
-  {
-   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
    "from_title": "Mouse Infestation Health Risks: Disease, Allergies & More",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
@@ -3900,8 +3886,18 @@
   },
   {
    "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "from_title": "How to Get Rid of Mice in Walls (Without Opening Drywall)",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-attic-under-insulation/",
+   "from_title": "How to Get Rid of Mice in the Attic and Insulation",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 42
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-car/",
+   "from_title": "How to Get Rid of Mice in Your Car: Engine Bay, Cabin & Air Vents",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "anchor": "rid mice",
@@ -4349,6 +4345,26 @@
    "from_strength": 0
   },
   {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/watch-match/methodology",
+   "from_title": "How Fitness Watch Match scores watches — methodology",
+   "to": "https://gearuptofit.com/watch-match/",
+   "to_title": "Fitness Watch Match — Find the Right Watch for Your Training",
+   "anchor": "fitness watch",
+   "relevance": 7,
+   "from_strength": 62
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/reviews/",
+   "from_title": "Reviews Hub | Running Shoes, Watches & Fitness Gear | GearUpToFit",
+   "to": "https://gearuptofit.com/watch-match/",
+   "to_title": "Fitness Watch Match — Find the Right Watch for Your Training",
+   "anchor": "fitness watch",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/personal-development/habit-stacking/",
    "from_title": "Habit Stacking: Examples, Templates & How To Start",
@@ -4410,6 +4426,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/dive-into-your-inner-dream-number/",
+   "from_title": "Dream Number Meaning: Uncover Your Inner Guide | Mystical Digits",
+   "to": "https://mysticaldigits.com/numerology-love-meter-calculator/",
+   "to_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
+   "anchor": "numerology love",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/numerology-love-compatibility/",
    "from_title": "Numerology Love Compatibility: 2026 Guide | Mystical Digits",
    "to": "https://mysticaldigits.com/numerology-love-meter-calculator/",
@@ -4427,16 +4453,6 @@
    "anchor": "numerology love",
    "relevance": 4,
    "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/personal-year-numerology/",
-   "from_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "to": "https://mysticaldigits.com/numerology-love-meter-calculator/",
-   "to_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
-   "anchor": "numerology love meter",
-   "relevance": 3,
-   "from_strength": 60
   },
   {
    "site": "gearuptofit.com",
@@ -4635,7 +4651,7 @@
    "to": "https://gearuptofit.com/watch-match/methodology",
    "to_title": "How Fitness Watch Match scores watches — methodology",
    "anchor": "fitness watch",
-   "relevance": 5,
+   "relevance": 4,
    "from_strength": 0
   },
   {
@@ -4650,18 +4666,18 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
-   "from_title": "Personal Year Calculator: How to Find Your Number (2026)",
+   "from": "https://mysticaldigits.com/revealing-birth-number-6-personality/",
+   "from_title": "Birth Number 6 Personality: 2026 Guide & Insights | Mystical Digits",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
    "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
    "anchor": "personal year",
    "relevance": 5,
-   "from_strength": 57
+   "from_strength": 62
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-is-14-in-numerology/",
-   "from_title": "2026 Guide: Numerology Meaning of Number 14 Explained",
+   "from": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
+   "from_title": "Personal Year Calculator: How to Find Your Number (2026)",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
    "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
    "anchor": "personal year",
@@ -4680,13 +4696,13 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/decode-your-personality-birth-number-7/",
-   "from_title": "Birth Number 7 Personality: Traits & Meanings | Mystical Digits",
+   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
+   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
    "to": "https://mysticaldigits.com/personal-year-numerology/",
    "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
    "anchor": "personal year",
    "relevance": 5,
-   "from_strength": 0
+   "from_strength": 54
   },
   {
    "site": "frenchyfab.com",
@@ -4760,12 +4776,22 @@
   },
   {
    "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-car/",
+   "from_title": "How to Get Rid of Mice in Your Car: Engine Bay, Cabin & Air Vents",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "anchor": "rid mice",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
    "from_title": "How to Get Rid of Mice in an Apartment",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
    "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
    "anchor": "rid mice",
-   "relevance": 5,
+   "relevance": 4,
    "from_strength": 56
   },
   {
@@ -4777,16 +4803,6 @@
    "anchor": "rid mice",
    "relevance": 4,
    "from_strength": 55
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/natural-mouse-repellents/",
-   "from_title": "Natural Mouse Repellents: What Helps and What Fails",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 54
   },
   {
    "site": "efficientgptprompts.com",
@@ -5150,18 +5166,18 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/find-your-lucky-mobile-number-based-on-date-of-birth/",
-   "from_title": "Find Your Lucky Mobile Number by DOB in 2026",
+   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
+   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
    "to": "https://mysticaldigits.com/find-your-lucky-name-with-the-ultimate-calculator/",
    "to_title": "Lucky Name Calculator: Find Your 2026 Numerology Match",
    "anchor": "lucky name calculator",
    "relevance": 3,
-   "from_strength": 0
+   "from_strength": 54
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
-   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
+   "from": "https://mysticaldigits.com/find-your-lucky-mobile-number-based-on-date-of-birth/",
+   "from_title": "Find Your Lucky Mobile Number by DOB in 2026",
    "to": "https://mysticaldigits.com/find-your-lucky-name-with-the-ultimate-calculator/",
    "to_title": "Lucky Name Calculator: Find Your 2026 Numerology Match",
    "anchor": "lucky name calculator",
@@ -5230,6 +5246,16 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
+   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
+   "to": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
+   "to_title": "Personal Year Calculator: How to Find Your Number (2026)",
+   "anchor": "personal year",
+   "relevance": 8,
+   "from_strength": 54
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/decode-your-personality-birth-number-7/",
    "from_title": "Birth Number 7 Personality: Traits & Meanings | Mystical Digits",
    "to": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
@@ -5242,16 +5268,6 @@
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/numerology-and-anniversary-date-selection/",
    "from_title": "Numerology Anniversary Dates 2026: 7-Step Guide",
-   "to": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
-   "to_title": "Personal Year Calculator: How to Find Your Number (2026)",
-   "anchor": "personal year",
-   "relevance": 8,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-power-of-number-9-in-numerology-revealed/",
-   "from_title": "Number 9 in Numerology: Meaning, Life Path Calculation and Limits | Mystical Digits",
    "to": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
    "to_title": "Personal Year Calculator: How to Find Your Number (2026)",
    "anchor": "personal year",
@@ -5436,8 +5452,8 @@
     "checked": 300,
     "healthy": 291,
     "problems": 9,
-    "critical": 0,
-    "not_found": 0,
+    "critical": 1,
+    "not_found": 1,
     "server_error": 0,
     "noindex": 0,
     "canonical_mismatch": 0,
@@ -5445,7 +5461,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 9
+    "thin": 8
    },
    {
     "site": "plantastichaven.com",
@@ -5594,6 +5610,15 @@
   ],
   "issues": [
    {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/fitness-plan",
+    "issue": "not_found",
+    "label": "404/410 in sitemap",
+    "fix": "Restore the page or 301-redirect it to the closest live page, then remove the old URL from the sitemap.",
+    "severity": 1,
+    "status": 404
+   },
+   {
     "site": "efficientgptprompts.com",
     "url": "https://efficientgptprompts.com/shop",
     "issue": "noindex",
@@ -5730,16 +5755,6 @@
     "severity": 8,
     "status": 200,
     "words": 137
-   },
-   {
-    "site": "gearuptofit.com",
-    "url": "https://gearuptofit.com/fitness-plan",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 209
    },
    {
     "site": "gearuptofit.com",
@@ -6270,7 +6285,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 24,
-  "updated_at": "2026-11-23T15:03:57.474Z"
+  "updated_at": "2026-11-24T02:26:14.510Z"
  },
  "wins": [
   {
@@ -6341,31 +6356,31 @@
   }
  ],
  "log": [
-  "15:02:39 connection dataforseo: connected",
-  "15:02:39 connection gmail: connected",
-  "15:02:42 crawl plantastichaven.com: 159/159 urls, fetched 2, 304 0, reused 157",
-  "15:02:43 crawl gearuptogrow.com: 107/107 urls, fetched 2, 304 0, reused 105",
-  "15:02:47 crawl frenchyfab.com: 155/155 urls, fetched 4, 304 0, reused 151",
-  "15:02:48 crawl mysticaldigits.com: 300/468 urls, fetched 4, 304 0, reused 296",
-  "15:02:49 crawl gearuptofit.com: 300/795 urls, fetched 0, 304 0, reused 300",
-  "15:02:49 crawl openclaw-skillshub.com: 158/158 urls, fetched 0, 304 0, reused 158",
-  "15:02:51 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "15:02:52 crawl micegoneguide.com: 43/43 urls, fetched 0, 304 0, reused 43",
-  "15:02:56 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 5, 304 0, reused 108",
-  "15:02:58 crawl efficientgptprompts.com: 300/487 urls, fetched 9, 304 0, reused 291",
-  "15:02:58 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "15:02:58 - search_performance: skipped (Search Console not connected)",
-  "15:02:59 indexation: 67 sitemap URLs with an indexing problem (1 critical)",
-  "15:03:00 link gap: frenchbulldogclub.org (for frenchyfab.com) 200 referring pages from offset 0/494, 149 new candidates",
-  "15:03:57 prospects: 0 from the saved queue, 0 saved for next run; 1 competitor link-gap pulls (149 candidates); 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 72 candidates, 35 qualified (0 unlinked mentions), 17 with email, 2 with a dead link we can replace, 0 already linking",
-  "15:03:57 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "15:03:57 self-tuning: next cycle runs up to 24 searches",
-  "15:03:57 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "15:04:01 replies: 41 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "15:04:10 queue screening (free, nothing sent): 19 checked, 10 sendable, 7 retired, 1 switched to a better published address",
-  "15:10:42 outreach: 7 sent, 2 follow-ups, 0 drafts, 15 held for verification, 1 follow-ups retired (address no longer verifiable)",
-  "15:10:42 - preverify: skipped (runs only while outreach is paused)",
-  "15:10:42 link checks: 0 pages, 0 new links won, 0 lost"
+  "02:25:07 connection dataforseo: connected",
+  "02:25:07 connection gmail: connected",
+  "02:25:16 crawl gearuptogrow.com: 107/107 urls, fetched 63, 304 0, reused 44",
+  "02:25:18 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 12, 304 0, reused 101",
+  "02:25:22 crawl gearuptofit.com: 300/795 urls, fetched 292, 304 0, reused 8",
+  "02:25:24 crawl plantastichaven.com: 159/159 urls, fetched 117, 304 0, reused 42",
+  "02:25:27 crawl frenchyfab.com: 155/155 urls, fetched 100, 304 0, reused 55",
+  "02:25:35 crawl openclaw-skillshub.com: 158/158 urls, fetched 158, 304 0, reused 0",
+  "02:25:37 crawl micegoneguide.com: 43/43 urls, fetched 36, 304 0, reused 7",
+  "02:25:38 crawl imagealchemy.app: 28/28 urls, fetched 25, 304 0, reused 3",
+  "02:25:47 crawl efficientgptprompts.com: 300/487 urls, fetched 240, 304 0, reused 60",
+  "02:25:50 crawl mysticaldigits.com: 300/468 urls, fetched 239, 304 0, reused 61",
+  "02:25:50 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "02:25:50 - search_performance: skipped (Search Console not connected)",
+  "02:25:50 indexation: 67 sitemap URLs with an indexing problem (2 critical)",
+  "02:25:51 link gap: victorpest.com (for micegoneguide.com) 200 referring pages from offset 0/725, 129 new candidates",
+  "02:26:14 prospects: 0 from the saved queue, 0 saved for next run; 1 competitor link-gap pulls (129 candidates); 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 43 candidates, 9 qualified (0 unlinked mentions), 5 with email, 1 with a dead link we can replace, 0 already linking",
+  "02:26:14 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "02:26:14 self-tuning: next cycle runs up to 24 searches",
+  "02:26:14 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "02:26:17 replies: 35 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "02:26:25 queue screening (free, nothing sent): 7 checked, 3 sendable, 2 retired, 1 switched to a better published address",
+  "02:26:25 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "02:26:25 - preverify: skipped (runs only while outreach is paused)",
+  "02:26:34 link checks: 10 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
