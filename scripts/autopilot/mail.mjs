@@ -105,11 +105,20 @@ export function parseFetch(raw){
  }return out;
 }
 const NEGATIVE=/\b(unsubscribe|remove me|take me off|stop (emailing|contacting)|do not (email|contact)|don't (email|contact)|not interested|no thanks|no thank you|please stop|spam)\b/i;
-const POSITIVE=/\b(added|i've added|i have added|updated the (page|post|article)|included (it|your)|linked|great resource|happy to (add|include)|sounds good|will add|we'll add)\b/i;
+const POSITIVE=/\b(added|i've added|i have added|updated the (page|post|article)|included (it|your)|linked|great resource|happy to (add|include)|sounds good|will add|we'll add|(?:i|we) can (?:do|add|include) (?:that|it|this)|can do that|go ahead)\b/i;
+const YES_OPENING=/^(?:(?:hi|hello|hey|dear)\b[^\n,!]{0,40}[,!]?\s*)?(?:yes|yep|yeah|sure|absolutely|of course|definitely)\b/i;
+// Conditions a publisher attaches to a yes. They need the owner's decision, so they are flagged, never auto-handled.
+const CONDITIONS=[
+ ['paid',/\b(?:fee|charges?|paid|payment|paypal|pricing|our rates?|sponsored|usd|dollars|euros?)\b|\$\s?\d/i],
+ ['reciprocal',/\b(?:if you (?:can )?(?:mention|link|add|feature|include) us|mention us|link (?:back )?to us|link back|in return|in exchange|link exchange|exchange links|reciprocal|return the favou?r|a link from your)\b/i],
+ ['guest_post',/\b(?:guest post|write for us|contribute an article|submit an article)\b/i],
+];
+export function replyText(msg){return String(msg.body||'').split(/\r?\n>|\r?\nOn .{5,160} wrote:|\r?\n-{2,}\s*Original Message/i)[0].trim()}
+export function replyCondition(msg){const t=replyText(msg);for(const [k,re] of CONDITIONS)if(re.test(t))return k;return null}
 export function classifyReply(msg){
  if(/mailer-daemon|postmaster|mail delivery subsystem/i.test(msg.from)||/delivery status notification|undeliverable|failure notice|returned mail/i.test(msg.subject))return 'bounce';
  if(/auto-replied|auto-generated/i.test(msg.autoSubmitted)||/out of (the )?office|automatic reply|auto(matic)?[- ]?reply/i.test(msg.subject))return 'auto';
- const text=String(msg.body||'').split(/\r?\n>|\r?\nOn .{5,160} wrote:|\r?\n-{2,}\s*Original Message/i)[0].trim();
+ const text=replyText(msg);
  if(NEGATIVE.test(text)||/^(?:no|nope|stop)[.!\s]*$/i.test(text)||/^(?:re:\s*)?unsubscribe[.!\s]*$/i.test(msg.subject||''))return 'negative';
- if(POSITIVE.test(text))return 'positive';return 'neutral';
+ if(POSITIVE.test(text)||YES_OPENING.test(text))return 'positive';return 'neutral';
 }

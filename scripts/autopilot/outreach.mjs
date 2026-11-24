@@ -1,6 +1,6 @@
 /** Outreach state machine with mandatory recipient preflight and reply-health gate. */
 import {createHash} from 'node:crypto';
-import {buildMessage,newMessageId,smtpSend,Imap,classifyReply} from './mail.mjs';
+import {buildMessage,newMessageId,smtpSend,Imap,classifyReply,replyCondition,replyText} from './mail.mjs';
 import {followupPitch} from './pitch.mjs';
 import {fetchPage,links,hostOf,sameSite,ageDays,NOW,sleep,DAY,pool} from './util.mjs';
 import {QUALIFY_VERSION} from './prospect.mjs';
@@ -93,7 +93,10 @@ export async function processReplies({state,imap,log=()=>{}}){
    else stats.delays++;
   }else{
    stats.replies++;p.replied_at=NOW();p.no_followup=true;
-   p.history.push({type:'reply',at:NOW(),from,sentiment:kind,subject:String(m.subject||'').slice(0,140)});
+   const condition=kind==='negative'?null:replyCondition(m);
+   // Stored only in the encrypted vault: the dashboard shows what they asked for without opening Gmail.
+   p.history.push({type:'reply',at:NOW(),from,sentiment:kind,...(condition?{condition}:{}),subject:String(m.subject||'').slice(0,140),excerpt:replyText(m).replace(/\s+/g,' ').slice(0,280)});
+   if(condition){p.condition=condition;p.needs_owner=true;stats.conditional=(stats.conditional||0)+1}
    if(kind==='negative'){stats.negative++;p.status='declined';state.suppression[p.domain]={reason:'Opt-out',at:NOW()};if(p.email)state.suppression[p.email.toLowerCase()]={reason:'Opt-out',at:NOW()}}
    else if(kind==='positive'){stats.positive++;p.status='positive';p.next_link_check=NOW()}
    else p.status='replied';
