@@ -129,6 +129,7 @@ export const SITES = [
     "domain": "signalroom.store",
     "topic": "SaaS status pages",
     "assets": [
+      "https://signalroom.store/monitor",
       "https://signalroom.store/"
     ],
     "competitors": [
@@ -139,6 +140,8 @@ export const SITES = [
     "domain": "stainsolver.shop",
     "topic": "stain removal",
     "assets": [
+      "https://stainsolver.shop/guides/",
+      "https://stainsolver.shop/guides/oil-on-clothes/",
       "https://stainsolver.shop/"
     ],
     "competitors": [
@@ -176,7 +179,6 @@ export const SITES = [
     "topic": "solar payback",
     "assets": [
       "https://solarpayback.shop/calculator",
-      "https://solarpayback.shop/balkonkraftwerk-rechner",
       "https://solarpayback.shop/"
     ],
     "competitors": [
@@ -190,7 +192,8 @@ export const SITES = [
     "topic": "notification settings",
     "assets": [
       "https://stopthat.shop/",
-      "https://stopthat.shop/fix"
+      "https://stopthat.shop/fix/chrome-desktop-site-notifications",
+      "https://stopthat.shop/fix/chrome-desktop-popups"
     ],
     "competitors": []
   },
@@ -225,7 +228,8 @@ export const SITES = [
     "assets": [
       "https://bordercover.shop/",
       "https://bordercover.shop/atlas",
-      "https://bordercover.shop/cover"
+      "https://bordercover.shop/cover",
+      "https://bordercover.shop/guides"
     ],
     "competitors": []
   },
