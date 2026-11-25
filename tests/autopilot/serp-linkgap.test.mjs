@@ -167,22 +167,24 @@ test('pre-verification only spends credits on inboxes whose send window opens wi
   assert.deepEqual(asked.sort(),['uk','us']);
 });
 
-test('send-window waker: wakes for the next window, keeps cycles 2 h apart, never when sending is off',async()=>{
+test('waker: next send window when pitches wait, a 5 h keep-alive otherwise, cycles 2 h apart, never after a dry run',async()=>{
   const {planWake,shouldStillWake}=await import('../../scripts/autopilot/waker.mjs');
   const now=Date.parse('2026-11-25T08:57:00Z');
   const base={generated_at:'2026-11-25T08:56:37Z',capabilities:{outreach_mode:'send'},outreach:{ready:60,sent_today:0,cap_today:12,next_send_at:'2026-11-25T13:00:00.000Z',reply_health:'ok'}};
   const p=planWake(base,now);
-  assert.equal(p.wake,true);assert.equal(p.at,'2026-11-25T13:00:00.000Z');assert.equal(p.wait_s,4*3600+3*60);
+  assert.equal(p.wake,true);assert.equal(p.at,'2026-11-25T13:00:00.000Z');assert.equal(p.wait_s,4*3600+3*60);assert.match(p.reason,/send window/);
   const open=planWake({...base,outreach:{...base.outreach,next_send_at:'2026-11-25T08:56:37Z'}},now);
   assert.equal(open.at,'2026-11-25T10:56:37.000Z','window already open: next cycle 2 h after the last one, not immediately');
-  assert.equal(planWake({...base,outreach:{...base.outreach,next_send_at:'2026-11-26T13:00:00Z'}},now).wake,false,'cap reached: tomorrow is left to the schedule');
-  assert.equal(planWake({...base,capabilities:{outreach_mode:'off'}},now).wake,false);
-  assert.equal(planWake({...base,outreach:{...base.outreach,ready:0}},now).wake,false);
+  const keep='2026-11-25T13:56:37.000Z';
+  for(const s of [{...base,outreach:{...base.outreach,next_send_at:'2026-11-26T13:00:00Z'}},{...base,capabilities:{outreach_mode:'off'}},{...base,outreach:{...base.outreach,ready:0}},{...base,outreach:{...base.outreach,reply_health:'checking'}}]){
+    const k=planWake(s,now);assert.equal(k.at,keep,'no window soon: keep-alive 5 h after the last cycle');assert.match(k.reason,/keep-alive/);
+  }
   assert.equal(planWake({...base,dry_run:true},now).wake,false);
+  assert.equal(planWake(base,Date.parse('2026-11-25T19:21:00Z')).wait_s,0,'an overdue cycle starts at once');
   assert.equal(shouldStillWake(base,Date.parse('2026-11-25T13:00:00Z')),true);
   assert.equal(shouldStillWake({...base,generated_at:'2026-11-25T12:30:00Z'},Date.parse('2026-11-25T13:00:00Z')),false,'a cycle ran meanwhile');
+  assert.equal(shouldStillWake({...base,capabilities:{outreach_mode:'off'}},Date.parse('2026-11-25T13:00:00Z')),true,'research cycles keep running with outreach off');
 });
-
 test('indie-blog contact pages count as the publisher\'s own contact pages; other pages do not',async()=>{
   const {CONTACT_PAGE}=await import('../../scripts/autopilot/recipient-policy.mjs');
   for(const p of ['/contact','/contact-us/','/contact-me/','/about','/about-me','/work-with-me/','/get-in-touch','/write-for-us'])assert.ok(CONTACT_PAGE.test(p),p);

@@ -5,7 +5,11 @@ name: LinkForge Autopilot
 # Cloudflare Pages. No Cloudflare credentials needed.
 on:
   schedule:
+    # Backup to the send-window waker (the primary scheduler). GitHub drops many scheduled slots, so three
+    # per hour make it far likelier that one fires; the "Is a cycle due?" step stops extra cycles.
+    - cron: '7 * * * *'
     - cron: '23 * * * *'
+    - cron: '41 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:
