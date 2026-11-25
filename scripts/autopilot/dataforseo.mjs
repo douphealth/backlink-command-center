@@ -99,7 +99,10 @@ export class DataForSEO{
    */
   async backlinks(target,{limit=200,offset=0}={}){
     const r=await this.post('backlinks','backlinks/backlinks/live',{target,mode:'one_per_domain',limit,offset,
-      filters:[['dofollow','=',true],'and',['item_type','=','anchor'],'and',['page_from_language','=','en'],'and',['is_lost','=',false]],
+      // In one_per_domain mode the filters choose WHICH link represents each domain. Filtering in-content
+      // placement and 3+ outbound links here made 100 of 100 returned rows usable instead of 33 (measured 2026-11-25).
+      filters:[['dofollow','=',true],'and',['item_type','=','anchor'],'and',['page_from_language','=','en'],'and',['is_lost','=',false],
+        'and',['page_from_external_links','>=',3],'and',['semantic_location','in',['article','main','section','details']]],
       order_by:['rank,desc'],include_subdomains:true,exclude_internal_backlinks:true});
     if(!r)return null;
     const res=r[0]||{};

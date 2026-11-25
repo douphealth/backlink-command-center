@@ -4,6 +4,9 @@
 
 ### How it gets smarter
 
+- **Never the same email twice:** every cycle reads Gmail's own Sent folder (read-only, To/Date headers) before sending. A pitch that is in Sent but missing from the record is restored and never repeated; a failed check blocks sending for that cycle. The workflow always starts from the newest commit and a started run never follows another cycle by under 10 minutes. (On 2026-11-25 a run that had queued behind another started from the older state file and re-sent 4 pitches and 1 follow-up.)
+- **3× more usable prospects per paid link-gap pull:** DataForSEO now filters for in-content links on pages with 3+ outbound links before billing rows (100 of 100 rows usable instead of 33, measured on cleaninginstitute.org).
+- **Verification credits are not wasted:** when the day's free credits are gone, verification stops instead of marking the rest of the queue as held.
 - **Only real mentions get a "thanks for mentioning us" email:** auto-generated pages about a domain (website worth/traffic estimates, whois, "is X legit/a scam", "sites like X") are rejected, since they mention every new site and have no editor. Google redirect lookups that are throttled (HTTP 429) get one paced retry, and every unresolved result is counted by reason (`unresolved_why` in the prospects stage).
 - **Fewer lost search results:** a wrapped Google result whose page could not be found was paid for and thrown away (31 of 58 in one cycle). The URL matcher now ignores the site name Google appends to titles ("… - Homegrown Futures"), which had dropped real pages to a score of 25 (accept is 40), and falls back to the publisher's WordPress search API (`/wp-json/wp/v2/search`).
 - **Most valuable prospects first:** with more pitch-ready prospects than daily sends, the queue is ordered by link likelihood *and* link value: DataForSEO domain authority for link-gap pages, and a bonus for pages already ranking in Google's top 10 for the topic.

@@ -16,6 +16,7 @@ The built-in Gmail sender requires all of the following before opening SMTP:
 4. A real mailbox verifier gives a complete positive verdict for that exact email, checked within 24 hours. Catch-all, unknown, pending, blocked, disposable, malformed and error responses never authorize a send.
 5. The address and publisher are not suppressed, and the reply scan completed successfully with a current cursor. A backlog is a reason to hold, not to ignore old opt-outs.
 6. The recipient is checked again for every follow-up. Do not silently change contacts in an existing conversation.
+7. Gmail's Sent folder is read (read-only, To/Date headers only) every cycle before anything is sent. An address found there is treated as already contacted even if the state file has no record of it, and a recipient who received two emails within 24 hours gets no further email. If the Sent folder cannot be read, nothing is sent that cycle.
 
 The `RecipientVerifier` uses bounded first-party page fetches and at most three verified contact candidates per prospect. It does not scrape a third-party contact directory or probe mailbox permutations.
 

@@ -25,7 +25,7 @@ import {autotune,diagnose,TUNING} from './health.mjs';
 import {gscClient,monitorIndex,indexReport,searchPerformance} from './searchconsole.mjs';
 import {submitToBing} from './bing.mjs';
 import {PitchWriter} from './pitch.mjs';
-import {processReplies,runOutreach,preverify,screenQueue,checkLinks,gmailTransport,dailyCap,outreachStatus} from './outreach.mjs';
+import {processReplies,reconcileSent,runOutreach,preverify,screenQueue,checkLinks,gmailTransport,dailyCap,outreachStatus} from './outreach.mjs';
 import {assetStats,learningSummary} from './learn.mjs';
 import {seal,open} from './vault.mjs';
 import {NOW,ageDays,normUrl} from './util.mjs';
@@ -133,6 +133,13 @@ export function retryUnresolved(state){
   return {domains_retried:n};
 }
 
+/** Link-gap pulls are now filtered at the source, so paging positions from the old, mostly unusable result sets are void. */
+export function resetLinkGapPaging(state){
+  state.migrations??={};if(state.migrations.linkgap_filter_v2)return null;
+  const n=Object.keys(state.linkgap||{}).length;state.linkgap={};state.migrations.linkgap_filter_v2=NOW();
+  return {targets_reopened:n};
+}
+
 function prune(state){
   for(const [id,p] of Object.entries(state.prospects||{}))if(p.status==='rejected'&&ageDays(p.found_at)>60)delete state.prospects[id];
   state.ledger=(state.ledger||[]).filter(x=>ageDays(x.at)<400);
@@ -176,6 +183,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     else vaultOk=true;
   }
   const privateWhy=!cfg.dataKey?'LINKFORGE_DATA_KEY not set':'vault could not be opened';
+  if(vaultOk){const r=resetLinkGapPaging(state);if(r?.targets_reopened)log(`repair: ${r.targets_reopened} competitor link profiles will be mined again with the stricter source filter`)}
   if(vaultOk){const r=retryUnresolved(state);if(r?.domains_retried)log(`repair: ${r.domains_retried} search results the old URL matcher gave up on will be retried`)}
   if(vaultOk){const fixed=repairSerpOutage(state);if(fixed)log(`repair: ${fixed.queries_reopened} searches burned by the Google redirect-link outage reopened; search volume restored to ${TUNING.start}`)}
   const dfs=new DataForSEO({...cfg.dfs,state,fetchImpl,log});
@@ -245,9 +253,13 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     :cfg.outreach.mode==='off'?'OUTREACH_MODE=off':noVerifier?'mailbox verifier not configured (Verifalia login or Hunter key, plus a verification daily limit)':'';
   try{
     await stage('replies',vaultOk&&gmailOk,()=>processReplies({state,imap:mailer.imap,log}),mailWhy||'Gmail not set');
+    // Gmail's Sent folder is the ground truth for who was already emailed; a failed check blocks sending this cycle.
+    const canReadSent=typeof mailer?.imap?.sentRecipients==='function';
+    await stage('sent_check',vaultOk&&gmailOk&&canReadSent,()=>reconcileSent({state,imap:mailer.imap,log}),!vaultOk?privateWhy:!canReadSent?'transport cannot read the Sent folder':mailWhy||'Gmail not set');
+    const sentUnknown=stages.sent_check?.ok===false;
     await stage('screen',vaultOk&&!!mailer,()=>screenQueue({state,mailer,deadline:deadline-4*60e3,log}),privateWhy,{until:deadline-3.5*60e3});
     const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',log});
-    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets},deadline:deadline-2*60e3,log}),mailWhy||'SENDER_NAME not set');
+    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets},deadline:deadline-2*60e3,log}),mailWhy||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,template_fallbacks:writer.fallbacks};
     // Every cycle: spend today's leftover free verification credits on the best inboxes whose send window opens within 20 h,
     // so the next in-window cycle (started by the send-window waker) sends at once.
