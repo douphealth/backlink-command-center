@@ -12,29 +12,31 @@ import {readFileSync} from 'node:fs';
 import {resolve,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
-export const WAKER={minGapHours:2,maxWaitHours:5.5,recentHours:1.5};
+// keepaliveHours: GitHub dropped every scheduled slot for 10+ hours on 2026-11-25, so the waker is now the
+// primary scheduler: the next cycle always starts within this many hours of the last one (cron is the backup).
+export const WAKER={minGapHours:2,maxWaitHours:5.5,recentHours:1.5,keepaliveHours:5};
 
-/** When should the next cycle start so queued pitches go out inside their send window? */
-export function planWake(summary,now=Date.now(),{minGapHours=WAKER.minGapHours,maxWaitHours=WAKER.maxWaitHours}={}){
-  const no=reason=>({wake:false,reason});
-  if(!summary?.generated_at)return no('no published summary');
-  if(summary.dry_run)return no('last cycle was a dry run');
-  if(summary.capabilities?.outreach_mode!=='send')return no('outreach is not in hands-free send mode');
-  const o=summary.outreach||{};
-  if(!o.ready)return no('no pitch is queued');
-  if(o.reply_health&&o.reply_health!=='ok')return no(`mailbox review is ${o.reply_health}`);
-  const next=Date.parse(o.next_send_at||'');
-  if(!Number.isFinite(next))return no('no send window ahead');
-  const last=Date.parse(summary.generated_at);
-  const at=Math.max(next,(Number.isFinite(last)?last:now)+minGapHours*36e5,now);
-  const wait=at-now;
-  if(wait>maxWaitHours*36e5)return no(`next send window (${new Date(at).toISOString().slice(0,16)}Z) is over ${maxWaitHours} h away; the schedule covers it`);
-  return {wake:true,at:new Date(at).toISOString(),wait_s:Math.max(0,Math.round(wait/1000)),reason:`${o.ready} pitches queued; next send window ${new Date(next).toISOString().slice(0,16)}Z`};
+/**
+ * When should the next cycle start? At the next recipient send window if pitches are queued (but at least
+ * minGapHours after the last cycle), and never later than keepaliveHours after it, so prospecting, reply
+ * reading and link checks keep running even when GitHub skips the schedule.
+ */
+export function planWake(summary,now=Date.now(),{minGapHours=WAKER.minGapHours,keepaliveHours=WAKER.keepaliveHours}={}){
+  if(!summary?.generated_at)return {wake:false,reason:'no published summary'};
+  if(summary.dry_run)return {wake:false,reason:'last cycle was a dry run'};
+  const last=Date.parse(summary.generated_at),base=Number.isFinite(last)?last:now;
+  const o=summary.outreach||{},next=Date.parse(o.next_send_at||'');
+  const sending=summary.capabilities?.outreach_mode==='send'&&o.ready>0&&(!o.reply_health||o.reply_health==='ok')&&Number.isFinite(next);
+  const keepalive=base+keepaliveHours*36e5;
+  const window=sending&&next<keepalive;
+  const at=Math.max(window?next:keepalive,base+minGapHours*36e5,now);
+  return {wake:true,at:new Date(at).toISOString(),wait_s:Math.max(0,Math.round((at-now)/1000)),
+    reason:window?`${o.ready} pitches queued; next send window ${new Date(next).toISOString().slice(0,16)}Z`:`keep-alive: next cycle ${keepaliveHours} h after the last one`};
 }
 
-/** After waiting: skip if another cycle already ran meanwhile, or sending was switched off. */
+/** After waiting: skip if another cycle already ran meanwhile (e.g. the backup schedule fired). */
 export function shouldStillWake(summary,now=Date.now(),{recentHours=WAKER.recentHours}={}){
-  if(!summary?.generated_at||summary.capabilities?.outreach_mode!=='send')return false;
+  if(!summary?.generated_at||summary.dry_run)return false;
   return now-Date.parse(summary.generated_at)>=recentHours*36e5;
 }
 

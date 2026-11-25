@@ -1,9 +1,9 @@
 name: LinkForge Send-Window Waker
-# GitHub starts the hourly Autopilot schedule only 2-3 times a day at random hours, so queued,
-# verified pitches waited for a cycle that happened to fall inside the recipient's business hours.
-# After every Autopilot cycle this job reads the published summary, waits until the next send
-# window opens (at most 5.5 h, cycles at least 2 h apart; waiting is free on public repositories)
-# and starts one cycle. The dashboard's Stop button disables Autopilot, so no cycle starts then.
+# The primary scheduler. GitHub starts the hourly Autopilot schedule only 2-3 times a day at random
+# hours, and on 2026-11-25 skipped it for over 10 hours. After every Autopilot cycle this job waits
+# until the next recipient send window, or at most 5 h (keep-alive), with cycles at least 2 h apart,
+# then starts one cycle (waiting is free on public repositories). The cron schedule is the backup that
+# restarts the chain. The dashboard's Stop button disables Autopilot, so no cycle can start then.
 on:
   workflow_run:
     workflows: [LinkForge Autopilot]
