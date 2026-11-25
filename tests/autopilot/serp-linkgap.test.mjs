@@ -198,3 +198,17 @@ test('contact finder follows the homepage menu and indie contact pages',async()=
   assert.equal(c.email,'jess@plantmom.blog');
   assert.equal(fetched[1].replace(/\/$/,''),'https://plantmom.blog/contact-me','the homepage menu link is tried before guessed paths');
 });
+
+test('each site searches and sizes publishers in its own market (UK sites are not judged on US traffic)',async()=>{
+  const {marketOf}=await import('../../scripts/autopilot/prospect.mjs');
+  const uk={domain:'bordercover.shop',topic:'car insurance abroad',market:{location:2826,language:'en'},assets:[],competitors:[]};
+  const us={domain:'cabinvolt.shop',topic:'power bank flight rules',assets:[],competitors:[]};
+  assert.deepEqual(marketOf(uk),{location:2826,language:'en'});assert.deepEqual(marketOf(us),{location:2840,language:'en'});
+  const serpCalls=[],trafficCalls=[];
+  const dfs={canSpend:()=>true,affordable:()=>4,serp:async(q,o)=>{serpCalls.push(o.location);return [{url:`https://blog-${o.location}.co.uk/x`,domain:`blog-${o.location}.co.uk`,title:'t',rank:1}]},
+    domainTraffic:async(d,o)=>{trafficCalls.push([o.location,d.length]);return Object.fromEntries(d.map(x=>[x,500]))}};
+  const state={};
+  await discoverProspects({assets:[],sites:[uk,us],state,dfs,fetchImpl:async()=>new Response('',{status:404})});
+  assert.deepEqual([...new Set(serpCalls)].sort(),[2826,2840],'brand searches run in each site\'s market');
+  assert.deepEqual(trafficCalls.map(x=>x[0]).sort(),[2826,2840],'audience sized per market');
+});

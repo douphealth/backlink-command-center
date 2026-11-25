@@ -113,5 +113,129 @@ export const SITES = [
     "competitors": [
       "iloveimg.com"
     ]
+  },
+  {
+    "domain": "tenderatlas.shop",
+    "market": {"location": 2826, "language": "en"},
+    "topic": "public procurement",
+    "assets": [
+      "https://tenderatlas.shop/",
+      "https://tenderatlas.shop/tenders",
+      "https://tenderatlas.shop/methodology"
+    ],
+    "competitors": []
+  },
+  {
+    "domain": "signalroom.store",
+    "topic": "SaaS status pages",
+    "assets": [
+      "https://signalroom.store/"
+    ],
+    "competitors": [
+      "downdetector.com"
+    ]
+  },
+  {
+    "domain": "stainsolver.shop",
+    "topic": "stain removal",
+    "assets": [
+      "https://stainsolver.shop/"
+    ],
+    "competitors": [
+      "cleaninginstitute.org",
+      "my100yearoldhome.com"
+    ]
+  },
+  {
+    "domain": "borderwise.online",
+    "market": {"location": 2826, "language": "en"},
+    "topic": "rental car border crossing",
+    "assets": [
+      "https://borderwise.online/",
+      "https://borderwise.online/routes",
+      "https://borderwise.online/guide"
+    ],
+    "competitors": []
+  },
+  {
+    "domain": "checkthetag.shop",
+    "topic": "laundry care symbols",
+    "assets": [
+      "https://checkthetag.shop/",
+      "https://checkthetag.shop/symbols",
+      "https://checkthetag.shop/wash-day"
+    ],
+    "competitors": [
+      "ihateironing.com",
+      "cleaninginstitute.org"
+    ]
+  },
+  {
+    "domain": "solarpayback.shop",
+    "market": {"location": 2826, "language": "en"},
+    "topic": "solar payback",
+    "assets": [
+      "https://solarpayback.shop/calculator",
+      "https://solarpayback.shop/balkonkraftwerk-rechner",
+      "https://solarpayback.shop/"
+    ],
+    "competitors": [
+      "solarreviews.com",
+      "unboundsolar.com",
+      "solarsesame.com"
+    ]
+  },
+  {
+    "domain": "stopthat.shop",
+    "topic": "notification settings",
+    "assets": [
+      "https://stopthat.shop/",
+      "https://stopthat.shop/fix"
+    ],
+    "competitors": []
+  },
+  {
+    "domain": "buyonce.site",
+    "topic": "smart home subscriptions",
+    "assets": [
+      "https://buyonce.site/",
+      "https://buyonce.site/devices",
+      "https://buyonce.site/quiz"
+    ],
+    "competitors": [
+      "safehome.org"
+    ]
+  },
+  {
+    "domain": "cabinvolt.shop",
+    "topic": "power bank flight rules",
+    "assets": [
+      "https://cabinvolt.shop/",
+      "https://cabinvolt.shop/calculator",
+      "https://cabinvolt.shop/portable-charger-on-plane"
+    ],
+    "competitors": [
+      "clutchcharger.com"
+    ]
+  },
+  {
+    "domain": "bordercover.shop",
+    "market": {"location": 2826, "language": "en"},
+    "topic": "car insurance abroad",
+    "assets": [
+      "https://bordercover.shop/",
+      "https://bordercover.shop/atlas",
+      "https://bordercover.shop/cover"
+    ],
+    "competitors": []
+  },
+  {
+    "domain": "fixorrefund.shop",
+    "market": {"location": 2826, "language": "en"},
+    "topic": "consumer rights",
+    "assets": [
+      "https://fixorrefund.shop/"
+    ],
+    "competitors": []
   }
 ];

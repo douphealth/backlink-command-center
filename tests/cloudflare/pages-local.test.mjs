@@ -31,11 +31,11 @@ test('Public site HTTP verification has a strictly fixed domain allowlist',async
   assert.equal((await onRequest(ctx('/api/asset-check?domain=attacker.site'))).status,404);
 });
 
-test('Browser workspace provides 10 real portfolio sites and zero invented KPIs',async()=>{
+test('Browser workspace provides every configured portfolio site and zero invented KPIs',async()=>{
   const s=memory();const overview=await s.api('overview');const sites=await s.api('sites');
   assert.equal(overview.counts.prospects,0);assert.equal(overview.counts.links,0);
   assert.equal(overview.spend.month_usd,0);assert.equal(overview.worker_status,'Browser workspace — no scheduled Worker');
-  assert.equal(sites.items.length,10);assert.equal(sites.items[0].domain,'gearuptofit.com');
+  assert.equal(sites.items.length,SITES.length);assert.deepEqual(sites.items.map(x=>x.domain),SITES.map(x=>x.domain));assert.ok(SITES.length>=21);
   assert.equal(s.persistent,false);
 });
 
