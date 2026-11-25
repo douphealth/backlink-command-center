@@ -45,7 +45,17 @@ export function carouselItems(items){
 
 const locs=xml=>[...String(xml||'').matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/gi)].map(m=>m[1].replace(/&amp;/g,'&'));
 const pathOf=u=>{try{return new URL(u).pathname.replace(/\/+$/,'')}catch{return ''}};
-/** Score how well a URL's path matches the breadcrumb prefix and the result title. */
+/**
+ * The article title without the site name Google appends ("… - Homegrown Futures", "… | Blog")
+ * and without a trailing ellipsis. Brand words are never in the slug, so they wrecked the match.
+ */
+export function coreTitle(title){
+  let t=String(title||'').replace(/\s*(\.\.\.|…)\s*$/,'').trim();
+  const parts=t.split(/\s+[|–—-]\s+|\s+::\s+/);
+  if(parts.length>1){const last=parts.at(-1);if(last.length<=40||parts[0].length>=last.length)t=parts.slice(0,-1).join(' ')}
+  return t;
+}
+/** Score how well a URL's path matches the breadcrumb prefix and the result title (40+ = accept). */
 export function matchScore(url,{segments=[],title=''}={}){
   const p=pathOf(url).toLowerCase();if(!p||p==='')return 0;
   let s=0;
@@ -53,9 +63,20 @@ export function matchScore(url,{segments=[],title=''}={}){
     const prefix='/'+segments.join('/').toLowerCase();
     if(p===prefix)s+=100;else if(p.startsWith(prefix))s+=60+Math.min(20,prefix.length);
   }
-  const t=[...new Set(tokens(title))].filter(w=>w.length>2&&!w.includes(' '));
-  if(t.length){const slug=new Set(p.split(/[^a-z0-9]+/));const hit=t.filter(w=>slug.has(w)).length/t.length;if(hit>=0.5)s+=Math.round(hit*50)}
+  const t=[...new Set(tokens(coreTitle(title)))].filter(w=>w.length>2&&!w.includes(' '));
+  if(t.length){
+    const slug=new Set(p.split(/[^a-z0-9]+/)),hits=t.filter(w=>slug.has(w)||slug.has(w+'s')||(w.endsWith('s')&&slug.has(w.slice(0,-1)))).length,ratio=hits/t.length;
+    // Two or more title words in the slug and most of the title present: a confident match.
+    if(hits>=2&&ratio>=0.6)s+=40+Math.round(ratio*40);else if(ratio>=0.5)s+=Math.round(ratio*30);
+  }
   return s;
+}
+/** WordPress sites answer a title search with the post URL in one request (/wp-json/wp/v2/search). */
+async function wordpressSearch(origin,title,{fetchImpl,timeout}){
+  const q=coreTitle(title).slice(0,90);if(q.length<8)return [];
+  const r=await fetchPage(`${origin}/wp-json/wp/v2/search?search=${encodeURIComponent(q)}&per_page=5&_fields=url,title`,{fetchImpl,timeout,maxBytes:200000,accept:'application/json'});
+  if(r.status!==200||!r.body)return [];
+  try{const j=JSON.parse(r.body);return Array.isArray(j)?j.map(x=>x?.url).filter(u=>typeof u==='string'):[]}catch{return []}
 }
 /**
  * Find the real page for a wrapped result. Returns {url, page?, via} or null.
@@ -97,7 +118,11 @@ export async function resolveWrapped(c,{fetchImpl=fetch,timeout=9000}={}){
     const home=await fetchPage(origin+'/',{fetchImpl,timeout,maxBytes:400000});
     if(home.status===200)for(const m of home.body.matchAll(/href="([^"#]+)"/gi)){const u=normUrl(m[1],home.url);if(u&&hostOf(u).endsWith(c.domain))urls.add(u)}
   }
-  let best=null,bestScore=0;
-  for(const u of urls){if(!hostOf(u).endsWith(c.domain))continue;const s=matchScore(u,{segments:crumb.segments,title:c.serp_title||c.title});if(s>bestScore){best=u;bestScore=s}}
-  return best&&bestScore>=40?{url:normUrl(best),via:'sitemap'}:null;
+  const pick=list=>{let best=null,bestScore=0;
+    for(const u of list){if(!hostOf(u).endsWith(c.domain))continue;const s=matchScore(u,{segments:crumb.segments,title:c.serp_title||c.title});if(s>bestScore){best=u;bestScore=s}}
+    return best&&bestScore>=40?normUrl(best):null};
+  const fromMap=pick(urls);if(fromMap)return {url:fromMap,via:'sitemap'};
+  // 4. WordPress search: covers big sitemaps we only partly read and sites whose sitemap is missing.
+  const fromWp=pick(await wordpressSearch(origin,c.serp_title||c.title,{fetchImpl,timeout}));
+  return fromWp?{url:fromWp,via:'wordpress_search'}:null;
 }

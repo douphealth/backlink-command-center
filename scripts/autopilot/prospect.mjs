@@ -299,6 +299,7 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
         const asset=pair.asset;
         fresh.push({site:job.site.domain,domain,url:normUrl(l.url_from),serp_title:l.title,query:`linkgap:${job.target}`,footprint:'link_gap',kind:'linkgap',rank:null,
           asset:{site:asset.site,url:asset.url,title:asset.title,h1:asset.h1,type:asset.type,terms:(asset.terms||[]).slice(0,30)},
+          authority:{domain_rank:l.domain_rank??null,page_rank:l.page_rank??null},
           competitor_link:{url:l.url_to,host:hostOf(l.url_to),anchor:String(l.anchor||'').slice(0,120),context:`${l.text_pre} … ${l.text_post}`.replace(/\s+/g,' ').trim().slice(0,300),dead:!!l.broken_to,match:pair.match}});
       }
       stats.linkgap_candidates+=fresh.length-before;
@@ -368,7 +369,7 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     res??=await fetchPage(url,{fetchImpl,timeout:12000,maxBytes:500000});
     const id=hashId(`${c.site}|${url}`);
     const base={id,site:c.site,domain:c.domain,page_url:url,asset_url:c.asset.url,asset_title:c.asset.title,query:c.query,footprint:c.footprint,kind:c.kind,serp_rank:c.rank,etv:c.etv??null,found_at:NOW(),history:[],
-      ...(c.competitor_link?{competitor_link:c.competitor_link}:{})};
+      ...(c.competitor_link?{competitor_link:c.competitor_link}:{}),...(c.authority?{authority:c.authority}:{})};
     if(res.status!==200||!res.body)return {...base,status:'rejected',reason:`HTTP ${res.status||res.error}`};
     const site=bySite.get(c.site),mention=c.kind==='mention';
     const q=qualifyPage(res.url,res.body,{asset:c.asset,site,ourDomains,provenLinker:c.kind==='linkgap'});

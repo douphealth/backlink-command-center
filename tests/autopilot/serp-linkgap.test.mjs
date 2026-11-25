@@ -212,3 +212,41 @@ test('each site searches and sizes publishers in its own market (UK sites are no
   assert.deepEqual([...new Set(serpCalls)].sort(),[2826,2840],'brand searches run in each site\'s market');
   assert.deepEqual(trafficCalls.map(x=>x[0]).sort(),[2826,2840],'audience sized per market');
 });
+
+test('titles with the site name appended still match their real URL; decoys on the same site do not',async()=>{
+  const {matchScore,coreTitle}=await import('../../scripts/autopilot/serp-unwrap.mjs');
+  assert.equal(coreTitle('Beginner\'s Guide to Indoor Plant Care - Homegrown Futures'),'Beginner\'s Guide to Indoor Plant Care');
+  assert.equal(coreTitle('How Interleaved Practice Schedules Outperform Blocked ...'),'How Interleaved Practice Schedules Outperform Blocked');
+  const t='Beginner\'s Guide to Indoor Plant Care - Homegrown Futures';
+  assert.ok(matchScore('https://homegrownfutures.com/beginners-guide-indoor-plant-care',{title:t})>=40,'real page accepted (scored 25 before)');
+  assert.ok(matchScore('https://pamsrootedingreen.com/plant-care-guides',{title:'Plant Care Guides - Pam\'s Rooted in Green'})>=40);
+  for(const decoy of ['https://homegrownfutures.com/about','https://homegrownfutures.com/indoor-herb-garden'])assert.ok(matchScore(decoy,{title:t})<40,decoy);
+});
+
+test('WordPress search recovers a wrapped result when the sitemap cannot',async()=>{
+  const {resolveWrapped}=await import('../../scripts/autopilot/serp-unwrap.mjs');
+  const asked=[];
+  const f=async u=>{asked.push(u);
+    if(u.includes('/wp-json/wp/v2/search'))return new Response(JSON.stringify([{url:'https://brainrash.com/about/',title:'About'},{url:'https://brainrash.com/blog/interleaving-why-mixing-practice-beats-blocking/',title:'Interleaving'}]),{headers:{'content-type':'application/json; charset=UTF-8'}});
+    return new Response('',{status:u.startsWith('https://google.com')?403:404})};
+  const r=await resolveWrapped({domain:'brainrash.com',goto:'https://google.com/goto?url=X',title:'Interleaving: Why Mixing Practice Beats Blocking | Blog',crumb:{origin:'https://brainrash.com',segments:['Blog','AI Personalized Learning'],truncated:false,slugLike:false,guess:null}},{fetchImpl:f});
+  assert.deepEqual(r,{url:'https://brainrash.com/blog/interleaving-why-mixing-practice-beats-blocking',via:'wordpress_search'});
+  assert.match(decodeURIComponent(asked.find(u=>u.includes('wp-json'))),/search=Interleaving: Why Mixing Practice Beats Blocking&/,'searched without the site-name suffix');
+});
+
+test('send order favours links worth more: domain authority and pages already ranking top 10',async()=>{
+  const {linkLikelihood}=await import('../../scripts/autopilot/learn.mjs');
+  const base={score:70,email:'editor@pub.com',domain:'pub.com',email_rank:95,etv:5000,kind:'linkgap'};
+  const strong=linkLikelihood({...base,authority:{domain_rank:450}}),weak=linkLikelihood({...base,authority:{domain_rank:40}});
+  assert.ok(strong>weak,`${strong} > ${weak}`);
+  assert.ok(linkLikelihood({...base,serp_rank:3})>linkLikelihood({...base,serp_rank:40}));
+  const dfs=new DataForSEO({login:'l',password:'p',state:{},fetchImpl:async()=>new Response(JSON.stringify({status_code:20000,cost:0.03,tasks:[{status_code:20000,result:[{total_count:1,items:[{url_from:'https://a.com/x',domain_from:'a.com',page_from_title:'t',url_to:'https://c.com/',anchor:'a',semantic_location:'article',domain_from_rank:312,page_from_rank:150,url_to_status_code:200}]}]}]}),{headers:{'content-type':'application/json'}})});
+  const r=await dfs.backlinks('c.com');assert.equal(r.items[0].domain_rank,312);assert.equal(r.items[0].page_rank,150);
+});
+
+test('domains the old resolver gave up on are retried once',async()=>{
+  const {retryUnresolved}=await import('../../scripts/autopilot/run.mjs');
+  const state={unresolved:{'a.com':'2026-11-25T00:00:00Z','b.com':'2026-11-24T00:00:00Z'}};
+  assert.deepEqual(retryUnresolved(state),{domains_retried:2});assert.deepEqual(state.unresolved,{});
+  state.unresolved={'c.com':'2026-11-26T00:00:00Z'};assert.equal(retryUnresolved(state),null);assert.ok(state.unresolved['c.com'],'runs once');
+});
