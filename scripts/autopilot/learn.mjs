@@ -35,6 +35,10 @@ export function linkLikelihood(p,{assets=new Map()}={}){
   s+=etv==null?6:etv>=1000&&etv<=300000?15:etv>=300&&etv<1_000_000?8:3; // independent, real audience
   s+=rank>=95?15:rank>=72?12:rank>=50?7:0;                             // author > editorial > generic inbox
   if((p.last_year_mentioned||0)>=year-1)s+=8;                         // recently maintained
+  // What the link is worth: DataForSEO domain authority (0-1000) for link-gap pages, and a page that already
+  // ranks in Google's top 10 for our topic is both clearly on-topic and a placement readers actually see.
+  const dr=p.authority?.domain_rank;if(dr!=null)s+=dr>=400?8:dr>=200?5:dr>=100?2:0;
+  if(p.serp_rank!=null&&p.serp_rank<=10)s+=5;
   const a=assets.get(p.asset_url);if(a&&a.sent>=3)s+=Math.max(-10,Math.min(10,(a.rate-1/3)*30)); // our page's track record
   return Math.round(Math.max(0,Math.min(100,s)));
 }

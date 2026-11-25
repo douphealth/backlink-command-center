@@ -46,7 +46,7 @@ export async function fetchPage(url,{timeout=12000,maxBytes=400000,etag,lastModi
     }
     const type=res.headers.get('content-type')||'';
     let body='';
-    if(res.status===200&&/html|xml|text\/plain/i.test(type)){
+    if(res.status===200&&/html|xml|json|text\/plain/i.test(type)){
       if(res.body?.getReader){const reader=res.body.getReader(),dec=new TextDecoder();
         try{while(body.length<maxBytes){const n=await reader.read();if(n.done)break;body+=dec.decode(n.value,{stream:true})}}
         finally{await reader.cancel().catch(()=>{})}

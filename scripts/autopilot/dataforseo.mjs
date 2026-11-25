@@ -105,7 +105,7 @@ export class DataForSEO{
     const res=r[0]||{};
     return {total:Number(res.total_count||0),items:(res.items||[]).map(x=>({url_from:x.url_from,domain_from:x.domain_from,title:x.page_from_title||'',url_to:x.url_to,anchor:x.anchor||'',
       text_pre:x.text_pre||'',text_post:x.text_post||'',location:x.semantic_location||'',spam:x.backlink_spam_score??null,external_links:x.page_from_external_links??null,
-      broken_to:[404,410].includes(Number(x.url_to_status_code)),platform:x.domain_from_platform_type||[]}))};
+      broken_to:[404,410].includes(Number(x.url_to_status_code)),domain_rank:Number.isFinite(x.domain_from_rank)?x.domain_from_rank:null,page_rank:Number.isFinite(x.page_from_rank)?x.page_from_rank:null,platform:x.domain_from_platform_type||[]}))};
   }
   /** Estimated monthly organic visits per domain (one request for up to 1,000 domains). */
   async domainTraffic(domains,{location=2840,language='en'}={}){

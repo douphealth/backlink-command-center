@@ -126,6 +126,13 @@ export function repairSerpOutage(state){
   return {queries_reopened:reopened};
 }
 
+/** The URL resolver learned to ignore appended site names and to ask WordPress search: retry domains it gave up on. */
+export function retryUnresolved(state){
+  state.migrations??={};if(state.migrations.resolver_v2)return null;
+  const n=Object.keys(state.unresolved||{}).length;state.unresolved={};state.migrations.resolver_v2=NOW();
+  return {domains_retried:n};
+}
+
 function prune(state){
   for(const [id,p] of Object.entries(state.prospects||{}))if(p.status==='rejected'&&ageDays(p.found_at)>60)delete state.prospects[id];
   state.ledger=(state.ledger||[]).filter(x=>ageDays(x.at)<400);
@@ -169,6 +176,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     else vaultOk=true;
   }
   const privateWhy=!cfg.dataKey?'LINKFORGE_DATA_KEY not set':'vault could not be opened';
+  if(vaultOk){const r=retryUnresolved(state);if(r?.domains_retried)log(`repair: ${r.domains_retried} search results the old URL matcher gave up on will be retried`)}
   if(vaultOk){const fixed=repairSerpOutage(state);if(fixed)log(`repair: ${fixed.queries_reopened} searches burned by the Google redirect-link outage reopened; search volume restored to ${TUNING.start}`)}
   const dfs=new DataForSEO({...cfg.dfs,state,fetchImpl,log});
   // ---- 0. Connections: free checks that saved credentials really work (nothing is charged or sent) ----
