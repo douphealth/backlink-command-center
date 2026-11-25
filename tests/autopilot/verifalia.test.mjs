@@ -97,12 +97,12 @@ test('pre-verify checks the best queued inboxes while outreach is paused and nev
   const state={prospects:{a:mk('a',40),b:mk('b',90),c:mk('c',70),d:{...mk('d',99),contact_quality:{status:'held',detail:'no_email_published',checked_at:t}}},contacted:{},suppression:{}};
   const mailer={send:async m=>sent.push(m),authorizeRecipient:async p=>{asked.push(p.id);return p.id==='b'?{ok:true,email:p.email,evidence:{source:`https://${p.domain}/contact`,email:p.email,rank:95,observed_at:t},
     verification:verifaliaVerdict(entry(p.email),p.email,Date.now())}:{ok:false,reason:'no_verified_mailbox',detail:'mailbox_unknown'}}};
-  const r=await preverify({state,mailer,max:2});
+  const r=await preverify({state,mailer,max:2,now:()=>new Date('2026-11-25T12:00:00Z')});
   assert.deepEqual(asked,['b','c']);assert.deepEqual(r,{checked:2,verified:1,held:1});assert.equal(sent.length,0);
   assert.equal(state.prospects.b.contact_quality.status,'verified');assert.equal(state.prospects.c.contact_quality.status,'held');
-  assert.deepEqual((await preverify({state,mailer,max:5})).checked,1); // b already verified, c and d held recently with a reason: only a
+  assert.deepEqual((await preverify({state,mailer,max:5,now:()=>new Date('2026-11-25T12:00:00Z')})).checked,1); // b already verified, c and d held recently with a reason: only a
   delete state.prospects.c.contact_quality.detail;
-  assert.equal((await preverify({state,mailer,max:5})).checked,1); // a hold with no recorded reason (older code) is re-checked now
+  assert.equal((await preverify({state,mailer,max:5,now:()=>new Date('2026-11-25T12:00:00Z')})).checked,1); // a hold with no recorded reason (older code) is re-checked now
 });
 
 test('held inboxes carry a precise, address-free reason that is aggregated publicly',async()=>{
@@ -139,7 +139,7 @@ test('holds caused on our side are re-checked next run and hidden once the verif
   assert.equal(publisherHold('no_email_published'),true);assert.equal(publisherHold('mx_null_mx'),true);assert.equal(publisherHold('mailbox_accept_all'),true);
   const old=new Date(Date.now()-3600e3).toISOString(),mk=(id,detail)=>({id,domain:id+'.example',email:`editor@${id}.example`,status:'ready',qv:2,score:50,history:[],contact_quality:{status:'held',detail,checked_at:old}});
   const state={prospects:{a:mk('a','mailbox_verifalia_login_rejected'),b:mk('b','no_email_published')},contacted:{},suppression:{},verifier_balance:{provider:'verifalia',free_credits:19,checked_at:new Date().toISOString()}};
-  const asked=[];await preverify({state,mailer:{authorizeRecipient:async p=>{asked.push(p.id);return {ok:false,reason:'x',detail:'no_email_published'}}},max:5});
+  const asked=[];await preverify({state,mailer:{authorizeRecipient:async p=>{asked.push(p.id);return {ok:false,reason:'x',detail:'no_email_published'}}},max:5,now:()=>new Date('2026-11-25T12:00:00Z')});
   assert.deepEqual(asked,['a']); // login-hold re-checked now; publisher-side hold waits
   state.prospects.c=mk('c','mailbox_verifalia_login_rejected');
   assert.deepEqual(outreachStatus(state,{limit:12,mode:'off',qualifyVersion:2}).holds,{no_email_published:2}); // stale login hold hidden

@@ -24,6 +24,8 @@ const DENIED=/\b(?:no (?:unsolicited |link )?(?:pitches|submissions)|do not (?:p
 // Owner decision (Nov 2026): a site's general inbox may be used, strictly: own domain, published on its own
 // contact/about page, only when no editorial or named-author address exists, and only after a
 // Deliverable mailbox check (catch-all never). Sales/support/privacy etc. stay excluded via BAD_LOCAL.
+/** The publisher's own contact/about pages, including the names indie blogs use (/contact-me, /about-me, /work-with-me). */
+export const CONTACT_PAGE=/\/(?:contact(?:-us|-me)?|about(?:-us|-me)?|work-with-me|get-in-touch|editorial|editors|team|write-for-us|contribute)(?:\/|$)/i;
 const GENERIC_INBOX=/^(?:hello|hi|contact|info|team|mail|office|enquiries|enquiry|inquiries)$/;
 const FREEMAIL=/^(?:gmail|outlook|hotmail|yahoo|protonmail|proton|icloud)\.(?:com|me)$/;
 const decode=s=>String(s||'').replace(/&#x([0-9a-f]+);/gi,(_,v)=>String.fromCodePoint(Math.min(0x10ffff,parseInt(v,16))))
@@ -223,7 +225,7 @@ export class RecipientVerifier{
       const url=queue.shift();if(!url||seen.has(url)||!samePublisher(url,p.domain))continue;seen.add(url);
       const page=await this.page(url,p.domain);if(!page)continue;fetched++;
       for(const m of cleanPublisherHtml(page.body).matchAll(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}/gi)){const e=normalizeEmail(m[0].toLowerCase());if(e&&host(e.split('@')[1])===host(p.domain))published.add(e)}
-      const source=/\/(?:author|writers?)\//i.test(new URL(url).pathname)?'author':/\/(?:contact(?:-us)?|about(?:-us)?|editorial|editors|team|write-for-us|contribute)(?:\/|$)/i.test(new URL(url).pathname)?'contact':'page';
+      const source=/\/(?:author|writers?)\//i.test(new URL(url).pathname)?'author':CONTACT_PAGE.test(new URL(url).pathname)?'contact':'page';
       for(const c of extractEditorialCandidates(page.body,page.url,{domain:p.domain,author:p.author||'',source,now:this.now()}))if(!candidates.has(c.email)||candidates.get(c.email).rank<c.rank)candidates.set(c.email,c);
       for(const m of cleanPublisherHtml(page.body).matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)){
         let link;try{link=new URL(decode(m[1]),url).href}catch{continue}
