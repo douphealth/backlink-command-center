@@ -74,6 +74,21 @@ export class Imap{
   if(validity&&parsed)result.cursor={mailbox,uidvalidity:validity,uid:uids.at(-1)||after};
   return result;
  }
+ /**
+  * Who we emailed recently, read from Gmail's own Sent folder (read-only, headers only). This is the
+  * ground truth for "already contacted": it survives a lost or overwritten state file.
+  */
+ async sentRecipients(sinceDate,{max=500}={}){
+  const list=await this.cmd('LIST "" "*"');const line=list.split(CRLF).find(l=>/\\Sent\b/.test(l));
+  const mailbox=line?((line.match(/"([^"]+)"\s*$/)||line.match(/(\S+)\s*$/)||[])[1]):'[Gmail]/Sent Mail';
+  await this.cmd(`EXAMINE ${quote(mailbox)}`);
+  const since=sinceDate.toUTCString().split(' ').slice(1,4).join('-');
+  const found=await this.cmd(`UID SEARCH SINCE ${since}`);
+  if(!/(?:^|\r\n)\* SEARCH(?:[ \t]+\d+)*[ \t]*(?:\r\n|$)/.test(found))throw Error('IMAP sent search response missing');
+  const uids=(found.match(/\* SEARCH([\d ]*)/)?.[1]||'').trim().split(/\s+/).map(Number).filter(n=>Number.isSafeInteger(n)&&n>0).sort((a,b)=>a-b).slice(-Math.max(1,Math.min(1000,max)));
+  if(!uids.length)return [];
+  return parseSentHeaders(await this.cmd(`UID FETCH ${uids.join(',')} (UID BODY.PEEK[HEADER.FIELDS (TO DATE)])`));
+ }
  async close(){try{await Promise.race([this.cmd('LOGOUT'),new Promise(r=>setTimeout(r,3000).unref?.())])}catch{}this.w?.end()}
 }
 /** Decode bounded multipart/plain replies; attachments are not interpreted as replies. */
@@ -93,6 +108,17 @@ export function decodeReplyBody(body,encoding='',contentType='',depth=0){
  else if(/quoted-printable/i.test(encoding))text=Buffer.from(text.replace(/=\r?\n/g,'').replace(/=([0-9a-f]{2})/gi,(_,h)=>String.fromCharCode(parseInt(h,16))),'latin1').toString('utf8');
  if(/text\/html/i.test(contentType))text=text.replace(/<blockquote\b[\s\S]*?<\/blockquote>/gi,'').replace(/<(script|style)\b[\s\S]*?<\/\1>/gi,'').replace(/<br\b[^>]*>|<\/(?:p|div)>/gi,'\n').replace(/<[^>]*>/g,' ').replace(/&nbsp;/gi,' ').replace(/&amp;/gi,'&');
  return text.trim();
+}
+/** [{to, at}] from a Sent-folder header fetch: one entry per recipient address per message. */
+export function parseSentHeaders(raw){
+ const out=[];for(const part of String(raw||'').split(/(?=^\* \d+ FETCH )/m)){
+  if(!part.startsWith('* '))continue;
+  const header=((part.match(/BODY\[HEADER\.FIELDS[^\]]*\] \{\d+\}\r\n([\s\S]*?)(?:\r\n\r\n|\)\s*$|$)/)||[])[1]||'').replace(/\r\n[ \t]+/g,' ');
+  const h=k=>(header.match(new RegExp('^'+k+':\\s*(.*)$','im'))||[])[1]||'';
+  const t=Date.parse(h('Date')),at=Number.isFinite(t)?new Date(t).toISOString():null;
+  for(const e of new Set((h('To').match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi)||[]).map(x=>x.toLowerCase())))out.push({to:e,at});
+ }
+ return out;
 }
 export function parseFetch(raw){
  const out=[];for(const part of raw.split(/(?=^\* \d+ FETCH )/m)){

@@ -124,6 +124,17 @@ export function mentionsUs(html,site){
   return text.includes(site.domain)||text.includes(b)||text.includes(b.replace(/([a-z])(?=(up|to|for|fit|grow|gone|guide|hub|lab|app)\b)/g,'$1 '));
 }
 
+/**
+ * Auto-generated pages about a domain (worth/traffic estimates, whois, "is it legit/down", "sites like")
+ * mention every new site but have no editor who would add a link: never thank them for a "mention".
+ */
+const SITE_INFO_HOST=/(^|\.)(siteprice|sitelike|similarsites|hypestat|statshow|websiteoutlook|site-analyzer|webstatsdomain|siteindices|scamadviser|scam-detector|scamdoc|isitdownrightnow|downforeveryoneorjustme|downdetector|whois|domaintools|sitechecker|seoptimer|website-informer|webrate|robtex|urlscan|builtwith|wappalyzer|siteworthtraffic|worthofweb|websiteiq|ranking|sur\.ly|validin|similarweb|semrush|ahrefs|crunchbase)\.[a-z.]+$/i;
+const SITE_INFO_TEXT=/\b(?:website (?:worth|value|valuation|traffic)|(?:site|domain) (?:worth|value|valuation|age|info(?:rmation)?|report|analysis)|traffic (?:estimate|analysis|stats)|whois|is (?:it |this )?(?:legit|a scam)|is [a-z0-9-]+\.[a-z.]{2,} (?:legit|safe|a scam|down|up)|scam (?:check|score)|trust score|(?:similar|related) (?:sites|websites)|sites like|seo (?:report|score|analysis|audit))\b/i;
+export function siteInfoPage(url,title=''){
+  let host='',path='';try{const u=new URL(url);host=u.hostname;path=decodeURIComponent(u.pathname).replace(/[-_/]+/g,' ')}catch{}
+  return SITE_INFO_HOST.test(host)||SITE_INFO_TEXT.test(`${title} ${path}`);
+}
+
 export function knownDomain(state,site,domain){
   return !!(state.domains?.[`${site}|${domain}`]||state.suppression?.[domain]||state.contacted?.[domain]);
 }
@@ -362,8 +373,8 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     if(Date.now()>deadline)return {deferred:c};
     let url=c.url,res=null;
     if(!url){
-      const found=await resolveWrapped({...c,title:c.serp_title},{fetchImpl}).catch(()=>null);
-      if(!found){state.unresolved[c.domain]=NOW();return {unresolved:c}}
+      const diag={},found=await resolveWrapped({...c,title:c.serp_title},{fetchImpl,diag}).catch(()=>null);
+      if(!found){state.unresolved[c.domain]=NOW();const why=c.goto?`redirect_${diag.goto||'error'}`:'no_redirect';(stats.unresolved_why??={})[why]=(stats.unresolved_why[why]||0)+1;return {unresolved:c}}
       url=found.url;res=found.page||null;stats.resolved=(stats.resolved||0)+1;(stats.resolved_via??={})[found.via]=(stats.resolved_via[found.via]||0)+1;
     }
     res??=await fetchPage(url,{fetchImpl,timeout:12000,maxBytes:500000});
@@ -377,7 +388,9 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
       resource_page:q.resource_page,fit_section:q.fit_section,author:q.author,excerpt:q.excerpt,last_year_mentioned:q.last_year_mentioned};
     if(q.linksToUs)return {...rec,status:'already_linked',reason:'Already links to us',existing_link:{url:q.linksToUs.url,anchor:q.linksToUs.anchor,rel:q.linksToUs.rel}};
     // A mention is relevant by definition; it only has to really name us (search engines are fuzzy).
-    if(mention){if(!mentionsUs(res.body,site))return {...rec,status:'rejected',reason:'Brand not actually mentioned'};rec.score=Math.max(rec.score,70)}
+    if(mention){if(!mentionsUs(res.body,site))return {...rec,status:'rejected',reason:'Brand not actually mentioned'};
+      if(siteInfoPage(rec.page_url,rec.title))return {...rec,status:'rejected',reason:'Automated site-info page, not an editorial mention'};
+      rec.score=Math.max(rec.score,70)}
     else if(!q.qualified)return {...rec,status:'rejected',reason:q.reasons.join('; ')||'Low fit score'};
     if(Date.now()>deadline)return {deferred:c};
     const contact=await findContact(rec.page_url,res.body,{fetchImpl,author:q.author});

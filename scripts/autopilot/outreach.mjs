@@ -154,6 +154,36 @@ export async function screenQueue({state,mailer,max=40,deadline=Infinity,log=()=
  return stats;
 }
 /**
+ * Make the Sent folder the ground truth for "already emailed". A prospect whose address is in Sent but whose
+ * record has no pitch (state lost or overwritten, as on 2026-11-25 when two cycles overlapped) is marked as
+ * contacted so it is never pitched again; anyone who received two emails within a day gets no further email.
+ */
+export async function reconcileSent({state,imap,days=30,log=()=>{}}){
+ const stats={scanned:0,restored:0,duplicates:0};
+ if(typeof imap?.sentRecipients!=='function')return stats;
+ const sent=await imap.sentRecipients(new Date(Date.now()-days*DAY));
+ if(!Array.isArray(sent))throw Error('Invalid Sent mailbox response');
+ stats.scanned=sent.length;state.contacted??={};
+ const byTo=new Map();for(const m of sent){const e=normalizeEmail(m.to);if(!e)continue;(byTo.get(e)||byTo.set(e,[]).get(e)).push(Date.parse(m.at)||Date.now())}
+ for(const p of Object.values(state.prospects||{})){
+  const addrs=new Set([p.email,...(p.history||[]).map(h=>h.to)].map(x=>normalizeEmail(x||'')).filter(Boolean));
+  const times=[...addrs].flatMap(e=>byTo.get(e)||[]).sort((a,b)=>a-b);if(!times.length)continue;
+  const first=new Date(times[0]).toISOString(),last=new Date(times.at(-1)).toISOString();
+  if(!(p.history||[]).some(h=>h.type==='initial'&&h.mode!=='draft')){
+   (p.history??=[]).push({type:'initial',at:first,to:normalizeEmail(p.email||'')||[...addrs][0],mode:'send',reconciled:true});
+   if(['ready','drafted','contact_form','no_contact'].includes(p.status))p.status='sent';
+   p.next_link_check??=new Date(times[0]+5*DAY).toISOString();stats.restored++;
+  }
+  if(!(Date.parse(state.contacted[p.domain])>=times.at(-1)))state.contacted[p.domain]=last;
+  // Two emails less than a day apart is never intended (a follow-up comes days later): do not write to them again.
+  if(times.some((t,i)=>i>0&&t-times[i-1]<DAY)&&!p.duplicate_sent){p.duplicate_sent=true;p.no_followup=true;p.no_followup_reason='Received a duplicate email';stats.duplicates++}
+ }
+ state.sent_reconciled_at=NOW();
+ log(`sent-folder check: ${stats.scanned} sent emails read, ${stats.restored} unrecorded pitches restored to the record, ${stats.duplicates} recipients found with a duplicate email (no further email to them)`);
+ return stats;
+}
+const NO_CREDITS=/credits_used_up|budget_exhausted/;
+/**
  * Verify the best queued inboxes ahead of their send window (no email is sent). Runs every cycle on
  * the free daily credits that would otherwise expire, so a cycle inside the window can send at once
  * instead of spending its time verifying. Only inboxes whose window opens within `withinHours` are
@@ -172,6 +202,8 @@ export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new D
   // A single slow mail server can take ~2 minutes to verify: never start one without that much time left.
   if(deadline-Date.now()<150e3)break;stats.checked++;
   let proof;try{proof=await mailer.authorizeRecipient(p,{state,followup:false,deadline})}catch{proof={ok:false,reason:'verification_error'}}
+  // Out of credits for today: stop, and leave the remaining inboxes untouched instead of marking each one "held".
+  if(!proof?.ok&&NO_CREDITS.test(`${proof?.reason||''} ${proof?.detail||''}`)){stats.checked--;stats.out_of_credits=true;break}
   if(applyProof(state,p,proof))stats.verified++;else stats.held++;
  }
  log(`pre-verify (nothing sent): ${stats.checked} top inboxes checked, ${stats.verified} verified, ${stats.held} held`);
@@ -199,6 +231,7 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   if(Date.now()>deadline||++checked>24)return false;
   if(suppressed(state,p.email,p.domain))return false;
   let proof;try{proof=await verify(p,{state,followup,deadline})}catch{proof={ok:false,reason:'verification_error'}}
+  if(!proof?.ok&&NO_CREDITS.test(`${proof?.reason||''} ${proof?.detail||''}`)){checked=24;stats.out_of_credits=true;return false} // nothing more can be verified today
   if(!applyProof(state,p,proof,{followup})){stats.verification_held++;return false}
   return true;
  };
@@ -287,7 +320,7 @@ export function gmailTransport(env){
    if(!usableVerification(p?.verification,to)||p?.email!==normalizeEmail(to)||!samePublisher(p?.evidence?.source,p?.publisher_domain))throw Error('SMTP blocked: verified recipient evidence required');
    return smtpSend({user,pass,from:user,to,raw});
   },
-  draft:async raw=>(await getImap()).appendDraft(raw),imap:{recentHeaders:async(...a)=>(await getImap()).recentHeaders(...a)},
+  draft:async raw=>(await getImap()).appendDraft(raw),imap:{recentHeaders:async(...a)=>(await getImap()).recentHeaders(...a),sentRecipients:async(...a)=>(await getImap()).sentRecipients(...a)},
   check:async()=>{try{await getImap();await imap.close();imap=null;return {status:'connected'}}catch{return {status:'rejected',error:'Gmail login or connection failed; outgoing mail blocked'}}},
   close:async()=>{if(imap)await imap.close()}
  };

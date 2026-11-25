@@ -26,11 +26,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
+      # Always the branch's newest commit, never the commit the trigger fired on: a run that waited behind
+      # another cycle (concurrency) must start from that cycle's results. On 2026-11-25 a queued run started
+      # from the older state file, repeated the previous cycle and emailed the same editors again.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
       - name: Is a cycle due?
         id: due
         env:
           EVENT: ${{ github.event_name }}
+          DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
           MIN_HOURS: ${{ vars.AUTOPILOT_MIN_HOURS || '5' }}
         run: |
           node -e "
@@ -38,7 +44,9 @@ jobs:
           try{last=Date.parse(JSON.parse(fs.readFileSync('public/data/autopilot.json','utf8')).generated_at)||0}catch{}
           const now=new Date(),h=now.getUTCHours(),weekday=now.getUTCDay()>0&&now.getUTCDay()<6;
           // Extra cycles every 2 h on weekdays 07-21 UTC: the EU and US send windows, so verified inboxes get emailed the same day.
-          const hours=(Date.now()-last)/36e5,due=process.env.EVENT!=='schedule'||hours>=Number(process.env.MIN_HOURS)||(weekday&&h>=7&&h<21&&hours>=2);
+          const hours=(Date.now()-last)/36e5;
+          // A started run (dashboard, send-window waker) still never follows another cycle by under 10 minutes: that is a duplicate that queued behind it.
+          const due=process.env.DRY_RUN==='1'||(process.env.EVENT!=='schedule'?hours*60>=10:hours>=Number(process.env.MIN_HOURS)||(weekday&&h>=7&&h<21&&hours>=2));
           console.log('Last cycle '+hours.toFixed(1)+' h ago; due: '+due);
           fs.appendFileSync(process.env.GITHUB_OUTPUT,'due='+due+String.fromCharCode(10))"
       - uses: actions/setup-node@v4
@@ -114,5 +122,7 @@ jobs:
           [ -f public/data/vault.json ] && git add public/data/vault.json
           if git diff --cached --quiet; then echo "No changes"; exit 0; fi
           git commit -m "autopilot: $(date -u +%Y-%m-%dT%H:%MZ) cycle"
+          git fetch -q origin main
+          if ! git diff --quiet HEAD~1 origin/main -- public/data/vault.json; then echo "::warning::The state file on main changed while this cycle ran. This cycle's state is kept; the Sent-folder check restores any send record the other change held."; fi
           for i in 1 2 3; do git pull --rebase -X theirs origin main && git push && exit 0; sleep 5; done
           exit 1

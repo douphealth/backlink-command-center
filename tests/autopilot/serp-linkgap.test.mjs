@@ -252,3 +252,24 @@ test('domains the old resolver gave up on are retried once',async()=>{
   assert.deepEqual(retryUnresolved(state),{domains_retried:2});assert.deepEqual(state.unresolved,{});
   state.unresolved={'c.com':'2026-11-26T00:00:00Z'};assert.equal(retryUnresolved(state),null);assert.ok(state.unresolved['c.com'],'runs once');
 });
+
+test('auto-generated site-info pages are never treated as editorial brand mentions',async()=>{
+  const {siteInfoPage}=await import('../../scripts/autopilot/prospect.mjs');
+  for(const [u,t] of [['https://www.siteprice.org/website-worth/stainsolver.shop','stainsolver.shop Website Worth'],['https://hypestat.com/info/cabinvolt.shop','cabinvolt.shop'],
+    ['https://example.net/is-buyonce-site-legit','Is buyonce.site legit or a scam?'],['https://www.scamadviser.com/check-website/stopthat.shop','Check'],['https://sites.example/sites-like/signalroom.store','Sites like signalroom.store']])
+    assert.equal(siteInfoPage(u,t),true,u);
+  for(const [u,t] of [['https://travelblog.com/power-bank-rules-flying','Can you fly with a power bank? (We used CabinVolt)'],['https://laundry.blog/care-label-guide','Laundry care label guide'],['https://blog.com/best-stain-removal-tools','Best stain removal tools'],['https://travel.blog/is-it-safe-to-fly-with-a-power-bank','Is it safe to fly with a power bank?']])
+    assert.equal(siteInfoPage(u,t),false,u);
+});
+
+test('Google redirect throttling gets one paced retry, and the failure reason is reported',async()=>{
+  const {resolveWrapped}=await import('../../scripts/autopilot/serp-unwrap.mjs');
+  let calls=0;const waits=[];
+  const f=async u=>{if(u.startsWith('https://google.com')){calls++;return calls===1?new Response('',{status:429}):new Response('',{status:302,headers:{location:'https://pub.com/post'}})}
+    return new Response('<html><body>ok</body></html>',{headers:{'content-type':'text/html'}})};
+  const ok=await resolveWrapped({domain:'pub.com',goto:'https://google.com/goto?url=X'},{fetchImpl:f,pause:async ms=>waits.push(ms)});
+  assert.equal(ok.via,'redirect');assert.deepEqual(waits,[3000]);
+  const diag={};
+  const none=await resolveWrapped({domain:'pub.com',goto:'https://google.com/goto?url=Y',crumb:{origin:'https://pub.com',segments:[]}},{fetchImpl:async u=>new Response('',{status:u.startsWith('https://google.com')?403:404}),diag,pause:async()=>{}});
+  assert.equal(none,null);assert.equal(diag.goto,'403');
+});
