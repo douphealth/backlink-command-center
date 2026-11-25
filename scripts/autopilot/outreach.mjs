@@ -154,17 +154,19 @@ export async function screenQueue({state,mailer,max=40,deadline=Infinity,log=()=
  return stats;
 }
 /**
- * While outreach is paused, verify the best queued inboxes (no email is sent). Uses the free
- * daily credits that would otherwise expire, shows real verified counts before sending is
- * released, and builds the permanent invalid / catch-all memory that saves credits later.
+ * Verify the best queued inboxes ahead of their send window (no email is sent). Runs every cycle on
+ * the free daily credits that would otherwise expire, so a cycle inside the window can send at once
+ * instead of spending its time verifying. Only inboxes whose window opens within `withinHours` are
+ * checked, so every proof is still under 24 h old when the email goes out.
  */
-export async function preverify({state,mailer,max=5,deadline=Infinity,log=()=>{}}){
+export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new Date(),deadline=Infinity,log=()=>{}}){
  const stats={checked:0,verified:0,held:0};
  if(typeof mailer?.authorizeRecipient!=='function')return stats;
  const learned=assetStats(state);
  const queue=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION&&!suppressed(state,p.email,p.domain)&&
    !(state.contacted?.[p.domain]&&ageDays(state.contacted[p.domain])<90)&&!usableVerification(p.recipient_proof?.verification,p.email)&&
-   !(p.contact_quality?.status==='held'&&publisherHold(p.contact_quality.detail)&&ageDays(p.contact_quality.checked_at)<3)) // only publisher-side holds wait 3 days
+   !(p.contact_quality?.status==='held'&&publisherHold(p.contact_quality.detail)&&ageDays(p.contact_quality.checked_at)<3)&& // only publisher-side holds wait 3 days
+   (()=>{const w=nextSendWindow(p.domain,now());return !!w&&w-now()<=withinHours*36e5})()) // a proof must not expire before the window
   .map(p=>[p,linkLikelihood(p,{assets:learned})]).sort((a,b)=>b[1]-a[1]).slice(0,Math.max(0,max)).map(x=>x[0]);
  for(const p of queue){
   // A single slow mail server can take ~2 minutes to verify: never start one without that much time left.

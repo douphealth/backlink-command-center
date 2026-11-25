@@ -68,7 +68,7 @@ export function loadConfig(env=process.env,argv=process.argv){
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5'},
     linkGapCalls:Math.max(0,Math.min(4,num(env.AUTOPILOT_LINKGAP_CALLS,1))),
-    gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,bing:!!env.BING_WEBMASTER_API_KEY,preverifyMax:num(env.AUTOPILOT_PREVERIFY,5),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
+    gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,bing:!!env.BING_WEBMASTER_API_KEY,preverifyMax:num(env.AUTOPILOT_PREVERIFY,10),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
     verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
       enabled:env.EMAIL_VERIFICATION_ENABLED==='YES',dailyLimit:Math.min(100,Math.max(0,Math.floor(num(env.EMAIL_VERIFY_DAILY_LIMIT,0))))},
   };
@@ -241,9 +241,10 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',log});
     await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets},deadline:deadline-2*60e3,log}),mailWhy||'SENDER_NAME not set');
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,template_fallbacks:writer.fallbacks};
-    // Outreach paused (safety hold / mode off): spend today's free verification credits on the best queued inboxes instead.
-    await stage('preverify',vaultOk&&gmailOk&&!noVerifier&&stages.outreach?.ok!==true&&typeof mailer?.authorizeRecipient==='function',
-      ()=>preverify({state,mailer,max:cfg.preverifyMax,deadline:deadline-90e3,log}),!vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':'runs only while outreach is paused',{until:deadline-30e3});
+    // Every cycle: spend today's leftover free verification credits on the best inboxes whose send window opens within 20 h,
+    // so the next in-window cycle (started by the send-window waker) sends at once.
+    await stage('preverify',vaultOk&&gmailOk&&!noVerifier&&typeof mailer?.authorizeRecipient==='function',
+      ()=>preverify({state,mailer,max:cfg.preverifyMax,deadline:deadline-90e3,log}),!vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':'no Gmail transport',{until:deadline-30e3});
   }finally{await mailer?.close?.().catch(()=>{})}
   // ---- 6. Link verification ----
   await stage('link_checks',vaultOk,()=>checkLinks({state,ourDomains:SITES.map(s=>s.domain),fetchImpl,deadline,log}),privateWhy,{until:deadline+90e3});

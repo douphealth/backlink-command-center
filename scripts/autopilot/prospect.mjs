@@ -183,8 +183,11 @@ export async function findContact(pageUrl,pageHtml,{fetchImpl=fetch,author=''}={
   const home=await fetchPage(origin+'/',{fetchImpl,timeout:9000,maxBytes:300000});
   if(home.status===200&&home.body){kind=siteKind(home.body);take(home.body,home.url,'other')}
   if(kind==='local_business')return {email:null,email_source:null,alternates:[],contact_form:null,site_kind:kind};
-  const linked=links(pageHtml,pageUrl).filter(l=>sameSite(hostOf(l.url),domain)&&/contact|about|write-for-us|contribute/i.test(l.url+' '+l.anchor)&&!/advertis|sponsor|media-kit|partner/i.test(l.url)).map(l=>l.url);
-  const paths=[...new Set([...linked.slice(0,3),origin+'/contact',origin+'/contact-us',origin+'/about',origin+'/write-for-us'].map(u=>normUrl(u)))].slice(0,5);
+  // Contact pages the site itself links to (article first, then the homepage menu/footer) beat guessed paths;
+  // indie blogs mostly use /contact-me, /about-me or /work-with-me rather than /contact-us.
+  const contactLinks=(html,base)=>html?links(html,base).filter(l=>sameSite(hostOf(l.url),domain)&&/contact|about|write-for-us|contribute|work-with-me|get-in-touch/i.test(l.url+' '+l.anchor)&&!/advertis|sponsor|media-kit|partner|privacy|terms|cookie|affiliate-disclosure/i.test(l.url)).map(l=>l.url):[];
+  const linked=[...contactLinks(pageHtml,pageUrl).slice(0,3),...(home.status===200?contactLinks(home.body,home.url).slice(0,3):[])];
+  const paths=[...new Set([...linked,origin+'/contact',origin+'/contact-us',origin+'/contact-me',origin+'/about',origin+'/about-me',origin+'/work-with-me',origin+'/write-for-us'].map(u=>normUrl(u)).filter(Boolean))].slice(0,7);
   for(const p of paths){
     const best=Math.max(-1,...[...candidates.values()].map(c=>c.rank));if(best>=75)break;
     const res=await fetchPage(p,{fetchImpl,timeout:9000,maxBytes:250000});

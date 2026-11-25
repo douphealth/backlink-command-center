@@ -1,0 +1,42 @@
+name: LinkForge Send-Window Waker
+# GitHub starts the hourly Autopilot schedule only 2-3 times a day at random hours, so queued,
+# verified pitches waited for a cycle that happened to fall inside the recipient's business hours.
+# After every Autopilot cycle this job reads the published summary, waits until the next send
+# window opens (at most 5.5 h, cycles at least 2 h apart; waiting is free on public repositories)
+# and starts one cycle. The dashboard's Stop button disables Autopilot, so no cycle starts then.
+on:
+  workflow_run:
+    workflows: [LinkForge Autopilot]
+    types: [completed]
+permissions:
+  actions: write
+  contents: read
+concurrency:
+  group: linkforge-waker
+  cancel-in-progress: true
+jobs:
+  wake:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Plan the next send-window cycle
+        id: plan
+        run: node scripts/autopilot/waker.mjs plan >> "$GITHUB_OUTPUT"
+      - name: Wait for the send window
+        if: steps.plan.outputs.wake == 'true'
+        run: sleep "${{ steps.plan.outputs.wait_s }}"
+      - name: Start an Autopilot cycle
+        if: steps.plan.outputs.wake == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch -q origin main && git checkout -q FETCH_HEAD -- public/data/autopilot.json
+          node scripts/autopilot/waker.mjs recheck || exit 0
+          gh workflow run autopilot.yml --ref main || echo "Autopilot is stopped (workflow disabled); no cycle started"

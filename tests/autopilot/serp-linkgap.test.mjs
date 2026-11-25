@@ -156,3 +156,45 @@ test('guides and software reviews are never described to editors as "a free inte
   const review=`<html><head><script type="application/ld+json">{"@type":"Review","itemReviewed":{"@type":"SoftwareApplication","name":"X"}}</script><script type="application/ld+json">{"@type":"SoftwareApplication","name":"X"}</script></head><body><h1>X review</h1><p>${'word '.repeat(300)}</p></body></html>`;
   assert.equal(extractFeatures('https://a.com/review/x',review,'a.com').interactive,false);
 });
+
+test('pre-verification only spends credits on inboxes whose send window opens within 20 h',async()=>{
+  const {preverify}=await import('../../scripts/autopilot/outreach.mjs');
+  const asked=[];const mailer={authorizeRecipient:async p=>{asked.push(p.id);return {ok:false,reason:'x',detail:'mailbox_unknown'}}};
+  const state={prospects:{us:{id:'us',status:'ready',email:'e@us-blog.com',domain:'us-blog.com',qv:2,history:[]},uk:{id:'uk',status:'ready',email:'e@uk-blog.co.uk',domain:'uk-blog.co.uk',qv:2,history:[]}}};
+  await preverify({state,mailer,max:5,now:()=>new Date('2026-11-27T22:00:00Z')}); // Friday night: next windows are Monday
+  assert.deepEqual(asked,[],'a proof bought now would expire before Monday');
+  await preverify({state,mailer,max:5,now:()=>new Date('2026-11-25T03:00:00Z')}); // Wednesday night: windows open in 4 h (EU) and 10 h (US)
+  assert.deepEqual(asked.sort(),['uk','us']);
+});
+
+test('send-window waker: wakes for the next window, keeps cycles 2 h apart, never when sending is off',async()=>{
+  const {planWake,shouldStillWake}=await import('../../scripts/autopilot/waker.mjs');
+  const now=Date.parse('2026-11-25T08:57:00Z');
+  const base={generated_at:'2026-11-25T08:56:37Z',capabilities:{outreach_mode:'send'},outreach:{ready:60,sent_today:0,cap_today:12,next_send_at:'2026-11-25T13:00:00.000Z',reply_health:'ok'}};
+  const p=planWake(base,now);
+  assert.equal(p.wake,true);assert.equal(p.at,'2026-11-25T13:00:00.000Z');assert.equal(p.wait_s,4*3600+3*60);
+  const open=planWake({...base,outreach:{...base.outreach,next_send_at:'2026-11-25T08:56:37Z'}},now);
+  assert.equal(open.at,'2026-11-25T10:56:37.000Z','window already open: next cycle 2 h after the last one, not immediately');
+  assert.equal(planWake({...base,outreach:{...base.outreach,next_send_at:'2026-11-26T13:00:00Z'}},now).wake,false,'cap reached: tomorrow is left to the schedule');
+  assert.equal(planWake({...base,capabilities:{outreach_mode:'off'}},now).wake,false);
+  assert.equal(planWake({...base,outreach:{...base.outreach,ready:0}},now).wake,false);
+  assert.equal(planWake({...base,dry_run:true},now).wake,false);
+  assert.equal(shouldStillWake(base,Date.parse('2026-11-25T13:00:00Z')),true);
+  assert.equal(shouldStillWake({...base,generated_at:'2026-11-25T12:30:00Z'},Date.parse('2026-11-25T13:00:00Z')),false,'a cycle ran meanwhile');
+});
+
+test('indie-blog contact pages count as the publisher\'s own contact pages; other pages do not',async()=>{
+  const {CONTACT_PAGE}=await import('../../scripts/autopilot/recipient-policy.mjs');
+  for(const p of ['/contact','/contact-us/','/contact-me/','/about','/about-me','/work-with-me/','/get-in-touch','/write-for-us'])assert.ok(CONTACT_PAGE.test(p),p);
+  for(const p of ['/contact-lens-guide/','/about-aloe-vera','/blog/team-building-games','/privacy'])assert.ok(!CONTACT_PAGE.test(p.replace(/\/team-building.*/,'/teamwork')),p);
+});
+
+test('contact finder follows the homepage menu and indie contact pages',async()=>{
+  const {findContact}=await import('../../scripts/autopilot/prospect.mjs');
+  const pages={'https://plantmom.blog/':'<nav><a href="/contact-me/">Say hi</a></nav>','https://plantmom.blog/contact-me':'<p>Email me at <a href="mailto:jess@plantmom.blog">jess@plantmom.blog</a> for collaborations.</p>'};
+  const fetched=[];
+  const f=async u=>{fetched.push(u);const b=pages[u.replace(/\/$/,'')]??pages[u];return b?new Response(b,{headers:{'content-type':'text/html'}}):new Response('',{status:404})};
+  const c=await findContact('https://plantmom.blog/watering','<main>no contact links here</main>',{fetchImpl:f});
+  assert.equal(c.email,'jess@plantmom.blog');
+  assert.equal(fetched[1].replace(/\/$/,''),'https://plantmom.blog/contact-me','the homepage menu link is tried before guessed paths');
+});
