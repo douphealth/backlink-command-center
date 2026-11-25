@@ -109,6 +109,8 @@ export function pickQueries(assets,sites,state,{perAsset=2,reuseDays=45}={}){
 
 /* ---------- Unlinked brand mentions: pages that already talk about us but don't link ---------- */
 export const brandOf=site=>site.brand||site.domain.split('.')[0];
+/** The search market a site's readers are in (DataForSEO location/language). Defaults to the US. */
+export const marketOf=site=>({location:Number(site?.market?.location)||2840,language:site?.market?.language||'en'});
 /** One mention search per site every 14 days. */
 export function mentionJobs(sites,state,{everyDays=14}={}){
   state.mentions_at??={};state.queries??={};
@@ -335,12 +337,18 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     const n=Math.min(4,maxQueries-stats.queries,jobs.length-i,dfs.affordable?dfs.affordable('serp'):(dfs.canSpend('serp')?1:0));
     if(n<=0)break;
     const batch=jobs.slice(i,i+n);i+=n;
-    const results=await Promise.all(batch.map(j=>dfs.serp(j.query,{depth:serpDepth})));
+    const results=await Promise.all(batch.map(j=>dfs.serp(j.query,{depth:serpDepth,...marketOf(bySite.get(j.asset.site))})));
     batch.forEach((job,k)=>{if(results[k]===null)stats.failed_queries=(stats.failed_queries||0)+1;else take(job,results[k])}); // provider error: retried next run
   }
   // One cheap request sizes every new candidate domain; drop giants and dead sites before fetching anything.
-  const unsized=[...new Set(fresh.filter(f=>!('etv' in f)).map(f=>f.domain))];
-  const traffic=unsized.length&&dfs.canSpend('traffic')?await dfs.domainTraffic(unsized):null;
+  // Audience is sized in the site's own market: a UK publisher has little US traffic and must not be dropped for it.
+  const byMarket=new Map();
+  for(const f of fresh)if(!('etv' in f)){const m=marketOf(bySite.get(f.site)),k=`${m.location}|${m.language}`;(byMarket.get(k)??byMarket.set(k,{m,domains:new Set()}).get(k)).domains.add(f.domain)}
+  let traffic=null;
+  for(const {m,domains} of byMarket.values()){
+    if(!dfs.canSpend('traffic'))break;
+    const t=await dfs.domainTraffic([...domains],m);if(t)traffic={...(traffic||{}),...t};
+  }
   if(traffic)for(let i=fresh.length-1;i>=0;i--){
     if('etv' in fresh[i])continue;
     const why=trafficVerdict(traffic[fresh[i].domain],fresh[i].kind);

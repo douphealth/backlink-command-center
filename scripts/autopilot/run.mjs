@@ -67,7 +67,7 @@ export function loadConfig(env=process.env,argv=process.argv){
     outreach:{mode,gmail,fromAddress:env.GMAIL_ADDRESS||(dryRun?'dry-run@linkforge.invalid':''),senderName:env.SENDER_NAME||'',postalAddress:env.SENDER_POSTAL_ADDRESS||'',
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5'},
-    linkGapCalls:Math.max(0,Math.min(4,num(env.AUTOPILOT_LINKGAP_CALLS,1))),
+    linkGapCalls:Math.max(0,Math.min(4,num(env.AUTOPILOT_LINKGAP_CALLS,2))),
     gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,bing:!!env.BING_WEBMASTER_API_KEY,preverifyMax:num(env.AUTOPILOT_PREVERIFY,10),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
     verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
       enabled:env.EMAIL_VERIFICATION_ENABLED==='YES',dailyLimit:Math.min(100,Math.max(0,Math.floor(num(env.EMAIL_VERIFY_DAILY_LIMIT,0))))},
