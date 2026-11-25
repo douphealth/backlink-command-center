@@ -5,7 +5,7 @@
  * stopped all prospecting. This module recovers the publisher (always, from the breadcrumb) and its
  * page URL (goto redirect → exact breadcrumb path → slug match in the publisher's sitemap/homepage).
  */
-import {fetchPage,hostOf,rootDomain,normUrl,tokens} from './util.mjs';
+import {fetchPage,hostOf,rootDomain,normUrl,tokens,sleep} from './util.mjs';
 
 const GOOGLE_HOST=/(^|\.)google\.[a-z.]+$/i;
 export const isGoogleHost=h=>GOOGLE_HOST.test(rootDomain(h));
@@ -82,10 +82,13 @@ async function wordpressSearch(origin,title,{fetchImpl,timeout}){
  * Find the real page for a wrapped result. Returns {url, page?, via} or null.
  * `page` is the fetched result (reused by the caller so nothing is fetched twice).
  */
-export async function resolveWrapped(c,{fetchImpl=fetch,timeout=9000}={}){
+export async function resolveWrapped(c,{fetchImpl=fetch,timeout=9000,diag={},pause=sleep}={}){
   // 1. Google's own redirect (works when the wrapper is publicly resolvable).
   if(c.goto){
-    const r=await fetchPage(c.goto,{fetchImpl,timeout,maxBytes:500000});
+    let r=await fetchPage(c.goto,{fetchImpl,timeout,maxBytes:500000});
+    if(r.status===429){await pause(3000);r=await fetchPage(c.goto,{fetchImpl,timeout,maxBytes:500000})} // Google throttles bursts: one paced retry
+    // Why the redirect did not give us the page: published so the next fix is chosen from data, not guesses.
+    diag.goto=r.status===200?(isGoogleHost(hostOf(r.url))?'google_page':hostOf(r.url).endsWith(c.domain)?'empty_page':'other_site'):String(r.status||r.error||'error');
     if(r.status===200&&r.body&&!isGoogleHost(hostOf(r.url))&&hostOf(r.url).endsWith(c.domain))return {url:normUrl(r.url),page:r,via:'redirect'};
     if(r.status===200&&r.body&&isGoogleHost(hostOf(r.url))){ // interstitial: the destination is in the page
       const m=r.body.match(/(?:url=|href=")(https?:\/\/[^"'&<>\s]+)/i);
