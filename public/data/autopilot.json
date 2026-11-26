@@ -1,10 +1,11 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-26T11:30:44.594Z",
- "duration_s": 81,
+ "generated_at": "2026-11-26T13:06:38.084Z",
+ "duration_s": 307,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
+  "ai_writer": "github_models",
   "vault": true,
   "dataforseo": true,
   "gmail": true,
@@ -30,12 +31,12 @@
    "key": true,
    "enabled": true,
    "daily_limit": 24,
-   "used_today": 22,
+   "used_today": 24,
    "balance": {
     "provider": "verifalia",
-    "free_credits": 3,
-    "reset_in": "12:29:54",
-    "checked_at": "2026-11-26T11:30:05.978Z"
+    "free_credits": 1,
+    "reset_in": "10:57:51",
+    "checked_at": "2026-11-26T13:02:08.203Z"
    },
    "catch_all_domains_skipped": 61
   }
@@ -122,7 +123,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 9472,
+   "ms": 7932,
    "result": {
     "sites": 21,
     "pages": 2512
@@ -130,7 +131,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 159
@@ -147,13 +148,14 @@
   "rank": {
    "ok": true,
    "result": {
-    "ranked": 487,
-    "internal_suggestions": 597
+    "ranked": 529,
+    "internal_suggestions": 590,
+    "pitchable": 86
    }
   },
   "requalify": {
    "ok": true,
-   "ms": 2,
+   "ms": 3,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -163,30 +165,31 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 21564,
+   "ms": 19629,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
-    "candidates": 76,
+    "candidates": 80,
     "qualified": 9,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 67,
-    "with_email": 2,
+    "rejected": 71,
+    "with_email": 3,
     "contact_form": 1,
     "broken_links": 0,
     "from_queue": 0,
     "linkgap_calls": 0,
     "linkgap_candidates": 0,
     "neighbor_pages": 12,
-    "neighbor_candidates": 76,
+    "neighbor_candidates": 80,
     "filtered": {
-     "already_evaluated": 19,
-     "platform_or_giant": 9,
-     "gov_or_edu": 11,
-     "duplicate_this_run": 12,
-     "competitor": 1
+     "already_evaluated": 24,
+     "platform_or_giant": 14,
+     "competitor": 2,
+     "duplicate_this_run": 14,
+     "gov_or_edu": 8,
+     "forum_or_ugc": 3
     },
     "deferred": 0
    }
@@ -205,9 +208,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1931,
+   "ms": 2293,
    "result": {
-    "scanned": 22,
+    "scanned": 2,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -217,7 +220,7 @@
   },
   "sent_check": {
    "ok": true,
-   "ms": 1264,
+   "ms": 2219,
    "result": {
     "scanned": 149,
     "restored": 0,
@@ -226,43 +229,47 @@
   },
   "screen": {
    "ok": true,
-   "ms": 969,
+   "ms": 1374,
    "result": {
-    "screened": 5,
-    "kept": 1,
+    "screened": 6,
+    "kept": 2,
     "retired": 1,
     "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 1757,
+   "ms": 271924,
    "result": {
-    "followups": 0,
-    "sent": 0,
+    "followups": 2,
+    "sent": 5,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 67,
+    "deferred": 0,
     "cap": 12,
-    "verification_held": 3
+    "verification_held": 2,
+    "repaired": 3,
+    "out_of_credits": true
    },
    "writer": {
     "claude": 0,
-    "template_fallbacks": 0
+    "github_models": 0,
+    "template_fallbacks": 5
    }
   },
   "preverify": {
    "ok": true,
-   "ms": 40198,
+   "ms": 15,
    "result": {
-    "checked": 10,
-    "verified": 2,
-    "held": 8
+    "checked": 0,
+    "verified": 0,
+    "held": 0,
+    "out_of_credits": true
    }
   },
   "link_checks": {
    "ok": true,
-   "ms": 4,
+   "ms": 3,
    "result": {
     "checked": 0,
     "won": 0,
@@ -274,9 +281,9 @@
   "sites": 21,
   "pages_crawled": 2512,
   "urls_discovered": 3635,
-  "promotable": 487,
-  "internal_suggestions": 597,
-  "promoting_now": 51
+  "promotable": 529,
+  "internal_suggestions": 590,
+  "promoting_now": 47
  },
  "spend": {
   "today_usd": 0,
@@ -293,28 +300,28 @@
  },
  "outreach": {
   "mode": "send",
-  "ready": 66,
-  "verified_ready": 5,
+  "ready": 61,
+  "verified_ready": 0,
   "pending_verification": 61,
   "holds": {
-   "mailbox_accept_all": 10,
+   "mailbox_accept_all": 8,
    "publisher_mismatch": 3,
    "mailbox_unknown": 11
   },
-  "sent_today": 0,
+  "sent_today": 7,
   "cap_today": 12,
-  "next_send_at": "2026-11-26T11:30:44.598Z",
+  "next_send_at": "2026-11-26T13:06:38.088Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 5221,
-  "qualified": 882,
-  "ready": 66,
+  "prospects_evaluated": 5301,
+  "qualified": 891,
+  "ready": 61,
   "broken_link_ready": 3,
-  "contact_form_only": 174,
-  "no_contact": 331,
-  "contacted": 97,
+  "contact_form_only": 175,
+  "no_contact": 336,
+  "contacted": 102,
   "replied": 3,
   "positive": 0,
   "won": 0,
@@ -890,13 +897,13 @@
   },
   {
    "date": "2026-11-26",
-   "prospects_evaluated": 5221,
-   "qualified": 882,
-   "ready": 66,
+   "prospects_evaluated": 5301,
+   "qualified": 891,
+   "ready": 61,
    "broken_link_ready": 3,
-   "contact_form_only": 174,
-   "no_contact": 331,
-   "contacted": 97,
+   "contact_form_only": 175,
+   "no_contact": 336,
+   "contacted": 102,
    "replied": 3,
    "positive": 0,
    "won": 0,
@@ -1011,22 +1018,16 @@
     "rate": 0.133
    },
    {
+    "footprint": "neighbor",
+    "queries": 35,
+    "ready": 4,
+    "rate": 0.132
+   },
+   {
     "footprint": "weekly_roundup",
     "queries": 5,
     "ready": 0,
     "rate": 0.125
-   },
-   {
-    "footprint": "mention",
-    "queries": 30,
-    "ready": 3,
-    "rate": 0.121
-   },
-   {
-    "footprint": "neighbor",
-    "queries": 23,
-    "ready": 2,
-    "rate": 0.115
    },
    {
     "footprint": "inurl_links",
@@ -1039,6 +1040,12 @@
     "queries": 11,
     "ready": 0,
     "rate": 0.071
+   },
+   {
+    "footprint": "mention",
+    "queries": 30,
+    "ready": 1,
+    "rate": 0.061
    },
    {
     "footprint": "resources",
@@ -1082,6 +1089,14 @@
    },
    {
     "url": "https://gearuptogrow.com/personal-development/habit-stacking/",
+    "sent": 1,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.25
+   },
+   {
+    "url": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
     "sent": 1,
     "replied": 0,
     "positive": 0,
@@ -1497,6 +1512,22 @@
     "rate": 0.2
    },
    {
+    "url": "https://signalroom.store/monitor",
+    "sent": 2,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.2
+   },
+   {
+    "url": "https://stainsolver.shop/guides/oil-on-clothes/",
+    "sent": 2,
+    "replied": 0,
+    "positive": 0,
+    "won": 0,
+    "rate": 0.2
+   },
+   {
     "url": "https://affiliatemarketingforsuccess.com/ai/how-teachers-detect-ai-writing/",
     "sent": 3,
     "replied": 0,
@@ -1568,7 +1599,7 @@
    "pages": 300,
    "discovered": 794,
    "sitemaps": 7,
-   "eligible": 25,
+   "eligible": 28,
    "top": "https://gearuptofit.com/shoe-finder/methodology/"
   },
   {
@@ -1576,7 +1607,7 @@
    "pages": 154,
    "discovered": 154,
    "sitemaps": 4,
-   "eligible": 25,
+   "eligible": 26,
    "top": "https://plantastichaven.com/overwatered-spider-plant/"
   },
   {
@@ -1584,7 +1615,7 @@
    "pages": 103,
    "discovered": 103,
    "sitemaps": 5,
-   "eligible": 25,
+   "eligible": 26,
    "top": "https://gearuptogrow.com/productivity/interleaving-vs-blocked-practice/"
   },
   {
@@ -1592,7 +1623,7 @@
    "pages": 113,
    "discovered": 113,
    "sitemaps": 5,
-   "eligible": 25,
+   "eligible": 26,
    "top": "https://affiliatemarketingforsuccess.com/how-to-start/most-suitable-affiliate-program/"
   },
   {
@@ -1600,7 +1631,7 @@
    "pages": 300,
    "discovered": 468,
    "sitemaps": 5,
-   "eligible": 25,
+   "eligible": 27,
    "top": "https://mysticaldigits.com/life-path-number-calculator/"
   },
   {
@@ -1616,7 +1647,7 @@
    "pages": 41,
    "discovered": 41,
    "sitemaps": 6,
-   "eligible": 25,
+   "eligible": 27,
    "top": "https://micegoneguide.com/prevent-mice-in-kitchen/"
   },
   {
@@ -1624,7 +1655,7 @@
    "pages": 300,
    "discovered": 487,
    "sitemaps": 6,
-   "eligible": 25,
+   "eligible": 27,
    "top": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/"
   },
   {
@@ -1632,104 +1663,104 @@
    "pages": 97,
    "discovered": 97,
    "sitemaps": 1,
-   "eligible": 25,
-   "top": "https://openclaw-skillshub.com/articles/openclaw-provider-apis-guide/"
+   "eligible": 27,
+   "top": "https://openclaw-skillshub.com/"
   },
   {
    "domain": "imagealchemy.app",
    "pages": 28,
    "discovered": 28,
    "sitemaps": 1,
-   "eligible": 25,
-   "top": "https://imagealchemy.app/learn/compress-images-without-uploading"
+   "eligible": 26,
+   "top": "https://imagealchemy.app/"
   },
   {
    "domain": "tenderatlas.shop",
    "pages": 3,
    "discovered": 3,
    "sitemaps": 0,
-   "eligible": 2,
-   "top": "https://tenderatlas.shop/tenders"
+   "eligible": 3,
+   "top": "https://tenderatlas.shop/"
   },
   {
    "domain": "signalroom.store",
    "pages": 142,
    "discovered": 142,
    "sitemaps": 1,
-   "eligible": 25,
-   "top": "https://signalroom.store/monitor"
+   "eligible": 27,
+   "top": "https://signalroom.store/"
   },
   {
    "domain": "stainsolver.shop",
    "pages": 67,
    "discovered": 67,
    "sitemaps": 1,
-   "eligible": 25,
-   "top": "https://stainsolver.shop/guides/"
+   "eligible": 28,
+   "top": "https://stainsolver.shop/"
   },
   {
    "domain": "borderwise.online",
    "pages": 300,
    "discovered": 574,
    "sitemaps": 1,
-   "eligible": 25,
-   "top": "https://borderwise.online/guide"
+   "eligible": 28,
+   "top": "https://borderwise.online/"
   },
   {
    "domain": "checkthetag.shop",
    "pages": 125,
    "discovered": 125,
    "sitemaps": 1,
-   "eligible": 25,
-   "top": "https://checkthetag.shop/symbols"
+   "eligible": 28,
+   "top": "https://checkthetag.shop/"
   },
   {
    "domain": "solarpayback.shop",
    "pages": 44,
    "discovered": 44,
    "sitemaps": 1,
-   "eligible": 25,
-   "top": "https://solarpayback.shop/cities/athens"
+   "eligible": 27,
+   "top": "https://solarpayback.shop/"
   },
   {
    "domain": "stopthat.shop",
    "pages": 84,
    "discovered": 84,
    "sitemaps": 1,
-   "eligible": 25,
-   "top": "https://stopthat.shop/fix/chrome-desktop-site-notifications"
+   "eligible": 28,
+   "top": "https://stopthat.shop/"
   },
   {
    "domain": "buyonce.site",
    "pages": 27,
    "discovered": 27,
    "sitemaps": 1,
-   "eligible": 25,
-   "top": "https://buyonce.site/devices"
+   "eligible": 27,
+   "top": "https://buyonce.site/"
   },
   {
    "domain": "cabinvolt.shop",
    "pages": 48,
    "discovered": 48,
    "sitemaps": 1,
-   "eligible": 25,
-   "top": "https://cabinvolt.shop/portable-charger-on-plane"
+   "eligible": 28,
+   "top": "https://cabinvolt.shop/"
   },
   {
    "domain": "bordercover.shop",
    "pages": 71,
    "discovered": 71,
    "sitemaps": 1,
-   "eligible": 25,
-   "top": "https://bordercover.shop/atlas"
+   "eligible": 29,
+   "top": "https://bordercover.shop/"
   },
   {
    "domain": "fixorrefund.shop",
    "pages": 11,
    "discovered": 11,
    "sitemaps": 1,
-   "eligible": 10,
-   "top": "https://fixorrefund.shop/en/methodology"
+   "eligible": 11,
+   "top": "https://fixorrefund.shop/"
   }
  ],
  "best_urls": [
@@ -1754,9 +1785,11 @@
     "Recently updated",
     "Flagship asset"
    ],
-   "prospects": 22,
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 25,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -1779,9 +1812,43 @@
     "Cites 4 authoritative sources",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 12,
    "internal_link_suggestions": 0,
    "promoting": false
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "url": "https://openclaw-skillshub.com/",
+   "title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
+   "h1": "OpenClaw Skills Hub — Skill Directory",
+   "description": "Browse OpenClaw AI agent skills with install guides and Trust Scores, and see exactly how each score is calculated before you install.",
+   "type": "reference",
+   "promotion": 84,
+   "linkability": 78,
+   "demand": 69,
+   "metrics": {
+    "source": "dataforseo",
+    "url": "https://openclaw-skillshub.com/",
+    "etv": 20.70976623869501,
+    "keywords": 21,
+    "striking": 6,
+    "top3": 0
+   },
+   "internal_inlinks": 0,
+   "words": 1211,
+   "interactive": false,
+   "modified": null,
+   "reasons": [
+    "~21 est. monthly visits from 21 keywords",
+    "Under-linked internally (0 inbound)",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -1805,6 +1872,7 @@
     "Cites 5 authoritative sources",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 9,
    "internal_link_suggestions": 5,
    "promoting": false
@@ -1829,6 +1897,7 @@
     "2 data tables",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 2,
    "internal_link_suggestions": 5,
    "promoting": true
@@ -1853,6 +1922,7 @@
     "2 data tables",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 13,
    "internal_link_suggestions": 5,
    "promoting": false
@@ -1879,9 +1949,10 @@
     "Cites 11 authoritative sources",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 8,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -1904,6 +1975,7 @@
     "Recently updated",
     "Under-linked internally (1 inbound)"
    ],
+   "pitchable": true,
    "prospects": 5,
    "internal_link_suggestions": 0,
    "promoting": true
@@ -1930,9 +2002,38 @@
     "Recently updated",
     "Under-linked internally (1 inbound)"
    ],
+   "flagship": true,
+   "pitchable": true,
    "prospects": 20,
    "internal_link_suggestions": 5,
    "promoting": false
+  },
+  {
+   "site": "fixorrefund.shop",
+   "url": "https://fixorrefund.shop/",
+   "title": "Fix or Refund? — EU-27 Consumer Rights & 2026 Right to Repair Checker",
+   "h1": "Broken product? Know if you're owed a fix or refund.",
+   "description": "Broken product in the EU? Check your 2-to-6 year statutory legal guarantee under Directive (EU) 2019/771, simulate the 2026 Right to Repair +12-month warranty extension (Directive 2024/1799), debunk illegal store excuses, and generate a formal seller claim letter locally in 2 minutes.",
+   "type": "interactive_tool",
+   "promotion": 80,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 1155,
+   "interactive": true,
+   "modified": null,
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Under-linked internally (1 inbound)",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -1955,9 +2056,10 @@
     "2 data tables",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 5,
    "internal_link_suggestions": 1,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -1979,6 +2081,7 @@
     "3 data tables",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 13,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -2003,6 +2106,7 @@
     "In-depth (2,071 words)",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 20,
    "internal_link_suggestions": 1,
    "promoting": false
@@ -2026,9 +2130,10 @@
     "Has an interactive tool/quiz — earns links naturally",
     "Recently updated"
    ],
-   "prospects": 5,
+   "pitchable": true,
+   "prospects": 6,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -2051,6 +2156,7 @@
     "3 data tables",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 9,
    "internal_link_suggestions": 4,
    "promoting": false
@@ -2076,6 +2182,8 @@
     "6 data tables",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
    "prospects": 14,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -2099,6 +2207,7 @@
     "Has an interactive tool/quiz — earns links naturally",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 8,
    "internal_link_suggestions": 2,
    "promoting": false
@@ -2122,6 +2231,7 @@
     "Has an interactive tool/quiz — earns links naturally",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 8,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -2146,9 +2256,335 @@
     "Recently updated",
     "Under-linked internally (2 inbound)"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 8,
    "internal_link_suggestions": 0,
    "promoting": false
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://blueprint.mysticaldigits.com/",
+   "title": "Your Mystical Blueprint — Discover Your Numbers | MysticalDigits",
+   "h1": "Free Life Path Blueprint Calculator",
+   "description": "Discover your personal numerology blueprint in under 2 minutes. Uncover your Life Path, Destiny, and Soul Urge numbers with a free personalized reading from MysticalDigits.",
+   "type": "interactive_tool",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 299,
+   "words": 147,
+   "interactive": true,
+   "modified": null,
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
+   "site": "micegoneguide.com",
+   "url": "https://elimination.micegoneguide.com/",
+   "title": "Mouse Control Planner: Free Step-by-Step Plan | MiceGoneGuide",
+   "h1": "",
+   "description": "Build a free, source-backed mouse control plan in two minutes: what to do today, this week and ongoing. Traps, safe cleanup and sealing entry gaps, based on CDC and UC IPM guidance.",
+   "type": "interactive_tool",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 40,
+   "words": 8,
+   "interactive": true,
+   "modified": null,
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
+   "site": "imagealchemy.app",
+   "url": "https://imagealchemy.app/",
+   "title": "ImageAlchemy — Free Private Image Compressor (WebP, AVIF, JPEG, PNG)",
+   "h1": "Image compression studio.",
+   "description": "Compress and convert images to WebP, AVIF, JPEG and PNG in your browser. Batch up to 200 files locally, inspect quality and download individually or as a ZIP.",
+   "type": "interactive_tool",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 28,
+   "words": 389,
+   "interactive": true,
+   "modified": "2026-11-19",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "Recently updated",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 3,
+   "promoting": true
+  },
+  {
+   "site": "tenderatlas.shop",
+   "url": "https://tenderatlas.shop/",
+   "title": "TenderAtlas — Live public tenders from official procurement sources",
+   "h1": "Every public tender, traced back to the official notice .",
+   "description": "Find open public tenders across Europe, the UK, France, Greece, the US and World Bank projects. Every notice links to its official publisher.",
+   "type": "reference",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 760,
+   "interactive": false,
+   "modified": null,
+   "reasons": [
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "signalroom.store",
+   "url": "https://signalroom.store/",
+   "title": "Signalroom — Live status board for AI, dev & SaaS tools",
+   "h1": "Some signals need attention.",
+   "description": "Source-first status desk: official readings for OpenAI, Claude, GitHub, Cloudflare, Vercel, Supabase and more, with a private watchlist.",
+   "type": "reference",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 141,
+   "words": 21,
+   "interactive": false,
+   "modified": null,
+   "reasons": [
+    "Thin content — expand before pitching",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 2,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "stainsolver.shop",
+   "url": "https://stainsolver.shop/",
+   "title": "Stain Solver | Stain removal by fabric and spill",
+   "h1": "Start with the spill.",
+   "description": "Spilled coffee, wine or grease? Get a stain-removal first move tailored to your fabric. Three quick choices, practical steps, and source-backed safety guidance.",
+   "type": "interactive_tool",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 67,
+   "words": 761,
+   "interactive": true,
+   "modified": null,
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 4,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "borderwise.online",
+   "url": "https://borderwise.online/",
+   "title": "Borderwise — Can your rental car cross the border?",
+   "h1": "Can your rental car cross the border?",
+   "description": "Compare source-linked rental car cross-border rules, fees and documents for 7 brands across 570+ routes.",
+   "type": "reference",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 300,
+   "words": 605,
+   "interactive": false,
+   "modified": null,
+   "reasons": [
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 2,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
+   "site": "checkthetag.shop",
+   "url": "https://checkthetag.shop/",
+   "title": "Check The Tag — Decode any laundry care label in seconds",
+   "h1": "Read the tag. Save the sweater.",
+   "description": "Tap the symbols on your clothing tag and get one clear washing instruction, risk warnings and fabric advice. ISO 3758:2023 and U.S. ASTM marks.",
+   "type": "reference",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 125,
+   "words": 1450,
+   "interactive": false,
+   "modified": null,
+   "reasons": [
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 1,
+   "internal_link_suggestions": 2,
+   "promoting": true
+  },
+  {
+   "site": "solarpayback.shop",
+   "url": "https://solarpayback.shop/",
+   "title": "SolarPayback — When will solar panels pay for themselves?",
+   "h1": "Know when your roof pays you back.",
+   "description": "Independent solar payback calculator using live EU PVGIS data. Compare cities, save installer quotes and export a transparent investment report.",
+   "type": "reference",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 44,
+   "words": 305,
+   "interactive": false,
+   "modified": null,
+   "reasons": [
+    "Thin content — expand before pitching",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "stopthat.shop",
+   "url": "https://stopthat.shop/",
+   "title": "STOP THAT! — Source-backed fixes for annoying apps",
+   "h1": "STOP THAT !",
+   "description": "Find official-source-backed instructions for notifications, pop-ups, autoplay and AI features, with honest limitations.",
+   "type": "reference",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 84,
+   "words": 42,
+   "interactive": false,
+   "modified": null,
+   "reasons": [
+    "Thin content — expand before pitching",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 1,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "buyonce.site",
+   "url": "https://buyonce.site/",
+   "title": "BuyOnce — Smart devices. Real ownership.",
+   "h1": "BuyOnce .",
+   "description": "Explore source-linked research on 21 doorbells, cameras and smart rings. See what survives a cancelled subscription, with evidence gaps clearly marked.",
+   "type": "reference",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 27,
+   "words": 408,
+   "interactive": false,
+   "modified": null,
+   "reasons": [
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "cabinvolt.shop",
+   "url": "https://cabinvolt.shop/",
+   "title": "CabinVolt — Can This Power Bank Fly? 2026 ICAO & Airline Recall Checker",
+   "h1": "Can this power bank fly?",
+   "description": "Instant source-backed power bank flight checker for the March 27, 2026 ICAO rule. Screen 18 recalled models, compare 22 airline limits, and calculate Watt-hours (Wh) on your device.",
+   "type": "interactive_tool",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 48,
+   "words": 903,
+   "interactive": true,
+   "modified": "2026-11-01",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Recently updated",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
+   "site": "bordercover.shop",
+   "url": "https://bordercover.shop/",
+   "title": "BorderCover Atlas — Overseas car insurance research",
+   "h1": "BorderCover Atlas",
+   "description": "Compare published overseas motor cover, trip allowances, transit-country conditions and original evidence. Personal policy confirmation remains essential.",
+   "type": "interactive_tool",
+   "promotion": 76,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 71,
+   "words": 1146,
+   "interactive": true,
+   "modified": null,
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 1,
+   "promoting": true
   },
   {
    "site": "gearuptofit.com",
@@ -2170,6 +2606,7 @@
     "2 data tables",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 12,
    "internal_link_suggestions": 4,
    "promoting": false
@@ -2195,7 +2632,8 @@
     "2 data tables",
     "Recently updated"
    ],
-   "prospects": 9,
+   "pitchable": true,
+   "prospects": 10,
    "internal_link_suggestions": 3,
    "promoting": false
   },
@@ -2218,6 +2656,7 @@
     "Has an interactive tool/quiz — earns links naturally",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 8,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -2241,9 +2680,11 @@
     "Has an interactive tool/quiz — earns links naturally",
     "Flagship asset"
    ],
+   "flagship": true,
+   "pitchable": true,
    "prospects": 10,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "frenchyfab.com",
@@ -2266,9 +2707,10 @@
     "19 data tables",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 11,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -2291,6 +2733,7 @@
     "Cites 8 authoritative sources",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 2,
    "internal_link_suggestions": 1,
    "promoting": false
@@ -2316,9 +2759,10 @@
     "Cites 6 authoritative sources",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 7,
    "internal_link_suggestions": 3,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "frenchyfab.com",
@@ -2341,6 +2785,8 @@
     "Recently updated",
     "Under-linked internally (0 inbound)"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 2,
    "internal_link_suggestions": 5,
    "promoting": false
@@ -2365,6 +2811,7 @@
     "1 data table",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 14,
    "internal_link_suggestions": 2,
    "promoting": false
@@ -2390,6 +2837,8 @@
     "Cites 6 authoritative sources",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
    "prospects": 2,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -2415,9 +2864,10 @@
     "Cites 8 authoritative sources",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 10,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "plantastichaven.com",
@@ -2440,9 +2890,10 @@
     "2 data tables",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 8,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -2463,6 +2914,8 @@
     "Has an interactive tool/quiz — earns links naturally",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 6,
    "internal_link_suggestions": 4,
    "promoting": false
@@ -2486,6 +2939,8 @@
     "1 data table",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
    "prospects": 7,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -2511,6 +2966,8 @@
     "3 data tables",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -2534,9 +2991,10 @@
     "Original method/data — citation-worthy",
     "Recently updated"
    ],
-   "prospects": 13,
+   "pitchable": true,
+   "prospects": 15,
    "internal_link_suggestions": 0,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "signalroom.store",
@@ -2559,7 +3017,9 @@
     "Under-linked internally (2 inbound)",
     "Flagship asset"
    ],
-   "prospects": 3,
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 4,
    "internal_link_suggestions": 0,
    "promoting": true
   },
@@ -2584,6 +3044,7 @@
     "Cites 8 authoritative sources",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 3,
    "internal_link_suggestions": 1,
    "promoting": false
@@ -2608,6 +3069,8 @@
     "1 data table",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -2632,6 +3095,8 @@
     "Cites 6 authoritative sources",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 1,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -2657,6 +3122,7 @@
     "Cites 16 authoritative sources",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 5,
    "internal_link_suggestions": 1,
    "promoting": false
@@ -2680,6 +3146,7 @@
     "4 data tables",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 0,
    "internal_link_suggestions": 2,
    "promoting": true
@@ -2704,9 +3171,11 @@
     "Recently updated",
     "Flagship asset"
    ],
-   "prospects": 24,
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 26,
    "internal_link_suggestions": 1,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -2726,6 +3195,8 @@
    "reasons": [
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -2749,6 +3220,8 @@
     "Has an interactive tool/quiz — earns links naturally",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -2772,6 +3245,8 @@
     "Recently updated",
     "Flagship asset"
    ],
+   "flagship": true,
+   "pitchable": true,
    "prospects": 11,
    "internal_link_suggestions": 2,
    "promoting": false
@@ -2799,6 +3274,7 @@
     "Recently updated",
     "One of 32 templated sibling pages — promote the hub first"
    ],
+   "pitchable": true,
    "prospects": 0,
    "internal_link_suggestions": 4,
    "promoting": true
@@ -2824,7 +3300,9 @@
     "Recently updated",
     "One of 299 templated sibling pages — promote the hub first"
    ],
-   "prospects": 9,
+   "pitchable": false,
+   "not_pitched_because": "one of many templated pages",
+   "prospects": 8,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -2848,6 +3326,8 @@
     "Recently updated",
     "Flagship asset"
    ],
+   "flagship": true,
+   "pitchable": true,
    "prospects": 0,
    "internal_link_suggestions": 5,
    "promoting": true
@@ -2874,6 +3354,7 @@
     "Recently updated",
     "One of 32 templated sibling pages — promote the hub first"
    ],
+   "pitchable": true,
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": true
@@ -2898,9 +3379,11 @@
     "1 data table",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "solarpayback.shop",
@@ -2922,9 +3405,11 @@
     "1 data table",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -2946,6 +3431,8 @@
     "Recently updated",
     "Under-linked internally (2 inbound)"
    ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
    "prospects": 2,
    "internal_link_suggestions": 5,
    "promoting": false
@@ -2970,9 +3457,11 @@
     "Recently updated",
     "Under-linked internally (2 inbound)"
    ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "buyonce.site",
@@ -2994,6 +3483,8 @@
     "In-depth (3,444 words)",
     "Flagship asset"
    ],
+   "flagship": true,
+   "pitchable": true,
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": true
@@ -3021,9 +3512,11 @@
     "Flagship asset",
     "One of 40 templated sibling pages — promote the hub first"
    ],
+   "flagship": true,
+   "pitchable": true,
    "prospects": 8,
    "internal_link_suggestions": 5,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -3044,6 +3537,8 @@
     "1 data table",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -3067,6 +3562,8 @@
     "1 data table",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -3092,9 +3589,11 @@
     "Recently updated",
     "Under-linked internally (2 inbound)"
    ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -3117,9 +3616,11 @@
     "Recently updated",
     "Under-linked internally (2 inbound)"
    ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -3141,6 +3642,8 @@
     "Recently updated",
     "Under-linked internally (2 inbound)"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 1,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -3167,6 +3670,7 @@
     "Recently updated",
     "One of 32 templated sibling pages — promote the hub first"
    ],
+   "pitchable": true,
    "prospects": 2,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -3191,9 +3695,11 @@
     "Recently updated",
     "One of 299 templated sibling pages — promote the hub first"
    ],
+   "pitchable": false,
+   "not_pitched_because": "one of many templated pages",
    "prospects": 0,
    "internal_link_suggestions": 5,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptofit.com",
@@ -3215,9 +3721,10 @@
     "1 data table",
     "Recently updated"
    ],
+   "pitchable": true,
    "prospects": 0,
    "internal_link_suggestions": 1,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -3239,6 +3746,8 @@
     "6 data tables",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "not distinctive enough to earn a link",
    "prospects": 13,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -3262,6 +3771,8 @@
     "1 data table",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -3284,6 +3795,8 @@
    "reasons": [
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
@@ -3307,368 +3820,10 @@
     "In-depth (2,102 words)",
     "Recently updated"
    ],
+   "pitchable": false,
+   "not_pitched_because": "not distinctive enough to earn a link",
    "prospects": 11,
    "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/learning/",
-   "title": "Learning Hub: Active Recall & Spaced Repetition Systems",
-   "h1": "Learning Hub: The Complete Practical System",
-   "description": "Explore scientific study systems using active recall, spaced repetition calendars, deliberate practice, and frameworks for accelerated learning.",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 68,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 103,
-   "words": 3515,
-   "interactive": false,
-   "modified": "2026-11-10T14:20:08+00:00",
-   "reasons": [
-    "In-depth (3,515 words)",
-    "3 data tables",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/make-money-online/optimize-your-sales-funnel/",
-   "title": "Sales Funnel Optimization 2026: Step-by-Step Proven Guide",
-   "h1": "Sales Funnel Optimization: 2026 Conversion Guide",
-   "description": "Discover 7 proven sales funnel optimization strategies to increase conversions in 2025. Maximize revenue with actionable tactics tailored for marketers. Try them today!",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 68,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 5,
-   "words": 2639,
-   "interactive": false,
-   "modified": "2026-11-20T21:37:42+00:00",
-   "reasons": [
-    "In-depth (2,639 words)",
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 1,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/make-money-online/how-to-make-money-with-clickbank-the-ultimate-guide/",
-   "title": "How to Make Money With ClickBank: 2026 Proven Strategy",
-   "h1": "How to Make Money With ClickBank: 2026 Ultimate Guide",
-   "description": "Discover proven strategies to make money with ClickBank in 2025. Learn how to find profitable products, avoid common pitfalls, and start earning fast.",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 68,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 6,
-   "words": 2871,
-   "interactive": false,
-   "modified": "2026-11-20T21:37:19+00:00",
-   "reasons": [
-    "In-depth (2,871 words)",
-    "3 data tables",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/blogging/how-to-write-a-high-ranking-blog-post/",
-   "title": "How to Write High-Ranking Blog Posts in 2026 (Proven)",
-   "h1": "How to Write High-Ranking Blog Posts (2025 SEO Guide)",
-   "description": "Rank higher in 2025! Follow our step-by-step guide to write SEO-optimized blog posts that drive more traffic. Start writing today!",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 68,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 4,
-   "words": 5564,
-   "interactive": false,
-   "modified": "2026-11-19T07:26:25+00:00",
-   "reasons": [
-    "In-depth (5,564 words)",
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/productivity/free-time-blocking-template/",
-   "title": "Free Time Blocking Template: Daily, Weekly, Deep Work",
-   "h1": "Free Time Blocking Template: Daily, Weekly, and Deep Work Versions",
-   "description": "Free time blocking templates for daily, weekly and deep work planning, with a step-by-step guide to filling them in in about 20 minutes.",
-   "type": "general_article",
-   "promotion": 60,
-   "linkability": 80,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 13,
-   "words": 3331,
-   "interactive": true,
-   "modified": "2026-11-08T07:35:52+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,331 words)",
-    "5 data tables",
-    "Cites 3 authoritative sources",
-    "Recently updated",
-    "One of 32 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "mysticaldigits.com",
-   "url": "https://mysticaldigits.com/personal-year-numerology/",
-   "title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "h1": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "description": "A grounded guide to your personal year numerology guide for 2026: energies, timing & action, with meanings, examples, common mistakes, and reflection-first.",
-   "type": "practical_guide",
-   "promotion": 60,
-   "linkability": 80,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 13,
-   "words": 1627,
-   "interactive": true,
-   "modified": "2026-11-07T20:01:22+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "2 data tables",
-    "Recently updated",
-    "One of 299 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 10,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "efficientgptprompts.com",
-   "url": "https://efficientgptprompts.com/disability-representation-prompts/",
-   "title": "Disability Representation Writing Guide | EfficientGPTPrompts",
-   "h1": "Disability Representation Writing Guide: Authentic Character Prompts (2026)",
-   "description": "Craft inclusive stories with disabilities! This guide provides prompts, expert insights, & resources for authentic representation & monetization. Boost your au",
-   "type": "practical_guide",
-   "promotion": 60,
-   "linkability": 67,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 4,
-   "words": 1785,
-   "interactive": false,
-   "modified": "2026-11-25T15:07:57+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": true
-  },
-  {
-   "site": "imagealchemy.app",
-   "url": "https://imagealchemy.app/glossary/chroma-subsampling",
-   "title": "What Is Chroma Subsampling? (4:4:4 vs 4:2:0 Explained)",
-   "h1": "Chroma subsampling",
-   "description": "Chroma subsampling reduces color data to shrink image files. Learn the difference between 4:4:4, 4:2:2 and 4:2:0 and what it costs you.",
-   "type": "comparison",
-   "promotion": 60,
-   "linkability": 67,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 6,
-   "words": 764,
-   "interactive": false,
-   "modified": "2026-09-16",
-   "reasons": [
-    "Recently updated"
-   ],
-   "prospects": 6,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "url": "https://openclaw-skillshub.com/articles/openclaw-provider-apis-guide/",
-   "title": "OpenClaw Provider APIs — Ollama Cloud, Anthropic, OpenRouter & xAI | ClawSkills",
-   "h1": "OpenClaw Provider APIs: How to Choose Ollama Cloud, Anthropic, OpenRouter, and xAI",
-   "description": "Compare OpenClaw provider choices without guessing: verify authentication, model IDs, routing, limits, privacy, cost, and failure behavior for Ollama, Anthropic",
-   "type": "practical_guide",
-   "promotion": 60,
-   "linkability": 62,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 1,
-   "words": 1310,
-   "interactive": false,
-   "modified": "2026-08-03",
-   "reasons": [
-    "Recently updated",
-    "Under-linked internally (1 inbound)"
-   ],
-   "prospects": 9,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
-   "title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
-   "h1": "Are French Bulldogs Hypoallergenic? The Honest Answer",
-   "description": "No — French Bulldogs are not hypoallergenic. Learn why Frenchies trigger allergies, how they compare to low-shedding breeds, and the 7-step routine that helps mild sufferers live happily with one.",
-   "type": "general_article",
-   "promotion": 59,
-   "linkability": 79,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 154,
-   "words": 3403,
-   "interactive": true,
-   "modified": "2026-11-19T17:20:53+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,403 words)",
-    "3 data tables",
-    "Recently updated",
-    "One of 152 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 10,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "h1": "How to Get Rid of Mice in the Garage and Keep Them Out",
-   "description": "Inspect garage evidence, secure stored food, protect trap placements and repair suitable gaps. Monitor for recurrence without a fixed clearance promise.",
-   "type": "practical_guide",
-   "promotion": 59,
-   "linkability": 79,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 10,
-   "words": 1800,
-   "interactive": false,
-   "modified": "2026-11-25T14:00:43+00:00",
-   "reasons": [
-    "Cites 4 authoritative sources",
-    "Recently updated",
-    "One of 40 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 5,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/email-marketing/getresponse-review-2025/",
-   "title": "GetResponse Review (2026): Email Marketing, Funnels & Automation Tested",
-   "h1": "GetResponse Review (2026): Email Marketing, Funnels & Automation Tested",
-   "description": "GetResponse review for 2026: funnel builder, email automation, and creator monetization — pricing verified, deliverability trade-offs, and who should pick something else.",
-   "type": "commercial",
-   "promotion": 59,
-   "linkability": 66,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 1831,
-   "interactive": false,
-   "modified": "2026-09-25T17:51:02+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "url": "https://openclaw-skillshub.com/skills/search-research/knowledge-graph/",
-   "title": "Knowledge Graph OpenClaw Skill: Install & Requirements | ClawSkills",
-   "h1": "Knowledge Graph OpenClaw skill",
-   "description": "Three ClawHub skills use the knowledge-graph slug. @safatinaztepe's (257 installs) keeps agent memory as JSON facts with a Python script; @paudyyin's adds OWL",
-   "type": "general_article",
-   "promotion": 59,
-   "linkability": 66,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 681,
-   "interactive": true,
-   "modified": "2026-11-25",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "Recently updated"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "url": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
-   "title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
-   "h1": "OpenClaw Skills Security: Are OpenClaw Skills Safe to Install?",
-   "description": "Are OpenClaw skills safe? Learn how to audit permissions, verify skill safety, and install OpenClaw skills securely. Complete security guide with actionable che",
-   "type": "reference",
-   "promotion": 59,
-   "linkability": 59,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 1022,
-   "interactive": false,
-   "modified": "2026-03-07",
-   "reasons": [
-    "Recently updated",
-    "Flagship asset"
-   ],
-   "prospects": 15,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "plantastichaven.com",
-   "url": "https://plantastichaven.com/how-to-propagate-a-philodendron-birkin/",
-   "title": "Philodendron Birkin Propagation: 5 Proven Methods (2026)",
-   "h1": "Philodendron Birkin Propagation: 5 Methods",
-   "description": "Propagate Philodendron Birkin from stem cuttings: where to cut relative to the node, rooting in water or soil, and how to keep the variegation stable.",
-   "type": "methodology",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 2472,
-   "interactive": false,
-   "modified": "2026-11-08T07:51:21+00:00",
-   "reasons": [
-    "Original method/data — citation-worthy",
-    "In-depth (2,472 words)",
-    "Recently updated",
-    "One of 151 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 8,
-   "internal_link_suggestions": 1,
    "promoting": false
   }
  ],
@@ -3722,6 +3877,56 @@
    "anchor": "life path",
    "relevance": 8,
    "from_strength": 55
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "from_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "to": "https://openclaw-skillshub.com/",
+   "to_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
+   "anchor": "openclaw skills",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/how-to-install-openclaw-skills/",
+   "from_title": "How to Install OpenClaw Skills — macOS, Windows WSL & Linux Guide (2026) | ClawSkills",
+   "to": "https://openclaw-skillshub.com/",
+   "to_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
+   "anchor": "openclaw skills",
+   "relevance": 4,
+   "from_strength": 40
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/best-openclaw-skills-2026/",
+   "from_title": "25 Best OpenClaw Skills (2026) — Safe, Rated & Ranked by Category | ClawSkills",
+   "to": "https://openclaw-skillshub.com/",
+   "to_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
+   "anchor": "openclaw skills",
+   "relevance": 4,
+   "from_strength": 40
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/openclaw-skills-vs-plugins-vs-mcp/",
+   "from_title": "OpenClaw Skills vs Plugins vs MCP — Decision Guide (2026) | ClawSkills",
+   "to": "https://openclaw-skillshub.com/",
+   "to_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
+   "anchor": "openclaw skills",
+   "relevance": 4,
+   "from_strength": 39
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/",
+   "from_title": "OpenClaw Guides: Install, Security & Comparisons — ClawSkills",
+   "to": "https://openclaw-skillshub.com/",
+   "to_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
+   "anchor": "openclaw skills",
+   "relevance": 4,
+   "from_strength": 39
   },
   {
    "site": "gearuptogrow.com",
@@ -3791,7 +3996,7 @@
    "to_title": "How to Choose the Right Affiliate Program (2026 Checklist)",
    "anchor": "choose affiliate program",
    "relevance": 4,
-   "from_strength": 0
+   "from_strength": 53
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -4051,6 +4256,266 @@
    "to_title": "Email Marketing Template Generator: HTML & Plain Text",
    "anchor": "write email reader",
    "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/numerology-calculators/",
+   "from_title": "Free Numerology Calculators: Birth Date, Name and House Number Tools | Mystical Digits",
+   "to": "https://blueprint.mysticaldigits.com/",
+   "to_title": "Your Mystical Blueprint — Discover Your Numbers | MysticalDigits",
+   "anchor": "life path",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/numerology-marriage-compatibility/",
+   "from_title": "Uniting Souls: The 2026 Blueprint to Numerology Marriage Compatibility…",
+   "to": "https://blueprint.mysticaldigits.com/",
+   "to_title": "Your Mystical Blueprint — Discover Your Numbers | MysticalDigits",
+   "anchor": "life path",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/life-path-number-calculator/",
+   "from_title": "Life Path Number Calculator (Free) | Mystical Digits",
+   "to": "https://blueprint.mysticaldigits.com/",
+   "to_title": "Your Mystical Blueprint — Discover Your Numbers | MysticalDigits",
+   "anchor": "life path",
+   "relevance": 5,
+   "from_strength": 87
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
+   "from_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
+   "to": "https://blueprint.mysticaldigits.com/",
+   "to_title": "Your Mystical Blueprint — Discover Your Numbers | MysticalDigits",
+   "anchor": "life path",
+   "relevance": 5,
+   "from_strength": 79
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/numerology-love-meter-calculator/",
+   "from_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
+   "to": "https://blueprint.mysticaldigits.com/",
+   "to_title": "Your Mystical Blueprint — Discover Your Numbers | MysticalDigits",
+   "anchor": "life path",
+   "relevance": 5,
+   "from_strength": 65
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
+   "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
+   "to": "https://elimination.micegoneguide.com/",
+   "to_title": "Mouse Control Planner: Free Step-by-Step Plan | MiceGoneGuide",
+   "anchor": "mouse control",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/mouse-cleanup-safety/",
+   "from_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
+   "to": "https://elimination.micegoneguide.com/",
+   "to_title": "Mouse Control Planner: Free Step-by-Step Plan | MiceGoneGuide",
+   "anchor": "mouse control",
+   "relevance": 4,
+   "from_strength": 58
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
+   "from_title": "Does Peppermint Oil Repel Mice? What the Evidence Shows",
+   "to": "https://elimination.micegoneguide.com/",
+   "to_title": "Mouse Control Planner: Free Step-by-Step Plan | MiceGoneGuide",
+   "anchor": "mouse control",
+   "relevance": 4,
+   "from_strength": 55
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/mouse-proofing/",
+   "from_title": "Mouse Proofing & Prevention: Find and Seal Entry Gaps",
+   "to": "https://elimination.micegoneguide.com/",
+   "to_title": "Mouse Control Planner: Free Step-by-Step Plan | MiceGoneGuide",
+   "anchor": "mouse control",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/mouse-traps-baits/",
+   "from_title": "Mouse Traps and Baits: Safer Choices",
+   "to": "https://elimination.micegoneguide.com/",
+   "to_title": "Mouse Control Planner: Free Step-by-Step Plan | MiceGoneGuide",
+   "anchor": "mouse control",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "imagealchemy.app",
+   "from": "https://imagealchemy.app/learn/best-free-image-compression-tools",
+   "from_title": "Best Free Image Compression Tools in 2026 (Compared)",
+   "to": "https://imagealchemy.app/",
+   "to_title": "ImageAlchemy — Free Private Image Compressor (WebP, AVIF, JPEG, PNG)",
+   "anchor": "image compression",
+   "relevance": 4,
+   "from_strength": 42
+  },
+  {
+   "site": "imagealchemy.app",
+   "from": "https://imagealchemy.app/glossary/entropy-coding",
+   "from_title": "What Is Entropy Coding in Image Compression?",
+   "to": "https://imagealchemy.app/",
+   "to_title": "ImageAlchemy — Free Private Image Compressor (WebP, AVIF, JPEG, PNG)",
+   "anchor": "image compression",
+   "relevance": 4,
+   "from_strength": 40
+  },
+  {
+   "site": "imagealchemy.app",
+   "from": "https://imagealchemy.app/glossary",
+   "from_title": "Image Compression & Format Glossary — ImageAlchemy",
+   "to": "https://imagealchemy.app/",
+   "to_title": "ImageAlchemy — Free Private Image Compressor (WebP, AVIF, JPEG, PNG)",
+   "anchor": "image compression",
+   "relevance": 4,
+   "from_strength": 27
+  },
+  {
+   "site": "borderwise.online",
+   "from": "https://borderwise.online/guide",
+   "from_title": "Cross-border rental car checklist: permits, insurance, fees | Borderwise",
+   "to": "https://borderwise.online/",
+   "to_title": "Borderwise — Can your rental car cross the border?",
+   "anchor": "rental car",
+   "relevance": 8,
+   "from_strength": 53
+  },
+  {
+   "site": "borderwise.online",
+   "from": "https://borderwise.online/routes/greece-to-south-africa",
+   "from_title": "Rental car Greece to South Africa: rules, fees & permits | Borderwise",
+   "to": "https://borderwise.online/",
+   "to_title": "Borderwise — Can your rental car cross the border?",
+   "anchor": "rental car",
+   "relevance": 8,
+   "from_strength": 41
+  },
+  {
+   "site": "borderwise.online",
+   "from": "https://borderwise.online/routes/france-to-united-kingdom",
+   "from_title": "Rental car France to United Kingdom: rules, fees & permits | Borderwise",
+   "to": "https://borderwise.online/",
+   "to_title": "Borderwise — Can your rental car cross the border?",
+   "anchor": "rental car",
+   "relevance": 8,
+   "from_strength": 41
+  },
+  {
+   "site": "borderwise.online",
+   "from": "https://borderwise.online/routes/germany-to-united-kingdom",
+   "from_title": "Rental car Germany to United Kingdom: rules, fees & permits | Borderwise",
+   "to": "https://borderwise.online/",
+   "to_title": "Borderwise — Can your rental car cross the border?",
+   "anchor": "rental car",
+   "relevance": 8,
+   "from_strength": 29
+  },
+  {
+   "site": "borderwise.online",
+   "from": "https://borderwise.online/routes/serbia-to-bosnia-and-herzegovina",
+   "from_title": "Rental car Serbia to Bosnia and Herzegovina: rules, fees & permits | Borderwise",
+   "to": "https://borderwise.online/",
+   "to_title": "Borderwise — Can your rental car cross the border?",
+   "anchor": "rental car",
+   "relevance": 8,
+   "from_strength": 29
+  },
+  {
+   "site": "checkthetag.shop",
+   "from": "https://checkthetag.shop/fabrics",
+   "from_title": "Fabric care guides | Check The Tag",
+   "to": "https://checkthetag.shop/",
+   "to_title": "Check The Tag — Decode any laundry care label in seconds",
+   "anchor": "read tag save",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "checkthetag.shop",
+   "from": "https://checkthetag.shop/fabrics/cashmere",
+   "from_title": "How to care for a cashmere sweater | Check The Tag",
+   "to": "https://checkthetag.shop/",
+   "to_title": "Check The Tag — Decode any laundry care label in seconds",
+   "anchor": "read tag save",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "cabinvolt.shop",
+   "from": "https://cabinvolt.shop/models/w5pro",
+   "from_title": "HAIARA W5 PRO 20W power bank sold by Mitrytech — recall & flight status | CabinVolt",
+   "to": "https://cabinvolt.shop/",
+   "to_title": "CabinVolt — Can This Power Bank Fly? 2026 ICAO & Airline Recall Checker",
+   "anchor": "power bank",
+   "relevance": 5,
+   "from_strength": 47
+  },
+  {
+   "site": "cabinvolt.shop",
+   "from": "https://cabinvolt.shop/models/e33a",
+   "from_title": "Casely E33A Wireless portable power bank — recall & flight status | CabinVolt",
+   "to": "https://cabinvolt.shop/",
+   "to_title": "CabinVolt — Can This Power Bank Fly? 2026 ICAO & Airline Recall Checker",
+   "anchor": "power bank",
+   "relevance": 5,
+   "from_strength": 46
+  },
+  {
+   "site": "cabinvolt.shop",
+   "from": "https://cabinvolt.shop/airlines/vueling",
+   "from_title": "Vueling power bank rules 2026 | CabinVolt",
+   "to": "https://cabinvolt.shop/",
+   "to_title": "CabinVolt — Can This Power Bank Fly? 2026 ICAO & Airline Recall Checker",
+   "anchor": "power bank",
+   "relevance": 5,
+   "from_strength": 45
+  },
+  {
+   "site": "cabinvolt.shop",
+   "from": "https://cabinvolt.shop/airlines/delta",
+   "from_title": "Delta Air Lines power bank rules 2026 | CabinVolt",
+   "to": "https://cabinvolt.shop/",
+   "to_title": "CabinVolt — Can This Power Bank Fly? 2026 ICAO & Airline Recall Checker",
+   "anchor": "power bank",
+   "relevance": 5,
+   "from_strength": 33
+  },
+  {
+   "site": "cabinvolt.shop",
+   "from": "https://cabinvolt.shop/airlines/turkish",
+   "from_title": "Turkish Airlines power bank rules 2026 | CabinVolt",
+   "to": "https://cabinvolt.shop/",
+   "to_title": "CabinVolt — Can This Power Bank Fly? 2026 ICAO & Airline Recall Checker",
+   "anchor": "power bank",
+   "relevance": 5,
+   "from_strength": 33
+  },
+  {
+   "site": "bordercover.shop",
+   "from": "https://bordercover.shop/methodology",
+   "from_title": "Methodology | BorderCover Atlas",
+   "to": "https://bordercover.shop/",
+   "to_title": "BorderCover Atlas — Overseas car insurance research",
+   "anchor": "bordercover atlas",
+   "relevance": 4,
    "from_strength": 0
   },
   {
@@ -4341,7 +4806,7 @@
    "to_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
    "anchor": "spider plants",
    "relevance": 9,
-   "from_strength": 0
+   "from_strength": 43
   },
   {
    "site": "plantastichaven.com",
@@ -4595,6 +5060,16 @@
   },
   {
    "site": "stainsolver.shop",
+   "from": "https://stainsolver.shop/",
+   "from_title": "Stain Solver | Stain removal by fabric and spill",
+   "to": "https://stainsolver.shop/guides/",
+   "to_title": "Stain removal guides | Stain Solver",
+   "anchor": "stain removal guides",
+   "relevance": 3,
+   "from_strength": 76
+  },
+  {
+   "site": "stainsolver.shop",
    "from": "https://stainsolver.shop/guides/water-stains-on-fabric/",
    "from_title": "How to remove water stains from fabric | Stain Solver",
    "to": "https://stainsolver.shop/guides/",
@@ -4612,16 +5087,6 @@
    "anchor": "stain removal guides",
    "relevance": 3,
    "from_strength": 42
-  },
-  {
-   "site": "stainsolver.shop",
-   "from": "https://stainsolver.shop/",
-   "from_title": "Stain Solver | Stain removal by fabric and spill",
-   "to": "https://stainsolver.shop/guides/",
-   "to_title": "Stain removal guides | Stain Solver",
-   "anchor": "stain removal guides",
-   "relevance": 3,
-   "from_strength": 0
   },
   {
    "site": "stainsolver.shop",
@@ -5245,6 +5710,16 @@
   },
   {
    "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/",
+   "from_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
+   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "anchor": "openclaw skills",
+   "relevance": 5,
+   "from_strength": 84
+  },
+  {
+   "site": "openclaw-skillshub.com",
    "from": "https://openclaw-skillshub.com/articles/",
    "from_title": "OpenClaw Guides: Install, Security & Comparisons — ClawSkills",
    "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
@@ -5255,13 +5730,13 @@
   },
   {
    "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/",
-   "from_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
+   "from": "https://openclaw-skillshub.com/articles/how-to-choose-openclaw-skills/",
+   "from_title": "How to Choose OpenClaw Skills — Decision Guide by Use Case | ClawSkills",
    "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
    "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
    "anchor": "openclaw skills",
    "relevance": 5,
-   "from_strength": 0
+   "from_strength": 38
   },
   {
    "site": "openclaw-skillshub.com",
@@ -5277,16 +5752,6 @@
    "site": "openclaw-skillshub.com",
    "from": "https://openclaw-skillshub.com/articles/openclaw-vs-nanoclaw/",
    "from_title": "OpenClaw vs NanoClaw (2026) — Security-Focused Agent Comparison | ClawSkills",
-   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
-   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
-   "anchor": "openclaw skills",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/how-to-choose-openclaw-skills/",
-   "from_title": "How to Choose OpenClaw Skills — Decision Guide by Use Case | ClawSkills",
    "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
    "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
    "anchor": "openclaw skills",
@@ -5362,316 +5827,6 @@
    "anchor": "french bulldogs",
    "relevance": 4,
    "from_strength": 74
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 73
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
-   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 59
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
-   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
-   "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-food-for-french-bulldogs-with-sensitive-stomach/",
-   "from_title": "Best Dog Food for a French Bulldog With a Sensitive Stomach",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-dog-treat-recipes-french-bulldogs/",
-   "from_title": "Homemade French Bulldog Treats: 4 Safe, Simple Recipes",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "french bulldogs",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/safely-remove-mice/",
-   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
-   "to": "https://micegoneguide.com/snap-traps-for-mice/",
-   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "anchor": "snap traps",
-   "relevance": 5,
-   "from_strength": 56
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "from_title": "Where to Place Mouse Traps: Room-by-Room Placement Guide",
-   "to": "https://micegoneguide.com/snap-traps-for-mice/",
-   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "anchor": "snap traps",
-   "relevance": 5,
-   "from_strength": 48
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/best-mouse-traps-for-homes/",
-   "from_title": "Best Mouse Traps for Homes: Snap, Enclosed & Electronic",
-   "to": "https://micegoneguide.com/snap-traps-for-mice/",
-   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "anchor": "snap traps",
-   "relevance": 5,
-   "from_strength": 42
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/best-bait-for-mouse-traps/",
-   "from_title": "Best Bait for Mouse Traps: Peanut Butter, Setup & Mistakes",
-   "to": "https://micegoneguide.com/snap-traps-for-mice/",
-   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "anchor": "snap traps",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/mouse-traps-baits/",
-   "from_title": "Mouse Traps and Baits: Safer Choices",
-   "to": "https://micegoneguide.com/snap-traps-for-mice/",
-   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "anchor": "snap traps",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/diseases-from-mice/",
-   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
-   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
-   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
-   "anchor": "cleanup safety",
-   "relevance": 5,
-   "from_strength": 53
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/rodent-infestation-cleanup-protocols/",
-   "from_title": "Rodent Infestation Cleanup Protocols for Homes and Storage Areas",
-   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
-   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
-   "anchor": "mouse cleanup",
-   "relevance": 5,
-   "from_strength": 49
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/identifying-mouse-nests-in-your-home/",
-   "from_title": "Identifying Mouse Nests in Your Home: Where Mice Hide",
-   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
-   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
-   "anchor": "cleanup safety",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/mouse-traps-baits/",
-   "from_title": "Mouse Traps and Baits: Safer Choices",
-   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
-   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
-   "anchor": "mouse cleanup safety",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/safely-remove-mice/",
-   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
-   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
-   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
-   "anchor": "mouse cleanup safety",
-   "relevance": 3,
-   "from_strength": 56
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-name-numbers-reading-calculator/",
-   "from_title": "Get Your FREE Numerology Name Numbers Reading Calculator Tool (Updated…",
-   "to": "https://mysticaldigits.com/find-your-lucky-name-with-the-ultimate-calculator/",
-   "to_title": "Lucky Name Calculator: Find Your 2026 Numerology Match",
-   "anchor": "name calculator",
-   "relevance": 4,
-   "from_strength": 55
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-business-name-calculator-boost-your-success/",
-   "from_title": "Business Name Numerology Calculator: 2026 Brand-Vibration Formula",
-   "to": "https://mysticaldigits.com/find-your-lucky-name-with-the-ultimate-calculator/",
-   "to_title": "Lucky Name Calculator: Find Your 2026 Numerology Match",
-   "anchor": "lucky name calculator",
-   "relevance": 3,
-   "from_strength": 55
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-numerology-of-your-lucky-numbers/",
-   "from_title": "Lucky Numbers Meaning 2026: Guide & Calculator | Mystical Digits",
-   "to": "https://mysticaldigits.com/find-your-lucky-name-with-the-ultimate-calculator/",
-   "to_title": "Lucky Name Calculator: Find Your 2026 Numerology Match",
-   "anchor": "lucky name calculator",
-   "relevance": 3,
-   "from_strength": 54
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/find-your-lucky-mobile-number-based-on-date-of-birth/",
-   "from_title": "Find Your Lucky Mobile Number by DOB in 2026",
-   "to": "https://mysticaldigits.com/find-your-lucky-name-with-the-ultimate-calculator/",
-   "to_title": "Lucky Name Calculator: Find Your 2026 Numerology Match",
-   "anchor": "lucky name calculator",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/purple-spider-plant/",
-   "from_title": "Purple Spider Plant: What It Really Is and How to ID It",
-   "to": "https://plantastichaven.com/house-plants-with-purple-leaves/",
-   "to_title": "House Plants With Purple Leaves: Best Indoor Picks and Care Tips",
-   "anchor": "purple leaves",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/how-to-install-openclaw-skills/",
-   "from_title": "How to Install OpenClaw Skills — macOS, Windows WSL & Linux Guide (2026) | ClawSkills",
-   "to": "https://openclaw-skillshub.com/skills/search-research/deep-research/",
-   "to_title": "Deep Research OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "deep research",
-   "relevance": 8,
-   "from_strength": 40
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/getting-started-openclaw-skills-beginner/",
-   "from_title": "Getting Started with OpenClaw Skills — Beginner Guide (2026) | ClawSkills",
-   "to": "https://openclaw-skillshub.com/skills/search-research/deep-research/",
-   "to_title": "Deep Research OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "deep research",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/tutorials/openclaw-take-the-wheel-long-form-writing/",
-   "from_title": "How to Use OpenClaw's 'Take the Wheel' Skill for Long-Form Writing | ClawSkills",
-   "to": "https://openclaw-skillshub.com/skills/search-research/deep-research/",
-   "to_title": "Deep Research OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "deep research",
-   "relevance": 6,
-   "from_strength": 50
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/how-to-choose-openclaw-skills/",
-   "from_title": "How to Choose OpenClaw Skills — Decision Guide by Use Case | ClawSkills",
-   "to": "https://openclaw-skillshub.com/skills/search-research/deep-research/",
-   "to_title": "Deep Research OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "deep research",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/best-openclaw-skills-by-use-case/",
-   "from_title": "Best OpenClaw Skills by Use Case (2026) — Curated Skill Bundles | ClawSkills",
-   "to": "https://openclaw-skillshub.com/skills/search-research/deep-research/",
-   "to_title": "Deep Research OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "deep research",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/shop/",
-   "from_title": "Houseplant Tools & Supplies: What to Buy & Skip | PlantasticHaven",
-   "to": "https://plantastichaven.com/houseplant-pest-control/",
-   "to_title": "Houseplant Pest Control: Identify Pests Before Treating",
-   "anchor": "pest control",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/care-guides/",
-   "from_title": "Indoor Plant Care Guides - PlantasticHaven",
-   "to": "https://plantastichaven.com/houseplant-pest-control/",
-   "to_title": "Houseplant Pest Control: Identify Pests Before Treating",
-   "anchor": "pest control",
-   "relevance": 4,
-   "from_strength": 0
   }
  ],
  "indexation": {
@@ -7041,7 +7196,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-26T11:29:58.453Z"
+  "updated_at": "2026-11-26T13:02:00.239Z"
  },
  "wins": [
   {
@@ -7112,43 +7267,44 @@
   }
  ],
  "log": [
-  "11:29:27 connection dataforseo: connected",
-  "11:29:27 connection gmail: connected",
-  "11:29:28 crawl plantastichaven.com: 154/154 urls, fetched 17, 304 0, reused 137",
-  "11:29:28 crawl gearuptofit.com: 300/794 urls, fetched 0, 304 0, reused 300",
-  "11:29:31 crawl frenchyfab.com: 154/154 urls, fetched 0, 304 0, reused 154",
-  "11:29:31 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
-  "11:29:33 crawl mysticaldigits.com: 300/468 urls, fetched 8, 304 1, reused 291",
-  "11:29:34 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
-  "11:29:34 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
-  "11:29:34 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "11:29:34 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 2, 304 0, reused 111",
-  "11:29:35 crawl tenderatlas.shop: 3/3 urls, fetched 0, 304 0, reused 3",
-  "11:29:35 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
-  "11:29:35 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
-  "11:29:35 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
-  "11:29:35 crawl efficientgptprompts.com: 300/487 urls, fetched 4, 304 0, reused 296",
-  "11:29:35 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
-  "11:29:35 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
-  "11:29:36 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
-  "11:29:36 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
-  "11:29:36 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
-  "11:29:36 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
-  "11:29:36 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
-  "11:29:36 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "11:29:36 - search_performance: skipped (Search Console not connected)",
-  "11:29:36 indexation: 102 sitemap URLs with an indexing problem (1 critical)",
-  "11:29:40 link neighbourhood (free): 12 qualified pages mined, 76 recommended sites to evaluate",
-  "11:29:58 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 76 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 76 candidates, 9 qualified (0 unlinked mentions), 2 with email, 0 with a dead link we can replace, 0 already linking",
-  "11:29:58 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "11:29:58 self-tuning: next cycle runs up to 20 searches",
-  "11:29:58 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "11:30:00 replies: 22 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "11:30:01 sent-folder check: 149 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
-  "11:30:02 queue screening (free, nothing sent): 5 checked, 1 sendable, 1 retired, 0 switched to a better published address",
-  "11:30:04 outreach: 0 sent, 0 follow-ups, 0 drafts, 3 held for verification",
-  "11:30:44 pre-verify (nothing sent): 10 top inboxes checked, 2 verified, 8 held",
-  "11:30:44 link checks: 0 pages, 0 new links won, 0 lost"
+  "13:01:32 connection dataforseo: connected",
+  "13:01:32 connection gmail: connected",
+  "13:01:32 crawl plantastichaven.com: 154/154 urls, fetched 1, 304 0, reused 153",
+  "13:01:34 crawl gearuptofit.com: 300/794 urls, fetched 0, 304 0, reused 300",
+  "13:01:36 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
+  "13:01:36 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "13:01:36 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
+  "13:01:37 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
+  "13:01:37 crawl efficientgptprompts.com: 300/487 urls, fetched 4, 304 0, reused 296",
+  "13:01:37 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
+  "13:01:38 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "13:01:38 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
+  "13:01:38 crawl tenderatlas.shop: 3/3 urls, fetched 0, 304 0, reused 3",
+  "13:01:38 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
+  "13:01:38 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
+  "13:01:38 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
+  "13:01:39 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
+  "13:01:39 crawl frenchyfab.com: 154/154 urls, fetched 0, 304 0, reused 154",
+  "13:01:39 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
+  "13:01:39 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
+  "13:01:39 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
+  "13:01:39 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
+  "13:01:40 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
+  "13:01:40 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "13:01:40 - search_performance: skipped (Search Console not connected)",
+  "13:01:40 pitch policy: 86 of 529 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
+  "13:01:40 indexation: 102 sitemap URLs with an indexing problem (1 critical)",
+  "13:01:43 link neighbourhood (free): 12 qualified pages mined, 80 recommended sites to evaluate",
+  "13:02:00 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 80 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 80 candidates, 9 qualified (0 unlinked mentions), 3 with email, 0 with a dead link we can replace, 0 already linking",
+  "13:02:00 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "13:02:00 self-tuning: next cycle runs up to 20 searches",
+  "13:02:00 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "13:02:02 replies: 2 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "13:02:04 sent-folder check: 149 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
+  "13:02:06 queue screening (free, nothing sent): 6 checked, 2 sendable, 1 retired, 0 switched to a better published address",
+  "13:06:38 outreach: 5 sent, 2 follow-ups, 0 drafts, 2 held for verification",
+  "13:06:38 pre-verify (nothing sent): 0 top inboxes checked, 0 verified, 0 held",
+  "13:06:38 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
@@ -7158,15 +7314,9 @@
    "fix": "Top up at app.dataforseo.com (Billing). Prospecting resumes by itself on the next cycle."
   },
   {
-   "level": "warn",
-   "code": "templates_only",
-   "message": "All 97 pitches so far were fixed templates (3 replies).",
-   "fix": "Add an Anthropic API key under ⚙ Connect so every pitch is written for that exact page and link."
-  },
-  {
    "level": "info",
    "code": "holds",
-   "message": "24 queued inboxes are held; most often (11) because mailbox unknown.",
+   "message": "22 queued inboxes are held; most often (11) because mailbox unknown.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   }
  ]
