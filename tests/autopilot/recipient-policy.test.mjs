@@ -81,7 +81,7 @@ test('suppression matches case-insensitive exact inbox and publisher subdomains'
  assert.equal(isSuppressed({suppression:{'other.example':{}}},email,'journal.example'),false);
 });
 test('MX presence is not an email-verification pass',async()=>{
- assert.deepEqual(await checkMx('journal.example',async()=>[{exchange:'mx.journal.example'}]),{ok:true,reason:'mx_present_not_mailbox_proof'});
+ assert.deepEqual(await checkMx('journal.example',async()=>[{exchange:'mx.journal.example'}]),{ok:true,reason:'mx_present_not_mailbox_proof',class:'other'});
  assert.equal(usableVerification({status:'valid'},email,now),false);
 });
 test('null MX, no explicit MX and DNS errors all hold rather than send',async()=>{

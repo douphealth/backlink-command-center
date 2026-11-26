@@ -12,6 +12,26 @@ export function validTarget(d){
   const h=String(d||'').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/[/:?#].*$/,'').replace(/\.$/,'');
   return h.length<=253&&/^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(h)?h:'';
 }
+/** Below this balance (USD) no paid call can succeed. */
+export const MIN_BALANCE=0.05;
+/**
+ * How much of the account balance was spent by something other than Autopilot since the previous cycle.
+ * The ledger matches the provider's balance to the cent on quiet days, so a larger drop means another tool
+ * or session shares this DataForSEO account. A top-up (balance rose) resets the comparison.
+ */
+export function trackExternalSpend(state,balance,now=NOW()){
+  if(!Number.isFinite(balance))return null;
+  const total=(state.ledger||[]).reduce((n,x)=>n+Number(x.cost||0),0),prev=state.dfs_watch;
+  state.dfs_external=(state.dfs_external||[]).filter(x=>ageDays(x.at)<30);
+  let external=0;
+  if(prev&&Number.isFinite(prev.balance)&&balance<=prev.balance){
+    external=Number(((prev.balance-balance)-(total-prev.ledger_total)).toFixed(4));
+    if(external>=0.05)state.dfs_external.push({at:now,usd:external});else external=0;
+  }
+  state.dfs_watch={balance,ledger_total:total,at:now};
+  const sum=days=>Number(state.dfs_external.filter(x=>ageDays(x.at)<days).reduce((n,x)=>n+x.usd,0).toFixed(2));
+  return {since_last_cycle_usd:external,last_7d_usd:sum(7),last_30d_usd:sum(30)};
+}
 const ESTIMATE={serp:0.006,relevant_pages:0.025,traffic:0.03,backlinks:0.03}; // calibrated from the ledger's real averages
 
 export class DataForSEO{
@@ -36,7 +56,10 @@ export class DataForSEO{
       if(res.status===401||res.status===403||body?.status_code===40100){this.reject(res.status===200?401:res.status,body);return {status:'rejected',error:this.authError}}
       const r=body?.tasks?.[0]?.result?.[0];
       if(!res.ok||!r)return {status:'unverified',error:`DataForSEO account check failed (HTTP ${res.status})`};
-      return {status:'connected',balance_usd:Number(r.money?.balance??NaN)};
+      this.balance=Number(r.money?.balance??NaN);
+      // No money left: make no paid call at all this cycle (each would only fail), and say so on the dashboard.
+      if(Number.isFinite(this.balance)&&this.balance<MIN_BALANCE)this.outOfFunds=true;
+      return {status:'connected',balance_usd:this.balance,...(this.outOfFunds?{out_of_funds:true}:{})};
     }catch{return {status:'unverified',error:'DataForSEO could not be reached'}}
   }
   spend(period){const key=period==='day'?NOW().slice(0,10):NOW().slice(0,7);
@@ -47,7 +70,7 @@ export class DataForSEO{
     return recent.length>=3?recent.reduce((n,x)=>n+Number(x.cost||0),0)/recent.length:(ESTIMATE[kind]??0.05);
   }
   canSpend(kind){
-    if(!this.enabled)return false;
+    if(!this.enabled||this.outOfFunds||this.costCapped)return false;
     const b=this.state.dfs_blocked[kind];if(b&&ageDays(b)<7)return false;
     const est=this.estimate(kind);
     return this.spend('day')+est<=this.dailyUsd&&this.spend('month')+est<=this.monthlyUsd;
@@ -74,7 +97,14 @@ export class DataForSEO{
       if(code===20000)return t.result||[];
       if(code===40102)return [{items:[]}]; // 'No Search Results' is a real (empty) answer, not a failure
       if(code===40106&&t.result)return t.result; // partial results: keep what was returned (unreturned pages aren't billed)
-      if(code>=40200&&code<40300||code===40204||code===40104){this.state.dfs_blocked[kind]=NOW();this.log(`dataforseo: ${kind} not available on this account (${code}); parked 7 days`);return null}
+      const msg=String(t?.status_message||body?.status_message||'');
+      // An empty balance is not "this endpoint is unavailable": on 2026-11-26 it parked every lookup for 7 days,
+      // which would have kept prospecting off for a week after a top-up. Stop for this cycle only.
+      if(code===40200||code===40210||/payment required|insufficient funds|not enough (money|funds)/i.test(msg)){
+        if(!this.outOfFunds)this.log('dataforseo: the account balance is used up; paid lookups stop until it is topped up');this.outOfFunds=true;return null}
+      if(code===40203||/cost limit/i.test(msg)){if(!this.costCapped)this.log('dataforseo: the daily cost limit set in the DataForSEO account is reached; lookups resume tomorrow');this.costCapped=true;return null}
+      if(code===40202||code===40209||/rate limit|too many/i.test(msg)){if(attempt===0){await sleep(4000);continue}this.log(`dataforseo: ${kind} rate-limited; retried next cycle`);return null}
+      if(code>=40200&&code<40300||code===40104){this.state.dfs_blocked[kind]=NOW();this.log(`dataforseo: ${kind} not available on this account (${code}); parked 7 days`);return null}
       if(attempt===0&&(!body||code>=50000||code===40101)){await sleep(3000);continue}
       this.log(`dataforseo: ${endpoint} failed ${code} ${t?.status_message||body?.status_message||''}`.trim());
       return null;

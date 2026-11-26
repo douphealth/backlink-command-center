@@ -5,7 +5,7 @@ import {followupPitch} from './pitch.mjs';
 import {fetchPage,links,hostOf,sameSite,ageDays,NOW,sleep,DAY,pool} from './util.mjs';
 import {QUALIFY_VERSION} from './prospect.mjs';
 import {assetStats,linkLikelihood} from './learn.mjs';
-import {RecipientVerifier,isSuppressed,usableVerification,samePublisher,normalizeEmail} from './recipient-policy.mjs';
+import {RecipientVerifier,isSuppressed,usableVerification,samePublisher,normalizeEmail,verifyPassRate} from './recipient-policy.mjs';
 import {checkDead} from './broken.mjs';
 import {normUrl as normUrlKey} from './util.mjs';
 export const PER_ASSET_DAILY=2;
@@ -115,7 +115,8 @@ export function applyProof(state,p,proof,{followup=false}={}){
   Number.isFinite(Date.parse(proof.evidence?.observed_at))&&Date.now()-Date.parse(proof.evidence.observed_at)>=0&&Date.now()-Date.parse(proof.evidence.observed_at)<DAY;
  if(!valid||suppressed(state,e,p.domain)||(followup&&e!==normalizeEmail(p.email))){
   const detail=proof?.detail?String(proof.detail).slice(0,60):undefined,prev=p.contact_quality;
-  p.contact_quality={status:'held',reason:proof?.reason||'recipient_not_verified',...(detail?{detail}:{}),checked_at:NOW()};delete p.recipient_proof;
+  p.contact_quality={status:'held',reason:proof?.reason||'recipient_not_verified',...(detail?{detail}:{}),checked_at:NOW(),
+   ...(Date.parse(proof?.retry_after||'')>Date.now()?{retry_after:proof.retry_after}:{})};delete p.recipient_proof;
   // Two publisher-side failures in a row: this publisher has no verifiable editorial inbox. Retire it from the
   // ready queue (record kept) so each cycle's checks go to prospects that can actually be emailed.
   if(!followup&&p.status==='ready'&&publisherHold(detail)&&prev?.status==='held'&&publisherHold(prev.detail)){p.status='contact_unverifiable';p.reason=`No verifiable editorial inbox (${detail})`}
@@ -183,6 +184,17 @@ export async function reconcileSent({state,imap,days=30,log=()=>{}}){
  return stats;
 }
 const NO_CREDITS=/credits_used_up|budget_exhausted/;
+/** The verifier already holds an inconclusive answer for this inbox that cannot change yet: asking again only wastes a slot. */
+export const coolingDown=(p,now=Date.now())=>p.contact_quality?.status==='held'&&Date.parse(p.contact_quality.retry_after||'')>now;
+/** Free DNS lookups: learn the mail-host class of queued inboxes (at most `max` per cycle, 30-day memory). */
+export async function classifyQueue(state,mailer,list,{max=80}={}){
+ if(typeof mailer?.mxClassOf!=='function')return 0;
+ const due=list.filter(p=>p.email&&!(p.mx_class&&ageDays(p.mx_checked_at)<30)).slice(0,max);
+ await pool(due,8,async p=>{const c=await mailer.mxClassOf(p,{state}).catch(()=>null);if(c){p.mx_class=c;p.mx_checked_at=NOW()}});
+ return due.length;
+}
+/** Expected value of spending one verification credit here: chance the inbox verifies x chance the pitch earns a link. */
+export const creditValue=(state,p,likelihood)=>likelihood*verifyPassRate(state,p.mx_class);
 /**
  * Verify the best queued inboxes ahead of their send window (no email is sent). Runs every cycle on
  * the free daily credits that would otherwise expire, so a cycle inside the window can send at once
@@ -196,9 +208,13 @@ export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new D
  const queue=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION&&!suppressed(state,p.email,p.domain)&&
    !(state.contacted?.[p.domain]&&ageDays(state.contacted[p.domain])<90)&&!usableVerification(p.recipient_proof?.verification,p.email)&&
    !(p.contact_quality?.status==='held'&&publisherHold(p.contact_quality.detail)&&ageDays(p.contact_quality.checked_at)<3)&& // only publisher-side holds wait 3 days
+   !coolingDown(p,now().getTime())&& // a cached "inconclusive" answer cannot change yet
    (()=>{const w=nextSendWindow(p.domain,now());return !!w&&w-now()<=withinHours*36e5})()) // a proof must not expire before the window
-  .map(p=>[p,linkLikelihood(p,{assets:learned})]).sort((a,b)=>b[1]-a[1]).slice(0,Math.max(0,max)).map(x=>x[0]);
- for(const p of queue){
+  .map(p=>[p,linkLikelihood(p,{assets:learned})]).sort((a,b)=>b[1]-a[1]);
+ // Credits are the scarce resource: spend them where (chance to verify) x (chance of a link) is highest.
+ await classifyQueue(state,mailer,queue.map(x=>x[0]));
+ const picked=queue.map(([p,l])=>[p,creditValue(state,p,l)]).sort((a,b)=>b[1]-a[1]).slice(0,Math.max(0,max)).map(x=>x[0]);
+ for(const p of picked){
   // A single slow mail server can take ~2 minutes to verify: never start one without that much time left.
   if(deadline-Date.now()<150e3)break;stats.checked++;
   let proof;try{proof=await mailer.authorizeRecipient(p,{state,followup:false,deadline})}catch{proof={ok:false,reason:'verification_error'}}
@@ -265,6 +281,12 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
  }
  const learned=assetStats(state),ready=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION)
   .map(p=>{p.likelihood=linkLikelihood(p,{assets:learned});return p}).sort((a,b)=>b.likelihood-a.likelihood||(b.score||0)-(a.score||0));
+ // Already-verified inboxes go first (they need no credit); the rest by expected value per verification credit.
+ if(requiresProof){
+  await classifyQueue(state,mailer,ready.filter(p=>!usableVerification(p.recipient_proof?.verification,p.email)));
+  const key=p=>usableVerification(p.recipient_proof?.verification,p.email)?1e6+p.likelihood:creditValue(state,p,p.likelihood);
+  ready.sort((a,b)=>key(b)-key(a));
+ }
  const perAsset=new Map();for(const p of Object.values(state.prospects||{}))if((p.history||[]).some(h=>h.type==='initial'&&String(h.at).startsWith(NOW().slice(0,10))))perAsset.set(p.asset_url,(perAsset.get(p.asset_url)||0)+1);
  for(const p of ready){
   if(budget<=0||Date.now()>deadline||checked>=24)break;
@@ -273,6 +295,7 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   if(suppressed(state,p.email,p.domain)||(last&&ageDays(last)<90)){p.status='skipped_duplicate';stats.skipped++;continue}
   const site=siteBy.get(p.site);if(!site){p.status='stale_asset';stats.skipped++;continue}
   if(config.blockedAssets?.has(normUrlKey(p.asset_url))){stats.asset_not_indexable=(stats.asset_not_indexable||0)+1;continue} // wait until the page is fixed
+  if(requiresProof&&coolingDown(p)&&!usableVerification(p.recipient_proof?.verification,p.email)){stats.cooling=(stats.cooling||0)+1;continue} // no slot for a cached answer
   if(!await prepare(p,false))continue;
   const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title||site.domain,type:p.kind==='mention'?'brand':'resource',description:''};
   // The email states that a link is dead: confirm it still is, seconds before writing it.
@@ -311,6 +334,10 @@ export function gmailTransport(env){
   authorizeRecipient:async(p,{state,followup,deadline})=>{
    if(!verifiers.has(state))verifiers.set(state,new RecipientVerifier({state,fetchPage,env}));
    return verifiers.get(state).verify(p,{followup,deadline});
+  },
+  mxClassOf:async(p,{state})=>{
+   if(!verifiers.has(state))verifiers.set(state,new RecipientVerifier({state,fetchPage,env}));
+   return verifiers.get(state).mxClassOf(p.email);
   },
   screenRecipient:async(p,{state,deadline})=>{
    if(!verifiers.has(state))verifiers.set(state,new RecipientVerifier({state,fetchPage,env}));
