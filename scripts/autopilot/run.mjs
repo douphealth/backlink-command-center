@@ -26,7 +26,7 @@ import {indexationReport} from './indexation.mjs';
 import {autotune,diagnose,TUNING} from './health.mjs';
 import {gscClient,monitorIndex,indexReport,searchPerformance} from './searchconsole.mjs';
 import {submitToBing} from './bing.mjs';
-import {PitchWriter} from './pitch.mjs';
+import {PitchWriter,aiProviders} from './pitch.mjs';
 import {processReplies,reconcileSent,runOutreach,preverify,screenQueue,checkLinks,gmailTransport,dailyCap,outreachStatus} from './outreach.mjs';
 import {assetStats,learningSummary} from './learn.mjs';
 import {seal,open} from './vault.mjs';
@@ -70,7 +70,7 @@ export function loadConfig(env=process.env,argv=process.argv){
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     brave:{apiKey:env.BRAVE_SEARCH_API_KEY||'',monthlyRequests:num(env.BRAVE_MONTHLY_REQUESTS,900)},neighborPages:Math.max(0,Math.min(40,num(env.AUTOPILOT_NEIGHBOR_PAGES,12))),
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5',
-      githubToken:env.LINKFORGE_AI_WRITER==='off'?'':env.GITHUB_MODELS_TOKEN||'',githubModel:env.LINKFORGE_GITHUB_MODEL||''},
+      providers:aiProviders(env)},
     linkGapCalls:Math.max(0,Math.min(4,num(env.AUTOPILOT_LINKGAP_CALLS,2))),
     gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,bing:!!env.BING_WEBMASTER_API_KEY,preverifyMax:num(env.AUTOPILOT_PREVERIFY,10),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
     verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
@@ -88,6 +88,7 @@ export function setupChecklist(cfg){
     {key:'VERIFALIA_USERNAME + VERIFALIA_PASSWORD + EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox verifier (needed to send)',done:verifierReady(cfg),unlocks:'Proves each editor inbox exists before any email goes out, so nothing bounces. Verifalia free plan: 25 credits every day, free credits only (Hunter key optional as fallback)',required:false},
     {key:'OUTREACH_MODE = send',label:'Hands-free sending',done:cfg.outreach.mode==='send',unlocks:'Sends pitches and one follow-up automatically (warm-up ramp, daily cap)',required:false},
     {key:'ANTHROPIC_API_KEY',label:'Claude pitch writer',done:!!cfg.claude.apiKey,unlocks:'Writes a unique, page-specific email for every prospect',required:false},
+    {key:'GROQ_API_KEY or GEMINI_API_KEY',label:'Free AI pitch writer',done:cfg.claude.providers.length>0,unlocks:'Writes a page-specific email for every prospect on a free API plan when no Anthropic key is set (templates otherwise)',required:false},
     {key:'GSC_SERVICE_ACCOUNT_JSON',label:'Search Console',done:cfg.gsc,unlocks:'Real index status of every important page, clicks/impressions tracking, striking-distance targeting',required:false},
     {key:'BRAVE_SEARCH_API_KEY',label:'Brave Search (fallback search)',done:!!cfg.brave.apiKey,unlocks:'Keeps prospect searches running when the DataForSEO balance or cap is used up (monthly request cap, default 900)',required:false},
     {key:'BING_WEBMASTER_API_KEY',label:'Bing Webmaster API',done:cfg.bing,unlocks:'Daily submission of new, changed and non-indexed pages to Bing (also feeds Copilot, DuckDuckGo and ChatGPT search)',required:false},
@@ -280,7 +281,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   // ---- 5. Mail ----
   // The production transport demands verified-mailbox proof for every recipient: without a verifier nothing could go out.
   const noVerifier=typeof mailer?.authorizeRecipient==='function'&&!verifierReady(cfg);
-  let aiWriter=cfg.claude.apiKey?'claude':cfg.claude.githubToken?'github_models':null;
+  let aiWriter=cfg.claude.apiKey?'claude':cfg.claude.providers[0]?.name||null;
   const mailWhy=!vaultOk?privateWhy:!mailer?'Gmail app password not set':!gmailOk?connections.gmail.error
     :cfg.outreach.mode==='off'?'OUTREACH_MODE=off':noVerifier?'mailbox verifier not configured (Verifalia login or Hunter key, plus a verification daily limit)':'';
   try{
@@ -297,10 +298,10 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     await stage('screen',vaultOk&&!!mailer,()=>screenQueue({state,mailer,deadline:deadline-4*60e3,log}),privateWhy,{until:deadline-3.5*60e3});
     const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',fetchImpl,log});
     await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets,pickAsset},deadline:deadline-2*60e3,log}),mailWhy||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
-    if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,github_models:writer.usedGithub,template_fallbacks:writer.fallbacks,...(writer.ghModel?{github_model:writer.ghModel}:{}),...(Object.keys(writer.reasons||{}).length?{fallback_reasons:writer.reasons}:{})};
+    if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,free_ai:writer.usedAi,template_fallbacks:writer.fallbacks,...(writer.aiModel?{ai_provider:writer.aiProvider,ai_model:writer.aiModel}:{}),...(Object.keys(writer.reasons||{}).length?{fallback_reasons:writer.reasons}:{})};
     aiWriter=writer.ai;
-    if(stages.outreach?.ok&&(writer.used+writer.usedGithub+writer.fallbacks)>0){const why=Object.entries(writer.reasons||{}).map(([k,n])=>`${k} x${n}`).join(', ');
-      log(`pitch writer: ${writer.used+writer.usedGithub} written by AI${writer.ghModel?` (${writer.ghModel})`:''}, ${writer.fallbacks} from the template${why?` (${why})`:''}`)}
+    if(stages.outreach?.ok&&(writer.used+writer.usedAi+writer.fallbacks)>0){const why=Object.entries(writer.reasons||{}).map(([k,n])=>`${k} x${n}`).join(', ');
+      log(`pitch writer: ${writer.used+writer.usedAi} written by AI${writer.aiModel?` (${writer.aiProvider}: ${writer.aiModel})`:''}, ${writer.fallbacks} from the template${why?` (${why})`:''}`)}
     // Every cycle: spend today's leftover free verification credits on the best inboxes whose send window opens within 20 h,
     // so the next in-window cycle (started by the send-window waker) sends at once.
     await stage('preverify',vaultOk&&gmailOk&&!noVerifier&&typeof mailer?.authorizeRecipient==='function',

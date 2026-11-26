@@ -1,6 +1,7 @@
 /**
  * Personalised pitch writer. Uses Claude when ANTHROPIC_API_KEY is configured
- * (grounded strictly in the fetched prospect page + our asset facts), otherwise a
+ * (grounded strictly in the fetched prospect page + our asset facts), otherwise a free
+ * OpenAI-compatible writer when its key is set (Groq, Gemini, or a custom endpoint), otherwise a
  * specific, non-spammy template. Every output is validated before use.
  */
 import Anthropic from '@anthropic-ai/sdk';
@@ -110,9 +111,43 @@ export function grounded(out,facts){
   const nums=`${out.subject} ${out.body}`.replace(/https?:\/\/\S+/g,' ').match(/\d[\d,.]*\d/g)||[];
   return nums.every(n=>src.includes(n.replace(/[,.]$/,'').replace(/,/g,'')));
 }
-const GITHUB_MODELS='https://models.github.ai';
-/** Tried in order; the catalogue is consulted when none of them exists any more. */
-const GITHUB_MODEL_PREFERENCE=['openai/gpt-4.1-mini','openai/gpt-4o-mini','openai/gpt-4.1','openai/gpt-4o'];
+/**
+ * Free AI writers that speak the OpenAI chat-completions format, used when no Anthropic key is set.
+ * (GitHub Models, the first free writer here, was retired by GitHub on 2026-07-30: its host answers "200 OK" to everything.)
+ * The model is chosen from the provider's own live model list (`prefer`: first match per pattern), so a renamed or
+ * retired model does not break the writer; the `fallback` names are tried when the list cannot be read.
+ */
+export const AI_PROVIDERS={
+  groq:{label:'Groq',base:'https://api.groq.com/openai/v1',prefer:[/gpt-oss-120b/i,/llama-3\.3-70b/i,/70b/i,/gpt-oss-20b/i,/instant/i],fallback:['openai/gpt-oss-120b','llama-3.3-70b-versatile','llama-3.1-8b-instant']},
+  // nativeList: Google's own model list, read when the OpenAI-style one is not served for this key.
+  gemini:{label:'Gemini',base:'https://generativelanguage.googleapis.com/v1beta/openai',prefer:[/flash-lite/i,/flash/i],fallback:['gemini-flash-lite-latest','gemini-flash-latest','gemini-2.5-flash-lite','gemini-2.5-flash'],
+    nativeList:{url:'https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000',keyHeader:'x-goog-api-key'}},
+};
+const NOT_CHAT=/embed|whisper|tts|audio|speech|image|imagen|veo|video|guard|moderation|rerank|vision|live|aqa|robotics|computer-use|transcri|native|compound|orpheus/i;
+/** Ordered model candidates from a provider's model list: per pattern the newest stable match; specialty models are ignored. */
+export function pickModels(ids,prefer){
+  const chat=[...new Set(ids.map(i=>String(i||'').replace(/^models\//,'')))].filter(i=>i&&!NOT_CHAT.test(i));
+  const unstable=i=>/preview|exp|beta/i.test(i)?1:0,out=[];
+  for(const re of prefer){
+    const m=chat.filter(i=>re.test(i)&&!out.includes(i)).sort((a,b)=>unstable(a)-unstable(b)||b.localeCompare(a,undefined,{numeric:true}));
+    if(m.length)out.push(m[0]);
+  }
+  return out;
+}
+/** The free writers configured in the environment, in the order they are tried. Keys never leave this object. */
+export function aiProviders(env){
+  if(env.LINKFORGE_AI_WRITER==='off')return [];
+  const t=v=>String(v||'').trim(),out=[];
+  if(t(env.GROQ_API_KEY))out.push({name:'groq',...AI_PROVIDERS.groq,key:t(env.GROQ_API_KEY),model:t(env.LINKFORGE_GROQ_MODEL)});
+  if(t(env.GEMINI_API_KEY))out.push({name:'gemini',...AI_PROVIDERS.gemini,key:t(env.GEMINI_API_KEY),model:t(env.LINKFORGE_GEMINI_MODEL)});
+  // Any other OpenAI-compatible service (OpenRouter, Cloudflare Workers AI, Mistral, a self-hosted model): all three values are needed.
+  const base=t(env.LINKFORGE_AI_BASE_URL).replace(/\/+$/,'').replace(/\/chat\/completions$/,'');
+  if(/^https:\/\/[^\s/]+/.test(base)&&t(env.LINKFORGE_AI_KEY)&&t(env.LINKFORGE_AI_MODEL)){
+    let label='custom';try{label=new URL(base).hostname}catch{}
+    out.push({name:'custom',label,base,key:t(env.LINKFORGE_AI_KEY),model:t(env.LINKFORGE_AI_MODEL),prefer:[],fallback:[]});
+  }
+  return out;
+}
 const SCHEMA={type:'object',properties:{subject:{type:'string'},body:{type:'string'}},required:['subject','body'],additionalProperties:false};
 const SYSTEM=`You write short, honest link-suggestion emails to independent website editors.
 Rules:
@@ -171,81 +206,104 @@ export function tidyPitch(out,asset){
 }
 
 export class PitchWriter{
-  constructor({apiKey,model='claude-opus-5-5',senderName,log=()=>{},githubToken='',githubModel='',fetchImpl=fetch}){
+  constructor({apiKey,model='claude-opus-5-5',senderName,log=()=>{},providers=[],fetchImpl=fetch,sleep=ms=>new Promise(r=>setTimeout(r,ms))}){
     this.client=apiKey?new Anthropic({apiKey,maxRetries:2,timeout:60000}):null;
     this.model=model;this.senderName=senderName;this.log=log;this.used=0;this.fallbacks=0;
-    // Free writer inside GitHub Actions (GitHub Models): used when no Anthropic key is set.
-    this.ghToken=githubToken;this.ghModels=[...(githubModel?[githubModel]:[]),...GITHUB_MODEL_PREFERENCE];this.ghModel=null;this.usedGithub=0;this.fetch=fetchImpl;
+    // Free writers (OpenAI-compatible): used when no Anthropic key is set.
+    this.providers=providers.map(p=>({...p,limited:new Set()}));this.usedAi=0;this.aiProvider=null;this.aiModel=null;this.fetch=fetchImpl;this.sleep=sleep;
     this.reasons={};
   }
   /** Count a template fallback by reason and say so once per reason (the reason is what makes the writer fixable). */
   fail(why,detail=''){
     this.fallbacks++;
-    if(!this.reasons[why])this.log(`pitch writer: template used (${why}${detail?': '+String(detail).replace(/\s+/g,' ').slice(0,140):''})`);
+    if(!this.reasons[why])this.log(`pitch writer: template used (${why}${detail?': '+String(detail).replace(/\s+/g,' ').slice(0,160):''})`);
     this.reasons[why]=(this.reasons[why]||0)+1;
   }
-  get ai(){return this.client?'claude':this.ghToken&&!this.ghOff?'github_models':null}
-  /** One chat completion on GitHub Models. Returns {out:{subject,body}} or {why, detail} (never throws). */
-  async github(facts){
-    if(!this.ghToken||this.ghOff)return {why:this.ghOffWhy||'writer_off'};
-    const headers={Authorization:'Bearer '+this.ghToken,'Content-Type':'application/json',Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+  get ai(){return this.client?'claude':this.providers.find(p=>!p.off)?.name||null}
+  /** One chat completion from the first free writer that can answer. Returns {out:{subject,body},provider,model} or {why, detail} (never throws). */
+  async chat(facts){
+    let first=null;
+    for(const p of this.providers){
+      if(p.off)continue;
+      const r=await this.ask(p,facts);
+      if(r.out)return r;
+      first??=r;
+    }
+    return first||{why:this.providers.find(p=>p.offWhy)?.offWhy||'writer_off'};
+  }
+  /** Model ids the provider lists for this key ([] when the list cannot be read). */
+  async listModels(p,headers){
+    const read=async(url,h)=>{
+      try{
+        const res=await this.fetch(url,{headers:h,redirect:'manual',signal:AbortSignal.timeout(20000)});if(!res.ok)return [];
+        const j=await res.json(),list=Array.isArray(j)?j:Array.isArray(j?.data)?j.data:Array.isArray(j?.models)?j.models:[];
+        return list.map(m=>typeof m==='string'?m:m?.id||m?.name).filter(Boolean);
+      }catch{return []}
+    };
+    const ids=await read(p.base+'/models',headers);
+    return ids.length||!p.nativeList?ids:read(p.nativeList.url,{[p.nativeList.keyHeader]:p.key});
+  }
+  async ask(p,facts){
+    const headers={Authorization:'Bearer '+p.key,'Content-Type':'application/json'};
     // Plain "Subject:" format: small models keep to it far more reliably than to JSON with line breaks inside strings.
     const system=SYSTEM+'\nAnswer in exactly this format, with nothing before or after it:\nSubject: <the subject line>\n\n<the email body>';
-    // redirect:'manual': a redirect would silently turn this POST into a GET and drop the token; report it instead.
-    const ask=async model=>this.fetch(GITHUB_MODELS+'/inference/chat/completions',{method:'POST',headers,redirect:'manual',signal:AbortSignal.timeout(45000),body:JSON.stringify({model,temperature:0.5,max_tokens:700,
-      messages:[{role:'system',content:system},{role:'user',content:'Write the email from these facts (JSON):\n'+JSON.stringify(facts)}]})});
-    const off=(why,line)=>{this.ghOff=true;this.ghOffWhy=why;this.log(line);return {why}};
-    const candidates=this.ghModel?[this.ghModel]:this.ghModels;
-    let lastDetail='';
-    for(let i=0;i<candidates.length;i++){
-      let res;try{res=await ask(candidates[i])}catch(e){return {why:'unreachable',detail:e?.name||''}}
-      if(res.status===401||res.status===403)return off('not_permitted',`github models: not permitted (HTTP ${res.status}); the workflow needs "models: read". Templates are used`);
-      if(res.status===429)return off('quota_used_up','github models: today\'s free quota is used up; templates are used for the rest of this cycle');
-      if(res.status>=300&&res.status<400)return {why:'redirected',detail:`HTTP ${res.status} to ${res.headers?.get?.('location')||'(no location)'}`};
-      if(res.status===404||res.status===400||res.status===422){
-        lastDetail=`HTTP ${res.status} for ${candidates[i]}: ${(await res.text().catch(()=>'')).slice(0,120)}`;
-        // Unknown model: after the known names, ask the catalogue once for a small text model.
-        if(i===candidates.length-1&&!this.ghCatalogTried){this.ghCatalogTried=true;const found=await this.catalogModel(headers);if(found&&!candidates.includes(found))candidates.push(found)}
-        continue;
+    // max_tokens leaves room for models that reason before answering; the body length is validated afterwards.
+    const body=model=>JSON.stringify({model,temperature:0.5,max_tokens:2000,messages:[{role:'system',content:system},{role:'user',content:'Write the email from these facts (JSON):\n'+JSON.stringify(facts)}]});
+    const off=(why,line)=>{p.off=true;p.offWhy=why;this.log(line);return {why}};
+    if(!p.candidates)p.candidates=[...new Set([...(p.model?[p.model]:[]),...pickModels(await this.listModels(p,headers),p.prefer||[]),...(p.fallback||[])])].slice(0,6);
+    const order=[...new Set([...(p.working?[p.working]:[]),...p.candidates])].filter(m=>!p.limited.has(m));
+    let lastDetail='',limited=p.limited.size>0;
+    for(const model of order){
+      let res;
+      for(let attempt=0;;attempt++){
+        // redirect:'manual': a redirect would silently turn this POST into a GET and drop the key; report it instead.
+        try{res=await this.fetch(p.base+'/chat/completions',{method:'POST',headers,redirect:'manual',signal:AbortSignal.timeout(45000),body:body(model)})}
+        catch(e){return {why:'unreachable',detail:`${p.label}: ${e?.name||''}`}}
+        // A per-minute limit clears in seconds: wait once. Anything longer is the daily quota.
+        const wait=res.status===429?Number(res.headers?.get?.('retry-after')):NaN;
+        if(attempt===0&&wait>0&&wait<=20){await this.sleep(wait*1000+500);continue}
+        break;
       }
-      if(!res.ok)return {why:`http_${res.status}`,detail:(await res.text().catch(()=>'')).slice(0,120)};
-      // Say exactly what came back: on 2026-11-26 the service answered "success" in 250 ms with no completion in it.
-      const raw=await res.text().catch(()=>'');let body=null;try{body=JSON.parse(raw)}catch{}
-      const content=body?.choices?.[0]?.message?.content;
-      const text=Array.isArray(content)?content.map(part=>typeof part==='string'?part:part?.text||'').join(''):String(content||'');
-      if(!text)return {why:body?'empty_answer':'answer_not_json',
-        detail:`HTTP ${res.status} ${res.headers?.get?.('content-type')||'no content-type'}: ${(raw||'(empty body)').slice(0,100)}`};
+      if(res.status===401||res.status===403)return off('not_permitted',`${p.label}: the API key was rejected (HTTP ${res.status}); it is not used for the rest of this cycle`);
+      // Quotas are per model: this model is skipped for the rest of the cycle and the next one is tried.
+      if(res.status===429){p.limited.add(model);if(p.working===model)p.working=null;limited=true;continue}
+      if(res.status>=300&&res.status<400)return {why:'redirected',detail:`${p.label}: HTTP ${res.status} to ${res.headers?.get?.('location')||'(no location)'}`};
+      if(res.status===404||res.status===400||res.status===422){
+        const text=(await res.text().catch(()=>'')).replace(/\s+/g,' ');
+        // Google answers a missing or wrong key with HTTP 400, not 401.
+        if(/api[ _-]?key|authorization header|unauthenticated|credential/i.test(text))return off('not_permitted',`${p.label}: the API key was rejected (HTTP ${res.status}: ${text.slice(0,100)}); it is not used for the rest of this cycle`);
+        lastDetail=`HTTP ${res.status} for ${model}: ${text.slice(0,120)}`;continue;
+      }
+      if(!res.ok)return {why:`http_${res.status}`,detail:`${p.label}: ${(await res.text().catch(()=>'')).slice(0,120)}`};
+      // Say exactly what came back: a retired service can answer "success" with no completion in it.
+      const raw=await res.text().catch(()=>'');let json=null;try{json=JSON.parse(raw)}catch{}
+      const content=json?.choices?.[0]?.message?.content;
+      const text=(Array.isArray(content)?content.map(part=>typeof part==='string'?part:part?.text||'').join(''):String(content||'')).replace(/<think>[\s\S]*?<\/think>/gi,'').trim();
+      if(!text)return {why:json?'empty_answer':'answer_not_json',
+        detail:`${p.label} ${model}: HTTP ${res.status} ${res.headers?.get?.('content-type')||'no content-type'}: ${(raw||'(empty body)').slice(0,100)}`};
       const out=parseAnswer(text);
-      if(!out)return {why:'answer_not_in_format',detail:text.slice(0,80)};
-      this.ghModel=candidates[i];
-      return {out};
+      if(!out)return {why:'answer_not_in_format',detail:`${p.label} ${model}: ${text.slice(0,80)}`};
+      p.working=model;
+      return {out,provider:p.name,model};
     }
-    this.ghOff=true;this.ghOffWhy='no_usable_model';this.log(`github models: no usable model found (${lastDetail}); templates are used`);
-    return {why:'no_usable_model'};
-  }
-  async catalogModel(headers){
-    try{
-      const res=await this.fetch(GITHUB_MODELS+'/catalog/models',{headers,signal:AbortSignal.timeout(20000)});if(!res.ok)return null;
-      const list=await res.json();if(!Array.isArray(list))return null;
-      const text=list.filter(m=>m?.id&&(m.supported_output_modalities||['text']).includes('text')&&!/embed/i.test(m.id));
-      return (text.find(m=>/mini/i.test(m.id)&&/^openai\//.test(m.id))||text.find(m=>m.rate_limit_tier==='low')||text[0])?.id||null;
-    }catch{return null}
+    if(limited&&!lastDetail)return off('quota_used_up',`${p.label}: the free quota is used up for now; it is not used for the rest of this cycle`);
+    return off('no_usable_model',`${p.label}: no usable model found (${lastDetail||'no model listed'}); it is not used for the rest of this cycle`);
   }
   async write(p,asset,site){
     const template=(p.kind==='mention'?mentionPitch:templatePitch)(p,asset,{senderName:this.senderName,site});
-    // Once the free writer is off for this cycle (quota, permission), later pitches still record why they are templates.
-    if(!this.ai){if(this.ghOffWhy)this.fail(this.ghOffWhy);return template}
+    // Once every free writer is off for this cycle (quota, rejected key), later pitches still record why they are templates.
+    if(!this.ai){const why=this.providers.find(x=>x.offWhy)?.offWhy;if(why)this.fail(why);return template}
     const facts={editor_page:{title:p.title,url:p.page_url,author:p.author||null,relevant_section:p.fit_section||null,excerpt:(p.excerpt||'').slice(0,1500)},
       our_asset:{title:asset.title,url:asset.url,kind:KIND[asset.type]||'resource',description:asset.description||'',facts:[...assetFacts(asset),...(asset.reasons||[]).filter(r=>!INTERNAL_NOTE.test(r))],free_tool:!!asset.interactive},
       ...(p.kind==='linkgap'&&p.competitor_link?.host&&!p.broken_link?{competitor_link:{site:p.competitor_link.host,anchor:p.competitor_link.anchor||null,surrounding_text:p.competitor_link.context||null,same_subject:p.competitor_link.match==='specific'}}:{}),
       ...(p.broken_link&&p.kind!=='mention'?{broken_link:{anchor:p.broken_link.anchor||null,site:p.broken_link.host,problem:DEAD[p.broken_link.reason]||'no longer works'}}:{}),
       sender:{name:this.senderName,website:site.domain},topic:site.topic,situation:p.kind==='mention'?'unlinked_mention':p.broken_link?'broken_link_replacement':p.kind==='linkgap'&&p.competitor_link?.host?'alternative_to_linked_resource':'resource_suggestion'};
     if(!this.client){
-      const r=await this.github(facts);
+      const r=await this.chat(facts);
       if(!r.out){this.fail(r.why,r.detail);return template}
       const out=tidyPitch(r.out,asset),why=pitchProblem(out,asset)||(grounded(out,facts)?null:'number_not_in_facts');
-      if(why){this.fail(why);return template}
-      this.usedGithub++;return {...out,writer:'github_models'};
+      if(why){this.fail(why,`${r.provider} ${r.model}`);return template}
+      this.usedAi++;this.aiProvider=r.provider;this.aiModel=r.model;return {...out,writer:r.provider};
     }
     try{
       const res=await this.client.beta.messages.create({

@@ -43,6 +43,8 @@ const FIELDS=[
   {name:'OUTREACH_MODE',label:'Outreach mode',type:'select',kind:'setting',options:[['send','Hands-free: send pitches + 1 follow-up automatically'],['draft','Safe: write pitches into Gmail Drafts'],['off','Research only']]},
   {name:'OUTREACH_DAILY_LIMIT',label:'Max new pitches per day',type:'number',kind:'setting',help:'Starts at 5/day and ramps up by 2/day to this limit'},
   {name:'ANTHROPIC_API_KEY',label:'Anthropic API key (optional)',type:'password',kind:'secret',help:'Claude writes a unique pitch for every page'},
+  {name:'GROQ_API_KEY',label:'Groq API key (optional, free AI pitch writer)',type:'password',kind:'secret',help:'Free plan, no card. Used to write each pitch when no Anthropic key is set. console.groq.com → API Keys',link:'https://console.groq.com/keys'},
+  {name:'GEMINI_API_KEY',label:'Gemini API key (optional, free AI pitch writer)',type:'password',kind:'secret',help:'Free plan from Google AI Studio. Used when no Anthropic key is set, after Groq if both are saved',link:'https://aistudio.google.com/apikey'},
   {name:'VERIFALIA_USERNAME',label:'Verifalia username (needed to send)',type:'text',kind:'secret',help:'Free plan: 25 credits every day, about 12 inbox checks. Create a dedicated user in the Verifalia client area',link:'https://verifalia.com/sign-up'},
   {name:'VERIFALIA_PASSWORD',label:'Verifalia password',type:'password',kind:'secret',help:'Only free daily credits are used, so verification never costs money'},
   {name:'EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox checks per day',type:'number',kind:'setting',min:0,max:100,placeholder:'24 (default)',help:'Leave blank for 24 a day (Verifalia Standard checks, free credits only). 0 turns verification, and so sending, off'},
