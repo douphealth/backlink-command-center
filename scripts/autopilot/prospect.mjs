@@ -188,6 +188,8 @@ export function siteKind(html){
   return 'publisher';
 }
 
+/** Pages where a site publishes how to reach it. Impressum/imprint/kontakt: German-language sites must list an address there. */
+const CONTACT_LINK=/contact|about|write-for-us|contribute|work-with-me|get-in-touch|impressum|imprint|kontakt|masthead|editorial-team|our-team|meet-the-team|guest-post|submit-(?:a-)?(?:tip|story|post)/i;
 export async function findContact(pageUrl,pageHtml,{fetchImpl=fetch,author=''}={}){
   const origin=new URL(pageUrl).origin,domain=hostOf(pageUrl);
   const candidates=new Map();let form=null,kind='publisher';
@@ -200,9 +202,11 @@ export async function findContact(pageUrl,pageHtml,{fetchImpl=fetch,author=''}={
   if(kind==='local_business')return {email:null,email_source:null,alternates:[],contact_form:null,site_kind:kind};
   // Contact pages the site itself links to (article first, then the homepage menu/footer) beat guessed paths;
   // indie blogs mostly use /contact-me, /about-me or /work-with-me rather than /contact-us.
-  const contactLinks=(html,base)=>html?links(html,base).filter(l=>sameSite(hostOf(l.url),domain)&&/contact|about|write-for-us|contribute|work-with-me|get-in-touch/i.test(l.url+' '+l.anchor)&&!/advertis|sponsor|media-kit|partner|privacy|terms|cookie|affiliate-disclosure/i.test(l.url)).map(l=>l.url):[];
-  const linked=[...contactLinks(pageHtml,pageUrl).slice(0,3),...(home.status===200?contactLinks(home.body,home.url).slice(0,3):[])];
-  const paths=[...new Set([...linked,origin+'/contact',origin+'/contact-us',origin+'/contact-me',origin+'/about',origin+'/about-me',origin+'/work-with-me',origin+'/write-for-us'].map(u=>normUrl(u)).filter(Boolean))].slice(0,7);
+  const contactLinks=(html,base)=>html?links(html,base).filter(l=>sameSite(hostOf(l.url),domain)&&CONTACT_LINK.test(l.url+' '+l.anchor)&&!/advertis|sponsor|media-kit|partner|privacy|terms|cookie|affiliate-disclosure/i.test(l.url)).map(l=>l.url):[];
+  // The article's author page first: a blogger's own address is the best one for a pitch about their article.
+  const authorPage=links(pageHtml,pageUrl).find(l=>sameSite(hostOf(l.url),domain)&&/\/(?:author|authors|team|staff|writers?|contributors?)\/[^/?#]+\/?$/i.test(l.url))?.url;
+  const linked=[...(authorPage?[authorPage]:[]),...contactLinks(pageHtml,pageUrl).slice(0,3),...(home.status===200?contactLinks(home.body,home.url).slice(0,4):[])];
+  const paths=[...new Set([...linked,origin+'/contact',origin+'/contact-us',origin+'/contact-me',origin+'/about',origin+'/about-us',origin+'/about-me',origin+'/work-with-me',origin+'/write-for-us',origin+'/impressum'].map(u=>normUrl(u)).filter(Boolean))].slice(0,9);
   for(const p of paths){
     const best=Math.max(-1,...[...candidates.values()].map(c=>c.rank));if(best>=75)break;
     const res=await fetchPage(p,{fetchImpl,timeout:9000,maxBytes:250000});
@@ -210,6 +214,35 @@ export async function findContact(pageUrl,pageHtml,{fetchImpl=fetch,author=''}={
   }
   const ranked=[...candidates.values()].sort((a,b)=>b.rank-a.rank);
   return {email:ranked[0]?.email||null,email_rank:ranked[0]?.rank??null,email_source:ranked[0]?.source||null,alternates:ranked.slice(1,3).map(x=>x.email),contact_form:form,site_kind:kind};
+}
+
+/* ---------- Second look at qualified pages that had no usable address ---------- */
+/** Bumped when contact discovery learns to read more (v2: schema.org email, author page, impressum/team pages). */
+export const CONTACT_VERSION=2;
+/**
+ * More than half of all qualified pages end as "contact form only" or "no contact" and were never looked at
+ * again. They get one more look whenever contact discovery improves, and otherwise every 60 days (sites add
+ * contact pages). This only ever promotes a prospect to ready: nothing is rejected or demoted here, and the
+ * address still has to pass the same inbox rules and mailbox verification before anything is sent.
+ */
+export async function recontact({state,fetchImpl=fetch,deadline=Infinity,max=60,log=()=>{}}){
+  const stats={checked:0,found:0,unreachable:0,waiting:0};
+  const all=Object.values(state.prospects||{}).filter(p=>(p.status==='contact_form'||p.status==='no_contact')&&p.page_url&&((p.contact_v||1)<CONTACT_VERSION||ageDays(p.contact_checked_at||p.found_at)>60))
+    .sort((a,b)=>(b.score||0)-(a.score||0));
+  const due=all.slice(0,max);stats.waiting=all.length-due.length;
+  await pool(due,4,async p=>{
+    if(Date.now()>deadline){stats.waiting++;return}
+    const res=await fetchPage(p.page_url,{fetchImpl,timeout:12000,maxBytes:500000});
+    p.contact_v=CONTACT_VERSION;p.contact_checked_at=NOW();stats.checked++;
+    if(res.status!==200||!res.body){stats.unreachable++;return}
+    const c=await findContact(p.page_url,res.body,{fetchImpl,author:p.author});
+    if(c.site_kind!=='publisher')return;
+    if(!c.email){if(c.contact_form&&p.status==='no_contact'){p.contact_form=c.contact_form;p.status='contact_form'}return}
+    Object.assign(p,{email:c.email,email_rank:c.email_rank,email_source:c.email_source,alternates:c.alternates,contact_form:c.contact_form||p.contact_form||null,site_kind:c.site_kind,status:'ready',recontacted_at:NOW()});
+    stats.found++;
+  });
+  if(due.length)log(`second look: ${stats.checked} qualified pages without an address re-checked, ${stats.found} now have one (${stats.unreachable} unreachable, ${stats.waiting} waiting for a later cycle)`);
+  return stats;
 }
 
 /* ---------- Link neighbourhood: sites that pages we already qualified link to (free, no search API) ---------- */
