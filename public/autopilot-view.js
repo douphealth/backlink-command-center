@@ -57,6 +57,16 @@ const FIELDS=[
 const local=(k,fallback)=>({get:()=>{try{return JSON.parse(localStorage.getItem(k))??fallback}catch{return fallback}},set:v=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}}});
 const savedSettings=local('linkforge-settings',{});
 const TAB=local('linkforge-ap-tab','overview');
+const AP_TABS=['overview','pages','index','prospects','sites','learning'];
+export const currentApTab=()=>AP_TABS.includes(TAB.get())?TAB.get():'overview';
+/** Show one Autopilot section: the tab bar, the panes and the sidebar all follow. Works before the page is rendered too. */
+export function showApTab(k){
+  if(!AP_TABS.includes(k))return;TAB.set(k);
+  document.querySelectorAll('[data-ap-tab]').forEach(x=>{const on=x.dataset.apTab===k;x.classList.toggle('active',on);x.setAttribute('aria-selected',String(on))});
+  document.querySelectorAll('[data-ap-pane]').forEach(x=>x.classList.toggle('hidden',x.dataset.apPane!==k));
+  document.querySelectorAll('.nav-link[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===k&&!!document.querySelector('[data-ap-pane]')));
+}
+const navCount=(id,v,warn=false)=>{const x=document.getElementById(id);if(x){x.textContent=v==null?'—':Number(v).toLocaleString('en-US');x.classList.toggle('warn',!!(warn&&v))}};
 const vaultResetAt=local('linkforge-vault-reset-at','');
 async function refreshControl(){
   try{ui.control=await control.status()}catch(err){ui.control={error:err.message}}
@@ -163,8 +173,15 @@ export async function renderAutopilot(h){
     ['Best URLs to promote',t.promotable,'◎',`${n(t.promoting_now)} promoted now · ${n(t.internal_suggestions)} internal links to add`]];
   const kpiHtml=`<div class="kpi-grid ap-kpis">${kpis.map(([name,val,ico,note],i)=>`<div class="kpi${i===4&&val?' kpi-alert':''}"><div class="kpi-head">${e(name)}<span class="kpi-ico">${ico}</span></div><div class="kpi-value">${n(val)}</div><div class="kpi-foot">${e(note)}</div></div>`).join('')}</div>`;
   // One long page became five tabs; the choice is remembered on this device.
-  const TABS=[['overview','Overview',0,''],['pages','Best pages',t.promotable,''],['index','Indexation',ixBlocking,'warn'],['prospects','Prospects & links',f.ready,''],['learning','Learning & log',0,'']];
-  const tab=TABS.some(x=>x[0]===TAB.get())?TAB.get():'overview';
+  const TABS=[['overview','Overview',0,''],['pages','Best pages',t.promotable,''],['index','Indexation',ixBlocking,'warn'],['prospects','Prospects & links',f.ready,''],['sites','Your sites',(s.sites||[]).length,''],['learning','Learning & log',0,'']];
+  const tab=currentApTab();
+  navCount('nav-ap-pages',t.promotable);navCount('nav-ap-index',ixBlocking,true);navCount('nav-ap-prospects',f.ready);navCount('nav-ap-sites',(s.sites||[]).length);
+  // Every site in one table: what was checked, what is worth promoting, and what stops pages from being indexed.
+  const ixBy=new Map((ix?.sites||[]).map(x=>[x.site,x]));
+  const siteRows2=[...(s.sites||[])].sort((a,b)=>(ixBy.get(b.domain)?.critical||0)-(ixBy.get(a.domain)?.critical||0)||b.eligible-a.eligible).map(x=>{const i=ixBy.get(x.domain)||{};
+    return `<tr><td><strong>${external('https://'+x.domain+'/',x.domain)}</strong><small>${n(x.pages)} pages checked of ${n(x.discovered)} in ${n(x.sitemaps)} sitemap${x.sitemaps===1?'':'s'}</small>${i.alert?`<small class="ap-why">${e(i.alert)}</small>`:''}</td><td><strong>${n(x.eligible)}</strong></td><td>${i.critical?`<span class="tag red">${n(i.critical)}</span>`:'0'}</td><td>${n(i.review||0)}</td><td>${n(i.thin||0)}</td><td>${x.top?external(x.top,new URL(x.top).pathname):'—'}</td></tr>`});
+  const sitesPanel=panel('Your sites',`${n((s.sites||[]).length)} sites are crawled every cycle from their own sitemaps. "Cannot be indexed" counts 404s, server errors, noindex and wrong canonicals.`,
+    siteRows2.length?table(['Site','Pages worth promoting','Cannot be indexed','Needs a look','Thin (indexable)','Best page to promote'],siteRows2):empty('No sites crawled yet','The next cycle crawls every configured site.'));
   const tabBar=`<div class="ap-tabs" role="tablist">${TABS.map(([k,label,count,tone])=>`<button type="button" role="tab" class="ap-tab${k===tab?' active':''}" data-ap-tab="${k}" aria-selected="${k===tab}">${label}${count?`<span class="${tone}">${n(count)}</span>`:''}</button>`).join('')}</div>`;
   const pane=(k,html)=>`<section class="ap-pane${k===tab?'':' hidden'}" data-ap-pane="${k}" role="tabpanel">${html}</section>`;
   const att=(s.attention||[]).filter(a=>a.level!=='info'||!(s.attention||[]).some(x=>x.level==='action'));
@@ -178,6 +195,7 @@ export async function renderAutopilot(h){
     pane('pages',bestPanel+internalPanel)+
     pane('index',ixPanel+spPanel+giPanel+bgLine)+
     pane('prospects',`<div class="ap-gap">${privatePanel(h)}</div>`+winsPanel)+
+    pane('sites',sitesPanel)+
     pane('learning',learningPanel(h,s)+logPanel);
 }
 
@@ -274,9 +292,7 @@ export function bindAutopilot(reload){
   if(main)new MutationObserver(()=>main.querySelectorAll('[data-w]').forEach(el=>{el.style.width=el.dataset.w+'%'})).observe(main,{childList:true});
   document.addEventListener('click',async ev=>{
     const tb=ev.target.closest('[data-ap-tab]');
-    if(tb){const k=tb.dataset.apTab;TAB.set(k);
-      document.querySelectorAll('[data-ap-tab]').forEach(x=>{const on=x.dataset.apTab===k;x.classList.toggle('active',on);x.setAttribute('aria-selected',String(on))});
-      document.querySelectorAll('[data-ap-pane]').forEach(x=>x.classList.toggle('hidden',x.dataset.apPane!==k));return}
+    if(tb){showApTab(tb.dataset.apTab);return}
     const b=ev.target.closest('[data-ap]');if(!b)return;const a=b.dataset.ap;
     if(a==='connect'){ui.showConnect=!ui.showConnect;return reload()}
     if(a==='close'){ui.showConnect=false;return reload()}
