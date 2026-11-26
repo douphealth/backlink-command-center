@@ -1,0 +1,15 @@
+# Cloudflare Pages configuration for the dashboard. Once deployed, this file is the source of truth for the
+# project's bindings and plain variables (they can no longer be edited in the Cloudflare dashboard).
+# No secrets here: secrets stay in the Cloudflare dashboard and are not affected by this file.
+name = "backlink-command-center"
+pages_build_output_dir = "public"
+compatibility_date = "2026-10-21"
+
+# Workers AI for the free pitch writer (functions/_lib/ai-writer.js). Included in the Workers Free plan:
+# 10,000 Neurons a day at no charge; nothing is billed on the free plan.
+[ai]
+binding = "AI"
+
+[vars]
+# Only this repository's Autopilot workflow may call /api/ai/v1 (verified with a GitHub Actions identity token).
+LINKFORGE_REPO = "douphealth/backlink-command-center"
