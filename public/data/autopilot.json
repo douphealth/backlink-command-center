@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-26T13:22:42.815Z",
- "duration_s": 39,
+ "generated_at": "2026-11-26T15:23:59.253Z",
+ "duration_s": 65,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -35,8 +35,8 @@
    "balance": {
     "provider": "verifalia",
     "free_credits": 1,
-    "reset_in": "10:37:18",
-    "checked_at": "2026-11-26T13:22:41.315Z"
+    "reset_in": "08:36:00",
+    "checked_at": "2026-11-26T15:23:59.081Z"
    },
    "catch_all_domains_skipped": 61
   }
@@ -123,15 +123,15 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 8870,
+   "ms": 28113,
    "result": {
     "sites": 21,
-    "pages": 2512
+    "pages": 2235
    }
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 159
@@ -148,14 +148,14 @@
   "rank": {
    "ok": true,
    "result": {
-    "ranked": 529,
-    "internal_suggestions": 590,
+    "ranked": 523,
+    "internal_suggestions": 573,
     "pitchable": 86
    }
   },
   "requalify": {
    "ok": true,
-   "ms": 3,
+   "ms": 2,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -165,30 +165,31 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 17894,
+   "ms": 18133,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
-    "candidates": 59,
-    "qualified": 7,
+    "candidates": 50,
+    "qualified": 6,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 52,
-    "with_email": 4,
+    "rejected": 44,
+    "with_email": 3,
     "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
     "linkgap_calls": 0,
     "linkgap_candidates": 0,
     "neighbor_pages": 12,
-    "neighbor_candidates": 59,
+    "neighbor_candidates": 50,
     "filtered": {
-     "platform_or_giant": 9,
      "already_evaluated": 22,
-     "gov_or_edu": 1,
-     "duplicate_this_run": 10,
-     "competitor": 1
+     "duplicate_this_run": 4,
+     "platform_or_giant": 21,
+     "forum_or_ugc": 1,
+     "competitor": 2,
+     "gov_or_edu": 1
     },
     "bylines": 1,
     "deferred": 0
@@ -200,7 +201,7 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 4,
+   "ms": 3,
    "result": {
     "checked": 0,
     "found": 0
@@ -208,9 +209,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1420,
+   "ms": 2581,
    "result": {
-    "scanned": 3,
+    "scanned": 10,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -220,7 +221,7 @@
   },
   "sent_check": {
    "ok": true,
-   "ms": 658,
+   "ms": 794,
    "result": {
     "scanned": 156,
     "restored": 0,
@@ -229,7 +230,7 @@
   },
   "screen": {
    "ok": true,
-   "ms": 1007,
+   "ms": 5105,
    "result": {
     "screened": 7,
     "kept": 1,
@@ -239,7 +240,7 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 5894,
+   "ms": 7822,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -258,7 +259,7 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 16,
+   "ms": 18,
    "result": {
     "checked": 0,
     "verified": 0,
@@ -268,7 +269,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 5,
+   "ms": 3,
    "result": {
     "checked": 0,
     "won": 0,
@@ -278,10 +279,10 @@
  },
  "totals": {
   "sites": 21,
-  "pages_crawled": 2512,
-  "urls_discovered": 3632,
-  "promotable": 529,
-  "internal_suggestions": 590,
+  "pages_crawled": 2235,
+  "urls_discovered": 3174,
+  "promotable": 523,
+  "internal_suggestions": 573,
   "promoting_now": 47
  },
  "spend": {
@@ -299,9 +300,9 @@
  },
  "outreach": {
   "mode": "send",
-  "ready": 63,
+  "ready": 64,
   "verified_ready": 0,
-  "pending_verification": 63,
+  "pending_verification": 64,
   "holds": {
    "mailbox_accept_all": 8,
    "publisher_mismatch": 3,
@@ -309,17 +310,17 @@
   },
   "sent_today": 7,
   "cap_today": 12,
-  "next_send_at": "2026-11-26T13:22:42.821Z",
+  "next_send_at": "2026-11-26T15:23:59.256Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 5360,
-  "qualified": 898,
-  "ready": 63,
+  "prospects_evaluated": 5410,
+  "qualified": 904,
+  "ready": 64,
   "broken_link_ready": 3,
   "contact_form_only": 175,
-  "no_contact": 339,
+  "no_contact": 342,
   "contacted": 102,
   "replied": 3,
   "positive": 0,
@@ -896,12 +897,12 @@
   },
   {
    "date": "2026-11-26",
-   "prospects_evaluated": 5360,
-   "qualified": 898,
-   "ready": 63,
+   "prospects_evaluated": 5410,
+   "qualified": 904,
+   "ready": 64,
    "broken_link_ready": 3,
    "contact_form_only": 175,
-   "no_contact": 339,
+   "no_contact": 342,
    "contacted": 102,
    "replied": 3,
    "positive": 0,
@@ -1011,16 +1012,16 @@
     "rate": 0.143
    },
    {
-    "footprint": "neighbor",
-    "queries": 47,
-    "ready": 6,
-    "rate": 0.14
-   },
-   {
     "footprint": "further_reading",
     "queries": 12,
     "ready": 1,
     "rate": 0.133
+   },
+   {
+    "footprint": "neighbor",
+    "queries": 59,
+    "ready": 7,
+    "rate": 0.129
    },
    {
     "footprint": "weekly_roundup",
@@ -1596,7 +1597,7 @@
   {
    "domain": "gearuptofit.com",
    "pages": 300,
-   "discovered": 791,
+   "discovered": 797,
    "sitemaps": 7,
    "eligible": 28,
    "top": "https://gearuptofit.com/shoe-finder/methodology/"
@@ -1651,10 +1652,10 @@
   },
   {
    "domain": "efficientgptprompts.com",
-   "pages": 300,
-   "discovered": 487,
-   "sitemaps": 6,
-   "eligible": 27,
+   "pages": 23,
+   "discovered": 23,
+   "sitemaps": 5,
+   "eligible": 21,
    "top": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/"
   },
   {
@@ -1938,12 +1939,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 40,
-   "words": 2215,
+   "words": 2213,
    "interactive": true,
-   "modified": "2026-10-03T06:27:27+00:00",
+   "modified": "2026-11-26T09:10:18+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,215 words)",
+    "In-depth (2,213 words)",
     "1 data table",
     "Cites 11 authoritative sources",
     "Recently updated"
@@ -2945,6 +2946,33 @@
    "promoting": false
   },
   {
+   "site": "efficientgptprompts.com",
+   "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
+   "title": "Prompt Engineering Framework for LLMs: Test, Grade, Deploy",
+   "h1": "The Enterprise LLM Prompt Engineering Framework",
+   "description": "A prompt engineering framework for LLMs: how to test, grade and deploy prompts in production workflows, with scoring rubrics and QA gates.",
+   "type": "reference",
+   "promotion": 71,
+   "linkability": 68,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 1181,
+   "interactive": false,
+   "modified": "2026-08-17T19:47:24+00:00",
+   "reasons": [
+    "2 data tables",
+    "Recently updated",
+    "Under-linked internally (1 inbound)",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 29,
+   "internal_link_suggestions": 1,
+   "promoting": true
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
    "title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
@@ -3151,32 +3179,6 @@
    "promoting": true
   },
   {
-   "site": "efficientgptprompts.com",
-   "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
-   "title": "Prompt Engineering Framework for LLMs: Test, Grade, Deploy",
-   "h1": "The Enterprise LLM Prompt Engineering Framework",
-   "description": "A prompt engineering framework for LLMs: how to test, grade and deploy prompts in production workflows, with scoring rubrics and QA gates.",
-   "type": "reference",
-   "promotion": 67,
-   "linkability": 68,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 5,
-   "words": 1181,
-   "interactive": false,
-   "modified": "2026-08-17T19:47:24+00:00",
-   "reasons": [
-    "2 data tables",
-    "Recently updated",
-    "Flagship asset"
-   ],
-   "flagship": true,
-   "pitchable": true,
-   "prospects": 29,
-   "internal_link_suggestions": 1,
-   "promoting": true
-  },
-  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/seo/answer-engine-optimization/",
    "title": "Answer Engine Optimization (AEO): Examples and Publishing Checklist",
@@ -3289,7 +3291,7 @@
    "linkability": 85,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 13,
    "words": 1346,
    "interactive": true,
    "modified": "2026-11-07T20:04:05+00:00",
@@ -3568,60 +3570,6 @@
    "promoting": false
   },
   {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "h1": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews)",
-   "description": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit: practical review guidance with key considerations, buyer signals, safety notes, an",
-   "type": "commercial",
-   "promotion": 63,
-   "linkability": 65,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2475,
-   "interactive": false,
-   "modified": "2026-10-04T17:56:49+00:00",
-   "reasons": [
-    "In-depth (2,475 words)",
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "review, comparison or sales page",
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "h1": "7 Best Running Shoes for Supination & High Arches (2026)",
-   "description": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit: practical review guidance with key considerations, buyer signals, safety notes, and",
-   "type": "commercial",
-   "promotion": 63,
-   "linkability": 65,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2219,
-   "interactive": false,
-   "modified": "2026-10-04T17:56:52+00:00",
-   "reasons": [
-    "In-depth (2,219 words)",
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "review, comparison or sales page",
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/focus-habit-reset/",
    "title": "Focus and Habit Reset Guide - Gear Up to Grow",
@@ -3821,7 +3769,59 @@
    ],
    "pitchable": false,
    "not_pitched_because": "not distinctive enough to earn a link",
-   "prospects": 11,
+   "prospects": 12,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/learning/",
+   "title": "Learning Hub: Active Recall & Spaced Repetition Systems",
+   "h1": "Learning Hub: The Complete Practical System",
+   "description": "Explore scientific study systems using active recall, spaced repetition calendars, deliberate practice, and frameworks for accelerated learning.",
+   "type": "practical_guide",
+   "promotion": 61,
+   "linkability": 68,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 103,
+   "words": 3515,
+   "interactive": false,
+   "modified": "2026-11-10T14:20:08+00:00",
+   "reasons": [
+    "In-depth (3,515 words)",
+    "3 data tables",
+    "Recently updated"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "not distinctive enough to earn a link",
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/make-money-online/optimize-your-sales-funnel/",
+   "title": "Sales Funnel Optimization 2026: Step-by-Step Proven Guide",
+   "h1": "Sales Funnel Optimization: 2026 Conversion Guide",
+   "description": "Discover 7 proven sales funnel optimization strategies to increase conversions in 2025. Maximize revenue with actionable tactics tailored for marketers. Try them today!",
+   "type": "practical_guide",
+   "promotion": 61,
+   "linkability": 68,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 5,
+   "words": 2639,
+   "interactive": false,
+   "modified": "2026-11-20T21:37:42+00:00",
+   "reasons": [
+    "In-depth (2,639 words)",
+    "1 data table",
+    "Recently updated"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "not distinctive enough to earn a link",
+   "prospects": 1,
    "internal_link_suggestions": 0,
    "promoting": false
   }
@@ -4089,26 +4089,6 @@
   },
   {
    "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "from_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "to": "https://gearuptofit.com/shoe-finder/methodology/",
-   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 63
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "from_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "to": "https://gearuptofit.com/shoe-finder/methodology/",
-   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 63
-  },
-  {
-   "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/running/",
    "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
@@ -4121,6 +4101,26 @@
    "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/review-methodology/testing-log/",
    "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
+   "to": "https://gearuptofit.com/shoe-finder/methodology/",
+   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/reviews/",
+   "from_title": "Reviews Hub | Running Shoes, Watches & Fitness Gear | GearUpToFit",
+   "to": "https://gearuptofit.com/shoe-finder/methodology/",
+   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running-injury-prevention/",
+   "from_title": "Running Injury Prevention: Form, Strength & Recovery Guide | GearUpToFit",
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
    "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
    "anchor": "running shoes",
@@ -4888,6 +4888,16 @@
    "from_strength": 0
   },
   {
+   "site": "efficientgptprompts.com",
+   "from": "https://efficientgptprompts.com/services/",
+   "from_title": "AI Prompt Engineering & Workflow Consulting",
+   "to": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
+   "to_title": "Prompt Engineering Framework for LLMs: Test, Grade, Deploy",
+   "anchor": "prompt engineering",
+   "relevance": 4,
+   "from_strength": 36
+  },
+  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/health/",
    "from_title": "Health Hub: Sleep, Energy & Cognitive Performance",
@@ -4924,16 +4934,6 @@
    "to": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
    "to_title": "Burnout at Work: Signs, Support, and Next Steps",
    "anchor": "burnout symptoms",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "efficientgptprompts.com",
-   "from": "https://efficientgptprompts.com/services/",
-   "from_title": "AI Prompt Engineering & Workflow Consulting",
-   "to": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
-   "to_title": "Prompt Engineering Framework for LLMs: Test, Grade, Deploy",
-   "anchor": "prompt engineering",
    "relevance": 4,
    "from_strength": 0
   },
@@ -5348,106 +5348,6 @@
    "from_strength": 42
   },
   {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "from_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 8,
-   "from_strength": 63
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/shoe-finder/methodology/",
-   "from_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 6,
-   "from_strength": 82
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/shoe-finder/",
-   "from_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 5,
-   "from_strength": 75
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running/",
-   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review-methodology/testing-log/",
-   "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "from_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 5,
-   "from_strength": 63
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/shoe-finder/methodology/",
-   "from_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 82
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/shoe-finder/",
-   "from_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 75
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running/",
-   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review-methodology/testing-log/",
-   "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/decode-your-personality-birth-number-7/",
    "from_title": "Birth Number 7 Personality: Traits & Meanings | Mystical Digits",
@@ -5826,6 +5726,106 @@
    "anchor": "french bulldogs",
    "relevance": 4,
    "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 73
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
+   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
+   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
+   "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-food-for-french-bulldogs-with-sensitive-stomach/",
+   "from_title": "Best Dog Food for a French Bulldog With a Sensitive Stomach",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-dog-treat-recipes-french-bulldogs/",
+   "from_title": "Homemade French Bulldog Treats: 4 Safe, Simple Recipes",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "french bulldogs",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/safely-remove-mice/",
+   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 56
   }
  ],
  "indexation": {
@@ -5944,9 +5944,9 @@
    },
    {
     "site": "efficientgptprompts.com",
-    "checked": 300,
-    "healthy": 295,
-    "problems": 5,
+    "checked": 23,
+    "healthy": 19,
+    "problems": 4,
     "critical": 1,
     "not_found": 0,
     "server_error": 0,
@@ -5956,7 +5956,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 4
+    "thin": 3
    },
    {
     "site": "openclaw-skillshub.com",
@@ -6525,16 +6525,6 @@
     "severity": 8,
     "status": 200,
     "words": 223
-   },
-   {
-    "site": "efficientgptprompts.com",
-    "url": "https://efficientgptprompts.com/teen-detective-story-ideas",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 99
    },
    {
     "site": "efficientgptprompts.com",
@@ -7187,7 +7177,7 @@
     "words": 42
    }
   ],
-  "total_issues": 102,
+  "total_issues": 101,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first)."
  },
  "search_performance": null,
@@ -7195,7 +7185,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-26T13:22:32.332Z"
+  "updated_at": "2026-11-26T15:23:42.776Z"
  },
  "wins": [
   {
@@ -7266,44 +7256,44 @@
   }
  ],
  "log": [
-  "13:22:05 connection dataforseo: connected",
-  "13:22:05 connection gmail: connected",
-  "13:22:06 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
-  "13:22:06 crawl plantastichaven.com: 154/154 urls, fetched 1, 304 0, reused 153",
-  "13:22:09 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
-  "13:22:10 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
-  "13:22:10 crawl frenchyfab.com: 154/154 urls, fetched 0, 304 0, reused 154",
-  "13:22:10 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "13:22:10 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
-  "13:22:10 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "13:22:11 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
-  "13:22:11 crawl tenderatlas.shop: 3/3 urls, fetched 0, 304 0, reused 3",
-  "13:22:11 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "13:22:11 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
-  "13:22:12 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
-  "13:22:12 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
-  "13:22:12 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
-  "13:22:12 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
-  "13:22:13 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
-  "13:22:13 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
-  "13:22:13 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
-  "13:22:13 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
-  "13:22:14 crawl gearuptofit.com: 300/791 urls, fetched 0, 304 0, reused 300",
-  "13:22:14 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "13:22:14 - search_performance: skipped (Search Console not connected)",
-  "13:22:14 pitch policy: 86 of 529 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
-  "13:22:14 indexation: 102 sitemap URLs with an indexing problem (1 critical)",
-  "13:22:16 link neighbourhood (free): 12 qualified pages mined, 59 recommended sites to evaluate",
-  "13:22:32 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 59 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 59 candidates, 7 qualified (0 unlinked mentions), 4 with email, 0 with a dead link we can replace, 0 already linking",
-  "13:22:32 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "13:22:32 self-tuning: next cycle runs up to 20 searches",
-  "13:22:32 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "13:22:33 replies: 3 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "13:22:34 sent-folder check: 156 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
-  "13:22:35 queue screening (free, nothing sent): 7 checked, 1 sendable, 2 retired, 0 switched to a better published address",
-  "13:22:41 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "13:22:41 pre-verify (nothing sent): 0 top inboxes checked, 0 verified, 0 held",
-  "13:22:42 link checks: 0 pages, 0 new links won, 0 lost"
+  "15:22:56 connection dataforseo: connected",
+  "15:22:56 connection gmail: connected",
+  "15:22:57 crawl gearuptofit.com: 300/797 urls, fetched 0, 304 0, reused 300",
+  "15:22:58 crawl plantastichaven.com: 154/154 urls, fetched 2, 304 0, reused 152",
+  "15:23:00 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
+  "15:23:03 crawl frenchyfab.com: 154/154 urls, fetched 2, 304 0, reused 152",
+  "15:23:04 crawl mysticaldigits.com: 300/468 urls, fetched 4, 304 0, reused 296",
+  "15:23:04 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
+  "15:23:05 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "15:23:06 crawl tenderatlas.shop: 3/3 urls, fetched 0, 304 0, reused 3",
+  "15:23:07 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
+  "15:23:07 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
+  "15:23:07 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 3, 304 0, reused 110",
+  "15:23:08 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
+  "15:23:08 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
+  "15:23:08 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
+  "15:23:09 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
+  "15:23:09 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
+  "15:23:09 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
+  "15:23:10 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
+  "15:23:10 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
+  "15:23:11 crawl micegoneguide.com: 41/41 urls, fetched 3, 304 0, reused 38",
+  "15:23:24 crawl efficientgptprompts.com: 23/23 urls, fetched 0, 304 0, reused 23",
+  "15:23:24 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "15:23:24 - search_performance: skipped (Search Console not connected)",
+  "15:23:24 pitch policy: 86 of 523 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
+  "15:23:24 indexation: 101 sitemap URLs with an indexing problem (1 critical)",
+  "15:23:29 link neighbourhood (free): 12 qualified pages mined, 50 recommended sites to evaluate",
+  "15:23:42 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 50 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 50 candidates, 6 qualified (0 unlinked mentions), 3 with email, 0 with a dead link we can replace, 0 already linking",
+  "15:23:42 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "15:23:42 self-tuning: next cycle runs up to 20 searches",
+  "15:23:42 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "15:23:45 replies: 10 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "15:23:46 sent-folder check: 156 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
+  "15:23:51 queue screening (free, nothing sent): 7 checked, 1 sendable, 2 retired, 0 switched to a better published address",
+  "15:23:59 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "15:23:59 pre-verify (nothing sent): 0 top inboxes checked, 0 verified, 0 held",
+  "15:23:59 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
