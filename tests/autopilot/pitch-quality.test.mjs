@@ -134,3 +134,35 @@ test('the Autopilot workflow grants the free AI writer its permission and token'
   const y=readFileSync(new URL('../../.github/workflows/autopilot.yml',import.meta.url),'utf8');
   assert.match(y,/permissions:\n\s+contents: write\n\s+models: read/);assert.match(y,/GITHUB_MODELS_TOKEN: \$\{\{ github\.token \}\}/);
 });
+
+test('a model answer in the plain "Subject:" format, with markdown and a missing trailing slash, is tidied and used',async()=>{
+  const {parseAnswer,tidyPitch,pitchProblem}=await import('../../scripts/autopilot/pitch.mjs');
+  const raw=`Subject: A shoe finder for your new-runner resources\n\nYour "Choosing shoes" section in Resources for New Runners points readers to fitting advice. Our **Running Shoe Finder** asks six questions and matches runners to shoes by gait and terrain, free and without sign-up: [Running Shoe Finder](https://gearuptofit.com/shoe-finder).\n\nIf it fits, it could sit in that section.\n\nBest,\nAlex\ngearuptofit.com\n\nP.S. Not relevant for you? Just reply "no" and I won't email again.`;
+  const w=new PitchWriter({senderName:'Alex',githubToken:'t',fetchImpl:async()=>completion(raw)});
+  const out=await w.write(prospect,asset,site);
+  assert.equal(out.writer,'github_models');assert.deepEqual(out.body.match(/https?:\/\/\S+/g),['https://gearuptofit.com/shoe-finder/.']);
+  assert.doesNotMatch(out.body,/\*\*|\]\(/);assert.equal(out.subject,'A shoe finder for your new-runner resources');
+  assert.deepEqual(parseAnswer('```json\n{"subject":"Hello there editor","body":"line one\nline two"}\n```'),{subject:'Hello there editor',body:'line one\nline two'},'JSON with a raw line break is still read');
+  assert.equal(parseAnswer('Sure! Here is an email you could send.'),null);
+  assert.equal(pitchProblem(tidyPitch({subject:'Subject: "A shoe finder for you"',body:'x'.repeat(250)+' https://gearuptofit.com/shoe-finder'},asset),asset),null);
+  assert.equal(pitchProblem({subject:'A shoe finder for you',body:'x'.repeat(250)},asset),'our_url_missing');
+  assert.equal(pitchProblem({subject:'A shoe finder for you',body:'x'.repeat(250)+' https://gearuptofit.com/shoe-finder/ https://other.example/'},asset),'extra_url');
+});
+
+test('every template fallback records why, so a failing writer explains itself',async()=>{
+  const logs=[];
+  const mk=fetchImpl=>new PitchWriter({senderName:'Alex',githubToken:'t',log:m=>logs.push(m),fetchImpl});
+  const server=mk(async()=>completion('{"error":"upstream"}',500));
+  assert.equal((await server.write(prospect,asset,site)).writer,'template');await server.write(prospect,asset,site);
+  assert.deepEqual(server.reasons,{http_500:2});assert.equal(logs.filter(l=>/http_500/.test(l)).length,1,'logged once per reason');assert.equal(server.ai,'github_models','a server error does not switch the writer off');
+  const chatty=mk(async()=>completion('Sure! Here is an email you could send to the editor.'));
+  await chatty.write(prospect,asset,site);assert.deepEqual(chatty.reasons,{answer_not_in_format:1});
+  const empty=mk(async()=>new Response(JSON.stringify({choices:[]}),{headers:{'content-type':'application/json'}}));
+  await empty.write(prospect,asset,site);assert.deepEqual(empty.reasons,{empty_answer:1});
+  const liar=mk(async()=>completion(`Subject: A shoe finder for your new-runner resources\n\n${goodBody.replace('free and without sign-up','trusted by 25,000 runners')}`));
+  await liar.write(prospect,asset,site);assert.deepEqual(liar.reasons,{number_not_in_facts:1});
+  const quota=mk(async()=>completion('',429));await quota.write(prospect,asset,site);await quota.write(prospect,asset,site);
+  assert.deepEqual(quota.reasons,{quota_used_up:2});
+  const gone=mk(async u=>String(u).endsWith('/catalog/models')?new Response('[]',{headers:{'content-type':'application/json'}}):completion('{"error":{"code":"unknown_model"}}',404));
+  await gone.write(prospect,asset,site);assert.deepEqual(gone.reasons,{no_usable_model:1});assert.match(logs.at(-2)+logs.at(-1),/HTTP 404 for openai\/gpt-4o/);
+});
