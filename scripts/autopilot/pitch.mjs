@@ -130,11 +130,44 @@ Rules:
 - If situation is "broken_link_replacement": open by telling the editor which link on their page is dead (use its anchor text and site name from broken_link, never its URL, and state the problem exactly as given in broken_link.problem). Then offer our page as a replacement covering the same topic. The helpful tip comes first; the ask is secondary.
 - End with this exact line: P.S. Not relevant for you? Just reply "no" and I won't email again.`;
 
-export function validPitch(out,asset){
-  if(!out||typeof out.subject!=='string'||typeof out.body!=='string')return false;
+/** Why a written pitch cannot be sent, or null when it can. The reason is logged, so a failing writer explains itself. */
+export function pitchProblem(out,asset){
+  if(!out||typeof out.subject!=='string'||typeof out.body!=='string')return 'no_subject_or_body';
+  if(out.subject.length<8||out.subject.length>90||/[\r\n]/.test(out.subject))return 'subject_length';
+  if(out.body.length<200)return 'body_too_short';
+  if(out.body.length>1400)return 'body_too_long';
   const urls=out.body.match(/https?:\/\/\S+/g)||[];
-  return out.subject.length>=8&&out.subject.length<=90&&!/[\r\n]/.test(out.subject)&&out.body.length>=200&&out.body.length<=1400&&
-    urls.length===1&&urls[0].replace(/[).,]+$/,'')===asset.url&&!/\[|\{\{|lorem|<\w+>/i.test(out.body);
+  if(urls.length!==1)return urls.length?'extra_url':'our_url_missing';
+  if(urls[0].replace(/[).,]+$/,'')!==asset.url)return 'wrong_url';
+  if(/\[|\{\{|lorem|<\w+>/i.test(out.body))return 'placeholder_or_markup';
+  return null;
+}
+export const validPitch=(out,asset)=>pitchProblem(out,asset)===null;
+/** {subject, body} from a model's answer: the "Subject: ..." text format, or JSON (also JSON with raw line breaks). */
+export function parseAnswer(text){
+  const t=String(text||'').trim().replace(/^```[a-z]*\s*/i,'').replace(/\s*```$/,'').trim();
+  if(t.startsWith('{')){
+    try{const j=JSON.parse(t.slice(0,t.lastIndexOf('}')+1));if(typeof j.subject==='string'&&typeof j.body==='string')return {subject:j.subject,body:j.body}}catch{}
+    const un=s=>s.replace(/\\n/g,'\n').replace(/\\"/g,'"').replace(/\\\\/g,'\\');
+    const s=t.match(/"subject"\s*:\s*"((?:[^"\\]|\\.)*)"/),b=t.match(/"body"\s*:\s*"([\s\S]*)"\s*\}?\s*$/);
+    return s&&b?{subject:un(s[1]),body:un(b[1])}:null;
+  }
+  const m=t.match(/^\**subject\**\s*:\**\s*(.+)\r?\n+([\s\S]+)$/i);
+  return m?{subject:m[1].trim(),body:m[2].trim()}:null;
+}
+/**
+ * Harmless formatting differences are fixed instead of failing the pitch: a markdown link becomes plain text,
+ * bold markers go, and our URL written without its trailing slash (or with one added) is restored exactly.
+ */
+export function tidyPitch(out,asset){
+  const subject=String(out.subject||'').replace(/^subject\s*:\s*/i,'').replace(/^["'\u201c]+|["'\u201d]+$/g,'').trim();
+  const base=String(asset.url).replace(/\/+$/,'').toLowerCase();
+  const body=String(out.body||'').replace(/\r\n/g,'\n')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,(m,label,url)=>label.trim().replace(/\/+$/,'')===url.replace(/\/+$/,'')?url:`${label.trim()}: ${url}`)
+    .replace(/\*\*/g,'')
+    .replace(/https?:\/\/[^\s<>"')\]]+/g,u=>{const clean=u.replace(/[.,;:!?]+$/,''),tail=u.slice(clean.length);return clean.replace(/\/+$/,'').toLowerCase()===base?asset.url+tail:u})
+    .replace(/\n{3,}/g,'\n\n').trim();
+  return {subject,body};
 }
 
 export class PitchWriter{
@@ -143,31 +176,46 @@ export class PitchWriter{
     this.model=model;this.senderName=senderName;this.log=log;this.used=0;this.fallbacks=0;
     // Free writer inside GitHub Actions (GitHub Models): used when no Anthropic key is set.
     this.ghToken=githubToken;this.ghModels=[...(githubModel?[githubModel]:[]),...GITHUB_MODEL_PREFERENCE];this.ghModel=null;this.usedGithub=0;this.fetch=fetchImpl;
+    this.reasons={};
+  }
+  /** Count a template fallback by reason and say so once per reason (the reason is what makes the writer fixable). */
+  fail(why,detail=''){
+    this.fallbacks++;
+    if(!this.reasons[why])this.log(`pitch writer: template used (${why}${detail?': '+String(detail).replace(/\s+/g,' ').slice(0,140):''})`);
+    this.reasons[why]=(this.reasons[why]||0)+1;
   }
   get ai(){return this.client?'claude':this.ghToken&&!this.ghOff?'github_models':null}
-  /** One chat completion on GitHub Models. Returns {subject, body} or null (rate limit, no permission, bad answer). */
+  /** One chat completion on GitHub Models. Returns {out:{subject,body}} or {why, detail} (never throws). */
   async github(facts){
-    if(!this.ghToken||this.ghOff)return null;
-    const headers={Authorization:'Bearer '+this.ghToken,'Content-Type':'application/json',Accept:'application/vnd.github+json'};
+    if(!this.ghToken||this.ghOff)return {why:this.ghOffWhy||'writer_off'};
+    const headers={Authorization:'Bearer '+this.ghToken,'Content-Type':'application/json',Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+    // Plain "Subject:" format: small models keep to it far more reliably than to JSON with line breaks inside strings.
+    const system=SYSTEM+'\nAnswer in exactly this format, with nothing before or after it:\nSubject: <the subject line>\n\n<the email body>';
     const ask=async model=>this.fetch(GITHUB_MODELS+'/inference/chat/completions',{method:'POST',headers,signal:AbortSignal.timeout(45000),body:JSON.stringify({model,temperature:0.5,max_tokens:700,
-      messages:[{role:'system',content:SYSTEM+'\nAnswer with one JSON object only: {"subject": "...", "body": "..."}.'},{role:'user',content:'Write the email from these facts (JSON):\n'+JSON.stringify(facts)}]})});
+      messages:[{role:'system',content:system},{role:'user',content:'Write the email from these facts (JSON):\n'+JSON.stringify(facts)}]})});
+    const off=(why,line)=>{this.ghOff=true;this.ghOffWhy=why;this.log(line);return {why}};
     const candidates=this.ghModel?[this.ghModel]:this.ghModels;
+    let lastDetail='';
     for(let i=0;i<candidates.length;i++){
-      let res;try{res=await ask(candidates[i])}catch{this.log('github models: could not be reached; template used');return null}
-      if(res.status===401||res.status===403){this.ghOff=true;this.log(`github models: not permitted (HTTP ${res.status}); the workflow needs "models: read". Templates are used`);return null}
-      if(res.status===429){this.ghOff=true;this.log('github models: today\'s free quota is used up; templates are used for the rest of this cycle');return null}
+      let res;try{res=await ask(candidates[i])}catch(e){return {why:'unreachable',detail:e?.name||''}}
+      if(res.status===401||res.status===403)return off('not_permitted',`github models: not permitted (HTTP ${res.status}); the workflow needs "models: read". Templates are used`);
+      if(res.status===429)return off('quota_used_up','github models: today\'s free quota is used up; templates are used for the rest of this cycle');
       if(res.status===404||res.status===400||res.status===422){
+        lastDetail=`HTTP ${res.status} for ${candidates[i]}: ${(await res.text().catch(()=>'')).slice(0,120)}`;
         // Unknown model: after the known names, ask the catalogue once for a small text model.
-        if(i===candidates.length-1&&!this.ghCatalogTried){this.ghCatalogTried=true;const found=await this.catalogModel(headers);if(found){candidates.push(found)}}
+        if(i===candidates.length-1&&!this.ghCatalogTried){this.ghCatalogTried=true;const found=await this.catalogModel(headers);if(found&&!candidates.includes(found))candidates.push(found)}
         continue;
       }
-      if(!res.ok)return null;
+      if(!res.ok)return {why:`http_${res.status}`,detail:(await res.text().catch(()=>'')).slice(0,120)};
       const body=await res.json().catch(()=>null),text=String(body?.choices?.[0]?.message?.content||'');
-      const a=text.indexOf('{'),b=text.lastIndexOf('}');if(a<0||b<=a)return null;
+      if(!text)return {why:'empty_answer',detail:JSON.stringify(body||{}).slice(0,120)};
+      const out=parseAnswer(text);
+      if(!out)return {why:'answer_not_in_format',detail:text.slice(0,80)};
       this.ghModel=candidates[i];
-      try{return JSON.parse(text.slice(a,b+1))}catch{return null}
+      return {out};
     }
-    this.ghOff=true;this.log('github models: no usable model found; templates are used');return null;
+    this.ghOff=true;this.ghOffWhy='no_usable_model';this.log(`github models: no usable model found (${lastDetail}); templates are used`);
+    return {why:'no_usable_model'};
   }
   async catalogModel(headers){
     try{
@@ -179,16 +227,19 @@ export class PitchWriter{
   }
   async write(p,asset,site){
     const template=(p.kind==='mention'?mentionPitch:templatePitch)(p,asset,{senderName:this.senderName,site});
-    if(!this.ai)return template;
+    // Once the free writer is off for this cycle (quota, permission), later pitches still record why they are templates.
+    if(!this.ai){if(this.ghOffWhy)this.fail(this.ghOffWhy);return template}
     const facts={editor_page:{title:p.title,url:p.page_url,author:p.author||null,relevant_section:p.fit_section||null,excerpt:(p.excerpt||'').slice(0,1500)},
       our_asset:{title:asset.title,url:asset.url,kind:KIND[asset.type]||'resource',description:asset.description||'',facts:[...assetFacts(asset),...(asset.reasons||[]).filter(r=>!INTERNAL_NOTE.test(r))],free_tool:!!asset.interactive},
       ...(p.kind==='linkgap'&&p.competitor_link?.host&&!p.broken_link?{competitor_link:{site:p.competitor_link.host,anchor:p.competitor_link.anchor||null,surrounding_text:p.competitor_link.context||null,same_subject:p.competitor_link.match==='specific'}}:{}),
       ...(p.broken_link&&p.kind!=='mention'?{broken_link:{anchor:p.broken_link.anchor||null,site:p.broken_link.host,problem:DEAD[p.broken_link.reason]||'no longer works'}}:{}),
       sender:{name:this.senderName,website:site.domain},topic:site.topic,situation:p.kind==='mention'?'unlinked_mention':p.broken_link?'broken_link_replacement':p.kind==='linkgap'&&p.competitor_link?.host?'alternative_to_linked_resource':'resource_suggestion'};
     if(!this.client){
-      const out=await this.github(facts);
-      if(!out||!validPitch(out,asset)||!grounded(out,facts)){this.fallbacks++;return template}
-      this.usedGithub++;return {subject:out.subject.trim(),body:out.body.trim(),writer:'github_models'};
+      const r=await this.github(facts);
+      if(!r.out){this.fail(r.why,r.detail);return template}
+      const out=tidyPitch(r.out,asset),why=pitchProblem(out,asset)||(grounded(out,facts)?null:'number_not_in_facts');
+      if(why){this.fail(why);return template}
+      this.usedGithub++;return {...out,writer:'github_models'};
     }
     try{
       const res=await this.client.beta.messages.create({
