@@ -166,3 +166,16 @@ test('every template fallback records why, so a failing writer explains itself',
   const gone=mk(async u=>String(u).endsWith('/catalog/models')?new Response('[]',{headers:{'content-type':'application/json'}}):completion('{"error":{"code":"unknown_model"}}',404));
   await gone.write(prospect,asset,site);assert.deepEqual(gone.reasons,{no_usable_model:1});assert.match(logs.at(-2)+logs.at(-1),/HTTP 404 for openai\/gpt-4o/);
 });
+
+test('a "success" with no completion in it is reported with status, content type and body, not as a silent fallback',async()=>{
+  const logs=[];
+  const mk=fetchImpl=>new PitchWriter({senderName:'Alex',githubToken:'t',log:m=>logs.push(m),fetchImpl});
+  const okText=mk(async()=>new Response('OK',{status:200,headers:{'content-type':'text/plain'}}));
+  await okText.write(prospect,asset,site);
+  assert.deepEqual(okText.reasons,{answer_not_json:1});assert.match(logs.at(-1),/answer_not_json: HTTP 200 text\/plain: OK/);
+  const moved=mk(async(u,o)=>{assert.equal(o.redirect,'manual');return new Response('',{status:302,headers:{location:'https://github.com/login'}})});
+  await moved.write(prospect,asset,site);
+  assert.deepEqual(moved.reasons,{redirected:1});assert.match(logs.at(-1),/redirected: HTTP 302 to https:\/\/github\.com\/login/);
+  const parts=mk(async()=>new Response(JSON.stringify({choices:[{message:{content:[{type:'text',text:`Subject: A shoe finder for your new-runner resources\n\n${goodBody}`}]}}]}),{headers:{'content-type':'application/json'}}));
+  assert.equal((await parts.write(prospect,asset,site)).writer,'github_models','content given as parts is read');
+});
