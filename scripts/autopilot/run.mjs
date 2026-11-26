@@ -299,6 +299,8 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets,pickAsset},deadline:deadline-2*60e3,log}),mailWhy||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,github_models:writer.usedGithub,template_fallbacks:writer.fallbacks,...(writer.ghModel?{github_model:writer.ghModel}:{}),...(Object.keys(writer.reasons||{}).length?{fallback_reasons:writer.reasons}:{})};
     aiWriter=writer.ai;
+    if(stages.outreach?.ok&&(writer.used+writer.usedGithub+writer.fallbacks)>0){const why=Object.entries(writer.reasons||{}).map(([k,n])=>`${k} x${n}`).join(', ');
+      log(`pitch writer: ${writer.used+writer.usedGithub} written by AI${writer.ghModel?` (${writer.ghModel})`:''}, ${writer.fallbacks} from the template${why?` (${why})`:''}`)}
     // Every cycle: spend today's leftover free verification credits on the best inboxes whose send window opens within 20 h,
     // so the next in-window cycle (started by the send-window waker) sends at once.
     await stage('preverify',vaultOk&&gmailOk&&!noVerifier&&typeof mailer?.authorizeRecipient==='function',
