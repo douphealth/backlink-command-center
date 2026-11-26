@@ -1,11 +1,11 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-26T17:26:14.242Z",
- "duration_s": 123,
+ "generated_at": "2026-11-26T19:29:05.342Z",
+ "duration_s": 146,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
-  "ai_writer": null,
+  "ai_writer": "cloudflare",
   "vault": true,
   "dataforseo": true,
   "gmail": true,
@@ -35,8 +35,8 @@
    "balance": {
     "provider": "verifalia",
     "free_credits": 1,
-    "reset_in": "06:33:55",
-    "checked_at": "2026-11-26T17:26:05.014Z"
+    "reset_in": "04:30:55",
+    "checked_at": "2026-11-26T19:29:04.970Z"
    },
    "catch_all_domains_skipped": 61
   }
@@ -92,10 +92,10 @@
    "required": false
   },
   {
-   "key": "GROQ_API_KEY or GEMINI_API_KEY",
+   "key": "Cloudflare Workers AI (built in), or GROQ_API_KEY / GEMINI_API_KEY",
    "label": "Free AI pitch writer",
-   "done": false,
-   "unlocks": "Writes a page-specific email for every prospect on a free API plan when no Anthropic key is set (templates otherwise)",
+   "done": true,
+   "unlocks": "Writes a page-specific email for every prospect at no cost when no Anthropic key is set (templates otherwise)",
    "required": false
   },
   {
@@ -130,10 +130,10 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 7373,
+   "ms": 23713,
    "result": {
     "sites": 21,
-    "pages": 2511
+    "pages": 2714
    }
   },
   "demand": {
@@ -155,9 +155,9 @@
   "rank": {
    "ok": true,
    "result": {
-    "ranked": 530,
-    "internal_suggestions": 580,
-    "pitchable": 87
+    "ranked": 555,
+    "internal_suggestions": 578,
+    "pitchable": 85
    }
   },
   "requalify": {
@@ -172,26 +172,26 @@
   },
   "second_look": {
    "ok": true,
-   "ms": 81615,
+   "ms": 92585,
    "result": {
     "checked": 60,
-    "found": 5,
-    "unreachable": 2,
-    "waiting": 457
+    "found": 4,
+    "unreachable": 0,
+    "waiting": 397
    }
   },
   "prospects": {
    "ok": true,
-   "ms": 4117,
+   "ms": 6596,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
-    "candidates": 24,
+    "candidates": 37,
     "qualified": 0,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 24,
+    "rejected": 37,
     "with_email": 0,
     "contact_form": 0,
     "broken_links": 0,
@@ -199,13 +199,13 @@
     "linkgap_calls": 0,
     "linkgap_candidates": 0,
     "neighbor_pages": 12,
-    "neighbor_candidates": 24,
+    "neighbor_candidates": 37,
     "filtered": {
-     "already_evaluated": 31,
-     "platform_or_giant": 11,
-     "duplicate_this_run": 18,
-     "gov_or_edu": 4,
-     "forum_or_ugc": 1
+     "platform_or_giant": 19,
+     "duplicate_this_run": 24,
+     "gov_or_edu": 2,
+     "already_evaluated": 22,
+     "competitor": 5
     },
     "deferred": 0
    }
@@ -216,17 +216,17 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 873,
+   "ms": 1162,
    "result": {
-    "checked": 3,
+    "checked": 2,
     "found": 0
    }
   },
   "replies": {
    "ok": true,
-   "ms": 1636,
+   "ms": 3940,
    "result": {
-    "scanned": 10,
+    "scanned": 7,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -236,7 +236,7 @@
   },
   "sent_check": {
    "ok": true,
-   "ms": 1199,
+   "ms": 1752,
    "result": {
     "scanned": 156,
     "restored": 0,
@@ -245,17 +245,17 @@
   },
   "screen": {
    "ok": true,
-   "ms": 5058,
+   "ms": 4125,
    "result": {
     "screened": 9,
     "kept": 0,
-    "retired": 4,
+    "retired": 5,
     "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 9419,
+   "ms": 9498,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -263,7 +263,7 @@
     "skipped": 0,
     "deferred": 0,
     "cap": 12,
-    "verification_held": 1,
+    "verification_held": 0,
     "out_of_credits": true
    },
    "writer": {
@@ -274,7 +274,7 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 14,
+   "ms": 18,
    "result": {
     "checked": 0,
     "verified": 0,
@@ -284,9 +284,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 9063,
+   "ms": 4,
    "result": {
-    "checked": 13,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -294,10 +294,10 @@
  },
  "totals": {
   "sites": 21,
-  "pages_crawled": 2511,
-  "urls_discovered": 3637,
-  "promotable": 530,
-  "internal_suggestions": 580,
+  "pages_crawled": 2714,
+  "urls_discovered": 3840,
+  "promotable": 555,
+  "internal_suggestions": 578,
   "promoting_now": 48
  },
  "spend": {
@@ -315,28 +315,27 @@
  },
  "outreach": {
   "mode": "send",
-  "ready": 65,
+  "ready": 64,
   "verified_ready": 0,
-  "pending_verification": 65,
+  "pending_verification": 64,
   "holds": {
    "mailbox_accept_all": 8,
-   "publisher_pages_unreachable": 1,
    "publisher_mismatch": 3,
    "mailbox_unknown": 11
   },
   "sent_today": 7,
   "cap_today": 12,
-  "next_send_at": "2026-11-26T17:26:14.246Z",
+  "next_send_at": "2026-11-26T19:29:05.346Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 5434,
+  "prospects_evaluated": 5471,
   "qualified": 904,
-  "ready": 65,
+  "ready": 64,
   "broken_link_ready": 3,
-  "contact_form_only": 173,
-  "no_contact": 339,
+  "contact_form_only": 172,
+  "no_contact": 336,
   "contacted": 102,
   "replied": 3,
   "positive": 0,
@@ -913,12 +912,12 @@
   },
   {
    "date": "2026-11-26",
-   "prospects_evaluated": 5434,
+   "prospects_evaluated": 5471,
    "qualified": 904,
-   "ready": 65,
+   "ready": 64,
    "broken_link_ready": 3,
-   "contact_form_only": 173,
-   "no_contact": 339,
+   "contact_form_only": 172,
+   "no_contact": 336,
    "contacted": 102,
    "replied": 3,
    "positive": 0,
@@ -976,8 +975,8 @@
    {
     "footprint": "intent",
     "queries": 97,
-    "ready": 28,
-    "rate": 0.29
+    "ready": 27,
+    "rate": 0.28
    },
    {
     "footprint": "recommended_tools",
@@ -1041,9 +1040,9 @@
    },
    {
     "footprint": "neighbor",
-    "queries": 71,
+    "queries": 83,
     "ready": 7,
-    "rate": 0.108
+    "rate": 0.093
    },
    {
     "footprint": "inurl_links",
@@ -1624,7 +1623,7 @@
    "discovered": 154,
    "sitemaps": 4,
    "eligible": 26,
-   "top": "https://plantastichaven.com/overwatered-spider-plant/"
+   "top": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/"
   },
   {
    "domain": "gearuptogrow.com",
@@ -1692,10 +1691,10 @@
   },
   {
    "domain": "tenderatlas.shop",
-   "pages": 3,
-   "discovered": 3,
+   "pages": 206,
+   "discovered": 206,
    "sitemaps": 0,
-   "eligible": 3,
+   "eligible": 28,
    "top": "https://tenderatlas.shop/"
   },
   {
@@ -1878,12 +1877,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 11,
-   "words": 2179,
+   "words": 2210,
    "interactive": true,
-   "modified": "2026-11-08T06:25:55+00:00",
+   "modified": "2026-11-26T17:56:19+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,179 words)",
+    "In-depth (2,210 words)",
     "3 data tables",
     "Cites 5 authoritative sources",
     "Recently updated"
@@ -1955,12 +1954,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 40,
-   "words": 2213,
+   "words": 2276,
    "interactive": true,
-   "modified": "2026-11-26T09:10:18+00:00",
+   "modified": "2026-11-26T17:55:28+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,213 words)",
+    "In-depth (2,276 words)",
     "1 data table",
     "Cites 11 authoritative sources",
     "Recently updated"
@@ -2052,32 +2051,6 @@
    "promoting": true
   },
   {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/running/running-calorie-calculator/",
-   "title": "Running Calorie Calculator: Pace & Incline | Gear Up to Fit",
-   "h1": "Running Calorie Calculator: Net vs. Gross, Incline & Fueling Lab",
-   "description": "Calculate exact Net and Gross calories burned running by weight, pace, distance, treadmill incline, and terrain using ACSM VO2, Minetti slope, and MET models.",
-   "type": "interactive_tool",
-   "promotion": 79,
-   "linkability": 88,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 4,
-   "words": 4693,
-   "interactive": true,
-   "modified": "2026-09-26T17:36:21+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,693 words)",
-    "2 data tables",
-    "Recently updated"
-   ],
-   "pitchable": true,
-   "prospects": 5,
-   "internal_link_suggestions": 1,
-   "promoting": true
-  },
-  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/personal-development/goal-achievement/",
    "title": "Goal Achievement: A 7-Step Framework to Finish Goals",
@@ -2089,9 +2062,9 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 7,
-   "words": 1899,
+   "words": 1965,
    "interactive": true,
-   "modified": "2026-10-15T10:10:07+00:00",
+   "modified": "2026-11-26T17:36:28+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "3 data tables",
@@ -2163,12 +2136,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 24,
-   "words": 2107,
+   "words": 2155,
    "interactive": true,
-   "modified": "2026-11-11T14:40:09+00:00",
+   "modified": "2026-11-26T17:56:37+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,107 words)",
+    "In-depth (2,155 words)",
     "3 data tables",
     "Recently updated"
    ],
@@ -2365,7 +2338,7 @@
    "linkability": 78,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 3,
+   "internal_inlinks": 117,
    "words": 760,
    "interactive": false,
    "modified": null,
@@ -2603,31 +2576,6 @@
    "promoting": true
   },
   {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/running/running-pace-calculator/",
-   "title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
-   "h1": "Running Pace Calculator & Race Time Predictor (2026)",
-   "description": "Unbiased & Independent GearUpToFit is reader-supported. We adhere to strict testing standards. When you buy through links on our site, we may earn a commission at no cost to you. Interactive Running Tool &bull; Updated 2026 Accurately calculate your running … Continue reading &rarr;",
-   "type": "interactive_tool",
-   "promotion": 75,
-   "linkability": 83,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 4,
-   "words": 1591,
-   "interactive": true,
-   "modified": "2026-09-08T13:32:42+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "2 data tables",
-    "Recently updated"
-   ],
-   "pitchable": true,
-   "prospects": 12,
-   "internal_link_suggestions": 4,
-   "promoting": false
-  },
-  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
    "title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
@@ -2729,6 +2677,34 @@
    "promoting": true
   },
   {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "h1": "Best Brushes for French Bulldogs: Shiny Coats",
+   "description": "Brushes for French Bulldogs a hassle? Discover essential grooming tools for a healthy coat. Proven solution for shedding! See how today!",
+   "type": "general_article",
+   "promotion": 74,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 4115,
+   "interactive": true,
+   "modified": "2026-11-25T13:50:04+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,115 words)",
+    "20 data tables",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
+   "prospects": 2,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/health/cognitive-function/",
    "title": "Cognitive Function: How to Support Focus and Memory",
@@ -2740,11 +2716,11 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 14,
-   "words": 2047,
+   "words": 2108,
    "interactive": false,
-   "modified": "2026-10-15T10:08:30+00:00",
+   "modified": "2026-11-26T17:36:14+00:00",
    "reasons": [
-    "In-depth (2,047 words)",
+    "In-depth (2,108 words)",
     "4 data tables",
     "Cites 8 authoritative sources",
     "Recently updated"
@@ -2778,33 +2754,6 @@
    "pitchable": true,
    "prospects": 7,
    "internal_link_suggestions": 3,
-   "promoting": false
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "h1": "French Bulldog Supplements: What the Evidence Supports and What to Skip",
-   "description": "A French Bulldog supplement guide by need: joints, skin, gut and calm. What the evidence supports, ingredients to avoid, dosing cautions, and when to ask your vet.",
-   "type": "practical_guide",
-   "promotion": 73,
-   "linkability": 77,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 0,
-   "words": 1367,
-   "interactive": false,
-   "modified": "2026-10-26T13:31:02+00:00",
-   "reasons": [
-    "1 data table",
-    "Cites 6 authoritative sources",
-    "Recently updated",
-    "Under-linked internally (0 inbound)"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "too thin to earn a link",
-   "prospects": 2,
-   "internal_link_suggestions": 5,
    "promoting": false
   },
   {
@@ -2861,6 +2810,32 @@
   },
   {
    "site": "plantastichaven.com",
+   "url": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
+   "h1": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer",
+   "description": "No. The ASPCA lists spider plants as non-toxic to cats and dogs. Why cats chew them, when eating a lot causes vomiting, and toxic look-alikes.",
+   "type": "general_article",
+   "promotion": 71,
+   "linkability": 79,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 7,
+   "words": 4257,
+   "interactive": true,
+   "modified": "2026-11-26T17:54:37+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,257 words)",
+    "2 data tables",
+    "Recently updated"
+   ],
+   "pitchable": true,
+   "prospects": 8,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
+   "site": "plantastichaven.com",
    "url": "https://plantastichaven.com/overwatered-spider-plant/",
    "title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
    "h1": "Overwatered Spider Plant? How to Revive It Fast [2026]",
@@ -2882,32 +2857,6 @@
    ],
    "pitchable": true,
    "prospects": 10,
-   "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
-   "site": "plantastichaven.com",
-   "url": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
-   "h1": "Are Spider Plants Toxic to Cats? The ASPCA-Verified Answer",
-   "description": "No. The ASPCA lists spider plants as non-toxic to cats and dogs. Why cats chew them, when eating a lot causes vomiting, and toxic look-alikes.",
-   "type": "general_article",
-   "promotion": 71,
-   "linkability": 79,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 7,
-   "words": 4229,
-   "interactive": true,
-   "modified": "2026-11-08T07:14:46+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,229 words)",
-    "2 data tables",
-    "Recently updated"
-   ],
-   "pitchable": true,
-   "prospects": 8,
    "internal_link_suggestions": 5,
    "promoting": true
   },
@@ -3051,11 +3000,11 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 7,
-   "words": 2558,
+   "words": 2621,
    "interactive": false,
-   "modified": "2026-10-15T10:08:15+00:00",
+   "modified": "2026-11-26T17:35:59+00:00",
    "reasons": [
-    "In-depth (2,558 words)",
+    "In-depth (2,621 words)",
     "4 data tables",
     "Cites 8 authoritative sources",
     "Recently updated"
@@ -3090,6 +3039,30 @@
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
+   "title": "Burnout at Work: Signs, Support, and Next Steps",
+   "h1": "Burnout Symptoms: Signs, Support, and Next Steps",
+   "description": "How the WHO defines work-related burnout, which signs of work strain to notice early, and when to seek qualified professional support.",
+   "type": "practical_guide",
+   "promotion": 68,
+   "linkability": 75,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 14,
+   "words": 1894,
+   "interactive": false,
+   "modified": "2026-11-26T17:55:59+00:00",
+   "reasons": [
+    "4 data tables",
+    "Recently updated"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 2,
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -3142,30 +3115,6 @@
    "prospects": 5,
    "internal_link_suggestions": 1,
    "promoting": false
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
-   "title": "Burnout at Work: Signs, Support, and Next Steps",
-   "h1": "Burnout Symptoms: Signs, Support, and Next Steps",
-   "description": "How the WHO defines work-related burnout, which signs of work strain to notice early, and when to seek qualified professional support.",
-   "type": "practical_guide",
-   "promotion": 68,
-   "linkability": 75,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 14,
-   "words": 1843,
-   "interactive": false,
-   "modified": "2026-10-15T10:08:10+00:00",
-   "reasons": [
-    "4 data tables",
-    "Recently updated"
-   ],
-   "pitchable": true,
-   "prospects": 0,
-   "internal_link_suggestions": 2,
-   "promoting": true
   },
   {
    "site": "efficientgptprompts.com",
@@ -3265,7 +3214,7 @@
    "pitchable": true,
    "prospects": 11,
    "internal_link_suggestions": 2,
-   "promoting": false
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -3374,6 +3323,35 @@
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": true
+  },
+  {
+   "site": "mysticaldigits.com",
+   "url": "https://mysticaldigits.com/essence-of-number-five-guide/",
+   "title": "Exploring Your Path: Essence of Number Five 2026 | Mystical Digits",
+   "h1": "Exploring Your Path: Essence of Number Five 2026",
+   "description": "A grounded guide to exploring your path: essence of number five 2026, with meanings, examples, common mistakes, and practical reflection-first next steps.",
+   "type": "practical_guide",
+   "promotion": 64,
+   "linkability": 80,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 4013,
+   "interactive": true,
+   "modified": "2026-11-26T17:43:22+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,013 words)",
+    "3 data tables",
+    "Recently updated",
+    "Under-linked internally (1 inbound)",
+    "One of 299 templated sibling pages — promote the hub first"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "one of many templated pages",
+   "prospects": 2,
+   "internal_link_suggestions": 0,
+   "promoting": false
   },
   {
    "site": "solarpayback.shop",
@@ -3585,6 +3563,60 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "h1": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews)",
+   "description": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit: practical review guidance with key considerations, buyer signals, safety notes, an",
+   "type": "commercial",
+   "promotion": 63,
+   "linkability": 65,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 2475,
+   "interactive": false,
+   "modified": "2026-10-04T17:56:49+00:00",
+   "reasons": [
+    "In-depth (2,475 words)",
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "h1": "7 Best Running Shoes for Supination & High Arches (2026)",
+   "description": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit: practical review guidance with key considerations, buyer signals, safety notes, and",
+   "type": "commercial",
+   "promotion": 63,
+   "linkability": 65,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 2219,
+   "interactive": false,
+   "modified": "2026-10-04T17:56:52+00:00",
+   "reasons": [
+    "In-depth (2,219 words)",
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/focus-habit-reset/",
    "title": "Focus and Habit Reset Guide - Gear Up to Grow",
@@ -3700,11 +3732,11 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 17,
-   "words": 2373,
+   "words": 2402,
    "interactive": false,
-   "modified": "2026-11-25T14:59:18+00:00",
+   "modified": "2026-11-26T17:57:06+00:00",
    "reasons": [
-    "In-depth (2,373 words)",
+    "In-depth (2,402 words)",
     "6 data tables",
     "Recently updated"
    ],
@@ -3789,55 +3821,31 @@
    "promoting": false
   },
   {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/learning/",
-   "title": "Learning Hub: Active Recall & Spaced Repetition Systems",
-   "h1": "Learning Hub: The Complete Practical System",
-   "description": "Explore scientific study systems using active recall, spaced repetition calendars, deliberate practice, and frameworks for accelerated learning.",
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "h1": "French Bulldog Supplements: What the Evidence Supports and What to Skip",
+   "description": "A French Bulldog supplement guide by need: joints, skin, gut and calm. What the evidence supports, ingredients to avoid, dosing cautions, and when to ask your vet.",
    "type": "practical_guide",
    "promotion": 61,
-   "linkability": 68,
+   "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 103,
-   "words": 3515,
+   "internal_inlinks": 1,
+   "words": 1367,
    "interactive": false,
-   "modified": "2026-11-10T14:20:08+00:00",
+   "modified": "2026-10-26T13:31:02+00:00",
    "reasons": [
-    "In-depth (3,515 words)",
-    "3 data tables",
-    "Recently updated"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "not distinctive enough to earn a link",
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/make-money-online/optimize-your-sales-funnel/",
-   "title": "Sales Funnel Optimization 2026: Step-by-Step Proven Guide",
-   "h1": "Sales Funnel Optimization: 2026 Conversion Guide",
-   "description": "Discover 7 proven sales funnel optimization strategies to increase conversions in 2025. Maximize revenue with actionable tactics tailored for marketers. Try them today!",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 68,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 5,
-   "words": 2639,
-   "interactive": false,
-   "modified": "2026-11-20T21:37:42+00:00",
-   "reasons": [
-    "In-depth (2,639 words)",
     "1 data table",
-    "Recently updated"
+    "Cites 6 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (1 inbound)",
+    "One of 152 templated sibling pages — promote the hub first"
    ],
    "pitchable": false,
-   "not_pitched_because": "not distinctive enough to earn a link",
-   "prospects": 1,
-   "internal_link_suggestions": 0,
+   "not_pitched_because": "one of many templated pages",
+   "prospects": 2,
+   "internal_link_suggestions": 5,
    "promoting": false
   }
  ],
@@ -4104,6 +4112,26 @@
   },
   {
    "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "from_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "to": "https://gearuptofit.com/shoe-finder/methodology/",
+   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 63
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "from_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "to": "https://gearuptofit.com/shoe-finder/methodology/",
+   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 63
+  },
+  {
+   "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/running/",
    "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
@@ -4120,36 +4148,6 @@
    "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
    "anchor": "running shoes",
    "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/reviews/",
-   "from_title": "Reviews Hub | Running Shoes, Watches & Fitness Gear | GearUpToFit",
-   "to": "https://gearuptofit.com/shoe-finder/methodology/",
-   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running-injury-prevention/",
-   "from_title": "Running Injury Prevention: Form, Strength & Recovery Guide | GearUpToFit",
-   "to": "https://gearuptofit.com/shoe-finder/methodology/",
-   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/calculators/",
-   "from_title": "Free Fitness & Running Calculators | GearUpToFit",
-   "to": "https://gearuptofit.com/running/running-calorie-calculator/",
-   "to_title": "Running Calorie Calculator: Pace & Incline | Gear Up to Fit",
-   "anchor": "running calorie calculator",
-   "relevance": 3,
    "from_strength": 0
   },
   {
@@ -4184,16 +4182,6 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/find-your-lucky-mobile-number-based-on-date-of-birth/",
-   "from_title": "Find Your Lucky Mobile Number by DOB in 2026",
-   "to": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
-   "to_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
-   "anchor": "life path",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/life-path-number-calculator/",
    "from_title": "Life Path Number Calculator (Free) | Mystical Digits",
    "to": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
@@ -4211,6 +4199,16 @@
    "anchor": "life path",
    "relevance": 5,
    "from_strength": 65
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/revealing-birth-number-6-personality/",
+   "from_title": "Birth Number 6 Personality: 2026 Guide & Insights | Mystical Digits",
+   "to": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
+   "to_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
+   "anchor": "life path",
+   "relevance": 5,
+   "from_strength": 62
   },
   {
    "site": "gearuptogrow.com",
@@ -4533,46 +4531,6 @@
    "from_strength": 0
   },
   {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/calculators/",
-   "from_title": "Free Fitness & Running Calculators | GearUpToFit",
-   "to": "https://gearuptofit.com/running/running-pace-calculator/",
-   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
-   "anchor": "running pace calculator",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running/running-calorie-calculator/",
-   "from_title": "Running Calorie Calculator: Pace & Incline | Gear Up to Fit",
-   "to": "https://gearuptofit.com/running/running-pace-calculator/",
-   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
-   "anchor": "running pace calculator",
-   "relevance": 3,
-   "from_strength": 79
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running/",
-   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
-   "to": "https://gearuptofit.com/running/running-pace-calculator/",
-   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
-   "anchor": "running pace calculator",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running-training-plans/",
-   "from_title": "2026 Running Training Plans: 5K, 10K & Marathon Guide | GearUpToFit",
-   "to": "https://gearuptofit.com/running/running-pace-calculator/",
-   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
-   "anchor": "running pace calculator",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
    "from_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
@@ -4653,6 +4611,56 @@
    "from_strength": 57
   },
   {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 61
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "from_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 60
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 58
+  },
+  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/mental-wellness/",
    "from_title": "Mental Wellness Hub: Stress Regulation & Burnout Recovery",
@@ -4693,56 +4701,6 @@
    "from_strength": 0
   },
   {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/supplements-for-french-bulldogs-what-you-need-to-know/",
-   "from_title": "Best French Bulldog Supplements: What May Help, What to Skip",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/essential-vitamins-and-minerals-for-french-bulldogs/",
-   "from_title": "French Bulldog Vitamins: Nutrition Basics, Deficiencies",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/recognizing-and-managing-arthritis-in-french-bulldogs/",
-   "from_title": "French Bulldog Arthritis Symptoms: Signs, Comfort, Mobility",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
-   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/review/namehero-hosting-review/",
    "from_title": "NameHero Hosting Review: Fast, Affordable WordPress Hosting for Growing Sites",
@@ -4761,56 +4719,6 @@
    "anchor": "web hosting",
    "relevance": 4,
    "from_strength": 62
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "from_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 71
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/philodendron-cordatum-care/",
-   "from_title": "Philodendron Cordatum Care: 2026 Heartleaf Guide",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 52
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/how-often-to-water-pothos/",
-   "from_title": "Pothos Watering Guide: How Often to Water Pothos Indoors",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 52
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/how-to-make-spider-plant-bushier/",
-   "from_title": "Bushy Spider Plant: 7 Proven Tips for Lush Growth [2026]",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 51
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/airplane-plant-vs-spider-plant/",
-   "from_title": "Airplane Plant vs Spider Plant: Same Plant, Two Names",
-   "to": "https://plantastichaven.com/overwatered-spider-plant/",
-   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
-   "anchor": "spider plant",
-   "relevance": 4,
-   "from_strength": 51
   },
   {
    "site": "plantastichaven.com",
@@ -4863,6 +4771,56 @@
    "from_strength": 0
   },
   {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "from_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 71
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/how-often-to-water-pothos/",
+   "from_title": "Pothos Watering Guide: How Often to Water Pothos Indoors",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 53
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/philodendron-cordatum-care/",
+   "from_title": "Philodendron Cordatum Care: 2026 Heartleaf Guide",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 52
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/how-to-make-spider-plant-bushier/",
+   "from_title": "Bushy Spider Plant: 7 Proven Tips for Lush Growth [2026]",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 51
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/airplane-plant-vs-spider-plant/",
+   "from_title": "Airplane Plant vs Spider Plant: Same Plant, Two Names",
+   "to": "https://plantastichaven.com/overwatered-spider-plant/",
+   "to_title": "Overwatered Spider Plant? How to Revive It Fast [2026]",
+   "anchor": "spider plant",
+   "relevance": 4,
+   "from_strength": 51
+  },
+  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/mental-wellness/positive-affirmations/",
    "from_title": "Positive Affirmations: Use Them Right | Gear Up to Grow",
@@ -4870,6 +4828,16 @@
    "to_title": "Daily Affirmations That Work: Evidence-Based Guide",
    "anchor": "affirmations feel",
    "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptogrow.com",
+   "from": "https://gearuptogrow.com/mental-wellness/mindfulness-exercises/",
+   "from_title": "Surprising Mindfulness Exercises for Stress (10 Min a Day)",
+   "to": "https://gearuptogrow.com/mental-wellness/daily-affirmations/",
+   "to_title": "Daily Affirmations That Work: Evidence-Based Guide",
+   "anchor": "daily affirmations feel",
+   "relevance": 3,
    "from_strength": 0
   },
   {
@@ -4894,16 +4862,6 @@
   },
   {
    "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/mental-wellness/mindfulness-exercises/",
-   "from_title": "Mindfulness Exercises for Stress: 10-Minute Daily Practice",
-   "to": "https://gearuptogrow.com/mental-wellness/daily-affirmations/",
-   "to_title": "Daily Affirmations That Work: Evidence-Based Guide",
-   "anchor": "daily affirmations feel",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/health/",
    "from_title": "Health Hub: Sleep, Energy & Cognitive Performance",
    "to": "https://gearuptogrow.com/health/focus-supplements/",
@@ -4911,16 +4869,6 @@
    "anchor": "focus supplements",
    "relevance": 4,
    "from_strength": 0
-  },
-  {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/learning/",
-   "from_title": "Learning Hub: Active Recall & Spaced Repetition Systems",
-   "to": "https://gearuptogrow.com/learning-development/rapid-skill-learning/",
-   "to_title": "Rapid Skill Learning: Master New Abilities Faster",
-   "anchor": "skill learning",
-   "relevance": 4,
-   "from_strength": 61
   },
   {
    "site": "gearuptogrow.com",
@@ -4941,6 +4889,16 @@
    "anchor": "burnout symptoms",
    "relevance": 4,
    "from_strength": 0
+  },
+  {
+   "site": "gearuptogrow.com",
+   "from": "https://gearuptogrow.com/learning/",
+   "from_title": "Learning Hub: Active Recall & Spaced Repetition Systems",
+   "to": "https://gearuptogrow.com/learning-development/rapid-skill-learning/",
+   "to_title": "Rapid Skill Learning: Master New Abilities Faster",
+   "anchor": "skill learning",
+   "relevance": 4,
+   "from_strength": 61
   },
   {
    "site": "efficientgptprompts.com",
@@ -4979,7 +4937,7 @@
    "to": "https://gearuptogrow.com/productivity/habit-stacking-executive-dysfunction/",
    "to_title": "Habit Stacking for Executive Dysfunction",
    "anchor": "habit stacking",
-   "relevance": 8,
+   "relevance": 6,
    "from_strength": 77
   },
   {
@@ -5363,6 +5321,106 @@
    "from_strength": 42
   },
   {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "from_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 8,
+   "from_strength": 63
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/shoe-finder/methodology/",
+   "from_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 6,
+   "from_strength": 82
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/shoe-finder/",
+   "from_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 5,
+   "from_strength": 75
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/",
+   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review-methodology/testing-log/",
+   "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "from_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 5,
+   "from_strength": 63
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/shoe-finder/methodology/",
+   "from_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 82
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/shoe-finder/",
+   "from_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 75
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/",
+   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review-methodology/testing-log/",
+   "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/decode-your-personality-birth-number-7/",
    "from_title": "Birth Number 7 Personality: Traits & Meanings | Mystical Digits",
@@ -5423,54 +5481,54 @@
    "from_strength": 0
   },
   {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/embrace-transformation-personal-year-7-numerology/",
-   "from_title": "Personal Year 7 Numerology Guide [2026] | Mystical Digits",
-   "to": "https://mysticaldigits.com/personal-year-numerology/",
-   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "anchor": "personal year",
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/supplements-for-french-bulldogs-what-you-need-to-know/",
+   "from_title": "Best French Bulldog Supplements: What May Help, What to Skip",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
    "relevance": 7,
    "from_strength": 0
   },
   {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/navigating-lifes-journey-personal-year-6-numerology/",
-   "from_title": "Personal Year 6 Numerology: Love, Growth & Harmony in 2026",
-   "to": "https://mysticaldigits.com/personal-year-numerology/",
-   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "anchor": "personal year",
-   "relevance": 7,
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
+   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/essential-vitamins-and-minerals-for-french-bulldogs/",
+   "from_title": "French Bulldog Vitamins: Nutrition Basics, Deficiencies",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
+   "relevance": 5,
    "from_strength": 0
   },
   {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/revealing-birth-number-6-personality/",
-   "from_title": "Birth Number 6 Personality: 2026 Guide & Insights | Mystical Digits",
-   "to": "https://mysticaldigits.com/personal-year-numerology/",
-   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "anchor": "personal year",
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/recognizing-and-managing-arthritis-in-french-bulldogs/",
+   "from_title": "French Bulldog Arthritis Symptoms: Signs, Comfort, Mobility",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
    "relevance": 5,
-   "from_strength": 62
+   "from_strength": 0
   },
   {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-to-find-your-personal-year-number-in-numerology/",
-   "from_title": "Personal Year Calculator: How to Find Your Number (2026)",
-   "to": "https://mysticaldigits.com/personal-year-numerology/",
-   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "anchor": "personal year",
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
+   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
+   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
+   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
+   "anchor": "french bulldog",
    "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
-   "from_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
-   "to": "https://mysticaldigits.com/personal-year-numerology/",
-   "to_title": "Your Personal Year Numerology Guide for 2026: Energies, Timing & Action",
-   "anchor": "personal year",
-   "relevance": 5,
-   "from_strength": 57
+   "from_strength": 0
   },
   {
    "site": "frenchyfab.com",
@@ -5524,6 +5582,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/raw-food-diet-for-french-bulldogs/",
+   "from_title": "Raw Food Diet for French Bulldogs: Risks, Safer Choices",
+   "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "to_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/are-french-bulldogs-protective-of-owners-temperament-traits/",
    "from_title": "Are French Bulldogs Protective? Temperament, Guarding",
    "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
@@ -5544,16 +5612,6 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/raw-food-diet-for-french-bulldogs/",
-   "from_title": "Raw Food Diet for French Bulldogs: Risks, Safer Choices",
-   "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
-   "to_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
-   "anchor": "french bulldogs",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
    "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
    "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
@@ -5564,8 +5622,8 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "from": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "from_title": "Best Brushes for French Bulldogs: Shiny Coats",
    "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
    "to_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
    "anchor": "french bulldogs",
@@ -5784,56 +5842,6 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "from_title": "French Bulldog Socialization Training: A Practical Plan",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 73
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-care-guide/",
-   "from_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 60
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
-   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 59
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
    "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
    "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
@@ -6017,21 +6025,21 @@
    },
    {
     "site": "tenderatlas.shop",
-    "checked": 3,
-    "healthy": 3,
-    "problems": 0,
-    "critical": 0,
+    "checked": 206,
+    "healthy": 19,
+    "problems": 187,
+    "critical": 89,
     "review": 0,
     "not_found": 0,
-    "server_error": 0,
+    "server_error": 89,
     "noindex": 0,
     "canonical_mismatch": 0,
     "redirect": 0,
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 0,
-    "alert": "the sitemap answered HTTP 503."
+    "thin": 98,
+    "alert": "89 of 206 URLs answered HTTP 503 (the site says: database-unavailable). The site itself is failing under light crawling, not individual pages; the crawl stopped early after 15 failures to avoid adding load. the sitemap answered HTTP 503, so 203 URLs known from earlier cycles were checked instead."
    },
    {
     "site": "signalroom.store",
@@ -6205,6 +6213,126 @@
    }
   ],
   "issues": [
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/820832-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/820885-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/820889-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/820913-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/820967-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/820989-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/820990-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/820991-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821023-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821026-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821030-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821037-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
    {
     "site": "efficientgptprompts.com",
     "url": "https://efficientgptprompts.com/shop",
@@ -6732,12 +6860,132 @@
     "severity": 8,
     "status": 200,
     "words": 42
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/fr/26-113903",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 178
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/fr/26-113921",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 219
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/fr/26-113929",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 187
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/fr/26-113930",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 184
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/fr/26-113935",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 204
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/fr/26-113952",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 193
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/fr/26-113966",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 197
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/fr/26-113967",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 177
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/fr/26-113968",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 205
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/fr/26-113974",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 181
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/fr/26-113975",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 174
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/fr/26-113976",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 188
    }
   ],
-  "total_issues": 83,
-  "blocking": 1,
+  "total_issues": 270,
+  "blocking": 90,
   "review": 1,
-  "thin": 81,
+  "thin": 179,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first); up to 12 examples are listed per site and problem."
  },
  "search_performance": null,
@@ -6745,7 +6993,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-26T17:25:46.828Z"
+  "updated_at": "2026-11-26T19:28:44.494Z"
  },
  "wins": [
   {
@@ -6816,49 +7064,55 @@
   }
  ],
  "log": [
-  "17:24:13 connection dataforseo: connected",
-  "17:24:13 connection gmail: connected",
-  "17:24:14 crawl plantastichaven.com: 154/154 urls, fetched 1, 304 0, reused 153",
-  "17:24:15 crawl gearuptofit.com: 300/797 urls, fetched 0, 304 0, reused 300",
-  "17:24:17 crawl frenchyfab.com: 153/153 urls, fetched 0, 304 0, reused 153",
-  "17:24:17 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
-  "17:24:17 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
-  "17:24:18 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
-  "17:24:18 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
-  "17:24:18 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "17:24:18 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "17:24:18 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
-  "17:24:18 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
-  "17:24:19 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
-  "17:24:19 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "17:24:19 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
-  "17:24:19 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
-  "17:24:19 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
-  "17:24:20 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
-  "17:24:20 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
-  "17:24:20 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
-  "17:24:20 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
-  "17:24:20 crawl tenderatlas.shop: sitemap answered HTTP 503; 0 URLs known from earlier cycles are checked instead",
-  "17:24:20 crawl tenderatlas.shop: 3/3 urls, fetched 0, 304 0, reused 3",
-  "17:24:21 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "17:24:21 - search_performance: skipped (Search Console not connected)",
-  "17:24:21 pitch policy: 87 of 530 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
-  "17:24:21 indexation: 1 sitemap URLs cannot be indexed, 1 need a look, 81 are thin (83 in all)",
-  "17:24:21 indexation: tenderatlas.shop: the sitemap answered HTTP 503.",
-  "17:25:42 second look: 60 qualified pages without an address re-checked, 5 now have one (2 unreachable, 457 waiting for a later cycle)",
-  "17:25:44 link neighbourhood (free): 12 qualified pages mined, 24 recommended sites to evaluate",
-  "17:25:46 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 24 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 24 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "17:25:46 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "17:25:46 self-tuning: next cycle runs up to 20 searches",
-  "17:25:47 broken links: 3 queued pages scanned, 0 with a dead link our page can replace",
-  "17:25:49 replies: 10 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "17:25:50 sent-folder check: 156 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
-  "17:25:55 queue screening (free, nothing sent): 9 checked, 0 sendable, 4 retired, 0 switched to a better published address",
-  "17:26:05 outreach: 0 sent, 0 follow-ups, 0 drafts, 1 held for verification",
-  "17:26:05 pre-verify (nothing sent): 0 top inboxes checked, 0 verified, 0 held",
-  "17:26:14 link checks: 13 pages, 0 new links won, 0 lost"
+  "19:26:40 connection dataforseo: connected",
+  "19:26:40 connection gmail: connected",
+  "19:26:43 crawl gearuptofit.com: 300/797 urls, fetched 2, 304 0, reused 298",
+  "19:26:46 crawl gearuptogrow.com: 103/103 urls, fetched 15, 304 0, reused 88",
+  "19:26:49 crawl mysticaldigits.com: 300/468 urls, fetched 9, 304 0, reused 291",
+  "19:26:51 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
+  "19:26:53 crawl frenchyfab.com: 153/153 urls, fetched 11, 304 0, reused 142",
+  "19:26:53 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
+  "19:26:54 crawl plantastichaven.com: 154/154 urls, fetched 44, 304 0, reused 110",
+  "19:26:54 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "19:26:54 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
+  "19:26:55 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
+  "19:26:55 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
+  "19:26:56 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
+  "19:26:56 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
+  "19:26:57 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
+  "19:26:57 crawl tenderatlas.shop: sitemap answered HTTP 503; 203 URLs known from earlier cycles are checked instead",
+  "19:26:57 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
+  "19:26:57 crawl efficientgptprompts.com: 300/487 urls, fetched 8, 304 0, reused 292",
+  "19:26:57 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
+  "19:26:57 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
+  "19:26:58 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
+  "19:27:02 crawl tenderatlas.shop: 206/206 urls, fetched 29, 304 0, reused 103; 15 answered HTTP 503 (database-unavailable), crawl stopped early (74 not requested)",
+  "19:27:04 crawl micegoneguide.com: 41/41 urls, fetched 12, 304 0, reused 29",
+  "19:27:05 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "19:27:05 - search_performance: skipped (Search Console not connected)",
+  "19:27:05 pitch policy: 85 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
+  "19:27:05 indexation: 90 sitemap URLs cannot be indexed, 1 need a look, 179 are thin (270 in all)",
+  "19:27:05 indexation: tenderatlas.shop: 89 of 206 URLs answered HTTP 503 (the site says: database-unavailable). The site itself is failing under light crawling, not individual pages; the crawl stopped early after 15 failures to avoid adding load. the sitemap answered HTTP 503, so 203 URLs known from earlier cycles were checked instead.",
+  "19:28:37 second look: 60 qualified pages without an address re-checked, 4 now have one (0 unreachable, 397 waiting for a later cycle)",
+  "19:28:38 link neighbourhood (free): 12 qualified pages mined, 37 recommended sites to evaluate",
+  "19:28:44 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 37 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 37 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "19:28:44 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "19:28:44 self-tuning: next cycle runs up to 20 searches",
+  "19:28:45 broken links: 2 queued pages scanned, 0 with a dead link our page can replace",
+  "19:28:49 replies: 7 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "19:28:51 sent-folder check: 156 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
+  "19:28:55 queue screening (free, nothing sent): 9 checked, 0 sendable, 5 retired, 0 switched to a better published address",
+  "19:29:04 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "19:29:04 pre-verify (nothing sent): 0 top inboxes checked, 0 verified, 0 held",
+  "19:29:05 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
+  {
+   "level": "action",
+   "code": "site_failing",
+   "message": "tenderatlas.shop: 89 of 206 URLs answered HTTP 503 (the site says: database-unavailable). The site itself is failing under light crawling, not individual pages; the crawl stopped early after 15 failures to avoid adding load. the sitemap answered HTTP 503, so 203 URLs known from earlier cycles were checked instead.",
+   "fix": "Fix the site itself first (hosting, database or plan limits, firewall). Links are not built to pages that fail, and this is re-checked every cycle."
+  },
   {
    "level": "action",
    "code": "dataforseo_funds",
@@ -6866,15 +7120,9 @@
    "fix": "Top up at app.dataforseo.com (Billing). Prospecting resumes by itself on the next cycle."
   },
   {
-   "level": "warn",
-   "code": "templates_only",
-   "message": "All 102 pitches so far were fixed templates (3 replies).",
-   "fix": "Add an Anthropic API key, or a free Groq or Gemini API key, under ⚙ Connect so every pitch is written for that exact page and link."
-  },
-  {
    "level": "info",
    "code": "holds",
-   "message": "23 queued inboxes are held; most often (11) because mailbox unknown.",
+   "message": "22 queued inboxes are held; most often (11) because mailbox unknown.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   }
  ]
