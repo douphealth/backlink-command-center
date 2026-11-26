@@ -110,6 +110,9 @@ export function extractEmails(html){
   for(const m of html.matchAll(/data-cfemail\s*=\s*["']([0-9a-f]+)["']/gi))found.add(decodeCfEmail(m[1]));
   for(const m of html.matchAll(/\/cdn-cgi\/l\/email-protection#([0-9a-f]+)/gi))found.add(decodeCfEmail(m[1]));
   for(const m of html.matchAll(/mailto:([^"'?\s>]+)/gi)){try{found.add(decodeURIComponent(m[1]))}catch{found.add(m[1])}}
+  // Structured data: many sites publish their contact address only as schema.org "email" (Organization, Person, ContactPoint).
+  for(const block of html.matchAll(/<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi))
+    for(const m of block[1].matchAll(/"email"\s*:\s*"(?:mailto:)?([^"\s]+@[^"\s]+)"/gi))found.add(m[1]);
   const text=decodeEntities(html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi,' '))
     .replace(/\s*(?:\[|\()\s*at\s*(?:\]|\))\s*/gi,'@').replace(/\s*(?:\[|\()\s*dot\s*(?:\]|\))\s*/gi,'.');
   for(const m of text.matchAll(EMAIL))found.add(m[0]);

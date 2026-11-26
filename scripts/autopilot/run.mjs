@@ -21,7 +21,7 @@ import {DataForSEO,trackExternalSpend} from './dataforseo.mjs';
 import {BraveSearch} from './search.mjs';
 import {pitchable,pitchableAssets,bestPitchAsset} from './assets.mjs';
 import {gscDemand,dfsDemand} from './demand.mjs';
-import {discoverProspects,requalify,enrichBrokenLinks,freshQueryCount,QUALIFY_VERSION} from './prospect.mjs';
+import {discoverProspects,requalify,recontact,enrichBrokenLinks,freshQueryCount,QUALIFY_VERSION} from './prospect.mjs';
 import {indexationReport} from './indexation.mjs';
 import {autotune,diagnose,TUNING} from './health.mjs';
 import {gscClient,monitorIndex,indexReport,searchPerformance} from './searchconsole.mjs';
@@ -71,7 +71,7 @@ export function loadConfig(env=process.env,argv=process.argv){
     brave:{apiKey:env.BRAVE_SEARCH_API_KEY||'',monthlyRequests:num(env.BRAVE_MONTHLY_REQUESTS,900)},neighborPages:Math.max(0,Math.min(40,num(env.AUTOPILOT_NEIGHBOR_PAGES,12))),
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5',
       providers:aiProviders(env)},
-    linkGapCalls:Math.max(0,Math.min(4,num(env.AUTOPILOT_LINKGAP_CALLS,2))),
+    linkGapCalls:Math.max(0,Math.min(4,num(env.AUTOPILOT_LINKGAP_CALLS,2))),secondLook:Math.max(0,Math.min(200,num(env.AUTOPILOT_SECOND_LOOK,60))),
     gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,bing:!!env.BING_WEBMASTER_API_KEY,preverifyMax:num(env.AUTOPILOT_PREVERIFY,10),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
     verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
       enabled:env.EMAIL_VERIFICATION_ENABLED==='YES',dailyLimit:Math.min(100,Math.max(0,Math.floor(num(env.EMAIL_VERIFY_DAILY_LIMIT,0))))},
@@ -270,6 +270,8 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     for(const s of indexation.sites)if(s.alert)log(`indexation: ${s.site}: ${s.alert}`)}
   // ---- 4. Prospects ----
   await stage('requalify',vaultOk,()=>requalify({state,dfs,fetchImpl,deadline:deadline-8*60e3,log}),privateWhy,{until:deadline-7*60e3});
+  // Free: plain page fetches of prospects that already passed qualification but had no usable address.
+  await stage('second_look',vaultOk,()=>recontact({state,fetchImpl,deadline:deadline-8*60e3,max:cfg.secondLook,log}),privateWhy,{until:deadline-7*60e3});
   // Runs even with no fresh asset searches: brand-mention searches have their own schedule.
   await stage('prospects',vaultOk&&(dfs.enabled||!!brave),()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,linkGapCalls:cfg.linkGapCalls,
     neighborPages:cfg.neighborPages,altSearch:brave,

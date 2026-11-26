@@ -56,6 +56,7 @@ const FIELDS=[
 // Settings travel as one encrypted secret (no Variables permission needed); this browser remembers them for display.
 const local=(k,fallback)=>({get:()=>{try{return JSON.parse(localStorage.getItem(k))??fallback}catch{return fallback}},set:v=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}}});
 const savedSettings=local('linkforge-settings',{});
+const TAB=local('linkforge-ap-tab','overview');
 const vaultResetAt=local('linkforge-vault-reset-at','');
 async function refreshControl(){
   try{ui.control=await control.status()}catch(err){ui.control={error:err.message}}
@@ -93,9 +94,21 @@ export async function renderAutopilot(h){
     catch(err){ui.err='Catch-up run could not start: '+err.message}
   }
   const state=ctl.error?['off','STATUS UNAVAILABLE',ctl.error]:ctl.running?['running','RUNNING NOW',`Started ${ago(ctl.run.started)}; results appear here automatically`]:ctl.enabled?['on','ON · AUTOPILOT',`Next automatic cycle around ${niceTime(nextRun(s.generated_at).toISOString())} (checked hourly)`]:['off','STOPPED','No automatic runs until you press Run'];
-  const summaryLine=`Last results ${ago(s.generated_at)} · ${n(t.pages_crawled)} pages audited · ${modeLabel.toLowerCase()} · DataForSEO $${s.spend.today_usd.toFixed(2)} today / $${s.spend.month_usd.toFixed(2)} month (caps $${s.spend.daily_cap_usd} / $${s.spend.monthly_cap_usd})`;
-  const status=`<div class="ap-control"><div class="ap-state"><span class="ap-dot ${state[0]}"></span><div><strong>${e(state[1])}</strong><p>${e(state[2])}${ctl.run?.url?` · <a href="${e(ctl.run.url)}" target="_blank" rel="noopener">${ctl.running?'watch live':'last run log'} ↗</a>`:''}</p><p>${e(summaryLine)}</p>${outreachLine(s,h)}</div></div>
-    <div class="ap-buttons"><button class="ap-run" data-ap="run" ${ctl.running||ui.busy?'disabled':''}>${ui.busy==='run'?'Starting…':ctl.running?'Running…':'▶ Run'}</button><button class="ap-stop" data-ap="stop" ${(!ctl.enabled&&!ctl.running)||ui.busy?'disabled':''}>${ui.busy==='stop'?'Stopping…':'■ Stop'}</button><button class="outline-btn" data-ap="connect">⚙ Connect</button></div></div>
+  const summaryLine=`Last results ${ago(s.generated_at)} · ${n(t.pages_crawled)} pages audited · ${modeLabel.toLowerCase()}`;
+  // The four things that decide how many pitches go out, readable at a glance; the full detail sits one click below.
+  const o=s.outreach||{},v=c.verifier||{},w=s.stages?.outreach?.writer||{};
+  const writerName={claude:'Claude',groq:'Groq (free plan)',gemini:'Gemini (free plan)',custom:'Custom AI'}[c.ai_writer]||null;
+  const aiWritten=(w.claude||0)+(w.free_ai||0);
+  const chip=(label,value,note,tone='')=>`<div class="ap-chip ${tone}"><span>${e(label)}</span><strong>${e(value)}</strong><small>${e(note)}</small></div>`;
+  const checksLeft=v.ready&&v.used_today<v.daily_limit;
+  const chips=`<div class="ap-chips">${[
+    chip('Ready to pitch',n(o.ready??f.ready),c.outreach_mode==='off'?'Research only: sending is off':o.cap_today!=null?`${n(o.sent_today||0)} of ${n(o.cap_today)} sent today`:modeLabel.toLowerCase()),
+    chip('Inbox checks today',v.ready?`${n(v.used_today)} / ${n(v.daily_limit)}`:'Off',v.ready?(checksLeft?'Every pitch needs one verified inbox':'Used up: more after midnight UTC'):'Add a Verifalia login under Connect',checksLeft?'':'warn'),
+    chip('Pitch writer',writerName||'Templates only',writerName?(aiWritten+(w.template_fallbacks||0)?`Last cycle: ${n(aiWritten)} AI-written, ${n(w.template_fallbacks||0)} template`:'Writes each pitch for that exact page'):'Add a free Groq or Gemini key under Connect',writerName?'':'warn'),
+    chip('Search spend',`$${s.spend.today_usd.toFixed(2)} today`,`$${s.spend.month_usd.toFixed(2)} this month · caps $${s.spend.daily_cap_usd} / $${s.spend.monthly_cap_usd}`),
+  ].join('')}</div>`;
+  const status=`<div class="ap-control"><div class="ap-state"><span class="ap-dot ${state[0]}"></span><div><strong>${e(state[1])}</strong><p>${e(state[2])}${ctl.run?.url?` · <a href="${e(ctl.run.url)}" target="_blank" rel="noopener">${ctl.running?'watch live':'last run log'} ↗</a>`:''}</p><p>${e(summaryLine)}</p></div></div>
+    <div class="ap-buttons"><button class="ap-run" data-ap="run" ${ctl.running||ui.busy?'disabled':''}>${ui.busy==='run'?'Starting…':ctl.running?'Running…':'▶ Run'}</button><button class="ap-stop" data-ap="stop" ${(!ctl.enabled&&!ctl.running)||ui.busy?'disabled':''}>${ui.busy==='stop'?'Stopping…':'■ Stop'}</button><button class="outline-btn" data-ap="connect">⚙ Connect</button></div>${chips}<details class="ap-more"><summary>Sending and verification details</summary>${outreachLine(s,h)}</details></div>
     ${ui.msg?`<div class="ap-msg">${e(ui.msg)}</div>`:''}${ui.err?`<div class="alert-warning">${e(ui.err)}</div>`:''}`;
   const needsSetup=missing.some(x=>x.required)&&!fullyConfigured();
   // Say plainly what is still unconnected: pressing Run alone never saves credentials.
@@ -114,8 +127,6 @@ export async function renderAutopilot(h){
     +(notConnected.length?`<div class="alert-warning ap-missing"><strong>Not connected yet: ${e(notConnected.join(' and '))}.</strong> Runs do research only until you fill in <b>step 2</b> below and press <b>Save &amp; run now</b>. ▶ Run by itself doesn't save credentials.</div>`:'')
     +(!rejectedMsgs.length&&!notConnected.length&&okList.length?`<div class="ap-msg">✓ Verified by the last run: ${e(okList.join(' and '))} logged in successfully.</div>`:'');
   const setup=ui.showConnect||needsSetup||rejectedMsgs.length||!control.diagnosisOk(ui.diag)?connectPanel(h):'';
-  const kpis=[['Best URLs to promote',t.promotable,'◎',`${n(t.promoting_now)} being promoted now`],['Internal link fixes',t.internal_suggestions,'⇄','Free ranking boosts on your own sites'],['Publishers contacted',f.contacted,'↗',`${n(f.ready)} ready${f.broken_link_ready?` (${n(f.broken_link_ready)} with a dead link to replace)`:''} · ${n(f.replied)} replied`],['Backlinks won',f.won,'◇',`+${n(f.existing_links)} existing links found`]];
-  const kpiHtml=`<div class="kpi-grid">${kpis.map(([name,v,ico,note])=>`<div class="kpi"><div class="kpi-head">${e(name)}<span class="kpi-ico">${ico}</span></div><div class="kpi-value">${n(v)}</div><div class="kpi-foot">${e(note)}</div></div>`).join('')}</div>`;
   // Change since the previous day's record, so progress is visible even when totals look similar.
   const hist=s.history||[],prev=hist.length>1?hist[hist.length-2]:null;
   const delta=k=>{if(!prev)return '';const d=(f[k]||0)-(prev[k]||0);return d?`<small class="ap-delta ${d>0?'up':'down'}">${d>0?'+':''}${n(d)} today</small>`:'<small class="ap-delta">no change today</small>'};
@@ -139,19 +150,35 @@ export async function renderAutopilot(h){
     table(['Site','Checked','Indexed','Unknown to Google','Discovered, not indexed','Crawled, not indexed','Other'],gi.sites.filter(x=>x.checked).map(x=>`<tr><td><strong>${e(x.site)}</strong></td><td>${n(x.checked)}</td><td>${n(x.indexed)}</td><td>${n(x.unknown||0)}</td><td>${n(x.discovered_not_indexed||0)}</td><td>${n(x.crawled_not_indexed||0)}</td><td>${n(x.not_indexed-(x.unknown||0)-(x.discovered_not_indexed||0)-(x.crawled_not_indexed||0))}</td></tr>`))+
     (gi.pages.length?table(['Page Google is ignoring','Status','Fix'],gi.pages.slice(0,40).map(x=>`<tr><td>${external(x.url,x.title||new URL(x.url).pathname)}<small>${e(x.site)}${x.promotion?` · promotion ${n(x.promotion)}`:''}</small></td><td><strong>${e(x.class.replaceAll('_',' '))}</strong><small>${e(x.coverage)}</small></td><td><small>${e(x.fix)}</small></td></tr>`)):''))}</div>`:'';
   const bgLine=bg?`<div class="ap-msg"><strong>Bing URL submission:</strong> ${n(bg.submitted_total)} URLs submitted so far${bg.last_run?.submitted?` (${n(bg.last_run.submitted)} this cycle)`:''}.${Object.keys(bg.errors||{}).length?` Issues: ${e(Object.entries(bg.errors).map(([d,x])=>d+': '+x.error).join(' · '))}. Add/verify those sites in Bing Webmaster Tools (import from Search Console works).`:''}</div>`:'';
-  const ixPanel=ix?`<div class="ap-gap">${panel('Indexation health',`${n(ixBlocking)} sitemap URLs cannot be indexed as they are (404, server error, noindex or wrong canonical): fix these first. ${n(ixReview)} need a look (redirect, blocked or no canonical). ${n(ixThin)} are indexable but thin. ${ix.note}`,
+  const ixPanel=ix?`<div class="ap-gap">${panel('Indexation health',`${n(ixBlocking)} sitemap URL${ixBlocking===1?'':'s'} cannot be indexed as ${ixBlocking===1?'it is':'they are'} (404, server error, noindex or wrong canonical): fix these first. ${n(ixReview)} need a look (redirect, blocked or no canonical). ${n(ixThin)} are indexable but thin. ${ix.note}`,
     ixRows.length?table(['Site','Cannot be indexed','Needs a look','Thin (indexable)','Healthy'],ixSites)+table(['URL','Problem','Fix'],ixRows):empty('No indexation problems found','Every crawled sitemap URL returns 200, is indexable and self-canonical.'))}</div>`:'';
   schedulePoll();
+  const ixSitesHit=(ix?.sites||[]).filter(x=>x.critical).length;
+  const replyRate=f.contacted?Math.round(1000*(f.replied||0)/f.contacted)/10:0;
+  const kpis=[['Ready to pitch',f.ready,'✉',`${n(o.verified_ready||0)} inbox-verified · ${n(f.contact_form_only||0)} more have only a contact form`],
+    ['Publishers contacted',f.contacted,'↗',`${n(o.sent_today||0)} sent today · ${n(f.bounced||0)} bounced in total`],
+    ['Replies',f.replied,'↩',f.contacted?`${replyRate}% reply rate · ${n(f.positive||0)} positive`:'No pitches sent yet'],
+    ['Backlinks won',f.won,'◇',`+${n(f.existing_links)} existing links found`],
+    ['Cannot be indexed',ixBlocking,'⚠',ixBlocking?`On ${n(ixSitesHit)} site${ixSitesHit===1?'':'s'}: open the Indexation tab`:'Every checked sitemap URL can be indexed'],
+    ['Best URLs to promote',t.promotable,'◎',`${n(t.promoting_now)} promoted now · ${n(t.internal_suggestions)} internal links to add`]];
+  const kpiHtml=`<div class="kpi-grid ap-kpis">${kpis.map(([name,val,ico,note],i)=>`<div class="kpi${i===4&&val?' kpi-alert':''}"><div class="kpi-head">${e(name)}<span class="kpi-ico">${ico}</span></div><div class="kpi-value">${n(val)}</div><div class="kpi-foot">${e(note)}</div></div>`).join('')}</div>`;
+  // One long page became five tabs; the choice is remembered on this device.
+  const TABS=[['overview','Overview',0,''],['pages','Best pages',t.promotable,''],['index','Indexation',ixBlocking,'warn'],['prospects','Prospects & links',f.ready,''],['learning','Learning & log',0,'']];
+  const tab=TABS.some(x=>x[0]===TAB.get())?TAB.get():'overview';
+  const tabBar=`<div class="ap-tabs" role="tablist">${TABS.map(([k,label,count,tone])=>`<button type="button" role="tab" class="ap-tab${k===tab?' active':''}" data-ap-tab="${k}" aria-selected="${k===tab}">${label}${count?`<span class="${tone}">${n(count)}</span>`:''}</button>`).join('')}</div>`;
+  const pane=(k,html)=>`<section class="ap-pane${k===tab?'':' hidden'}" data-ap-pane="${k}" role="tabpanel">${html}</section>`;
   const att=(s.attention||[]).filter(a=>a.level!=='info'||!(s.attention||[]).some(x=>x.level==='action'));
   const attention=att.length?`<div class="${att.some(a=>a.level==='action')?'alert-warning':'ap-msg'} ap-missing"><strong>${att.some(a=>a.level==='action')?'Needs you:':'Autopilot notes:'}</strong><ul class="ap-list">${att.map(a=>`<li><b>${e(a.message)}</b> ${e(a.fix)}</li>`).join('')}</ul>${s.tuning?.max_queries?`<small>Self-tuning: up to ${n(s.tuning.max_queries)} searches next cycle.</small>`:''}</div>`:'';
-  return intro('autopilot','')+status+attention+banner+setup+kpiHtml+
-    `<div class="overview-grid">${panel('Outreach funnel','Every number is a stored, verified record',funnel)}${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`+
-    `<div class="ap-gap">${panel('Best URLs to promote','Linkability × real search demand; templated duplicates and thin pages are demoted',best.length?table(['#','URL & why','Score','Internal links','Prospects'],best):empty('No promotable URLs yet','The next crawl will rank your pages.'))}</div>`+
-    spPanel+giPanel+bgLine+ixPanel+learningPanel(h,s)+
-    `<div class="ap-gap">${panel('Internal link plan','Add these links on your own pages: highest-ROI, zero-cost ranking boost',internal.length?table(['On this page','Add anchor','Linking to'],internal):empty('No internal gaps found','Your best URLs are already well linked.'))}</div>`+
-    `<div class="ap-gap">${panel('Backlinks','Won after outreach, or already linking to you (verified on the live page)',wins.length?table(['Publisher','Page','Links to','Status','Found'],wins):empty('No verified backlinks yet','Pitched pages are re-checked every 4 days for 150 days.'))}</div>`+
-    `<div class="ap-gap">${privatePanel(h)}</div>`+
-    `<details class="data-note"><summary><strong>Last run log</strong></summary><div class="pre-detail ap-log">${e((s.log||[]).join('\n'))}</div></details>`;
+  const bestPanel=`<div class="ap-gap">${panel('Best URLs to promote','Linkability × real search demand; templated duplicates and thin pages are demoted',best.length?table(['#','URL & why','Score','Internal links','Prospects'],best):empty('No promotable URLs yet','The next crawl will rank your pages.'))}</div>`;
+  const internalPanel=`<div class="ap-gap">${panel('Internal link plan','Add these links on your own pages: highest-ROI, zero-cost ranking boost',internal.length?table(['On this page','Add anchor','Linking to'],internal):empty('No internal gaps found','Your best URLs are already well linked.'))}</div>`;
+  const winsPanel=`<div class="ap-gap">${panel('Backlinks','Won after outreach, or already linking to you (verified on the live page)',wins.length?table(['Publisher','Page','Links to','Status','Found'],wins):empty('No verified backlinks yet','Pitched pages are re-checked every 4 days for 150 days.'))}</div>`;
+  const logPanel=`<details class="data-note" open><summary><strong>Last run log</strong></summary><div class="pre-detail ap-log">${e((s.log||[]).join('\n'))}</div></details>`;
+  return intro('autopilot','')+status+attention+banner+setup+kpiHtml+tabBar+
+    pane('overview',`<div class="overview-grid">${panel('Outreach funnel','Every number is a stored, verified record',funnel)}${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`)+
+    pane('pages',bestPanel+internalPanel)+
+    pane('index',ixPanel+spPanel+giPanel+bgLine)+
+    pane('prospects',`<div class="ap-gap">${privatePanel(h)}</div>`+winsPanel)+
+    pane('learning',learningPanel(h,s)+logPanel);
 }
 
 const FP_LABEL={neighbor:'Sites recommended by qualified pages (free)',link_gap:'Competitor link gap (pages linking to rivals)',phrase_resources:'"page phrase" resources',phrase_links:'"page phrase" "useful links"',phrase_blog:'"page phrase" blog',link_roundup:'"link roundup" posts',weekly_roundup:'"weekly roundup" posts',best_of_web:'"best of the web" lists',further_reading:'"further reading" sections',helpful_resources:'"helpful resources" pages',recommended_tools:'"recommended tools" pages',mention:'Unlinked brand mentions',intent:'Same-topic articles',resources:'"{topic} resources"',intitle_resources:'intitle:resources',useful_links:'"useful links" pages',tools:'"{topic} tools"',free_tools:'"free {topic} tools"',best_resources:'"best {topic} resources"',useful_websites:'"useful websites"',statistics:'"{topic} statistics"',research_resources:'"research resources"',sources:'"{topic} sources"',blogs_to_follow:'"blogs to follow"',recommended_reading:'"recommended reading"',inurl_resources:'inurl:resources',inurl_links:'inurl:links',best_guides:'"best … guides"',k_resources:'"{page topic} resources"'};
@@ -246,6 +273,10 @@ export function bindAutopilot(reload){
   const main=document.getElementById('main');
   if(main)new MutationObserver(()=>main.querySelectorAll('[data-w]').forEach(el=>{el.style.width=el.dataset.w+'%'})).observe(main,{childList:true});
   document.addEventListener('click',async ev=>{
+    const tb=ev.target.closest('[data-ap-tab]');
+    if(tb){const k=tb.dataset.apTab;TAB.set(k);
+      document.querySelectorAll('[data-ap-tab]').forEach(x=>{const on=x.dataset.apTab===k;x.classList.toggle('active',on);x.setAttribute('aria-selected',String(on))});
+      document.querySelectorAll('[data-ap-pane]').forEach(x=>x.classList.toggle('hidden',x.dataset.apPane!==k));return}
     const b=ev.target.closest('[data-ap]');if(!b)return;const a=b.dataset.ap;
     if(a==='connect'){ui.showConnect=!ui.showConnect;return reload()}
     if(a==='close'){ui.showConnect=false;return reload()}
