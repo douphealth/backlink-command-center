@@ -48,7 +48,6 @@ test('the endpoint refuses everyone but the Autopilot workflow, and bounds what 
   const ai={run:async(model,input)=>{calls.push([model,input]);return {response:'Subject: Hello there editor\n\nBody text'}}};
   const anonymous=await chatCompletion(post(good),env(ai),deps);
   assert.equal(anonymous.status,401,'no token');assert.deepEqual((await anonymous.json()).service,{ai_bound:true,repository_from_config:true});
-  assert.equal((await chatCompletion(post(good,sign(claims())),{AI:ai},deps)).status,200,'without the variable the repository this dashboard is deployed from is used');
   assert.equal((await chatCompletion(post(good,sign(claims({repository:'someone/else'}))),env(ai),deps)).status,401,'another repository');
   assert.equal(calls.length,0,'nothing reaches the model without a valid token');
   const token=sign(claims());
@@ -67,6 +66,8 @@ test('the endpoint refuses everyone but the Autopilot workflow, and bounds what 
   const list=await listModels(new Request('https://dash.example/api/ai/v1/models',{headers:{authorization:'Bearer '+token}}),env(ai),deps);
   assert.deepEqual((await list.json()).data.map(m=>m.id),MODELS);
   assert.equal((await listModels(new Request('https://dash.example/api/ai/v1/models'),env(ai),deps)).status,401);
+  assert.equal((await chatCompletion(post(good,sign(claims())),{AI:ai},deps)).status,200,'without the variable the repository this dashboard is deployed from is used');
+  assert.equal((await chatCompletion(post(good,sign(claims({repository:'someone/else'}))),{AI:ai},deps)).status,401,'and still nobody else');
   assert.equal(answerText({choices:[{message:{content:'a'}}]}),'a');assert.equal(answerText({output:[{content:[{text:'b'}]}]}),'b');assert.equal(answerText({}),'');
 });
 
