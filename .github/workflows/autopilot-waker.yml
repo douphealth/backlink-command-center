@@ -1,13 +1,23 @@
 name: LinkForge Send-Window Waker
 # The primary scheduler. GitHub starts the hourly Autopilot schedule only 2-3 times a day at random
-# hours, and on 2026-11-25 skipped it for over 10 hours. After every Autopilot cycle this job waits
-# until the next recipient send window, or at most 5 h (keep-alive), with cycles at least 2 h apart,
-# then starts one cycle (waiting is free on public repositories). The cron schedule is the backup that
-# restarts the chain. The dashboard's Stop button disables Autopilot, so no cycle can start then.
+# hours, and on 2026-11-25/26 skipped it for 4-10 hours at a time. This job waits until the next
+# recipient send window, or at most 5 h (keep-alive), with cycles at least 2 h apart, then starts one
+# Autopilot cycle (waiting is free on public repositories).
+#
+# A cycle started with this workflow's token does not fire `workflow_run` (GitHub's recursion guard), so
+# the chain used to stop after one hop. The waker therefore starts its own successor (workflow_dispatch
+# is exempt from that guard). Cron-started cycles and dashboard runs re-enter through `workflow_run`.
+# The dashboard's Stop button disables Autopilot: the start then fails and the chain ends.
 on:
   workflow_run:
     workflows: [LinkForge Autopilot]
     types: [completed]
+  workflow_dispatch:
+    inputs:
+      after:
+        description: 'Set by the waker itself: when it started the cycle this run follows (ISO time)'
+        required: false
+        default: ''
 permissions:
   actions: write
   contents: read
@@ -16,7 +26,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   wake:
-    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     timeout-minutes: 345
     steps:
@@ -26,17 +36,39 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Plan the next send-window cycle
+      - name: Wait for the cycle that was just started to publish its results
+        if: github.event_name == 'workflow_dispatch' && inputs.after != ''
+        env:
+          AFTER: ${{ inputs.after }}
+        run: |
+          for i in $(seq 1 50); do
+            git fetch -q origin main && git checkout -q FETCH_HEAD -- public/data/autopilot.json
+            if node scripts/autopilot/waker.mjs fresh "$AFTER"; then echo "The cycle published its results"; break; fi
+            sleep 30
+          done
+      - name: Plan the next cycle
         id: plan
+        env:
+          WAKER_AFTER: ${{ github.event_name == 'workflow_dispatch' && inputs.after || '' }}
         run: node scripts/autopilot/waker.mjs plan >> "$GITHUB_OUTPUT"
       - name: Wait for the send window
         if: steps.plan.outputs.wake == 'true'
         run: sleep "${{ steps.plan.outputs.wait_s }}"
-      - name: Start an Autopilot cycle
+      - name: Start an Autopilot cycle and the next waker
         if: steps.plan.outputs.wake == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           git fetch -q origin main && git checkout -q FETCH_HEAD -- public/data/autopilot.json
-          node scripts/autopilot/waker.mjs recheck || exit 0
-          gh workflow run autopilot.yml --ref main || echo "Autopilot is stopped (workflow disabled); no cycle started"
+          STARTED=""
+          if node scripts/autopilot/waker.mjs recheck; then
+            NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            if gh workflow run autopilot.yml --ref main; then
+              STARTED="$NOW"
+            else
+              echo "Autopilot is stopped (workflow disabled); no cycle started and the chain ends here"
+              exit 0
+            fi
+          fi
+          # Keep the chain alive: this run's own successor plans the cycle after this one.
+          gh workflow run autopilot-waker.yml --ref main -f after="$STARTED"

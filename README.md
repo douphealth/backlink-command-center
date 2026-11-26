@@ -4,6 +4,9 @@
 
 ### How it gets smarter
 
+- **Free prospecting from the link neighbourhood:** every cycle mines up to 12 pages Autopilot has already qualified (resource lists and roundups first, two per site) and evaluates the sites those pages recommend, with plain page fetches and no paid lookup. New prospects become sources themselves, so discovery compounds. It runs after the paid sources and keeps finding prospects when the DataForSEO balance is empty. `AUTOPILOT_NEIGHBOR_PAGES` (0-40, default 12) sets the volume.
+- **Optional fallback search (Brave Search API):** with `BRAVE_SEARCH_API_KEY` set, topic and brand-mention searches switch to Brave only when DataForSEO cannot pay for a search. Brave returns real result URLs (no Google redirect wrapping). Requests are capped per month (`BRAVE_MONTHLY_REQUESTS`, default 900) to stay inside the credit Brave includes with a plan; check the current terms at brave.com/search/api. There is no free competitor-backlink API of comparable coverage, so link-gap mining stays on DataForSEO.
+- **The scheduler chain no longer stops after one cycle:** a cycle started by the waker does not fire GitHub's `workflow_run` event, so the waker now starts its own successor. Cycles it starts are at least 2 h apart even if one fails, and Stop still ends the chain.
 - **An empty DataForSEO balance no longer switches prospecting off for a week:** on 2026-11-26 the balance reached zero and every lookup was "parked 7 days" as if the account lacked the subscription. Now an empty balance stops lookups for that cycle only, the dashboard shows a "top up" action, and prospecting resumes by itself after a top-up. The balance is shown with the spend figures.
 - **Spending outside Autopilot is measured:** each cycle compares the provider's balance with Autopilot's own cost ledger (they match to the cent on quiet days). A larger drop is reported as spending by another tool on the same DataForSEO account.
 - **Verification credits go where they can win:** inboxes whose cached answer is "inconclusive" are skipped until that answer can change (they used to take half the slots of every cycle, leaving free credits unused); an address that stays "unknown" waits 3, 6, 12, then 24 days; and the queue is ordered by (learned chance that this kind of mail host verifies) x (chance of a link), learned from Autopilot's own results per mail host (Google Workspace, Microsoft 365, forwarders, self-hosted...).
@@ -80,6 +83,7 @@ The setup script stores everything as **encrypted GitHub Actions secrets** (valu
 | `HUNTER_API_KEY` *(optional)* | Fallback verifier when the day's Verifalia free credits are used up | hunter.io → API keys |
 | `ANTHROPIC_API_KEY` *(optional)* | Unique, page-specific pitches written by Claude | console.anthropic.com |
 | `GSC_SERVICE_ACCOUNT_JSON` *(optional)* | Exact impressions/positions → striking-distance targeting | Google Cloud service account with Search Console access |
+| `BRAVE_SEARCH_API_KEY` *(optional)* | Fallback search when DataForSEO cannot run one (balance or cap used up) | brave.com/search/api |
 | `BING_WEBMASTER_API_KEY` *(optional)* | Daily submission of new, changed and Google-ignored pages to Bing (Bing also feeds Copilot, DuckDuckGo, Yahoo and ChatGPT search) | Bing Webmaster Tools → Settings → API access. Sites must be added/verified in Bing (import from Search Console works) |
 | `SENDER_POSTAL_ADDRESS` *(optional)* | CAN-SPAM footer | — |
 

@@ -21,7 +21,7 @@ export const WAKER={minGapHours:2,maxWaitHours:5.5,recentHours:1.5,keepaliveHour
  * minGapHours after the last cycle), and never later than keepaliveHours after it, so prospecting, reply
  * reading and link checks keep running even when GitHub skips the schedule.
  */
-export function planWake(summary,now=Date.now(),{minGapHours=WAKER.minGapHours,keepaliveHours=WAKER.keepaliveHours}={}){
+export function planWake(summary,now=Date.now(),{minGapHours=WAKER.minGapHours,keepaliveHours=WAKER.keepaliveHours,after=null}={}){
   if(!summary?.generated_at)return {wake:false,reason:'no published summary'};
   if(summary.dry_run)return {wake:false,reason:'last cycle was a dry run'};
   const last=Date.parse(summary.generated_at),base=Number.isFinite(last)?last:now;
@@ -29,11 +29,19 @@ export function planWake(summary,now=Date.now(),{minGapHours=WAKER.minGapHours,k
   const sending=summary.capabilities?.outreach_mode==='send'&&o.ready>0&&(!o.reply_health||o.reply_health==='ok')&&Number.isFinite(next);
   const keepalive=base+keepaliveHours*36e5;
   const window=sending&&next<keepalive;
-  const at=Math.max(window?next:keepalive,base+minGapHours*36e5,now);
+  // `after`: when the waker itself started the previous cycle. Even if that cycle published nothing (it failed),
+  // the next one is never started sooner than minGapHours after it, so the chain cannot spin.
+  const started=Date.parse(after||''),notBefore=Number.isFinite(started)?started+minGapHours*36e5:0;
+  const at=Math.max(window?next:keepalive,base+minGapHours*36e5,notBefore,now);
   return {wake:true,at:new Date(at).toISOString(),wait_s:Math.max(0,Math.round((at-now)/1000)),
     reason:window?`${o.ready} pitches queued; next send window ${new Date(next).toISOString().slice(0,16)}Z`:`keep-alive: next cycle ${keepaliveHours} h after the last one`};
 }
 
+/** Has a cycle published results since `after` (ISO time)? */
+export function isFresh(summary,after){
+  const a=Date.parse(after||''),g=Date.parse(summary?.generated_at||'');
+  return Number.isFinite(a)&&Number.isFinite(g)&&g>a;
+}
 /** After waiting: skip if another cycle already ran meanwhile (e.g. the backup schedule fired). */
 export function shouldStillWake(summary,now=Date.now(),{recentHours=WAKER.recentHours}={}){
   if(!summary?.generated_at||summary.dry_run)return false;
@@ -46,7 +54,8 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   if(process.argv[2]==='recheck'){
     const go=shouldStillWake(summary);console.error(go?'Starting a send-window cycle':'Skipped: a cycle ran meanwhile or sending is off');process.exit(go?0:1);
   }
-  const p=planWake(summary);
+  if(process.argv[2]==='fresh')process.exit(isFresh(summary,process.argv[3])?0:1);
+  const p=planWake(summary,Date.now(),{after:process.env.WAKER_AFTER||null});
   console.error(`waker: ${p.wake?`wake at ${p.at} (in ${Math.round(p.wait_s/60)} min)`:'no wake'}: ${p.reason}`);
   console.log(`wake=${p.wake}\nwait_s=${p.wait_s||0}\nat=${p.at||''}`);
 }
