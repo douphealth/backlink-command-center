@@ -64,7 +64,7 @@ export const SITES = [
     "domain": "frenchyfab.com",
     "topic": "french bulldog care",
     "assets": [
-      "https://frenchyfab.com/french-bulldog-care/"
+      "https://frenchyfab.com/french-bulldog-care-guide/"
     ],
     "competitors": [
       "frenchbulldogclub.org"

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {pitchable,pitchableAssets,bestPitchAsset} from '../../scripts/autopilot/assets.mjs';
 import {rankPortfolio} from '../../scripts/autopilot/score.mjs';
-import {PitchWriter,grounded,validPitch} from '../../scripts/autopilot/pitch.mjs';
+import {PitchWriter,grounded,validPitch,aiProviders,pickModels,AI_PROVIDERS} from '../../scripts/autopilot/pitch.mjs';
 import {runOutreach} from '../../scripts/autopilot/outreach.mjs';
 import {planWake} from '../../scripts/autopilot/waker.mjs';
 import {SITES} from '../../functions/_lib/sites.js';
@@ -80,40 +80,90 @@ const prospect={id:'x',title:'Resources for New Runners',page_url:'https://pub.e
 const goodBody=`Your "Choosing shoes" section in Resources for New Runners points readers to fitting advice. Our Running Shoe Finder asks six questions and matches runners to shoes by gait and terrain, free and without sign-up: ${asset.url}\n\nIf it fits, it could sit in that section.\n\nBest,\nAlex\ngearuptofit.com\n\nP.S. Not relevant for you? Just reply "no" and I won't email again.`;
 const completion=(content,status=200)=>new Response(JSON.stringify({choices:[{message:{content}}]}),{status,headers:{'content-type':'application/json'}});
 
-test('free AI writer (GitHub Models): a grounded, valid email is used; everything else falls back to the template',async()=>{
+const modelList=ids=>new Response(JSON.stringify({object:'list',data:ids.map(id=>({id}))}),{headers:{'content-type':'application/json'}});
+const GROQ_LIST=['whisper-large-v3','llama-3.3-70b-versatile','openai/gpt-oss-120b','meta-llama/llama-guard-4-12b'];
+/** A provider API: the model list on GET /models, `answer` for chat completions. */
+const api=(answer,ids=GROQ_LIST)=>async(u,o)=>String(u).endsWith('/models')?modelList(ids):answer(u,o);
+const groq=(extra={})=>aiProviders({GROQ_API_KEY:' gsk_x ',...extra});
+const email=JSON.stringify({subject:'A shoe finder for your new-runner resources',body:goodBody});
+
+test('free AI writer: a grounded, valid email is used; everything else falls back to the template',async()=>{
   const calls=[];
-  const w=new PitchWriter({senderName:'Alex',githubToken:'ghs_x',fetchImpl:async(u,o)=>{calls.push([u,JSON.parse(o.body).model,o.headers.Authorization]);return completion(JSON.stringify({subject:'A shoe finder for your new-runner resources',body:goodBody}))}});
-  assert.equal(w.ai,'github_models');
+  const w=new PitchWriter({senderName:'Alex',providers:groq(),fetchImpl:api(async(u,o)=>{calls.push([u,JSON.parse(o.body).model,o.headers.Authorization]);return completion(email)})});
+  assert.equal(w.ai,'groq');
   const out=await w.write(prospect,asset,site);
-  assert.equal(out.writer,'github_models');assert.equal(w.usedGithub,1);assert.equal(w.ghModel,'openai/gpt-4.1-mini');
-  assert.equal(calls[0][0],'https://models.github.ai/inference/chat/completions');assert.equal(calls[0][2],'Bearer ghs_x');
+  assert.equal(out.writer,'groq');assert.equal(w.usedAi,1);assert.equal(w.aiProvider,'groq');
+  assert.equal(w.aiModel,'openai/gpt-oss-120b','chosen from the provider\'s own model list; speech and guard models are ignored');
+  assert.equal(calls[0][0],'https://api.groq.com/openai/v1/chat/completions');assert.equal(calls[0][2],'Bearer gsk_x','the pasted key is trimmed');
   assert.ok(validPitch(out,asset));
   // Invented number -> template.
-  const liar=new PitchWriter({senderName:'Alex',githubToken:'t',fetchImpl:async()=>completion(JSON.stringify({subject:'A shoe finder for your new-runner resources',body:goodBody.replace('free and without sign-up','trusted by 25,000 runners')}))});
+  const liar=new PitchWriter({senderName:'Alex',providers:groq(),fetchImpl:api(async()=>completion(JSON.stringify({subject:'A shoe finder for your new-runner resources',body:goodBody.replace('free and without sign-up','trusted by 25,000 runners')})))});
   assert.equal((await liar.write(prospect,asset,site)).writer,'template');assert.equal(liar.fallbacks,1);
   // Extra URL -> template.
-  const spam=new PitchWriter({senderName:'Alex',githubToken:'t',fetchImpl:async()=>completion(JSON.stringify({subject:'A shoe finder for your new-runner resources',body:goodBody+' See also https://evil.example/x'}))});
+  const spam=new PitchWriter({senderName:'Alex',providers:groq(),fetchImpl:api(async()=>completion(JSON.stringify({subject:'A shoe finder for your new-runner resources',body:goodBody+' See also https://evil.example/x'})))});
   assert.equal((await spam.write(prospect,asset,site)).writer,'template');
-  // Quota used up -> template, and no further calls this cycle.
-  let n=0;const limited=new PitchWriter({senderName:'Alex',githubToken:'t',fetchImpl:async()=>{n++;return completion('',429)}});
-  assert.equal((await limited.write(prospect,asset,site)).writer,'template');await limited.write(prospect,asset,site);assert.equal(n,1);assert.equal(limited.ai,null);
-  // No permission -> template with a clear log line.
-  const logs=[];const denied=new PitchWriter({senderName:'Alex',githubToken:'t',log:m=>logs.push(m),fetchImpl:async()=>completion('',403)});
-  assert.equal((await denied.write(prospect,asset,site)).writer,'template');assert.match(logs[0],/models: read/);
-  // No token at all -> template, no network.
+  // Every model over its quota -> template, and no further calls this cycle.
+  let n=0;const limited=new PitchWriter({senderName:'Alex',providers:groq(),fetchImpl:api(async()=>{n++;return completion('',429)})});
+  assert.equal((await limited.write(prospect,asset,site)).writer,'template');const after=n;await limited.write(prospect,asset,site);
+  assert.equal(after,3,'each candidate model is tried once');assert.equal(n,after);assert.equal(limited.ai,null);assert.deepEqual(limited.reasons,{quota_used_up:2});
+  // Rejected key -> template with a clear log line.
+  const logs=[];const denied=new PitchWriter({senderName:'Alex',providers:groq(),log:m=>logs.push(m),fetchImpl:api(async()=>completion('',403))});
+  assert.equal((await denied.write(prospect,asset,site)).writer,'template');assert.match(logs[0],/Groq: the API key was rejected \(HTTP 403\)/);
+  // No key at all -> template, no network.
   const none=new PitchWriter({senderName:'Alex',fetchImpl:async()=>{throw Error('no call expected')}});
   assert.equal((await none.write(prospect,asset,site)).writer,'template');assert.equal(none.ai,null);
 });
 
-test('when the preferred models no longer exist the catalogue supplies one',async()=>{
+test('quotas are per model: a limited model is skipped, a short per-minute limit is waited out',async()=>{
   const tried=[];
-  const w=new PitchWriter({senderName:'Alex',githubToken:'t',fetchImpl:async(u,o)=>{
-    if(String(u).endsWith('/catalog/models'))return new Response(JSON.stringify([{id:'openai/text-embedding-9',supported_output_modalities:['embeddings']},{id:'openai/gpt-9-mini',supported_output_modalities:['text'],rate_limit_tier:'low'}]),{headers:{'content-type':'application/json'}});
-    const model=JSON.parse(o.body).model;tried.push(model);
-    return model==='openai/gpt-9-mini'?completion(JSON.stringify({subject:'A shoe finder for your new-runner resources',body:goodBody})):completion('{"error":"unknown model"}',404)}});
-  const out=await w.write(prospect,asset,site);
-  assert.equal(out.writer,'github_models');assert.equal(w.ghModel,'openai/gpt-9-mini');assert.equal(tried.at(-1),'openai/gpt-9-mini');
-  await w.write(prospect,asset,site);assert.equal(tried.at(-1),'openai/gpt-9-mini');assert.equal(tried.length,6,'the working model is remembered');
+  const w=new PitchWriter({senderName:'Alex',providers:groq(),fetchImpl:api(async(u,o)=>{const m=JSON.parse(o.body).model;tried.push(m);return m==='openai/gpt-oss-120b'?completion('',429):completion(email)})});
+  assert.equal((await w.write(prospect,asset,site)).writer,'groq');assert.equal(w.aiModel,'llama-3.3-70b-versatile');
+  await w.write(prospect,asset,site);
+  assert.deepEqual(tried,['openai/gpt-oss-120b','llama-3.3-70b-versatile','llama-3.3-70b-versatile'],'the limited model is not asked again; the working one is remembered');
+  let n=0;const slept=[];
+  const brief=new PitchWriter({senderName:'Alex',providers:groq(),sleep:async ms=>{slept.push(ms)},fetchImpl:api(async()=>++n===1?new Response('',{status:429,headers:{'retry-after':'2'}}):completion(email))});
+  assert.equal((await brief.write(prospect,asset,site)).writer,'groq');assert.deepEqual(slept,[2500]);assert.equal(brief.aiModel,'openai/gpt-oss-120b');
+});
+
+test('a model that no longer exists is skipped; a second provider takes over when the first one is rejected',async()=>{
+  const tried=[];
+  const w=new PitchWriter({senderName:'Alex',providers:groq({LINKFORGE_GROQ_MODEL:'retired-model'}),fetchImpl:api(async(u,o)=>{const m=JSON.parse(o.body).model;tried.push(m);return m==='retired-model'?completion('{"error":"unknown model"}',404):completion(email)})});
+  assert.equal((await w.write(prospect,asset,site)).writer,'groq');assert.deepEqual(tried,['retired-model','openai/gpt-oss-120b']);
+  const urls=[];
+  const both=new PitchWriter({senderName:'Alex',providers:aiProviders({GROQ_API_KEY:'bad',GEMINI_API_KEY:'g'}),fetchImpl:async(u,o)=>{
+    if(String(u).includes('groq'))return completion('',401);
+    if(String(u).endsWith('/models'))return modelList(['models/gemini-embedding-001','models/gemini-2.5-flash-image','models/gemini-3.8-flash-lite-preview','models/gemini-2.5-flash','models/gemini-2.5-flash-lite']);
+    urls.push(String(u));return completion(email)}});
+  const out=await both.write(prospect,asset,site);
+  assert.equal(out.writer,'gemini');assert.equal(both.aiModel,'gemini-2.5-flash-lite','the stable model is preferred over a preview');
+  assert.deepEqual(urls,['https://generativelanguage.googleapis.com/v1beta/openai/chat/completions']);assert.equal(both.ai,'gemini');
+});
+
+test('Gemini: a rejected key arrives as HTTP 400 and is reported as such; the native model list is the second source',async()=>{
+  const logs=[];let n=0;
+  const bad=new PitchWriter({senderName:'Alex',providers:aiProviders({GEMINI_API_KEY:'wrong'}),log:m=>logs.push(m),fetchImpl:async u=>{n++;
+    return String(u).includes('/models')?new Response('{"error":{"code":404}}',{status:404}):new Response('[{"error":{"code":400,"message":"API key not valid. Please pass a valid API key.","status":"INVALID_ARGUMENT"}}]',{status:400,headers:{'content-type':'application/json'}})}});
+  assert.equal((await bad.write(prospect,asset,site)).writer,'template');await bad.write(prospect,asset,site);
+  assert.deepEqual(bad.reasons,{not_permitted:2});assert.equal(n,3,'two model lists and one chat call, then the provider is off');assert.match(logs[0],/Gemini: the API key was rejected \(HTTP 400: .*API key not valid/);
+  const seen=[];
+  const w=new PitchWriter({senderName:'Alex',providers:aiProviders({GEMINI_API_KEY:'g'}),fetchImpl:async(u,o)=>{
+    if(String(u).endsWith('/openai/models'))return new Response('{"error":{"code":404}}',{status:404});
+    if(String(u).startsWith('https://generativelanguage.googleapis.com/v1beta/models?')){assert.equal(o.headers['x-goog-api-key'],'g');return new Response(JSON.stringify({models:[{name:'models/gemini-4.1-flash-lite'},{name:'models/gemini-4.1-flash-live'},{name:'models/text-embedding-005'}]}),{headers:{'content-type':'application/json'}})}
+    seen.push(JSON.parse(o.body).model);return completion(email)}});
+  assert.equal((await w.write(prospect,asset,site)).writer,'gemini');assert.deepEqual(seen,['gemini-4.1-flash-lite']);
+});
+
+test('model choice and provider configuration',()=>{
+  assert.deepEqual(pickModels(['models/gemini-2.5-flash-lite','models/gemini-2.5-flash','models/gemini-2.5-flash-preview-tts','models/gemini-3.8-flash-lite','models/gemini-2.5-pro'],AI_PROVIDERS.gemini.prefer),['gemini-3.8-flash-lite','gemini-2.5-flash-lite']);
+  assert.deepEqual(pickModels(['whisper-large-v3','llama-3.1-8b-instant'],AI_PROVIDERS.groq.prefer),['llama-3.1-8b-instant']);
+  assert.deepEqual(pickModels([],AI_PROVIDERS.groq.prefer),[]);
+  assert.deepEqual(aiProviders({}),[]);
+  assert.deepEqual(aiProviders({GROQ_API_KEY:'k',LINKFORGE_AI_WRITER:'off'}),[],'the off switch still works');
+  assert.deepEqual(aiProviders({GROQ_API_KEY:'k',GEMINI_API_KEY:'g'}).map(p=>p.name),['groq','gemini']);
+  const custom=aiProviders({LINKFORGE_AI_BASE_URL:'https://openrouter.ai/api/v1/chat/completions/',LINKFORGE_AI_KEY:'k',LINKFORGE_AI_MODEL:'some/model'});
+  assert.equal(custom[0].base,'https://openrouter.ai/api/v1');assert.equal(custom[0].label,'openrouter.ai');assert.equal(custom[0].model,'some/model');
+  assert.deepEqual(aiProviders({LINKFORGE_AI_BASE_URL:'http://insecure.example/v1',LINKFORGE_AI_KEY:'k',LINKFORGE_AI_MODEL:'m'}),[],'plain http is refused');
+  assert.deepEqual(aiProviders({LINKFORGE_AI_BASE_URL:'https://x.example/v1',LINKFORGE_AI_KEY:'k'}),[],'a custom endpoint needs its model name');
 });
 
 test('grounding: numbers must come from the supplied facts',()=>{
@@ -130,17 +180,18 @@ test('a failed reply scan is retried at the 2 h gap instead of after the 5 h kee
   assert.equal(planWake({...s,outreach:{...s.outreach,ready:0}},nowMs).at,'2026-11-26T13:50:47.000Z','nothing to send: keep-alive');
 });
 
-test('the Autopilot workflow grants the free AI writer its permission and token',()=>{
+test('the Autopilot workflow passes the free AI writer keys and no longer asks for the retired GitHub Models permission',()=>{
   const y=readFileSync(new URL('../../.github/workflows/autopilot.yml',import.meta.url),'utf8');
-  assert.match(y,/permissions:\n\s+contents: write\n\s+models: read/);assert.match(y,/GITHUB_MODELS_TOKEN: \$\{\{ github\.token \}\}/);
+  assert.match(y,/permissions:\n\s+contents: write\nconcurrency:/);assert.doesNotMatch(y,/models: read|GITHUB_MODELS/);
+  assert.match(y,/GROQ_API_KEY: \$\{\{ secrets\.GROQ_API_KEY \}\}/);assert.match(y,/GEMINI_API_KEY: \$\{\{ secrets\.GEMINI_API_KEY \}\}/);
 });
 
 test('a model answer in the plain "Subject:" format, with markdown and a missing trailing slash, is tidied and used',async()=>{
   const {parseAnswer,tidyPitch,pitchProblem}=await import('../../scripts/autopilot/pitch.mjs');
   const raw=`Subject: A shoe finder for your new-runner resources\n\nYour "Choosing shoes" section in Resources for New Runners points readers to fitting advice. Our **Running Shoe Finder** asks six questions and matches runners to shoes by gait and terrain, free and without sign-up: [Running Shoe Finder](https://gearuptofit.com/shoe-finder).\n\nIf it fits, it could sit in that section.\n\nBest,\nAlex\ngearuptofit.com\n\nP.S. Not relevant for you? Just reply "no" and I won't email again.`;
-  const w=new PitchWriter({senderName:'Alex',githubToken:'t',fetchImpl:async()=>completion(raw)});
+  const w=new PitchWriter({senderName:'Alex',providers:groq(),fetchImpl:api(async()=>completion(raw))});
   const out=await w.write(prospect,asset,site);
-  assert.equal(out.writer,'github_models');assert.deepEqual(out.body.match(/https?:\/\/\S+/g),['https://gearuptofit.com/shoe-finder/.']);
+  assert.equal(out.writer,'groq');assert.deepEqual(out.body.match(/https?:\/\/\S+/g),['https://gearuptofit.com/shoe-finder/.']);
   assert.doesNotMatch(out.body,/\*\*|\]\(/);assert.equal(out.subject,'A shoe finder for your new-runner resources');
   assert.deepEqual(parseAnswer('```json\n{"subject":"Hello there editor","body":"line one\nline two"}\n```'),{subject:'Hello there editor',body:'line one\nline two'},'JSON with a raw line break is still read');
   assert.equal(parseAnswer('Sure! Here is an email you could send.'),null);
@@ -151,31 +202,33 @@ test('a model answer in the plain "Subject:" format, with markdown and a missing
 
 test('every template fallback records why, so a failing writer explains itself',async()=>{
   const logs=[];
-  const mk=fetchImpl=>new PitchWriter({senderName:'Alex',githubToken:'t',log:m=>logs.push(m),fetchImpl});
+  const mk=(answer,ids)=>new PitchWriter({senderName:'Alex',providers:groq(),log:m=>logs.push(m),fetchImpl:api(answer,ids)});
   const server=mk(async()=>completion('{"error":"upstream"}',500));
   assert.equal((await server.write(prospect,asset,site)).writer,'template');await server.write(prospect,asset,site);
-  assert.deepEqual(server.reasons,{http_500:2});assert.equal(logs.filter(l=>/http_500/.test(l)).length,1,'logged once per reason');assert.equal(server.ai,'github_models','a server error does not switch the writer off');
+  assert.deepEqual(server.reasons,{http_500:2});assert.equal(logs.filter(l=>/http_500/.test(l)).length,1,'logged once per reason');assert.equal(server.ai,'groq','a server error does not switch the writer off');
   const chatty=mk(async()=>completion('Sure! Here is an email you could send to the editor.'));
   await chatty.write(prospect,asset,site);assert.deepEqual(chatty.reasons,{answer_not_in_format:1});
   const empty=mk(async()=>new Response(JSON.stringify({choices:[]}),{headers:{'content-type':'application/json'}}));
   await empty.write(prospect,asset,site);assert.deepEqual(empty.reasons,{empty_answer:1});
+  const thinker=mk(async()=>completion(`<think>The editor lists tools.</think>\nSubject: A shoe finder for your new-runner resources\n\n${goodBody}`));
+  assert.equal((await thinker.write(prospect,asset,site)).writer,'groq','a reasoning block before the answer is dropped');
   const liar=mk(async()=>completion(`Subject: A shoe finder for your new-runner resources\n\n${goodBody.replace('free and without sign-up','trusted by 25,000 runners')}`));
   await liar.write(prospect,asset,site);assert.deepEqual(liar.reasons,{number_not_in_facts:1});
-  const quota=mk(async()=>completion('',429));await quota.write(prospect,asset,site);await quota.write(prospect,asset,site);
-  assert.deepEqual(quota.reasons,{quota_used_up:2});
-  const gone=mk(async u=>String(u).endsWith('/catalog/models')?new Response('[]',{headers:{'content-type':'application/json'}}):completion('{"error":{"code":"unknown_model"}}',404));
-  await gone.write(prospect,asset,site);assert.deepEqual(gone.reasons,{no_usable_model:1});assert.match(logs.at(-2)+logs.at(-1),/HTTP 404 for openai\/gpt-4o/);
+  const gone=mk(async()=>completion('{"error":{"code":"unknown_model"}}',404),[]);
+  await gone.write(prospect,asset,site);await gone.write(prospect,asset,site);
+  assert.deepEqual(gone.reasons,{no_usable_model:2});assert.match(logs.join('\n'),/Groq: no usable model found \(HTTP 404 for llama-3\.1-8b-instant/);
 });
 
-test('a "success" with no completion in it is reported with status, content type and body, not as a silent fallback',async()=>{
+test('a "success" with no completion in it is reported with provider, model, status, content type and body',async()=>{
   const logs=[];
-  const mk=fetchImpl=>new PitchWriter({senderName:'Alex',githubToken:'t',log:m=>logs.push(m),fetchImpl});
+  const mk=fetchImpl=>new PitchWriter({senderName:'Alex',providers:groq(),log:m=>logs.push(m),fetchImpl});
+  // What the retired GitHub Models host answered on 2026-11-26: "200 OK" as plain text, to every request.
   const okText=mk(async()=>new Response('OK',{status:200,headers:{'content-type':'text/plain'}}));
   await okText.write(prospect,asset,site);
-  assert.deepEqual(okText.reasons,{answer_not_json:1});assert.match(logs.at(-1),/answer_not_json: HTTP 200 text\/plain: OK/);
-  const moved=mk(async(u,o)=>{assert.equal(o.redirect,'manual');return new Response('',{status:302,headers:{location:'https://github.com/login'}})});
+  assert.deepEqual(okText.reasons,{answer_not_json:1});assert.match(logs.at(-1),/answer_not_json: Groq openai\/gpt-oss-120b: HTTP 200 text\/plain: OK/);
+  const moved=mk(async(u,o)=>{assert.equal(o.redirect,'manual');return new Response('',{status:302,headers:{location:'https://example.com/login'}})});
   await moved.write(prospect,asset,site);
-  assert.deepEqual(moved.reasons,{redirected:1});assert.match(logs.at(-1),/redirected: HTTP 302 to https:\/\/github\.com\/login/);
-  const parts=mk(async()=>new Response(JSON.stringify({choices:[{message:{content:[{type:'text',text:`Subject: A shoe finder for your new-runner resources\n\n${goodBody}`}]}}]}),{headers:{'content-type':'application/json'}}));
-  assert.equal((await parts.write(prospect,asset,site)).writer,'github_models','content given as parts is read');
+  assert.deepEqual(moved.reasons,{redirected:1});assert.match(logs.at(-1),/redirected: Groq: HTTP 302 to https:\/\/example\.com\/login/);
+  const parts=mk(api(async()=>new Response(JSON.stringify({choices:[{message:{content:[{type:'text',text:`Subject: A shoe finder for your new-runner resources\n\n${goodBody}`}]}}]}),{headers:{'content-type':'application/json'}})));
+  assert.equal((await parts.write(prospect,asset,site)).writer,'groq','content given as parts is read');
 });

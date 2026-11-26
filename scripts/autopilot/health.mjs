@@ -23,8 +23,11 @@ export function autotune(state,prospects,{envQueries}={}){
 }
 
 /** What needs the owner, most important first. Public data: no addresses, no prospect names. */
-export function diagnose({stages={},capabilities={},outreach={},funnel={},spend={},held=true,noPitchSites=[]}){
+export function diagnose({stages={},capabilities={},outreach={},funnel={},spend={},held=true,noPitchSites=[],indexation=null}){
   const out=[],add=(level,code,message,fix)=>out.push({level,code,message,fix});
+  // A whole site failing is the most expensive problem there is: Google drops URLs that keep answering 5xx.
+  for(const s of indexation?.sites||[])if(s.alert&&s.server_error>=10)add('action','site_failing',`${s.site}: ${s.alert}`,
+    'Fix the site itself first (hosting, database or plan limits, firewall). Links are not built to pages that fail, and this is re-checked every cycle.');
   const v=capabilities.verifier||{},c=capabilities.connections||{};
   for(const [k,label] of [['dataforseo','DataForSEO'],['gmail','Gmail']])if(c[k]?.status==='rejected')
     add('action',`${k}_rejected`,`${label} rejected the saved login, so that part of the pipeline is stopped.`,`Re-enter the ${label} credentials under ⚙ Connect.`);
@@ -69,7 +72,7 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
   if(pr.linkgap_failed&&!pr.linkgap_calls)add('info','linkgap_unavailable','Competitor link-gap mining could not run (DataForSEO Backlinks API refused or failed).',
     'If your DataForSEO plan lacks the Backlinks API, activate it at app.dataforseo.com (it is retried automatically after 7 days).');
   if(capabilities.claude===false&&!capabilities.ai_writer&&(funnel.contacted||0)>=20)add('warn','templates_only',`All ${funnel.contacted} pitches so far were fixed templates (${funnel.replied||0} replies).`,
-    'Add an Anthropic API key under ⚙ Connect so every pitch is written for that exact page and link.');
+    'Add an Anthropic API key, or a free Groq or Gemini API key, under ⚙ Connect so every pitch is written for that exact page and link.');
   if(p?.ok&&p.result?.queries>=8&&!p.result?.candidates&&!p.result?.from_queue)add('warn','discovery_saturated',`${p.result.queries} searches found no site that has not been evaluated already.`,'Handled automatically: search volume is halved and long-tail searches built from each page\'s own phrases take priority.');
   else if(p?.ok&&p.result?.queries>=8&&!p.result?.qualified&&!p.result?.deferred)add('warn','no_qualified',`${p.result.queries} searches produced 0 qualified prospects this cycle.`,'Usually transient; if it repeats, the promoted pages may need stronger topical matches.');
   if(p?.result&&(p.result.failed_queries||0)>Math.max(2,p.result.queries/3))add('warn','dataforseo_errors',`${p.result.failed_queries} DataForSEO searches failed (provider errors); they are retried next cycle.`,'No action unless it persists for a day.');

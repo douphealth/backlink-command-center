@@ -39,6 +39,8 @@ const steps=[
   ['VERIFALIA_USERNAME','Verifalia username: free inbox verification, 25 credits/day; required before anything is sent (verifalia.com/sign-up)',false],
   ['VERIFALIA_PASSWORD','Verifalia password',true],
   ['ANTHROPIC_API_KEY','Anthropic API key for AI-written pitches (optional)',true],
+  ['GROQ_API_KEY','Groq API key: free AI-written pitches when no Anthropic key is set (optional, console.groq.com)',true],
+  ['GEMINI_API_KEY','Gemini API key: free AI-written pitches when no Anthropic key is set (optional, aistudio.google.com)',true],
   ['SENDER_POSTAL_ADDRESS','Postal address for the email footer (optional, recommended for CAN-SPAM)',false],
 ];
 for(const [name,label,hidden] of steps){
