@@ -18,6 +18,7 @@ on:
         default: false
 permissions:
   contents: write
+  models: read # free AI pitch writer (GitHub Models); no key or secret needed
 concurrency:
   group: linkforge-autopilot
   cancel-in-progress: false
@@ -78,6 +79,9 @@ jobs:
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
           BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
           BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
+          GITHUB_MODELS_TOKEN: ${{ github.token }}
+          LINKFORGE_AI_WRITER: ${{ vars.LINKFORGE_AI_WRITER }}
+          LINKFORGE_GITHUB_MODEL: ${{ vars.LINKFORGE_GITHUB_MODEL }}
           BRAVE_MONTHLY_REQUESTS: ${{ vars.BRAVE_MONTHLY_REQUESTS }}
           AUTOPILOT_NEIGHBOR_PAGES: ${{ vars.AUTOPILOT_NEIGHBOR_PAGES }}
           SENDER_POSTAL_ADDRESS: ${{ secrets.SENDER_POSTAL_ADDRESS }}

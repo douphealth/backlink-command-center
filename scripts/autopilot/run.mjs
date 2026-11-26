@@ -19,6 +19,7 @@ import {crawlPortfolio} from './crawl.mjs';
 import {rankPortfolio,internalLinkPlan} from './score.mjs';
 import {DataForSEO,trackExternalSpend} from './dataforseo.mjs';
 import {BraveSearch} from './search.mjs';
+import {pitchable,pitchableAssets,bestPitchAsset} from './assets.mjs';
 import {gscDemand,dfsDemand} from './demand.mjs';
 import {discoverProspects,requalify,enrichBrokenLinks,freshQueryCount,QUALIFY_VERSION} from './prospect.mjs';
 import {indexationReport} from './indexation.mjs';
@@ -68,7 +69,8 @@ export function loadConfig(env=process.env,argv=process.argv){
     outreach:{mode,gmail,fromAddress:env.GMAIL_ADDRESS||(dryRun?'dry-run@linkforge.invalid':''),senderName:env.SENDER_NAME||'',postalAddress:env.SENDER_POSTAL_ADDRESS||'',
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     brave:{apiKey:env.BRAVE_SEARCH_API_KEY||'',monthlyRequests:num(env.BRAVE_MONTHLY_REQUESTS,900)},neighborPages:Math.max(0,Math.min(40,num(env.AUTOPILOT_NEIGHBOR_PAGES,12))),
-    claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5'},
+    claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5',
+      githubToken:env.LINKFORGE_AI_WRITER==='off'?'':env.GITHUB_MODELS_TOKEN||'',githubModel:env.LINKFORGE_GITHUB_MODEL||''},
     linkGapCalls:Math.max(0,Math.min(4,num(env.AUTOPILOT_LINKGAP_CALLS,2))),
     gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,bing:!!env.BING_WEBMASTER_API_KEY,preverifyMax:num(env.AUTOPILOT_PREVERIFY,10),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
     verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
@@ -244,11 +246,24 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   const linkTargets=[...ranked].sort((a,b)=>notIndexed(b)-notIndexed(a)||b.promotion-a.promotion);
   const internal=crawl.length?internalLinkPlan(crawl,linkTargets):(previous.internal_links||[]);
   stages.rank={ok:true,result:{ranked:ranked.length,internal_suggestions:internal.length}};
+  let noPitchSites=[];
   // A link to a page Google will not index as itself (noindex, canonical elsewhere, redirect, 404) is wasted:
   // such pages are neither promoted nor pitched until fixed. Unknown / not-yet-indexed pages stay eligible.
   const UNLINKABLE=new Set(['noindex','canonical_elsewhere','redirect','not_found']);
   const blockedAssets=new Set(Object.entries(state.index_status||{}).filter(([,x])=>UNLINKABLE.has(x.class)).map(([k])=>k));
-  const chosen=chooseAssets(ranked.filter(a=>!blockedAssets.has(normUrl(a.url))),state,{perSite:cfg.assetsPerSite,sites:SITES});
+  // Only pages an editor would actually link to are promoted or pitched (see assets.mjs).
+  const siteByDomain=new Map(SITES.map(s=>[s.domain,s]));
+  for(const a of ranked){const v=pitchable(a,siteByDomain.get(a.site));a.pitchable=v.ok;if(!v.ok)a.not_pitched_because=v.why}
+  const linkable=ranked.filter(a=>a.pitchable&&!blockedAssets.has(normUrl(a.url)));
+  const pitchBySite=new Map(SITES.map(s=>[s.domain,pitchableAssets(linkable,s)]));
+  const pickAsset=(p,site)=>{const list=pitchBySite.get(site.domain)||[];if(!crawl.length)return undefined; // no crawl this cycle: keep the stored pairing
+    if(list.some(a=>a.url===p.asset_url))return undefined;return bestPitchAsset(p,list,site)};
+  const chosen=chooseAssets(linkable,state,{perSite:cfg.assetsPerSite,sites:SITES});
+  // Only sites that were actually crawled this cycle: an unreachable site is a crawl problem, not a content problem.
+  const crawledSites=new Set(crawl.filter(s=>s.pages.some(p=>p.status===200)).map(s=>s.site));
+  noPitchSites=SITES.filter(s=>crawledSites.has(s.domain)&&!(pitchBySite.get(s.domain)||[]).length).map(s=>s.domain);
+  stages.rank.result.pitchable=linkable.length;
+  log(`pitch policy: ${linkable.length} of ${ranked.length} ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)${noPitchSites.length?`; no such page yet on ${noPitchSites.join(', ')}`:''}`);
   const indexation=crawl.length?indexationReport(crawl):previous.indexation||null;
   if(indexation)log(`indexation: ${indexation.total_issues} sitemap URLs with an indexing problem (${indexation.sites.reduce((n,x)=>n+x.critical,0)} critical)`);
   // ---- 4. Prospects ----
@@ -256,7 +271,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   // Runs even with no fresh asset searches: brand-mention searches have their own schedule.
   await stage('prospects',vaultOk&&(dfs.enabled||!!brave),()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,linkGapCalls:cfg.linkGapCalls,
     neighborPages:cfg.neighborPages,altSearch:brave,
-    pairPool:ranked.filter(a=>!blockedAssets.has(normUrl(a.url))&&a.linkability>=50),maxQueries:cfg.maxQueries??(state.tuning?.max_queries||TUNING.start),serpDepth:cfg.serpDepth,deadline:deadline-7*60e3,log}),
+    pairPool:linkable,maxQueries:cfg.maxQueries??(state.tuning?.max_queries||TUNING.start),serpDepth:cfg.serpDepth,deadline:deadline-7*60e3,log}),
     !vaultOk?privateWhy:(dfs.authError||'DataForSEO credentials not set'),{until:deadline-5.5*60e3});
   await stage('bing_submit',vaultOk&&!!env.BING_WEBMASTER_API_KEY&&crawl.length>0,()=>submitToBing({state,env,sites:SITES,crawl,ranked,fetchImpl,deadline:deadline-6*60e3,log}),
     !vaultOk?privateWhy:'Bing Webmaster API key not set (BING_WEBMASTER_API_KEY)',{until:deadline-5.5*60e3});
@@ -265,18 +280,25 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   // ---- 5. Mail ----
   // The production transport demands verified-mailbox proof for every recipient: without a verifier nothing could go out.
   const noVerifier=typeof mailer?.authorizeRecipient==='function'&&!verifierReady(cfg);
+  let aiWriter=cfg.claude.apiKey?'claude':cfg.claude.githubToken?'github_models':null;
   const mailWhy=!vaultOk?privateWhy:!mailer?'Gmail app password not set':!gmailOk?connections.gmail.error
     :cfg.outreach.mode==='off'?'OUTREACH_MODE=off':noVerifier?'mailbox verifier not configured (Verifalia login or Hunter key, plus a verification daily limit)':'';
   try{
-    await stage('replies',vaultOk&&gmailOk,()=>processReplies({state,imap:mailer.imap,log}),mailWhy||'Gmail not set');
+    // A stalled mailbox connection (30 s timeout, seen 2026-11-26) blocked that cycle's sending: retry once on a fresh connection.
+    await stage('replies',vaultOk&&gmailOk,async()=>{
+      try{return await processReplies({state,imap:mailer.imap,log})}
+      catch(e){if(!/timeout|socket|ECONN|EPIPE|closed/i.test(String(e?.message))||typeof mailer.reset!=='function')throw e;
+        log('replies: mailbox connection stalled; retrying once on a fresh connection');await mailer.reset();return processReplies({state,imap:mailer.imap,log})}
+    },mailWhy||'Gmail not set');
     // Gmail's Sent folder is the ground truth for who was already emailed; a failed check blocks sending this cycle.
     const canReadSent=typeof mailer?.imap?.sentRecipients==='function';
     await stage('sent_check',vaultOk&&gmailOk&&canReadSent,()=>reconcileSent({state,imap:mailer.imap,log}),!vaultOk?privateWhy:!canReadSent?'transport cannot read the Sent folder':mailWhy||'Gmail not set');
     const sentUnknown=stages.sent_check?.ok===false;
     await stage('screen',vaultOk&&!!mailer,()=>screenQueue({state,mailer,deadline:deadline-4*60e3,log}),privateWhy,{until:deadline-3.5*60e3});
-    const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',log});
-    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets},deadline:deadline-2*60e3,log}),mailWhy||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
-    if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,template_fallbacks:writer.fallbacks};
+    const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',fetchImpl,log});
+    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets,pickAsset},deadline:deadline-2*60e3,log}),mailWhy||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
+    if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,github_models:writer.usedGithub,template_fallbacks:writer.fallbacks,...(writer.ghModel?{github_model:writer.ghModel}:{})};
+    aiWriter=writer.ai;
     // Every cycle: spend today's leftover free verification credits on the best inboxes whose send window opens within 20 h,
     // so the next in-window cycle (started by the send-window waker) sends at once.
     await stage('preverify',vaultOk&&gmailOk&&!noVerifier&&typeof mailer?.authorizeRecipient==='function',
@@ -297,7 +319,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   const summary={
     schema:'linkforge-autopilot/1',generated_at:NOW(),duration_s:Math.round((Date.now()-started)/1000),dry_run:cfg.dryRun,
     schedule:"Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
-    capabilities:{vault:vaultOk,dataforseo:dfs.enabled,gmail:cfg.outreach.gmail&&gmailOk,connections,outreach_mode:cfg.outreach.mode,claude:!!cfg.claude.apiKey,gsc:cfg.gsc,
+    capabilities:{ai_writer:aiWriter,vault:vaultOk,dataforseo:dfs.enabled,gmail:cfg.outreach.gmail&&gmailOk,connections,outreach_mode:cfg.outreach.mode,claude:!!cfg.claude.apiKey,gsc:cfg.gsc,
       daily_send_cap:cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit,
       verifier:{ready:verifierReady(cfg),providers:cfg.verifier.providers,key:cfg.verifier.providers.length>0,enabled:cfg.verifier.enabled,daily_limit:cfg.verifier.dailyLimit,
         used_today:state.email_verifier_usage?.[NOW().slice(0,10)]||0,balance:state.verifier_balance||null,catch_all_domains_skipped:Object.keys(state.catch_all_domains||{}).length}},
@@ -320,7 +342,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     log:logs.slice(-80),
   };
   // Self-diagnosis: what Autopilot cannot fix by itself, with the exact fix.
-  summary.attention=diagnose({stages,capabilities:summary.capabilities,outreach:summary.outreach||{},funnel:summary.funnel||{},spend:summary.spend,held:cfg.outreach.mode==='off'});
+  summary.attention=diagnose({stages,capabilities:summary.capabilities,outreach:summary.outreach||{},funnel:summary.funnel||{},spend:summary.spend,held:cfg.outreach.mode==='off',noPitchSites});
   if(write&&!cfg.dryRun){
     await mkdir(dirname(P.summary),{recursive:true});
     await writeFile(P.summary,JSON.stringify(summary,null,1)+'\n');

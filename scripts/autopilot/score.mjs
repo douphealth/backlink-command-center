@@ -57,7 +57,12 @@ export function rankPortfolio(crawl,{demand={},maxPerSite=25}={}){
     for(const p of pages){
       if(!eligiblePage(p))continue;
       const link=linkability(p);
-      if(link.type==='navigation'||link.type==='invalid')continue;
+      if(link.type==='invalid')continue;
+      // Homepages are normally navigation, but on a tool site the homepage IS the tool: keep it when it is a configured flagship.
+      if(link.type==='navigation'){
+        if(!p.configured||(p.final_url||p.url).replace(/^https?:\/\/[^/]+/,'').replace(/\/$/,'')!=='')continue;
+        link.type=p.interactive?'interactive_tool':'reference';link.score=Math.max(link.score,78);
+      }
       const m=demand[p.url]||demand[p.final_url];
       const dem=demandScore(m);
       const internal=Math.max(inlinks.get(p.url)||0,inlinks.get(p.final_url)||0);
@@ -70,7 +75,7 @@ export function rankPortfolio(crawl,{demand={},maxPerSite=25}={}){
       if(link.sensitive)reasons.push('Health/YMYL topic — pitch only to expert publishers');
       out.push({site:site.site,url:p.final_url||p.url,title:p.title,h1:p.h1,description:p.description,type:link.type,
         promotion:clamp(promotion,0,100),linkability:link.score,demand:dem,metrics:m||null,internal_inlinks:internal,
-        words:p.words,interactive:!!p.interactive,modified:p.modified||p.lastmod||null,reasons:reasons.slice(0,5),terms:p.terms||[]});
+        words:p.words,interactive:!!p.interactive,modified:p.modified||p.lastmod||null,reasons:reasons.slice(0,5),terms:p.terms||[],...(p.configured?{flagship:true}:{})});
     }
   }
   // Programmatic siblings (e.g. /compare/x-vs-y) compete with each other: keep the best two per template.
@@ -80,7 +85,8 @@ export function rankPortfolio(crawl,{demand={},maxPerSite=25}={}){
     list.sort((a,b)=>b.promotion-a.promotion).slice(2).forEach(a=>{a.promotion=Math.max(0,a.promotion-12);a.reasons.push(`One of ${list.length} templated sibling pages — promote the hub first`)})}
   out.sort((a,b)=>b.promotion-a.promotion||b.linkability-a.linkability);
   const per=new Map();
-  return out.filter(a=>{const n=per.get(a.site)||0;per.set(a.site,n+1);return n<maxPerSite});
+  // Flagships are always kept: they are the pages worth pitching, whatever the per-site cap.
+  return out.filter(a=>{if(a.flagship)return true;const n=per.get(a.site)||0;per.set(a.site,n+1);return n<maxPerSite});
 }
 
 /**

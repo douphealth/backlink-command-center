@@ -101,11 +101,24 @@ export function followupPitch(p,asset,{senderName}){
       `If it's not a fit, just reply "no" and I won't email again.`,'',`Best,`,senderName].join('\n'),writer:'template'};
 }
 
+/**
+ * Every number (2+ digits) in the email must come from the facts we supplied: a model that invents
+ * "trusted by 10,000 readers" or a year is rejected and the template is used instead.
+ */
+export function grounded(out,facts){
+  const src=JSON.stringify(facts).replace(/[,\s]/g,'');
+  const nums=`${out.subject} ${out.body}`.replace(/https?:\/\/\S+/g,' ').match(/\d[\d,.]*\d/g)||[];
+  return nums.every(n=>src.includes(n.replace(/[,.]$/,'').replace(/,/g,'')));
+}
+const GITHUB_MODELS='https://models.github.ai';
+/** Tried in order; the catalogue is consulted when none of them exists any more. */
+const GITHUB_MODEL_PREFERENCE=['openai/gpt-4.1-mini','openai/gpt-4o-mini','openai/gpt-4.1','openai/gpt-4o'];
 const SCHEMA={type:'object',properties:{subject:{type:'string'},body:{type:'string'}},required:['subject','body'],additionalProperties:false};
 const SYSTEM=`You write short, honest link-suggestion emails to independent website editors.
 Rules:
 - 70 to 130 words in the body. Plain text, no markdown, no emojis.
-- Refer to something specific on the editor's page (its title or a section) so it is obviously not a mass email.
+- Refer to something specific on the editor's page (its title, a section, or a point made in the excerpt) so it is obviously not a mass email. Say where on their page our resource would fit when a relevant_section is given.
+- Never open with "I hope this finds you well", "I came across your site" or "I was reading"; start with the specific observation.
 - Explain in one or two sentences what our resource adds for THEIR readers. Only state facts present in the provided asset details; never invent statistics, awards, traffic, or that they linked to us before.
 - Include our asset URL exactly once. Include no other URLs.
 - One soft ask (consider adding it to the page). No pressure, no guilt, no flattery clichés ("I love your blog", "great content"), no offer of payment or link exchange.
@@ -125,18 +138,58 @@ export function validPitch(out,asset){
 }
 
 export class PitchWriter{
-  constructor({apiKey,model='claude-opus-5-5',senderName,log=()=>{}}){
+  constructor({apiKey,model='claude-opus-5-5',senderName,log=()=>{},githubToken='',githubModel='',fetchImpl=fetch}){
     this.client=apiKey?new Anthropic({apiKey,maxRetries:2,timeout:60000}):null;
     this.model=model;this.senderName=senderName;this.log=log;this.used=0;this.fallbacks=0;
+    // Free writer inside GitHub Actions (GitHub Models): used when no Anthropic key is set.
+    this.ghToken=githubToken;this.ghModels=[...(githubModel?[githubModel]:[]),...GITHUB_MODEL_PREFERENCE];this.ghModel=null;this.usedGithub=0;this.fetch=fetchImpl;
+  }
+  get ai(){return this.client?'claude':this.ghToken&&!this.ghOff?'github_models':null}
+  /** One chat completion on GitHub Models. Returns {subject, body} or null (rate limit, no permission, bad answer). */
+  async github(facts){
+    if(!this.ghToken||this.ghOff)return null;
+    const headers={Authorization:'Bearer '+this.ghToken,'Content-Type':'application/json',Accept:'application/vnd.github+json'};
+    const ask=async model=>this.fetch(GITHUB_MODELS+'/inference/chat/completions',{method:'POST',headers,signal:AbortSignal.timeout(45000),body:JSON.stringify({model,temperature:0.5,max_tokens:700,
+      messages:[{role:'system',content:SYSTEM+'\nAnswer with one JSON object only: {"subject": "...", "body": "..."}.'},{role:'user',content:'Write the email from these facts (JSON):\n'+JSON.stringify(facts)}]})});
+    const candidates=this.ghModel?[this.ghModel]:this.ghModels;
+    for(let i=0;i<candidates.length;i++){
+      let res;try{res=await ask(candidates[i])}catch{this.log('github models: could not be reached; template used');return null}
+      if(res.status===401||res.status===403){this.ghOff=true;this.log(`github models: not permitted (HTTP ${res.status}); the workflow needs "models: read". Templates are used`);return null}
+      if(res.status===429){this.ghOff=true;this.log('github models: today\'s free quota is used up; templates are used for the rest of this cycle');return null}
+      if(res.status===404||res.status===400||res.status===422){
+        // Unknown model: after the known names, ask the catalogue once for a small text model.
+        if(i===candidates.length-1&&!this.ghCatalogTried){this.ghCatalogTried=true;const found=await this.catalogModel(headers);if(found){candidates.push(found)}}
+        continue;
+      }
+      if(!res.ok)return null;
+      const body=await res.json().catch(()=>null),text=String(body?.choices?.[0]?.message?.content||'');
+      const a=text.indexOf('{'),b=text.lastIndexOf('}');if(a<0||b<=a)return null;
+      this.ghModel=candidates[i];
+      try{return JSON.parse(text.slice(a,b+1))}catch{return null}
+    }
+    this.ghOff=true;this.log('github models: no usable model found; templates are used');return null;
+  }
+  async catalogModel(headers){
+    try{
+      const res=await this.fetch(GITHUB_MODELS+'/catalog/models',{headers,signal:AbortSignal.timeout(20000)});if(!res.ok)return null;
+      const list=await res.json();if(!Array.isArray(list))return null;
+      const text=list.filter(m=>m?.id&&(m.supported_output_modalities||['text']).includes('text')&&!/embed/i.test(m.id));
+      return (text.find(m=>/mini/i.test(m.id)&&/^openai\//.test(m.id))||text.find(m=>m.rate_limit_tier==='low')||text[0])?.id||null;
+    }catch{return null}
   }
   async write(p,asset,site){
     const template=(p.kind==='mention'?mentionPitch:templatePitch)(p,asset,{senderName:this.senderName,site});
-    if(!this.client)return template;
+    if(!this.ai)return template;
     const facts={editor_page:{title:p.title,url:p.page_url,author:p.author||null,relevant_section:p.fit_section||null,excerpt:(p.excerpt||'').slice(0,1500)},
       our_asset:{title:asset.title,url:asset.url,kind:KIND[asset.type]||'resource',description:asset.description||'',facts:[...assetFacts(asset),...(asset.reasons||[]).filter(r=>!INTERNAL_NOTE.test(r))],free_tool:!!asset.interactive},
       ...(p.kind==='linkgap'&&p.competitor_link?.host&&!p.broken_link?{competitor_link:{site:p.competitor_link.host,anchor:p.competitor_link.anchor||null,surrounding_text:p.competitor_link.context||null,same_subject:p.competitor_link.match==='specific'}}:{}),
       ...(p.broken_link&&p.kind!=='mention'?{broken_link:{anchor:p.broken_link.anchor||null,site:p.broken_link.host,problem:DEAD[p.broken_link.reason]||'no longer works'}}:{}),
       sender:{name:this.senderName,website:site.domain},topic:site.topic,situation:p.kind==='mention'?'unlinked_mention':p.broken_link?'broken_link_replacement':p.kind==='linkgap'&&p.competitor_link?.host?'alternative_to_linked_resource':'resource_suggestion'};
+    if(!this.client){
+      const out=await this.github(facts);
+      if(!out||!validPitch(out,asset)||!grounded(out,facts)){this.fallbacks++;return template}
+      this.usedGithub++;return {subject:out.subject.trim(),body:out.body.trim(),writer:'github_models'};
+    }
     try{
       const res=await this.client.beta.messages.create({
         model:this.model,max_tokens:2000,betas:['server-side-fallback-2026-07-01'],fallbacks:'default',
@@ -146,7 +199,7 @@ export class PitchWriter{
       if(res.stop_reason==='refusal'){this.fallbacks++;return template}
       const text=res.content.filter(b=>b.type==='text').map(b=>b.text).join('');
       const out=JSON.parse(text);
-      if(!validPitch(out,asset)){this.fallbacks++;return template}
+      if(!validPitch(out,asset)||!grounded(out,facts)){this.fallbacks++;return template}
       this.used++;return {subject:out.subject.trim(),body:out.body.trim(),writer:'claude'};
     }catch(e){
       if(e instanceof Anthropic.AuthenticationError){this.log('claude: API key rejected; using templates');this.client=null}

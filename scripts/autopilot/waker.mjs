@@ -28,13 +28,15 @@ export function planWake(summary,now=Date.now(),{minGapHours=WAKER.minGapHours,k
   const o=summary.outreach||{},next=Date.parse(o.next_send_at||'');
   const sending=summary.capabilities?.outreach_mode==='send'&&o.ready>0&&(!o.reply_health||o.reply_health==='ok')&&Number.isFinite(next);
   const keepalive=base+keepaliveHours*36e5;
-  const window=sending&&next<keepalive;
+  // The reply scan failed (mailbox timeout): sending was blocked, so try again at the minimum gap.
+  const retry=summary.capabilities?.outreach_mode==='send'&&o.ready>0&&o.reply_health==='failed';
+  const window=(sending&&next<keepalive)||retry;
   // `after`: when the waker itself started the previous cycle. Even if that cycle published nothing (it failed),
   // the next one is never started sooner than minGapHours after it, so the chain cannot spin.
   const started=Date.parse(after||''),notBefore=Number.isFinite(started)?started+minGapHours*36e5:0;
-  const at=Math.max(window?next:keepalive,base+minGapHours*36e5,notBefore,now);
+  const at=Math.max(retry?0:window?next:keepalive,base+minGapHours*36e5,notBefore,now);
   return {wake:true,at:new Date(at).toISOString(),wait_s:Math.max(0,Math.round((at-now)/1000)),
-    reason:window?`${o.ready} pitches queued; next send window ${new Date(next).toISOString().slice(0,16)}Z`:`keep-alive: next cycle ${keepaliveHours} h after the last one`};
+    reason:retry?`${o.ready} pitches queued; the last reply scan failed, retrying`:window?`${o.ready} pitches queued; next send window ${new Date(next).toISOString().slice(0,16)}Z`:`keep-alive: next cycle ${keepaliveHours} h after the last one`};
 }
 
 /** Has a cycle published results since `after` (ISO time)? */
