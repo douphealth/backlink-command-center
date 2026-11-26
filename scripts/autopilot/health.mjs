@@ -23,8 +23,11 @@ export function autotune(state,prospects,{envQueries}={}){
 }
 
 /** What needs the owner, most important first. Public data: no addresses, no prospect names. */
-export function diagnose({stages={},capabilities={},outreach={},funnel={},spend={},held=true,noPitchSites=[]}){
+export function diagnose({stages={},capabilities={},outreach={},funnel={},spend={},held=true,noPitchSites=[],indexation=null}){
   const out=[],add=(level,code,message,fix)=>out.push({level,code,message,fix});
+  // A whole site failing is the most expensive problem there is: Google drops URLs that keep answering 5xx.
+  for(const s of indexation?.sites||[])if(s.alert&&s.server_error>=10)add('action','site_failing',`${s.site}: ${s.alert}`,
+    'Fix the site itself first (hosting, database or plan limits, firewall). Links are not built to pages that fail, and this is re-checked every cycle.');
   const v=capabilities.verifier||{},c=capabilities.connections||{};
   for(const [k,label] of [['dataforseo','DataForSEO'],['gmail','Gmail']])if(c[k]?.status==='rejected')
     add('action',`${k}_rejected`,`${label} rejected the saved login, so that part of the pipeline is stopped.`,`Re-enter the ${label} credentials under ⚙ Connect.`);

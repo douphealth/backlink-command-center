@@ -266,7 +266,8 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   stages.rank.result.pitchable=linkable.length;
   log(`pitch policy: ${linkable.length} of ${ranked.length} ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)${noPitchSites.length?`; no such page yet on ${noPitchSites.join(', ')}`:''}`);
   const indexation=crawl.length?indexationReport(crawl):previous.indexation||null;
-  if(indexation)log(`indexation: ${indexation.total_issues} sitemap URLs with an indexing problem (${indexation.sites.reduce((n,x)=>n+x.critical,0)} critical)`);
+  if(indexation){log(`indexation: ${indexation.blocking??indexation.sites.reduce((n,x)=>n+x.critical,0)} sitemap URLs cannot be indexed, ${indexation.review??0} need a look, ${indexation.thin??0} are thin (${indexation.total_issues} in all)`);
+    for(const s of indexation.sites)if(s.alert)log(`indexation: ${s.site}: ${s.alert}`)}
   // ---- 4. Prospects ----
   await stage('requalify',vaultOk,()=>requalify({state,dfs,fetchImpl,deadline:deadline-8*60e3,log}),privateWhy,{until:deadline-7*60e3});
   // Runs even with no fresh asset searches: brand-mention searches have their own schedule.
@@ -345,7 +346,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     log:logs.slice(-80),
   };
   // Self-diagnosis: what Autopilot cannot fix by itself, with the exact fix.
-  summary.attention=diagnose({stages,capabilities:summary.capabilities,outreach:summary.outreach||{},funnel:summary.funnel||{},spend:summary.spend,held:cfg.outreach.mode==='off',noPitchSites});
+  summary.attention=diagnose({stages,capabilities:summary.capabilities,outreach:summary.outreach||{},funnel:summary.funnel||{},spend:summary.spend,held:cfg.outreach.mode==='off',noPitchSites,indexation});
   if(write&&!cfg.dryRun){
     await mkdir(dirname(P.summary),{recursive:true});
     await writeFile(P.summary,JSON.stringify(summary,null,1)+'\n');
