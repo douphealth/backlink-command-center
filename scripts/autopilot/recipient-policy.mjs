@@ -97,12 +97,36 @@ export function verifaliaVerdict(entry,email,now=Date.now()){
     provider:'verifalia',provider_status:String(e.status||'').slice(0,60),checked_at:new Date(now).toISOString(),expires_at:new Date(now+DAY).toISOString(),
     smtp_check:valid,accept_all:!valid,block:!valid,disposable:valid?false:e.isDisposableEmailAddress!==false,catch_all:catchAll};
 }
+/** Which kind of mail host serves a domain (from its MX records). Verification pass rates differ a lot by host. */
+export function mxClass(records){
+  const h=(records||[]).map(r=>String(r?.exchange||'').toLowerCase()).join(' ');
+  if(!h.trim())return 'none';
+  if(/(^|[ .])(google|googlemail)\.com/.test(h))return 'google';
+  if(/outlook\.com|office365|microsoft/.test(h))return 'microsoft';
+  if(/zoho\./.test(h))return 'zoho';
+  if(/protonmail|proton\.me/.test(h))return 'proton';
+  if(/messagingengine\.com/.test(h))return 'fastmail';
+  if(/mx\.cloudflare\.net|improvmx|forwardemail|registrar-servers\.com|forwardmx/.test(h))return 'forwarder';
+  if(/mimecast|pphosted|proofpoint|barracuda|mailchannels/.test(h))return 'gateway';
+  if(/secureserver\.net/.test(h))return 'godaddy';
+  return 'other';
+}
+/**
+ * Learned chance that an inbox on this kind of mail host gets a positive verification:
+ * (verified+1)/(checked+3), so untried hosts start at 1/3 and are still explored.
+ */
+export function verifyPassRate(state,cls){
+  const s=state?.verify_stats?.[cls];
+  if(s&&s.n>0)return (s.valid+1)/(s.n+3);
+  const all=Object.values(state?.verify_stats||{}).reduce((a,x)=>({n:a.n+x.n,valid:a.valid+x.valid}),{n:0,valid:0});
+  return (all.valid+1)/(all.n+3);
+}
 export async function checkMx(domain,resolveMx){
   try{const records=await resolveMx(domain);
     if(!Array.isArray(records)||!records.length)return {ok:false,reason:'no_explicit_mx'};
     if(records.some(r=>r.exchange==='.'||r.exchange===''))return {ok:false,reason:'null_mx'};
     if(!records.some(r=>typeof r.exchange==='string'&&r.exchange.includes('.')))return {ok:false,reason:'unusable_mx'};
-    return {ok:true,reason:'mx_present_not_mailbox_proof'};
+    return {ok:true,reason:'mx_present_not_mailbox_proof',class:mxClass(records)};
   }catch{return {ok:false,reason:'dns_unverified'}}
 }
 export class RecipientVerifier{
@@ -124,18 +148,31 @@ export class RecipientVerifier{
     const day=new Date(this.now()).toISOString().slice(0,10),limit=Math.min(100,Math.floor(Number(this.env.EMAIL_VERIFY_DAILY_LIMIT)||0)),usage=this.state.email_verifier_usage;
     if((usage[day]||0)>=limit)return false;usage[day]=(usage[day]||0)+1;return true;
   }
-  async mailbox(email){
+  /** Free DNS lookup: the mail-host class of an address's domain (cached for the run). */
+  async mxClassOf(email){
+    const d=String(email||'').split('@')[1];if(!d)return null;
+    this.mxCache??=new Map();
+    if(!this.mxCache.has(d)){const r=await checkMx(d,this.resolveMx);this.mxCache.set(d,r.ok?r.class:r.reason==='dns_unverified'?null:'none')}
+    return this.mxCache.get(d);
+  }
+  async mailbox(email,{mxClass:cls}={}){
     if(!this.enabled)return {status:'unknown',reason:'verifier_not_configured'};
     const key=createHash('sha256').update(email).digest('hex'),cached=this.state.email_verifications[key],nowMs=this.now();
     if(usableVerification(cached,email,nowMs))return cached;
     // Don't buy the same inconclusive answer again: unknown for 3 days, catch-all for 30.
+    // An address that stays "unknown" waits twice as long each time (3, 6, 12, 24 days) instead of costing a credit every 3 days.
     const age=cached?nowMs-Date.parse(cached.checked_at):Infinity;
-    if(cached?.status==='unknown'&&age<3*DAY||cached?.catch_all&&age<30*DAY)return {...cached,reason:'recently_inconclusive'};
+    const wait=cached?.catch_all?30*DAY:cached?.status==='unknown'?3*DAY*Math.min(8,2**((cached.unknown_count||1)-1)):0;
+    if(wait&&age<wait)return {...cached,reason:'recently_inconclusive',retry_after:new Date(Date.parse(cached.checked_at)+wait).toISOString()};
     let last='verification_unavailable';
     for(const provider of this.providers){
       const r=await (provider==='verifalia'?this.verifalia(email):this.hunter(email));
       if(r.verdict){
-        const v=r.verdict;this.state.email_verifications[key]=v;
+        const v=r.verdict;
+        if(v.status==='unknown'&&cached?.status==='unknown')v.unknown_count=(cached.unknown_count||1)+1;
+        this.state.email_verifications[key]=v;
+        // Learn which mail hosts actually verify, so credits go where a "deliverable" answer is likely.
+        if(cls){const st=(this.state.verify_stats??={})[cls]??={n:0,valid:0};if(st.n>=200){st.n/=2;st.valid/=2}st.n++;if(v.status==='valid')st.valid++}
         if(v.status==='invalid'){this.state.suppression??={};this.state.suppression[email]={reason:'Mailbox verifier returned invalid',at:new Date(nowMs).toISOString()}}
         if(v.catch_all){this.state.catch_all_domains??={};this.state.catch_all_domains[email.split('@')[1]]=new Date(nowMs).toISOString()}
         return v;
@@ -218,7 +255,7 @@ export class RecipientVerifier{
    */
   async verify(p,{followup=false,deadline=Infinity,screenOnly=false}={}){
     // `detail` says exactly why (no addresses): it is aggregated on the dashboard to tune the pipeline.
-    const fail=(reason,detail)=>({ok:false,reason,...(detail?{detail}:{})}),published=new Set();let fetched=0;if(isSuppressed(this.state,p.email,p.domain))return fail('suppressed');
+    const fail=(reason,detail,extra)=>({ok:false,reason,...(detail?{detail}:{}),...(extra||{})}),published=new Set();let fetched=0;if(isSuppressed(this.state,p.email,p.domain))return fail('suppressed');
     if(!this.enabled&&!screenOnly)return fail('verifier_not_configured');if(!samePublisher(p.page_url,p.domain))return fail('publisher_mismatch');
     const origin=new URL(p.page_url).origin,queue=[p.email_source,p.page_url,origin+'/',origin+'/contact/',origin+'/contact-us/',origin+'/about/'],seen=new Set(),candidates=new Map();
     while(queue.length&&seen.size<6&&this.now()<deadline){
@@ -238,14 +275,16 @@ export class RecipientVerifier{
     if(ranked.some(c=>c.role!=='contact_page_inbox'))ranked=ranked.filter(c=>c.role!=='contact_page_inbox');
     if(!ranked.length)return fail('no_published_editorial_contact',!fetched?'publisher_pages_unreachable':published.size?'only_non_editorial_inbox_published':'no_email_published');
     if(screenOnly){const c=ranked.find(x=>!isSuppressed(this.state,x.email,p.domain));return c?{ok:true,screened:true,email:c.email,evidence:c}:fail('no_published_editorial_contact','suppressed')}
-    let attempted=0;const outcomes=[];
+    let attempted=0,retryAfter=null;const outcomes=[];
     for(const c of ranked){if(++attempted>3||this.now()>=deadline)break;if(isSuppressed(this.state,c.email,p.domain)){outcomes.push('suppressed');continue}
       // A catch-all mail server accepts every address, so no provider can prove this inbox: don't spend a credit.
       const seenCatchAll=this.state.catch_all_domains?.[c.email.split('@')[1]];if(seenCatchAll&&this.now()-Date.parse(seenCatchAll)<90*DAY){outcomes.push('catch_all_domain');continue}
       const mx=await checkMx(c.email.split('@')[1],this.resolveMx);if(!mx.ok){outcomes.push('mx_'+mx.reason);continue}
-      const v=await this.mailbox(c.email);if(usableVerification(v,c.email,this.now()))return {ok:true,email:c.email,evidence:c,verification:v};
+      const v=await this.mailbox(c.email,{mxClass:mx.class});if(usableVerification(v,c.email,this.now()))return {ok:true,email:c.email,evidence:c,verification:v};
+      if(v.retry_after&&!outcomes.length)retryAfter=v.retry_after;
       outcomes.push(v.status==='unknown'?'mailbox_'+(v.reason||'unknown'):'mailbox_'+v.status);
     }
-    return fail('no_verified_mailbox',outcomes[0]||'time_budget');
+    // retry_after: the cached answer cannot change before then, so the queue skips this inbox instead of re-asking every cycle.
+    return fail('no_verified_mailbox',outcomes[0]||'time_budget',retryAfter&&outcomes.every(o=>o==='mailbox_recently_inconclusive')?{retry_after:retryAfter}:null);
   }
 }

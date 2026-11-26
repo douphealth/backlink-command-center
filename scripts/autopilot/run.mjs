@@ -17,7 +17,7 @@ import {fileURLToPath} from 'node:url';
 import {SITES} from '../../functions/_lib/sites.js';
 import {crawlPortfolio} from './crawl.mjs';
 import {rankPortfolio,internalLinkPlan} from './score.mjs';
-import {DataForSEO} from './dataforseo.mjs';
+import {DataForSEO,trackExternalSpend} from './dataforseo.mjs';
 import {gscDemand,dfsDemand} from './demand.mjs';
 import {discoverProspects,requalify,enrichBrokenLinks,freshQueryCount,QUALIFY_VERSION} from './prospect.mjs';
 import {indexationReport} from './indexation.mjs';
@@ -140,6 +140,13 @@ export function resetLinkGapPaging(state){
   return {targets_reopened:n};
 }
 
+/** Lookups parked for 7 days on 2026-11-26 were parked by an empty balance, not by a missing subscription: reopen them. */
+export function unparkAfterFundsOutage(state){
+  state.migrations??={};if(state.migrations.dfs_park_v2)return null;
+  const kinds=Object.keys(state.dfs_blocked||{});state.dfs_blocked={};state.migrations.dfs_park_v2=NOW();
+  return kinds.length?{reopened:kinds}:null;
+}
+
 function prune(state){
   for(const [id,p] of Object.entries(state.prospects||{}))if(p.status==='rejected'&&ageDays(p.found_at)>60)delete state.prospects[id];
   state.ledger=(state.ledger||[]).filter(x=>ageDays(x.at)<400);
@@ -186,6 +193,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   if(vaultOk){const r=resetLinkGapPaging(state);if(r?.targets_reopened)log(`repair: ${r.targets_reopened} competitor link profiles will be mined again with the stricter source filter`)}
   if(vaultOk){const r=retryUnresolved(state);if(r?.domains_retried)log(`repair: ${r.domains_retried} search results the old URL matcher gave up on will be retried`)}
   if(vaultOk){const fixed=repairSerpOutage(state);if(fixed)log(`repair: ${fixed.queries_reopened} searches burned by the Google redirect-link outage reopened; search volume restored to ${TUNING.start}`)}
+  if(vaultOk){const r=unparkAfterFundsOutage(state);if(r)log(`repair: DataForSEO lookups (${r.reopened.join(', ')}) parked by the empty balance are reopened`)}
   const dfs=new DataForSEO({...cfg.dfs,state,fetchImpl,log});
   // ---- 0. Connections: free checks that saved credentials really work (nothing is charged or sent) ----
   const mailer=injectedMailer||(cfg.dryRun?dryMailer(log):gmailTransport(env));
@@ -196,6 +204,9 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     if(v.error)v.error=String(v.error).replace(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi,'[email]'); // published in the public summary
     log(`connection ${k}: ${v.status}${v.error?' — '+v.error:''}`);
   }
+  // Spending outside Autopilot's own ledger (another tool on the same DataForSEO account) is measured, not guessed.
+  const externalSpend=vaultOk&&connections.dataforseo.status==='connected'?trackExternalSpend(state,connections.dataforseo.balance_usd):null;
+  if(externalSpend?.since_last_cycle_usd)log(`dataforseo: balance fell ${externalSpend.since_last_cycle_usd.toFixed(2)} USD more than Autopilot spent since the last cycle (another tool is using this account)`);
   stages.connections={ok:!Object.values(connections).some(c=>c.status==='rejected'),result:Object.fromEntries(Object.entries(connections).map(([k,v])=>[k,v.status]))};
   const gmailOk=!!mailer&&connections.gmail.status!=='rejected';
   // ---- 1. Crawl ----
@@ -288,7 +299,8 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     setup:setupChecklist(cfg),stages,
     totals:{sites:SITES.length,pages_crawled:crawl.reduce((n,s)=>n+s.pages.length,0),urls_discovered:crawl.reduce((n,s)=>n+(s.discovered||0),0),
       promotable:ranked.length,internal_suggestions:internal.length,promoting_now:chosen.length},
-    spend:{today_usd:Number(dfs.spend('day').toFixed(4)),month_usd:Number(dfs.spend('month').toFixed(4)),daily_cap_usd:cfg.dfs.dailyUsd,monthly_cap_usd:cfg.dfs.monthlyUsd,calls_this_run:dfs.calls},
+    spend:{today_usd:Number(dfs.spend('day').toFixed(4)),month_usd:Number(dfs.spend('month').toFixed(4)),daily_cap_usd:cfg.dfs.dailyUsd,monthly_cap_usd:cfg.dfs.monthlyUsd,calls_this_run:dfs.calls,
+      balance_usd:Number.isFinite(dfs.balance)?Number(dfs.balance.toFixed(2)):null,...(externalSpend?{external:externalSpend}:previous.spend?.external?{external:previous.spend.external}:{})},
     outreach:vaultOk?outreachStatus(state,{limit:cfg.outreach.dailyLimit,mode:cfg.outreach.mode,qualifyVersion:QUALIFY_VERSION}):previous.outreach||null,
     funnel:f,history,learning:vaultOk?learningSummary(state,SITES):previous.learning||null,
     sites:crawl.map(s=>({domain:s.site,pages:s.pages.length,discovered:s.discovered,sitemaps:s.sitemaps.length,

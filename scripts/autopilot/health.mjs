@@ -50,6 +50,14 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
     add('info','holds',`${heldCount} queued inboxes are held; most often (${n}) because ${why}.`,
       'Handled automatically; held inboxes are re-checked after 3 days.');
   }
+  const bal=c.dataforseo?.balance_usd,ext=spend.external||{};
+  if(c.dataforseo?.status==='connected'&&Number.isFinite(bal)){
+    if(bal<0.05)add('action','dataforseo_funds',`The DataForSEO balance is used up (${Math.max(0,bal).toFixed(2)} USD), so no new prospects can be found.`,
+      'Top up at app.dataforseo.com (Billing). Prospecting resumes by itself on the next cycle.');
+    else if(bal<1.5)add('warn','dataforseo_low',`The DataForSEO balance is down to ${bal.toFixed(2)} USD.`,'Top up at app.dataforseo.com (Billing) before prospecting stops.');
+  }
+  if((ext.last_7d_usd||0)>=1)add('warn','dataforseo_external',`${ext.last_7d_usd.toFixed(2)} USD of the DataForSEO balance was spent outside Autopilot in the last 7 days.`,
+    'Another tool or session uses the same DataForSEO account. Check the usage log at app.dataforseo.com, or give Autopilot its own account so its budget is protected.');
   const p=stages.prospects;
   // Guard against a silent provider format change: in Nov 2026 every Google result arrived as a google.com
   // redirect link and 100% were dropped as "platforms" for two weeks while queries were still paid for.
