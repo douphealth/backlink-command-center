@@ -297,6 +297,13 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   if(config.blockedAssets?.has(normUrlKey(p.asset_url))){stats.asset_not_indexable=(stats.asset_not_indexable||0)+1;continue} // wait until the page is fixed
   if(requiresProof&&coolingDown(p)&&!usableVerification(p.recipient_proof?.verification,p.email)){stats.cooling=(stats.cooling||0)+1;continue} // no slot for a cached answer
   if(!await prepare(p,false))continue;
+  // Pitch only a page an editor would link to: a prospect paired with a thin, templated or review page is
+  // re-paired with the site's best pitchable page for that editor's topic before anything is written.
+  if(config.pickAsset&&p.kind!=='mention'){
+   const pick=config.pickAsset(p,site);
+   if(pick===null){stats.no_pitchable_page=(stats.no_pitchable_page||0)+1;continue}
+   if(pick&&pick.asset.url!==p.asset_url){p.asset_repaired_from=p.asset_url;p.asset_url=pick.asset.url;p.asset_title=pick.asset.title;if(p.competitor_link)p.competitor_link.match=pick.match;stats.repaired=(stats.repaired||0)+1}
+  }
   const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title||site.domain,type:p.kind==='mention'?'brand':'resource',description:''};
   // The email states that a link is dead: confirm it still is, seconds before writing it.
   if(p.broken_link){const r=await (config.recheckBroken||(u=>checkDead(u)))(p.broken_link.url).catch(()=>null);if(!r?.dead){p.broken_link_cleared_at=NOW();delete p.broken_link}else stats.broken_link_pitches=(stats.broken_link_pitches||0)+1}
@@ -349,6 +356,8 @@ export function gmailTransport(env){
   },
   draft:async raw=>(await getImap()).appendDraft(raw),imap:{recentHeaders:async(...a)=>(await getImap()).recentHeaders(...a),sentRecipients:async(...a)=>(await getImap()).sentRecipients(...a)},
   check:async()=>{try{await getImap();await imap.close();imap=null;return {status:'connected'}}catch{return {status:'rejected',error:'Gmail login or connection failed; outgoing mail blocked'}}},
+  // Drop a stalled mailbox connection so the next call opens a fresh one.
+  reset:async()=>{try{await imap?.close()}catch{}imap=null},
   close:async()=>{if(imap)await imap.close()}
  };
 }

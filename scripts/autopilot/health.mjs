@@ -23,7 +23,7 @@ export function autotune(state,prospects,{envQueries}={}){
 }
 
 /** What needs the owner, most important first. Public data: no addresses, no prospect names. */
-export function diagnose({stages={},capabilities={},outreach={},funnel={},spend={},held=true}){
+export function diagnose({stages={},capabilities={},outreach={},funnel={},spend={},held=true,noPitchSites=[]}){
   const out=[],add=(level,code,message,fix)=>out.push({level,code,message,fix});
   const v=capabilities.verifier||{},c=capabilities.connections||{};
   for(const [k,label] of [['dataforseo','DataForSEO'],['gmail','Gmail']])if(c[k]?.status==='rejected')
@@ -50,6 +50,8 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
     add('info','holds',`${heldCount} queued inboxes are held; most often (${n}) because ${why}.`,
       'Handled automatically; held inboxes are re-checked after 3 days.');
   }
+  if(noPitchSites.length)add('warn','no_pitchable_page',`${noPitchSites.length} site${noPitchSites.length>1?'s have':' has'} no page worth pitching (${noPitchSites.slice(0,6).join(', ')}), so nothing is pitched for ${noPitchSites.length>1?'them':'it'}.`,
+    'Editors link to tools, original data and in-depth guides. List that site\'s best such page under "assets" in functions/_lib/sites.js, or publish one.');
   const bal=c.dataforseo?.balance_usd,ext=spend.external||{};
   if(c.dataforseo?.status==='connected'&&Number.isFinite(bal)){
     if(bal<0.05)add('action','dataforseo_funds',`The DataForSEO balance is used up (${Math.max(0,bal).toFixed(2)} USD), so no new prospects can be found.`,
@@ -66,7 +68,7 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
     'Prospecting from searches is effectively stopped. Check one raw DataForSEO SERP response for the url/domain fields and update scripts/autopilot/serp-unwrap.mjs.');
   if(pr.linkgap_failed&&!pr.linkgap_calls)add('info','linkgap_unavailable','Competitor link-gap mining could not run (DataForSEO Backlinks API refused or failed).',
     'If your DataForSEO plan lacks the Backlinks API, activate it at app.dataforseo.com (it is retried automatically after 7 days).');
-  if(capabilities.claude===false&&(funnel.contacted||0)>=20)add('warn','templates_only',`All ${funnel.contacted} pitches so far were fixed templates (${funnel.replied||0} replies).`,
+  if(capabilities.claude===false&&!capabilities.ai_writer&&(funnel.contacted||0)>=20)add('warn','templates_only',`All ${funnel.contacted} pitches so far were fixed templates (${funnel.replied||0} replies).`,
     'Add an Anthropic API key under ⚙ Connect so every pitch is written for that exact page and link.');
   if(p?.ok&&p.result?.queries>=8&&!p.result?.candidates&&!p.result?.from_queue)add('warn','discovery_saturated',`${p.result.queries} searches found no site that has not been evaluated already.`,'Handled automatically: search volume is halved and long-tail searches built from each page\'s own phrases take priority.');
   else if(p?.ok&&p.result?.queries>=8&&!p.result?.qualified&&!p.result?.deferred)add('warn','no_qualified',`${p.result.queries} searches produced 0 qualified prospects this cycle.`,'Usually transient; if it repeats, the promoted pages may need stronger topical matches.');
