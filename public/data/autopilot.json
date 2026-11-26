@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-26T08:50:47.909Z",
- "duration_s": 200,
+ "generated_at": "2026-11-26T11:30:44.594Z",
+ "duration_s": 81,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -30,14 +30,14 @@
    "key": true,
    "enabled": true,
    "daily_limit": 24,
-   "used_today": 14,
+   "used_today": 22,
    "balance": {
     "provider": "verifalia",
-    "free_credits": 11,
-    "reset_in": "15:09:39",
-    "checked_at": "2026-11-26T08:50:20.640Z"
+    "free_credits": 3,
+    "reset_in": "12:29:54",
+    "checked_at": "2026-11-26T11:30:05.978Z"
    },
-   "catch_all_domains_skipped": 55
+   "catch_all_domains_skipped": 61
   }
  },
  "setup": [
@@ -122,15 +122,15 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 52141,
+   "ms": 9472,
    "result": {
     "sites": 21,
-    "pages": 2809
+    "pages": 2512
    }
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 159
@@ -147,8 +147,8 @@
   "rank": {
    "ok": true,
    "result": {
-    "ranked": 510,
-    "internal_suggestions": 622
+    "ranked": 487,
+    "internal_suggestions": 597
    }
   },
   "requalify": {
@@ -163,31 +163,30 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 69317,
+   "ms": 21564,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
     "candidates": 76,
-    "qualified": 7,
+    "qualified": 9,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 68,
-    "with_email": 3,
-    "contact_form": 0,
+    "rejected": 67,
+    "with_email": 2,
+    "contact_form": 1,
     "broken_links": 0,
     "from_queue": 0,
     "linkgap_calls": 0,
     "linkgap_candidates": 0,
-    "neighbor_pages": 11,
+    "neighbor_pages": 12,
     "neighbor_candidates": 76,
     "filtered": {
-     "already_evaluated": 18,
-     "platform_or_giant": 7,
-     "duplicate_this_run": 7,
-     "competitor": 1,
-     "gov_or_edu": 3,
-     "forum_or_ugc": 2
+     "already_evaluated": 19,
+     "platform_or_giant": 9,
+     "gov_or_edu": 11,
+     "duplicate_this_run": 12,
+     "competitor": 1
     },
     "deferred": 0
    }
@@ -198,20 +197,27 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 3,
+   "ms": 4,
    "result": {
     "checked": 0,
     "found": 0
    }
   },
   "replies": {
-   "ok": false,
-   "ms": 30046,
-   "error": "mail socket timeout"
+   "ok": true,
+   "ms": 1931,
+   "result": {
+    "scanned": 22,
+    "replies": 0,
+    "positive": 0,
+    "negative": 0,
+    "bounces": 0,
+    "delays": 0
+   }
   },
   "sent_check": {
    "ok": true,
-   "ms": 4060,
+   "ms": 1264,
    "result": {
     "scanned": 149,
     "restored": 0,
@@ -220,26 +226,25 @@
   },
   "screen": {
    "ok": true,
-   "ms": 3909,
+   "ms": 969,
    "result": {
     "screened": 5,
-    "kept": 0,
-    "retired": 2,
+    "kept": 1,
+    "retired": 1,
     "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 4,
+   "ms": 1757,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 0,
+    "deferred": 67,
     "cap": 12,
-    "verification_held": 0,
-    "blocked_reason": "reply_scan_not_current_and_complete"
+    "verification_held": 3
    },
    "writer": {
     "claude": 0,
@@ -248,18 +253,18 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 31155,
+   "ms": 40198,
    "result": {
     "checked": 10,
-    "verified": 1,
-    "held": 9
+    "verified": 2,
+    "held": 8
    }
   },
   "link_checks": {
    "ok": true,
-   "ms": 7316,
+   "ms": 4,
    "result": {
-    "checked": 9,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -267,11 +272,11 @@
  },
  "totals": {
   "sites": 21,
-  "pages_crawled": 2809,
-  "urls_discovered": 7393,
-  "promotable": 510,
-  "internal_suggestions": 622,
-  "promoting_now": 54
+  "pages_crawled": 2512,
+  "urls_discovered": 3635,
+  "promotable": 487,
+  "internal_suggestions": 597,
+  "promoting_now": 51
  },
  "spend": {
   "today_usd": 0,
@@ -288,28 +293,27 @@
  },
  "outreach": {
   "mode": "send",
-  "ready": 67,
-  "verified_ready": 3,
-  "pending_verification": 64,
+  "ready": 66,
+  "verified_ready": 5,
+  "pending_verification": 61,
   "holds": {
-   "mailbox_recently_inconclusive": 1,
-   "publisher_mismatch": 1,
-   "mailbox_unknown": 12,
-   "mailbox_accept_all": 6
+   "mailbox_accept_all": 10,
+   "publisher_mismatch": 3,
+   "mailbox_unknown": 11
   },
   "sent_today": 0,
   "cap_today": 12,
-  "next_send_at": "2026-11-26T08:50:47.914Z",
+  "next_send_at": "2026-11-26T11:30:44.598Z",
   "sending_now": false,
-  "reply_health": "failed"
+  "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 5145,
-  "qualified": 873,
-  "ready": 67,
+  "prospects_evaluated": 5221,
+  "qualified": 882,
+  "ready": 66,
   "broken_link_ready": 3,
-  "contact_form_only": 173,
-  "no_contact": 325,
+  "contact_form_only": 174,
+  "no_contact": 331,
   "contacted": 97,
   "replied": 3,
   "positive": 0,
@@ -886,12 +890,12 @@
   },
   {
    "date": "2026-11-26",
-   "prospects_evaluated": 5145,
-   "qualified": 873,
-   "ready": 67,
+   "prospects_evaluated": 5221,
+   "qualified": 882,
+   "ready": 66,
    "broken_link_ready": 3,
-   "contact_form_only": 173,
-   "no_contact": 325,
+   "contact_form_only": 174,
+   "no_contact": 331,
    "contacted": 97,
    "replied": 3,
    "positive": 0,
@@ -907,8 +911,8 @@
    {
     "footprint": "link_gap",
     "queries": 20,
-    "ready": 48,
-    "rate": 2.13
+    "ready": 47,
+    "rate": 2.087
    },
    {
     "footprint": "statistics",
@@ -1001,12 +1005,6 @@
     "rate": 0.143
    },
    {
-    "footprint": "neighbor",
-    "queries": 11,
-    "ready": 1,
-    "rate": 0.143
-   },
-   {
     "footprint": "further_reading",
     "queries": 12,
     "ready": 1,
@@ -1023,6 +1021,12 @@
     "queries": 30,
     "ready": 3,
     "rate": 0.121
+   },
+   {
+    "footprint": "neighbor",
+    "queries": 23,
+    "ready": 2,
+    "rate": 0.115
    },
    {
     "footprint": "inurl_links",
@@ -1641,11 +1645,11 @@
   },
   {
    "domain": "tenderatlas.shop",
-   "pages": 300,
-   "discovered": 3761,
-   "sitemaps": 1,
-   "eligible": 25,
-   "top": "https://tenderatlas.shop/countries/fr/cpv/79000000"
+   "pages": 3,
+   "discovered": 3,
+   "sitemaps": 0,
+   "eligible": 2,
+   "top": "https://tenderatlas.shop/tenders"
   },
   {
    "domain": "signalroom.store",
@@ -1775,7 +1779,7 @@
     "Cites 4 authoritative sources",
     "Recently updated"
    ],
-   "prospects": 11,
+   "prospects": 12,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -1849,7 +1853,7 @@
     "2 data tables",
     "Recently updated"
    ],
-   "prospects": 11,
+   "prospects": 13,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -1975,7 +1979,7 @@
     "3 data tables",
     "Recently updated"
    ],
-   "prospects": 12,
+   "prospects": 13,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -2404,7 +2408,7 @@
    "internal_inlinks": 17,
    "words": 2556,
    "interactive": false,
-   "modified": "2026-11-24T21:13:41+00:00",
+   "modified": "2026-11-26T09:37:14+00:00",
    "reasons": [
     "In-depth (2,556 words)",
     "2 data tables",
@@ -2530,7 +2534,7 @@
     "Original method/data — citation-worthy",
     "Recently updated"
    ],
-   "prospects": 12,
+   "prospects": 13,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -3441,7 +3445,7 @@
    "linkability": 80,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 12,
+   "internal_inlinks": 13,
    "words": 1627,
    "interactive": true,
    "modified": "2026-11-07T20:01:22+00:00",
@@ -3851,8 +3855,8 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/compliance/",
-   "from_title": "Affiliate Marketing Compliance: 2026 Rules & Best Practices",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-social-media-for-affiliate-marketing/",
+   "from_title": "Social Media Marketing 2026: 7 Proven Affiliate Link Hacks",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
    "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
    "anchor": "affiliate link",
@@ -3861,8 +3865,8 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/building-an-affiliate-marketing-website/",
-   "from_title": "How to Build an Affiliate Marketing Website: 10-Step Guide",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/compliance/",
+   "from_title": "Affiliate Marketing Compliance: 2026 Rules & Best Practices",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
    "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
    "anchor": "affiliate link",
@@ -4361,21 +4365,21 @@
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/philodendron-micans-care/",
-   "from_title": "Philodendron Micans Care: Complete Velvet Leaf Guide",
-   "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
-   "to_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
-   "anchor": "toxic cats",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
    "from": "https://plantastichaven.com/purple-spider-plant/",
    "from_title": "Purple Spider Plant: What It Really Is and How to ID It",
    "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
    "to_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
    "anchor": "spider plants",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "plantastichaven.com",
+   "from": "https://plantastichaven.com/philodendron-micans-care/",
+   "from_title": "Philodendron Micans Care: Complete Velvet Leaf Guide",
+   "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
+   "to_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
+   "anchor": "toxic cats",
    "relevance": 6,
    "from_strength": 0
   },
@@ -5341,11 +5345,11 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/exploring-your-path-the-essence-of-number-five/",
-   "from_title": "Numerology Number 5: Meaning, Freedom & Adventure",
+   "from": "https://mysticaldigits.com/compatibility-check-life-path-numbers-6-and-9/",
+   "from_title": "Life Path 6 & 9 Compatibility: Love, Marriage & Karma 2026",
    "to": "https://mysticaldigits.com/free-numerology-love-compatibility-score/",
    "to_title": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
-   "anchor": "love compatibility",
+   "anchor": "compatibility calculator",
    "relevance": 6,
    "from_strength": 0
   },
@@ -5834,19 +5838,19 @@
    },
    {
     "site": "tenderatlas.shop",
-    "checked": 300,
-    "healthy": 261,
-    "problems": 39,
-    "critical": 1,
+    "checked": 3,
+    "healthy": 3,
+    "problems": 0,
+    "critical": 0,
     "not_found": 0,
     "server_error": 0,
-    "noindex": 1,
+    "noindex": 0,
     "canonical_mismatch": 0,
     "redirect": 0,
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 38
+    "thin": 0
    },
    {
     "site": "signalroom.store",
@@ -6013,15 +6017,6 @@
    {
     "site": "efficientgptprompts.com",
     "url": "https://efficientgptprompts.com/shop",
-    "issue": "noindex",
-    "label": "noindex but listed in sitemap",
-    "fix": "If the page should rank, remove the noindex (SEO plugin / X-Robots-Tag). If not, drop it from the sitemap.",
-    "severity": 3,
-    "status": 200
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/countries/es/cpv/72000000",
     "issue": "noindex",
     "label": "noindex but listed in sitemap",
     "fix": "If the page should rank, remove the noindex (SEO plugin / X-Robots-Tag). If not, drop it from the sitemap.",
@@ -7036,389 +7031,9 @@
     "severity": 8,
     "status": 200,
     "words": 42
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/countries/be/cpv/33000000",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 261
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/countries/be/cpv/34000000",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 264
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/countries/fr/cpv/31000000",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 286
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/countries/fr/cpv/60000000",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 299
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/countries/se/cpv/45000000",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 274
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/countries/se/cpv/71000000",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 270
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/countries/se/cpv/79000000",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 291
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820676-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 237
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820755-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 202
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820795-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 253
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820963-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 243
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820991-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 256
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821023-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 296
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821194-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 210
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821195-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 242
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821256-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 279
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821263-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 222
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821274-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 271
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821521-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 278
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821558-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 284
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821647-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 251
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821697-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 217
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821822-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 274
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821833-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 255
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821905-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 285
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821953-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 260
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821985-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 245
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/822025-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 299
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/822041-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 280
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/822067-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 273
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/822085-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 239
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/822172-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 274
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/822173-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 280
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/822195-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 211
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/822321-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 214
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/822609-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 299
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/822750-2026",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 214
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/uk/ocds-h6vhtk-07c41e",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 297
    }
   ],
-  "total_issues": 141,
+  "total_issues": 102,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first)."
  },
  "search_performance": null,
@@ -7426,7 +7041,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-26T08:49:31.402Z"
+  "updated_at": "2026-11-26T11:29:58.453Z"
  },
  "wins": [
   {
@@ -7497,44 +7112,43 @@
   }
  ],
  "log": [
-  "08:47:27 repair: DataForSEO lookups (backlinks, serp, traffic) parked by the empty balance are reopened",
-  "08:47:29 connection dataforseo: connected",
-  "08:47:29 connection gmail: connected",
-  "08:47:30 crawl plantastichaven.com: 154/154 urls, fetched 1, 304 0, reused 153",
-  "08:47:31 crawl gearuptofit.com: 300/794 urls, fetched 0, 304 0, reused 300",
-  "08:47:34 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
-  "08:47:34 crawl gearuptogrow.com: 103/103 urls, fetched 3, 304 0, reused 100",
-  "08:47:34 crawl frenchyfab.com: 154/154 urls, fetched 0, 304 0, reused 154",
-  "08:47:36 crawl openclaw-skillshub.com: 97/97 urls, fetched 10, 304 0, reused 87",
-  "08:47:36 crawl mysticaldigits.com: 300/468 urls, fetched 2, 304 0, reused 298",
-  "08:47:36 crawl micegoneguide.com: 41/41 urls, fetched 2, 304 0, reused 39",
-  "08:47:37 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "08:47:37 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
-  "08:47:37 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
-  "08:47:37 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
-  "08:47:37 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
-  "08:47:38 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
-  "08:47:38 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
-  "08:47:38 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
-  "08:47:38 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
-  "08:47:39 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
-  "08:47:39 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
-  "08:47:40 crawl efficientgptprompts.com: 300/487 urls, fetched 11, 304 0, reused 289",
-  "08:48:21 crawl tenderatlas.shop: 300/3761 urls, fetched 243, 304 0, reused 57",
-  "08:48:21 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "08:48:21 - search_performance: skipped (Search Console not connected)",
-  "08:48:22 indexation: 141 sitemap URLs with an indexing problem (2 critical)",
-  "08:48:25 link neighbourhood (free): 11 qualified pages mined, 76 recommended sites to evaluate",
-  "08:49:31 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 76 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 76 candidates, 7 qualified (0 unlinked mentions), 3 with email, 0 with a dead link we can replace, 0 already linking",
-  "08:49:31 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "08:49:31 self-tuning: next cycle runs up to 20 searches",
-  "08:49:31 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "08:50:01 ! replies failed: mail socket timeout",
-  "08:50:05 sent-folder check: 149 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
-  "08:50:09 queue screening (free, nothing sent): 5 checked, 0 sendable, 2 retired, 0 switched to a better published address",
-  "08:50:09 outreach blocked: complete mailbox review required",
-  "08:50:40 pre-verify (nothing sent): 10 top inboxes checked, 1 verified, 9 held",
-  "08:50:47 link checks: 9 pages, 0 new links won, 0 lost"
+  "11:29:27 connection dataforseo: connected",
+  "11:29:27 connection gmail: connected",
+  "11:29:28 crawl plantastichaven.com: 154/154 urls, fetched 17, 304 0, reused 137",
+  "11:29:28 crawl gearuptofit.com: 300/794 urls, fetched 0, 304 0, reused 300",
+  "11:29:31 crawl frenchyfab.com: 154/154 urls, fetched 0, 304 0, reused 154",
+  "11:29:31 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
+  "11:29:33 crawl mysticaldigits.com: 300/468 urls, fetched 8, 304 1, reused 291",
+  "11:29:34 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
+  "11:29:34 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
+  "11:29:34 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "11:29:34 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 2, 304 0, reused 111",
+  "11:29:35 crawl tenderatlas.shop: 3/3 urls, fetched 0, 304 0, reused 3",
+  "11:29:35 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
+  "11:29:35 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
+  "11:29:35 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
+  "11:29:35 crawl efficientgptprompts.com: 300/487 urls, fetched 4, 304 0, reused 296",
+  "11:29:35 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
+  "11:29:35 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
+  "11:29:36 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
+  "11:29:36 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
+  "11:29:36 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
+  "11:29:36 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
+  "11:29:36 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
+  "11:29:36 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "11:29:36 - search_performance: skipped (Search Console not connected)",
+  "11:29:36 indexation: 102 sitemap URLs with an indexing problem (1 critical)",
+  "11:29:40 link neighbourhood (free): 12 qualified pages mined, 76 recommended sites to evaluate",
+  "11:29:58 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 76 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 76 candidates, 9 qualified (0 unlinked mentions), 2 with email, 0 with a dead link we can replace, 0 already linking",
+  "11:29:58 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "11:29:58 self-tuning: next cycle runs up to 20 searches",
+  "11:29:58 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "11:30:00 replies: 22 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "11:30:01 sent-folder check: 149 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
+  "11:30:02 queue screening (free, nothing sent): 5 checked, 1 sendable, 1 retired, 0 switched to a better published address",
+  "11:30:04 outreach: 0 sent, 0 follow-ups, 0 drafts, 3 held for verification",
+  "11:30:44 pre-verify (nothing sent): 10 top inboxes checked, 2 verified, 8 held",
+  "11:30:44 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
@@ -7550,15 +7164,9 @@
    "fix": "Add an Anthropic API key under ⚙ Connect so every pitch is written for that exact page and link."
   },
   {
-   "level": "warn",
-   "code": "stage_replies",
-   "message": "The replies stage failed: mail socket timeout",
-   "fix": "It retries automatically next cycle."
-  },
-  {
    "level": "info",
    "code": "holds",
-   "message": "20 queued inboxes are held; most often (12) because mailbox unknown.",
+   "message": "24 queued inboxes are held; most often (11) because mailbox unknown.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   }
  ]
