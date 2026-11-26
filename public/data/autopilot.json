@@ -1,11 +1,11 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-26T15:23:59.253Z",
- "duration_s": 65,
+ "generated_at": "2026-11-26T17:26:14.242Z",
+ "duration_s": 123,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
-  "ai_writer": "github_models",
+  "ai_writer": null,
   "vault": true,
   "dataforseo": true,
   "gmail": true,
@@ -35,8 +35,8 @@
    "balance": {
     "provider": "verifalia",
     "free_credits": 1,
-    "reset_in": "08:36:00",
-    "checked_at": "2026-11-26T15:23:59.081Z"
+    "reset_in": "06:33:55",
+    "checked_at": "2026-11-26T17:26:05.014Z"
    },
    "catch_all_domains_skipped": 61
   }
@@ -92,6 +92,13 @@
    "required": false
   },
   {
+   "key": "GROQ_API_KEY or GEMINI_API_KEY",
+   "label": "Free AI pitch writer",
+   "done": false,
+   "unlocks": "Writes a page-specific email for every prospect on a free API plan when no Anthropic key is set (templates otherwise)",
+   "required": false
+  },
+  {
    "key": "GSC_SERVICE_ACCOUNT_JSON",
    "label": "Search Console",
    "done": false,
@@ -123,10 +130,10 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 28113,
+   "ms": 7373,
    "result": {
     "sites": 21,
-    "pages": 2235
+    "pages": 2511
    }
   },
   "demand": {
@@ -148,9 +155,9 @@
   "rank": {
    "ok": true,
    "result": {
-    "ranked": 523,
-    "internal_suggestions": 573,
-    "pitchable": 86
+    "ranked": 530,
+    "internal_suggestions": 580,
+    "pitchable": 87
    }
   },
   "requalify": {
@@ -163,35 +170,43 @@
     "recontacted": 0
    }
   },
+  "second_look": {
+   "ok": true,
+   "ms": 81615,
+   "result": {
+    "checked": 60,
+    "found": 5,
+    "unreachable": 2,
+    "waiting": 457
+   }
+  },
   "prospects": {
    "ok": true,
-   "ms": 18133,
+   "ms": 4117,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
-    "candidates": 50,
-    "qualified": 6,
+    "candidates": 24,
+    "qualified": 0,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 44,
-    "with_email": 3,
+    "rejected": 24,
+    "with_email": 0,
     "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
     "linkgap_calls": 0,
     "linkgap_candidates": 0,
     "neighbor_pages": 12,
-    "neighbor_candidates": 50,
+    "neighbor_candidates": 24,
     "filtered": {
-     "already_evaluated": 22,
-     "duplicate_this_run": 4,
-     "platform_or_giant": 21,
-     "forum_or_ugc": 1,
-     "competitor": 2,
-     "gov_or_edu": 1
+     "already_evaluated": 31,
+     "platform_or_giant": 11,
+     "duplicate_this_run": 18,
+     "gov_or_edu": 4,
+     "forum_or_ugc": 1
     },
-    "bylines": 1,
     "deferred": 0
    }
   },
@@ -201,15 +216,15 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 3,
+   "ms": 873,
    "result": {
-    "checked": 0,
+    "checked": 3,
     "found": 0
    }
   },
   "replies": {
    "ok": true,
-   "ms": 2581,
+   "ms": 1636,
    "result": {
     "scanned": 10,
     "replies": 0,
@@ -221,7 +236,7 @@
   },
   "sent_check": {
    "ok": true,
-   "ms": 794,
+   "ms": 1199,
    "result": {
     "scanned": 156,
     "restored": 0,
@@ -230,17 +245,17 @@
   },
   "screen": {
    "ok": true,
-   "ms": 5105,
+   "ms": 5058,
    "result": {
-    "screened": 7,
-    "kept": 1,
-    "retired": 2,
+    "screened": 9,
+    "kept": 0,
+    "retired": 4,
     "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 7822,
+   "ms": 9419,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -248,18 +263,18 @@
     "skipped": 0,
     "deferred": 0,
     "cap": 12,
-    "verification_held": 0,
+    "verification_held": 1,
     "out_of_credits": true
    },
    "writer": {
     "claude": 0,
-    "github_models": 0,
+    "free_ai": 0,
     "template_fallbacks": 0
    }
   },
   "preverify": {
    "ok": true,
-   "ms": 18,
+   "ms": 14,
    "result": {
     "checked": 0,
     "verified": 0,
@@ -269,9 +284,9 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 3,
+   "ms": 9063,
    "result": {
-    "checked": 0,
+    "checked": 13,
     "won": 0,
     "lost": 0
    }
@@ -279,11 +294,11 @@
  },
  "totals": {
   "sites": 21,
-  "pages_crawled": 2235,
-  "urls_discovered": 3174,
-  "promotable": 523,
-  "internal_suggestions": 573,
-  "promoting_now": 47
+  "pages_crawled": 2511,
+  "urls_discovered": 3637,
+  "promotable": 530,
+  "internal_suggestions": 580,
+  "promoting_now": 48
  },
  "spend": {
   "today_usd": 0,
@@ -300,27 +315,28 @@
  },
  "outreach": {
   "mode": "send",
-  "ready": 64,
+  "ready": 65,
   "verified_ready": 0,
-  "pending_verification": 64,
+  "pending_verification": 65,
   "holds": {
    "mailbox_accept_all": 8,
+   "publisher_pages_unreachable": 1,
    "publisher_mismatch": 3,
    "mailbox_unknown": 11
   },
   "sent_today": 7,
   "cap_today": 12,
-  "next_send_at": "2026-11-26T15:23:59.256Z",
+  "next_send_at": "2026-11-26T17:26:14.246Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 5410,
+  "prospects_evaluated": 5434,
   "qualified": 904,
-  "ready": 64,
+  "ready": 65,
   "broken_link_ready": 3,
-  "contact_form_only": 175,
-  "no_contact": 342,
+  "contact_form_only": 173,
+  "no_contact": 339,
   "contacted": 102,
   "replied": 3,
   "positive": 0,
@@ -897,12 +913,12 @@
   },
   {
    "date": "2026-11-26",
-   "prospects_evaluated": 5410,
+   "prospects_evaluated": 5434,
    "qualified": 904,
-   "ready": 64,
+   "ready": 65,
    "broken_link_ready": 3,
-   "contact_form_only": 175,
-   "no_contact": 342,
+   "contact_form_only": 173,
+   "no_contact": 339,
    "contacted": 102,
    "replied": 3,
    "positive": 0,
@@ -960,8 +976,8 @@
    {
     "footprint": "intent",
     "queries": 97,
-    "ready": 27,
-    "rate": 0.28
+    "ready": 28,
+    "rate": 0.29
    },
    {
     "footprint": "recommended_tools",
@@ -1018,16 +1034,16 @@
     "rate": 0.133
    },
    {
-    "footprint": "neighbor",
-    "queries": 59,
-    "ready": 7,
-    "rate": 0.129
-   },
-   {
     "footprint": "weekly_roundup",
     "queries": 5,
     "ready": 0,
     "rate": 0.125
+   },
+   {
+    "footprint": "neighbor",
+    "queries": 71,
+    "ready": 7,
+    "rate": 0.108
    },
    {
     "footprint": "inurl_links",
@@ -1636,10 +1652,10 @@
   },
   {
    "domain": "frenchyfab.com",
-   "pages": 154,
-   "discovered": 154,
+   "pages": 153,
+   "discovered": 153,
    "sitemaps": 5,
-   "eligible": 25,
+   "eligible": 26,
    "top": "https://frenchyfab.com/french-bulldog-social-interaction-training/"
   },
   {
@@ -1652,10 +1668,10 @@
   },
   {
    "domain": "efficientgptprompts.com",
-   "pages": 23,
-   "discovered": 23,
-   "sitemaps": 5,
-   "eligible": 21,
+   "pages": 300,
+   "discovered": 487,
+   "sitemaps": 6,
+   "eligible": 27,
    "top": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/"
   },
   {
@@ -2946,33 +2962,6 @@
    "promoting": false
   },
   {
-   "site": "efficientgptprompts.com",
-   "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
-   "title": "Prompt Engineering Framework for LLMs: Test, Grade, Deploy",
-   "h1": "The Enterprise LLM Prompt Engineering Framework",
-   "description": "A prompt engineering framework for LLMs: how to test, grade and deploy prompts in production workflows, with scoring rubrics and QA gates.",
-   "type": "reference",
-   "promotion": 71,
-   "linkability": 68,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 1,
-   "words": 1181,
-   "interactive": false,
-   "modified": "2026-08-17T19:47:24+00:00",
-   "reasons": [
-    "2 data tables",
-    "Recently updated",
-    "Under-linked internally (1 inbound)",
-    "Flagship asset"
-   ],
-   "flagship": true,
-   "pitchable": true,
-   "prospects": 29,
-   "internal_link_suggestions": 1,
-   "promoting": true
-  },
-  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
    "title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
@@ -3176,6 +3165,32 @@
    "pitchable": true,
    "prospects": 0,
    "internal_link_suggestions": 2,
+   "promoting": true
+  },
+  {
+   "site": "efficientgptprompts.com",
+   "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
+   "title": "Prompt Engineering Framework for LLMs: Test, Grade, Deploy",
+   "h1": "The Enterprise LLM Prompt Engineering Framework",
+   "description": "A prompt engineering framework for LLMs: how to test, grade and deploy prompts in production workflows, with scoring rubrics and QA gates.",
+   "type": "reference",
+   "promotion": 67,
+   "linkability": 68,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 5,
+   "words": 1181,
+   "interactive": false,
+   "modified": "2026-08-17T19:47:24+00:00",
+   "reasons": [
+    "2 data tables",
+    "Recently updated",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 29,
+   "internal_link_suggestions": 1,
    "promoting": true
   },
   {
@@ -4609,6 +4624,26 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "from_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "to_title": "French Bulldog Socialization Training: A Practical Plan",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 60
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-names-2025-guide/",
+   "from_title": "174 French Bulldog Names: Practical Naming Framework",
+   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "to_title": "French Bulldog Socialization Training: A Practical Plan",
+   "anchor": "french bulldog",
+   "relevance": 5,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/best-harness-for-french-bulldog-that-pulls/",
    "from_title": "Best Harness for a French Bulldog That Pulls: Fit, Airway Comfort, and Training",
    "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
@@ -4616,26 +4651,6 @@
    "anchor": "french bulldog",
    "relevance": 5,
    "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-separation-anxiety/",
-   "from_title": "French Bulldog Separation Anxiety: Signs, Training Plan",
-   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "to_title": "French Bulldog Socialization Training: A Practical Plan",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 56
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/owning-a-french-bulldog-guide/",
-   "from_title": "French Bulldog Characteristics: Traits, Care and Health",
-   "to": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "to_title": "French Bulldog Socialization Training: A Practical Plan",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 56
   },
   {
    "site": "gearuptogrow.com",
@@ -4888,16 +4903,6 @@
    "from_strength": 0
   },
   {
-   "site": "efficientgptprompts.com",
-   "from": "https://efficientgptprompts.com/services/",
-   "from_title": "AI Prompt Engineering & Workflow Consulting",
-   "to": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
-   "to_title": "Prompt Engineering Framework for LLMs: Test, Grade, Deploy",
-   "anchor": "prompt engineering",
-   "relevance": 4,
-   "from_strength": 36
-  },
-  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/health/",
    "from_title": "Health Hub: Sleep, Energy & Cognitive Performance",
@@ -4934,6 +4939,16 @@
    "to": "https://gearuptogrow.com/mental-wellness/burnout-symptoms/",
    "to_title": "Burnout at Work: Signs, Support, and Next Steps",
    "anchor": "burnout symptoms",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "efficientgptprompts.com",
+   "from": "https://efficientgptprompts.com/services/",
+   "from_title": "AI Prompt Engineering & Workflow Consulting",
+   "to": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
+   "to_title": "Prompt Engineering Framework for LLMs: Test, Grade, Deploy",
+   "anchor": "prompt engineering",
    "relevance": 4,
    "from_strength": 0
   },
@@ -5459,6 +5474,56 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/care-plan-quiz/",
+   "from_title": "French Bulldog Care Plan Quiz: Get a Personalized Daily Routine",
+   "to": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "to_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 56
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/preventing-joint-issues-in-french-bulldogs/",
+   "from_title": "French Bulldog Joint Health: Mobility Signs, Weight",
+   "to": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "to_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/creating-safe-environment-french-bulldog/",
+   "from_title": "Creating A Safe Environment For Your French Bulldog",
+   "to": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "to_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-care-plan/",
+   "from_title": "French Bulldog Care Plan: Daily Routine & Checklist",
+   "to": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "to_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/senior-french-bulldog-care-guide/",
+   "from_title": "Senior French Bulldog Care: Health, Diet, and Happiness Tips",
+   "to": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "to_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "anchor": "french bulldog",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/are-french-bulldogs-protective-of-owners-temperament-traits/",
    "from_title": "Are French Bulldogs Protective? Temperament, Guarding",
    "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
@@ -5739,6 +5804,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "from_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 60
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
    "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
    "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
@@ -5759,16 +5834,6 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
    "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
    "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
@@ -5776,56 +5841,6 @@
    "anchor": "food french",
    "relevance": 7,
    "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
-   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
-   "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-food-for-french-bulldogs-with-sensitive-stomach/",
-   "from_title": "Best Dog Food for a French Bulldog With a Sensitive Stomach",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-dog-treat-recipes-french-bulldogs/",
-   "from_title": "Homemade French Bulldog Treats: 4 Safe, Simple Recipes",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "french bulldogs",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/safely-remove-mice/",
-   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
-   "to": "https://micegoneguide.com/snap-traps-for-mice/",
-   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "anchor": "snap traps",
-   "relevance": 5,
-   "from_strength": 56
   }
  ],
  "indexation": {
@@ -5833,9 +5848,10 @@
    {
     "site": "gearuptofit.com",
     "checked": 300,
-    "healthy": 292,
-    "problems": 8,
+    "healthy": 297,
+    "problems": 3,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -5844,7 +5860,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 8
+    "thin": 3
    },
    {
     "site": "plantastichaven.com",
@@ -5852,6 +5868,7 @@
     "healthy": 151,
     "problems": 3,
     "critical": 0,
+    "review": 1,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -5865,9 +5882,10 @@
    {
     "site": "gearuptogrow.com",
     "checked": 103,
-    "healthy": 101,
-    "problems": 2,
+    "healthy": 103,
+    "problems": 0,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -5876,7 +5894,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 2
+    "thin": 0
    },
    {
     "site": "affiliatemarketingforsuccess.com",
@@ -5884,6 +5902,7 @@
     "healthy": 111,
     "problems": 2,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -5897,9 +5916,10 @@
    {
     "site": "mysticaldigits.com",
     "checked": 300,
-    "healthy": 297,
-    "problems": 3,
+    "healthy": 298,
+    "problems": 2,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -5908,19 +5928,20 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 3
+    "thin": 2
    },
    {
     "site": "frenchyfab.com",
-    "checked": 154,
+    "checked": 153,
     "healthy": 150,
-    "problems": 4,
+    "problems": 3,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
     "canonical_mismatch": 0,
-    "redirect": 1,
+    "redirect": 0,
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
@@ -5929,9 +5950,10 @@
    {
     "site": "micegoneguide.com",
     "checked": 41,
-    "healthy": 37,
-    "problems": 4,
+    "healthy": 41,
+    "problems": 0,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -5940,14 +5962,15 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 4
+    "thin": 0
    },
    {
     "site": "efficientgptprompts.com",
-    "checked": 23,
-    "healthy": 19,
-    "problems": 4,
+    "checked": 300,
+    "healthy": 297,
+    "problems": 3,
     "critical": 1,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 1,
@@ -5956,7 +5979,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 3
+    "thin": 2
    },
    {
     "site": "openclaw-skillshub.com",
@@ -5964,6 +5987,7 @@
     "healthy": 64,
     "problems": 33,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -5980,6 +6004,7 @@
     "healthy": 26,
     "problems": 2,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -5996,6 +6021,7 @@
     "healthy": 3,
     "problems": 0,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -6004,7 +6030,8 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 0
+    "thin": 0,
+    "alert": "the sitemap answered HTTP 503."
    },
    {
     "site": "signalroom.store",
@@ -6012,6 +6039,7 @@
     "healthy": 140,
     "problems": 2,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -6028,6 +6056,7 @@
     "healthy": 67,
     "problems": 0,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -6044,6 +6073,7 @@
     "healthy": 300,
     "problems": 0,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -6060,6 +6090,7 @@
     "healthy": 104,
     "problems": 21,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -6076,6 +6107,7 @@
     "healthy": 44,
     "problems": 0,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -6092,6 +6124,7 @@
     "healthy": 83,
     "problems": 1,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -6105,9 +6138,10 @@
    {
     "site": "buyonce.site",
     "checked": 27,
-    "healthy": 25,
-    "problems": 2,
+    "healthy": 26,
+    "problems": 1,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -6116,7 +6150,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 2
+    "thin": 1
    },
    {
     "site": "cabinvolt.shop",
@@ -6124,6 +6158,7 @@
     "healthy": 47,
     "problems": 1,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -6137,25 +6172,10 @@
    {
     "site": "bordercover.shop",
     "checked": 71,
-    "healthy": 66,
-    "problems": 5,
-    "critical": 0,
-    "not_found": 0,
-    "server_error": 0,
-    "noindex": 0,
-    "canonical_mismatch": 0,
-    "redirect": 0,
-    "unreachable": 0,
-    "bot_blocked": 0,
-    "missing_canonical": 0,
-    "thin": 5
-   },
-   {
-    "site": "fixorrefund.shop",
-    "checked": 11,
-    "healthy": 7,
+    "healthy": 67,
     "problems": 4,
     "critical": 0,
+    "review": 0,
     "not_found": 0,
     "server_error": 0,
     "noindex": 0,
@@ -6165,6 +6185,23 @@
     "bot_blocked": 0,
     "missing_canonical": 0,
     "thin": 4
+   },
+   {
+    "site": "fixorrefund.shop",
+    "checked": 11,
+    "healthy": 9,
+    "problems": 2,
+    "critical": 0,
+    "review": 0,
+    "not_found": 0,
+    "server_error": 0,
+    "noindex": 0,
+    "canonical_mismatch": 0,
+    "redirect": 0,
+    "unreachable": 0,
+    "bot_blocked": 0,
+    "missing_canonical": 0,
+    "thin": 2
    }
   ],
   "issues": [
@@ -6176,16 +6213,6 @@
     "fix": "If the page should rank, remove the noindex (SEO plugin / X-Robots-Tag). If not, drop it from the sitemap.",
     "severity": 3,
     "status": 200
-   },
-   {
-    "site": "frenchyfab.com",
-    "url": "https://frenchyfab.com/french-bulldog-care",
-    "issue": "redirect",
-    "label": "Sitemap URL redirects",
-    "fix": "Replace the sitemap entry and internal links with the final URL (sitemaps should list only 200, canonical URLs).",
-    "severity": 5,
-    "status": 200,
-    "final_url": "https://frenchyfab.com/french-bulldog-care-guide/"
    },
    {
     "site": "plantastichaven.com",
@@ -6215,16 +6242,6 @@
     "severity": 8,
     "status": 200,
     "words": 235
-   },
-   {
-    "site": "bordercover.shop",
-    "url": "https://bordercover.shop/change-log",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 138
    },
    {
     "site": "bordercover.shop",
@@ -6265,16 +6282,6 @@
     "severity": 8,
     "status": 200,
     "words": 266
-   },
-   {
-    "site": "buyonce.site",
-    "url": "https://buyonce.site/methodology",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 278
    },
    {
     "site": "buyonce.site",
@@ -6358,46 +6365,6 @@
    },
    {
     "site": "checkthetag.shop",
-    "url": "https://checkthetag.shop/guides/how-to-wash-a-bath-mat",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 271
-   },
-   {
-    "site": "checkthetag.shop",
-    "url": "https://checkthetag.shop/guides/how-to-wash-a-bra",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 269
-   },
-   {
-    "site": "checkthetag.shop",
-    "url": "https://checkthetag.shop/guides/how-to-wash-a-dog-bed",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 289
-   },
-   {
-    "site": "checkthetag.shop",
-    "url": "https://checkthetag.shop/guides/how-to-wash-a-fleece-blanket",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 275
-   },
-   {
-    "site": "checkthetag.shop",
     "url": "https://checkthetag.shop/guides/how-to-wash-a-hat",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
@@ -6408,26 +6375,6 @@
    },
    {
     "site": "checkthetag.shop",
-    "url": "https://checkthetag.shop/guides/how-to-wash-a-mattress-protector",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 248
-   },
-   {
-    "site": "checkthetag.shop",
-    "url": "https://checkthetag.shop/guides/how-to-wash-a-rug",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 183
-   },
-   {
-    "site": "checkthetag.shop",
     "url": "https://checkthetag.shop/guides/how-to-wash-a-weighted-blanket",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
@@ -6435,36 +6382,6 @@
     "severity": 8,
     "status": 200,
     "words": 231
-   },
-   {
-    "site": "checkthetag.shop",
-    "url": "https://checkthetag.shop/guides/how-to-wash-an-electric-blanket",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 203
-   },
-   {
-    "site": "checkthetag.shop",
-    "url": "https://checkthetag.shop/guides/how-to-wash-curtains",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 285
-   },
-   {
-    "site": "checkthetag.shop",
-    "url": "https://checkthetag.shop/guides/how-to-wash-microfiber-cloths",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 275
    },
    {
     "site": "checkthetag.shop",
@@ -6508,23 +6425,13 @@
    },
    {
     "site": "efficientgptprompts.com",
-    "url": "https://efficientgptprompts.com/refund-policy",
+    "url": "https://efficientgptprompts.com/teen-detective-story-ideas",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 139
-   },
-   {
-    "site": "efficientgptprompts.com",
-    "url": "https://efficientgptprompts.com/review-methodology",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 223
+    "words": 99
    },
    {
     "site": "efficientgptprompts.com",
@@ -6548,16 +6455,6 @@
    },
    {
     "site": "fixorrefund.shop",
-    "url": "https://fixorrefund.shop/el/ownership",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 70
-   },
-   {
-    "site": "fixorrefund.shop",
     "url": "https://fixorrefund.shop/en/guides",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
@@ -6565,16 +6462,6 @@
     "severity": 8,
     "status": 200,
     "words": 254
-   },
-   {
-    "site": "fixorrefund.shop",
-    "url": "https://fixorrefund.shop/en/ownership",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 86
    },
    {
     "site": "frenchyfab.com",
@@ -6608,56 +6495,6 @@
    },
    {
     "site": "gearuptofit.com",
-    "url": "https://gearuptofit.com/corrections-policy",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 176
-   },
-   {
-    "site": "gearuptofit.com",
-    "url": "https://gearuptofit.com/editorial-standards",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 137
-   },
-   {
-    "site": "gearuptofit.com",
-    "url": "https://gearuptofit.com/medical-disclaimer",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 197
-   },
-   {
-    "site": "gearuptofit.com",
-    "url": "https://gearuptofit.com/runmatch-thank-you",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 65
-   },
-   {
-    "site": "gearuptofit.com",
-    "url": "https://gearuptofit.com/runmatch-unsubscribe",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 88
-   },
-   {
-    "site": "gearuptofit.com",
     "url": "https://gearuptofit.com/running-shoe-decision-guide",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
@@ -6687,26 +6524,6 @@
     "words": 173
    },
    {
-    "site": "gearuptogrow.com",
-    "url": "https://gearuptogrow.com/about-the-editor",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 280
-   },
-   {
-    "site": "gearuptogrow.com",
-    "url": "https://gearuptogrow.com/review-methodology",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 244
-   },
-   {
     "site": "imagealchemy.app",
     "url": "https://imagealchemy.app/formats",
     "issue": "thin",
@@ -6727,46 +6544,6 @@
     "words": 166
    },
    {
-    "site": "micegoneguide.com",
-    "url": "https://micegoneguide.com/about-alexios-papaioannou-founder-of-micegoneguide",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 225
-   },
-   {
-    "site": "micegoneguide.com",
-    "url": "https://micegoneguide.com/editorial-policy-micegoneguide",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 144
-   },
-   {
-    "site": "micegoneguide.com",
-    "url": "https://micegoneguide.com/review-methodology",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 176
-   },
-   {
-    "site": "micegoneguide.com",
-    "url": "https://micegoneguide.com/safety-disclaimer-micegoneguide",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 150
-   },
-   {
     "site": "mysticaldigits.com",
     "url": "https://mysticaldigits.com/blog-articles",
     "issue": "thin",
@@ -6785,16 +6562,6 @@
     "severity": 8,
     "status": 200,
     "words": 56
-   },
-   {
-    "site": "mysticaldigits.com",
-    "url": "https://mysticaldigits.com/medical-financial-relationship-disclaimer",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 141
    },
    {
     "site": "openclaw-skillshub.com",
@@ -6908,136 +6675,6 @@
    },
    {
     "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/glossary/what-are-ai-guardrails",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 177
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/glossary/what-is-agent-memory",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 203
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/glossary/what-is-agent-sandboxing",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 219
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/glossary/what-is-clawhub",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 203
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/glossary/what-is-context-window",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 212
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/glossary/what-is-llm-orchestration",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 186
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/glossary/what-is-multi-agent-system",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 177
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/glossary/what-is-openclaw-permissions",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 158
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/glossary/what-is-prompt-injection",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 293
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/glossary/what-is-tool-calling",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 261
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/skills/ai-llms",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 235
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/skills/browser-automation",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 128
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/skills/coding-agents",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 128
-   },
-   {
-    "site": "openclaw-skillshub.com",
     "url": "https://openclaw-skillshub.com/skills/compare",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
@@ -7045,86 +6682,6 @@
     "severity": 8,
     "status": 200,
     "words": 98
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/skills/devops-cloud",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 174
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/skills/health-fitness",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 83
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/skills/marketing-sales",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 127
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/skills/notes-pkm",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 110
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/skills/productivity",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 181
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/skills/search-research",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 162
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/skills/web-frontend",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 130
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/tutorials",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 161
    },
    {
     "site": "plantastichaven.com",
@@ -7177,15 +6734,18 @@
     "words": 42
    }
   ],
-  "total_issues": 101,
-  "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first)."
+  "total_issues": 83,
+  "blocking": 1,
+  "review": 1,
+  "thin": 81,
+  "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first); up to 12 examples are listed per site and problem."
  },
  "search_performance": null,
  "google_index": null,
  "bing": null,
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-26T15:23:42.776Z"
+  "updated_at": "2026-11-26T17:25:46.828Z"
  },
  "wins": [
   {
@@ -7256,44 +6816,47 @@
   }
  ],
  "log": [
-  "15:22:56 connection dataforseo: connected",
-  "15:22:56 connection gmail: connected",
-  "15:22:57 crawl gearuptofit.com: 300/797 urls, fetched 0, 304 0, reused 300",
-  "15:22:58 crawl plantastichaven.com: 154/154 urls, fetched 2, 304 0, reused 152",
-  "15:23:00 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
-  "15:23:03 crawl frenchyfab.com: 154/154 urls, fetched 2, 304 0, reused 152",
-  "15:23:04 crawl mysticaldigits.com: 300/468 urls, fetched 4, 304 0, reused 296",
-  "15:23:04 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
-  "15:23:05 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "15:23:06 crawl tenderatlas.shop: 3/3 urls, fetched 0, 304 0, reused 3",
-  "15:23:07 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
-  "15:23:07 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
-  "15:23:07 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 3, 304 0, reused 110",
-  "15:23:08 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
-  "15:23:08 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
-  "15:23:08 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
-  "15:23:09 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
-  "15:23:09 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
-  "15:23:09 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
-  "15:23:10 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
-  "15:23:10 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
-  "15:23:11 crawl micegoneguide.com: 41/41 urls, fetched 3, 304 0, reused 38",
-  "15:23:24 crawl efficientgptprompts.com: 23/23 urls, fetched 0, 304 0, reused 23",
-  "15:23:24 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "15:23:24 - search_performance: skipped (Search Console not connected)",
-  "15:23:24 pitch policy: 86 of 523 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
-  "15:23:24 indexation: 101 sitemap URLs with an indexing problem (1 critical)",
-  "15:23:29 link neighbourhood (free): 12 qualified pages mined, 50 recommended sites to evaluate",
-  "15:23:42 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 50 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 50 candidates, 6 qualified (0 unlinked mentions), 3 with email, 0 with a dead link we can replace, 0 already linking",
-  "15:23:42 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "15:23:42 self-tuning: next cycle runs up to 20 searches",
-  "15:23:42 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "15:23:45 replies: 10 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "15:23:46 sent-folder check: 156 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
-  "15:23:51 queue screening (free, nothing sent): 7 checked, 1 sendable, 2 retired, 0 switched to a better published address",
-  "15:23:59 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "15:23:59 pre-verify (nothing sent): 0 top inboxes checked, 0 verified, 0 held",
-  "15:23:59 link checks: 0 pages, 0 new links won, 0 lost"
+  "17:24:13 connection dataforseo: connected",
+  "17:24:13 connection gmail: connected",
+  "17:24:14 crawl plantastichaven.com: 154/154 urls, fetched 1, 304 0, reused 153",
+  "17:24:15 crawl gearuptofit.com: 300/797 urls, fetched 0, 304 0, reused 300",
+  "17:24:17 crawl frenchyfab.com: 153/153 urls, fetched 0, 304 0, reused 153",
+  "17:24:17 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
+  "17:24:17 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
+  "17:24:18 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
+  "17:24:18 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
+  "17:24:18 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "17:24:18 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "17:24:18 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
+  "17:24:18 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
+  "17:24:19 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
+  "17:24:19 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "17:24:19 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
+  "17:24:19 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
+  "17:24:19 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
+  "17:24:20 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
+  "17:24:20 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
+  "17:24:20 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
+  "17:24:20 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
+  "17:24:20 crawl tenderatlas.shop: sitemap answered HTTP 503; 0 URLs known from earlier cycles are checked instead",
+  "17:24:20 crawl tenderatlas.shop: 3/3 urls, fetched 0, 304 0, reused 3",
+  "17:24:21 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "17:24:21 - search_performance: skipped (Search Console not connected)",
+  "17:24:21 pitch policy: 87 of 530 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
+  "17:24:21 indexation: 1 sitemap URLs cannot be indexed, 1 need a look, 81 are thin (83 in all)",
+  "17:24:21 indexation: tenderatlas.shop: the sitemap answered HTTP 503.",
+  "17:25:42 second look: 60 qualified pages without an address re-checked, 5 now have one (2 unreachable, 457 waiting for a later cycle)",
+  "17:25:44 link neighbourhood (free): 12 qualified pages mined, 24 recommended sites to evaluate",
+  "17:25:46 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 24 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 24 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "17:25:46 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "17:25:46 self-tuning: next cycle runs up to 20 searches",
+  "17:25:47 broken links: 3 queued pages scanned, 0 with a dead link our page can replace",
+  "17:25:49 replies: 10 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "17:25:50 sent-folder check: 156 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
+  "17:25:55 queue screening (free, nothing sent): 9 checked, 0 sendable, 4 retired, 0 switched to a better published address",
+  "17:26:05 outreach: 0 sent, 0 follow-ups, 0 drafts, 1 held for verification",
+  "17:26:05 pre-verify (nothing sent): 0 top inboxes checked, 0 verified, 0 held",
+  "17:26:14 link checks: 13 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
@@ -7303,9 +6866,15 @@
    "fix": "Top up at app.dataforseo.com (Billing). Prospecting resumes by itself on the next cycle."
   },
   {
+   "level": "warn",
+   "code": "templates_only",
+   "message": "All 102 pitches so far were fixed templates (3 replies).",
+   "fix": "Add an Anthropic API key, or a free Groq or Gemini API key, under ⚙ Connect so every pitch is written for that exact page and link."
+  },
+  {
    "level": "info",
    "code": "holds",
-   "message": "22 queued inboxes are held; most often (11) because mailbox unknown.",
+   "message": "23 queued inboxes are held; most often (11) because mailbox unknown.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   }
  ]
