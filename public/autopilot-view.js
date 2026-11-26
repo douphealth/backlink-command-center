@@ -107,14 +107,14 @@ export async function renderAutopilot(h){
   const summaryLine=`Last results ${ago(s.generated_at)} · ${n(t.pages_crawled)} pages audited · ${modeLabel.toLowerCase()}`;
   // The four things that decide how many pitches go out, readable at a glance; the full detail sits one click below.
   const o=s.outreach||{},v=c.verifier||{},w=s.stages?.outreach?.writer||{};
-  const writerName={claude:'Claude',groq:'Groq (free plan)',gemini:'Gemini (free plan)',custom:'Custom AI'}[c.ai_writer]||null;
+  const writerName={claude:'Claude',cloudflare:'Cloudflare AI (free)',groq:'Groq (free plan)',gemini:'Gemini (free plan)',custom:'Custom AI'}[c.ai_writer]||null;
   const aiWritten=(w.claude||0)+(w.free_ai||0);
   const chip=(label,value,note,tone='')=>`<div class="ap-chip ${tone}"><span>${e(label)}</span><strong>${e(value)}</strong><small>${e(note)}</small></div>`;
   const checksLeft=v.ready&&v.used_today<v.daily_limit;
   const chips=`<div class="ap-chips">${[
     chip('Ready to pitch',n(o.ready??f.ready),c.outreach_mode==='off'?'Research only: sending is off':o.cap_today!=null?`${n(o.sent_today||0)} of ${n(o.cap_today)} sent today`:modeLabel.toLowerCase()),
     chip('Inbox checks today',v.ready?`${n(v.used_today)} / ${n(v.daily_limit)}`:'Off',v.ready?(checksLeft?'Every pitch needs one verified inbox':'Used up: more after midnight UTC'):'Add a Verifalia login under Connect',checksLeft?'':'warn'),
-    chip('Pitch writer',writerName||'Templates only',writerName?(aiWritten+(w.template_fallbacks||0)?`Last cycle: ${n(aiWritten)} AI-written, ${n(w.template_fallbacks||0)} template`:'Writes each pitch for that exact page'):'Add a free Groq or Gemini key under Connect',writerName?'':'warn'),
+    chip('Pitch writer',writerName||'Templates only',writerName?(aiWritten+(w.template_fallbacks||0)?`Last cycle: ${n(aiWritten)} AI-written, ${n(w.template_fallbacks||0)} template`:'Writes each pitch for that exact page'):'Built-in free writer was not reachable last cycle',writerName?'':'warn'),
     chip('Search spend',`$${s.spend.today_usd.toFixed(2)} today`,`$${s.spend.month_usd.toFixed(2)} this month · caps $${s.spend.daily_cap_usd} / $${s.spend.monthly_cap_usd}`),
   ].join('')}</div>`;
   const status=`<div class="ap-control"><div class="ap-state"><span class="ap-dot ${state[0]}"></span><div><strong>${e(state[1])}</strong><p>${e(state[2])}${ctl.run?.url?` · <a href="${e(ctl.run.url)}" target="_blank" rel="noopener">${ctl.running?'watch live':'last run log'} ↗</a>`:''}</p><p>${e(summaryLine)}</p></div></div>

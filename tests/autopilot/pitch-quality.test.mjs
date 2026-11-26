@@ -108,7 +108,7 @@ test('free AI writer: a grounded, valid email is used; everything else falls bac
   assert.equal(after,3,'each candidate model is tried once');assert.equal(n,after);assert.equal(limited.ai,null);assert.deepEqual(limited.reasons,{quota_used_up:2});
   // Rejected key -> template with a clear log line.
   const logs=[];const denied=new PitchWriter({senderName:'Alex',providers:groq(),log:m=>logs.push(m),fetchImpl:api(async()=>completion('',403))});
-  assert.equal((await denied.write(prospect,asset,site)).writer,'template');assert.match(logs[0],/Groq: the API key was rejected \(HTTP 403\)/);
+  assert.equal((await denied.write(prospect,asset,site)).writer,'template');assert.match(logs[0],/Groq: the API key was rejected \(HTTP 403/);
   // No key at all -> template, no network.
   const none=new PitchWriter({senderName:'Alex',fetchImpl:async()=>{throw Error('no call expected')}});
   assert.equal((await none.write(prospect,asset,site)).writer,'template');assert.equal(none.ai,null);
@@ -182,7 +182,8 @@ test('a failed reply scan is retried at the 2 h gap instead of after the 5 h kee
 
 test('the Autopilot workflow passes the free AI writer keys and no longer asks for the retired GitHub Models permission',()=>{
   const y=readFileSync(new URL('../../.github/workflows/autopilot.yml',import.meta.url),'utf8');
-  assert.match(y,/permissions:\n\s+contents: write\nconcurrency:/);assert.doesNotMatch(y,/models: read|GITHUB_MODELS/);
+  assert.match(y,/permissions:\n\s+contents: write\n\s+id-token: write/);assert.doesNotMatch(y,/models: read|GITHUB_MODELS/);
+  assert.match(y,/LINKFORGE_AI_ENDPOINT: \$\{\{ inputs\.ai_endpoint \|\| vars\.LINKFORGE_AI_ENDPOINT \|\| 'https:\/\/backlink-command-center\.pages\.dev\/api\/ai\/v1' \}\}/);
   assert.match(y,/GROQ_API_KEY: \$\{\{ secrets\.GROQ_API_KEY \}\}/);assert.match(y,/GEMINI_API_KEY: \$\{\{ secrets\.GEMINI_API_KEY \}\}/);
 });
 

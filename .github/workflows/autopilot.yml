@@ -16,8 +16,13 @@ on:
         description: 'Dry run (no emails, nothing committed)'
         type: boolean
         default: false
+      ai_endpoint:
+        description: 'AI writer endpoint override (testing a preview deployment only)'
+        type: string
+        default: ''
 permissions:
   contents: write
+  id-token: write # identity token for the dashboard's free AI pitch writer; no secret is stored
 concurrency:
   group: linkforge-autopilot
   cancel-in-progress: false
@@ -78,6 +83,9 @@ jobs:
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
           BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
           BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
+          # Free pitch writer: Cloudflare Workers AI behind the dashboard, authorised by this run's identity token.
+          LINKFORGE_AI_ENDPOINT: ${{ inputs.ai_endpoint || vars.LINKFORGE_AI_ENDPOINT || 'https://backlink-command-center.pages.dev/api/ai/v1' }}
+          LINKFORGE_CLOUDFLARE_MODEL: ${{ vars.LINKFORGE_CLOUDFLARE_MODEL }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           LINKFORGE_AI_BASE_URL: ${{ vars.LINKFORGE_AI_BASE_URL }}

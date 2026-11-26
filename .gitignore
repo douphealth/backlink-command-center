@@ -25,8 +25,9 @@ secrets/**
 .env.production*
 # Deployment-only Cloudflare Worker configuration: contains account-specific D1 id.
 workers/scheduler/wrangler.toml
-# Avoid root wrangler.toml overriding production Pages dashboard bindings.
-wrangler.toml
+# The root wrangler.toml IS committed: it binds Workers AI for the free pitch writer and is the source of truth
+# for the Pages project's bindings. (It used to be ignored so it could not override dashboard bindings; the
+# project had none when it was added on 2026-11-26: /api/health reported database_bound false, no auth.)
 
 # One-command deployment generates local, never-published access credentials.
 .linkforge/
