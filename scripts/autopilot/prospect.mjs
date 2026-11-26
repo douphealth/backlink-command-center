@@ -8,6 +8,7 @@
 import {fetchPage,pool,tokens,keyPhrase,links,tagText,jsonLd,mainText,stripTags,extractEmails,rankEmail,hostOf,sameSite,rootDomain,normUrl,hashId,ageDays,NOW} from './util.mjs';
 import {findBrokenLink,assetTerms,outboundCandidates} from './broken.mjs';
 import {resolveWrapped} from './serp-unwrap.mjs';
+import {readArticle} from './article.mjs';
 
 export const BLOCKED=/(^|\.)(reddit|quora|youtube|youtu|facebook|instagram|pinterest|tiktok|twitter|x|linkedin|threads|tumblr|amazon|ebay|walmart|etsy|target|bestbuy|aliexpress|temu|wikipedia|wikihow|wiktionary|medium|substack|github|stackexchange|stackoverflow|apple|google|bing|yahoo|msn|microsoft|play\.google|apps\.apple|yelp|tripadvisor|trustpilot|glassdoor|indeed|craigslist|scribd|slideshare|issuu|archive|imdb|britannica|dictionary|merriam-webster|cambridge|fandom|discord|telegram|whatsapp|twitch|vimeo|dailymotion|soundcloud|spotify|goodreads|zillow|webmd|healthline|mayoclinic|clevelandclinic|nytimes|washingtonpost|theguardian|bbc|cnn|forbes|businessinsider|wsj|usatoday|nbcnews|cbsnews|foxnews|reuters|apnews|bloomberg)\.[a-z.]+$/i;
 // Government sites essentially never add outreach links; skip them before spending a fetch.
@@ -440,7 +441,16 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
       rec.score=Math.max(rec.score,70)}
     else if(!q.qualified)return {...rec,status:'rejected',reason:q.reasons.join('; ')||'Low fit score'};
     if(Date.now()>deadline)return {deferred:c};
-    const contact=await findContact(rec.page_url,res.body,{fetchImpl,author:q.author});
+    // Read the page the way a reader does (Mozilla Readability): what the article itself says and who wrote it.
+    // A page in another language is dropped here, before any contact lookup or verification credit.
+    const art=readArticle(res.body,rec.page_url);
+    if(art){
+      const expected=marketOf(site).language==='en'?'eng':null;
+      if(expected&&art.lang!=='und'&&art.lang!==expected&&art.text.length>=600)return {...rec,qv:QUALIFY_VERSION,status:'rejected',reason:`Page is not in English (${art.lang})`};
+      if(art.text.length>=400)rec.excerpt=art.text.slice(0,1800);
+      if(!rec.author&&art.byline){rec.author=art.byline;stats.bylines=(stats.bylines||0)+1}
+    }
+    const contact=await findContact(rec.page_url,res.body,{fetchImpl,author:rec.author});
     // Vendors that mention us may still link; for cold pitches they're competitors.
     if(contact.site_kind==='local_business'||(contact.site_kind==='software_vendor'&&!mention))return {...rec,qv:QUALIFY_VERSION,status:'rejected',reason:contact.site_kind==='software_vendor'?'Software vendor (competing product)':'Local service business'};
     const status=contact.email?'ready':contact.contact_form?'contact_form':'no_contact';

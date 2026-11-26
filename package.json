@@ -23,6 +23,9 @@
     "wrangler": "^4.149.0"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^1.1.0"
+    "@anthropic-ai/sdk": "^1.1.0",
+    "@mozilla/readability": "^0.6.0",
+    "franc": "^6.2.0",
+    "jsdom": "^31.0.1"
   }
 }
