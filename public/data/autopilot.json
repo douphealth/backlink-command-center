@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-26T19:29:05.342Z",
- "duration_s": 146,
+ "generated_at": "2026-11-26T21:31:40.237Z",
+ "duration_s": 141,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -35,8 +35,8 @@
    "balance": {
     "provider": "verifalia",
     "free_credits": 1,
-    "reset_in": "04:30:55",
-    "checked_at": "2026-11-26T19:29:04.970Z"
+    "reset_in": "02:28:20",
+    "checked_at": "2026-11-26T21:31:40.070Z"
    },
    "catch_all_domains_skipped": 61
   }
@@ -130,7 +130,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 23713,
+   "ms": 12981,
    "result": {
     "sites": 21,
     "pages": 2714
@@ -172,40 +172,38 @@
   },
   "second_look": {
    "ok": true,
-   "ms": 92585,
+   "ms": 100639,
    "result": {
     "checked": 60,
-    "found": 4,
-    "unreachable": 0,
-    "waiting": 397
+    "found": 2,
+    "unreachable": 1,
+    "waiting": 337
    }
   },
   "prospects": {
    "ok": true,
-   "ms": 6596,
+   "ms": 7408,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
-    "candidates": 37,
-    "qualified": 0,
+    "candidates": 18,
+    "qualified": 1,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 37,
+    "rejected": 17,
     "with_email": 0,
-    "contact_form": 0,
+    "contact_form": 1,
     "broken_links": 0,
     "from_queue": 0,
     "linkgap_calls": 0,
     "linkgap_candidates": 0,
-    "neighbor_pages": 12,
-    "neighbor_candidates": 37,
+    "neighbor_pages": 11,
+    "neighbor_candidates": 18,
     "filtered": {
-     "platform_or_giant": 19,
-     "duplicate_this_run": 24,
-     "gov_or_edu": 2,
-     "already_evaluated": 22,
-     "competitor": 5
+     "already_evaluated": 21,
+     "competitor": 2,
+     "duplicate_this_run": 1
     },
     "deferred": 0
    }
@@ -216,17 +214,17 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 1162,
+   "ms": 2259,
    "result": {
-    "checked": 2,
+    "checked": 1,
     "found": 0
    }
   },
   "replies": {
    "ok": true,
-   "ms": 3940,
+   "ms": 2596,
    "result": {
-    "scanned": 7,
+    "scanned": 8,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -236,7 +234,7 @@
   },
   "sent_check": {
    "ok": true,
-   "ms": 1752,
+   "ms": 1377,
    "result": {
     "scanned": 156,
     "restored": 0,
@@ -245,26 +243,25 @@
   },
   "screen": {
    "ok": true,
-   "ms": 4125,
+   "ms": 1718,
    "result": {
-    "screened": 9,
-    "kept": 0,
-    "retired": 5,
+    "screened": 8,
+    "kept": 2,
+    "retired": 2,
     "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 9498,
+   "ms": 37,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 0,
+    "deferred": 65,
     "cap": 12,
-    "verification_held": 0,
-    "out_of_credits": true
+    "verification_held": 0
    },
    "writer": {
     "claude": 0,
@@ -274,7 +271,7 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 18,
+   "ms": 10194,
    "result": {
     "checked": 0,
     "verified": 0,
@@ -295,7 +292,7 @@
  "totals": {
   "sites": 21,
   "pages_crawled": 2714,
-  "urls_discovered": 3840,
+  "urls_discovered": 7395,
   "promotable": 555,
   "internal_suggestions": 578,
   "promoting_now": 48
@@ -325,17 +322,17 @@
   },
   "sent_today": 7,
   "cap_today": 12,
-  "next_send_at": "2026-11-26T19:29:05.346Z",
+  "next_send_at": "2026-11-27T03:00:00.000Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 5471,
-  "qualified": 904,
+  "prospects_evaluated": 5489,
+  "qualified": 905,
   "ready": 64,
   "broken_link_ready": 3,
-  "contact_form_only": 172,
-  "no_contact": 336,
+  "contact_form_only": 175,
+  "no_contact": 332,
   "contacted": 102,
   "replied": 3,
   "positive": 0,
@@ -912,12 +909,12 @@
   },
   {
    "date": "2026-11-26",
-   "prospects_evaluated": 5471,
-   "qualified": 904,
+   "prospects_evaluated": 5489,
+   "qualified": 905,
    "ready": 64,
    "broken_link_ready": 3,
-   "contact_form_only": 172,
-   "no_contact": 336,
+   "contact_form_only": 175,
+   "no_contact": 332,
    "contacted": 102,
    "replied": 3,
    "positive": 0,
@@ -1039,16 +1036,16 @@
     "rate": 0.125
    },
    {
-    "footprint": "neighbor",
-    "queries": 83,
-    "ready": 7,
-    "rate": 0.093
-   },
-   {
     "footprint": "inurl_links",
     "queries": 9,
     "ready": 0,
     "rate": 0.083
+   },
+   {
+    "footprint": "neighbor",
+    "queries": 94,
+    "ready": 7,
+    "rate": 0.082
    },
    {
     "footprint": "helpful_resources",
@@ -1692,8 +1689,8 @@
   {
    "domain": "tenderatlas.shop",
    "pages": 206,
-   "discovered": 206,
-   "sitemaps": 0,
+   "discovered": 3761,
+   "sitemaps": 1,
    "eligible": 28,
    "top": "https://tenderatlas.shop/"
   },
@@ -2338,7 +2335,7 @@
    "linkability": 78,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 117,
+   "internal_inlinks": 129,
    "words": 760,
    "interactive": false,
    "modified": null,
@@ -6026,20 +6023,20 @@
    {
     "site": "tenderatlas.shop",
     "checked": 206,
-    "healthy": 19,
-    "problems": 187,
-    "critical": 89,
+    "healthy": 23,
+    "problems": 183,
+    "critical": 77,
     "review": 0,
     "not_found": 0,
-    "server_error": 89,
+    "server_error": 77,
     "noindex": 0,
     "canonical_mismatch": 0,
     "redirect": 0,
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 98,
-    "alert": "89 of 206 URLs answered HTTP 503 (the site says: database-unavailable). The site itself is failing under light crawling, not individual pages; the crawl stopped early after 15 failures to avoid adding load. the sitemap answered HTTP 503, so 203 URLs known from earlier cycles were checked instead."
+    "thin": 106,
+    "alert": "77 of 206 URLs answered HTTP 503 (the site says: database-unavailable). The site itself is failing under light crawling, not individual pages; the crawl stopped early after 15 failures to avoid adding load."
    },
    {
     "site": "signalroom.store",
@@ -6215,96 +6212,6 @@
   "issues": [
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820832-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820885-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820889-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820913-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820967-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820989-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820990-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/820991-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821023-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
     "url": "https://tenderatlas.shop/tenders/ted/821026-2026",
     "issue": "server_error",
     "label": "Server error (5xx)",
@@ -6315,7 +6222,7 @@
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821030-2026",
+    "url": "https://tenderatlas.shop/tenders/ted/821037-2026",
     "issue": "server_error",
     "label": "Server error (5xx)",
     "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
@@ -6325,7 +6232,97 @@
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821037-2026",
+    "url": "https://tenderatlas.shop/tenders/ted/821059-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821167-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821174-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821238-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821250-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821263-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821293-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821296-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821372-2026",
+    "issue": "server_error",
+    "label": "Server error (5xx)",
+    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
+    "severity": 2,
+    "status": 503,
+    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/tenders/ted/821425-2026",
     "issue": "server_error",
     "label": "Server error (5xx)",
     "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
@@ -6982,10 +6979,10 @@
     "words": 188
    }
   ],
-  "total_issues": 270,
-  "blocking": 90,
+  "total_issues": 266,
+  "blocking": 78,
   "review": 1,
-  "thin": 179,
+  "thin": 187,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first); up to 12 examples are listed per site and problem."
  },
  "search_performance": null,
@@ -6993,7 +6990,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-26T19:28:44.494Z"
+  "updated_at": "2026-11-26T21:31:21.890Z"
  },
  "wins": [
   {
@@ -7064,53 +7061,52 @@
   }
  ],
  "log": [
-  "19:26:40 connection dataforseo: connected",
-  "19:26:40 connection gmail: connected",
-  "19:26:43 crawl gearuptofit.com: 300/797 urls, fetched 2, 304 0, reused 298",
-  "19:26:46 crawl gearuptogrow.com: 103/103 urls, fetched 15, 304 0, reused 88",
-  "19:26:49 crawl mysticaldigits.com: 300/468 urls, fetched 9, 304 0, reused 291",
-  "19:26:51 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
-  "19:26:53 crawl frenchyfab.com: 153/153 urls, fetched 11, 304 0, reused 142",
-  "19:26:53 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
-  "19:26:54 crawl plantastichaven.com: 154/154 urls, fetched 44, 304 0, reused 110",
-  "19:26:54 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "19:26:54 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
-  "19:26:55 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
-  "19:26:55 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
-  "19:26:56 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
-  "19:26:56 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
-  "19:26:57 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
-  "19:26:57 crawl tenderatlas.shop: sitemap answered HTTP 503; 203 URLs known from earlier cycles are checked instead",
-  "19:26:57 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
-  "19:26:57 crawl efficientgptprompts.com: 300/487 urls, fetched 8, 304 0, reused 292",
-  "19:26:57 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
-  "19:26:57 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
-  "19:26:58 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
-  "19:27:02 crawl tenderatlas.shop: 206/206 urls, fetched 29, 304 0, reused 103; 15 answered HTTP 503 (database-unavailable), crawl stopped early (74 not requested)",
-  "19:27:04 crawl micegoneguide.com: 41/41 urls, fetched 12, 304 0, reused 29",
-  "19:27:05 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "19:27:05 - search_performance: skipped (Search Console not connected)",
-  "19:27:05 pitch policy: 85 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
-  "19:27:05 indexation: 90 sitemap URLs cannot be indexed, 1 need a look, 179 are thin (270 in all)",
-  "19:27:05 indexation: tenderatlas.shop: 89 of 206 URLs answered HTTP 503 (the site says: database-unavailable). The site itself is failing under light crawling, not individual pages; the crawl stopped early after 15 failures to avoid adding load. the sitemap answered HTTP 503, so 203 URLs known from earlier cycles were checked instead.",
-  "19:28:37 second look: 60 qualified pages without an address re-checked, 4 now have one (0 unreachable, 397 waiting for a later cycle)",
-  "19:28:38 link neighbourhood (free): 12 qualified pages mined, 37 recommended sites to evaluate",
-  "19:28:44 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 37 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 37 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "19:28:44 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "19:28:44 self-tuning: next cycle runs up to 20 searches",
-  "19:28:45 broken links: 2 queued pages scanned, 0 with a dead link our page can replace",
-  "19:28:49 replies: 7 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "19:28:51 sent-folder check: 156 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
-  "19:28:55 queue screening (free, nothing sent): 9 checked, 0 sendable, 5 retired, 0 switched to a better published address",
-  "19:29:04 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "19:29:04 pre-verify (nothing sent): 0 top inboxes checked, 0 verified, 0 held",
-  "19:29:05 link checks: 0 pages, 0 new links won, 0 lost"
+  "21:29:20 connection dataforseo: connected",
+  "21:29:20 connection gmail: connected",
+  "21:29:22 crawl gearuptofit.com: 300/797 urls, fetched 0, 304 0, reused 300",
+  "21:29:23 crawl plantastichaven.com: 154/154 urls, fetched 1, 304 0, reused 153",
+  "21:29:25 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
+  "21:29:25 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
+  "21:29:26 crawl frenchyfab.com: 153/153 urls, fetched 0, 304 0, reused 153",
+  "21:29:27 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
+  "21:29:28 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "21:29:28 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "21:29:28 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
+  "21:29:29 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
+  "21:29:29 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
+  "21:29:29 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
+  "21:29:30 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
+  "21:29:30 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
+  "21:29:31 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
+  "21:29:31 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
+  "21:29:31 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
+  "21:29:31 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
+  "21:29:31 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
+  "21:29:33 crawl tenderatlas.shop: 300/3761 urls, fetched 27, 304 0, reused 117; 15 answered HTTP 503 (database-unavailable), crawl stopped early (156 not requested)",
+  "21:29:33 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "21:29:33 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "21:29:33 - search_performance: skipped (Search Console not connected)",
+  "21:29:33 pitch policy: 85 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
+  "21:29:33 indexation: 78 sitemap URLs cannot be indexed, 1 need a look, 187 are thin (266 in all)",
+  "21:29:33 indexation: tenderatlas.shop: 77 of 206 URLs answered HTTP 503 (the site says: database-unavailable). The site itself is failing under light crawling, not individual pages; the crawl stopped early after 15 failures to avoid adding load.",
+  "21:31:14 second look: 60 qualified pages without an address re-checked, 2 now have one (1 unreachable, 337 waiting for a later cycle)",
+  "21:31:17 link neighbourhood (free): 11 qualified pages mined, 18 recommended sites to evaluate",
+  "21:31:21 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 18 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 18 candidates, 1 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "21:31:21 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "21:31:21 self-tuning: next cycle runs up to 20 searches",
+  "21:31:24 broken links: 1 queued pages scanned, 0 with a dead link our page can replace",
+  "21:31:26 replies: 8 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "21:31:28 sent-folder check: 156 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
+  "21:31:29 queue screening (free, nothing sent): 8 checked, 2 sendable, 2 retired, 0 switched to a better published address",
+  "21:31:29 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "21:31:40 pre-verify (nothing sent): 0 top inboxes checked, 0 verified, 0 held",
+  "21:31:40 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
    "level": "action",
    "code": "site_failing",
-   "message": "tenderatlas.shop: 89 of 206 URLs answered HTTP 503 (the site says: database-unavailable). The site itself is failing under light crawling, not individual pages; the crawl stopped early after 15 failures to avoid adding load. the sitemap answered HTTP 503, so 203 URLs known from earlier cycles were checked instead.",
+   "message": "tenderatlas.shop: 77 of 206 URLs answered HTTP 503 (the site says: database-unavailable). The site itself is failing under light crawling, not individual pages; the crawl stopped early after 15 failures to avoid adding load.",
    "fix": "Fix the site itself first (hosting, database or plan limits, firewall). Links are not built to pages that fail, and this is re-checked every cycle."
   },
   {
