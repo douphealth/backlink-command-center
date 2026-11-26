@@ -1,5 +1,5 @@
 import {BrowserStore} from './browser-store.js';
-import {renderAutopilot,bindAutopilot} from './autopilot-view.js';
+import {renderAutopilot,bindAutopilot,showApTab,currentApTab} from './autopilot-view.js';
 const state={csrf:'',view:'autopilot',page:1,filters:{q:'',site:'all',status:'all'},overview:null,liveTimer:null,mode:'booting',local:null};
 const el=id=>document.getElementById(id);
 const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -76,7 +76,14 @@ async function viewLearning(){
   let referrals=d.referrals.map(x=>`<tr><td><strong>${escapeHTML(x.site)}</strong><small>${escapeHTML(x.referrer_domain)}</small></td><td>${escapeHTML(x.date)}</td><td>${n(x.sessions)}</td><td>${x.conversions===null?'Not recorded':n(x.conversions)}</td><td>${escapeHTML(x.source)}</td></tr>`);
   return intro('learning')+`<div class="learning-hero"><div><div class="overline">EVIDENCE-BASED LEARNING LOOP</div><h2>Optimise for verified outcomes, not email volume.</h2><p>Every seven research cycles, the engine can compare outreach categories against real replies and placements. Missing analytics and unknown outcomes are excluded from claims.</p></div><span class="learning-symbol">↗</span></div><div class="section-grid" style="margin-bottom:20px"><div class="mini-stat"><strong>${n(d.outcomes.length)}</strong><span>Recorded campaign outcomes</span></div><div class="mini-stat"><strong>${n(d.searches.length)}</strong><span>Most recent logged searches (up to 50)</span></div><div class="mini-stat"><strong>${n(d.referrals.length)}</strong><span>Imported referral observations</span></div></div>${counts?`<div class="section-grid" style="margin-bottom:20px">${counts}</div>`:''}${panel('Editorial outcome evidence','Observed decisions backed by publisher evidence',rows.length?table(['Publisher','Observed outcome','Evidence','Recorded'],rows):empty('No outcome evidence yet','A send does not count as a positive response or placement.'))}${panel('Source efficiency','Current footprint queries and actual yield',searches.length?table(['Website','Query','Results','New prospects','Errors'],searches):empty('No search history','Research attempts are logged when a real worker runs.'))}${panel('Attributable referrals','Only imported analytics, never assumed traffic',referrals.length?table(['Site and referrer','Date','Sessions','Conversions','Source'],referrals):empty('No referral analytics imported','Traffic is unknown until a compatible analytics export is imported.'))}`;
 }
-async function setView(view){if(!titles[view])return;state.view=view;state.page=1;document.querySelectorAll('[data-view]').forEach(a=>{if(a.classList.contains('nav-link'))a.classList.toggle('active',a.dataset.view===view)});el('current-crumb').textContent=titles[view][0];el('sidebar').classList.remove('open');window.history.replaceState(null,'','#'+view);await load()}
+// A sidebar item is active when its view is open and, for an Autopilot section, its tab is the one shown.
+function markNav(){const tab=currentApTab();document.querySelectorAll('.nav-link').forEach(a=>a.classList.toggle('active',a.dataset.view===state.view&&(!a.dataset.tab||a.dataset.tab===tab)));
+  const g=el('manual-group');if(g&&state.view!=='autopilot')g.open=true}
+async function setView(view,tab){if(!titles[view])return;
+  // Already on Autopilot: switching section needs no reload.
+  if(tab&&view==='autopilot'&&state.view==='autopilot'&&document.querySelector('[data-ap-pane]')){showApTab(tab);el('sidebar').classList.remove('open');window.scrollTo({top:0});return}
+  if(tab)showApTab(tab);
+  state.view=view;state.page=1;markNav();el('current-crumb').textContent=titles[view][0];el('sidebar').classList.remove('open');window.history.replaceState(null,'','#'+view);await load();markNav()}
 function browserBanner(){return `<section class="browser-banner" role="status"><div><div class="browser-eyebrow"><span class="pulse-indicator"></span> READY ON CLOUDFLARE PAGES · ON THIS DEVICE</div><strong>Your LinkForge workspace is operational.</strong><p>Imported and manually managed records stay in this browser. Cloud-wide synchronization, unattended research and Gmail require an optional secured Worker. <b>Paid API calls and outgoing emails are OFF.</b>${state.local?.persistenceWarning?' <b>'+escapeHTML(state.local.persistenceWarning)+'</b>':''}</p></div><div class="browser-actions"><button class="secondary" data-action="import-workspace">↑ Import data</button><button class="secondary" data-action="backup-workspace">↓ Back up</button></div></section>`}
 function downloadContent(text,filename,contentType){const blob=new Blob([text],{type:contentType}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1200)}
 async function siteCheck(domain){
@@ -130,8 +137,8 @@ async function start(){
     }
     const requested=location.hash.slice(1)==='besturls'?'autopilot':location.hash.slice(1);
     state.view=titles[requested]?requested:state.view;
-    document.querySelectorAll('.nav-link').forEach(a=>a.classList.toggle('active',a.dataset.view===state.view));
-    el('current-crumb').textContent=titles[state.view][0];await load();
+    markNav();
+    el('current-crumb').textContent=titles[state.view][0];await load();markNav();
   }catch(err){
     // Do not trap the user in a setup screen because of a backend/network error.
     if(!state.local)state.local=new BrowserStore();await state.local.ready;
@@ -155,7 +162,7 @@ el('toggle-code').addEventListener('click',()=>{
 });
 
 let searchDebounce;
-document.addEventListener('click',async e=>{let nav=e.target.closest('[data-view]');if(nav){await setView(nav.dataset.view);return}if(e.target.closest('[data-action=refresh]')||e.target.closest('#refresh')||e.target.closest('#refresh2')){await load();toast('Verified records refreshed');return}let exportButton=e.target.closest('[data-export]');if(exportButton){try{const kind=exportButton.dataset.export;if(state.mode==='browser')downloadContent(await state.local.exportCsv(kind),'linkforge-'+kind+'.csv','text/csv;charset=utf-8');else {const r=await fetch('/api/export/'+encodeURIComponent(kind),{credentials:'same-origin',headers:{'X-CSRF-Token':state.csrf}});if(!r.ok)throw Error('Export failed');downloadContent(await r.text(),'linkforge-'+kind+'.csv','text/csv;charset=utf-8')}toast('CSV downloaded')}catch(ex){toast(ex.message,true)}return}const manage=e.target.closest('[data-action]');if(manage){
+document.addEventListener('click',async e=>{let nav=e.target.closest('[data-view]');if(nav){await setView(nav.dataset.view,nav.dataset.tab);return}if(e.target.closest('[data-action=refresh]')||e.target.closest('#refresh')||e.target.closest('#refresh2')){await load();toast('Verified records refreshed');return}let exportButton=e.target.closest('[data-export]');if(exportButton){try{const kind=exportButton.dataset.export;if(state.mode==='browser')downloadContent(await state.local.exportCsv(kind),'linkforge-'+kind+'.csv','text/csv;charset=utf-8');else {const r=await fetch('/api/export/'+encodeURIComponent(kind),{credentials:'same-origin',headers:{'X-CSRF-Token':state.csrf}});if(!r.ok)throw Error('Export failed');downloadContent(await r.text(),'linkforge-'+kind+'.csv','text/csv;charset=utf-8')}toast('CSV downloaded')}catch(ex){toast(ex.message,true)}return}const manage=e.target.closest('[data-action]');if(manage){
  const action=manage.dataset.action;
  if(action==='import-workspace'){el('workspace-import').click();return;}
  if(action==='backup-workspace'&&state.mode==='browser'){try{downloadContent(JSON.stringify(await state.local.exportBackup(),null,2),'linkforge-browser-backup.json','application/json');toast('Complete device backup downloaded')}catch(err){toast(err.message,true)}return;}

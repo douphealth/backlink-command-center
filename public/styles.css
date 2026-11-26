@@ -152,3 +152,11 @@ td small{font-size:12px;color:#66727f;max-width:520px;white-space:normal;line-he
 .ap-tab:focus-visible,.ap-more summary:focus-visible{outline:2px solid #8bbf4a;outline-offset:2px}
 .ap-pane>.ap-gap:first-child{margin-top:0}
 .ap-list li{margin:6px 0}
+.nav-count.warn{background:#5a2a26;color:#ffb4ae}
+.nav-group{margin:18px 0 0;border-top:1px solid #232d39;padding-top:10px}
+.nav-group summary{list-style:none;cursor:pointer;color:#aeb9c6;font-size:12.5px;font-weight:700;padding:10px 15px;border-radius:9px;display:block}
+.nav-group summary::-webkit-details-marker{display:none}
+.nav-group summary:before{content:'▸ '}.nav-group[open] summary:before{content:'▾ '}
+.nav-group summary small{display:block;font-size:10.5px;font-weight:600;color:#6c7a8d;margin-top:3px}
+.nav-group summary:hover{background:#1d2835}.nav-group summary:focus-visible{outline:2px solid #8bbf4a;outline-offset:2px}
+.nav-group .nav-link{font-size:12.5px;padding:9px 15px;color:#75828f}
