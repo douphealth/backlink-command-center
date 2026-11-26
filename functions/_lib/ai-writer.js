@@ -8,6 +8,8 @@ import {verifyActionsToken} from './actions-oidc.js';
 
 export const AUDIENCE='linkforge-ai-writer';
 export const WORKFLOW='autopilot.yml';
+/** The repository this dashboard is deployed from; a fork sets LINKFORGE_REPO (wrangler.toml [vars]) to its own. */
+export const DEFAULT_REPO='douphealth/backlink-command-center';
 /** Text models, best writer first. Ids and prices checked on developers.cloudflare.com (2026-11-26). */
 export const MODELS=['@cf/meta/llama-3.3-70b-instruct-fp8-fast','@cf/openai/gpt-oss-120b','@cf/meta/llama-4-scout-17b-16e-instruct','@cf/meta/llama-3.1-8b-instruct'];
 const MAX_INPUT_CHARS=24000,MAX_TOKENS=2000;
@@ -29,9 +31,9 @@ export function answerText(out){
 
 async function authorised(request,env,deps){
   const token=(request.headers.get('authorization')||'').replace(/^Bearer\s+/i,'');
-  if(!token)return error(401,'no_token','Send the GitHub Actions identity token as a Bearer token');
-  const repository=env?.LINKFORGE_REPO||'';
-  if(!repository)return error(503,'not_configured','LINKFORGE_REPO is not set for this deployment');
+  // Two harmless booleans so a missing binding can be told apart from a refused caller without any login.
+  if(!token)return json({error:{code:'no_token',message:'Send the GitHub Actions identity token as a Bearer token'},service:{ai_bound:!!env?.AI,repository_from_config:!!env?.LINKFORGE_REPO}},401);
+  const repository=env?.LINKFORGE_REPO||DEFAULT_REPO;
   try{await verifyActionsToken(token,{audience:AUDIENCE,repository,workflow:WORKFLOW,...deps});return null}
   catch(e){return error(e.code==='keys_unavailable'?503:401,e.code||'rejected',e.message)}
 }

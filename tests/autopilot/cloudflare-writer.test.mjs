@@ -46,7 +46,9 @@ test('the endpoint refuses everyone but the Autopilot workflow, and bounds what 
   _resetKeyCache();
   const deps={fetchImpl:keysFetch},calls=[];
   const ai={run:async(model,input)=>{calls.push([model,input]);return {response:'Subject: Hello there editor\n\nBody text'}}};
-  assert.equal((await chatCompletion(post(good),env(ai),deps)).status,401,'no token');
+  const anonymous=await chatCompletion(post(good),env(ai),deps);
+  assert.equal(anonymous.status,401,'no token');assert.deepEqual((await anonymous.json()).service,{ai_bound:true,repository_from_config:true});
+  assert.equal((await chatCompletion(post(good,sign(claims())),{AI:ai},deps)).status,200,'without the variable the repository this dashboard is deployed from is used');
   assert.equal((await chatCompletion(post(good,sign(claims({repository:'someone/else'}))),env(ai),deps)).status,401,'another repository');
   assert.equal(calls.length,0,'nothing reaches the model without a valid token');
   const token=sign(claims());
