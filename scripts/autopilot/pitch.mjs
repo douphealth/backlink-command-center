@@ -120,6 +120,8 @@ export function grounded(out,facts){
 export const AI_PROVIDERS={
   groq:{label:'Groq',base:'https://api.groq.com/openai/v1',prefer:[/gpt-oss-120b/i,/llama-3\.3-70b/i,/70b/i,/gpt-oss-20b/i,/instant/i],fallback:['openai/gpt-oss-120b','llama-3.3-70b-versatile','llama-3.1-8b-instant']},
   // nativeList: Google's own model list, read when the OpenAI-style one is not served for this key.
+  // Our own dashboard's endpoint in front of Cloudflare Workers AI (functions/_lib/ai-writer.js): no key at all.
+  cloudflare:{label:'Cloudflare Workers AI',prefer:[/llama-3\.3-70b/i,/gpt-oss-120b/i,/llama-4-scout/i,/llama-3\.1-8b/i],fallback:['@cf/meta/llama-3.3-70b-instruct-fp8-fast','@cf/openai/gpt-oss-120b']},
   gemini:{label:'Gemini',base:'https://generativelanguage.googleapis.com/v1beta/openai',prefer:[/flash-lite/i,/flash/i],fallback:['gemini-flash-lite-latest','gemini-flash-latest','gemini-2.5-flash-lite','gemini-2.5-flash'],
     nativeList:{url:'https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000',keyHeader:'x-goog-api-key'}},
 };
@@ -146,7 +148,28 @@ export function aiProviders(env){
     let label='custom';try{label=new URL(base).hostname}catch{}
     out.push({name:'custom',label,base,key:t(env.LINKFORGE_AI_KEY),model:t(env.LINKFORGE_AI_MODEL),prefer:[],fallback:[]});
   }
+  // Keyless default inside GitHub Actions: the dashboard's Workers AI endpoint, authorised by a GitHub identity token.
+  const endpoint=t(env.LINKFORGE_AI_ENDPOINT).replace(/\/+$/,'');
+  if(/^https:\/\/[^\s/]+/.test(endpoint)&&env.ACTIONS_ID_TOKEN_REQUEST_URL&&env.ACTIONS_ID_TOKEN_REQUEST_TOKEN)
+    out.push({name:'cloudflare',...AI_PROVIDERS.cloudflare,base:endpoint,key:'',getKey:actionsIdentity(env,'linkforge-ai-writer'),model:t(env.LINKFORGE_CLOUDFLARE_MODEL)});
   return out;
+}
+/**
+ * A short-lived GitHub Actions identity token (OIDC, valid a few minutes): it proves to our own dashboard that the
+ * caller is this repository's Autopilot workflow, so no secret has to be stored anywhere. Reused for 3 minutes.
+ */
+export function actionsIdentity(env,audience){
+  let cached={at:0,value:''};
+  return async fetchImpl=>{
+    if(cached.value&&Date.now()-cached.at<180000)return cached.value;
+    try{
+      const u=new URL(env.ACTIONS_ID_TOKEN_REQUEST_URL);u.searchParams.set('audience',audience);
+      const res=await fetchImpl(u.href,{headers:{Authorization:'bearer '+env.ACTIONS_ID_TOKEN_REQUEST_TOKEN,Accept:'application/json'},signal:AbortSignal.timeout(15000)});
+      const value=res.ok?String((await res.json().catch(()=>({})))?.value||''):'';
+      if(value)cached={at:Date.now(),value};
+      return value;
+    }catch{return ''}
+  };
 }
 const SCHEMA={type:'object',properties:{subject:{type:'string'},body:{type:'string'}},required:['subject','body'],additionalProperties:false};
 const SYSTEM=`You write short, honest link-suggestion emails to independent website editors.
@@ -244,7 +267,9 @@ export class PitchWriter{
     return ids.length||!p.nativeList?ids:read(p.nativeList.url,{[p.nativeList.keyHeader]:p.key});
   }
   async ask(p,facts){
-    const headers={Authorization:'Bearer '+p.key,'Content-Type':'application/json'};
+    const key=p.getKey?await p.getKey(this.fetch):p.key;
+    if(!key){p.off=true;p.offWhy='not_permitted';this.log(`${p.label}: no identity token from GitHub Actions (the workflow needs "id-token: write"); it is not used for the rest of this cycle`);return {why:'not_permitted'}}
+    const headers={Authorization:'Bearer '+key,'Content-Type':'application/json'};
     // Plain "Subject:" format: small models keep to it far more reliably than to JSON with line breaks inside strings.
     const system=SYSTEM+'\nAnswer in exactly this format, with nothing before or after it:\nSubject: <the subject line>\n\n<the email body>';
     // max_tokens leaves room for models that reason before answering; the body length is validated afterwards.
@@ -264,7 +289,8 @@ export class PitchWriter{
         if(attempt===0&&wait>0&&wait<=20){await this.sleep(wait*1000+500);continue}
         break;
       }
-      if(res.status===401||res.status===403)return off('not_permitted',`${p.label}: the API key was rejected (HTTP ${res.status}); it is not used for the rest of this cycle`);
+      if(res.status===401||res.status===403){const said=(await res.text().catch(()=>'')).replace(/\s+/g,' ').slice(0,120);
+        return off('not_permitted',`${p.label}: the ${p.getKey?'identity token':'API key'} was rejected (HTTP ${res.status}${said?': '+said:''}); it is not used for the rest of this cycle`)}
       // Quotas are per model: this model is skipped for the rest of the cycle and the next one is tried.
       if(res.status===429){p.limited.add(model);if(p.working===model)p.working=null;limited=true;continue}
       if(res.status>=300&&res.status<400)return {why:'redirected',detail:`${p.label}: HTTP ${res.status} to ${res.headers?.get?.('location')||'(no location)'}`};
