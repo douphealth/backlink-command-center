@@ -25,6 +25,8 @@ test('only pages an editor would link to are pitched (cases taken from productio
   assert.equal(ok(a('https://gearuptofit.com/productivity/weekly-review-checklist/',{type:'reference',words:3075,linkability:84,reasons:['One of 14 templated sibling pages — promote the hub first']})),true,'a blog category is not a template');
   assert.equal(ok(a('https://gearuptofit.com/skills/knowledge-graph/',{words:681,linkability:66,interactive:true})),false,'thin page with a widget');
   assert.match(pitchable(a('https://gearuptofit.com/cities/athens'),site).why,/thin/);
+  assert.equal(ok(a('https://gearuptofit.com/productivity/weekly-review-checklist/',{type:'reference',title:'Weekly Review Checklist: A 30-Minute Template',words:3075,linkability:84})),true,'a weekly review is not a product review');
+  assert.equal(ok(a('https://gearuptofit.com/blog/garmin-forerunner/',{type:'practical_guide',title:'Garmin Forerunner 265 Review: Worth It?',words:2600,linkability:85})),false);
 });
 
 test('every configured site has flagship pages, so each one always has something worth pitching',()=>{

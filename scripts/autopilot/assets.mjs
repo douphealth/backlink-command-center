@@ -10,7 +10,7 @@ import {normUrl,tokens,keyPhrase} from './util.mjs';
 
 const REVIEW_PATH=/\/(?:reviews?|compare|comparisons?|best|deals?|coupons?|discounts?|pricing|shop|product|products|buy)(?:\/|$)/i;
 // Product pages by title. Concept comparisons ("interleaving vs blocked practice") are fine and are not matched here.
-const REVIEW_TITLE=/\b(?:review|reviews|coupon|discount|deals?|pricing|cheapest|best [a-z0-9 ]{2,40} for)\b/i;
+const REVIEW_TITLE=/\b(?:(?<!weekly |monthly |quarterly |annual |yearly |daily |peer |performance |code |literature |life |self[- ])reviews?(?! checklist| template| process| questions| meeting)|coupon|discount|deals?|pricing|cheapest|best [a-z0-9 ]{2,40} for)\b/i;
 const pathOf=u=>{try{return new URL(u).pathname}catch{return ''}};
 
 export const isFlagship=(asset,site)=>(site?.assets||[]).some(u=>normUrl(u)===normUrl(asset?.url));
