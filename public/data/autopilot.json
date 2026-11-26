@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-26T02:43:21.549Z",
- "duration_s": 111,
+ "generated_at": "2026-11-26T04:44:54.642Z",
+ "duration_s": 64,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -29,14 +29,14 @@
    "key": true,
    "enabled": true,
    "daily_limit": 24,
-   "used_today": 6,
+   "used_today": 11,
    "balance": {
     "provider": "verifalia",
-    "free_credits": 19,
-    "reset_in": "21:17:15",
-    "checked_at": "2026-11-26T02:42:44.885Z"
+    "free_credits": 14,
+    "reset_in": "19:15:46",
+    "checked_at": "2026-11-26T04:44:13.744Z"
    },
-   "catch_all_domains_skipped": 54
+   "catch_all_domains_skipped": 55
   }
  },
  "setup": [
@@ -114,10 +114,10 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 54412,
+   "ms": 16820,
    "result": {
     "sites": 21,
-    "pages": 2795
+    "pages": 2799
    }
   },
   "demand": {
@@ -140,7 +140,7 @@
    "ok": true,
    "result": {
     "ranked": 510,
-    "internal_suggestions": 610
+    "internal_suggestions": 605
    }
   },
   "requalify": {
@@ -155,34 +155,23 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 11135,
+   "ms": 17,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
-    "candidates": 14,
-    "qualified": 4,
+    "candidates": 0,
+    "qualified": 0,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 8,
+    "rejected": 0,
     "with_email": 0,
     "contact_form": 0,
     "broken_links": 0,
-    "from_queue": 14,
+    "from_queue": 0,
     "linkgap_calls": 0,
     "linkgap_candidates": 0,
-    "linkgap_failed": 1,
-    "failed_queries": 4,
-    "resolved": 9,
-    "resolved_via": {
-     "redirect": 9
-    },
-    "unresolved_why": {
-     "redirect_empty_page": 1,
-     "redirect_too_many_redirects": 1
-    },
-    "deferred": 0,
-    "unresolved": 2
+    "deferred": 0
    }
   },
   "bing_submit": {
@@ -191,7 +180,7 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 4,
+   "ms": 2,
    "result": {
     "checked": 0,
     "found": 0
@@ -199,9 +188,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1578,
+   "ms": 1827,
    "result": {
-    "scanned": 7,
+    "scanned": 2,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -211,16 +200,16 @@
   },
   "sent_check": {
    "ok": true,
-   "ms": 895,
+   "ms": 1118,
    "result": {
     "scanned": 149,
-    "restored": 6,
-    "duplicates": 8
+    "restored": 0,
+    "duplicates": 0
    }
   },
   "screen": {
    "ok": true,
-   "ms": 3,
+   "ms": 2,
    "result": {
     "screened": 2,
     "kept": 0,
@@ -230,15 +219,15 @@
   },
   "outreach": {
    "ok": true,
-   "ms": 16,
+   "ms": 8016,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 68,
+    "deferred": 67,
     "cap": 12,
-    "verification_held": 0
+    "verification_held": 1
    },
    "writer": {
     "claude": 0,
@@ -247,18 +236,18 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 38304,
+   "ms": 34449,
    "result": {
     "checked": 10,
-    "verified": 2,
-    "held": 8
+    "verified": 0,
+    "held": 10
    }
   },
   "link_checks": {
    "ok": true,
-   "ms": 1981,
+   "ms": 3,
    "result": {
-    "checked": 5,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -266,10 +255,10 @@
  },
  "totals": {
   "sites": 21,
-  "pages_crawled": 2795,
-  "urls_discovered": 6436,
+  "pages_crawled": 2799,
+  "urls_discovered": 6934,
   "promotable": 510,
-  "internal_suggestions": 610,
+  "internal_suggestions": 605,
   "promoting_now": 54
  },
  "spend": {
@@ -277,7 +266,7 @@
   "month_usd": 7.4361,
   "daily_cap_usd": 0.5,
   "monthly_cap_usd": 10,
-  "calls_this_run": 6
+  "calls_this_run": 0
  },
  "outreach": {
   "mode": "send",
@@ -286,13 +275,13 @@
   "pending_verification": 64,
   "holds": {
    "publisher_mismatch": 1,
-   "mailbox_unknown": 6,
-   "mailbox_recently_inconclusive": 2,
-   "mailbox_accept_all": 5
+   "mailbox_unknown": 10,
+   "mailbox_recently_inconclusive": 5,
+   "mailbox_accept_all": 6
   },
   "sent_today": 0,
   "cap_today": 12,
-  "next_send_at": "2026-11-26T03:00:00.000Z",
+  "next_send_at": "2026-11-26T04:44:54.645Z",
   "sending_now": false,
   "reply_health": "ok"
  },
@@ -1548,9 +1537,9 @@
  "sites": [
   {
    "domain": "gearuptofit.com",
-   "pages": 296,
-   "discovered": 296,
-   "sitemaps": 6,
+   "pages": 300,
+   "discovered": 794,
+   "sitemaps": 7,
    "eligible": 25,
    "top": "https://gearuptofit.com/shoe-finder/methodology/"
   },
@@ -1918,6 +1907,31 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/running-calorie-calculator/",
+   "title": "Running Calorie Calculator: Pace & Incline | Gear Up to Fit",
+   "h1": "Running Calorie Calculator: Net vs. Gross, Incline & Fueling Lab",
+   "description": "Calculate exact Net and Gross calories burned running by weight, pace, distance, treadmill incline, and terrain using ACSM VO2, Minetti slope, and MET models.",
+   "type": "interactive_tool",
+   "promotion": 79,
+   "linkability": 88,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 4,
+   "words": 4693,
+   "interactive": true,
+   "modified": "2026-09-26T17:36:21+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,693 words)",
+    "2 data tables",
+    "Recently updated"
+   ],
+   "prospects": 5,
+   "internal_link_suggestions": 1,
+   "promoting": false
+  },
+  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/personal-development/goal-achievement/",
    "title": "Goal Achievement: A 7-Step Framework to Finish Goals",
@@ -2109,6 +2123,30 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/running-pace-calculator/",
+   "title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "h1": "Running Pace Calculator & Race Time Predictor (2026)",
+   "description": "Unbiased & Independent GearUpToFit is reader-supported. We adhere to strict testing standards. When you buy through links on our site, we may earn a commission at no cost to you. Interactive Running Tool &bull; Updated 2026 Accurately calculate your running … Continue reading &rarr;",
+   "type": "interactive_tool",
+   "promotion": 75,
+   "linkability": 83,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 4,
+   "words": 1591,
+   "interactive": true,
+   "modified": "2026-09-08T13:32:42+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "2 data tables",
+    "Recently updated"
+   ],
+   "prospects": 12,
+   "internal_link_suggestions": 4,
+   "promoting": false
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
    "title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
@@ -2167,7 +2205,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 22,
+   "internal_inlinks": 26,
    "words": 999,
    "interactive": true,
    "modified": null,
@@ -2698,7 +2736,7 @@
    "linkability": 67,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 290,
+   "internal_inlinks": 294,
    "words": 1406,
    "interactive": false,
    "modified": "2026-10-04T18:13:49.000Z",
@@ -2971,7 +3009,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 3,
-   "words": 1137,
+   "words": 1136,
    "interactive": false,
    "modified": "2026-11-13T07:31:57+00:00",
    "reasons": [
@@ -3004,6 +3042,56 @@
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "h1": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews)",
+   "description": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit: practical review guidance with key considerations, buyer signals, safety notes, an",
+   "type": "commercial",
+   "promotion": 63,
+   "linkability": 65,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 2475,
+   "interactive": false,
+   "modified": "2026-10-04T17:56:49+00:00",
+   "reasons": [
+    "In-depth (2,475 words)",
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "h1": "7 Best Running Shoes for Supination & High Arches (2026)",
+   "description": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit: practical review guidance with key considerations, buyer signals, safety notes, and",
+   "type": "commercial",
+   "promotion": 63,
+   "linkability": 65,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 2219,
+   "interactive": false,
+   "modified": "2026-10-04T17:56:52+00:00",
+   "reasons": [
+    "In-depth (2,219 words)",
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
   },
   {
    "site": "gearuptogrow.com",
@@ -3101,7 +3189,7 @@
    ],
    "prospects": 0,
    "internal_link_suggestions": 1,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -3556,107 +3644,6 @@
    "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/productivity/how-to-recover-from-burnout-while-working/",
-   "title": "How to Recover from Burnout While Working",
-   "h1": "How to Recover from Burnout While Working",
-   "description": "Compare burnout and short-term stress without biomarker myths. Review work-pattern clues, red flags, recovery limits, and when to seek professional support.",
-   "type": "practical_guide",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 4,
-   "words": 1930,
-   "interactive": false,
-   "modified": "2026-11-08T07:36:11+00:00",
-   "reasons": [
-    "3 data tables",
-    "Cites 6 authoritative sources",
-    "Recently updated",
-    "One of 32 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/personal-development/morning-routine/",
-   "title": "Morning Routine: Realistic Guide | Gear Up to Grow",
-   "h1": "Morning Routine: A Practical System That Works on Hard Days",
-   "description": "A realistic, flexible morning routine framework that supports energy and cuts decision fatigue. Start with one small anchor and build from there.",
-   "type": "practical_guide",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 17,
-   "words": 1807,
-   "interactive": false,
-   "modified": "2026-11-08T07:36:09+00:00",
-   "reasons": [
-    "3 data tables",
-    "Cites 6 authoritative sources",
-    "Recently updated",
-    "One of 23 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 1,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "mysticaldigits.com",
-   "url": "https://mysticaldigits.com/free-numerology-love-compatibility-score/",
-   "title": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
-   "h1": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
-   "description": "Compare two people’s Life Path, Destiny, Soul Urge, and Personal Year numbers with a careful numerology love compatibility framework.",
-   "type": "interactive_tool",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 17,
-   "words": 3476,
-   "interactive": false,
-   "modified": "2026-11-07T20:04:39+00:00",
-   "reasons": [
-    "In-depth (3,476 words)",
-    "2 data tables",
-    "Recently updated",
-    "One of 299 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 1,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "h1": "Best Brushes for French Bulldogs: Shiny Coats",
-   "description": "Brushes for French Bulldogs a hassle? Discover essential grooming tools for a healthy coat. Proven solution for shedding! See how today!",
-   "type": "general_article",
-   "promotion": 58,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 3,
-   "words": 4115,
-   "interactive": true,
-   "modified": "2026-11-25T13:50:04+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,115 words)",
-    "20 data tables",
-    "Recently updated",
-    "One of 152 templated sibling pages — promote the hub first"
-   ],
-   "prospects": 2,
-   "internal_link_suggestions": 5,
-   "promoting": false
   }
  ],
  "internal_links": [
@@ -3872,6 +3859,26 @@
   },
   {
    "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "from_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "to": "https://gearuptofit.com/shoe-finder/methodology/",
+   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 63
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "from_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "to": "https://gearuptofit.com/shoe-finder/methodology/",
+   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 63
+  },
+  {
+   "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/running/",
    "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
@@ -3892,22 +3899,12 @@
   },
   {
    "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/reviews/",
-   "from_title": "Reviews Hub | Running Shoes, Watches & Fitness Gear | GearUpToFit",
-   "to": "https://gearuptofit.com/shoe-finder/methodology/",
-   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running-injury-prevention/",
-   "from_title": "Running Injury Prevention: Form, Strength & Recovery Guide | GearUpToFit",
-   "to": "https://gearuptofit.com/shoe-finder/methodology/",
-   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "anchor": "running shoes",
-   "relevance": 4,
+   "from": "https://gearuptofit.com/calculators/",
+   "from_title": "Free Fitness & Running Calculators | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-calorie-calculator/",
+   "to_title": "Running Calorie Calculator: Pace & Incline | Gear Up to Fit",
+   "anchor": "running calorie calculator",
+   "relevance": 3,
    "from_strength": 0
   },
   {
@@ -4027,6 +4024,46 @@
    "to": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
    "to_title": "Email Marketing Template Generator: HTML & Plain Text",
    "anchor": "write email reader",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/calculators/",
+   "from_title": "Free Fitness & Running Calculators | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/running-calorie-calculator/",
+   "from_title": "Running Calorie Calculator: Pace & Incline | Gear Up to Fit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
+   "relevance": 3,
+   "from_strength": 79
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/",
+   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running-training-plans/",
+   "from_title": "2026 Running Training Plans: 5K, 10K & Marathon Guide | GearUpToFit",
+   "to": "https://gearuptofit.com/running/running-pace-calculator/",
+   "to_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "anchor": "running pace calculator",
    "relevance": 3,
    "from_strength": 0
   },
@@ -4821,6 +4858,106 @@
    "from_strength": 42
   },
   {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "from_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 8,
+   "from_strength": 63
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/shoe-finder/methodology/",
+   "from_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 6,
+   "from_strength": 82
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/shoe-finder/",
+   "from_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 5,
+   "from_strength": 75
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/",
+   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review-methodology/testing-log/",
+   "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
+   "from_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 5,
+   "from_strength": 63
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/shoe-finder/methodology/",
+   "from_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 82
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/shoe-finder/",
+   "from_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 75
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/",
+   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review-methodology/testing-log/",
+   "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
+   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
+   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/decode-your-personality-birth-number-7/",
    "from_title": "Birth Number 7 Personality: Traits & Meanings | Mystical Digits",
@@ -5509,164 +5646,14 @@
    "anchor": "life path",
    "relevance": 7,
    "from_strength": 56
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/unlocking-compatibility-between-life-paths-1-and-11/",
-   "from_title": "Life Path 1 & 11 Compatibility: Key Insights for 2026",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-mysteries-revealed-delving-into-life-path-number-3/",
-   "from_title": "Life Path 3 Meaning: Creativity, Expression, and Balanced Growth | Mystical Digits",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-and-anniversary-date-selection/",
-   "from_title": "Numerology Anniversary Dates 2026: 7-Step Guide",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/compatibility-of-life-path-1-and-5/",
-   "from_title": "Life Path 1 and 5 Compatibility: Key Insights & Dynamics",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/compatibility/",
-   "from_title": "Compatibility Guides: Life Path, Moon Sign & Relationship Reflection Tools",
-   "to": "https://mysticaldigits.com/compatibility-between-life-path-5-and-8/",
-   "to_title": "Life Path 5 & 8 Compatibility 2026: 73% Success Guide",
-   "anchor": "life path",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-name-numbers-reading-calculator/",
-   "from_title": "Get Your FREE Numerology Name Numbers Reading Calculator Tool (Updated…",
-   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
-   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
-   "anchor": "reading calculator",
-   "relevance": 6,
-   "from_strength": 55
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-to-use-numerology-to-overcome-challenges/",
-   "from_title": "Mystical Digits: Use Numerology to Overcome Challenges in 7 Steps",
-   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
-   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
-   "anchor": "personal numerology reading",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/a-comprehensive-guide-to-understanding-numerology/",
-   "from_title": "Numerology: A Complete Guide to Life Path Numbers and Core Meanings",
-   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
-   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
-   "anchor": "personal numerology",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-dream-interpretation/",
-   "from_title": "Numerology Dream Interpretation: Decode Your 2026 Visions",
-   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
-   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
-   "anchor": "personal numerology",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/the-enigmatic-power-of-26-numerology/",
-   "from_title": "Numerology Number 26: Symbolism & Meaning | Mystical Digits",
-   "to": "https://mysticaldigits.com/free-personal-numerology-reading-calculator/",
-   "to_title": "Free Personal Numerology Reading Calculator | Mystical Digits",
-   "anchor": "personal numerology",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/food-aggression-in-french-bulldogs/",
-   "from_title": "French Bulldog Food Aggression: Safety, Management",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/complete-guide-french-bulldog-nutrition/",
-   "from_title": "What Do French Bulldogs Eat? Diet, Portions & Food Guide",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-separation-anxiety/",
-   "from_title": "French Bulldog Separation Anxiety: Signs, Training Plan",
-   "to": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "to_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 56
   }
  ],
  "indexation": {
   "sites": [
    {
     "site": "gearuptofit.com",
-    "checked": 296,
-    "healthy": 288,
+    "checked": 300,
+    "healthy": 292,
     "problems": 8,
     "critical": 0,
     "not_found": 0,
@@ -7418,7 +7405,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-26T02:42:38.752Z"
+  "updated_at": "2026-11-26T04:44:09.212Z"
  },
  "wins": [
   {
@@ -7489,49 +7476,42 @@
   }
  ],
  "log": [
-  "02:41:31 repair: 20 competitor link profiles will be mined again with the stricter source filter",
-  "02:41:32 connection dataforseo: connected",
-  "02:41:32 connection gmail: connected",
-  "02:41:35 crawl plantastichaven.com: 154/154 urls, fetched 1, 304 0, reused 153",
-  "02:41:36 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
-  "02:41:39 crawl frenchyfab.com: 154/154 urls, fetched 7, 304 0, reused 147",
-  "02:41:41 crawl mysticaldigits.com: 300/468 urls, fetched 10, 304 0, reused 290",
-  "02:41:42 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
-  "02:41:43 crawl openclaw-skillshub.com: 87/87 urls, fetched 0, 304 0, reused 87",
-  "02:41:43 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
-  "02:41:44 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "02:41:44 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
-  "02:41:45 crawl gearuptofit.com: 296/296 urls, fetched 0, 304 0, reused 296",
-  "02:41:45 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
-  "02:41:45 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
-  "02:41:46 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
-  "02:41:46 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "02:41:46 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
-  "02:41:46 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
-  "02:41:46 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
-  "02:41:47 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
-  "02:41:47 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
-  "02:41:47 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
-  "02:42:27 crawl tenderatlas.shop: 300/3312 urls, fetched 297, 304 0, reused 3",
-  "02:42:27 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "02:42:27 - search_performance: skipped (Search Console not connected)",
-  "02:42:27 indexation: 141 sitemap URLs with an indexing problem (1 critical)",
-  "02:42:28 dataforseo: backlinks not available on this account (40200); parked 7 days",
-  "02:42:28 dataforseo: serp not available on this account (40200); parked 7 days",
-  "02:42:28 dataforseo: serp not available on this account (40200); parked 7 days",
-  "02:42:28 dataforseo: serp not available on this account (40200); parked 7 days",
-  "02:42:28 dataforseo: serp not available on this account (40200); parked 7 days",
-  "02:42:28 dataforseo: traffic not available on this account (40200); parked 7 days",
-  "02:42:38 prospects: 14 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 0 queries (0 brand-mention), 9 Google-wrapped results resolved, 2 unresolvable; 14 candidates, 4 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "02:42:38 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "02:42:38 self-tuning: next cycle runs up to 20 searches",
-  "02:42:38 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "02:42:40 replies: 7 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "02:42:41 sent-folder check: 149 sent emails read, 6 unrecorded pitches restored to the record, 8 recipients found with a duplicate email (no further email to them)",
-  "02:42:41 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
-  "02:42:41 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "02:43:19 pre-verify (nothing sent): 10 top inboxes checked, 2 verified, 8 held",
-  "02:43:21 link checks: 5 pages, 0 new links won, 0 lost"
+  "04:43:51 connection dataforseo: connected",
+  "04:43:51 connection gmail: connected",
+  "04:43:54 crawl plantastichaven.com: 154/154 urls, fetched 1, 304 0, reused 153",
+  "04:43:56 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
+  "04:43:59 crawl frenchyfab.com: 154/154 urls, fetched 0, 304 0, reused 154",
+  "04:43:59 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
+  "04:44:01 crawl mysticaldigits.com: 300/468 urls, fetched 10, 304 0, reused 290",
+  "04:44:01 crawl openclaw-skillshub.com: 87/87 urls, fetched 0, 304 0, reused 87",
+  "04:44:02 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "04:44:03 crawl gearuptofit.com: 300/794 urls, fetched 5, 304 0, reused 295",
+  "04:44:03 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
+  "04:44:03 crawl tenderatlas.shop: 300/3312 urls, fetched 0, 304 0, reused 300",
+  "04:44:04 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
+  "04:44:04 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
+  "04:44:04 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
+  "04:44:04 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
+  "04:44:05 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
+  "04:44:05 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
+  "04:44:05 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
+  "04:44:05 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
+  "04:44:05 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
+  "04:44:07 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 1, 304 0, reused 112",
+  "04:44:08 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "04:44:09 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "04:44:09 - search_performance: skipped (Search Console not connected)",
+  "04:44:09 indexation: 141 sitemap URLs with an indexing problem (1 critical)",
+  "04:44:09 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 0 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "04:44:09 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "04:44:09 self-tuning: next cycle runs up to 20 searches",
+  "04:44:09 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "04:44:11 replies: 2 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "04:44:12 sent-folder check: 149 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
+  "04:44:12 queue screening (free, nothing sent): 2 checked, 0 sendable, 0 retired, 0 switched to a better published address",
+  "04:44:20 outreach: 0 sent, 0 follow-ups, 0 drafts, 1 held for verification",
+  "04:44:54 pre-verify (nothing sent): 10 top inboxes checked, 0 verified, 10 held",
+  "04:44:54 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
@@ -7541,22 +7521,10 @@
    "fix": "Add an Anthropic API key under ⚙ Connect so every pitch is written for that exact page and link."
   },
   {
-   "level": "warn",
-   "code": "dataforseo_errors",
-   "message": "4 DataForSEO searches failed (provider errors); they are retried next cycle.",
-   "fix": "No action unless it persists for a day."
-  },
-  {
    "level": "info",
    "code": "holds",
-   "message": "14 queued inboxes are held; most often (6) because mailbox unknown.",
+   "message": "22 queued inboxes are held; most often (10) because mailbox unknown.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
-  },
-  {
-   "level": "info",
-   "code": "linkgap_unavailable",
-   "message": "Competitor link-gap mining could not run (DataForSEO Backlinks API refused or failed).",
-   "fix": "If your DataForSEO plan lacks the Backlinks API, activate it at app.dataforseo.com (it is retried automatically after 7 days)."
   }
  ]
 }
