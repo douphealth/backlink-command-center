@@ -191,7 +191,8 @@ export class PitchWriter{
     const headers={Authorization:'Bearer '+this.ghToken,'Content-Type':'application/json',Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
     // Plain "Subject:" format: small models keep to it far more reliably than to JSON with line breaks inside strings.
     const system=SYSTEM+'\nAnswer in exactly this format, with nothing before or after it:\nSubject: <the subject line>\n\n<the email body>';
-    const ask=async model=>this.fetch(GITHUB_MODELS+'/inference/chat/completions',{method:'POST',headers,signal:AbortSignal.timeout(45000),body:JSON.stringify({model,temperature:0.5,max_tokens:700,
+    // redirect:'manual': a redirect would silently turn this POST into a GET and drop the token; report it instead.
+    const ask=async model=>this.fetch(GITHUB_MODELS+'/inference/chat/completions',{method:'POST',headers,redirect:'manual',signal:AbortSignal.timeout(45000),body:JSON.stringify({model,temperature:0.5,max_tokens:700,
       messages:[{role:'system',content:system},{role:'user',content:'Write the email from these facts (JSON):\n'+JSON.stringify(facts)}]})});
     const off=(why,line)=>{this.ghOff=true;this.ghOffWhy=why;this.log(line);return {why}};
     const candidates=this.ghModel?[this.ghModel]:this.ghModels;
@@ -200,6 +201,7 @@ export class PitchWriter{
       let res;try{res=await ask(candidates[i])}catch(e){return {why:'unreachable',detail:e?.name||''}}
       if(res.status===401||res.status===403)return off('not_permitted',`github models: not permitted (HTTP ${res.status}); the workflow needs "models: read". Templates are used`);
       if(res.status===429)return off('quota_used_up','github models: today\'s free quota is used up; templates are used for the rest of this cycle');
+      if(res.status>=300&&res.status<400)return {why:'redirected',detail:`HTTP ${res.status} to ${res.headers?.get?.('location')||'(no location)'}`};
       if(res.status===404||res.status===400||res.status===422){
         lastDetail=`HTTP ${res.status} for ${candidates[i]}: ${(await res.text().catch(()=>'')).slice(0,120)}`;
         // Unknown model: after the known names, ask the catalogue once for a small text model.
@@ -207,8 +209,12 @@ export class PitchWriter{
         continue;
       }
       if(!res.ok)return {why:`http_${res.status}`,detail:(await res.text().catch(()=>'')).slice(0,120)};
-      const body=await res.json().catch(()=>null),text=String(body?.choices?.[0]?.message?.content||'');
-      if(!text)return {why:'empty_answer',detail:JSON.stringify(body||{}).slice(0,120)};
+      // Say exactly what came back: on 2026-11-26 the service answered "success" in 250 ms with no completion in it.
+      const raw=await res.text().catch(()=>'');let body=null;try{body=JSON.parse(raw)}catch{}
+      const content=body?.choices?.[0]?.message?.content;
+      const text=Array.isArray(content)?content.map(part=>typeof part==='string'?part:part?.text||'').join(''):String(content||'');
+      if(!text)return {why:body?'empty_answer':'answer_not_json',
+        detail:`HTTP ${res.status} ${res.headers?.get?.('content-type')||'no content-type'}: ${(raw||'(empty body)').slice(0,100)}`};
       const out=parseAnswer(text);
       if(!out)return {why:'answer_not_in_format',detail:text.slice(0,80)};
       this.ghModel=candidates[i];
