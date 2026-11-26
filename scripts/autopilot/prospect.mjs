@@ -6,7 +6,7 @@
  *    detect existing links to us, and find the best editorial contact.
  */
 import {fetchPage,pool,tokens,keyPhrase,links,tagText,jsonLd,mainText,stripTags,extractEmails,rankEmail,hostOf,sameSite,rootDomain,normUrl,hashId,ageDays,NOW} from './util.mjs';
-import {findBrokenLink,assetTerms} from './broken.mjs';
+import {findBrokenLink,assetTerms,outboundCandidates} from './broken.mjs';
 import {resolveWrapped} from './serp-unwrap.mjs';
 
 export const BLOCKED=/(^|\.)(reddit|quora|youtube|youtu|facebook|instagram|pinterest|tiktok|twitter|x|linkedin|threads|tumblr|amazon|ebay|walmart|etsy|target|bestbuy|aliexpress|temu|wikipedia|wikihow|wiktionary|medium|substack|github|stackexchange|stackoverflow|apple|google|bing|yahoo|msn|microsoft|play\.google|apps\.apple|yelp|tripadvisor|trustpilot|glassdoor|indeed|craigslist|scribd|slideshare|issuu|archive|imdb|britannica|dictionary|merriam-webster|cambridge|fandom|discord|telegram|whatsapp|twitch|vimeo|dailymotion|soundcloud|spotify|goodreads|zillow|webmd|healthline|mayoclinic|clevelandclinic|nytimes|washingtonpost|theguardian|bbc|cnn|forbes|businessinsider|wsj|usatoday|nbcnews|cbsnews|foxnews|reuters|apnews|bloomberg)\.[a-z.]+$/i;
@@ -71,6 +71,7 @@ export function footprintOf(query,site){
     const re=new RegExp('^'+tpl.replace(/[.*+?^$()|[\]\\]/g,'\\$&').replace('\\{t\\}',`(${site?.topic?.replace(/[.*+?^$()|[\]\\]/g,'\\$&')||'.+'})`).replace(/\{t\}|\{k\}|\{b\}/g,'.+')+'$','i');
     if(re.test(query))return fp}
   if(/^linkgap:/.test(query))return 'link_gap';
+  if(/^neighbor:/.test(query))return 'neighbor';
   return /^"[^"]+"( OR "[^"]+")? -site:/.test(query)?'mention':'intent';
 }
 /**
@@ -210,6 +211,22 @@ export async function findContact(pageUrl,pageHtml,{fetchImpl=fetch,author=''}={
   return {email:ranked[0]?.email||null,email_rank:ranked[0]?.rank??null,email_source:ranked[0]?.source||null,alternates:ranked.slice(1,3).map(x=>x.email),contact_form:form,site_kind:kind};
 }
 
+/* ---------- Link neighbourhood: sites that pages we already qualified link to (free, no search API) ---------- */
+const NEIGHBOR_SOURCE=new Set(['ready','drafted','sent','followed_up','replied','positive','won','already_linked','contact_form','no_contact','contact_unverifiable']);
+const NOT_A_PAGE=/\.(pdf|jpe?g|png|gif|webp|svg|zip|mp4|mp3|docx?|xlsx?|pptx?)$/i;
+/**
+ * On-topic pages that link out a lot (resource lists, roundups, guides) were chosen by a human editor in the
+ * niche. The sites they recommend are the next prospects, found with plain page fetches: no paid lookup.
+ * Each source page is mined once every `everyDays`; at most `perSite` per site per cycle so every site advances.
+ */
+export function neighborSources(state,sites,{max=12,perSite=2,everyDays=90}={}){
+  const ok=new Set(sites.map(s=>s.domain)),taken=new Map(),out=[];
+  const all=Object.values(state.prospects||{}).filter(p=>NEIGHBOR_SOURCE.has(p.status)&&ok.has(p.site)&&p.page_url&&(p.external_domains||0)>=5&&ageDays(p.mined_at)>everyDays)
+    .sort((a,b)=>(b.resource_page?1:0)-(a.resource_page?1:0)||(b.external_domains||0)-(a.external_domains||0)||(b.score||0)-(a.score||0));
+  for(const p of all){const n=taken.get(p.site)||0;if(n>=perSite)continue;taken.set(p.site,n+1);out.push(p);if(out.length>=max)break}
+  return out;
+}
+
 /* ---------- Competitor link gap: pages that already link to a competing resource from their content ---------- */
 const CONTENT_LOCATIONS=new Set(['article','main','section','details','']);
 /**
@@ -259,7 +276,7 @@ export function pairAsset(link,assets,site){
  * Run discovery for the chosen assets. Mutates `state.prospects` / `state.domains`.
  * Returns counters for the run report.
  */
-export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,resolveHost,perAsset=2,maxNewPerRun=60,maxQueries=24,serpDepth=50,linkGapCalls=1,pairPool=null,deadline=Infinity,log=()=>{}}){
+export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,resolveHost,perAsset=2,maxNewPerRun=60,maxQueries=24,serpDepth=50,linkGapCalls=1,pairPool=null,neighborPages=12,altSearch=null,deadline=Infinity,log=()=>{}}){
   state.prospects??={};state.domains??={};state.queries??={};
   const ourDomains=sites.map(s=>s.domain),competitors=new Set(sites.flatMap(s=>s.competitors||[]));
   const bySite=new Map(sites.map(s=>[s.domain,s]));
@@ -317,6 +334,33 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
       log(`link gap: ${job.target} (for ${job.site.domain}) ${r.items.length} referring pages from offset ${job.offset}/${r.total}, ${fresh.length-before} new candidates`);
     }
   }
+  // ---- Link neighbourhood (free): the sites that already-qualified pages recommend. Runs after the paid
+  // sources so it only fills the room they leave, and keeps prospecting alive when no search credit is left. ----
+  stats.neighbor_pages=0;stats.neighbor_candidates=0;
+  if(neighborPages>0&&fresh.length<maxNewPerRun*2&&Date.now()<deadline){
+    const assetBy=new Map([...(pairPool||[]),...assets].map(a=>[a.url,a]));
+    const sources=neighborSources(state,sites,{max:neighborPages});
+    const pages=await pool(sources,6,async p=>Date.now()>deadline?null:{p,res:await fetchPage(p.page_url,{fetchImpl,timeout:10000,maxBytes:500000})});
+    for(const x of pages){
+      if(!x||x.error)continue;const {p,res}=x;p.mined_at=NOW();
+      if(res.status!==200||!res.body)continue;
+      stats.neighbor_pages++;
+      const site=bySite.get(p.site),a=assetBy.get(p.asset_url)||{site:p.site,url:p.asset_url,title:p.asset_title||''};
+      const asset={site:p.site,url:a.url,title:a.title,h1:a.h1,type:a.type,terms:(a.terms||[]).slice(0,30)};
+      const before=fresh.length;let taken=0;
+      // Most on-topic links first (anchor and URL words that match what our page covers); at most 8 per source page.
+      for(const l of outboundCandidates(res.body,res.url,{terms:assetTerms(asset,site),ourDomains,max:40})){
+        if(taken>=8||fresh.length>=maxNewPerRun*2)break;
+        const domain=hostOf(l.url);let path='';try{path=new URL(l.url).pathname}catch{continue}
+        if(NOT_A_PAGE.test(path)){dropBy('not_a_page');continue}
+        if(!admit(site,domain,path,dropBy))continue;
+        fresh.push({site:site.domain,domain,url:normUrl(l.url),serp_title:l.anchor,query:`neighbor:${p.domain}`,footprint:'neighbor',kind:'neighbor',rank:null,asset});taken++;
+      }
+      state.queries[`${site.domain}|neighbor:${p.domain}`]=NOW();
+      stats.neighbor_candidates+=fresh.length-before;
+    }
+    if(stats.neighbor_pages)log(`link neighbourhood (free): ${stats.neighbor_pages} qualified pages mined, ${stats.neighbor_candidates} recommended sites to evaluate`);
+  }
   // Searches get at most 40% of the time left, so their results can still be qualified in this run.
   const serpUntil=Number.isFinite(deadline)?Date.now()+Math.max(0,deadline-Date.now())*0.4:Infinity;
   const take=(job,results)=>{
@@ -346,10 +390,13 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
   for(let i=0;i<jobs.length;){
     // A full candidate list stops topic searches, never the (fortnightly, highest-converting) brand-mention searches.
     if(Date.now()>=serpUntil||Date.now()>=deadline||stats.queries>=maxQueries||(fresh.length>=maxNewPerRun*2&&jobs[i].kind!=='mention'))break;
-    const n=Math.min(4,maxQueries-stats.queries,jobs.length-i,dfs.affordable?dfs.affordable('serp'):(dfs.canSpend('serp')?1:0));
+    // DataForSEO serves searches while it can pay for them; otherwise the optional fallback provider does.
+    const viaAlt=!dfs.canSpend('serp')&&!!altSearch?.canSearch?.();
+    const n=Math.min(4,maxQueries-stats.queries,jobs.length-i,viaAlt?altSearch.remaining():dfs.affordable?dfs.affordable('serp'):(dfs.canSpend('serp')?1:0));
     if(n<=0)break;
     const batch=jobs.slice(i,i+n);i+=n;
-    const results=await Promise.all(batch.map(j=>dfs.serp(j.query,{depth:serpDepth,...marketOf(bySite.get(j.asset.site))})));
+    const results=await Promise.all(batch.map(j=>(viaAlt?altSearch:dfs).serp(j.query,{depth:serpDepth,...marketOf(bySite.get(j.asset.site))})));
+    if(viaAlt)stats.fallback_queries=(stats.fallback_queries||0)+batch.length;
     batch.forEach((job,k)=>{if(results[k]===null)stats.failed_queries=(stats.failed_queries||0)+1;else take(job,results[k])}); // provider error: retried next run
   }
   // One cheap request sizes every new candidate domain; drop giants and dead sites before fetching anything.
@@ -414,7 +461,7 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     else if(p.status==='rejected')stats.rejected++;
     else{stats.qualified++;if(p.kind==='mention')stats.mentions++;if(p.email)stats.with_email++;else if(p.contact_form)stats.contact_form++;if(p.broken_link)stats.broken_links++}
   }
-  log(`prospects: ${stats.from_queue} from the saved queue, ${stats.deferred} saved for next run; ${stats.linkgap_calls} competitor link-gap pulls (${stats.linkgap_candidates} candidates); ${stats.queries} queries (${stats.mention_queries} brand-mention), ${stats.resolved||0} Google-wrapped results resolved, ${stats.unresolved||0} unresolvable; ${stats.candidates} candidates, ${stats.qualified} qualified (${stats.mentions} unlinked mentions), ${stats.with_email} with email, ${stats.broken_links} with a dead link we can replace, ${stats.already_linked} already linking`);
+  log(`prospects: ${stats.from_queue} from the saved queue, ${stats.deferred} saved for next run; ${stats.linkgap_calls} competitor link-gap pulls (${stats.linkgap_candidates} candidates); ${stats.neighbor_candidates} from the link neighbourhood; ${stats.queries} queries (${stats.mention_queries} brand-mention), ${stats.resolved||0} Google-wrapped results resolved, ${stats.unresolved||0} unresolvable; ${stats.candidates} candidates, ${stats.qualified} qualified (${stats.mentions} unlinked mentions), ${stats.with_email} with email, ${stats.broken_links} with a dead link we can replace, ${stats.already_linked} already linking`);
   return stats;
 }
 

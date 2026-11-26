@@ -18,6 +18,7 @@ import {SITES} from '../../functions/_lib/sites.js';
 import {crawlPortfolio} from './crawl.mjs';
 import {rankPortfolio,internalLinkPlan} from './score.mjs';
 import {DataForSEO,trackExternalSpend} from './dataforseo.mjs';
+import {BraveSearch} from './search.mjs';
 import {gscDemand,dfsDemand} from './demand.mjs';
 import {discoverProspects,requalify,enrichBrokenLinks,freshQueryCount,QUALIFY_VERSION} from './prospect.mjs';
 import {indexationReport} from './indexation.mjs';
@@ -66,6 +67,7 @@ export function loadConfig(env=process.env,argv=process.argv){
     dfs:{login:env.DATAFORSEO_LOGIN||'',password:env.DATAFORSEO_PASSWORD||'',dailyUsd:num(env.DATAFORSEO_DAILY_USD,0.5),monthlyUsd:num(env.DATAFORSEO_MONTHLY_USD,10)},
     outreach:{mode,gmail,fromAddress:env.GMAIL_ADDRESS||(dryRun?'dry-run@linkforge.invalid':''),senderName:env.SENDER_NAME||'',postalAddress:env.SENDER_POSTAL_ADDRESS||'',
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
+    brave:{apiKey:env.BRAVE_SEARCH_API_KEY||'',monthlyRequests:num(env.BRAVE_MONTHLY_REQUESTS,900)},neighborPages:Math.max(0,Math.min(40,num(env.AUTOPILOT_NEIGHBOR_PAGES,12))),
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5'},
     linkGapCalls:Math.max(0,Math.min(4,num(env.AUTOPILOT_LINKGAP_CALLS,2))),
     gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,bing:!!env.BING_WEBMASTER_API_KEY,preverifyMax:num(env.AUTOPILOT_PREVERIFY,10),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
@@ -85,6 +87,7 @@ export function setupChecklist(cfg){
     {key:'OUTREACH_MODE = send',label:'Hands-free sending',done:cfg.outreach.mode==='send',unlocks:'Sends pitches and one follow-up automatically (warm-up ramp, daily cap)',required:false},
     {key:'ANTHROPIC_API_KEY',label:'Claude pitch writer',done:!!cfg.claude.apiKey,unlocks:'Writes a unique, page-specific email for every prospect',required:false},
     {key:'GSC_SERVICE_ACCOUNT_JSON',label:'Search Console',done:cfg.gsc,unlocks:'Real index status of every important page, clicks/impressions tracking, striking-distance targeting',required:false},
+    {key:'BRAVE_SEARCH_API_KEY',label:'Brave Search (fallback search)',done:!!cfg.brave.apiKey,unlocks:'Keeps prospect searches running when the DataForSEO balance or cap is used up (monthly request cap, default 900)',required:false},
     {key:'BING_WEBMASTER_API_KEY',label:'Bing Webmaster API',done:cfg.bing,unlocks:'Daily submission of new, changed and non-indexed pages to Bing (also feeds Copilot, DuckDuckGo and ChatGPT search)',required:false},
   ];
   return items;
@@ -195,6 +198,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   if(vaultOk){const fixed=repairSerpOutage(state);if(fixed)log(`repair: ${fixed.queries_reopened} searches burned by the Google redirect-link outage reopened; search volume restored to ${TUNING.start}`)}
   if(vaultOk){const r=unparkAfterFundsOutage(state);if(r)log(`repair: DataForSEO lookups (${r.reopened.join(', ')}) parked by the empty balance are reopened`)}
   const dfs=new DataForSEO({...cfg.dfs,state,fetchImpl,log});
+  const brave=cfg.brave.apiKey?new BraveSearch({...cfg.brave,state,fetchImpl,log}):null;
   // ---- 0. Connections: free checks that saved credentials really work (nothing is charged or sent) ----
   const mailer=injectedMailer||(cfg.dryRun?dryMailer(log):gmailTransport(env));
   const connections={
@@ -250,7 +254,8 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   // ---- 4. Prospects ----
   await stage('requalify',vaultOk,()=>requalify({state,dfs,fetchImpl,deadline:deadline-8*60e3,log}),privateWhy,{until:deadline-7*60e3});
   // Runs even with no fresh asset searches: brand-mention searches have their own schedule.
-  await stage('prospects',vaultOk&&dfs.enabled,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,linkGapCalls:cfg.linkGapCalls,
+  await stage('prospects',vaultOk&&(dfs.enabled||!!brave),()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,linkGapCalls:cfg.linkGapCalls,
+    neighborPages:cfg.neighborPages,altSearch:brave,
     pairPool:ranked.filter(a=>!blockedAssets.has(normUrl(a.url))&&a.linkability>=50),maxQueries:cfg.maxQueries??(state.tuning?.max_queries||TUNING.start),serpDepth:cfg.serpDepth,deadline:deadline-7*60e3,log}),
     !vaultOk?privateWhy:(dfs.authError||'DataForSEO credentials not set'),{until:deadline-5.5*60e3});
   await stage('bing_submit',vaultOk&&!!env.BING_WEBMASTER_API_KEY&&crawl.length>0,()=>submitToBing({state,env,sites:SITES,crawl,ranked,fetchImpl,deadline:deadline-6*60e3,log}),
@@ -300,6 +305,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     totals:{sites:SITES.length,pages_crawled:crawl.reduce((n,s)=>n+s.pages.length,0),urls_discovered:crawl.reduce((n,s)=>n+(s.discovered||0),0),
       promotable:ranked.length,internal_suggestions:internal.length,promoting_now:chosen.length},
     spend:{today_usd:Number(dfs.spend('day').toFixed(4)),month_usd:Number(dfs.spend('month').toFixed(4)),daily_cap_usd:cfg.dfs.dailyUsd,monthly_cap_usd:cfg.dfs.monthlyUsd,calls_this_run:dfs.calls,
+      ...(brave?{brave:{requests_this_month:brave.used(),monthly_cap:brave.limit,requests_this_run:brave.calls}}:{}),
       balance_usd:Number.isFinite(dfs.balance)?Number(dfs.balance.toFixed(2)):null,...(externalSpend?{external:externalSpend}:previous.spend?.external?{external:previous.spend.external}:{})},
     outreach:vaultOk?outreachStatus(state,{limit:cfg.outreach.dailyLimit,mode:cfg.outreach.mode,qualifyVersion:QUALIFY_VERSION}):previous.outreach||null,
     funnel:f,history,learning:vaultOk?learningSummary(state,SITES):previous.learning||null,
