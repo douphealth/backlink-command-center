@@ -178,7 +178,11 @@ test('follow-up adds a new, verifiable reason and an easy one-word reply',async(
   const {followupPitch}=await import('../../scripts/autopilot/pitch.mjs');
   const f=followupPitch({title:'Best Running Resources',author:'Jane Doe',last_subject:'Resource for your page'},asset,{senderName:'Alex'});
   assert.equal(f.subject,'Re: Resource for your page');assert.match(f.body,/^Hi Jane,/);
-  assert.match(f.body,/One detail I didn't mention: it is a free interactive tool/);assert.match(f.body,/reply "no"/);
+  // Never claims a fact is new: the first email's facts were not recorded, so this is the honest one-line nudge.
+  assert.doesNotMatch(f.body,/didn't mention|free interactive tool/);assert.match(f.body,/just checking whether you'd consider adding Running Shoe Finder/);assert.match(f.body,/reply "no"/);
+  // Only a fact the first email did not contain is added.
+  const g=followupPitch({title:'Best Running Resources',author:'Jane Doe',last_subject:'x',facts_used:['it is a free interactive tool (no sign-up needed)']},asset,{senderName:'Alex'});
+  assert.match(g.body,/It includes 2 data tables\./);assert.doesNotMatch(g.body,/free interactive tool|didn't mention/);
   assert.deepEqual(f.body.match(/https?:\/\/\S+/g),[asset.url]);assert.doesNotMatch(f.body,/top of your inbox/);
   const b=followupPitch({title:'X',broken_link:{anchor:'shoe fit guide',host:'deadshoes.com',reason:'not_found'}},asset,{senderName:'Alex'});
   assert.match(b.body,/"shoe fit guide" \(deadshoes\.com\) on that page still returns a "page not found" error/);
