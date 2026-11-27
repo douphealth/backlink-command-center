@@ -14,14 +14,25 @@ import {fileURLToPath} from 'node:url';
 
 // keepaliveHours: GitHub dropped every scheduled slot for 10+ hours on 2026-11-25, so the waker is now the
 // primary scheduler: the next cycle always starts within this many hours of the last one (cron is the backup).
-export const WAKER={minGapHours:2,maxWaitHours:5.5,recentHours:1.5,keepaliveHours:5};
+// sundayHours: Saturday's free verification credits can never back a send (a proof lasts 24 h), but Sunday's can verify
+// inboxes whose Monday window opens within 20 h. Pre-verify runs every cycle, so a few Sunday cycles from 11:00 UTC
+// (EU Monday 07:00 is then 20 h away; the 19:00 cycle reaches the US Monday window) spend them.
+export const WAKER={minGapHours:2,maxWaitHours:5.5,recentHours:1.5,keepaliveHours:5,sundayHours:[11,15,19]};
+
+/** The first Sunday verification slot (UTC) at or after `from` on the same Sunday, or null. */
+export function sundaySlot(from,hours=WAKER.sundayHours){
+  const d=new Date(from);if(!Number.isFinite(d.getTime())||d.getUTCDay()!==0)return null;
+  for(const h of hours){const t=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate(),h);if(t>=from)return t}
+  return null;
+}
 
 /**
  * When should the next cycle start? At the next recipient send window if pitches are queued (but at least
  * minGapHours after the last cycle), and never later than keepaliveHours after it, so prospecting, reply
- * reading and link checks keep running even when GitHub skips the schedule.
+ * reading and link checks keep running even when GitHub skips the schedule. On Sundays with inboxes queued, the next
+ * Sunday verification slot is used instead of the keep-alive when it comes first.
  */
-export function planWake(summary,now=Date.now(),{minGapHours=WAKER.minGapHours,keepaliveHours=WAKER.keepaliveHours,after=null}={}){
+export function planWake(summary,now=Date.now(),{minGapHours=WAKER.minGapHours,keepaliveHours=WAKER.keepaliveHours,after=null,sundayHours=WAKER.sundayHours}={}){
   if(!summary?.generated_at)return {wake:false,reason:'no published summary'};
   if(summary.dry_run)return {wake:false,reason:'last cycle was a dry run'};
   const last=Date.parse(summary.generated_at),base=Number.isFinite(last)?last:now;
@@ -34,9 +45,13 @@ export function planWake(summary,now=Date.now(),{minGapHours=WAKER.minGapHours,k
   // `after`: when the waker itself started the previous cycle. Even if that cycle published nothing (it failed),
   // the next one is never started sooner than minGapHours after it, so the chain cannot spin.
   const started=Date.parse(after||''),notBefore=Number.isFinite(started)?started+minGapHours*36e5:0;
-  const at=Math.max(retry?0:window?next:keepalive,base+minGapHours*36e5,notBefore,now);
+  // Sunday: with inboxes queued, the next verification slot replaces the keep-alive when it comes first (gaps unchanged).
+  const sunday=!window&&!retry&&summary.capabilities?.outreach_mode==='send'&&o.ready>0?sundaySlot(Math.max(base+minGapHours*36e5,notBefore,now),sundayHours):null;
+  const onSunday=sunday!=null&&sunday<keepalive;
+  const at=Math.max(retry?0:window?next:onSunday?sunday:keepalive,base+minGapHours*36e5,notBefore,now);
   return {wake:true,at:new Date(at).toISOString(),wait_s:Math.max(0,Math.round((at-now)/1000)),
-    reason:retry?`${o.ready} pitches queued; the last reply scan failed, retrying`:window?`${o.ready} pitches queued; next send window ${new Date(next).toISOString().slice(0,16)}Z`:`keep-alive: next cycle ${keepaliveHours} h after the last one`};
+    reason:retry?`${o.ready} pitches queued; the last reply scan failed, retrying`:window?`${o.ready} pitches queued; next send window ${new Date(next).toISOString().slice(0,16)}Z`
+      :onSunday?`Sunday verification cycle (${new Date(sunday).toISOString().slice(11,16)}Z): today's free checks prepare Monday's send windows`:`keep-alive: next cycle ${keepaliveHours} h after the last one`};
 }
 
 /** Has a cycle published results since `after` (ISO time)? */

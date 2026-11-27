@@ -93,5 +93,6 @@ test('the waker workflow starts its own successor and never interpolates input i
   assert.match(y,/AFTER: \$\{\{ inputs\.after \}\}/,'the input reaches the script through an environment variable');
   const scripts=y.split(/\n\s+run: /).slice(1).join('\n');
   assert.ok(!/\$\{\{\s*inputs\./.test(scripts.replace(/env:[\s\S]*?run:/g,'')),'no ${{ inputs.* }} inside a run script');
-  assert.match(y,/the chain ends here/);assert.match(y,/cancel-in-progress: true/);
+  // Job-level and never cancelling: a skipped or failed cron-started waker must not cancel the live chain (see vault-waker tests).
+  assert.match(y,/the chain ends here/);assert.match(y,/\n    concurrency:\n      group: linkforge-waker\n      cancel-in-progress: false/);
 });

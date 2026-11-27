@@ -10,7 +10,7 @@
  * reported and the rest still run. Public results go to public/data/autopilot.json
  * (served by Cloudflare Pages); private state is AES-GCM sealed in public/data/vault.json.
  */
-import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,stat} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {resolve,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -29,7 +29,8 @@ import {submitToBing} from './bing.mjs';
 import {PitchWriter,aiProviders} from './pitch.mjs';
 import {processReplies,reconcileSent,runOutreach,preverify,screenQueue,checkLinks,gmailTransport,dailyCap,outreachStatus} from './outreach.mjs';
 import {assetStats,learningSummary} from './learn.mjs';
-import {seal,open} from './vault.mjs';
+import {sealJson,open,vaultFormat} from './vault.mjs';
+import {requireRebuild,rebuildHold,rebuildFromMailbox,linkRestoredSends,pruneRestoredSends} from './rebuild.mjs';
 import {NOW,ageDays,normUrl} from './util.mjs';
 
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'../..');
@@ -171,10 +172,33 @@ export function unparkAfterFundsOutage(state){
   return kinds.length?{reopened:kinds}:null;
 }
 
-function prune(state){
-  for(const [id,p] of Object.entries(state.prospects||{}))if(p.status==='rejected'&&ageDays(p.found_at)>60)delete state.prospects[id];
+/**
+ * Rejected prospects are deleted 7 days after they were found. Nothing reads them: deduplication lives in
+ * state.domains and state.domain_rejections (both kept, so a rejected publisher is never re-evaluated early), and at
+ * 60 days they made the vault grow ~0.5 MB a day toward Cloudflare's 25 MiB per-file limit. A record that ever
+ * emailed or heard from someone is kept whatever its status.
+ */
+export const REJECTED_KEEP_DAYS=7;
+export function prune(state,{rejectedDays=REJECTED_KEEP_DAYS}={}){
+  let rejected=0;state.domains??={};
+  for(const [id,p] of Object.entries(state.prospects||{})){
+    if(p?.status!=='rejected'||!(ageDays(p.found_at)>rejectedDays)||(p.history||[]).some(h=>['initial','followup','reply','bounce','delivery_delay'].includes(h?.type)))continue;
+    if(p.site&&p.domain)state.domains[`${p.site}|${p.domain}`]??=id; // dedup must survive the record
+    delete state.prospects[id];rejected++;
+  }
   state.ledger=(state.ledger||[]).filter(x=>ageDays(x.at)<400);
   for(const [k,t] of Object.entries(state.seen_replies||{}))if(ageDays(t)>60)delete state.seen_replies[k];
+  pruneRestoredSends(state);
+  return {rejected};
+}
+
+/**
+ * Seals the vault for writing: once before self-diagnosis (so this cycle's size is published and checked against
+ * Cloudflare's 25 MiB per-file limit), and again at write time only if something changed the state in between.
+ */
+export function vaultSealer(state,key){
+  let from=null,out=null;
+  return {async seal(){const json=JSON.stringify(state);if(json!==from){const box=await sealJson(json,key),text=JSON.stringify(box)+'\n';from=json;out={box,text,bytes:Buffer.byteLength(text)}}return out}};
 }
 
 export function funnel(state){
@@ -206,15 +230,17 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   };
   const previous=await readJson(P.summary,{});
   // ---- Private state ----
-  let state={v:1,created_at:NOW(),prospects:{},domains:{},suppression:{},contacted:{},queries:{},ledger:[]},vaultOk=false;
+  let state={v:1,created_at:NOW(),prospects:{},domains:{},suppression:{},contacted:{},queries:{},ledger:[]},vaultOk=false,freshVault='';
   const box=await readJson(P.vault,null);
   if(cfg.dataKey){
     if(box){try{state={...state,...await open(box,cfg.dataKey)};vaultOk=true}catch(e){
       // The owner created a new key from the dashboard after this vault was sealed: start fresh.
-      if(cfg.vaultResetAt&&Date.parse(cfg.vaultResetAt)>Date.parse(box.sealed_at||0)){vaultOk=true;log('vault: new key requested from the dashboard — starting a fresh vault')}
+      if(cfg.vaultResetAt&&Date.parse(cfg.vaultResetAt)>Date.parse(box.sealed_at||0)){vaultOk=true;freshVault='dashboard_reset';log('vault: new key requested from the dashboard — starting a fresh vault')}
       else log('vault: '+e.message+' — private stages disabled, vault left untouched')}}
-    else vaultOk=true;
+    else{vaultOk=true;freshVault='no_vault_file'}
   }
+  // A new vault knows nobody who was emailed or opted out: sending waits for the mailbox rebuild (stage 'rebuild').
+  if(freshVault){requireRebuild(state,freshVault);log('vault: new vault, so outreach and automatic replies are held until contact history and opt-outs are restored from Gmail')}
   const privateWhy=!cfg.dataKey?'LINKFORGE_DATA_KEY not set':'vault could not be opened';
   if(vaultOk){const r=resetLinkGapPaging(state);if(r?.targets_reopened)log(`repair: ${r.targets_reopened} competitor link profiles will be mined again with the stricter source filter`)}
   if(vaultOk){const r=retryUnresolved(state);if(r?.domains_retried)log(`repair: ${r.domains_retried} search results the old URL matcher gave up on will be retried`)}
@@ -236,6 +262,17 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   if(externalSpend?.since_last_cycle_usd)log(`dataforseo: balance fell ${externalSpend.since_last_cycle_usd.toFixed(2)} USD more than Autopilot spent since the last cycle (another tool is using this account)`);
   stages.connections={ok:!Object.values(connections).some(c=>c.status==='rejected'),result:Object.fromEntries(Object.entries(connections).map(([k,v])=>[k,v.status]))};
   const gmailOk=!!mailer&&connections.gmail.status!=='rejected';
+  // ---- 0b. Fresh vault: restore who was emailed and who opted out from Gmail before anything is sent ----
+  // No `until` race: the rebuild stops between mailbox pages at its own deadline, so it never shares the connection
+  // with a later stage. An unfinished rebuild continues next cycle; sending stays held until it completes.
+  if(vaultOk&&state.rebuild_required){
+    const canRebuild=typeof mailer?.imap?.sentRecipients==='function'&&typeof mailer?.imap?.recentHeaders==='function';
+    await stage('rebuild',gmailOk&&canRebuild,()=>rebuildFromMailbox({state,imap:mailer.imap,self:cfg.outreach.fromAddress,deadline:started+cfg.minutes*0.3*60e3,log}),
+      !mailer?'Gmail app password not set':!gmailOk?connections.gmail.error:'transport cannot read the Sent folder and All Mail');
+    try{await mailer?.reset?.()}catch{} // an idle connection times out: later stages open a fresh one
+    // Automatic answers wait too (drafts are fine): the replies stage reads this mode.
+    if(state.rebuild_required&&cfg.outreach.replyMode==='send'){cfg.outreach.replyMode='draft';log('replies: answers are saved as drafts until the mailbox rebuild finishes')}
+  }
   // ---- 1. Crawl ----
   const cache=useCache?await readJson(P.cache,{}):{};
   const crawl=await stage('crawl',true,()=>crawlPortfolio(SITES,{cache,fetchImpl,limitPerSite:cfg.maxUrlsPerSite,deadline:started+cfg.minutes*0.45*60e3,log}))||[];
@@ -301,6 +338,8 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     !vaultOk?privateWhy:'Bing Webmaster API key not set (BING_WEBMASTER_API_KEY)',{until:deadline-5.5*60e3});
   if(vaultOk&&stages.prospects&&stages.prospects.ok!==null)log(`self-tuning: next cycle runs up to ${autotune(state,stages.prospects,{envQueries:cfg.maxQueries})} searches`);
   await stage('broken_links',vaultOk,()=>enrichBrokenLinks({state,assets:ranked,sites:SITES,fetchImpl,deadline:deadline-5*60e3,log}),privateWhy,{until:deadline-4*60e3});
+  // A prospect emailed before the vault was replaced (found again since) counts as contacted from that send.
+  if(vaultOk){const n=linkRestoredSends(state);if(n)log(`rebuild: ${n} prospects matched to emails sent before the vault was replaced (marked contacted, or suppressed after an opt-out)`)}
   // ---- 5. Mail ----
   // The production transport demands verified-mailbox proof for every recipient: without a verifier nothing could go out.
   const noVerifier=typeof mailer?.authorizeRecipient==='function'&&!verifierReady(cfg);
@@ -320,7 +359,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     const sentUnknown=stages.sent_check?.ok===false;
     await stage('screen',vaultOk&&!!mailer,()=>screenQueue({state,mailer,deadline:deadline-4*60e3,log}),privateWhy,{until:deadline-3.5*60e3});
     const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',fetchImpl,log});
-    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets,pickAsset},deadline:deadline-2*60e3,log}),mailWhy||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
+    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown&&!state.rebuild_required,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets,pickAsset},deadline:deadline-2*60e3,log}),mailWhy||rebuildHold(state,stages.rebuild)||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,free_ai:writer.usedAi,template_fallbacks:writer.fallbacks,...(writer.aiModel?{ai_provider:writer.aiProvider,ai_model:writer.aiModel}:{}),...(Object.keys(writer.reasons||{}).length?{fallback_reasons:writer.reasons}:{})};
     aiWriter=writer.ai;
     if(stages.outreach?.ok&&(writer.used+writer.usedAi+writer.fallbacks)>0){const why=Object.entries(writer.reasons||{}).map(([k,n])=>`${k} x${n}`).join(', ');
@@ -333,7 +372,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   // ---- 6. Link verification ----
   await stage('link_checks',vaultOk,()=>checkLinks({state,ourDomains:SITES.map(s=>s.domain),fetchImpl,deadline,log}),privateWhy,{until:deadline+90e3});
   // ---- Outputs ----
-  if(vaultOk)prune(state);
+  if(vaultOk){const r=prune(state);if(r.rejected)log(`vault: ${r.rejected} rejected prospects older than ${REJECTED_KEEP_DAYS} days removed (their domains stay deduplicated)`)}
   const f=vaultOk?funnel(state):previous.funnel||null;
   const today=NOW().slice(0,10);
   const history=(previous.history||[]).filter(h=>h.date!==today&&ageDays(h.date)<120);
@@ -369,12 +408,16 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
       kind:p.status==='won'?'won':'existing',target:p.won?.target||p.existing_link?.url||null,anchor:p.won?.anchor||p.existing_link?.anchor||'',rel:p.won?.rel||p.existing_link?.rel||'',found_at:p.won?.found_at||p.found_at})).sort((a,b)=>String(b.found_at).localeCompare(String(a.found_at))).slice(0,200),
     log:logs.slice(-80),
   };
+  // The vault's size and format are published (numbers only): the sealed file written this cycle, else the one on disk.
+  const sealer=write&&!cfg.dryRun&&vaultOk?vaultSealer(state,cfg.dataKey):null,sealed=sealer?await sealer.seal():null;
+  Object.assign(summary.capabilities,{vault_bytes:sealed?sealed.bytes:await stat(P.vault).then(s=>s.size,()=>null),vault_format:vaultFormat(sealed?.box||box),rebuild_required:vaultOk&&!!state.rebuild_required});
   // Self-diagnosis: what Autopilot cannot fix by itself, with the exact fix.
   summary.attention=diagnose({stages,capabilities:summary.capabilities,outreach:summary.outreach||{},funnel:summary.funnel||{},spend:summary.spend,held:cfg.outreach.mode==='off',noPitchSites,indexation});
   if(write&&!cfg.dryRun){
     await mkdir(dirname(P.summary),{recursive:true});
+    const vault=sealer?await sealer.seal():null;if(vault)summary.capabilities.vault_bytes=vault.bytes;
     await writeFile(P.summary,JSON.stringify(summary,null,1)+'\n');
-    if(vaultOk)await writeFile(P.vault,JSON.stringify(await seal(state,cfg.dataKey))+'\n');
+    if(vault)await writeFile(P.vault,vault.text);
   }
   log(`autopilot finished in ${summary.duration_s}s`);
   return {summary,state};
