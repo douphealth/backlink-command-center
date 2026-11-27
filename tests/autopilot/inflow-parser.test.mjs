@@ -22,6 +22,8 @@ test('Cloudflare-protected addresses are read in both forms, with the text a rea
   const [b]=extractEditorialCandidates(attr,contact,ctx);
   assert.equal(b.email,'submissions@journal.example');assert.equal(b.role,'editorial');assert.match(b.context,/Editorial enquiries/);
   assert.deepEqual(extractEditorialCandidates(`<a href="/cdn-cgi/l/email-protection#${enc('sales@journal.example')}">x</a>`,contact,ctx),[],'wrong departments stay excluded');
+  const unclosed=`<p>Editorial contact: <span class="__cf_email__" data-cfemail="${enc('editor@journal.example')}">[email&#160;protected]</p>`;
+  assert.equal(extractEditorialCandidates(unclosed,contact,ctx)[0]?.email,'editor@journal.example','broken markup around a protected address is still read');
 });
 
 test('a mailto link takes its context from the page text, not from the markup around it',()=>{
@@ -123,11 +125,12 @@ test('policy v2: proofs made under the previous rules are re-verified, never reu
   assert.equal(usableVerification({...v,policy_version:1},'editor@journal.example',now),false);
 });
 
-test('blog comment, reply and newsletter forms are not contact forms',()=>{
+test('blog comment, reply, newsletter and sales-intake forms are not contact forms',()=>{
   assert.equal(contactForm('<form action="/contact" method="post"><input name="name"><textarea name="message"></textarea></form>'),true);
   for(const f of ['<form action="https://x.com/wp-comments-post.php" id="commentform" class="comment-form"><textarea name="comment"></textarea></form>',
     '<form method="post"><textarea id="comment" name="comment"></textarea><input type="hidden" name="comment_post_ID" value="1"></form>',
-    '<form class="newsletter"><textarea></textarea></form>','<form><input name="q"></form>','<form id="reply-form"><textarea name="reply"></textarea></form>'])
+    '<form class="newsletter"><textarea></textarea></form>','<form><input name="q"></form>','<form id="reply-form"><textarea name="reply"></textarea></form>',
+    '<form action="/start"><input name="your-name"><select name="budget"><option>$5k</option></select><input name="start_date"><textarea name="brief"></textarea></form>'])
     assert.equal(contactForm(f),false,f);
   assert.equal(contactForm('<form id="commentform"><textarea name="comment"></textarea></form><form action="/contact"><textarea name="msg"></textarea></form>'),true,'a real form after a comment form still counts');
 });

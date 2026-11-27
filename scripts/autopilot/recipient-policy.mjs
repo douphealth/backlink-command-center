@@ -105,6 +105,8 @@ export function extractEditorialCandidates(html,url,{domain,author='',source='pa
   const text=plain(marked).replace(/\s*\[at\]\s*/gi,'@').replace(/\s*\[dot\]\s*/gi,'.');
   const shown=s=>s.replace(/\u0001(\d+)\u0001/g,(_,n)=>marks[n]?.e||' ');
   for(const m of text.matchAll(/\u0001(\d+)\u0001/g)){const k=marks[m[1]];if(k)add(k.e,shown(text.slice(Math.max(0,m.index-180),m.index+m[0].length+180)),k.method)}
+  // A protected address whose element could not be delimited (broken markup) is still read, with the text around it as context.
+  for(const m of marked.matchAll(/data-cfemail\s*=\s*["']([0-9a-f]+)["']/gi)){const e=decodeCloudflare(m[1]);if(e)add(e,plain(marked.slice(Math.max(0,m.index-600),m.index+600)).replace(/\u0001\d+\u0001/g,' '),'cloudflare_published')}
   const visible=text.replace(/\u0001\d+\u0001/g,' ');
   for(const m of visible.matchAll(/[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9.-]+\.[a-z]{2,63}/gi))add(m[0],visible.slice(Math.max(0,m.index-180),m.index+m[0].length+180),'visible_text');
   // Structured data counts only for the publisher's own domain, and never on a page that asks not to be pitched.

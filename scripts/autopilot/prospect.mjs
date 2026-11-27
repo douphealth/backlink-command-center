@@ -242,13 +242,17 @@ export function siteKind(html){
 
 /** Pages where a site publishes how to reach it. Impressum/imprint/kontakt: German-language sites must list an address there. */
 const CONTACT_LINK=/contact|about|write-for-us|contribute|work-with-me|get-in-touch|impressum|imprint|kontakt|masthead|editorial-team|our-team|meet-the-team|guest-post|submit-(?:a-)?(?:tip|story|post)/i;
-/** A form a reader can use to write to the site: blog comment, reply, review, search, login and newsletter forms do not count. */
+/**
+ * A form a reader can use to write to the site. Blog comment, reply, review, search, login and newsletter forms do not count,
+ * nor do sales-intake forms (budget, start date, company size): they are not a route for an editorial suggestion.
+ */
 export function contactForm(html){
   for(const m of String(html||'').matchAll(/<form\b([^>]*)>([\s\S]*?)<\/form\s*>/gi)){
     const tag=m[1],body=m[2].slice(0,8000);
     if(!/<textarea\b/i.test(body))continue;
     if(/comment|respond|reply|review|search|subscribe|newsletter|login|sign-?in|sign-?up|register/i.test(tag))continue;
     if(/<textarea\b[^>]*(?:name|id)\s*=\s*["']?(?:comment|reply)/i.test(body)||/name\s*=\s*["']comment_(?:post_ID|parent)["']/i.test(body))continue;
+    if(/<(?:input|select)\b[^>]*name\s*=\s*["']?[\w\[\]-]*(?:budget|start[_-]?date|timeline|company[_-]?size|project[_-]?type)/i.test(body))continue;
     return true;
   }
   return false;
