@@ -1,7 +1,10 @@
 /** Fail-closed recipient eligibility. DNS is not proof of an existing mailbox. */
 import {createHash} from 'node:crypto';
 import {Resolver} from 'node:dns/promises';
-export const POLICY_VERSION=1;
+// v2 (Nov 2026): the gate reads what discovery reads (Cloudflare-protected links, schema.org email, contact.html/contactus/
+// our-team/meet-the-team/masthead pages) and takes an address's context from the page text a reader sees. Bumping it
+// re-screens retired prospects for free and makes older mailbox proofs re-verify under the current rules.
+export const POLICY_VERSION=2;
 const DAY=86400000;
 const host=s=>String(s||'').toLowerCase().replace(/^www\./,'').replace(/\.$/,'');
 export function samePublisher(url,domain){
@@ -25,7 +28,15 @@ const DENIED=/\b(?:no (?:unsolicited |link )?(?:pitches|submissions)|do not (?:p
 // contact/about page, only when no editorial or named-author address exists, and only after a
 // Deliverable mailbox check (catch-all never). Sales/support/privacy etc. stay excluded via BAD_LOCAL.
 /** The publisher's own contact/about pages, including the names indie blogs use (/contact-me, /about-me, /work-with-me). */
-export const CONTACT_PAGE=/\/(?:contact(?:-us|-me)?|about(?:-us|-me)?|work-with-me|get-in-touch|editorial|editors|team|write-for-us|contribute)(?:\/|$)/i;
+export const CONTACT_PAGE=/\/(?:contact(?:[-_]?us|-me)?|about(?:[-_]?us|-me)?|work-with-me|get-in-touch|editorial(?:-team)?|editors|team|our-team|meet-the-team|the-team|masthead|write-for-us|contribute)(?:\.(?:html?|php|aspx?))?(?:\/|$)/i;
+/**
+ * What kind of first-party page a URL is, for the address rules. One definition for the send gate and contact discovery:
+ * 'author' (an author's own profile page), 'contact' (contact, about, team and masthead pages) or 'page' (anything else).
+ */
+export function pageKind(url){
+  let path='';try{path=new URL(url).pathname}catch{return 'page'}
+  return /\/(?:author|authors|writers?|contributors?)\/[^/]+/i.test(path)?'author':CONTACT_PAGE.test(path)?'contact':'page';
+}
 const GENERIC_INBOX=/^(?:hello|hi|contact|info|team|mail|office|enquiries|enquiry|inquiries)$/;
 const FREEMAIL=/^(?:gmail|outlook|hotmail|yahoo|protonmail|proton|icloud)\.(?:com|me)$/;
 const decode=s=>String(s||'').replace(/&#x([0-9a-f]+);/gi,(_,v)=>String.fromCodePoint(Math.min(0x10ffff,parseInt(v,16))))
@@ -38,14 +49,42 @@ export function cleanPublisherHtml(html){
     .replace(/<(section|div|li)\b[^>]*(?:id|class)=["'][^"']*(?:comment|reviews|testimonial)[^"']*["'][^>]*>[\s\S]*?<\/\1\s*>/gi,' ')
     .replace(/<([a-z][a-z0-9]*)\b[^>]*(?:\shidden\b|aria-hidden=["']true["']|display\s*:\s*none)[^>]*>[\s\S]*?<\/\1\s*>/gi,' ');
 }
+/** Cloudflare email protection: hex key byte, then the address XOR-ed with it. '' when malformed. */
+export function decodeCloudflare(hex){
+  if(!/^[0-9a-f]+$/i.test(hex||'')||hex.length<6||hex.length%2)return '';
+  const key=parseInt(hex.slice(0,2),16);let e='';for(let i=2;i<hex.length;i+=2)e+=String.fromCharCode(parseInt(hex.slice(i,i+2),16)^key);return e;
+}
+/**
+ * schema.org addresses the publisher states about itself: Organization, Person or ContactPoint nodes whose own url (if any)
+ * is on the publisher's domain. Read from the raw page, before scripts are stripped; the node's type, role and name are its context.
+ */
+export function structuredEmails(html,domain){
+  const out=[],src=String(html||'').slice(0,500000).replace(/<!--[\s\S]*?-->/g,' ');
+  for(const m of src.matchAll(/<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script\s*>/gi)){
+    let data;try{data=JSON.parse(m[1].trim())}catch{continue}
+    const walk=(x,key,depth)=>{
+      if(depth>8||!x||typeof x!=='object')return;
+      if(Array.isArray(x)){for(const y of x.slice(0,200))walk(y,key,depth+1);return}
+      const kind=[].concat(x['@type']||[]).map(String).find(t=>/(?:Organization|Person|ContactPoint|Corporation)$/.test(t));
+      const about=typeof x.url==='string'?x.url:typeof x['@id']==='string'?x['@id']:'';
+      if(kind&&(!/^https?:/i.test(about)||samePublisher(about,domain)))for(const v of [].concat(x.email||[])){
+        if(typeof v!=='string')continue;const email=v.replace(/^mailto:/i,'').split('?')[0].trim();
+        out.push({email,context:[key==='author'?'author':'',kind,x.contactType,x.name,x.jobTitle,typeof x.description==='string'?x.description.slice(0,200):'',email].filter(t=>typeof t==='string'&&t).join(' ')});
+      }
+      for(const [k,v] of Object.entries(x))if(k!=='email'&&v&&typeof v==='object')walk(v,k,depth+1);
+    };
+    walk(data,'',0);
+  }
+  return out;
+}
 /** Literal, first-party editorial contacts only; never generate an address pattern. */
 export function extractEditorialCandidates(html,url,{domain,author='',source='page',now=Date.now()}={}){
   if(!samePublisher(url,domain))return [];
-  const h=cleanPublisherHtml(html),found=new Map();
-  const add=(email,context,method)=>{
+  const found=new Map();
+  const add=(email,context,method,{ownDomain=false}={})=>{
     const e=normalizeEmail(email);if(!e)return;
     const [local,d]=e.split('@');if(BAD_LOCAL.test(local)||PLACEHOLDER.test(d)||/\.(png|jpg|gif|svg|webp)$/.test(d))return;
-    if(host(d)!==host(domain)&&!FREEMAIL.test(d))return;if(DENIED.test(context))return;
+    if(host(d)!==host(domain)&&(ownDomain||!FREEMAIL.test(d)))return;if(DENIED.test(context))return;
     const names=author.toLowerCase().split(/[^a-z]+/).filter(x=>x.length>=3),named=names.length>=2&&names.every(x=>local.includes(x));
     const purpose=PURPOSE.test(context),official=source==='contact'||source==='author';let rank=0,role='';
     if(named&&(purpose||source==='author'||/\b(?:author|writer)\b/i.test(context))){rank=100;role='named_author'}
@@ -56,17 +95,22 @@ export function extractEditorialCandidates(html,url,{domain,author='',source='pa
     const c={email:e,rank,role,source:url,source_type:source,method,observed_at:new Date(now).toISOString(),context:context.slice(0,300)};
     if(!found.has(e)||found.get(e).rank<rank)found.set(e,c);
   };
-  for(const m of h.matchAll(/<a\b[^>]*href\s*=\s*["']mailto:([^"']+)["'][^>]*>[\s\S]*?<\/a>/gi)){
-    let e;try{e=decodeURIComponent(decode(m[1]).split('?')[0])}catch{continue}
-    add(e,plain(h.slice(Math.max(0,m.index-180),m.index+m[0].length+180)),'mailto');
-  }
-  const text=plain(h).replace(/\s*\[at\]\s*/gi,'@').replace(/\s*\[dot\]\s*/gi,'.');
-  for(const m of text.matchAll(/[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9.-]+\.[a-z]{2,63}/gi))add(m[0],text.slice(Math.max(0,m.index-180),m.index+m[0].length+180),'visible_text');
-  for(const m of h.matchAll(/data-cfemail=["']([a-f0-9]+)["']/gi)){
-    const hex=m[1];if(hex.length<6||hex.length%2)continue;
-    const key=parseInt(hex.slice(0,2),16);let e='';for(let i=2;i<hex.length;i+=2)e+=String.fromCharCode(parseInt(hex.slice(i,i+2),16)^key);
-    add(e,plain(h.slice(Math.max(0,m.index-180),m.index+hex.length+180)),'cloudflare_published');
-  }
+  // Linked and protected addresses become markers in the page text, so each one's context is the text a reader sees around it
+  // (not 180 characters of markup). A Cloudflare-protected address is shown decoded, as the reader's browser shows it.
+  const marks=[],mark=(e,method,shown)=>{marks.push({e,method});return ` \u0001${marks.length-1}\u0001 ${shown} `};
+  const marked=cleanPublisherHtml(html).replace(/\u0001/g,' ')
+    .replace(/<a\b[^>]*href\s*=\s*["'][^"']*\/cdn-cgi\/l\/email-protection#([0-9a-f]+)["'][^>]*>[\s\S]*?<\/a\s*>/gi,(m,hex)=>{const e=decodeCloudflare(hex);return e?mark(e,'cloudflare_published',e):' '})
+    .replace(/<([a-z][a-z0-9]*)\b[^>]*data-cfemail\s*=\s*["']([0-9a-f]+)["'][^>]*>[\s\S]*?<\/\1\s*>/gi,(m,tag,hex)=>{const e=decodeCloudflare(hex);return e?mark(e,'cloudflare_published',e):' '})
+    .replace(/<a\b[^>]*href\s*=\s*["']mailto:([^"']+)["'][^>]*>([\s\S]*?)<\/a\s*>/gi,(m,to,inner)=>{let e;try{e=decodeURIComponent(decode(to).split('?')[0])}catch{return ' '}return mark(e,'mailto',inner)});
+  const text=plain(marked).replace(/\s*\[at\]\s*/gi,'@').replace(/\s*\[dot\]\s*/gi,'.');
+  const shown=s=>s.replace(/\u0001(\d+)\u0001/g,(_,n)=>marks[n]?.e||' ');
+  for(const m of text.matchAll(/\u0001(\d+)\u0001/g)){const k=marks[m[1]];if(k)add(k.e,shown(text.slice(Math.max(0,m.index-180),m.index+m[0].length+180)),k.method)}
+  // A protected address whose element could not be delimited (broken markup) is still read, with the text around it as context.
+  for(const m of marked.matchAll(/data-cfemail\s*=\s*["']([0-9a-f]+)["']/gi)){const e=decodeCloudflare(m[1]);if(e)add(e,plain(marked.slice(Math.max(0,m.index-600),m.index+600)).replace(/\u0001\d+\u0001/g,' '),'cloudflare_published')}
+  const visible=text.replace(/\u0001\d+\u0001/g,' ');
+  for(const m of visible.matchAll(/[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9.-]+\.[a-z]{2,63}/gi))add(m[0],visible.slice(Math.max(0,m.index-180),m.index+m[0].length+180),'visible_text');
+  // Structured data counts only for the publisher's own domain, and never on a page that asks not to be pitched.
+  if(!DENIED.test(visible))for(const x of structuredEmails(html,domain))add(x.email,x.context,'structured_data',{ownDomain:true});
   return [...found.values()].sort((a,b)=>b.rank-a.rank||a.email.localeCompare(b.email));
 }
 export function isSuppressed(state,email,domain){
@@ -327,7 +371,9 @@ export class RecipientVerifier{
   }
   async page(url,domain){
     if(!samePublisher(url,domain))return null;if(this.pages.has(url))return this.pages.get(url);
-    const pending=Promise.resolve().then(()=>this.fetchPage(url,{timeout:8000,maxBytes:300000,redirects:2})).then(r=>r.status===200&&r.body&&samePublisher(r.url,domain)?r:null).catch(()=>null);
+    // Pages that did not load are remembered with their status, so a timeout or 5xx is not mistaken for "no address published".
+    const missed=(url,status)=>{(this.missed??=new Map()).set(url,status);return null};
+    const pending=Promise.resolve().then(()=>this.fetchPage(url,{timeout:8000,maxBytes:300000,redirects:2})).then(r=>r.status===200&&r.body&&samePublisher(r.url,domain)?r:missed(url,r?.status||0)).catch(()=>missed(url,0));
     this.pages.set(url,pending);return pending;
   }
   /**
@@ -347,7 +393,7 @@ export class RecipientVerifier{
       const url=queue.shift();if(!url||seen.has(url)||!samePublisher(url,p.domain))continue;seen.add(url);
       const page=await this.page(url,p.domain);if(!page)continue;fetched++;
       for(const m of cleanPublisherHtml(page.body).matchAll(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}/gi)){const e=normalizeEmail(m[0].toLowerCase());if(e&&host(e.split('@')[1])===host(p.domain))published.add(e)}
-      const source=/\/(?:author|writers?)\//i.test(new URL(url).pathname)?'author':CONTACT_PAGE.test(new URL(url).pathname)?'contact':'page';
+      const source=pageKind(url);
       for(const c of extractEditorialCandidates(page.body,page.url,{domain:p.domain,author:p.author||'',source,now:this.now()}))if(!candidates.has(c.email)||candidates.get(c.email).rank<c.rank)candidates.set(c.email,c);
       for(const m of cleanPublisherHtml(page.body).matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)){
         let link;try{link=new URL(decode(m[1]),url).href}catch{continue}
@@ -358,7 +404,9 @@ export class RecipientVerifier{
     let ranked=[...candidates.values()].filter(c=>(!followup&&!hasContact)||c.email===normalizeEmail(p.email)).sort((a,b)=>b.rank-a.rank);
     // A general inbox is a last resort: never used while an editorial or named-author address exists.
     if(ranked.some(c=>c.role!=='contact_page_inbox'))ranked=ranked.filter(c=>c.role!=='contact_page_inbox');
-    if(!ranked.length)return fail('no_published_editorial_contact',!fetched?'publisher_pages_unreachable':published.size?'only_non_editorial_inbox_published':'no_email_published');
+    // The page the address was found on did not load (timeout, 5xx, network): absence elsewhere proves nothing, so it is not a publisher-side verdict.
+    const st=this.missed?.get(p.email_source),sourceMissed=!!p.email_source&&this.missed?.has(p.email_source)&&(st===0||st===429||st>=500);
+    if(!ranked.length)return fail('no_published_editorial_contact',!fetched?'publisher_pages_unreachable':published.size?'only_non_editorial_inbox_published':sourceMissed?'email_source_unreachable':'no_email_published');
     if(screenOnly){const c=ranked.find(x=>!isSuppressed(this.state,x.email,p.domain));return c?{ok:true,screened:true,email:c.email,evidence:c}:fail('no_published_editorial_contact','suppressed')}
     let attempted=0,retryAfter=null;const outcomes=[];
     for(const c of ranked){if(++attempted>3||this.now()>=deadline)break;if(isSuppressed(this.state,c.email,p.domain)){outcomes.push('suppressed');continue}

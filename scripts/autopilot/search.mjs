@@ -4,9 +4,10 @@
  *
  * Why Brave: it returns the real result URLs (Google results arrive wrapped and ~40% of them cannot be
  * resolved), and each plan includes a monthly credit worth about 1,000 searches. Requests are counted here
- * and capped per month (default 900) so the included credit is not exceeded.
+ * and capped per month (default 900) so the included credit is not exceeded, and paced per day (what is left of the
+ * month's budget divided by the days left), so the budget lasts the whole month instead of going in the first few cycles.
  */
-import {sleep,NOW,hostOf} from './util.mjs';
+import {sleep,hostOf} from './util.mjs';
 
 const ENDPOINT='https://api.search.brave.com/res/v1/web/search';
 const COUNTRY={2840:'us',2826:'gb',2124:'ca',2036:'au',2372:'ie',2276:'de'};
@@ -14,15 +15,23 @@ const COUNTRY={2840:'us',2826:'gb',2124:'ca',2036:'au',2372:'ie',2276:'de'};
 export const braveQuery=q=>String(q||'').replace(/\binurl:/gi,'').replace(/\s+/g,' ').trim();
 
 export class BraveSearch{
-  constructor({apiKey,state,monthlyRequests=900,fetchImpl=fetch,log=()=>{},gapMs=1100}){
+  constructor({apiKey,state,monthlyRequests=900,fetchImpl=fetch,log=()=>{},gapMs=1100,now=()=>Date.now()}){
     this.key=String(apiKey||'').trim();this.state=state;this.limit=Math.max(0,Math.floor(Number(monthlyRequests)||0));
-    this.fetch=fetchImpl;this.log=log;this.gapMs=gapMs;this.calls=0;this.last=0;this.queue=Promise.resolve();
-    state.brave_usage??={};
+    this.fetch=fetchImpl;this.log=log;this.gapMs=gapMs;this.calls=0;this.last=0;this.queue=Promise.resolve();this.now=now;
+    state.brave_usage??={};state.brave_days??={};
     for(const k of Object.keys(state.brave_usage).sort().slice(0,-13))delete state.brave_usage[k]; // keep a year of monthly counts
+    for(const k of Object.keys(state.brave_days).sort().slice(0,-40))delete state.brave_days[k]; // and about a month of daily ones
   }
   get enabled(){return !!this.key}
-  used(){return this.state.brave_usage[NOW().slice(0,7)]||0}
-  remaining(){return this.enabled&&!this.blocked?Math.max(0,this.limit-this.used()):0}
+  day(){return new Date(this.now()).toISOString().slice(0,10)}
+  used(){return this.state.brave_usage[this.day().slice(0,7)]||0}
+  usedToday(){return this.state.brave_days[this.day()]||0}
+  /** Today's share of the monthly budget: what was left at the start of today, divided by the days left in the month (today included). */
+  dailyAllowance(){
+    const d=new Date(this.now()),days=new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth()+1,0)).getUTCDate(),left=days-d.getUTCDate()+1;
+    return Math.max(0,Math.ceil((this.limit-Math.max(0,this.used()-this.usedToday()))/left));
+  }
+  remaining(){return this.enabled&&!this.blocked?Math.max(0,Math.min(this.limit-this.used(),this.dailyAllowance()-this.usedToday())):0}
   canSearch(){return this.remaining()>0}
   /** Same result shape as DataForSEO.serp: [{url,domain,title,description,rank}] or null when the search could not run. */
   serp(keyword,{location=2840,language='en'}={}){
@@ -34,7 +43,7 @@ export class BraveSearch{
   async one(keyword,{location,language}){
     if(!this.canSearch())return null;
     const wait=this.last+this.gapMs-Date.now();if(wait>0)await sleep(wait);
-    const month=NOW().slice(0,7);this.state.brave_usage[month]=(this.state.brave_usage[month]||0)+1;this.calls++;this.last=Date.now();
+    const day=this.day(),month=day.slice(0,7);this.state.brave_usage[month]=(this.state.brave_usage[month]||0)+1;this.state.brave_days[day]=(this.state.brave_days[day]||0)+1;this.calls++;this.last=Date.now();
     const url=`${ENDPOINT}?q=${encodeURIComponent(braveQuery(keyword))}&count=20&country=${COUNTRY[location]||'us'}&search_lang=${encodeURIComponent(language||'en')}&text_decorations=false`;
     let res,body;
     try{res=await this.fetch(url,{headers:{Accept:'application/json','X-Subscription-Token':this.key},signal:AbortSignal.timeout(20000)});body=await res.json().catch(()=>null)}

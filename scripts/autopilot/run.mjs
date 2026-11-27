@@ -332,7 +332,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   await stage('second_look',vaultOk,()=>recontact({state,fetchImpl,deadline:deadline-8*60e3,max:cfg.secondLook,log}),privateWhy,{until:deadline-7*60e3});
   // Runs even with no fresh asset searches: brand-mention searches have their own schedule.
   await stage('prospects',vaultOk&&(dfs.enabled||!!brave),()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,linkGapCalls:cfg.linkGapCalls,
-    neighborPages:cfg.neighborPages,altSearch:brave,
+    neighborPages:cfg.neighborPages,altSearch:brave,crawl,
     pairPool:linkable,maxQueries:cfg.maxQueries??(state.tuning?.max_queries||TUNING.start),serpDepth:cfg.serpDepth,deadline:deadline-7*60e3,log}),
     !vaultOk?privateWhy:(dfs.authError||'DataForSEO credentials not set'),{until:deadline-5.5*60e3});
   await stage('bing_submit',vaultOk&&!!env.BING_WEBMASTER_API_KEY&&crawl.length>0,()=>submitToBing({state,env,sites:SITES,crawl,ranked,fetchImpl,deadline:deadline-6*60e3,log}),
