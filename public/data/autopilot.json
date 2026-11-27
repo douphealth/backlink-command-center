@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-27T02:35:13.333Z",
- "duration_s": 201,
+ "generated_at": "2026-11-27T04:38:16.362Z",
+ "duration_s": 169,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -31,14 +31,14 @@
    "key": true,
    "enabled": true,
    "daily_limit": 24,
-   "used_today": 7,
+   "used_today": 15,
    "balance": {
     "provider": "verifalia",
-    "free_credits": 18,
-    "reset_in": "21:25:31",
-    "checked_at": "2026-11-27T02:34:29.029Z"
+    "free_credits": 10,
+    "reset_in": "19:22:04",
+    "checked_at": "2026-11-27T04:37:55.662Z"
    },
-   "catch_all_domains_skipped": 63
+   "catch_all_domains_skipped": 70
   }
  },
  "setup": [
@@ -130,10 +130,10 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 34226,
+   "ms": 18412,
    "result": {
     "sites": 21,
-    "pages": 2808
+    "pages": 2804
    }
   },
   "demand": {
@@ -156,13 +156,13 @@
    "ok": true,
    "result": {
     "ranked": 555,
-    "internal_suggestions": 595,
+    "internal_suggestions": 605,
     "pitchable": 85
    }
   },
   "requalify": {
    "ok": true,
-   "ms": 2,
+   "ms": 3,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -172,40 +172,40 @@
   },
   "second_look": {
    "ok": true,
-   "ms": 88156,
+   "ms": 95945,
    "result": {
     "checked": 60,
-    "found": 6,
-    "unreachable": 1,
-    "waiting": 278
+    "found": 3,
+    "unreachable": 0,
+    "waiting": 221
    }
   },
   "prospects": {
    "ok": true,
-   "ms": 8933,
+   "ms": 21252,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
-    "candidates": 26,
-    "qualified": 4,
+    "candidates": 33,
+    "qualified": 5,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 22,
-    "with_email": 1,
+    "rejected": 28,
+    "with_email": 4,
     "contact_form": 0,
-    "broken_links": 0,
+    "broken_links": 1,
     "from_queue": 0,
     "linkgap_calls": 0,
     "linkgap_candidates": 0,
-    "neighbor_pages": 11,
-    "neighbor_candidates": 26,
+    "neighbor_pages": 12,
+    "neighbor_candidates": 33,
     "filtered": {
+     "platform_or_giant": 5,
      "already_evaluated": 18,
-     "duplicate_this_run": 8,
-     "platform_or_giant": 1,
-     "competitor": 5,
-     "gov_or_edu": 8
+     "gov_or_edu": 1,
+     "competitor": 2,
+     "duplicate_this_run": 4
     },
     "deferred": 0
    }
@@ -216,17 +216,17 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 9323,
+   "ms": 609,
    "result": {
     "checked": 3,
-    "found": 1
+    "found": 0
    }
   },
   "replies": {
    "ok": true,
-   "ms": 1388,
+   "ms": 2219,
    "result": {
-    "scanned": 8,
+    "scanned": 1,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -236,7 +236,7 @@
   },
   "sent_check": {
    "ok": true,
-   "ms": 775,
+   "ms": 1536,
    "result": {
     "scanned": 144,
     "restored": 0,
@@ -245,17 +245,17 @@
   },
   "screen": {
    "ok": true,
-   "ms": 4221,
+   "ms": 5789,
    "result": {
-    "screened": 11,
-    "kept": 0,
-    "retired": 7,
+    "screened": 17,
+    "kept": 7,
+    "retired": 6,
     "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 40,
+   "ms": 162,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -263,7 +263,8 @@
     "skipped": 0,
     "deferred": 66,
     "cap": 12,
-    "verification_held": 0
+    "verification_held": 0,
+    "cooling": 1
    },
    "writer": {
     "claude": 0,
@@ -273,18 +274,18 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 38795,
+   "ms": 21010,
    "result": {
     "checked": 10,
-    "verified": 4,
-    "held": 6
+    "verified": 1,
+    "held": 9
    }
   },
   "link_checks": {
    "ok": true,
-   "ms": 13424,
+   "ms": 3,
    "result": {
-    "checked": 11,
+    "checked": 0,
     "won": 0,
     "lost": 0
    }
@@ -292,10 +293,10 @@
  },
  "totals": {
   "sites": 21,
-  "pages_crawled": 2808,
-  "urls_discovered": 7417,
+  "pages_crawled": 2804,
+  "urls_discovered": 6916,
   "promotable": 555,
-  "internal_suggestions": 595,
+  "internal_suggestions": 605,
   "promoting_now": 48
  },
  "spend": {
@@ -313,28 +314,28 @@
  },
  "outreach": {
   "mode": "send",
-  "ready": 64,
-  "verified_ready": 4,
+  "ready": 65,
+  "verified_ready": 5,
   "pending_verification": 60,
   "holds": {
-   "mailbox_accept_all": 10,
+   "mailbox_accept_all": 17,
    "publisher_mismatch": 3,
    "mailbox_unknown": 12,
    "mx_dns_unverified": 1
   },
   "sent_today": 0,
   "cap_today": 12,
-  "next_send_at": "2026-11-27T03:00:00.000Z",
+  "next_send_at": "2026-11-27T04:38:16.365Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 5515,
-  "qualified": 909,
-  "ready": 64,
-  "broken_link_ready": 3,
+  "prospects_evaluated": 5548,
+  "qualified": 914,
+  "ready": 65,
+  "broken_link_ready": 4,
   "contact_form_only": 173,
-  "no_contact": 331,
+  "no_contact": 329,
   "contacted": 102,
   "replied": 3,
   "positive": 0,
@@ -928,12 +929,12 @@
   },
   {
    "date": "2026-11-27",
-   "prospects_evaluated": 5515,
-   "qualified": 909,
-   "ready": 64,
-   "broken_link_ready": 3,
+   "prospects_evaluated": 5548,
+   "qualified": 914,
+   "ready": 65,
+   "broken_link_ready": 4,
    "contact_form_only": 173,
-   "no_contact": 331,
+   "no_contact": 329,
    "contacted": 102,
    "replied": 3,
    "positive": 0,
@@ -1062,9 +1063,9 @@
    },
    {
     "footprint": "neighbor",
-    "queries": 105,
-    "ready": 7,
-    "rate": 0.074
+    "queries": 117,
+    "ready": 8,
+    "rate": 0.075
    },
    {
     "footprint": "helpful_resources",
@@ -1627,9 +1628,9 @@
  "sites": [
   {
    "domain": "gearuptofit.com",
-   "pages": 300,
-   "discovered": 797,
-   "sitemaps": 7,
+   "pages": 296,
+   "discovered": 296,
+   "sitemaps": 6,
    "eligible": 28,
    "top": "https://gearuptofit.com/shoe-finder/methodology/"
   },
@@ -2189,7 +2190,7 @@
    ],
    "pitchable": false,
    "not_pitched_because": "review, comparison or sales page",
-   "prospects": 14,
+   "prospects": 17,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -2652,7 +2653,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 26,
+   "internal_inlinks": 22,
    "words": 999,
    "interactive": true,
    "modified": null,
@@ -3218,7 +3219,7 @@
    "linkability": 67,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 294,
+   "internal_inlinks": 290,
    "words": 1406,
    "interactive": false,
    "modified": "2026-10-04T18:13:49.000Z",
@@ -3579,60 +3580,6 @@
    "promoting": false
   },
   {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "h1": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews)",
-   "description": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit: practical review guidance with key considerations, buyer signals, safety notes, an",
-   "type": "commercial",
-   "promotion": 63,
-   "linkability": 65,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2475,
-   "interactive": false,
-   "modified": "2026-10-04T17:56:49+00:00",
-   "reasons": [
-    "In-depth (2,475 words)",
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "review, comparison or sales page",
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "h1": "7 Best Running Shoes for Supination & High Arches (2026)",
-   "description": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit: practical review guidance with key considerations, buyer signals, safety notes, and",
-   "type": "commercial",
-   "promotion": 63,
-   "linkability": 65,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2219,
-   "interactive": false,
-   "modified": "2026-10-04T17:56:52+00:00",
-   "reasons": [
-    "In-depth (2,219 words)",
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "review, comparison or sales page",
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/focus-habit-reset/",
    "title": "Focus and Habit Reset Guide - Gear Up to Grow",
@@ -3858,6 +3805,57 @@
    "pitchable": false,
    "not_pitched_because": "not distinctive enough to earn a link",
    "prospects": 12,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "url": "https://openclaw-skillshub.com/articles/openclaw-provider-apis-guide/",
+   "title": "OpenClaw Provider APIs — Ollama Cloud, Anthropic, OpenRouter & xAI | ClawSkills",
+   "h1": "OpenClaw Provider APIs: How to Choose Ollama Cloud, Anthropic, OpenRouter, and xAI",
+   "description": "Compare OpenClaw provider choices without guessing: verify authentication, model IDs, routing, limits, privacy, cost, and failure behavior for Ollama, Anthropic",
+   "type": "practical_guide",
+   "promotion": 62,
+   "linkability": 64,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 1460,
+   "interactive": false,
+   "modified": "2026-08-03",
+   "reasons": [
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
+   "prospects": 9,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptogrow.com",
+   "url": "https://gearuptogrow.com/learning/",
+   "title": "Learning Hub: Active Recall & Spaced Repetition Systems",
+   "h1": "Learning Hub: The Complete Practical System",
+   "description": "Explore scientific study systems using active recall, spaced repetition calendars, deliberate practice, and frameworks for accelerated learning.",
+   "type": "practical_guide",
+   "promotion": 61,
+   "linkability": 68,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 103,
+   "words": 3515,
+   "interactive": false,
+   "modified": "2026-11-10T14:20:08+00:00",
+   "reasons": [
+    "In-depth (3,515 words)",
+    "3 data tables",
+    "Recently updated"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "not distinctive enough to earn a link",
+   "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
   }
@@ -4125,26 +4123,6 @@
   },
   {
    "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "from_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "to": "https://gearuptofit.com/shoe-finder/methodology/",
-   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 63
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "from_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "to": "https://gearuptofit.com/shoe-finder/methodology/",
-   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 63
-  },
-  {
-   "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/running/",
    "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
@@ -4157,6 +4135,26 @@
    "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/review-methodology/testing-log/",
    "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
+   "to": "https://gearuptofit.com/shoe-finder/methodology/",
+   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/reviews/",
+   "from_title": "Reviews Hub | Running Shoes, Watches & Fitness Gear | GearUpToFit",
+   "to": "https://gearuptofit.com/shoe-finder/methodology/",
+   "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
+   "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running-injury-prevention/",
+   "from_title": "Running Injury Prevention: Form, Strength & Recovery Guide | GearUpToFit",
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
    "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
    "anchor": "running shoes",
@@ -5284,106 +5282,6 @@
    "from_strength": 42
   },
   {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "from_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 8,
-   "from_strength": 63
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/shoe-finder/methodology/",
-   "from_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 6,
-   "from_strength": 82
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/shoe-finder/",
-   "from_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 5,
-   "from_strength": 75
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running/",
-   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review-methodology/testing-log/",
-   "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "from_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 5,
-   "from_strength": 63
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/shoe-finder/methodology/",
-   "from_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 82
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/shoe-finder/",
-   "from_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 75
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running/",
-   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review-methodology/testing-log/",
-   "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
    "site": "openclaw-skillshub.com",
    "from": "https://openclaw-skillshub.com/",
    "from_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
@@ -5795,6 +5693,56 @@
   },
   {
    "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/safely-remove-mice/",
+   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 56
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/where-to-place-mouse-traps/",
+   "from_title": "Where to Place Mouse Traps: Room-by-Room Placement Guide",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 48
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/best-mouse-traps-for-homes/",
+   "from_title": "Best Mouse Traps for Homes: Snap, Enclosed & Electronic",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 42
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
+   "from_title": "How to Get Rid of Mice in Walls (Without Opening Drywall)",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/best-bait-for-mouse-traps/",
+   "from_title": "Best Bait for Mouse Traps: Peanut Butter, Setup & Mistakes",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/diseases-from-mice/",
    "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
    "to": "https://micegoneguide.com/mouse-cleanup-safety/",
@@ -5844,32 +5792,82 @@
    "from_strength": 57
   },
   {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/safely-remove-mice/",
-   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
-   "to": "https://micegoneguide.com/snap-traps-for-mice/",
-   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "anchor": "snap traps",
-   "relevance": 5,
-   "from_strength": 56
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "from_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "to": "https://frenchyfab.com/french-bulldog-names-2025-guide/",
+   "to_title": "174 French Bulldog Names: Practical Naming Framework",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 74
   },
   {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "from_title": "Where to Place Mouse Traps: Room-by-Room Placement Guide",
-   "to": "https://micegoneguide.com/snap-traps-for-mice/",
-   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "anchor": "snap traps",
-   "relevance": 5,
-   "from_strength": 48
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/french-bulldog-names-2025-guide/",
+   "to_title": "174 French Bulldog Names: Practical Naming Framework",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "from_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "to": "https://frenchyfab.com/french-bulldog-names-2025-guide/",
+   "to_title": "174 French Bulldog Names: Practical Naming Framework",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 60
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
+   "to": "https://frenchyfab.com/french-bulldog-names-2025-guide/",
+   "to_title": "174 French Bulldog Names: Practical Naming Framework",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/french-bulldog-names-2025-guide/",
+   "to_title": "174 French Bulldog Names: Practical Naming Framework",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/senior-french-bulldog-care-guide/",
+   "from_title": "Senior French Bulldog Care: Health, Diet, and Happiness Tips",
+   "to": "https://frenchyfab.com/french-bulldog-diet-for-seniors/",
+   "to_title": "Senior French Bulldog Nutrition: Step-by-Step Guide",
+   "anchor": "senior french",
+   "relevance": 8,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-vet-check-ups-guide/",
+   "from_title": "French Bulldog Vet Checkups: Routine Care, Screening",
+   "to": "https://frenchyfab.com/french-bulldog-diet-for-seniors/",
+   "to_title": "Senior French Bulldog Nutrition: Step-by-Step Guide",
+   "anchor": "senior french",
+   "relevance": 7,
+   "from_strength": 0
   }
  ],
  "indexation": {
   "sites": [
    {
     "site": "gearuptofit.com",
-    "checked": 300,
-    "healthy": 297,
+    "checked": 296,
+    "healthy": 293,
     "problems": 3,
     "critical": 0,
     "review": 0,
@@ -6894,7 +6892,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-27T02:34:05.350Z"
+  "updated_at": "2026-11-27T04:37:44.672Z"
  },
  "wins": [
   {
@@ -6965,45 +6963,45 @@
   }
  ],
  "log": [
-  "02:31:53 connection dataforseo: connected",
-  "02:31:53 connection gmail: connected",
-  "02:31:56 crawl plantastichaven.com: 154/154 urls, fetched 62, 304 0, reused 92",
-  "02:32:02 crawl gearuptofit.com: 300/797 urls, fetched 291, 304 0, reused 9",
-  "02:32:03 crawl gearuptogrow.com: 103/103 urls, fetched 33, 304 0, reused 70",
-  "02:32:04 crawl micegoneguide.com: 41/41 urls, fetched 16, 304 0, reused 25",
-  "02:32:04 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 12, 304 0, reused 101",
-  "02:32:05 crawl mysticaldigits.com: 300/468 urls, fetched 189, 304 0, reused 111",
-  "02:32:06 crawl efficientgptprompts.com: 300/487 urls, fetched 22, 304 0, reused 278",
-  "02:32:07 crawl frenchyfab.com: 153/153 urls, fetched 75, 304 0, reused 78",
-  "02:32:07 crawl imagealchemy.app: 28/28 urls, fetched 21, 304 0, reused 7",
-  "02:32:07 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
-  "02:32:07 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
-  "02:32:07 crawl openclaw-skillshub.com: 97/97 urls, fetched 87, 304 0, reused 10",
-  "02:32:08 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
-  "02:32:08 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
-  "02:32:08 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
-  "02:32:08 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
-  "02:32:09 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
-  "02:32:09 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
-  "02:32:09 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
-  "02:32:09 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
-  "02:32:27 crawl tenderatlas.shop: 300/3783 urls, fetched 171, 304 0, reused 129",
-  "02:32:28 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "02:32:28 - search_performance: skipped (Search Console not connected)",
-  "02:32:28 pitch policy: 85 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
-  "02:32:28 indexation: 2 sitemap URLs cannot be indexed, 1 need a look, 207 are thin (210 in all)",
-  "02:33:56 second look: 60 qualified pages without an address re-checked, 6 now have one (1 unreachable, 278 waiting for a later cycle)",
-  "02:33:58 link neighbourhood (free): 11 qualified pages mined, 26 recommended sites to evaluate",
-  "02:34:05 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 26 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 26 candidates, 4 qualified (0 unlinked mentions), 1 with email, 0 with a dead link we can replace, 0 already linking",
-  "02:34:05 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "02:34:05 self-tuning: next cycle runs up to 20 searches",
-  "02:34:14 broken links: 3 queued pages scanned, 1 with a dead link our page can replace",
-  "02:34:16 replies: 8 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "02:34:16 sent-folder check: 144 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
-  "02:34:21 queue screening (free, nothing sent): 11 checked, 0 sendable, 7 retired, 0 switched to a better published address",
-  "02:34:21 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "02:34:59 pre-verify (nothing sent): 10 top inboxes checked, 4 verified, 6 held",
-  "02:35:13 link checks: 11 pages, 0 new links won, 0 lost"
+  "04:35:28 connection dataforseo: connected",
+  "04:35:28 connection gmail: connected",
+  "04:35:31 crawl plantastichaven.com: 154/154 urls, fetched 1, 304 0, reused 153",
+  "04:35:32 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
+  "04:35:35 crawl frenchyfab.com: 153/153 urls, fetched 0, 304 0, reused 153",
+  "04:35:36 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
+  "04:35:37 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
+  "04:35:38 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
+  "04:35:39 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "04:35:40 crawl tenderatlas.shop: 300/3783 urls, fetched 0, 304 0, reused 300",
+  "04:35:41 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
+  "04:35:42 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
+  "04:35:42 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
+  "04:35:42 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
+  "04:35:43 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
+  "04:35:43 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
+  "04:35:43 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
+  "04:35:43 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
+  "04:35:44 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
+  "04:35:44 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
+  "04:35:44 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
+  "04:35:44 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "04:35:47 crawl gearuptofit.com: 296/296 urls, fetched 1, 304 0, reused 295",
+  "04:35:47 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "04:35:47 - search_performance: skipped (Search Console not connected)",
+  "04:35:47 pitch policy: 85 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
+  "04:35:47 indexation: 2 sitemap URLs cannot be indexed, 1 need a look, 207 are thin (210 in all)",
+  "04:37:23 second look: 60 qualified pages without an address re-checked, 3 now have one (0 unreachable, 221 waiting for a later cycle)",
+  "04:37:26 link neighbourhood (free): 12 qualified pages mined, 33 recommended sites to evaluate",
+  "04:37:44 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 33 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 33 candidates, 5 qualified (0 unlinked mentions), 4 with email, 1 with a dead link we can replace, 0 already linking",
+  "04:37:44 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "04:37:44 self-tuning: next cycle runs up to 20 searches",
+  "04:37:45 broken links: 3 queued pages scanned, 0 with a dead link our page can replace",
+  "04:37:47 replies: 1 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "04:37:49 sent-folder check: 144 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
+  "04:37:54 queue screening (free, nothing sent): 17 checked, 7 sendable, 6 retired, 0 switched to a better published address",
+  "04:37:54 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "04:38:15 pre-verify (nothing sent): 10 top inboxes checked, 1 verified, 9 held",
+  "04:38:16 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
@@ -7015,7 +7013,7 @@
   {
    "level": "info",
    "code": "holds",
-   "message": "26 queued inboxes are held; most often (12) because mailbox unknown.",
+   "message": "33 queued inboxes are held; most often (17) because mailbox accept all.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   }
  ]
