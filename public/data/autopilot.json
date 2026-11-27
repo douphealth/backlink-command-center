@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-27T13:09:05.798Z",
- "duration_s": 102,
+ "generated_at": "2026-11-27T15:10:06.889Z",
+ "duration_s": 44,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -35,8 +35,8 @@
    "balance": {
     "provider": "verifalia",
     "free_credits": 1,
-    "reset_in": "10:50:56",
-    "checked_at": "2026-11-27T13:09:03.170Z"
+    "reset_in": "08:49:59",
+    "checked_at": "2026-11-27T15:10:00.587Z"
    },
    "catch_all_domains_skipped": 72
   }
@@ -130,7 +130,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 11692,
+   "ms": 11746,
    "result": {
     "sites": 21,
     "pages": 2808
@@ -156,7 +156,7 @@
    "ok": true,
    "result": {
     "ranked": 555,
-    "internal_suggestions": 623,
+    "internal_suggestions": 624,
     "pitchable": 97
    }
   },
@@ -172,41 +172,38 @@
   },
   "second_look": {
    "ok": true,
-   "ms": 58860,
+   "ms": 2,
    "result": {
-    "checked": 46,
-    "found": 2,
-    "unreachable": 3,
+    "checked": 0,
+    "found": 0,
+    "unreachable": 0,
     "waiting": 0
    }
   },
   "prospects": {
    "ok": true,
-   "ms": 7288,
+   "ms": 14448,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
-    "candidates": 25,
-    "qualified": 0,
+    "candidates": 12,
+    "qualified": 2,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 25,
-    "with_email": 0,
-    "contact_form": 0,
+    "rejected": 10,
+    "with_email": 1,
+    "contact_form": 1,
     "broken_links": 0,
     "from_queue": 0,
     "linkgap_calls": 0,
     "linkgap_candidates": 0,
     "neighbor_pages": 11,
-    "neighbor_candidates": 25,
+    "neighbor_candidates": 12,
     "filtered": {
-     "already_evaluated": 16,
-     "duplicate_this_run": 2,
-     "platform_or_giant": 4,
-     "competitor": 1,
-     "forum_or_ugc": 1,
-     "gov_or_edu": 5
+     "already_evaluated": 27,
+     "platform_or_giant": 12,
+     "duplicate_this_run": 11
     },
     "deferred": 0
    }
@@ -225,9 +222,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 2333,
+   "ms": 6248,
    "result": {
-    "scanned": 5,
+    "scanned": 22,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -237,7 +234,7 @@
   },
   "sent_check": {
    "ok": true,
-   "ms": 1466,
+   "ms": 2405,
    "result": {
     "scanned": 146,
     "restored": 0,
@@ -246,17 +243,17 @@
   },
   "screen": {
    "ok": true,
-   "ms": 10433,
+   "ms": 151,
    "result": {
-    "screened": 13,
-    "kept": 4,
-    "retired": 4,
-    "address_updated": 1
+    "screened": 6,
+    "kept": 1,
+    "retired": 0,
+    "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 4001,
+   "ms": 1784,
    "result": {
     "followups": 0,
     "sent": 0,
@@ -275,7 +272,7 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 2083,
+   "ms": 4732,
    "result": {
     "checked": 3,
     "verified": 0,
@@ -298,7 +295,7 @@
   "pages_crawled": 2808,
   "urls_discovered": 7444,
   "promotable": 555,
-  "internal_suggestions": 623,
+  "internal_suggestions": 624,
   "promoting_now": 49
  },
  "spend": {
@@ -316,9 +313,9 @@
  },
  "outreach": {
   "mode": "send",
-  "ready": 65,
+  "ready": 66,
   "verified_ready": 6,
-  "pending_verification": 59,
+  "pending_verification": 60,
   "holds": {
    "mailbox_unknown": 16,
    "mailbox_accept_all": 18,
@@ -327,16 +324,16 @@
   },
   "sent_today": 0,
   "cap_today": 12,
-  "next_send_at": "2026-11-27T13:09:05.803Z",
+  "next_send_at": "2026-11-27T15:10:06.893Z",
   "sending_now": true,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 5644,
-  "qualified": 918,
-  "ready": 65,
+  "prospects_evaluated": 5656,
+  "qualified": 920,
+  "ready": 66,
   "broken_link_ready": 4,
-  "contact_form_only": 170,
+  "contact_form_only": 171,
   "no_contact": 320,
   "contacted": 102,
   "replied": 3,
@@ -931,11 +928,11 @@
   },
   {
    "date": "2026-11-27",
-   "prospects_evaluated": 5644,
-   "qualified": 918,
-   "ready": 65,
+   "prospects_evaluated": 5656,
+   "qualified": 920,
+   "ready": 66,
    "broken_link_ready": 4,
-   "contact_form_only": 170,
+   "contact_form_only": 171,
    "no_contact": 320,
    "contacted": 102,
    "replied": 3,
@@ -1070,16 +1067,16 @@
     "rate": 0.071
    },
    {
+    "footprint": "neighbor",
+    "queries": 174,
+    "ready": 10,
+    "rate": 0.062
+   },
+   {
     "footprint": "mention",
     "queries": 30,
     "ready": 1,
     "rate": 0.061
-   },
-   {
-    "footprint": "neighbor",
-    "queries": 163,
-    "ready": 9,
-    "rate": 0.06
    },
    {
     "footprint": "resources",
@@ -2055,8 +2052,8 @@
    "linkability": 91,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
-   "words": 1667,
+   "internal_inlinks": 5,
+   "words": 1666,
    "interactive": true,
    "modified": "2026-11-04T05:40:26+00:00",
    "reasons": [
@@ -2065,7 +2062,7 @@
     "Recently updated"
    ],
    "pitchable": true,
-   "prospects": 13,
+   "prospects": 14,
    "internal_link_suggestions": 5,
    "promoting": false
   },
@@ -2369,7 +2366,7 @@
    "linkability": 86,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 11,
+   "internal_inlinks": 5,
    "words": 3514,
    "interactive": true,
    "modified": "2026-11-15T07:33:08+00:00",
@@ -2423,8 +2420,8 @@
    "linkability": 84,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
-   "words": 679,
+   "internal_inlinks": 4,
+   "words": 677,
    "interactive": true,
    "modified": "2026-09-05T13:47:24+00:00",
    "reasons": [
@@ -2448,7 +2445,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 8,
-   "words": 690,
+   "words": 692,
    "interactive": true,
    "modified": "2026-09-05T13:47:17+00:00",
    "reasons": [
@@ -2822,7 +2819,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 7,
-   "words": 608,
+   "words": 609,
    "interactive": true,
    "modified": "2026-09-05T13:47:04+00:00",
    "reasons": [
@@ -2831,7 +2828,7 @@
    ],
    "pitchable": true,
    "prospects": 8,
-   "internal_link_suggestions": 0,
+   "internal_link_suggestions": 1,
    "promoting": false
   },
   {
@@ -2858,6 +2855,32 @@
    "pitchable": false,
    "not_pitched_because": "review, comparison or sales page",
    "prospects": 6,
+   "internal_link_suggestions": 4,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
+   "title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
+   "h1": "Best Surfer SEO Alternatives: 2025 Content Optimization Guide",
+   "description": "Practical guide for SEOs, affiliate marketers, and agencies comparing content optimization platforms: best tools, decision framework, SEO workflow, mistakes to avoid, FAQs, and safe recommendations.",
+   "type": "comparison",
+   "promotion": 75,
+   "linkability": 79,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 1878,
+   "interactive": false,
+   "modified": "2026-09-25T17:56:08+00:00",
+   "reasons": [
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
+   "prospects": 7,
    "internal_link_suggestions": 4,
    "promoting": false
   },
@@ -3053,12 +3076,12 @@
    "linkability": 80,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
-   "words": 3394,
+   "internal_inlinks": 4,
+   "words": 3541,
    "interactive": false,
    "modified": "2026-09-13T19:07:43+00:00",
    "reasons": [
-    "In-depth (3,394 words)",
+    "In-depth (3,541 words)",
     "1 data table",
     "Cites 6 authoritative sources",
     "Recently updated"
@@ -3147,31 +3170,6 @@
    "promoting": false
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
-   "title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
-   "h1": "Best Surfer SEO Alternatives: 2025 Content Optimization Guide",
-   "description": "Practical guide for SEOs, affiliate marketers, and agencies comparing content optimization platforms: best tools, decision framework, SEO workflow, mistakes to avoid, FAQs, and safe recommendations.",
-   "type": "comparison",
-   "promotion": 71,
-   "linkability": 79,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 4,
-   "words": 1876,
-   "interactive": false,
-   "modified": "2026-09-25T17:56:08+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "review, comparison or sales page",
-   "prospects": 7,
-   "internal_link_suggestions": 4,
-   "promoting": false
-  },
-  {
    "site": "gearuptofit.com",
    "url": "https://gearuptofit.com/nutrition/what-is-the-role-of-glycogen/",
    "title": "How Glycogen Energy Storage Impacts Athletic Performance | GearUpToFit",
@@ -3210,7 +3208,7 @@
    "linkability": 78,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 10,
    "words": 3252,
    "interactive": true,
    "modified": "2026-11-20T18:16:29+00:00",
@@ -3237,7 +3235,7 @@
    "linkability": 78,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
+   "internal_inlinks": 6,
    "words": 3693,
    "interactive": true,
    "modified": "2026-11-20T17:41:25+00:00",
@@ -3643,7 +3641,7 @@
    "linkability": 76,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 102,
+   "internal_inlinks": 103,
    "words": 1657,
    "interactive": false,
    "modified": "2026-10-25T11:02:11+00:00",
@@ -3792,6 +3790,32 @@
    "promoting": false
   },
   {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/blogging/update-old-blog-content/",
+   "title": "How to Update Old Blog Content for SEO (2026): 7-Step Workflow",
+   "h1": "How to Update Old Blog Content for SEO (2026): A 7-Step Refresh Workflow",
+   "description": "A seven-step workflow for refreshing old posts: find decay in Search Console, prioritise by impressions and CTR, update, then re-index and measure.",
+   "type": "practical_guide",
+   "promotion": 67,
+   "linkability": 70,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 1068,
+   "interactive": false,
+   "modified": "2026-09-16T18:01:48+00:00",
+   "reasons": [
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
    "site": "efficientgptprompts.com",
    "url": "https://efficientgptprompts.com/prompt-engineering-framework-for-llms/",
    "title": "Prompt Engineering Framework for LLMs: Test, Grade, Deploy",
@@ -3828,8 +3852,8 @@
    "linkability": 73,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 1106,
+   "internal_inlinks": 7,
+   "words": 1116,
    "interactive": false,
    "modified": "2026-09-13T08:04:36+00:00",
    "reasons": [
@@ -3852,8 +3876,8 @@
    "linkability": 73,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
-   "words": 725,
+   "internal_inlinks": 4,
+   "words": 728,
    "interactive": true,
    "modified": "2026-09-05T13:47:30+00:00",
    "reasons": [
@@ -3863,31 +3887,6 @@
    "pitchable": false,
    "not_pitched_because": "too thin to earn a link",
    "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/watch-match/",
-   "title": "Fitness Watch Match — Find the Right Watch for Your Training",
-   "h1": "Fitness Watch Match — Find the Right Watch for Your Training",
-   "description": "Compare fitness watches by GPS accuracy, battery life, heart-rate features, training metrics, recovery insights, mapping, comfort, phone compatibility and budget. Free, spec-based, no signup.",
-   "type": "practical_guide",
-   "promotion": 66,
-   "linkability": 67,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 297,
-   "words": 1406,
-   "interactive": false,
-   "modified": "2026-10-04T18:13:49.000Z",
-   "reasons": [
-    "Recently updated",
-    "Flagship asset"
-   ],
-   "flagship": true,
-   "pitchable": true,
-   "prospects": 11,
    "internal_link_suggestions": 0,
    "promoting": false
   }
@@ -4195,6 +4194,16 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
+   "from_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
+   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
+   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
+   "anchor": "affiliate link",
+   "relevance": 4,
+   "from_strength": 75
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/web-hosting/web-hosting-comparison/",
    "from_title": "Web Hosting Comparison: The Practical Buyer’s Guide for WordPress and Affiliate Sites",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
@@ -4202,16 +4211,6 @@
    "anchor": "affiliate link",
    "relevance": 4,
    "from_strength": 72
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
-   "from_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
-   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "anchor": "affiliate link",
-   "relevance": 4,
-   "from_strength": 71
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -4541,7 +4540,7 @@
    "to_title": "Email Marketing Template Generator: HTML & Plain Text",
    "anchor": "write email reader",
    "relevance": 3,
-   "from_strength": 62
+   "from_strength": 0
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -4774,6 +4773,16 @@
    "from_strength": 0
   },
   {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/ai-affiliate-funnels/",
+   "from_title": "AI Affiliate Funnels (2026): Build Compliant Automated Sales Systems",
+   "to": "https://affiliatemarketingforsuccess.com/tools/commission-calculator/",
+   "to_title": "Affiliate Commission Calculator: Profit & Recurring Revenue",
+   "anchor": "affiliate funnel",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
    "site": "gearuptofit.com",
    "from": "https://gearuptofit.com/fitness/setting-up-a-home-gym-on-a-budget/",
    "from_title": "Creating a Home Gym on a Budget: 5 Must-Have Essentials | GearUpToFit",
@@ -4810,6 +4819,46 @@
    "to": "https://gearuptofit.com/review/resistance-bands-vs-free-weights/",
    "to_title": "Resistance Bands vs. Free Weights: Which Builds More Muscle? | GearUpToFit",
    "anchor": "resistance bands",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/review/inkforall-review-2024/",
+   "from_title": "INK Review 2026: AI Writing & SEO Content Optimization, Re-Evaluated",
+   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
+   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
+   "anchor": "surfer seo",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/review/surfer-ai/",
+   "from_title": "Surfer AI Review 2026: SEO Uses, Pricing, Pros, Cons",
+   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
+   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
+   "anchor": "surfer seo",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/best-ai-writing-tools-affiliate-marketers/",
+   "from_title": "Best AI Writing Tools for Affiliate Marketers (2026): Compared by Workflow",
+   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
+   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
+   "anchor": "surfer seo",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/faq/",
+   "from_title": "Affiliate Marketing FAQ: 28 Most Common Questions Answered (2026) - Affiliate Marketing",
+   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
+   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
+   "anchor": "surfer seo",
    "relevance": 4,
    "from_strength": 0
   },
@@ -5131,46 +5180,6 @@
    "to_title": "Daily Affirmations That Work: Evidence-Based Guide",
    "anchor": "daily affirmations feel",
    "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/review/inkforall-review-2024/",
-   "from_title": "INK Review 2026: AI Writing & SEO Content Optimization, Re-Evaluated",
-   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
-   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
-   "anchor": "surfer seo",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/review/surfer-ai/",
-   "from_title": "Surfer AI Review 2026: SEO Uses, Pricing, Pros, Cons",
-   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
-   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
-   "anchor": "surfer seo",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/best-ai-writing-tools-affiliate-marketers/",
-   "from_title": "Best AI Writing Tools for Affiliate Marketers (2026): Compared by Workflow",
-   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
-   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
-   "anchor": "surfer seo",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/faq/",
-   "from_title": "Affiliate Marketing FAQ: 28 Most Common Questions Answered (2026) - Affiliate Marketing",
-   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
-   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
-   "anchor": "surfer seo",
-   "relevance": 4,
    "from_strength": 0
   },
   {
@@ -5585,6 +5594,16 @@
   },
   {
    "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/natural-mouse-repellents/",
+   "from_title": "Natural Mouse Repellents: What Helps and What Fails",
+   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
+   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
+   "anchor": "rid mice",
+   "relevance": 4,
+   "from_strength": 54
+  },
+  {
+   "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/the-hidden-health-risks-of-a-mouse-infestation/",
    "from_title": "Mouse Infestation Health Risks: Disease, Allergies & More",
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
@@ -5602,16 +5621,6 @@
    "anchor": "rid mice",
    "relevance": 4,
    "from_strength": 53
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-walls/",
-   "from_title": "How to Get Rid of Mice in Walls (Without Opening Drywall)",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 0
   },
   {
    "site": "openclaw-skillshub.com",
@@ -5882,16 +5891,6 @@
    "anchor": "rid mice",
    "relevance": 5,
    "from_strength": 56
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-car/",
-   "from_title": "How to Get Rid of Mice in Your Car: Engine Bay, Cabin & Air Vents",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "anchor": "rid mice",
-   "relevance": 5,
-   "from_strength": 0
   }
  ],
  "indexation": {
@@ -5950,8 +5949,8 @@
    {
     "site": "affiliatemarketingforsuccess.com",
     "checked": 113,
-    "healthy": 111,
-    "problems": 2,
+    "healthy": 113,
+    "problems": 0,
     "critical": 0,
     "review": 0,
     "not_found": 0,
@@ -5962,7 +5961,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 2
+    "thin": 0
    },
    {
     "site": "mysticaldigits.com",
@@ -6281,26 +6280,6 @@
     "fix": "Confirm Googlebot is allowed in the firewall/CDN bot rules and use URL Inspection in Search Console.",
     "severity": 6,
     "status": 403
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/ai-affiliate-funnels",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 167
-   },
-   {
-    "site": "affiliatemarketingforsuccess.com",
-    "url": "https://affiliatemarketingforsuccess.com/blogging/start-affiliate-marketing-blog",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 235
    },
    {
     "site": "bordercover.shop",
@@ -6963,10 +6942,10 @@
     "words": 244
    }
   ],
-  "total_issues": 149,
+  "total_issues": 147,
   "blocking": 2,
   "review": 1,
-  "thin": 146,
+  "thin": 144,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first); up to 12 examples are listed per site and problem."
  },
  "search_performance": null,
@@ -6974,7 +6953,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-27T13:08:44.977Z"
+  "updated_at": "2026-11-27T15:09:50.735Z"
  },
  "wins": [
   {
@@ -7045,45 +7024,44 @@
   }
  ],
  "log": [
-  "13:07:26 connection dataforseo: connected",
-  "13:07:26 connection gmail: connected",
-  "13:07:27 crawl gearuptofit.com: 300/525 urls, fetched 0, 304 0, reused 300",
-  "13:07:29 crawl plantastichaven.com: 154/154 urls, fetched 1, 304 0, reused 153",
-  "13:07:30 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
-  "13:07:32 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "13:07:32 crawl frenchyfab.com: 153/153 urls, fetched 0, 304 0, reused 153",
-  "13:07:32 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
-  "13:07:33 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "13:07:34 crawl tenderatlas.shop: 300/4082 urls, fetched 0, 304 0, reused 300",
-  "13:07:34 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
-  "13:07:35 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
-  "13:07:35 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
-  "13:07:36 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
-  "13:07:37 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
-  "13:07:37 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "13:07:37 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
-  "13:07:37 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
-  "13:07:37 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
-  "13:07:37 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
-  "13:07:37 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
-  "13:07:37 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
-  "13:07:38 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
-  "13:07:38 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "13:07:38 - search_performance: skipped (Search Console not connected)",
-  "13:07:38 pitch policy: 97 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
-  "13:07:38 indexation: 2 sitemap URLs cannot be indexed, 1 need a look, 146 are thin (149 in all)",
-  "13:08:37 second look: 46 qualified pages without an address re-checked, 2 now have one (3 unreachable, 0 waiting for a later cycle)",
-  "13:08:39 link neighbourhood (free): 11 qualified pages mined, 25 recommended sites to evaluate",
-  "13:08:44 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 25 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 25 candidates, 0 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "13:08:44 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "13:08:44 self-tuning: next cycle runs up to 20 searches",
-  "13:08:44 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "13:08:47 replies: 5 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "13:08:48 sent-folder check: 146 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
-  "13:08:59 queue screening (free, nothing sent): 13 checked, 4 sendable, 4 retired, 1 switched to a better published address",
-  "13:09:03 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "13:09:05 pre-verify (nothing sent): 3 top inboxes checked, 0 verified, 3 held",
-  "13:09:05 link checks: 0 pages, 0 new links won, 0 lost"
+  "15:09:24 connection dataforseo: connected",
+  "15:09:24 connection gmail: connected",
+  "15:09:25 crawl gearuptofit.com: 300/525 urls, fetched 0, 304 0, reused 300",
+  "15:09:27 crawl plantastichaven.com: 154/154 urls, fetched 16, 304 0, reused 138",
+  "15:09:30 crawl gearuptogrow.com: 103/103 urls, fetched 25, 304 0, reused 78",
+  "15:09:31 crawl frenchyfab.com: 153/153 urls, fetched 8, 304 0, reused 145",
+  "15:09:32 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "15:09:32 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
+  "15:09:32 crawl micegoneguide.com: 41/41 urls, fetched 2, 304 0, reused 39",
+  "15:09:33 crawl tenderatlas.shop: 300/4082 urls, fetched 0, 304 0, reused 300",
+  "15:09:33 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "15:09:33 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
+  "15:09:33 crawl mysticaldigits.com: 300/468 urls, fetched 10, 304 0, reused 290",
+  "15:09:33 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
+  "15:09:34 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
+  "15:09:34 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
+  "15:09:34 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
+  "15:09:34 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
+  "15:09:34 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
+  "15:09:34 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
+  "15:09:35 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
+  "15:09:35 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
+  "15:09:35 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 69, 304 0, reused 44",
+  "15:09:36 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "15:09:36 - search_performance: skipped (Search Console not connected)",
+  "15:09:36 pitch policy: 97 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
+  "15:09:36 indexation: 2 sitemap URLs cannot be indexed, 1 need a look, 144 are thin (147 in all)",
+  "15:09:39 link neighbourhood (free): 11 qualified pages mined, 12 recommended sites to evaluate",
+  "15:09:50 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 12 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 12 candidates, 2 qualified (0 unlinked mentions), 1 with email, 0 with a dead link we can replace, 0 already linking",
+  "15:09:50 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "15:09:50 self-tuning: next cycle runs up to 20 searches",
+  "15:09:50 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "15:09:56 replies: 22 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "15:09:59 sent-folder check: 146 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
+  "15:09:59 queue screening (free, nothing sent): 6 checked, 1 sendable, 0 retired, 0 switched to a better published address",
+  "15:10:01 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "15:10:06 pre-verify (nothing sent): 3 top inboxes checked, 0 verified, 3 held",
+  "15:10:06 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
