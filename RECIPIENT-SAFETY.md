@@ -50,7 +50,7 @@ The reader uses Gmail's All Mail special-use mailbox when exposed, falling back 
 
 Historical bounce records restore address suppression. Queues previously switched to an alternate inbox are quarantined. A delivery failure never starts outreach to another person automatically. Temporary delay is recorded separately from a hard failure. A later `no` or unsubscribe reply remains actionable even when the sender and subject repeat or a placement was already marked won.
 
-Initial messages and follow-ups share the daily limit. Transport errors with an uncertain delivery outcome become held records rather than automatic retries. SMTP acceptance does not prove recipient delivery.
+Initial messages and follow-ups share the daily limit. Transport errors with an uncertain delivery outcome become held records rather than automatic retries. SMTP acceptance does not prove recipient delivery. Only a failure at or after SMTP `DATA` (or of unknown stage) is uncertain. A refusal before `DATA` delivered nothing: the prospect keeps its place, and a rejected Gmail login or sending-limit answer stops sending for the rest of the cycle. A mailbox refused at `RCPT` (5xx) is handled as a bounce: the address is suppressed, no follow-up is sent and nobody else at that publisher is tried automatically.
 
 ## Production release checklist
 

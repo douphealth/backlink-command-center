@@ -6,11 +6,20 @@ const b64=s=>Buffer.from(s,'utf8').toString('base64');
 const encWord=s=>/^[\x20-\x7e]*$/.test(s)?s:`=?UTF-8?B?${b64(s)}?=`;
 const wrap76=s=>s.replace(/.{1,76}/g,'$&\r\n').trimEnd();
 const cleanHeader=s=>String(s||'').replace(/[\r\n]+/g,' ').trim();
+/**
+ * The opt-out address carries this message's own lf- id in its subject ("unsubscribe lf-..."), so an unsubscribe
+ * sent by a mail client's button, even from a forwarding address, still matches the email it answers.
+ * mailto only: no one-click POST endpoint exists, so List-Unsubscribe-Post is deliberately not sent.
+ */
+export function unsubscribeHeader(from,messageId){
+ const id=cleanHeader(messageId).replace(/^<|>$/g,'');
+ return `List-Unsubscribe: <mailto:${cleanHeader(from)}?subject=unsubscribe${/^lf-[a-z0-9.@-]+$/i.test(id)?'%20'+id:''}>`;
+}
 export function buildMessage({from,fromName,to,subject,text,messageId,inReplyTo,references,unsubscribe}){
  const headers=[`From: ${fromName?`"${encWord(cleanHeader(fromName)).replace(/"/g,'')}" `:''}<${from}>`,`To: <${cleanHeader(to)}>`,
  `Subject: ${encWord(cleanHeader(subject))}`,`Date: ${new Date().toUTCString().replace('GMT','+0000')}`,`Message-ID: ${messageId}`,
  ...(inReplyTo?[`In-Reply-To: ${inReplyTo}`,`References: ${references||inReplyTo}`]:[]),
- ...(unsubscribe?[`List-Unsubscribe: <mailto:${from}?subject=unsubscribe>`]:[]),
+ ...(unsubscribe?[unsubscribeHeader(from,messageId)]:[]),
  'MIME-Version: 1.0','Content-Type: text/plain; charset=UTF-8','Content-Transfer-Encoding: base64'];
  return headers.join(CRLF)+CRLF+CRLF+wrap76(b64(text.replace(/\r?\n/g,CRLF)))+CRLF;
 }
@@ -32,14 +41,28 @@ function smtpReply(buf){
  const lines=buf.split(CRLF);let consumed=0;
  for(let i=0;i<lines.length-1;i++){consumed+=lines[i].length+2;const m=lines[i].match(/^(\d{3})([ -])/);if(m&&m[2]===' ')return {consumed,value:{code:Number(m[1]),text:lines.slice(0,i+1).join('\n')}}}return null;
 }
+/**
+ * Every failure carries err.stage ('connect' | 'auth' | 'mail_from' | 'rcpt' | 'data' | 'after_data') and err.code
+ * (the SMTP reply code, or the socket error code). Before 'data' nothing can have been delivered; the caller
+ * treats only 'data' and 'after_data' failures as "delivery uncertain".
+ */
 export async function smtpSend({user,pass,from,to,raw,connect=defaultConnect,host='smtp.gmail.com',port=465}){
- const w=new Wire(connect(host,port));
- const cmd=async(line,ok)=>{if(line!=null)w.write(line+CRLF);const r=await w.wait(smtpReply);if(!ok.includes(r.code))throw Error(`SMTP ${r.code}: ${r.text.slice(0,160)}`);return r};
- try{await cmd(null,[220]);await cmd('EHLO linkforge.autopilot',[250]);await cmd('AUTH PLAIN '+b64(`\0${user}\0${pass}`),[235]);
-  await cmd(`MAIL FROM:<${from}>`,[250]);await cmd(`RCPT TO:<${to}>`,[250,251]);await cmd('DATA',[354]);
-  const r=await cmd(raw.replace(/\r?\n/g,CRLF).split(CRLF).map(l=>l.startsWith('.')?'.'+l:l).join(CRLF)+CRLF+'.',[250]);
+ let stage='connect',w=null;
+ const cmd=async(line,ok)=>{if(line!=null)w.write(line+CRLF);const r=await w.wait(smtpReply);
+  if(!ok.includes(r.code)){const e=Error(`SMTP ${r.code}: ${r.text.slice(0,160)}`);e.code=r.code;throw e}return r};
+ try{w=new Wire(connect(host,port));await cmd(null,[220]);await cmd('EHLO linkforge.autopilot',[250]);
+  stage='auth';await cmd('AUTH PLAIN '+b64(`\0${user}\0${pass}`),[235]);
+  stage='mail_from';await cmd(`MAIL FROM:<${from}>`,[250]);
+  stage='rcpt';await cmd(`RCPT TO:<${to}>`,[250,251]);
+  stage='data';await cmd('DATA',[354]);
+  stage='after_data';const r=await cmd(raw.replace(/\r?\n/g,CRLF).split(CRLF).map(l=>l.startsWith('.')?'.'+l:l).join(CRLF)+CRLF+'.',[250]);
   await cmd('QUIT',[221]).catch(()=>{});return {accepted:true,response:r.text.slice(0,120)};
- }finally{w.end()}
+ }catch(e){
+  const err=e instanceof Error?e:Error(String(e));
+  if(typeof err.stage!=='string')err.stage=stage;
+  err.code??=/timeout/i.test(err.message)?'timeout':'connection';
+  throw err;
+ }finally{w?.end()}
 }
 const quote=s=>'"'+String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"')+'"';
 export class Imap{

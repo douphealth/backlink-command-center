@@ -1,7 +1,7 @@
 /** Outreach state machine with mandatory recipient preflight and reply-health gate. */
 import {createHash} from 'node:crypto';
 import {buildMessage,newMessageId,smtpSend,Imap,classifyReply,replyCondition,replyText} from './mail.mjs';
-import {followupPitch} from './pitch.mjs';
+import {followupPitch,reSubject} from './pitch.mjs';
 import {fetchPage,links,hostOf,sameSite,ageDays,NOW,sleep,DAY,pool} from './util.mjs';
 import {QUALIFY_VERSION} from './prospect.mjs';
 import {assetStats,linkLikelihood} from './learn.mjs';
@@ -225,6 +225,29 @@ export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new D
  log(`pre-verify (nothing sent): ${stats.checked} top inboxes checked, ${stats.verified} verified, ${stats.held} held`);
  return stats;
 }
+/**
+ * Footer under every email once a postal address is configured: who sends it and, in plain text, the site where
+ * the recipient's address was published (no tracking pixel, no tracked link).
+ */
+export function emailFooter(postalAddress,source){
+ const a=String(postalAddress||'').trim();if(!a)return '';
+ let host='';try{host=new URL(source).hostname.replace(/^www\./,'')}catch{}
+ return `\n\n${a}${host?`\nYou're receiving this because this address is published on ${host}.`:''}`;
+}
+const GMAIL_LIMIT=/\b5\.4\.5\b|sending (?:limit|quota)|daily user sending|\b4\.7\.\d{1,2}\b|too many (?:login attempts|messages|recipients)|rate limit/i;
+const BEFORE_DATA=new Set(['precheck','connect','auth','mail_from','rcpt']);
+/**
+ * What a failed send means, from the SMTP stage it failed at (smtpSend tags err.stage and err.code). Nothing can
+ * have been delivered before DATA; from DATA on, or when the stage is unknown, delivery is uncertain. Gmail
+ * refusing the login or the sending quota ('block') stops sending for the rest of the cycle.
+ */
+export function sendFailure(e){
+ const stage=typeof e?.stage==='string'?e.stage:null,code=typeof e?.code==='number'?e.code:null,text=String(e?.message||'');
+ const block=code&&code>=400&&GMAIL_LIMIT.test(text)?'gmail_limit'
+  :(stage==='auth'&&code>=500)||[530,534,535].includes(code)||/username and password not accepted|application-specific password required/i.test(text)?'gmail_auth':null;
+ const uncertain=!BEFORE_DATA.has(stage);
+ return {stage,code,block,uncertain,refused:stage==='rcpt'&&code>=500&&!block,retry_recipient:stage==='rcpt'&&code>=400&&code<500&&!block};
+}
 export async function runOutreach({state,assets,sites,writer,mailer,config,deadline=Infinity,log=()=>{}}){
  state.contacted??={};state.suppression??={};
  const stats={followups:0,sent:0,drafted:0,skipped:0,deferred:0,cap:0,verification_held:0};
@@ -251,19 +274,54 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   if(!applyProof(state,p,proof,{followup})){stats.verification_held++;return false}
   return true;
  };
- const deliver=async(p,{subject,body},type,inReplyTo)=>{
-  if(suppressed(state,p.email,p.domain)||(requiresProof&&!usableVerification(p.recipient_proof?.verification,p.email)))throw Error('Recipient verification no longer valid');
-  const messageId=newMessageId(config.fromAddress.split('@')[1]);
-  const footer=config.postalAddress?`\n\n${config.postalAddress}`:'';
-  const raw=buildMessage({from:config.fromAddress,fromName:config.senderName,to:p.email,subject,text:body+footer,messageId,inReplyTo,references:inReplyTo,unsubscribe:true});
+ // Which code version wrote each email, so replies can later be counted per writer and variant.
+ const rev=config.rev||process.env.GITHUB_SHA?.slice(0,7)||'local';
+ // Each site's pitches are signed with that site's sender name (SENDER_NAMES), else SENDER_NAME.
+ const senderFor=p=>config.senderNames?.[String(p.site||'').toLowerCase()]||config.senderName;
+ const deliver=async(p,pitch,type,{inReplyTo,senderName=config.senderName}={})=>{
+  if(suppressed(state,p.email,p.domain)||(requiresProof&&!usableVerification(p.recipient_proof?.verification,p.email))){const e=Error('Recipient verification no longer valid');e.stage='precheck';throw e}
+  const messageId=newMessageId(config.fromAddress.split('@')[1]),{subject,body}=pitch;
+  const raw=buildMessage({from:config.fromAddress,fromName:senderName,to:p.email,subject,text:body+emailFooter(config.postalAddress,p.email_source),messageId,inReplyTo,references:inReplyTo,unsubscribe:true});
+  const verified=usableVerification(p.recipient_proof?.verification,p.email),by=pitch.writer||'template';
   if(config.mode==='send')await mailer.send({to:p.email,raw,recipientProof:p.recipient_proof});else await mailer.draft(raw);
-  p.history??=[];p.history.push({type,at:NOW(),message_id:messageId,subject,to:p.email,mode:config.mode,writer:p.writer||'template'});p.last_subject=subject;
+  p.history??=[];p.history.push({type,at:NOW(),message_id:messageId,subject,to:p.email,mode:config.mode,writer:by,
+   variant:pitch.variant||`${by==='template'?'template':'ai'}:${type==='followup'?'followup':'pitch'}`,rev,verified,
+   facts_used:Array.isArray(pitch.facts_used)?pitch.facts_used:[],sender_name:senderName||null});
+  p.last_subject=subject;
  };
- let fuChecks=0;
+ /** Book a failed send. Returns true when nothing more may be sent this cycle. */
+ const failed=(p,e,type)=>{
+  const f=sendFailure(e);
+  if(f.block)stats.send_blocked=f.block;
+  if(f.uncertain){
+   // The message may have gone out: hold the recipient for good, never retry automatically.
+   p.status='delivery_uncertain';p.no_followup=true;if(type==='initial')state.contacted[p.domain]=NOW();
+   log(type==='followup'?'follow-up held after uncertain delivery; no automatic retry':'delivery uncertain; recipient held without retry');
+   if(f.block)log(`outreach: Gmail refused to send (${f.block==='gmail_auth'?'login rejected':'sending limit reached'}); nothing more is sent this cycle`);
+   return true;
+  }
+  if(f.stage==='precheck'){stats.skipped++;return false}
+  if(f.refused){
+   // The mail server refused this mailbox before any message was transmitted: a bounce in all but name.
+   const to=normalizeEmail(p.email);(p.history??=[]).push({type:'bounce',at:NOW(),to,stage:'rcpt',code:f.code});
+   p.status='bounced';p.no_followup=true;if(to)state.suppression[to]={reason:'Mailbox refused by the mail server; re-contact prohibited',at:NOW()};
+   state.contacted[p.domain]??=NOW(); // as with any delivery failure: no other person at this publisher is tried automatically
+   stats.rcpt_refused=(stats.rcpt_refused||0)+1;log('a recipient mailbox was refused by the mail server before sending; treated as a bounce');return false;
+  }
+  // Nothing was transmitted: the prospect keeps its place (and its proof) for the next cycle.
+  stats.not_sent=(stats.not_sent||0)+1;
+  if(f.retry_recipient){log('the mail server deferred one recipient before sending; it is tried again next cycle');return false}
+  log(f.block?`outreach: Gmail refused to send (${f.block==='gmail_auth'?'login rejected':'sending limit reached'}); nothing was delivered and nothing more is sent this cycle`
+   :`outreach: the mail server failed before the message was transmitted (${f.stage||'unknown'} stage); nothing was delivered and nothing more is sent this cycle`);
+  return true;
+ };
+ let fuChecks=0,stop=false;
  if(config.mode==='send')for(const p of Object.values(state.prospects||{})){
-  if(budget<=0||Date.now()>deadline||checked>=24)break;
+  if(stop||budget<=0||Date.now()>deadline||checked>=24)break;
   if(p.status!=='sent'||p.replied_at||p.no_followup||(p.qv||1)<QUALIFY_VERSION||suppressed(state,p.email,p.domain))continue;
   const initial=p.history.find(h=>h.type==='initial'&&h.mode!=='draft');if(!initial||ageDays(initial.at)<config.followupDays)continue;
+  // A follow-up goes in the same thread. A pitch restored from the Sent folder has no message id to reply to.
+  if(!initial.message_id){p.no_followup=true;p.no_followup_reason='Original email not on record, so it cannot be followed up in the same thread';stats.followups_unthreaded=(stats.followups_unthreaded||0)+1;continue}
   if(outOfHours(p)){stats.deferred++;continue}
   // Follow-ups get at most 8 of the run's 24 verification checks, so new pitches always get a turn.
   if(++fuChecks>8)break;
@@ -276,20 +334,28 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   }
   const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title};
   if(p.broken_link){const r=await (config.recheckBroken||(u=>checkDead(u)))(p.broken_link.url).catch(()=>null);if(!r?.dead){p.broken_link_cleared_at=NOW();delete p.broken_link}}
-  try{await deliver(p,followupPitch(p,asset,{senderName:config.senderName}),'followup',initial.message_id);p.status='followed_up';stats.followups++;budget--;await sleep(config.gapMs())}
-  catch{p.status='delivery_uncertain';p.no_followup=true;log('follow-up held after uncertain delivery; no automatic retry');break}
+  // Same name as the first email (older records: SENDER_NAME, which signed them), same thread, same subject.
+  const site=siteBy.get(p.site)||{domain:p.site||'',topic:''},senderName=initial.sender_name||config.senderName;
+  const subject=reSubject(initial.subject||p.last_subject||asset.title||site.domain);
+  let pitch=null;try{pitch=await writer.write(p,asset,site,{situation:'followup',senderName,subject})}catch{}
+  if(typeof pitch?.body!=='string'||!pitch.body.trim())pitch=followupPitch(p,asset,{senderName,site,subject});
+  pitch={...pitch,subject};
+  try{await deliver(p,pitch,'followup',{inReplyTo:initial.message_id,senderName});p.status='followed_up';stats.followups++;budget--;
+   if(pitch.facts_used?.length)p.facts_used=[...new Set([...(p.facts_used||[]),...pitch.facts_used])];
+   await sleep(config.gapMs())}
+  catch(e){if(failed(p,e,'followup')){stop=true;break}}
  }
  const learned=assetStats(state),ready=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION)
   .map(p=>{p.likelihood=linkLikelihood(p,{assets:learned});return p}).sort((a,b)=>b.likelihood-a.likelihood||(b.score||0)-(a.score||0));
  // Already-verified inboxes go first (they need no credit); the rest by expected value per verification credit.
- if(requiresProof){
+ if(requiresProof&&!stop){
   await classifyQueue(state,mailer,ready.filter(p=>!usableVerification(p.recipient_proof?.verification,p.email)));
   const key=p=>usableVerification(p.recipient_proof?.verification,p.email)?1e6+p.likelihood:creditValue(state,p,p.likelihood);
   ready.sort((a,b)=>key(b)-key(a));
  }
  const perAsset=new Map();for(const p of Object.values(state.prospects||{}))if((p.history||[]).some(h=>h.type==='initial'&&String(h.at).startsWith(NOW().slice(0,10))))perAsset.set(p.asset_url,(perAsset.get(p.asset_url)||0)+1);
  for(const p of ready){
-  if(budget<=0||Date.now()>deadline||checked>=24)break;
+  if(stop||budget<=0||Date.now()>deadline||checked>=24)break;
   if((perAsset.get(p.asset_url)||0)>=PER_ASSET_DAILY)continue;if(outOfHours(p)){stats.deferred++;continue}
   const last=state.contacted[p.domain];
   if(suppressed(state,p.email,p.domain)||(last&&ageDays(last)<90)){p.status='skipped_duplicate';stats.skipped++;continue}
@@ -300,20 +366,29 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   // Pitch only a page an editor would link to: a prospect paired with a thin, templated or review page is
   // re-paired with the site's best pitchable page for that editor's topic before anything is written.
   if(config.pickAsset&&p.kind!=='mention'){
-   const pick=config.pickAsset(p,site);
+   // A dead link was matched to one of our pages: that page stays the replacement while it is still pitchable.
+   if(p.broken_link)p.broken_link.asset_url??=p.asset_url;
+   const pinned=p.broken_link?.asset_url;
+   const pick=pinned&&pinned!==p.asset_url&&assetByUrl.has(pinned)&&config.pickAsset({...p,asset_url:pinned},site)===undefined
+    ?{asset:assetByUrl.get(pinned)}:config.pickAsset(p,site);
    if(pick===null){stats.no_pitchable_page=(stats.no_pitchable_page||0)+1;continue}
-   if(pick&&pick.asset.url!==p.asset_url){p.asset_repaired_from=p.asset_url;p.asset_url=pick.asset.url;p.asset_title=pick.asset.title;if(p.competitor_link)p.competitor_link.match=pick.match;stats.repaired=(stats.repaired||0)+1}
+   if(pick&&pick.asset.url!==p.asset_url){p.asset_repaired_from=p.asset_url;p.asset_url=pick.asset.url;p.asset_title=pick.asset.title;if(p.competitor_link&&pick.match)p.competitor_link.match=pick.match;stats.repaired=(stats.repaired||0)+1}
+   // Otherwise the "replacement" could be unrelated to the dead link: drop the dead-link framing instead.
+   if(p.broken_link&&p.broken_link.asset_url!==p.asset_url){p.broken_link_dropped_reason='Pitched page changed, so it is no longer the replacement for the dead link';p.broken_link_dropped_at=NOW();delete p.broken_link;stats.broken_link_dropped=(stats.broken_link_dropped||0)+1}
   }
   const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title||site.domain,type:p.kind==='mention'?'brand':'resource',description:''};
   // The email states that a link is dead: confirm it still is, seconds before writing it.
   if(p.broken_link){const r=await (config.recheckBroken||(u=>checkDead(u)))(p.broken_link.url).catch(()=>null);if(!r?.dead){p.broken_link_cleared_at=NOW();delete p.broken_link}else stats.broken_link_pitches=(stats.broken_link_pitches||0)+1}
-  const pitch=await writer.write(p,asset,site);p.writer=pitch.writer;
-  try{await deliver(p,pitch,'initial');state.contacted[p.domain]=NOW();if(config.mode==='send')state.first_send_at??=NOW();
+  const senderName=senderFor(p);
+  const pitch=await writer.write(p,asset,site,{senderName});p.writer=pitch.writer;
+  try{await deliver(p,pitch,'initial',{senderName});state.contacted[p.domain]=NOW();if(config.mode==='send')state.first_send_at??=NOW();
+   // The facts this email states: a follow-up may add only a fact that is not among them.
+   if(Array.isArray(pitch.facts_used))p.facts_used=pitch.facts_used;else delete p.facts_used;
    p.status=config.mode==='send'?'sent':'drafted';p.next_link_check=new Date(Date.now()+5*DAY).toISOString();
    config.mode==='send'?stats.sent++:stats.drafted++;budget--;perAsset.set(p.asset_url,(perAsset.get(p.asset_url)||0)+1);if(config.mode==='send')await sleep(config.gapMs());
-  }catch{p.status='delivery_uncertain';p.no_followup=true;state.contacted[p.domain]=NOW();log('delivery uncertain; recipient held without retry');break}
+  }catch(e){if(failed(p,e,'initial')){stop=true;break}}
  }
- log(`outreach: ${stats.sent} sent, ${stats.followups} follow-ups, ${stats.drafted} drafts, ${stats.verification_held} held for verification${stats.followups_retired?`, ${stats.followups_retired} follow-ups retired (address no longer verifiable)`:''}`);return stats;
+ log(`outreach: ${stats.sent} sent, ${stats.followups} follow-ups, ${stats.drafted} drafts, ${stats.verification_held} held for verification${stats.followups_retired?`, ${stats.followups_retired} follow-ups retired (address no longer verifiable)`:''}${stats.send_blocked?`; sending stopped (${stats.send_blocked})`:''}`);return stats;
 }
 /** Existing link checking is unchanged; attribution hardening remains in PR 25. */
 export async function checkLinks({state,ourDomains,fetchImpl=fetch,max=60,deadline=Infinity,log=()=>{}}){

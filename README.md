@@ -110,7 +110,7 @@ Run a cycle on demand: **Actions → LinkForge Autopilot → Run workflow** (tic
 ## Guardrails (built in, not optional)
 
 - **Spend:** DataForSEO daily/monthly caps (`DATAFORSEO_DAILY_USD`, default $0.50; `DATAFORSEO_MONTHLY_USD`, default $10), provider-reported cost ledger, endpoints the account can't access are parked for 7 days.
-- **Deliverability:** every recipient is a literally published first-party editorial address with a positive mailbox verification under 24 h old (see `RECIPIENT-SAFETY.md`); warm-up ramp (5/day, +2/day, restarting at 5/day after a week without sending) up to `OUTREACH_DAILY_LIMIT` (default 12), 15–45 s spacing, `List-Unsubscribe` header, plain-text mail.
+- **Deliverability:** every recipient is a literally published first-party editorial address with a positive mailbox verification under 24 h old (see `RECIPIENT-SAFETY.md`); warm-up ramp (5/day, +2/day, restarting at 5/day after a week without sending) up to `OUTREACH_DAILY_LIMIT` (default 12), 15–45 s spacing, `List-Unsubscribe` header (a mailto whose subject carries the email's own id, so a client-button opt-out still matches), plain-text mail.
 - **Respect:** one contact per publisher domain per 90 days, one follow-up only, follow-ups stop on any reply, opt-out replies suppress the domain permanently, bounces switch to an alternate address or stop.
 - **Honesty:** pitches only state facts from the crawled asset; Claude output is rejected if it adds URLs, placeholders or runs long. A backlink counts only when the anchor is found on the live page.
 - **Privacy:** the public summary is checked in CI to contain no email addresses; private state is AES-256-GCM (PBKDF2-SHA256, 210k iterations).
