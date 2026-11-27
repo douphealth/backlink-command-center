@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-27T06:40:41.240Z",
- "duration_s": 127,
+ "generated_at": "2026-11-27T08:44:09.012Z",
+ "duration_s": 196,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -31,12 +31,12 @@
    "key": true,
    "enabled": true,
    "daily_limit": 24,
-   "used_today": 22,
+   "used_today": 24,
    "balance": {
     "provider": "verifalia",
-    "free_credits": 3,
-    "reset_in": "17:19:40",
-    "checked_at": "2026-11-27T06:40:19.826Z"
+    "free_credits": 1,
+    "reset_in": "15:16:07",
+    "checked_at": "2026-11-27T08:43:52.867Z"
    },
    "catch_all_domains_skipped": 72
   }
@@ -130,7 +130,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 11985,
+   "ms": 46299,
    "result": {
     "sites": 21,
     "pages": 2808
@@ -138,7 +138,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 2,
+   "ms": 1,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 159
@@ -156,13 +156,13 @@
    "ok": true,
    "result": {
     "ranked": 555,
-    "internal_suggestions": 595,
-    "pitchable": 85
+    "internal_suggestions": 623,
+    "pitchable": 97
    }
   },
   "requalify": {
    "ok": true,
-   "ms": 2,
+   "ms": 7,
    "result": {
     "checked": 0,
     "rejected": 0,
@@ -172,40 +172,39 @@
   },
   "second_look": {
    "ok": true,
-   "ms": 63409,
+   "ms": 101794,
    "result": {
     "checked": 60,
     "found": 4,
-    "unreachable": 3,
-    "waiting": 162
+    "unreachable": 1,
+    "waiting": 104
    }
   },
   "prospects": {
    "ok": true,
-   "ms": 16072,
+   "ms": 17622,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
-    "candidates": 31,
+    "candidates": 21,
     "qualified": 2,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 29,
+    "rejected": 19,
     "with_email": 0,
-    "contact_form": 0,
+    "contact_form": 1,
     "broken_links": 0,
     "from_queue": 0,
     "linkgap_calls": 0,
     "linkgap_candidates": 0,
-    "neighbor_pages": 11,
-    "neighbor_candidates": 31,
+    "neighbor_pages": 12,
+    "neighbor_candidates": 21,
     "filtered": {
-     "already_evaluated": 11,
-     "duplicate_this_run": 10,
-     "competitor": 2,
-     "platform_or_giant": 4,
-     "gov_or_edu": 2
+     "already_evaluated": 6,
+     "platform_or_giant": 11,
+     "gov_or_edu": 10,
+     "competitor": 1
     },
     "deferred": 0
    }
@@ -216,17 +215,17 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 982,
+   "ms": 611,
    "result": {
-    "checked": 3,
+    "checked": 1,
     "found": 0
    }
   },
   "replies": {
    "ok": true,
-   "ms": 5656,
+   "ms": 1601,
    "result": {
-    "scanned": 3,
+    "scanned": 7,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -236,7 +235,7 @@
   },
   "sent_check": {
    "ok": true,
-   "ms": 975,
+   "ms": 1261,
    "result": {
     "scanned": 144,
     "restored": 0,
@@ -245,25 +244,25 @@
   },
   "screen": {
    "ok": true,
-   "ms": 1128,
+   "ms": 6454,
    "result": {
     "screened": 8,
-    "kept": 0,
-    "retired": 4,
+    "kept": 1,
+    "retired": 2,
     "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 54,
+   "ms": 119,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 66,
+    "deferred": 67,
     "cap": 12,
-    "verification_held": 0,
+    "verification_held": 1,
     "cooling": 1
    },
    "writer": {
@@ -274,11 +273,12 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 22425,
+   "ms": 16761,
    "result": {
-    "checked": 10,
-    "verified": 1,
-    "held": 9
+    "checked": 5,
+    "verified": 0,
+    "held": 5,
+    "out_of_credits": true
    }
   },
   "link_checks": {
@@ -294,10 +294,10 @@
  "totals": {
   "sites": 21,
   "pages_crawled": 2808,
-  "urls_discovered": 7417,
+  "urls_discovered": 7444,
   "promotable": 555,
-  "internal_suggestions": 595,
-  "promoting_now": 48
+  "internal_suggestions": 623,
+  "promoting_now": 49
  },
  "spend": {
   "today_usd": 0,
@@ -314,30 +314,29 @@
  },
  "outreach": {
   "mode": "send",
-  "ready": 65,
+  "ready": 67,
   "verified_ready": 6,
-  "pending_verification": 59,
+  "pending_verification": 61,
   "holds": {
-   "mailbox_unknown": 14,
+   "mailbox_unknown": 16,
    "mailbox_accept_all": 19,
    "no_email_published": 1,
    "publisher_mismatch": 4,
-   "mailbox_recently_inconclusive": 1,
    "mx_dns_unverified": 1
   },
   "sent_today": 0,
   "cap_today": 12,
-  "next_send_at": "2026-11-27T06:40:41.244Z",
+  "next_send_at": "2026-11-27T08:44:09.015Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 5579,
-  "qualified": 916,
-  "ready": 65,
+  "prospects_evaluated": 5600,
+  "qualified": 918,
+  "ready": 67,
   "broken_link_ready": 4,
   "contact_form_only": 172,
-  "no_contact": 328,
+  "no_contact": 326,
   "contacted": 102,
   "replied": 3,
   "positive": 0,
@@ -931,12 +930,12 @@
   },
   {
    "date": "2026-11-27",
-   "prospects_evaluated": 5579,
-   "qualified": 916,
-   "ready": 65,
+   "prospects_evaluated": 5600,
+   "qualified": 918,
+   "ready": 67,
    "broken_link_ready": 4,
    "contact_form_only": 172,
-   "no_contact": 328,
+   "no_contact": 326,
    "contacted": 102,
    "replied": 3,
    "positive": 0,
@@ -964,8 +963,8 @@
    {
     "footprint": "useful_websites",
     "queries": 4,
-    "ready": 2,
-    "rate": 0.429
+    "ready": 3,
+    "rate": 0.571
    },
    {
     "footprint": "tools",
@@ -1071,9 +1070,9 @@
    },
    {
     "footprint": "neighbor",
-    "queries": 128,
-    "ready": 8,
-    "rate": 0.069
+    "queries": 140,
+    "ready": 9,
+    "rate": 0.07
    },
    {
     "footprint": "mention",
@@ -1631,10 +1630,10 @@
   {
    "domain": "gearuptofit.com",
    "pages": 300,
-   "discovered": 797,
-   "sitemaps": 7,
+   "discovered": 525,
+   "sitemaps": 6,
    "eligible": 28,
-   "top": "https://gearuptofit.com/shoe-finder/methodology/"
+   "top": "https://gearuptofit.com/fitness-and-health-calculators/how-body-fat-is-calculated/"
   },
   {
    "domain": "plantastichaven.com",
@@ -1674,7 +1673,7 @@
    "discovered": 153,
    "sitemaps": 5,
    "eligible": 26,
-   "top": "https://frenchyfab.com/french-bulldog-social-interaction-training/"
+   "top": "https://frenchyfab.com/french-bulldog-mixes-guide/"
   },
   {
    "domain": "micegoneguide.com",
@@ -1711,7 +1710,7 @@
   {
    "domain": "tenderatlas.shop",
    "pages": 300,
-   "discovered": 3783,
+   "discovered": 4082,
    "sitemaps": 1,
    "eligible": 28,
    "top": "https://tenderatlas.shop/"
@@ -1799,6 +1798,87 @@
  ],
  "best_urls": [
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/fitness-and-health-calculators/how-body-fat-is-calculated/",
+   "title": "Calculate Body Fat Easily With Our Accurate Body Fat Calculator | GearUpToFit",
+   "h1": "How Body Fat Is Calculated: 6 Methods & Free Calculator",
+   "description": "Explore various body fat percentage methods to achieve a healthier lifestyle. Get motivated to improve your fitness today with expert advice!",
+   "type": "interactive_tool",
+   "promotion": 94,
+   "linkability": 100,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 1725,
+   "interactive": true,
+   "modified": "2026-11-25T05:30:54+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "3 data tables",
+    "Cites 4 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/fitness-and-health-calculators/body-mass-index-calculation-tool/",
+   "title": "Free BMI Calculator 2025: Discover Your Health Risks Today | GearUpToFit",
+   "h1": "BMI Calculator: Accurate Body Mass Index & Health Tool",
+   "description": "Understanding Your BMI is essential for managing health risks. Use our BMI Calculator for personalized insights and achieve a balanced lifestyle!",
+   "type": "interactive_tool",
+   "promotion": 92,
+   "linkability": 98,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 1758,
+   "interactive": true,
+   "modified": "2026-11-25T05:28:41+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Cites 15 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": true
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/heart-rate-zone-calculator/",
+   "title": "Heart Rate Zone Calculator: Karvonen, LTHR | Gear Up to Fit",
+   "h1": "Heart Rate Zone Calculator: Karvonen HRR, LTHR & 5-Zone Training",
+   "description": "Calculate your exact 5-zone, 3-zone, and 7-zone running heart rate zones using Karvonen Heart Rate Reserve (HRR), Joe Friel LTHR, and Tanaka Max HR formulas.",
+   "type": "interactive_tool",
+   "promotion": 88,
+   "linkability": 98,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 10,
+   "words": 4973,
+   "interactive": true,
+   "modified": "2026-11-26T17:53:56+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,973 words)",
+    "3 data tables",
+    "Cites 6 authoritative sources",
+    "Recently updated"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
    "site": "mysticaldigits.com",
    "url": "https://mysticaldigits.com/life-path-number-calculator/",
    "title": "Life Path Number Calculator (Free) | Mystical Digits",
@@ -1848,6 +1928,33 @@
    ],
    "pitchable": true,
    "prospects": 12,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/creatine-for-runners/",
+   "title": "Creatine for Runners: Benefits, Weight Gain & 2026 Guide - Gear Up to Fit",
+   "h1": "Creatine for Runners: Benefits, Weight Gain & 2026 Guide",
+   "description": "Creatine for Runners: Benefits, Weight Gain & 2026 Guide - Gear Up to Fit: practical running guidance with key considerations, buyer signals, safety notes, an",
+   "type": "practical_guide",
+   "promotion": 84,
+   "linkability": 93,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 2280,
+   "interactive": true,
+   "modified": "2026-11-26T17:54:09+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,280 words)",
+    "4 data tables",
+    "Cites 4 authoritative sources",
+    "Recently updated"
+   ],
+   "pitchable": true,
+   "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -1922,7 +2029,7 @@
    "linkability": 91,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
+   "internal_inlinks": 10,
    "words": 1844,
    "interactive": true,
    "modified": "2026-11-25T09:40:43+00:00",
@@ -2043,6 +2150,33 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/fitness/sample-weekly-meal-plan-for-vegetarian-athletes/",
+   "title": "7-Day Vegetarian Meal Guide for Peak Performance and Energy | GearUpToFit",
+   "h1": "Vegetarian Athlete Meal Plan: 7-Day High-Protein Guide (2026)",
+   "description": "Explore high-protein vegetarian meals tailored for athletes. Fuel your journey with balanced nutrition and see the difference in your performance!",
+   "type": "practical_guide",
+   "promotion": 81,
+   "linkability": 90,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 2473,
+   "interactive": true,
+   "modified": "2026-11-06T09:11:08+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,473 words)",
+    "3 data tables",
+    "Cites 4 authoritative sources",
+    "Recently updated"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
    "site": "fixorrefund.shop",
    "url": "https://fixorrefund.shop/",
    "title": "Fix or Refund? — EU-27 Consumer Rights & 2026 Right to Repair Checker",
@@ -2108,7 +2242,7 @@
    "internal_inlinks": 5,
    "words": 2071,
    "interactive": true,
-   "modified": "2026-10-25T11:01:04+00:00",
+   "modified": "2026-11-27T07:54:39+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
     "In-depth (2,071 words)",
@@ -2130,7 +2264,7 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 7,
+   "internal_inlinks": 6,
    "words": 1721,
    "interactive": true,
    "modified": "2026-11-08T05:33:11+00:00",
@@ -2142,6 +2276,60 @@
    "prospects": 6,
    "internal_link_suggestions": 5,
    "promoting": true
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/fitness/fascia-release-methods/",
+   "title": "Fascia Release Methods: Tools, Techniques & When They Help | GearUpToFit",
+   "h1": "7 Best Fascia Release Methods for Pain & Mobility (2026)",
+   "description": "Practical fascia release methods: foam rollers, balls, stretching and manual techniques, what the evidence supports, and when mobility work actually helps.",
+   "type": "methodology",
+   "promotion": 79,
+   "linkability": 83,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 1846,
+   "interactive": false,
+   "modified": "2026-11-06T08:27:28+00:00",
+   "reasons": [
+    "Original method/data — citation-worthy",
+    "2 data tables",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/fitness-and-health-calculators/calculate-bmi-bmr-and-whr-now/",
+   "title": "BMI, BMR, WHR & TDEE Calculator: The Only Health-Metrics Tool You Actually Need | GearUpToFit",
+   "h1": "BMI, BMR, TDEE & WHR Health Calculator | 2026 Tool",
+   "description": "Track health metrics with our free BMI, BMR, WHR and TDEE calculator. Get instant results for body composition and daily energy expenditure.",
+   "type": "interactive_tool",
+   "promotion": 78,
+   "linkability": 100,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 38,
+   "words": 2918,
+   "interactive": true,
+   "modified": "2026-11-25T05:34:01+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,918 words)",
+    "6 data tables",
+    "Cites 4 authoritative sources",
+    "Recently updated",
+    "One of 15 templated sibling pages — promote the hub first"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 4,
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -2197,6 +2385,33 @@
    "promoting": false
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/weight-loss/how-to-lose-weight-in-2-weeks/",
+   "title": "Prevent Crash Diets and Achieve Lasting Weight Loss Strategies | GearUpToFit",
+   "h1": "How to Lose Weight in 2 Weeks: 14-Day Safe Fat Loss Plan",
+   "description": "Say goodbye to crash diets! Embrace healthy weight management and lose weight in 2 weeks with our proven strategies.",
+   "type": "practical_guide",
+   "promotion": 77,
+   "linkability": 81,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 2782,
+   "interactive": false,
+   "modified": "2026-11-06T09:10:56+00:00",
+   "reasons": [
+    "In-depth (2,782 words)",
+    "4 data tables",
+    "Cites 10 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
    "title": "Email Marketing Template Generator: HTML & Plain Text",
@@ -2240,7 +2455,7 @@
     "Recently updated"
    ],
    "pitchable": true,
-   "prospects": 11,
+   "prospects": 13,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -2596,32 +2811,6 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "h1": "9 Ways to Promote Affiliate Products Without a Website (2026)",
-   "description": "Discover 7 proven methods to succeed in affiliate marketing without a website. Leverage Instagram, email, and more to earn passive income in 2025. Start now!",
-   "type": "methodology",
-   "promotion": 75,
-   "linkability": 83,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 5,
-   "words": 2085,
-   "interactive": false,
-   "modified": "2026-09-25T14:57:36+00:00",
-   "reasons": [
-    "Original method/data — citation-worthy",
-    "In-depth (2,085 words)",
-    "2 data tables",
-    "Recently updated"
-   ],
-   "pitchable": true,
-   "prospects": 13,
-   "internal_link_suggestions": 3,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
    "url": "https://affiliatemarketingforsuccess.com/tools/commission-calculator/",
    "title": "Affiliate Commission Calculator: Profit & Recurring Revenue",
    "h1": "Know what your affiliate funnel could earn—and what it could cost.",
@@ -2646,6 +2835,59 @@
   },
   {
    "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/review/resistance-bands-vs-free-weights/",
+   "title": "Resistance Bands vs. Free Weights: Which Builds More Muscle? | GearUpToFit",
+   "h1": "Resistance Bands vs. Free Weights: The Scientific Comparison",
+   "description": "Comparing resistance bands vs free weights? Learn the science of variable resistance, progressive overload, and muscle hypertrophy.",
+   "type": "comparison",
+   "promotion": 75,
+   "linkability": 79,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 2061,
+   "interactive": false,
+   "modified": "2026-11-26T17:34:35+00:00",
+   "reasons": [
+    "In-depth (2,061 words)",
+    "1 data table",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
+   "prospects": 6,
+   "internal_link_suggestions": 4,
+   "promoting": false
+  },
+  {
+   "site": "frenchyfab.com",
+   "url": "https://frenchyfab.com/french-bulldog-mixes-guide/",
+   "title": "French Bulldog Mixes: Popular Crosses, Health & Temperament",
+   "h1": "French Bulldog Mixes: Health, Temperament, Size, and Buyer Questions",
+   "description": "What French Bulldogs are mixed with, from Frenchtons to Frenchie-Pug and Boston crosses: size, temperament, health risks a mix can still inherit, and breeder checks.",
+   "type": "practical_guide",
+   "promotion": 75,
+   "linkability": 79,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 1574,
+   "interactive": false,
+   "modified": "2026-11-27T08:02:56+00:00",
+   "reasons": [
+    "1 data table",
+    "Cites 5 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
+   "site": "gearuptofit.com",
    "url": "https://gearuptofit.com/shoe-finder/",
    "title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
    "h1": "Running Shoe Finder Quiz: Find the Right Running Shoes for Your Feet, Mileage, Terrain and Budget",
@@ -2655,7 +2897,7 @@
    "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 26,
+   "internal_inlinks": 299,
    "words": 999,
    "interactive": true,
    "modified": null,
@@ -2666,8 +2908,8 @@
    "flagship": true,
    "pitchable": true,
    "prospects": 10,
-   "internal_link_suggestions": 0,
-   "promoting": true
+   "internal_link_suggestions": 5,
+   "promoting": false
   },
   {
    "site": "frenchyfab.com",
@@ -2681,12 +2923,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 4,
-   "words": 3580,
+   "words": 3484,
    "interactive": true,
-   "modified": "2026-11-07T19:35:50+00:00",
+   "modified": "2026-11-27T08:01:51+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,580 words)",
+    "In-depth (3,484 words)",
     "19 data tables",
     "Recently updated"
    ],
@@ -2694,34 +2936,6 @@
    "prospects": 11,
    "internal_link_suggestions": 5,
    "promoting": true
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "h1": "Best Brushes for French Bulldogs: Shiny Coats",
-   "description": "Brushes for French Bulldogs a hassle? Discover essential grooming tools for a healthy coat. Proven solution for shedding! See how today!",
-   "type": "general_article",
-   "promotion": 74,
-   "linkability": 78,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 4115,
-   "interactive": true,
-   "modified": "2026-11-25T13:50:04+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,115 words)",
-    "20 data tables",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "review, comparison or sales page",
-   "prospects": 2,
-   "internal_link_suggestions": 5,
-   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -2750,29 +2964,56 @@
    "promoting": false
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "h1": "How to Choose a Profitable Affiliate Niche: 2026 Strategy",
-   "description": "Choose affiliate niche now & unlock your marketing goldmine! Frustrated? Discover proven steps for profit. Expert-approved. See how today!",
-   "type": "reference",
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/weight-loss/how-to-get-rid-of-a-pooch-stomach/",
+   "title": "Ultimate Guide on How To Get Rid Of A Pooch Stomach Fast | GearUpToFit",
+   "h1": "How to Get Rid of a Pooch Stomach: 2026 Fat Loss Guide",
+   "description": "Discover how to get rid of a pooch stomach by targeting visceral fat with HIIT, strength training, whole foods, and better sleep, backed by studies.",
+   "type": "practical_guide",
    "promotion": 73,
-   "linkability": 81,
+   "linkability": 77,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 6198,
+   "internal_inlinks": 2,
+   "words": 3044,
    "interactive": false,
-   "modified": "2026-09-12T09:23:40+00:00",
+   "modified": "2026-11-19T21:15:14+00:00",
    "reasons": [
-    "In-depth (6,198 words)",
-    "11 data tables",
+    "In-depth (3,044 words)",
     "Cites 6 authoritative sources",
-    "Recently updated"
+    "Recently updated",
+    "Under-linked internally (2 inbound)",
+    "Health/YMYL topic — pitch only to expert publishers"
    ],
    "pitchable": true,
-   "prospects": 7,
-   "internal_link_suggestions": 3,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/fitness-and-health-calculators/basal-metabolic-rate-calculation-tool/",
+   "title": "BMR Calculator 2026: Free Basal Metabolic Rate Tool | GearUpToFit",
+   "h1": "BMR Calculator 2026: Basal Metabolic Rate Tool",
+   "description": "Free BMR calculator using the validated Mifflin-St Jeor formula. Get your Basal Metabolic Rate instantly and learn what it means for fat loss and muscle gain.",
+   "type": "interactive_tool",
+   "promotion": 72,
+   "linkability": 93,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 4,
+   "words": 1956,
+   "interactive": true,
+   "modified": "2026-10-12T05:53:50+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Recently updated",
+    "One of 15 templated sibling pages — promote the hub first"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -2926,6 +3167,34 @@
    "pitchable": false,
    "not_pitched_because": "review, comparison or sales page",
    "prospects": 7,
+   "internal_link_suggestions": 4,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/nutrition/what-is-the-role-of-glycogen/",
+   "title": "How Glycogen Energy Storage Impacts Athletic Performance | GearUpToFit",
+   "h1": "What Is the Role of Glycogen? 2026 Energy & Performance Guide",
+   "description": "Find out how to increase glycogen levels for better athletic performance. Maximize your energy reserves!",
+   "type": "general_article",
+   "promotion": 71,
+   "linkability": 74,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 4655,
+   "interactive": false,
+   "modified": "2026-10-04T19:04:33+00:00",
+   "reasons": [
+    "In-depth (4,655 words)",
+    "1 data table",
+    "Cites 12 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "not distinctive enough to earn a link",
+   "prospects": 0,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -2953,6 +3222,143 @@
    "pitchable": false,
    "not_pitched_because": "review, comparison or sales page",
    "prospects": 0,
+   "internal_link_suggestions": 5,
+   "promoting": false
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
+   "title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
+   "h1": "Pinterest Affiliate Marketing: A Step-by-Step Guide for Beginners (2026)",
+   "description": "Pinterest affiliate marketing step by step: the official rules, best niches, pin design, Amazon tips, an earnings calculator and a 90-day plan.",
+   "type": "commercial",
+   "promotion": 70,
+   "linkability": 78,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 5,
+   "words": 3693,
+   "interactive": true,
+   "modified": "2026-11-20T17:41:25+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (3,693 words)",
+    "3 data tables",
+    "Recently updated"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/review/amazfit-stratos-3/",
+   "title": "Amazfit Stratos 3 Review: Specs, Battery and Alternatives | GearUpToFit",
+   "h1": "Amazfit Stratos 3 Review: 70hr GPS vs Garmin & Apple (2026)",
+   "description": "Amazfit Stratos 3 review: GPS sports watch specs, battery life, sensors and how it compares with Garmin and Apple Watch alternatives.",
+   "type": "comparison",
+   "promotion": 70,
+   "linkability": 73,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 2178,
+   "interactive": false,
+   "modified": "2026-11-06T07:15:27+00:00",
+   "reasons": [
+    "In-depth (2,178 words)",
+    "2 data tables",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/fitness-and-health-calculators/lean-body-mass-calculator/",
+   "title": "Lean Body Mass (LBM) and FFMI Calculator | GearUpToFit",
+   "h1": "Lean Body Mass Calculator: Track Muscle & Composition (2026)",
+   "description": "Calculate your exact Lean Body Mass (LBM) and Fat-Free Mass Index (FFMI) using the Boer, James, Hume, Peters, and Navy body fat equations for men and women.",
+   "type": "interactive_tool",
+   "promotion": 69,
+   "linkability": 90,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 6,
+   "words": 3000,
+   "interactive": true,
+   "modified": "2026-11-25T05:28:45+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (3,000 words)",
+    "8 data tables",
+    "Recently updated",
+    "One of 15 templated sibling pages — promote the hub first"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/best-running-shoes-outdoor-workouts/",
+   "title": "Top Outdoor Running Shoes 2025: Expert Guide & Best Picks | GearUpToFit",
+   "h1": "Best Running Shoes for Outdoor Workouts: 2026 Expert Guide",
+   "description": "Discover the best running shoes for outdoor workouts in 2024. Expert picks for all terrains & foot types. Improve your run with the right gear today!",
+   "type": "practical_guide",
+   "promotion": 69,
+   "linkability": 85,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 4736,
+   "interactive": true,
+   "modified": "2026-11-26T06:33:20+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,736 words)",
+    "2 data tables",
+    "Recently updated",
+    "Under-linked internally (1 inbound)",
+    "One of 41 templated sibling pages — promote the hub first"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "one of many templated pages",
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/nutrition/how-to-control-emotional-eating-and-stop-cravings/",
+   "title": "Self-Help Hacks to Conquer Emotional Eating & Stop Cravings | GearUpToFit",
+   "h1": "How to Control Emotional Eating & Stop Cravings (2026 Guide)",
+   "description": "Self-help for emotional eaters is possible! Learn to identify triggers and develop healthy eating habits for lasting change.",
+   "type": "practical_guide",
+   "promotion": 69,
+   "linkability": 77,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 8,
+   "words": 3007,
+   "interactive": false,
+   "modified": "2026-11-24T18:50:20+00:00",
+   "reasons": [
+    "In-depth (3,007 words)",
+    "1 data table",
+    "Cites 6 authoritative sources",
+    "Recently updated",
+    "Health/YMYL topic — pitch only to expert publishers"
+   ],
+   "pitchable": true,
+   "prospects": 7,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -2981,6 +3387,88 @@
    "promoting": true
   },
   {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/health/supplements/ranking-the-best-supplements-that-gain-weight/",
+   "title": "Top Weight Gain Supplements in 2025 for Muscle Mass | GearUpToFit",
+   "h1": "10 Best Weight Gain Supplements 2026: Expert Rankings",
+   "description": "Explore nutrition tips for gaining weight effectively. Combine the best weight gain supplements with a balanced diet for optimal muscle growth.",
+   "type": "general_article",
+   "promotion": 69,
+   "linkability": 72,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 2,
+   "words": 4570,
+   "interactive": false,
+   "modified": "2026-10-28T11:48:07+00:00",
+   "reasons": [
+    "In-depth (4,570 words)",
+    "15 data tables",
+    "Recently updated",
+    "Under-linked internally (2 inbound)"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "not distinctive enough to earn a link",
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/health/stay-ahead-of-the-game-hydration-tips/",
+   "title": "Hydration Tips for Athletes in 2025: Proven Strategies to Stay Fueled | GearUpToFit",
+   "h1": "Hydration Tips for Peak Performance & Faster Recovery",
+   "description": "Recognize signs of dehydration and prioritize hydration for weightlifting performance. Stay hydrated to boost recovery and enhance workouts!",
+   "type": "general_article",
+   "promotion": 69,
+   "linkability": 72,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 3682,
+   "interactive": false,
+   "modified": "2026-10-04T19:03:25+00:00",
+   "reasons": [
+    "In-depth (3,682 words)",
+    "Cites 12 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "not distinctive enough to earn a link",
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/health/ranking-the-best-cough-drops/",
+   "title": "Top 10 Best Cough Drops for Fast Relief in 2025 | GearUpToFit",
+   "h1": "10 Best Cough Drops 2026: Expert Sore Throat Relief Guide",
+   "description": "Cough Drops: Soothe your sore throat and find relief with the best cough drops of 2025. Explore top picks for effective comfort.",
+   "type": "commercial",
+   "promotion": 69,
+   "linkability": 72,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 4004,
+   "interactive": false,
+   "modified": "2026-10-04T19:00:29+00:00",
+   "reasons": [
+    "In-depth (4,004 words)",
+    "2 data tables",
+    "Cites 7 authoritative sources",
+    "Recently updated",
+    "Under-linked internally (1 inbound)"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "review, comparison or sales page",
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
    "site": "signalroom.store",
    "url": "https://signalroom.store/monitor",
    "title": "Signalroom — Real-Time 99-Service Infrastructure Status & Dependency Watchlist",
@@ -3006,6 +3494,116 @@
    "prospects": 4,
    "internal_link_suggestions": 0,
    "promoting": true
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/fitness-and-health-calculators/calculate-macronutrients-for-weight-loss/",
+   "title": "Macro Calculator for Weight Loss 2026: Calculate Daily Ratios | GearUpToFit",
+   "h1": "Macro Calculator for Weight Loss: 2026 Ratios & Guide",
+   "description": "Calculate your daily weight loss macros with our interactive tool using the Mifflin-St Jeor equation. Get precise protein, carb, and fat grams for sustainable fat loss.",
+   "type": "interactive_tool",
+   "promotion": 68,
+   "linkability": 89,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 6,
+   "words": 1650,
+   "interactive": true,
+   "modified": "2026-10-04T18:59:55+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "1 data table",
+    "Recently updated",
+    "Health/YMYL topic — pitch only to expert publishers",
+    "One of 15 templated sibling pages — promote the hub first"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/fitness-and-health-calculators/the-best-tdee-calculator/",
+   "title": "Calculate TDEE &amp; Maximize Fat Burn: Proven Methods to Boost Your Metabolic Rate | GearUpToFit",
+   "h1": "TDEE Calculator: Calculate Total Daily Energy Expenditure",
+   "description": "Unlock your daily calorie needs through TDEE calculation. Balance your energy expenditure for effective healthy weight management strategies.",
+   "type": "methodology",
+   "promotion": 68,
+   "linkability": 89,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 4,
+   "words": 3196,
+   "interactive": true,
+   "modified": "2026-10-04T18:58:51+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "Original method/data — citation-worthy",
+    "In-depth (3,196 words)",
+    "1 data table",
+    "Recently updated",
+    "One of 15 templated sibling pages — promote the hub first"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/fitness-and-health-calculators/bmi-reduction-tips/",
+   "title": "Effective Diet Changes to Boost BMI Improvement in Record Time | GearUpToFit",
+   "h1": "BMI Reduction Tips: 7 Science-Backed Steps to Lower BMI Fast",
+   "description": "Uncover strategies to address underlying medical conditions and improve your BMI while embarking on sustainable weight loss in 2025.",
+   "type": "general_article",
+   "promotion": 68,
+   "linkability": 84,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 1,
+   "words": 2092,
+   "interactive": true,
+   "modified": "2026-10-04T19:01:38+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (2,092 words)",
+    "11 data tables",
+    "Cites 11 authoritative sources",
+    "Recently updated",
+    "One of 15 templated sibling pages — promote the hub first"
+   ],
+   "pitchable": true,
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/health/supplements/ranking-the-best-over-the-counter-weight-loss-pills/",
+   "title": "OTC Weight Loss Pills Ranked by Evidence: What Works, Side Effects | GearUpToFit",
+   "h1": "Best OTC Weight Loss Pills 2026: Evidence & Safety Guide",
+   "description": "Which over-the-counter weight loss pills have evidence: orlistat 60 mg (an FDA-approved OTC drug), fiber, caffeine and fat burner blends, with trial doses, side effects and red flags.",
+   "type": "general_article",
+   "promotion": 68,
+   "linkability": 76,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 3,
+   "words": 1385,
+   "interactive": false,
+   "modified": "2026-11-06T08:27:45+00:00",
+   "reasons": [
+    "1 data table",
+    "Cites 9 authoritative sources",
+    "Recently updated",
+    "Health/YMYL topic — pitch only to expert publishers"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
+   "prospects": 0,
+   "internal_link_suggestions": 0,
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -3044,7 +3642,7 @@
    "linkability": 76,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 100,
+   "internal_inlinks": 102,
    "words": 1657,
    "interactive": false,
    "modified": "2026-10-25T11:02:11+00:00",
@@ -3071,17 +3669,18 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 14,
-   "words": 1894,
+   "words": 1383,
    "interactive": false,
-   "modified": "2026-11-26T17:55:59+00:00",
+   "modified": "2026-11-27T07:46:19+00:00",
    "reasons": [
-    "4 data tables",
+    "2 data tables",
     "Recently updated"
    ],
-   "pitchable": true,
+   "pitchable": false,
+   "not_pitched_because": "too thin to earn a link",
    "prospects": 0,
    "internal_link_suggestions": 2,
-   "promoting": true
+   "promoting": false
   },
   {
    "site": "gearuptogrow.com",
@@ -3133,6 +3732,62 @@
    "pitchable": true,
    "prospects": 5,
    "internal_link_suggestions": 1,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/running-calorie-calculator/",
+   "title": "Running Calorie Calculator: Pace & Incline | Gear Up to Fit",
+   "h1": "Running Calorie Calculator: Net vs. Gross, Incline & Fueling Lab",
+   "description": "Calculate exact Net and Gross calories burned running by weight, pace, distance, treadmill incline, and terrain using ACSM VO2, Minetti slope, and MET models.",
+   "type": "interactive_tool",
+   "promotion": 67,
+   "linkability": 88,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 5,
+   "words": 4719,
+   "interactive": true,
+   "modified": "2026-11-26T17:53:34+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,719 words)",
+    "2 data tables",
+    "Recently updated",
+    "One of 41 templated sibling pages — promote the hub first"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "one of many templated pages",
+   "prospects": 5,
+   "internal_link_suggestions": 0,
+   "promoting": false
+  },
+  {
+   "site": "gearuptofit.com",
+   "url": "https://gearuptofit.com/running/how-to-choose-the-right-running-shoes/",
+   "title": "How to Choose Running Shoes: 6-Step Fit & Gait Guide (2026) | GearUpToFit",
+   "h1": "How to Choose Running Shoes: 2026 Guide to Fit & Gait",
+   "description": "Choose the right running shoes in 6 steps: match your surface, gait, cushioning, heel drop and sizing to your goals. A practical 2026 fitting framework that works in any store.",
+   "type": "practical_guide",
+   "promotion": 67,
+   "linkability": 88,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 294,
+   "words": 4123,
+   "interactive": true,
+   "modified": "2026-11-06T08:44:33+00:00",
+   "reasons": [
+    "Has an interactive tool/quiz — earns links naturally",
+    "In-depth (4,123 words)",
+    "4 data tables",
+    "Recently updated",
+    "One of 41 templated sibling pages — promote the hub first"
+   ],
+   "pitchable": false,
+   "not_pitched_because": "one of many templated pages",
+   "prospects": 0,
+   "internal_link_suggestions": 0,
    "promoting": false
   },
   {
@@ -3221,7 +3876,7 @@
    "linkability": 67,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 294,
+   "internal_inlinks": 297,
    "words": 1406,
    "interactive": false,
    "modified": "2026-10-04T18:13:49.000Z",
@@ -3232,640 +3887,111 @@
    "flagship": true,
    "pitchable": true,
    "prospects": 11,
-   "internal_link_suggestions": 1,
-   "promoting": true
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/productivity/habit-stacking-executive-dysfunction/",
-   "title": "Habit Stacking for Executive Dysfunction",
-   "h1": "Habit Stacking for Executive Dysfunction: A Practical Starting System",
-   "description": "Build a zero-initiation habit stack with a stable cue, prepared environment, tiny first action, completion signal, and fallback for low-capacity days.",
-   "type": "general_article",
-   "promotion": 65,
-   "linkability": 86,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 11,
-   "words": 2034,
-   "interactive": true,
-   "modified": "2026-11-14T13:24:33+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (2,034 words)",
-    "3 data tables",
-    "Cites 6 authoritative sources",
-    "Recently updated",
-    "One of 32 templated sibling pages — promote the hub first"
-   ],
-   "pitchable": true,
-   "prospects": 0,
-   "internal_link_suggestions": 4,
-   "promoting": true
-  },
-  {
-   "site": "mysticaldigits.com",
-   "url": "https://mysticaldigits.com/numerology-love-meter-calculator/",
-   "title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
-   "h1": "Numerology Love Meter Calculator [2026] | Mystical Digits",
-   "description": "A grounded guide to numerology love meter calculator [2026] | mystical digits, with communication prompts, relationship patterns, common mistakes, and clear.",
-   "type": "interactive_tool",
-   "promotion": 65,
-   "linkability": 85,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 13,
-   "words": 1346,
-   "interactive": true,
-   "modified": "2026-11-07T20:04:05+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "2 data tables",
-    "Recently updated",
-    "One of 299 templated sibling pages — promote the hub first"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "one of many templated pages",
-   "prospects": 8,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "stainsolver.shop",
-   "url": "https://stainsolver.shop/guides/",
-   "title": "Stain removal guides | Stain Solver",
-   "h1": "Stain removal guides by fabric.",
-   "description": "Care-aware guides for common spills on cotton, denim, sofas, carpet, wool, silk and more. Browse by stain and material.",
-   "type": "general_article",
-   "promotion": 65,
-   "linkability": 65,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 67,
-   "words": 761,
-   "interactive": true,
-   "modified": "2026-11-18",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "Recently updated",
-    "Flagship asset"
-   ],
-   "flagship": true,
-   "pitchable": true,
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/productivity/weekly-review-checklist/",
-   "title": "Weekly Review Checklist: Plan Your Week in 20 Minutes",
-   "h1": "Weekly Review Checklist: Plan Your Week in 20 Minutes",
-   "description": "A 20-minute weekly review checklist based on GTD: clear open loops, choose 3 outcomes, and schedule your week. Free template.",
-   "type": "reference",
-   "promotion": 64,
-   "linkability": 84,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 35,
-   "words": 3075,
-   "interactive": true,
-   "modified": "2026-11-08T07:36:04+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,075 words)",
-    "3 data tables",
-    "Recently updated",
-    "One of 32 templated sibling pages — promote the hub first"
-   ],
-   "pitchable": true,
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": true
-  },
-  {
-   "site": "mysticaldigits.com",
-   "url": "https://mysticaldigits.com/essence-of-number-five-guide/",
-   "title": "Exploring Your Path: Essence of Number Five 2026 | Mystical Digits",
-   "h1": "Exploring Your Path: Essence of Number Five 2026",
-   "description": "A grounded guide to exploring your path: essence of number five 2026, with meanings, examples, common mistakes, and practical reflection-first next steps.",
-   "type": "practical_guide",
-   "promotion": 64,
-   "linkability": 80,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 1,
-   "words": 4013,
-   "interactive": true,
-   "modified": "2026-11-26T17:43:22+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (4,013 words)",
-    "3 data tables",
-    "Recently updated",
-    "Under-linked internally (1 inbound)",
-    "One of 299 templated sibling pages — promote the hub first"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "one of many templated pages",
-   "prospects": 2,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "solarpayback.shop",
-   "url": "https://solarpayback.shop/cities/athens",
-   "title": "Athens solar yield & payback | SolarPayback",
-   "h1": "Solar panels in Athens",
-   "description": "Athens produces about 1,573 kWh/kWp/year (PVGIS). Compare monthly output and calculate payback with your own quote.",
-   "type": "general_article",
-   "promotion": 64,
-   "linkability": 71,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 7,
-   "words": 969,
-   "interactive": true,
-   "modified": "2026-11-25T19:25:23.259Z",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "1 data table",
-    "Recently updated"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "too thin to earn a link",
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "solarpayback.shop",
-   "url": "https://solarpayback.shop/cities/thessaloniki",
-   "title": "Thessaloniki solar yield & payback | SolarPayback",
-   "h1": "Solar panels in Thessaloniki",
-   "description": "Thessaloniki produces about 1,462 kWh/kWp/year (PVGIS). Compare monthly output and calculate payback with your own quote.",
-   "type": "general_article",
-   "promotion": 64,
-   "linkability": 71,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 7,
-   "words": 969,
-   "interactive": true,
-   "modified": "2026-11-25T19:25:22.182Z",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "1 data table",
-    "Recently updated"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "too thin to earn a link",
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-ultra",
-   "title": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch Ultra: Which Should You Buy?",
-   "h1": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch Ultra",
-   "description": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch Ultra: On the numbers we track, Apple Watch SE (2nd gen) wins on weight (33 g vs 60 g) and price ($249 vs $649); Samsung Galaxy Watch Ultra wins on battery life (2.5 days vs 1.2 days), tracked features (8 vs 4) and water rating (10ATM vs 5ATM). Specs,",
-   "type": "comparison",
-   "promotion": 64,
-   "linkability": 67,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 965,
-   "interactive": false,
-   "modified": "2026-10-20",
-   "reasons": [
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "review, comparison or sales page",
-   "prospects": 2,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-google-pixel-watch-3",
-   "title": "Apple Watch SE (2nd gen) vs Google Pixel Watch 3: Which Should You Buy?",
-   "h1": "Apple Watch SE (2nd gen) vs Google Pixel Watch 3",
-   "description": "Apple Watch SE (2nd gen) vs Google Pixel Watch 3: On the numbers we track, Apple Watch SE (2nd gen) wins on battery life (1.2 days vs 1 day), weight (33 g vs 37 g) and price ($249 vs $349); Google Pixel Watch 3 wins on tracked features (7 vs 4). Specs, price, who should pick each and who should skip",
-   "type": "comparison",
-   "promotion": 64,
-   "linkability": 67,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 916,
-   "interactive": false,
-   "modified": "2026-10-20",
-   "reasons": [
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "review, comparison or sales page",
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "buyonce.site",
-   "url": "https://buyonce.site/devices",
-   "title": "Smart device ownership directory — BuyOnce",
-   "h1": "What still works when you stop paying?",
-   "description": "Compare subscription requirements, local storage and ownership costs for 21 devices, with manufacturer links and explicit evidence gaps.",
-   "type": "general_article",
-   "promotion": 64,
-   "linkability": 64,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 27,
-   "words": 3444,
-   "interactive": true,
-   "modified": null,
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,444 words)",
-    "Flagship asset"
-   ],
-   "flagship": true,
-   "pitchable": true,
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": true
-  },
-  {
-   "site": "micegoneguide.com",
-   "url": "https://micegoneguide.com/how-to-get-rid-of-mice/",
-   "title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
-   "h1": "How to Get Rid of Mice",
-   "description": "Complete CDC-aligned home plan for how to get rid of mice: food storage, snap trap T-placement with chunky peanut butter, safe wet cleanup, and gap sealing.",
-   "type": "practical_guide",
-   "promotion": 63,
-   "linkability": 77,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 41,
-   "words": 4398,
-   "interactive": false,
-   "modified": "2026-11-25T14:25:47+00:00",
-   "reasons": [
-    "In-depth (4,398 words)",
-    "4 data tables",
-    "Cites 12 authoritative sources",
-    "Recently updated",
-    "Flagship asset",
-    "One of 40 templated sibling pages — promote the hub first"
-   ],
-   "flagship": true,
-   "pitchable": true,
-   "prospects": 8,
-   "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/seo/write-meta-descriptions-that-convert/",
-   "title": "How to Write Meta Descriptions That Convert (2026): CTR Playbook",
-   "h1": "How to Write Meta Descriptions That Convert (2026): The Hook + Data + Constraint CTR Playbook",
-   "description": "A practical Hook + Data + Constraint framework for writing meta descriptions that earn clicks: copy-paste templates, length guidance, and what changes for AI Overviews.",
-   "type": "practical_guide",
-   "promotion": 63,
-   "linkability": 70,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 3,
-   "words": 1136,
-   "interactive": false,
-   "modified": "2026-11-13T07:31:57+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "too thin to earn a link",
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/blogging/update-old-blog-content/",
-   "title": "How to Update Old Blog Content for SEO (2026): 7-Step Workflow",
-   "h1": "How to Update Old Blog Content for SEO (2026): A 7-Step Refresh Workflow",
-   "description": "A seven-step workflow for refreshing old posts: find decay in Search Console, prioritise by impressions and CTR, update, then re-index and measure.",
-   "type": "practical_guide",
-   "promotion": 63,
-   "linkability": 70,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 3,
-   "words": 1062,
-   "interactive": false,
-   "modified": "2026-09-16T18:01:48+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "too thin to earn a link",
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "h1": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews)",
-   "description": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit: practical review guidance with key considerations, buyer signals, safety notes, an",
-   "type": "commercial",
-   "promotion": 63,
-   "linkability": 65,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2475,
-   "interactive": false,
-   "modified": "2026-10-04T17:56:49+00:00",
-   "reasons": [
-    "In-depth (2,475 words)",
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "review, comparison or sales page",
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "h1": "7 Best Running Shoes for Supination & High Arches (2026)",
-   "description": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit: practical review guidance with key considerations, buyer signals, safety notes, and",
-   "type": "commercial",
-   "promotion": 63,
-   "linkability": 65,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 2219,
-   "interactive": false,
-   "modified": "2026-10-04T17:56:52+00:00",
-   "reasons": [
-    "In-depth (2,219 words)",
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "review, comparison or sales page",
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/focus-habit-reset/",
-   "title": "Focus and Habit Reset Guide - Gear Up to Grow",
-   "h1": "Focus and Habit Reset Guide",
-   "description": "A 14-day focus and habit reset: choose one behaviour, lower the starting cost, track completion and review on days 7 and 14 to rebuild momentum.",
-   "type": "practical_guide",
-   "promotion": 63,
-   "linkability": 65,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 2,
-   "words": 858,
-   "interactive": false,
-   "modified": "2026-11-25T15:16:38+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated",
-    "Under-linked internally (2 inbound)"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "too thin to earn a link",
-   "prospects": 1,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "url": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
-   "title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
-   "h1": "OpenClaw Skills Security: Are OpenClaw Skills Safe to Install?",
-   "description": "Are OpenClaw skills safe? Learn how to audit permissions, verify skill safety, and install OpenClaw skills securely. Complete security guide with actionable che",
-   "type": "reference",
-   "promotion": 63,
-   "linkability": 63,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 9,
-   "words": 1201,
-   "interactive": false,
-   "modified": "2026-03-07",
-   "reasons": [
-    "Recently updated",
-    "Flagship asset"
-   ],
-   "flagship": true,
-   "pitchable": true,
-   "prospects": 16,
-   "internal_link_suggestions": 5,
-   "promoting": true
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/productivity/improve-focus-7-day-protocol/",
-   "title": "How to Improve Focus: A 7-Day Focus Reset Plan",
-   "h1": "How to Improve Focus: A 7-Day Focus Reset",
-   "description": "Find what is breaking your focus, then test one change a day for a week: fewer cues, clearer tasks, better breaks. Keep only what works for you.",
-   "type": "reference",
-   "promotion": 62,
-   "linkability": 82,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 21,
-   "words": 2096,
-   "interactive": false,
-   "modified": "2026-11-25T15:14:20+00:00",
-   "reasons": [
-    "In-depth (2,096 words)",
-    "4 data tables",
-    "Cites 6 authoritative sources",
-    "Recently updated",
-    "One of 32 templated sibling pages — promote the hub first"
-   ],
-   "pitchable": true,
-   "prospects": 2,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "mysticaldigits.com",
-   "url": "https://mysticaldigits.com/revealing-birth-number-6-personality/",
-   "title": "Birth Number 6 Personality: 2026 Guide & Insights | Mystical Digits",
-   "h1": "Birth Number 6 Personality: 2026 Guide & Insights | Mystical Digits",
-   "description": "A grounded guide to birth number 6 personality: 2026 guide & insights | mystical digits, with meanings, examples, common mistakes, and reflection-first next.",
-   "type": "practical_guide",
-   "promotion": 62,
-   "linkability": 82,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 6,
-   "words": 1807,
-   "interactive": true,
-   "modified": "2026-11-08T05:33:11+00:00",
-   "reasons": [
-    "Has an interactive tool/quiz — earns links naturally",
-    "Recently updated",
-    "One of 299 templated sibling pages — promote the hub first"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "one of many templated pages",
-   "prospects": 0,
-   "internal_link_suggestions": 5,
-   "promoting": false
-  },
-  {
-   "site": "gearuptofit.com",
-   "url": "https://gearuptofit.com/watch-match/methodology",
-   "title": "How Fitness Watch Match scores watches — methodology",
-   "h1": "How Fitness Watch Match scores watches",
-   "description": "The exact scoring formula behind Fitness Watch Match: nine weighted criteria, how partial matches are credited, the budget gate, tie-breaks, where the specs come from, and what the score cannot tell you.",
-   "type": "methodology",
-   "promotion": 62,
-   "linkability": 69,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 270,
-   "words": 1018,
-   "interactive": false,
-   "modified": "2026-10-01",
-   "reasons": [
-    "Original method/data — citation-worthy",
-    "1 data table",
-    "Recently updated"
-   ],
-   "pitchable": true,
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": true
-  },
-  {
-   "site": "gearuptogrow.com",
-   "url": "https://gearuptogrow.com/learning/active-recall/",
-   "title": "Active Recall: How to Study Without Rereading Everything",
-   "h1": "Active Recall: How to Study with Retrieval Practice",
-   "description": "Learn the active recall study method. Discover the science of the testing effect, Feynman technique templates, and step-by-step active testing steps.",
-   "type": "practical_guide",
-   "promotion": 62,
-   "linkability": 69,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 17,
-   "words": 2402,
-   "interactive": false,
-   "modified": "2026-11-26T17:57:06+00:00",
-   "reasons": [
-    "In-depth (2,402 words)",
-    "6 data tables",
-    "Recently updated"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "not distinctive enough to earn a link",
-   "prospects": 13,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-a-web-host/",
-   "title": "How to Choose a Web Host (2026): Decision Guide by Use Case",
-   "h1": "How to Choose a Web Host (2026): A WordPress Decision Guide by Use Case",
-   "description": "Choose web hosting by what you are actually building: affiliate blogs, first sites on a budget, or scaling WordPress. With 2026 pricing and renewal traps.",
-   "type": "practical_guide",
-   "promotion": 62,
-   "linkability": 69,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 5,
-   "words": 1009,
-   "interactive": false,
-   "modified": "2026-09-16T18:01:41+00:00",
-   "reasons": [
-    "1 data table",
-    "Recently updated"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "too thin to earn a link",
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/seo/generative-engine-optimization/",
-   "title": "Generative Engine Optimization (GEO): A Practical Publisher Guide",
-   "h1": "Generative Engine Optimization (GEO): A Practical Publisher Guide",
-   "description": "Improve AI search discoverability with verifiable comparisons, clear answers, internal links and a practical citation measurement workflow.",
-   "type": "practical_guide",
-   "promotion": 62,
-   "linkability": 69,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 7,
-   "words": 1204,
-   "interactive": false,
-   "modified": "2026-09-13T08:04:24+00:00",
-   "reasons": [
-    "Recently updated"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "too thin to earn a link",
-   "prospects": 0,
-   "internal_link_suggestions": 0,
-   "promoting": false
-  },
-  {
-   "site": "imagealchemy.app",
-   "url": "https://imagealchemy.app/learn/jpeg-quality-guide",
-   "title": "What JPEG Quality Should You Use? Settings That Work (2026)",
-   "h1": "What JPEG quality should you use? The settings that actually work",
-   "description": "The exact quality settings to use for JPEG, WebP and AVIF — why 80 is the safe default, where artifacts appear first, and why resizing beats lowering quality.",
-   "type": "practical_guide",
-   "promotion": 62,
-   "linkability": 69,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 28,
-   "words": 2102,
-   "interactive": false,
-   "modified": "2026-11-25",
-   "reasons": [
-    "In-depth (2,102 words)",
-    "Recently updated"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "not distinctive enough to earn a link",
-   "prospects": 12,
    "internal_link_suggestions": 0,
    "promoting": false
   }
  ],
  "internal_links": [
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/calculate-bmi-bmr-and-whr-now/",
+   "from_title": "BMI, BMR, WHR & TDEE Calculator: The Only Health-Metrics Tool You Actually Need | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness-and-health-calculators/how-body-fat-is-calculated/",
+   "to_title": "Calculate Body Fat Easily With Our Accurate Body Fat Calculator | GearUpToFit",
+   "anchor": "body fat",
+   "relevance": 4,
+   "from_strength": 78
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/weight-loss/how-to-get-rid-of-a-pooch-stomach/",
+   "from_title": "Ultimate Guide on How To Get Rid Of A Pooch Stomach Fast | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness-and-health-calculators/how-body-fat-is-calculated/",
+   "to_title": "Calculate Body Fat Easily With Our Accurate Body Fat Calculator | GearUpToFit",
+   "anchor": "body fat",
+   "relevance": 4,
+   "from_strength": 73
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/lean-body-mass-calculator/",
+   "from_title": "Lean Body Mass (LBM) and FFMI Calculator | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness-and-health-calculators/how-body-fat-is-calculated/",
+   "to_title": "Calculate Body Fat Easily With Our Accurate Body Fat Calculator | GearUpToFit",
+   "anchor": "body fat",
+   "relevance": 4,
+   "from_strength": 69
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/bmi-reduction-tips/",
+   "from_title": "Effective Diet Changes to Boost BMI Improvement in Record Time | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness-and-health-calculators/how-body-fat-is-calculated/",
+   "to_title": "Calculate Body Fat Easily With Our Accurate Body Fat Calculator | GearUpToFit",
+   "anchor": "body fat",
+   "relevance": 4,
+   "from_strength": 68
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/fat-loss-protein-calculator/",
+   "from_title": "Protein Calculator for Fat Loss: Find Your Optimal Daily Target | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness-and-health-calculators/how-body-fat-is-calculated/",
+   "to_title": "Calculate Body Fat Easily With Our Accurate Body Fat Calculator | GearUpToFit",
+   "anchor": "body fat",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/zone-2-running-calculator/",
+   "from_title": "Zone 2 Running Calculator: Find Your Easy Heart Rate and Pace | GearUpToFit",
+   "to": "https://gearuptofit.com/running/heart-rate-zone-calculator/",
+   "to_title": "Heart Rate Zone Calculator: Karvonen, LTHR | Gear Up to Fit",
+   "anchor": "heart rate",
+   "relevance": 8,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/heart-rate-training-for-runners/",
+   "from_title": "Unlock the Power of Heart Rate Zones for Better Running Performance | GearUpToFit",
+   "to": "https://gearuptofit.com/running/heart-rate-zone-calculator/",
+   "to_title": "Heart Rate Zone Calculator: Karvonen, LTHR | Gear Up to Fit",
+   "anchor": "heart rate",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/running-pace-calculator/",
+   "from_title": "Running Pace Calculator & Race Time Predictor (2026) - Gear Up to FitGear Up to Fit",
+   "to": "https://gearuptofit.com/running/heart-rate-zone-calculator/",
+   "to_title": "Heart Rate Zone Calculator: Karvonen, LTHR | Gear Up to Fit",
+   "anchor": "heart rate",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/",
+   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
+   "to": "https://gearuptofit.com/running/heart-rate-zone-calculator/",
+   "to_title": "Heart Rate Zone Calculator: Karvonen, LTHR | Gear Up to Fit",
+   "anchor": "heart rate",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review/fitbit-air/",
+   "from_title": "Google Fitbit Air Review 2026: Screenless Tracker, Features and Value | GearUpToFit",
+   "to": "https://gearuptofit.com/running/heart-rate-zone-calculator/",
+   "to_title": "Heart Rate Zone Calculator: Karvonen, LTHR | Gear Up to Fit",
+   "anchor": "heart rate",
+   "relevance": 5,
+   "from_strength": 0
+  },
   {
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/calculate-your-soul-number-with-our-free-calculator/",
@@ -4028,6 +4154,16 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
+   "from_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
+   "to": "https://affiliatemarketingforsuccess.com/how-to-start/most-suitable-affiliate-program/",
+   "to_title": "How to Choose the Right Affiliate Program (2026 Checklist)",
+   "anchor": "affiliate program",
+   "relevance": 4,
+   "from_strength": 70
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/",
    "from_title": "Affiliate Marketing Guide: Start, Grow & Earn in 2026",
    "to": "https://affiliatemarketingforsuccess.com/how-to-start/most-suitable-affiliate-program/",
@@ -4058,16 +4194,6 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/warriorplus-affiliate-program-unlock-lucrative-opportunities/",
-   "from_title": "WarriorPlus Affiliate Program 2026: Approval, Payouts, Rules",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/most-suitable-affiliate-program/",
-   "to_title": "How to Choose the Right Affiliate Program (2026 Checklist)",
-   "anchor": "affiliate program",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/web-hosting/web-hosting-comparison/",
    "from_title": "Web Hosting Comparison: The Practical Buyer’s Guide for WordPress and Affiliate Sites",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
@@ -4088,13 +4214,13 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-social-media-for-affiliate-marketing/",
-   "from_title": "Social Media Marketing 2026: 7 Proven Affiliate Link Hacks",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
+   "from_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
    "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
    "anchor": "affiliate link",
    "relevance": 4,
-   "from_strength": 0
+   "from_strength": 70
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -4108,8 +4234,8 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
-   "from_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/building-an-affiliate-marketing-website/",
+   "from_title": "How to Build an Affiliate Marketing Website: 10-Step Guide",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
    "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
    "anchor": "affiliate link",
@@ -4128,28 +4254,28 @@
   },
   {
    "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "from_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
+   "from": "https://gearuptofit.com/running/best-running-shoes-outdoor-workouts/",
+   "from_title": "Top Outdoor Running Shoes 2025: Expert Guide & Best Picks | GearUpToFit",
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
    "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
    "anchor": "running shoes",
    "relevance": 4,
-   "from_strength": 63
+   "from_strength": 69
   },
   {
    "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "from_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
+   "from": "https://gearuptofit.com/running/how-to-choose-the-right-running-shoes/",
+   "from_title": "How to Choose Running Shoes: 6-Step Fit & Gait Guide (2026) | GearUpToFit",
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
    "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
    "anchor": "running shoes",
    "relevance": 4,
-   "from_strength": 63
+   "from_strength": 67
   },
   {
    "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running/",
-   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
+   "from": "https://gearuptofit.com/review/best-running-shoes-for-overpronation/",
+   "from_title": "Best Running Shoes for Overpronation: Stability Shoe Guide | GearUpToFit",
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
    "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
    "anchor": "running shoes",
@@ -4158,11 +4284,61 @@
   },
   {
    "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review-methodology/testing-log/",
-   "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
+   "from": "https://gearuptofit.com/running/running-for-weight-loss/",
+   "from_title": "Running for Weight Loss: Schedule & Results for Beginners | GearUpToFit",
    "to": "https://gearuptofit.com/shoe-finder/methodology/",
    "to_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
    "anchor": "running shoes",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/nutrition/meal-planning-for-athletes/",
+   "from_title": "7 Proven Secrets to Athlete Meal Planning Success | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness/sample-weekly-meal-plan-for-vegetarian-athletes/",
+   "to_title": "7-Day Vegetarian Meal Guide for Peak Performance and Energy | GearUpToFit",
+   "anchor": "athlete meal",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/nutrition/nutrition-plan-for-an-athlete/",
+   "from_title": "Athlete Nutrition Plan: Carbs and Protein per kg, With a 7-Day Menu | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness/sample-weekly-meal-plan-for-vegetarian-athletes/",
+   "to_title": "7-Day Vegetarian Meal Guide for Peak Performance and Energy | GearUpToFit",
+   "anchor": "meal plan",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/calculate-macronutrients-for-weight-loss/",
+   "from_title": "Macro Calculator for Weight Loss 2026: Calculate Daily Ratios | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness/sample-weekly-meal-plan-for-vegetarian-athletes/",
+   "to_title": "7-Day Vegetarian Meal Guide for Peak Performance and Energy | GearUpToFit",
+   "anchor": "meal plan",
+   "relevance": 4,
+   "from_strength": 68
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/weight-loss/eating-right-for-an-endomorphic-body-type/",
+   "from_title": "Endomorph Body Type Secrets for Rapid Weight Loss Success | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness/sample-weekly-meal-plan-for-vegetarian-athletes/",
+   "to_title": "7-Day Vegetarian Meal Guide for Peak Performance and Energy | GearUpToFit",
+   "anchor": "meal plan",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/weight-loss/the-best-meal-plan-for-losing-belly-fat/",
+   "from_title": "Proven Meal Plan for Losing Belly Fat and Boosting Metabolism | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness/sample-weekly-meal-plan-for-vegetarian-athletes/",
+   "to_title": "7-Day Vegetarian Meal Guide for Peak Performance and Energy | GearUpToFit",
+   "anchor": "meal plan",
    "relevance": 4,
    "from_strength": 0
   },
@@ -4178,12 +4354,42 @@
   },
   {
    "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/demystifying-numerology-3-secrets-revealed/",
+   "from_title": "Numerology Number 3 Meaning: Creativity, Communication, Strengths & Challenges | Mystical Digits",
+   "to": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
+   "to_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
+   "anchor": "life path",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/numerology-calculators/",
    "from_title": "Free Numerology Calculators: Birth Date, Name and House Number Tools | Mystical Digits",
    "to": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
    "to_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
    "anchor": "life path",
    "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/esoteric-numerology-spiritual-pathways/",
+   "from_title": "Esoteric Numerology: Core Principles, Spiritual Symbolism & Safe Interpretation | Mystical Digits",
+   "to": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
+   "to_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
+   "anchor": "life path",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/star-signs-impact-numerology-true-impact/",
+   "from_title": "Star Signs and Numerology: How Astrology and Numerology Compare | Mystical Digits",
+   "to": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
+   "to_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
+   "anchor": "life path",
+   "relevance": 6,
    "from_strength": 0
   },
   {
@@ -4197,34 +4403,44 @@
    "from_strength": 0
   },
   {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/life-path-number-calculator/",
-   "from_title": "Life Path Number Calculator (Free) | Mystical Digits",
-   "to": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
-   "to_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
-   "anchor": "life path",
-   "relevance": 5,
-   "from_strength": 87
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/health-and-fitness-calculators/",
+   "from_title": "Free Health &amp; Fitness Calculators (2026) — BMR, TDEE, BMI &amp; More | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness-and-health-calculators/calculate-bmi-bmr-and-whr-now/",
+   "to_title": "BMI, BMR, WHR & TDEE Calculator: The Only Health-Metrics Tool You Actually Need | GearUpToFit",
+   "anchor": "bmr tdee",
+   "relevance": 6,
+   "from_strength": 0
   },
   {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-love-meter-calculator/",
-   "from_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
-   "to": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
-   "to_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
-   "anchor": "life path",
-   "relevance": 5,
-   "from_strength": 65
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/basal-metabolic-rate-calculation-tool/",
+   "from_title": "BMR Calculator 2026: Free Basal Metabolic Rate Tool | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness-and-health-calculators/calculate-bmi-bmr-and-whr-now/",
+   "to_title": "BMI, BMR, WHR & TDEE Calculator: The Only Health-Metrics Tool You Actually Need | GearUpToFit",
+   "anchor": "bmi bmr tdee",
+   "relevance": 3,
+   "from_strength": 72
   },
   {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/revealing-birth-number-6-personality/",
-   "from_title": "Birth Number 6 Personality: 2026 Guide & Insights | Mystical Digits",
-   "to": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
-   "to_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
-   "anchor": "life path",
-   "relevance": 5,
-   "from_strength": 62
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/calories-unveiled-mastering-daily-calorie-needs-and-meal-planning/",
+   "from_title": "Calculate Your Daily Calorie Needs for Effective Weight Loss | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness-and-health-calculators/calculate-bmi-bmr-and-whr-now/",
+   "to_title": "BMI, BMR, WHR & TDEE Calculator: The Only Health-Metrics Tool You Actually Need | GearUpToFit",
+   "anchor": "bmi bmr tdee",
+   "relevance": 3,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/daily-calorie-intake-calculation-tool/",
+   "from_title": "Master Your Daily Calorie Needs for Fast Weight Loss | GearUpToFit",
+   "to": "https://gearuptofit.com/fitness-and-health-calculators/calculate-bmi-bmr-and-whr-now/",
+   "to_title": "BMI, BMR, WHR & TDEE Calculator: The Only Health-Metrics Tool You Actually Need | GearUpToFit",
+   "anchor": "bmi bmr tdee",
+   "relevance": 3,
+   "from_strength": 0
   },
   {
    "site": "gearuptogrow.com",
@@ -4267,14 +4483,64 @@
    "from_strength": 0
   },
   {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/does-running-make-you-lose-weight/",
+   "from_title": "Running and Metabolism: Burn Fat Faster with These Tips | GearUpToFit",
+   "to": "https://gearuptofit.com/weight-loss/how-to-lose-weight-in-2-weeks/",
+   "to_title": "Prevent Crash Diets and Achieve Lasting Weight Loss Strategies | GearUpToFit",
+   "anchor": "lose weight",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/weight-loss/how-long-to-see-weight-loss-results/",
+   "from_title": "How Long to See Weight Loss Results: A Realistic Timeline | GearUpToFit",
+   "to": "https://gearuptofit.com/weight-loss/how-to-lose-weight-in-2-weeks/",
+   "to_title": "Prevent Crash Diets and Achieve Lasting Weight Loss Strategies | GearUpToFit",
+   "anchor": "lose weight",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/calculate-macronutrients-for-weight-loss/",
+   "from_title": "Macro Calculator for Weight Loss 2026: Calculate Daily Ratios | GearUpToFit",
+   "to": "https://gearuptofit.com/weight-loss/how-to-lose-weight-in-2-weeks/",
+   "to_title": "Prevent Crash Diets and Achieve Lasting Weight Loss Strategies | GearUpToFit",
+   "anchor": "lose weight",
+   "relevance": 4,
+   "from_strength": 68
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness-and-health-calculators/the-best-tdee-calculator/",
+   "from_title": "Calculate TDEE &amp; Maximize Fat Burn: Proven Methods to Boost Your Metabolic Rate | GearUpToFit",
+   "to": "https://gearuptofit.com/weight-loss/how-to-lose-weight-in-2-weeks/",
+   "to_title": "Prevent Crash Diets and Achieve Lasting Weight Loss Strategies | GearUpToFit",
+   "anchor": "lose weight",
+   "relevance": 4,
+   "from_strength": 68
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/running-for-weight-loss/",
+   "from_title": "Running for Weight Loss: Schedule & Results for Beginners | GearUpToFit",
+   "to": "https://gearuptofit.com/weight-loss/how-to-lose-weight-in-2-weeks/",
+   "to_title": "Prevent Crash Diets and Achieve Lasting Weight Loss Strategies | GearUpToFit",
+   "anchor": "lose weight",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/blogging/how-to-write-a-high-ranking-blog-post/",
-   "from_title": "How to Write High-Ranking Blog Posts in 2026 (Proven)",
+   "from_title": "How to Write a Blog Post That Ranks: Step-by-Step SEO Guide",
    "to": "https://affiliatemarketingforsuccess.com/tools/email-marketing-template-generator/",
    "to_title": "Email Marketing Template Generator: HTML & Plain Text",
    "anchor": "write email reader",
    "relevance": 3,
-   "from_strength": 61
+   "from_strength": 62
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -4507,33 +4773,143 @@
    "from_strength": 0
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
-   "from_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
-   "relevance": 3,
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness/setting-up-a-home-gym-on-a-budget/",
+   "from_title": "Creating a Home Gym on a Budget: 5 Must-Have Essentials | GearUpToFit",
+   "to": "https://gearuptofit.com/review/resistance-bands-vs-free-weights/",
+   "to_title": "Resistance Bands vs. Free Weights: Which Builds More Muscle? | GearUpToFit",
+   "anchor": "resistance bands",
+   "relevance": 4,
    "from_strength": 0
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/building-an-affiliate-marketing-website/",
-   "from_title": "How to Build an Affiliate Marketing Website: 10-Step Guide",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
-   "relevance": 3,
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness/low-impact-workout/",
+   "from_title": "Low-Impact Exercise Routines: 8-Week Joint-Friendly Plan (2026) | GearUpToFit",
+   "to": "https://gearuptofit.com/review/resistance-bands-vs-free-weights/",
+   "to_title": "Resistance Bands vs. Free Weights: Which Builds More Muscle? | GearUpToFit",
+   "anchor": "resistance bands",
+   "relevance": 4,
    "from_strength": 0
   },
   {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/start-here/",
-   "from_title": "Start Affiliate Marketing in 2026: The Step-by-Step Roadmap",
-   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
-   "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
-   "anchor": "promote affiliate products",
-   "relevance": 3,
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness/get-out-of-shape/",
+   "from_title": "Getting Back Into Shape: Proven Strategies to Prevent Weight Gain | GearUpToFit",
+   "to": "https://gearuptofit.com/review/resistance-bands-vs-free-weights/",
+   "to_title": "Resistance Bands vs. Free Weights: Which Builds More Muscle? | GearUpToFit",
+   "anchor": "resistance bands",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/fitness/maximizing-small-space-workouts/",
+   "from_title": "Small Space Workout Hacks for Maximum Results at Home | GearUpToFit",
+   "to": "https://gearuptofit.com/review/resistance-bands-vs-free-weights/",
+   "to_title": "Resistance Bands vs. Free Weights: Which Builds More Muscle? | GearUpToFit",
+   "anchor": "resistance bands",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/french-bulldog-mixes-guide/",
+   "to_title": "French Bulldog Mixes: Popular Crosses, Health & Temperament",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "from_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "to": "https://frenchyfab.com/french-bulldog-mixes-guide/",
+   "to_title": "French Bulldog Mixes: Popular Crosses, Health & Temperament",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 62
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "from_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "to": "https://frenchyfab.com/french-bulldog-mixes-guide/",
+   "to_title": "French Bulldog Mixes: Popular Crosses, Health & Temperament",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 60
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
+   "to": "https://frenchyfab.com/french-bulldog-mixes-guide/",
+   "to_title": "French Bulldog Mixes: Popular Crosses, Health & Temperament",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/french-bulldog-mixes-guide/",
+   "to_title": "French Bulldog Mixes: Popular Crosses, Health & Temperament",
+   "anchor": "french bulldog",
+   "relevance": 4,
+   "from_strength": 58
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/how-to-choose-the-right-running-shoes/",
+   "from_title": "How to Choose Running Shoes: 6-Step Fit & Gait Guide (2026) | GearUpToFit",
+   "to": "https://gearuptofit.com/shoe-finder/",
+   "to_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
+   "anchor": "running shoe",
+   "relevance": 6,
+   "from_strength": 67
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/best-running-shoes-outdoor-workouts/",
+   "from_title": "Top Outdoor Running Shoes 2025: Expert Guide & Best Picks | GearUpToFit",
+   "to": "https://gearuptofit.com/shoe-finder/",
+   "to_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
+   "anchor": "running shoe",
+   "relevance": 4,
+   "from_strength": 69
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review/best-running-shoes-for-overpronation/",
+   "from_title": "Best Running Shoes for Overpronation: Stability Shoe Guide | GearUpToFit",
+   "to": "https://gearuptofit.com/shoe-finder/",
+   "to_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
+   "anchor": "running shoe",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/running/running-for-weight-loss/",
+   "from_title": "Running for Weight Loss: Schedule & Results for Beginners | GearUpToFit",
+   "to": "https://gearuptofit.com/shoe-finder/",
+   "to_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
+   "anchor": "running shoe",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "gearuptofit.com",
+   "from": "https://gearuptofit.com/review/best-running-shoes-without-a-carbon-plate/",
+   "from_title": "Best Running Shoes Without a Carbon Plate: Fast, Comfortable | GearUpToFit",
+   "to": "https://gearuptofit.com/shoe-finder/",
+   "to_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
+   "anchor": "running shoe",
+   "relevance": 4,
    "from_strength": 0
   },
   {
@@ -4587,56 +4963,6 @@
    "from_strength": 57
   },
   {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
-   "from_title": "French Bulldog Socialization Training: A Practical Plan",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-care-guide/",
-   "from_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 60
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
-   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 59
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 58
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-diet-for-seniors/",
-   "from_title": "Senior French Bulldog Nutrition: Step-by-Step Guide",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 58
-  },
-  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/mental-wellness/",
    "from_title": "Mental Wellness Hub: Stress Regulation & Burnout Recovery",
@@ -4644,36 +4970,6 @@
    "to_title": "Cognitive Function: How to Support Focus and Memory",
    "anchor": "cognitive function",
    "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/best-affiliate-marketing-niches-2025/",
-   "from_title": "Best Affiliate Marketing Niches: 8 Durable Picks (2026)",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "affiliate niche",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-success/",
-   "from_title": "2026 Affiliate Marketing Success Guide: The 5 Pillars to Win",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "choose profitable affiliate",
-   "relevance": 3,
-   "from_strength": 0
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-vs-dropshipping/",
-   "from_title": "Affiliate Marketing Vs Dropshipping: 2026 Winner? (2026 Analysis)",
-   "to": "https://affiliatemarketingforsuccess.com/how-to-start/how-to-choose-your-niche/",
-   "to_title": "Niche Selection 2026: Ultimate 7-Step Proven Framework",
-   "anchor": "choose profitable affiliate",
-   "relevance": 3,
    "from_strength": 0
   },
   {
@@ -4728,21 +5024,21 @@
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/purple-spider-plant/",
-   "from_title": "Purple Spider Plant: What It Really Is and How to ID It",
+   "from": "https://plantastichaven.com/pet-friendly-houseplants/",
+   "from_title": "Pet-Safe Plants: 10 Non-Toxic Houseplants for Pets [2026]",
    "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
    "to_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
-   "anchor": "spider plants",
+   "anchor": "toxic cats",
    "relevance": 6,
    "from_strength": 0
   },
   {
    "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/philodendron-micans-care/",
-   "from_title": "Philodendron Micans Care: Complete Velvet Leaf Guide",
+   "from": "https://plantastichaven.com/purple-spider-plant/",
+   "from_title": "Purple Spider Plant: What It Really Is and How to ID It",
    "to": "https://plantastichaven.com/are-spider-plants-toxic-to-cats/",
    "to_title": "Are Spider Plants Toxic to Cats? What the ASPCA Says",
-   "anchor": "toxic cats",
+   "anchor": "spider plants",
    "relevance": 6,
    "from_strength": 0
   },
@@ -4837,6 +5133,96 @@
    "from_strength": 0
   },
   {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/review/inkforall-review-2024/",
+   "from_title": "INK Review 2026: AI Writing & SEO Content Optimization, Re-Evaluated",
+   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
+   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
+   "anchor": "surfer seo",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/review/surfer-ai/",
+   "from_title": "Surfer AI Review 2026: SEO Uses, Pricing, Pros, Cons",
+   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
+   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
+   "anchor": "surfer seo",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/best-ai-writing-tools-affiliate-marketers/",
+   "from_title": "Best AI Writing Tools for Affiliate Marketers (2026): Compared by Workflow",
+   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
+   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
+   "anchor": "surfer seo",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/faq/",
+   "from_title": "Affiliate Marketing FAQ: 28 Most Common Questions Answered (2026) - Affiliate Marketing",
+   "to": "https://affiliatemarketingforsuccess.com/ai/surfer-seo-alternatives/",
+   "to_title": "Best Surfer SEO Alternatives for Content Optimization, Topi…",
+   "anchor": "surfer seo",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-social-media-for-affiliate-marketing/",
+   "from_title": "How to Use Social Media for Affiliate Marketing",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-youtube-for-affiliate-marketing/",
+   "to_title": "How to Set Up Affiliate Links on YouTube (2026 Guide)",
+   "anchor": "affiliate marketing",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-promote-affiliate-products-without-a-website/",
+   "from_title": "9 Ways to Promote Affiliate Products Without a Website",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-youtube-for-affiliate-marketing/",
+   "to_title": "How to Set Up Affiliate Links on YouTube (2026 Guide)",
+   "anchor": "affiliate marketing",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/best-ai-affiliate-niches/",
+   "from_title": "7 Best AI Affiliate Niches for 2026 (High Recurring Profits)",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-youtube-for-affiliate-marketing/",
+   "to_title": "How to Set Up Affiliate Links on YouTube (2026 Guide)",
+   "anchor": "affiliate marketing",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/amazon-associates-guide/",
+   "from_title": "Amazon Affiliate Program 2026: Rates, Rules & Approval",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-youtube-for-affiliate-marketing/",
+   "to_title": "How to Set Up Affiliate Links on YouTube (2026 Guide)",
+   "anchor": "affiliate marketing",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-strategies/",
+   "from_title": "Affiliate Marketing Strategies (2026): 9 Systems of Affiliate Growth",
+   "to": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-youtube-for-affiliate-marketing/",
+   "to_title": "How to Set Up Affiliate Links on YouTube (2026 Guide)",
+   "anchor": "affiliate marketing",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/health/",
    "from_title": "Health Hub: Sleep, Energy & Cognitive Performance",
@@ -4887,16 +5273,6 @@
    "from_strength": 0
   },
   {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/methodology",
-   "from_title": "How Fitness Watch Match scores watches — methodology",
-   "to": "https://gearuptofit.com/watch-match/",
-   "to_title": "Fitness Watch Match — Find the Right Watch for Your Training",
-   "anchor": "fitness watch",
-   "relevance": 7,
-   "from_strength": 62
-  },
-  {
    "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/personal-development/habit-stacking/",
    "from_title": "Habit Stacking: Examples, Templates & How To Start",
@@ -4934,6 +5310,56 @@
    "to_title": "Habit Stacking for Executive Dysfunction",
    "anchor": "habit stacking",
    "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/karmic-debt-number-13-in-past-lives/",
+   "from_title": "Karmic Debt Number 13: Past Lives Guide | Mystical Digits",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/compatibility-check-life-path-numbers-6-and-9/",
+   "from_title": "Life Path 6 & 9 Compatibility: Love, Marriage & Karma 2026",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/embrace-the-journey-life-path-number-fourteen/",
+   "from_title": "Life Path Number 14: 2026 Deep Dive into the Karmic Force of 14/5",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/how-is-14-in-numerology/",
+   "from_title": "2026 Guide: Numerology Meaning of Number 14 Explained",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "mysticaldigits.com",
+   "from": "https://mysticaldigits.com/the-numerology-of-your-past-lives-what-can-you-learn-from-your-past/",
+   "from_title": "Past Lives Numerology: 2026 Step-by-Step Guide",
+   "to": "https://mysticaldigits.com/karmic-debt-number-calculator-13-14-16-19/",
+   "to_title": "Karmic Debt Number Calculator: 13, 14, 16, 19 Meaning and How to Calculate | Mystical Digits",
+   "anchor": "karmic debt",
+   "relevance": 5,
    "from_strength": 0
   },
   {
@@ -4978,12 +5404,12 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/how-to-use-numerology-to-enhance-your-relationships/",
-   "from_title": "Numerology for Love: Decode Compatibility & Deepen Bonds [2026]",
+   "from": "https://mysticaldigits.com/compatibility-check-life-path-numbers-6-and-9/",
+   "from_title": "Life Path 6 & 9 Compatibility: Love, Marriage & Karma 2026",
    "to": "https://mysticaldigits.com/numerology-love-meter-calculator/",
    "to_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
-   "anchor": "numerology love",
-   "relevance": 4,
+   "anchor": "numerology love meter",
+   "relevance": 3,
    "from_strength": 0
   },
   {
@@ -5137,106 +5563,6 @@
    "from_strength": 52
   },
   {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-7",
-   "from_title": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch 7: Which Should You Buy?",
-   "to": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-ultra",
-   "to_title": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch Ultra: Which Should You Buy?",
-   "anchor": "apple watch",
-   "relevance": 13,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-8",
-   "from_title": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch 8: Which Should You Buy?",
-   "to": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-ultra",
-   "to_title": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch Ultra: Which Should You Buy?",
-   "anchor": "apple watch",
-   "relevance": 13,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-ultra-2025",
-   "from_title": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch Ultra (2025): Which Should You Buy?",
-   "to": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-ultra",
-   "to_title": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch Ultra: Which Should You Buy?",
-   "anchor": "apple watch",
-   "relevance": 13,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-apple-watch-ultra-2",
-   "from_title": "Apple Watch SE (2nd gen) vs Apple Watch Ultra 2: Which Should You Buy?",
-   "to": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-ultra",
-   "to_title": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch Ultra: Which Should You Buy?",
-   "anchor": "apple watch",
-   "relevance": 11,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-apple-watch-ultra-3",
-   "from_title": "Apple Watch SE (2nd gen) vs Apple Watch Ultra 3: Which Should You Buy?",
-   "to": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-ultra",
-   "to_title": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch Ultra: Which Should You Buy?",
-   "anchor": "apple watch",
-   "relevance": 11,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-google-pixel-watch-4",
-   "from_title": "Apple Watch SE (2nd gen) vs Google Pixel Watch 4: Which Should You Buy?",
-   "to": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-google-pixel-watch-3",
-   "to_title": "Apple Watch SE (2nd gen) vs Google Pixel Watch 3: Which Should You Buy?",
-   "anchor": "apple watch",
-   "relevance": 13,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-samsung-galaxy-watch-ultra",
-   "from_title": "Apple Watch SE (2nd gen) vs Samsung Galaxy Watch Ultra: Which Should You Buy?",
-   "to": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-google-pixel-watch-3",
-   "to_title": "Apple Watch SE (2nd gen) vs Google Pixel Watch 3: Which Should You Buy?",
-   "anchor": "apple watch",
-   "relevance": 10,
-   "from_strength": 64
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/watch/apple-watch-se-2",
-   "from_title": "Apple Watch SE (2nd gen) Review: Specs, Battery Life & Who Should Skip It",
-   "to": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-google-pixel-watch-3",
-   "to_title": "Apple Watch SE (2nd gen) vs Google Pixel Watch 3: Which Should You Buy?",
-   "anchor": "apple watch",
-   "relevance": 10,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-apple-watch-ultra-2",
-   "from_title": "Apple Watch SE (2nd gen) vs Apple Watch Ultra 2: Which Should You Buy?",
-   "to": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-google-pixel-watch-3",
-   "to_title": "Apple Watch SE (2nd gen) vs Google Pixel Watch 3: Which Should You Buy?",
-   "anchor": "apple watch",
-   "relevance": 10,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-apple-watch-ultra-3",
-   "from_title": "Apple Watch SE (2nd gen) vs Apple Watch Ultra 3: Which Should You Buy?",
-   "to": "https://gearuptofit.com/watch-match/compare/apple-watch-se-2-vs-google-pixel-watch-3",
-   "to_title": "Apple Watch SE (2nd gen) vs Google Pixel Watch 3: Which Should You Buy?",
-   "anchor": "apple watch",
-   "relevance": 10,
-   "from_strength": 0
-  },
-  {
    "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
    "from_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
@@ -5283,106 +5609,6 @@
    "to": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "to_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
    "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "from_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 8,
-   "from_strength": 63
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/shoe-finder/methodology/",
-   "from_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 6,
-   "from_strength": 82
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/shoe-finder/",
-   "from_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 5,
-   "from_strength": 75
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running/",
-   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review-methodology/testing-log/",
-   "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "to_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review/best-running-shoes-for-ball-of-foot-pain/",
-   "from_title": "7 Best Running Shoes for Ball of Foot Pain (2026 Reviews) - Gear Up to Fit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 5,
-   "from_strength": 63
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/shoe-finder/methodology/",
-   "from_title": "How RunMatch Scores Running Shoes: Methodology, Weights and Sources",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 82
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/shoe-finder/",
-   "from_title": "Free Running Shoe Finder Quiz: Match Shoes to Your Feet | RunMatch AI",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 75
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/running/",
-   "from_title": "Running Hub: Training Plans, Shoes & Pace Tools | GearUpToFit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/review-methodology/testing-log/",
-   "from_title": "GearUpToFit Testing Log — Verified Field Data for Every Review | GearUpToFit",
-   "to": "https://gearuptofit.com/review/best-running-shoes-for-supination-high-arches/",
-   "to_title": "7 Best Running Shoes for Supination & High Arches (2026) - Gear Up to Fit",
-   "anchor": "running shoes",
    "relevance": 4,
    "from_strength": 0
   },
@@ -5488,6 +5714,56 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-mixes-guide/",
+   "from_title": "French Bulldog Mixes: Popular Crosses, Health & Temperament",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 75
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-social-interaction-training/",
+   "from_title": "French Bulldog Socialization Training: A Practical Plan",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 74
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-care-guide/",
+   "from_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 60
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "from_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 59
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/care-plan-quiz/",
    "from_title": "French Bulldog Care Plan Quiz: Get a Personalized Daily Routine",
    "to": "https://frenchyfab.com/french-bulldog-care-guide/",
@@ -5538,6 +5814,16 @@
   },
   {
    "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-mixes-guide/",
+   "from_title": "French Bulldog Mixes: Popular Crosses, Health & Temperament",
+   "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
+   "to_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
+   "anchor": "french bulldogs",
+   "relevance": 5,
+   "from_strength": 75
+  },
+  {
+   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/raw-food-diet-for-french-bulldogs/",
    "from_title": "Raw Food Diet for French Bulldogs: Risks, Safer Choices",
    "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
@@ -5577,16 +5863,6 @@
    "from_strength": 0
   },
   {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "from_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "to": "https://frenchyfab.com/are-french-bulldogs-hypoallergenic/",
-   "to_title": "Are French Bulldogs Hypoallergenic? The Honest Answer | Frenchy Fab",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 74
-  },
-  {
    "site": "micegoneguide.com",
    "from": "https://micegoneguide.com/how-to-get-rid-of-mice/",
    "from_title": "How to Get Rid of Mice: Safe Home Plan | Mice Gone Guide",
@@ -5615,256 +5891,6 @@
    "anchor": "rid mice",
    "relevance": 5,
    "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/how-to-get-rid-of-mice-in-apartment/",
-   "from_title": "How to Get Rid of Mice in an Apartment",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 56
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/peppermint-oil-for-mouse-repellent/",
-   "from_title": "Does Peppermint Oil Repel Mice? What the Evidence Shows",
-   "to": "https://micegoneguide.com/how-to-get-rid-of-mice-in-garage/",
-   "to_title": "How to Get Rid of Mice in the Garage: Storage, Doors & Traps",
-   "anchor": "rid mice",
-   "relevance": 4,
-   "from_strength": 55
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/best-openclaw-skills-by-use-case/",
-   "from_title": "Best OpenClaw Skills by Use Case (2026) — Curated Skill Bundles | ClawSkills",
-   "to": "https://openclaw-skillshub.com/skills/search-research/knowledge-graph/",
-   "to_title": "Knowledge Graph OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "knowledge graph",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/best-search-research-skills-openclaw/",
-   "from_title": "7 Best Search & Research Skills for OpenClaw (2026) | ClawSkills",
-   "to": "https://openclaw-skillshub.com/skills/search-research/knowledge-graph/",
-   "to_title": "Knowledge Graph OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "knowledge graph",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/skills/notes-pkm/logseq-bridge/",
-   "from_title": "Logseq Bridge OpenClaw Skill: Install & Requirements | ClawSkills",
-   "to": "https://openclaw-skillshub.com/skills/search-research/knowledge-graph/",
-   "to_title": "Knowledge Graph OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "openclaw skill",
-   "relevance": 5,
-   "from_strength": 54
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/skills/",
-   "from_title": "OpenClaw Skills Directory — Documented Skill Guides & Catalog Overview | ClawSkills",
-   "to": "https://openclaw-skillshub.com/skills/search-research/knowledge-graph/",
-   "to_title": "Knowledge Graph OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "knowledge graph",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/",
-   "from_title": "OpenClaw Guides: Install, Security & Comparisons — ClawSkills",
-   "to": "https://openclaw-skillshub.com/skills/search-research/knowledge-graph/",
-   "to_title": "Knowledge Graph OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "openclaw skill",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "plantastichaven.com",
-   "from": "https://plantastichaven.com/philodendron-birkin/",
-   "from_title": "Philodendron Birkin Care: Complete Guide for Thriving Plants",
-   "to": "https://plantastichaven.com/how-to-propagate-a-philodendron-birkin/",
-   "to_title": "Philodendron Birkin Propagation: 5 Proven Methods (2026)",
-   "anchor": "philodendron birkin",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/astrology-and-numerology-compatibility/",
-   "from_title": "Astrology and Numerology Compatibility: A Complete Guide",
-   "to": "https://mysticaldigits.com/free-numerology-love-compatibility-score/",
-   "to_title": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
-   "anchor": "love compatibility",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/astrology-and-love-compatibility/",
-   "from_title": "Astrology Love Compatibility: A 2026 Guide to Cosmic Connections",
-   "to": "https://mysticaldigits.com/free-numerology-love-compatibility-score/",
-   "to_title": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
-   "anchor": "numerology love",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-love-compatibility/",
-   "from_title": "Numerology Love Compatibility: 2026 Guide | Mystical Digits",
-   "to": "https://mysticaldigits.com/free-numerology-love-compatibility-score/",
-   "to_title": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
-   "anchor": "numerology love",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-love-meter-calculator/",
-   "from_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
-   "to": "https://mysticaldigits.com/free-numerology-love-compatibility-score/",
-   "to_title": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
-   "anchor": "numerology love",
-   "relevance": 6,
-   "from_strength": 65
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/compatibility-check-life-path-numbers-6-and-9/",
-   "from_title": "Life Path 6 & 9 Compatibility: Love, Marriage & Karma 2026",
-   "to": "https://mysticaldigits.com/free-numerology-love-compatibility-score/",
-   "to_title": "Free Numerology Love Compatibility Calculator: Life Path & Name Match",
-   "anchor": "compatibility calculator",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-foods-for-french-bulldogs/",
-   "from_title": "Best Dog Food for French Bulldogs: How to Compare Diets and Ingredients",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-dog-food-for-french-bulldogs-with-sensitive-stomach/",
-   "from_title": "Best Dog Food for a French Bulldog With a Sensitive Stomach",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
-   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
-   "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "food french",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/homemade-dog-treat-recipes-french-bulldogs/",
-   "from_title": "Homemade French Bulldog Treats: 4 Safe, Simple Recipes",
-   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
-   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
-   "anchor": "french bulldogs",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/diseases-from-mice/",
-   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
-   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
-   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
-   "anchor": "cleanup safety",
-   "relevance": 5,
-   "from_strength": 53
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/rodent-infestation-cleanup-protocols/",
-   "from_title": "Rodent Infestation Cleanup Protocols for Homes and Storage Areas",
-   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
-   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
-   "anchor": "mouse cleanup",
-   "relevance": 5,
-   "from_strength": 49
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/identifying-mouse-nests-in-your-home/",
-   "from_title": "Identifying Mouse Nests in Your Home: Where Mice Hide",
-   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
-   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
-   "anchor": "cleanup safety",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/mouse-traps-baits/",
-   "from_title": "Mouse Traps and Baits: Safer Choices",
-   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
-   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
-   "anchor": "mouse cleanup safety",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/mouse-removal/",
-   "from_title": "Mouse Removal Checklist: Traps, Cleanup, and Sealing",
-   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
-   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
-   "anchor": "mouse cleanup safety",
-   "relevance": 3,
-   "from_strength": 57
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/safely-remove-mice/",
-   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
-   "to": "https://micegoneguide.com/snap-traps-for-mice/",
-   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "anchor": "snap traps",
-   "relevance": 5,
-   "from_strength": 56
-  },
-  {
-   "site": "micegoneguide.com",
-   "from": "https://micegoneguide.com/where-to-place-mouse-traps/",
-   "from_title": "Where to Place Mouse Traps: Room-by-Room Placement Guide",
-   "to": "https://micegoneguide.com/snap-traps-for-mice/",
-   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
-   "anchor": "snap traps",
-   "relevance": 5,
-   "from_strength": 48
   }
  ],
  "indexation": {
@@ -5872,8 +5898,8 @@
    {
     "site": "gearuptofit.com",
     "checked": 300,
-    "healthy": 297,
-    "problems": 3,
+    "healthy": 292,
+    "problems": 8,
     "critical": 0,
     "review": 0,
     "not_found": 0,
@@ -5884,7 +5910,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 3
+    "thin": 8
    },
    {
     "site": "plantastichaven.com",
@@ -6042,8 +6068,8 @@
    {
     "site": "tenderatlas.shop",
     "checked": 300,
-    "healthy": 162,
-    "problems": 138,
+    "healthy": 228,
+    "problems": 72,
     "critical": 1,
     "review": 0,
     "not_found": 0,
@@ -6054,7 +6080,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 137
+    "thin": 71
    },
    {
     "site": "signalroom.store",
@@ -6239,7 +6265,7 @@
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/countries/es/cpv/72000000",
+    "url": "https://tenderatlas.shop/countries/nl/cpv/34000000",
     "issue": "noindex",
     "label": "noindex but listed in sitemap",
     "fix": "If the page should rank, remove the noindex (SEO plugin / X-Robots-Tag). If not, drop it from the sitemap.",
@@ -6527,23 +6553,63 @@
    },
    {
     "site": "gearuptofit.com",
-    "url": "https://gearuptofit.com/running-shoe-decision-guide",
+    "url": "https://gearuptofit.com/review/apple-watch-vs-garmin",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 248
+    "words": 61
    },
    {
     "site": "gearuptofit.com",
-    "url": "https://gearuptofit.com/strength-training-hub",
+    "url": "https://gearuptofit.com/review/garmin-fenix-6-series",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 230
+    "words": 286
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/review/garmin-tactix-delta-solar",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 80
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/review/hoka-clifton-10",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 274
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/review/nordictrack-treadmill-the-ultimate-buying-guide",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 86
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/review/puma-deviate-elite-4",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 42
    },
    {
     "site": "gearuptofit.com",
@@ -6554,6 +6620,16 @@
     "severity": 8,
     "status": 200,
     "words": 173
+   },
+   {
+    "site": "gearuptofit.com",
+    "url": "https://gearuptofit.com/weight-loss/what-is-the-best-time-to-eat-flaxseed-for-weight-loss",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 268
    },
    {
     "site": "imagealchemy.app",
@@ -6767,129 +6843,129 @@
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/fr/26-113903",
+    "url": "https://tenderatlas.shop/tenders/ted/824558-2026",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 178
+    "words": 274
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/fr/26-113921",
+    "url": "https://tenderatlas.shop/tenders/ted/824574-2026",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 219
+    "words": 221
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/fr/26-113929",
+    "url": "https://tenderatlas.shop/tenders/ted/824629-2026",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 187
+    "words": 271
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/fr/26-113930",
+    "url": "https://tenderatlas.shop/tenders/ted/824699-2026",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 184
+    "words": 292
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/fr/26-113935",
+    "url": "https://tenderatlas.shop/tenders/ted/824719-2026",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 204
+    "words": 279
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/fr/26-113952",
+    "url": "https://tenderatlas.shop/tenders/ted/824745-2026",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 193
+    "words": 199
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/fr/26-113966",
+    "url": "https://tenderatlas.shop/tenders/ted/824785-2026",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 197
+    "words": 201
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/fr/26-113967",
+    "url": "https://tenderatlas.shop/tenders/ted/824788-2026",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 177
+    "words": 270
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/fr/26-113968",
+    "url": "https://tenderatlas.shop/tenders/ted/824863-2026",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 205
+    "words": 218
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/fr/26-113974",
+    "url": "https://tenderatlas.shop/tenders/ted/824887-2026",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 181
+    "words": 209
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/fr/26-113975",
+    "url": "https://tenderatlas.shop/tenders/ted/825029-2026",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 174
+    "words": 270
    },
    {
     "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/fr/26-113976",
+    "url": "https://tenderatlas.shop/tenders/ted/825086-2026",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 188
+    "words": 244
    }
   ],
-  "total_issues": 210,
+  "total_issues": 149,
   "blocking": 2,
   "review": 1,
-  "thin": 207,
+  "thin": 146,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first); up to 12 examples are listed per site and problem."
  },
  "search_performance": null,
@@ -6897,7 +6973,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-27T06:40:09.556Z"
+  "updated_at": "2026-11-27T08:43:42.045Z"
  },
  "wins": [
   {
@@ -6968,45 +7044,45 @@
   }
  ],
  "log": [
-  "06:38:37 connection dataforseo: connected",
-  "06:38:37 connection gmail: connected",
-  "06:38:39 crawl plantastichaven.com: 154/154 urls, fetched 1, 304 0, reused 153",
-  "06:38:39 crawl gearuptofit.com: 300/797 urls, fetched 5, 304 0, reused 295",
-  "06:38:41 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
-  "06:38:42 crawl frenchyfab.com: 153/153 urls, fetched 0, 304 0, reused 153",
-  "06:38:44 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "06:38:44 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
-  "06:38:45 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "06:38:46 crawl micegoneguide.com: 41/41 urls, fetched 1, 304 0, reused 40",
-  "06:38:46 crawl tenderatlas.shop: 300/3783 urls, fetched 0, 304 0, reused 300",
-  "06:38:47 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
-  "06:38:47 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "06:38:47 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
-  "06:38:48 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
-  "06:38:48 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
-  "06:38:48 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
-  "06:38:48 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
-  "06:38:48 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
-  "06:38:49 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
-  "06:38:49 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
-  "06:38:49 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
-  "06:38:49 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
-  "06:38:49 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "06:38:49 - search_performance: skipped (Search Console not connected)",
-  "06:38:50 pitch policy: 85 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
-  "06:38:50 indexation: 2 sitemap URLs cannot be indexed, 1 need a look, 207 are thin (210 in all)",
-  "06:39:53 second look: 60 qualified pages without an address re-checked, 4 now have one (3 unreachable, 162 waiting for a later cycle)",
-  "06:39:59 link neighbourhood (free): 11 qualified pages mined, 31 recommended sites to evaluate",
-  "06:40:09 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 31 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 31 candidates, 2 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "06:40:09 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "06:40:09 self-tuning: next cycle runs up to 20 searches",
-  "06:40:10 broken links: 3 queued pages scanned, 0 with a dead link our page can replace",
-  "06:40:16 replies: 3 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "06:40:17 sent-folder check: 144 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
-  "06:40:18 queue screening (free, nothing sent): 8 checked, 0 sendable, 4 retired, 0 switched to a better published address",
-  "06:40:18 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "06:40:40 pre-verify (nothing sent): 10 top inboxes checked, 1 verified, 9 held",
-  "06:40:41 link checks: 0 pages, 0 new links won, 0 lost"
+  "08:40:55 connection dataforseo: connected",
+  "08:40:55 connection gmail: connected",
+  "08:40:58 crawl plantastichaven.com: 154/154 urls, fetched 3, 304 0, reused 151",
+  "08:41:02 crawl gearuptogrow.com: 103/103 urls, fetched 9, 304 0, reused 94",
+  "08:41:04 crawl gearuptofit.com: 300/525 urls, fetched 290, 304 0, reused 10",
+  "08:41:04 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
+  "08:41:05 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "08:41:05 crawl frenchyfab.com: 153/153 urls, fetched 6, 304 0, reused 147",
+  "08:41:06 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
+  "08:41:06 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "08:41:06 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
+  "08:41:07 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
+  "08:41:07 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
+  "08:41:08 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
+  "08:41:08 crawl mysticaldigits.com: 300/468 urls, fetched 19, 304 0, reused 281",
+  "08:41:08 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
+  "08:41:09 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
+  "08:41:09 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
+  "08:41:09 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
+  "08:41:09 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
+  "08:41:10 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
+  "08:41:14 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 12, 304 0, reused 101",
+  "08:41:42 crawl tenderatlas.shop: 300/4082 urls, fetched 239, 304 0, reused 61",
+  "08:41:42 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "08:41:42 - search_performance: skipped (Search Console not connected)",
+  "08:41:42 pitch policy: 97 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
+  "08:41:42 indexation: 2 sitemap URLs cannot be indexed, 1 need a look, 146 are thin (149 in all)",
+  "08:43:24 second look: 60 qualified pages without an address re-checked, 4 now have one (1 unreachable, 104 waiting for a later cycle)",
+  "08:43:27 link neighbourhood (free): 12 qualified pages mined, 21 recommended sites to evaluate",
+  "08:43:42 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 21 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 21 candidates, 2 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
+  "08:43:42 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "08:43:42 self-tuning: next cycle runs up to 20 searches",
+  "08:43:42 broken links: 1 queued pages scanned, 0 with a dead link our page can replace",
+  "08:43:44 replies: 7 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "08:43:45 sent-folder check: 144 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
+  "08:43:51 queue screening (free, nothing sent): 8 checked, 1 sendable, 2 retired, 0 switched to a better published address",
+  "08:43:52 outreach: 0 sent, 0 follow-ups, 0 drafts, 1 held for verification",
+  "08:44:08 pre-verify (nothing sent): 5 top inboxes checked, 0 verified, 5 held",
+  "08:44:09 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
@@ -7018,7 +7094,7 @@
   {
    "level": "info",
    "code": "holds",
-   "message": "40 queued inboxes are held; most often (19) because mailbox accept all.",
+   "message": "41 queued inboxes are held; most often (19) because mailbox accept all.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   }
  ]
