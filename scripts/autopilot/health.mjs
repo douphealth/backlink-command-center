@@ -162,7 +162,8 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
     const capUsed=days.length===2&&days.every(h=>Number.isFinite(h.sent)&&h.cap>0&&h.sent>=h.cap); // follow-ups filled the cap: not a stall
     if(recent&&!capUsed&&Number.isFinite(base?.contacted)&&(Number(funnel.contacted)||0)<=base.contacted){
       stalled=true;
-      const credits=days.every(h=>Number.isFinite(h.verifier_used))?`${sum(days,h=>h.verifier_used)} verification credits were used on those days, ${v.used_today||0} of ${v.daily_limit||0} today`:`${v.used_today||0} of ${v.daily_limit||0} verification credits used today`;
+      // Stable wording within a day (the issue body is rewritten only when this text changes).
+      const credits=days.every(h=>Number.isFinite(h.verifier_used))?`${sum(days,h=>h.verifier_used)} verification credits were used on those days (daily limit ${v.daily_limit||0})`:`${v.used_today||0} of ${v.daily_limit||0} verification credits used today`;
       const skipped=stages.outreach?.skipped?` The outreach stage was skipped: ${String(stages.outreach.skipped).slice(0,120)}.`
         :stages.outreach?.result?.blocked_reason?` Sending was blocked: ${String(stages.outreach.result.blocked_reason).replaceAll('_',' ')}.`:'';
       add('action','sending_stalled',`No new publisher was emailed on the last 2 weekdays with open send windows, although ${ready} prospects are ready (${outreach.verified_ready||0} verified now).${topHold?` Most held inboxes wait because ${holdWhy(topHold[0])} (${topHold[1]}).`:''} ${credits}.${skipped}`,

@@ -21,7 +21,7 @@ test('sending_stalled fires after 2 in-window weekdays with no new publisher, na
   assert.ok(s,codes(d).join());assert.equal(s.level,'action');
   assert.match(s.message,/last 2 weekdays/);assert.match(s.message,/60 prospects are ready/);
   assert.match(s.message,/mail server accepts every address.*\(12\)/,'names the top hold reason');
-  assert.match(s.message,/49 verification credits were used on those days, 25 of 25 today/);
+  assert.match(s.message,/49 verification credits were used on those days \(daily limit 25\)/);
   assert.match(s.fix,/OUTREACH_HOLD=YES/);
   assert.ok(!find(d,'low_throughput'),'a stall is not also reported as low throughput');
   // The outreach stage's own skip reason is the most useful clue.
