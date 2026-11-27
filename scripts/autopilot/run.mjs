@@ -38,7 +38,7 @@ const readJson=async(f,fallback)=>{try{return JSON.parse(await readFile(f,'utf8'
 const num=(v,d)=>Number.isFinite(Number(v))&&String(v).trim()!==''?Number(v):d;
 
 // The verifier opt-in and budget are read by the recipient gate (recipient-policy.mjs).
-const DASHBOARD_SETTINGS=['SENDER_NAME','OUTREACH_MODE','OUTREACH_DAILY_LIMIT','EMAIL_VERIFICATION_ENABLED','EMAIL_VERIFY_DAILY_LIMIT'];
+const DASHBOARD_SETTINGS=['SENDER_NAME','SENDER_NAMES','SENDER_POSTAL_ADDRESS','OUTREACH_MODE','OUTREACH_DAILY_LIMIT','REPLY_MODE','EMAIL_VERIFICATION_ENABLED','EMAIL_VERIFY_DAILY_LIMIT','HUNTER_DAILY_LIMIT','OUTREACH_DACH'];
 /** The dashboard saves these as one JSON secret; it takes precedence over older repo variables. */
 export function withDashboardSettings(env){
   let s={};try{s=JSON.parse(env.LINKFORGE_SETTINGS||'{}')}catch{}
@@ -47,13 +47,24 @@ export function withDashboardSettings(env){
 }
 /**
  * Saving a Verifalia login is the opt-in: in free-credits-only mode verification cannot cost money,
- * so it starts at 12 checks/day unless the dashboard explicitly set a limit (0 = off).
+ * so it starts at 25 checks/day (the Verifalia free plan's daily credits) unless the dashboard explicitly set a limit (0 = off).
  */
 export function verifierDefaults(env){
   let s={};try{s=JSON.parse(env.LINKFORGE_SETTINGS||'{}')}catch{}
   const explicit=['YES','NO'].includes(s.EMAIL_VERIFICATION_ENABLED)||env.EMAIL_VERIFICATION_ENABLED==='YES';
   if(explicit||!(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD)||env.VERIFALIA_ALLOW_PAID==='YES')return env;
-  return {...env,EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:Number(env.EMAIL_VERIFY_DAILY_LIMIT)>0?env.EMAIL_VERIFY_DAILY_LIMIT:'24'};
+  return {...env,EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:Number(env.EMAIL_VERIFY_DAILY_LIMIT)>0?env.EMAIL_VERIFY_DAILY_LIMIT:'25'};
+}
+/**
+ * Per-site sender names, so a pitch for one site is never signed with another site's name.
+ * Accepts a JSON object or one "domain = Name" (or "domain: Name") pair per line; unknown or empty values are ignored.
+ */
+export function parseSenderNames(value){
+  const out={},put=(d,n)=>{d=String(d||'').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/\/.*$/,'');n=String(n||'').trim().slice(0,80);if(/^[a-z0-9.-]+\.[a-z]{2,}$/.test(d)&&n)out[d]=n};
+  const text=String(value||'').trim();if(!text)return out;
+  try{const j=JSON.parse(text);if(j&&typeof j==='object'&&!Array.isArray(j)){for(const [d,n] of Object.entries(j))if(typeof n==='string')put(d,n);return out}}catch{}
+  for(const line of text.split(/\r?\n|;/)){const m=line.replace(/^\s*https?:\/\//i,'').match(/^\s*([^=:]+?)\s*[=:]\s*(.+?)\s*$/);if(m)put(m[1],m[2])}
+  return out;
 }
 export function loadConfig(env=process.env,argv=process.argv){
   env=verifierDefaults(withDashboardSettings(env));
@@ -66,7 +77,11 @@ export function loadConfig(env=process.env,argv=process.argv){
     assetsPerSite:num(env.AUTOPILOT_ASSETS_PER_SITE,3),queriesPerAsset:num(env.AUTOPILOT_QUERIES_PER_ASSET,3),maxNewProspects:num(env.AUTOPILOT_MAX_NEW_PROSPECTS,60),
     dataKey:env.LINKFORGE_DATA_KEY||'',vaultResetAt:env.LINKFORGE_VAULT_RESET_AT||'',
     dfs:{login:env.DATAFORSEO_LOGIN||'',password:env.DATAFORSEO_PASSWORD||'',dailyUsd:num(env.DATAFORSEO_DAILY_USD,0.5),monthlyUsd:num(env.DATAFORSEO_MONTHLY_USD,10)},
-    outreach:{mode,gmail,fromAddress:env.GMAIL_ADDRESS||(dryRun?'dry-run@linkforge.invalid':''),senderName:env.SENDER_NAME||'',postalAddress:env.SENDER_POSTAL_ADDRESS||'',
+    outreach:{mode,gmail,fromAddress:env.GMAIL_ADDRESS||(dryRun?'dry-run@linkforge.invalid':''),senderName:env.SENDER_NAME||'',postalAddress:String(env.SENDER_POSTAL_ADDRESS||'').trim(),senderNames:parseSenderNames(env.SENDER_NAMES),
+      // Replies: 'draft' (default) saves an answer in Gmail Drafts for the owner; 'send' may auto-answer only unconditional replies; 'off' does neither.
+      replyMode:['off','draft','send'].includes(env.REPLY_MODE)?env.REPLY_MODE:'draft',
+      // DE/AT/CH recipients need prior consent for unsolicited business email: held unless the owner opts in.
+      allowDach:env.OUTREACH_DACH==='YES',
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     brave:{apiKey:env.BRAVE_SEARCH_API_KEY||'',monthlyRequests:num(env.BRAVE_MONTHLY_REQUESTS,900)},neighborPages:Math.max(0,Math.min(40,num(env.AUTOPILOT_NEIGHBOR_PAGES,12))),
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5',
@@ -74,7 +89,9 @@ export function loadConfig(env=process.env,argv=process.argv){
     linkGapCalls:Math.max(0,Math.min(4,num(env.AUTOPILOT_LINKGAP_CALLS,2))),secondLook:Math.max(0,Math.min(200,num(env.AUTOPILOT_SECOND_LOOK,60))),
     gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,bing:!!env.BING_WEBMASTER_API_KEY,preverifyMax:num(env.AUTOPILOT_PREVERIFY,10),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
     verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
-      enabled:env.EMAIL_VERIFICATION_ENABLED==='YES',dailyLimit:Math.min(100,Math.max(0,Math.floor(num(env.EMAIL_VERIFY_DAILY_LIMIT,0))))},
+      enabled:env.EMAIL_VERIFICATION_ENABLED==='YES',dailyLimit:Math.min(100,Math.max(0,Math.floor(num(env.EMAIL_VERIFY_DAILY_LIMIT,0)))),
+      // Hunter has its own budget (default 0 = never used): a second opinion, never a shared counter with Verifalia.
+      hunterDailyLimit:Math.min(50,Math.max(0,Math.floor(num(env.HUNTER_DAILY_LIMIT,0))))},
   };
 }
 const verifierReady=cfg=>cfg.verifier.providers.length>0&&cfg.verifier.enabled&&cfg.verifier.dailyLimit>0;
@@ -84,7 +101,8 @@ export function setupChecklist(cfg){
     {key:'LINKFORGE_DATA_KEY',label:'Private vault key',done:!!cfg.dataKey,unlocks:'Stores prospects, contacts and outreach history encrypted in the repo',required:true},
     {key:'DATAFORSEO_LOGIN + DATAFORSEO_PASSWORD',label:'DataForSEO API',done:!!(cfg.dfs.login&&cfg.dfs.password),unlocks:'Finds link prospects in Google and estimates page traffic',required:true},
     {key:'GMAIL_ADDRESS + GMAIL_APP_PASSWORD',label:'Gmail app password',done:cfg.outreach.gmail,unlocks:'Writes pitches into Gmail Drafts, reads replies, detects bounces',required:true},
-    {key:'SENDER_NAME',label:'Sender name',done:!!cfg.outreach.senderName,unlocks:'Signs every pitch with your real name',required:true},
+    {key:'SENDER_NAME',label:'Sender name',done:!!cfg.outreach.senderName,unlocks:'Signs every pitch with your real name (one person, not a site name; per-site names go in SENDER_NAMES)',required:true},
+    {key:'SENDER_POSTAL_ADDRESS',label:'Postal address in the email footer',done:!!cfg.outreach.postalAddress,unlocks:'Identifies the sender in every email, as commercial-email rules such as CAN-SPAM expect (a P.O. box or mailbox service works)',required:false},
     {key:'VERIFALIA_USERNAME + VERIFALIA_PASSWORD + EMAIL_VERIFY_DAILY_LIMIT',label:'Mailbox verifier (needed to send)',done:verifierReady(cfg),unlocks:'Proves each editor inbox exists before any email goes out, so nothing bounces. Verifalia free plan: 25 credits every day, free credits only (Hunter key optional as fallback)',required:false},
     {key:'OUTREACH_MODE = send',label:'Hands-free sending',done:cfg.outreach.mode==='send',unlocks:'Sends pitches and one follow-up automatically (warm-up ramp, daily cap)',required:false},
     {key:'ANTHROPIC_API_KEY',label:'Claude pitch writer',done:!!cfg.claude.apiKey,unlocks:'Writes a unique, page-specific email for every prospect',required:false},
@@ -165,7 +183,9 @@ export function funnel(state){
   return {prospects_evaluated:Object.keys(state.domains||{}).length,qualified:ps.filter(p=>!['rejected','already_linked'].includes(p.status)).length,
     ready:by(['ready']),broken_link_ready:ps.filter(p=>p.status==='ready'&&p.broken_link).length,contact_form_only:by(['contact_form']),no_contact:by(['no_contact']),contacted,
     replied:ps.filter(p=>p.replied_at).length,positive:by(['positive']),won:by(['won']),existing_links:by(['already_linked']),
-    declined:by(['declined']),bounced:by(['bounced'])};
+    declined:by(['declined']),bounced:by(['bounced']),
+    // Counts only (public): replies that wait for the owner's decision, and replies nobody has answered yet.
+    needs_owner:ps.filter(p=>p.needs_owner&&!p.owner_decided_at).length,awaiting_reply:ps.filter(p=>p.awaiting_us).length};
 }
 
 export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=fetch,mailer:injectedMailer,write=true,useCache=true}={}){
@@ -329,6 +349,8 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
       daily_send_cap:cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit,
       verifier:{ready:verifierReady(cfg),providers:cfg.verifier.providers,key:cfg.verifier.providers.length>0,enabled:cfg.verifier.enabled,daily_limit:cfg.verifier.dailyLimit,
         used_today:state.email_verifier_usage?.[NOW().slice(0,10)]||0,balance:state.verifier_balance||null,catch_all_domains_skipped:Object.keys(state.catch_all_domains||{}).length}},
+    // Booleans only, never the values: lets self-diagnosis flag a missing sender identity.
+    sender:{sender_name:!!cfg.outreach.senderName,postal_address:!!cfg.outreach.postalAddress,per_site_names:Object.keys(cfg.outreach.senderNames).length,reply_mode:cfg.outreach.replyMode,allow_dach:cfg.outreach.allowDach},
     setup:setupChecklist(cfg),stages,
     totals:{sites:SITES.length,pages_crawled:crawl.reduce((n,s)=>n+s.pages.length,0),urls_discovered:crawl.reduce((n,s)=>n+(s.discovered||0),0),
       promotable:ranked.length,internal_suggestions:internal.length,promoting_now:chosen.length},

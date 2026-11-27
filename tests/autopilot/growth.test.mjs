@@ -113,7 +113,7 @@ test('asset rotation skips pages whose searches are all on cooldown',()=>{
 });
 test('verifier opt-in and budget can come from the dashboard settings secret',()=>{
   const cfg=loadConfig({HUNTER_API_KEY:'k',LINKFORGE_SETTINGS:JSON.stringify({EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:'500'})},[]);
-  assert.deepEqual(cfg.verifier,{providers:['hunter'],enabled:true,dailyLimit:100});
+  assert.deepEqual(cfg.verifier,{providers:['hunter'],enabled:true,dailyLimit:100,hunterDailyLimit:0});
   assert.equal(setupChecklist(cfg).find(x=>x.key.startsWith('VERIFALIA')).done,true);
   const both=loadConfig({VERIFALIA_USERNAME:'u',VERIFALIA_PASSWORD:'p',HUNTER_API_KEY:'k',EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:'12'},[]);
   assert.deepEqual(both.verifier.providers,['verifalia','hunter']);
@@ -137,7 +137,7 @@ test('queued prospects are back-filled with dead-link evidence once per 30 days'
 test('a saved Verifalia login turns free verification on at 12/day unless the owner set a limit',async()=>{
   const {verifierDefaults}=await import('../../scripts/autopilot/run.mjs');
   const v={VERIFALIA_USERNAME:'u',VERIFALIA_PASSWORD:'p',EMAIL_VERIFICATION_ENABLED:'NO',EMAIL_VERIFY_DAILY_LIMIT:'0'};
-  assert.equal(loadConfig(v,[]).verifier.enabled,true);assert.equal(loadConfig(v,[]).verifier.dailyLimit,24);
+  assert.equal(loadConfig(v,[]).verifier.enabled,true);assert.equal(loadConfig(v,[]).verifier.dailyLimit,25);
   const off={...v,LINKFORGE_SETTINGS:JSON.stringify({EMAIL_VERIFICATION_ENABLED:'NO',EMAIL_VERIFY_DAILY_LIMIT:'0'})};
   assert.equal(loadConfig(off,[]).verifier.enabled,false);
   assert.equal(loadConfig({...v,VERIFALIA_ALLOW_PAID:'YES'},[]).verifier.enabled,false); // paid use needs an explicit opt-in
@@ -191,4 +191,16 @@ test('every dropped search result is counted by reason',async()=>{
   const state={queries:{},prospects:{},domains:{'gearuptofit.com|known.example':'x'}};
   const r=await discoverProspects({assets:[{site:s.domain,url:'https://gearuptofit.com/a',title:'Shoe Finder',type:'interactive_tool',linkability:80}],sites:[s],state,dfs,perAsset:1,maxQueries:1,fetchImpl:async()=>new Response('',{status:404,headers:{'content-type':'text/html'}})});
   assert.deepEqual(r.filtered,{platform_or_giant:1,own_site:1,already_evaluated:1,forum_or_ugc:1});assert.equal(r.new_domains,1);
+});
+
+test('sender names per site are read from JSON or "domain = Name" lines, and reply/DACH settings default to the safe choice',async()=>{
+  const {parseSenderNames,loadConfig:load}=await import('../../scripts/autopilot/run.mjs');
+  assert.deepEqual(parseSenderNames('gearuptofit.com = Alex from GearUpToFit\nhttps://www.plantastichaven.com/ : Alex, Plantastic Haven\nbad line\n= nobody'),{'gearuptofit.com':'Alex from GearUpToFit','plantastichaven.com':'Alex, Plantastic Haven'});
+  assert.deepEqual(parseSenderNames('{"micegoneguide.com":"Alex","x":"no tld","y.com":5}'),{'micegoneguide.com':'Alex'});
+  assert.deepEqual(parseSenderNames(''),{});
+  const c=load({LINKFORGE_SETTINGS:JSON.stringify({SENDER_NAMES:'a.com = A',REPLY_MODE:'send',SENDER_POSTAL_ADDRESS:' PO Box 1 '})},[]);
+  assert.deepEqual(c.outreach.senderNames,{'a.com':'A'});assert.equal(c.outreach.replyMode,'send');assert.equal(c.outreach.postalAddress,'PO Box 1');
+  const d=load({},[]);assert.equal(d.outreach.replyMode,'draft');assert.equal(d.outreach.allowDach,false);assert.equal(d.verifier.hunterDailyLimit,0);
+  assert.equal(load({REPLY_MODE:'loud',OUTREACH_DACH:'YES',HUNTER_DAILY_LIMIT:'500'},[]).outreach.replyMode,'draft');
+  assert.equal(load({OUTREACH_DACH:'YES',HUNTER_DAILY_LIMIT:'500'},[]).verifier.hunterDailyLimit,50);
 });
