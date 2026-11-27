@@ -23,7 +23,7 @@ import {pitchable,pitchableAssets,bestPitchAsset} from './assets.mjs';
 import {gscDemand,dfsDemand} from './demand.mjs';
 import {discoverProspects,requalify,recontact,enrichBrokenLinks,freshQueryCount,QUALIFY_VERSION} from './prospect.mjs';
 import {indexationReport} from './indexation.mjs';
-import {autotune,diagnose,TUNING} from './health.mjs';
+import {autotune,diagnose,TUNING,dailyEntry,recordDiscovery,paidDiscoveryBreaker,replySignals,inSendWindow} from './health.mjs';
 import {gscClient,monitorIndex,indexReport,searchPerformance} from './searchconsole.mjs';
 import {submitToBing} from './bing.mjs';
 import {PitchWriter,aiProviders} from './pitch.mjs';
@@ -125,7 +125,7 @@ export function chooseAssets(ranked,state,{perSite=3,minLinkability=50,sites=nul
     const l=bySite.get(a.site)||[];if(l.length<perSite*(siteBy?4:2))l.push(a);bySite.set(a.site,l)}
   // Pages that earn replies get more prospecting; pages with a deep unused queue get less.
   const learned=assetStats(state);
-  const value=a=>{const r=learned.get(a.url);return (r&&r.sent>=3?r.rate*3:1)/(1+(counts.get(a.url)||0)/10)};
+  const value=a=>(learned.get(a.url)?.lift??1)/(1+(counts.get(a.url)||0)/10);
   const out=[];
   for(const list of bySite.values())out.push(...list.sort((x,y)=>value(y)-value(x)||y.promotion-x.promotion).slice(0,perSite));
   return out.sort((a,b)=>b.promotion-a.promotion);
@@ -335,11 +335,24 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   // ---- Outputs ----
   if(vaultOk)prune(state);
   const f=vaultOk?funnel(state):previous.funnel||null;
-  const today=NOW().slice(0,10);
-  const history=(previous.history||[]).filter(h=>h.date!==today&&ageDays(h.date)<120);
-  if(f)history.push({date:today,...f,spend_usd:Number(dfs.spend('day').toFixed(4)),
+  const now=new Date(),today=NOW().slice(0,10);
+  // A deliberate hold (outreach off, or the OUTREACH_HOLD brake) never counts as a stall.
+  const hold=cfg.outreach.mode==='off'||env.OUTREACH_HOLD==='YES';
+  const outreach=vaultOk?outreachStatus(state,{limit:cfg.outreach.dailyLimit,mode:cfg.outreach.mode,qualifyVersion:QUALIFY_VERSION}):previous.outreach||null;
+  const sendCap=cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit;
+  // Outcome watchdog inputs (vault only, counts only): what discovery found this cycle, and whether paid search still finds anything.
+  const found=vaultOk?recordDiscovery(state,{stages,spentUsd:dfs.spent,now}):null;
+  const paidDiscovery=vaultOk?paidDiscoveryBreaker(state,{now}):null;
+  if(paidDiscovery?.paused_now)log(`watchdog: paid searches found no new sites in ${paidDiscovery.cycles} cycles in a row; paid search paused until ${paidDiscovery.paused_until} (free sources continue)`);
+  const history=(previous.history||[]).filter(h=>h.date!==today&&ageDays(h.date)<120),prevToday=(previous.history||[]).find(h=>h.date===today);
+  const dayBase=f&&{date:today,...f,spend_usd:Number(dfs.spend('day').toFixed(4)),
     ...(search?.length?{search_clicks_7d:search.reduce((n,x)=>n+x.clicks,0),search_impressions_7d:search.reduce((n,x)=>n+x.impressions,0),striking_distance_pages:search.reduce((n,x)=>n+x.striking_distance,0)}:{}),
-    ...(state.index_status?{google_indexed:Object.values(state.index_status).filter(x=>x.class==='indexed').length,google_not_indexed:Object.values(state.index_status).filter(x=>x.class!=='indexed').length}:{})});
+    ...(state.index_status?{google_indexed:Object.values(state.index_status).filter(x=>x.class==='indexed').length,google_not_indexed:Object.values(state.index_status).filter(x=>x.class!=='indexed').length}:{})};
+  // One entry per UTC day, overwritten by each cycle. A cycle that cannot open the vault keeps the day's last real entry.
+  if(f&&vaultOk)history.push(dailyEntry(prevToday,dayBase,{state,newWithEmail:found?.with_email||0,readySendable:outreach?.sendable_now??null,cap:sendCap,
+    verifierUsed:state.email_verifier_usage?.[today]||0,inWindow:!cfg.dryRun&&cfg.outreach.mode==='send'&&!hold&&inSendWindow(state,now)}));
+  else if(prevToday)history.push(prevToday);
+  else if(f)history.push(dayBase);
   const prospectsByAsset=new Map();for(const p of Object.values(state.prospects))if(p.status!=='rejected')prospectsByAsset.set(p.asset_url,(prospectsByAsset.get(p.asset_url)||0)+1);
   const internalByAsset=new Map();for(const s of internal)internalByAsset.set(s.to,(internalByAsset.get(s.to)||0)+1);
   const summary={
@@ -357,8 +370,9 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     spend:{today_usd:Number(dfs.spend('day').toFixed(4)),month_usd:Number(dfs.spend('month').toFixed(4)),daily_cap_usd:cfg.dfs.dailyUsd,monthly_cap_usd:cfg.dfs.monthlyUsd,calls_this_run:dfs.calls,
       ...(brave?{brave:{requests_this_month:brave.used(),monthly_cap:brave.limit,requests_this_run:brave.calls}}:{}),
       balance_usd:Number.isFinite(dfs.balance)?Number(dfs.balance.toFixed(2)):null,...(externalSpend?{external:externalSpend}:previous.spend?.external?{external:previous.spend.external}:{})},
-    outreach:vaultOk?outreachStatus(state,{limit:cfg.outreach.dailyLimit,mode:cfg.outreach.mode,qualifyVersion:QUALIFY_VERSION}):previous.outreach||null,
-    funnel:f,history,learning:vaultOk?learningSummary(state,SITES):previous.learning||null,
+    outreach,
+    // The funnel and outreach numbers are republished from an earlier cycle when the vault cannot be opened.
+    funnel:f,funnel_stale:!vaultOk,history,learning:vaultOk?learningSummary(state,SITES):previous.learning||null,
     sites:crawl.map(s=>({domain:s.site,pages:s.pages.length,discovered:s.discovered,sitemaps:s.sitemaps.length,
       eligible:ranked.filter(a=>a.site===s.site).length,top:ranked.find(a=>a.site===s.site)?.url||null})),
     best_urls:ranked.slice(0,80).map(({terms,...a})=>({...a,prospects:prospectsByAsset.get(a.url)||0,internal_link_suggestions:internalByAsset.get(a.url)||0,promoting:chosen.some(c=>c.url===a.url)})),
@@ -370,7 +384,10 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     log:logs.slice(-80),
   };
   // Self-diagnosis: what Autopilot cannot fix by itself, with the exact fix.
-  summary.attention=diagnose({stages,capabilities:summary.capabilities,outreach:summary.outreach||{},funnel:summary.funnel||{},spend:summary.spend,held:cfg.outreach.mode==='off',noPitchSites,indexation});
+  // History and signals are counts only; the outcome rules (stalls, throughput, inflow) never fire on weekends, holds or dry runs.
+  summary.attention=diagnose({stages,capabilities:summary.capabilities,outreach:summary.outreach||{},funnel:summary.funnel||{},spend:summary.spend,held:cfg.outreach.mode==='off',noPitchSites,indexation,
+    history,sender:summary.sender,signals:{now:now.toISOString(),dry_run:cfg.dryRun,hold,mode:cfg.outreach.mode,reply_mode:cfg.outreach.replyMode,vault:{key:!!cfg.dataKey,open:vaultOk},
+      ...(vaultOk?{discovery:state.discovery_log||[],paid_discovery:paidDiscovery,...replySignals(state,now)}:{})}});
   if(write&&!cfg.dryRun){
     await mkdir(dirname(P.summary),{recursive:true});
     await writeFile(P.summary,JSON.stringify(summary,null,1)+'\n');

@@ -37,18 +37,71 @@ export function restartRampIfIdle(state,days=7){
 export const sentToday=state=>Object.values(state.prospects||{}).reduce((n,p)=>n+(p.history||[]).filter(h=>['initial','followup'].includes(h.type)&&h.mode!=='draft'&&String(h.at).startsWith(NOW().slice(0,10))).length,0);
 const draftedToday=state=>Object.values(state.prospects||{}).reduce((n,p)=>n+(p.history||[]).filter(h=>h.mode==='draft'&&String(h.at).startsWith(NOW().slice(0,10))).length,0);
 export const suppressed=isSuppressed;
-export function outreachStatus(state,{limit,mode,qualifyVersion}){
+/** Wilson 95% interval [low, high] for k successes in n trials (null without trials). */
+export function wilson(k,n,z=1.96){
+ if(!(n>0))return null;const p=Math.min(1,Math.max(0,k/n)),d=1+z*z/n,c=p+z*z/(2*n),m=z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n));
+ return [Number(Math.max(0,(c-m)/d).toFixed(3)),Number(Math.min(1,(c+m)/d).toFixed(3))];
+}
+/** ISO 8601 week of a timestamp, e.g. "2026-W48" (null when unparseable). */
+export function isoWeek(t){
+ const d=new Date(t);if(!Number.isFinite(d.getTime()))return null;
+ d.setUTCHours(0,0,0,0);d.setUTCDate(d.getUTCDate()+3-(d.getUTCDay()+6)%7); // the Thursday of that week decides the year
+ const y=d.getUTCFullYear();return `${y}-W${String(1+Math.floor((d-Date.UTC(y,0,1))/(7*DAY))).padStart(2,'0')}`;
+}
+/**
+ * Results per writer, per message variant and per send week (counts only, keys are code names or ISO weeks). Every
+ * real send counts once; a publisher's first reply is credited to the message it answered (reply.in_reply_to), else to
+ * that publisher's first pitch; positive = any positive reply (or status positive/won) from a publisher who replied.
+ * Sends recorded before variants existed are 'unrecorded', and their follow-ups were always the fixed template.
+ * exposure_days = days since that writer, variant or week first went out, so a young variant's wide interval reads as
+ * "too early", not "worse". Rates are per message sent.
+ */
+export function sendStats(state,now=Date.now()){
+ const DIMS=['writer','variant','week'],by={writer:{},variant:{},week:{}},key=s=>String(s).replace(/[^a-z0-9:_.-]/gi,'_').slice(0,60);
+ const keyOf=h=>({writer:key(h.variant||h.type==='initial'?h.writer||'template':'template'),variant:key(h.variant||'unrecorded'),week:isoWeek(h.at)||'unknown'});
+ const row=(dim,k)=>by[dim][k]??={sent:0,replied:0,positive:0,first_at:null};
+ for(const p of Object.values(state.prospects||{})){
+  const sends=(p.history||[]).filter(h=>(h.type==='initial'||h.type==='followup')&&h.mode!=='draft');if(!sends.length)continue;
+  for(const h of sends){const k=keyOf(h);for(const dim of DIMS){const r=row(dim,k[dim]);r.sent++;if(h.at&&(!r.first_at||h.at<r.first_at))r.first_at=h.at}}
+  const replies=(p.history||[]).filter(h=>h.type==='reply');if(!replies.length&&!p.replied_at)continue;
+  const first=replies[0],answered=(first?.in_reply_to&&sends.find(h=>h.message_id===first.in_reply_to))||sends.find(h=>h.type==='initial')||sends[0];
+  const k=keyOf(answered),positive=replies.some(h=>h.sentiment==='positive')||['positive','won'].includes(p.status);
+  for(const dim of DIMS){const r=row(dim,k[dim]);r.replied++;if(positive)r.positive++}
+ }
+ const fmt=([k,r])=>[k,{sent:r.sent,replied:r.replied,positive:r.positive,reply_rate:Number((r.replied/r.sent).toFixed(3)),reply_ci95:wilson(r.replied,r.sent),
+  exposure_days:r.first_at?Math.max(0,Math.floor((now-Date.parse(r.first_at))/DAY)):null}];
+ const top=m=>Object.fromEntries(Object.entries(m).sort((a,b)=>b[1].sent-a[1].sent).slice(0,20).map(fmt));
+ return {by_writer:top(by.writer),by_variant:top(by.variant),by_week:Object.fromEntries(Object.entries(by.week).sort((a,b)=>a[0].localeCompare(b[0])).slice(-12).map(fmt))};
+}
+/** Holds no wait can fix: the publisher's mail server accepts everything, the inbox is gone or has no usable MX. */
+const PERMANENT_HOLD=/^(?:catch_all_domain|mailbox_accept_all|mailbox_invalid|suppressed|mx_(?:null_mx|no_explicit_mx|unusable_mx))$/;
+export function outreachStatus(state,{limit,mode,qualifyVersion,now=new Date()}){
  const ready=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=qualifyVersion);
- const cap=mode==='send'?dailyCap(state,limit):limit,sent=sentToday(state),now=new Date();
+ const cap=mode==='send'?dailyCap(state,limit):limit,sent=sentToday(state);
  const from=sent>=cap?new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate()+1)):now;
  const next=ready.map(p=>nextSendWindow(p.domain,from)).filter(Boolean).sort((a,b)=>a-b)[0]||null;
- const verified=ready.filter(p=>usableVerification(p.recipient_proof?.verification,p.email)&&!suppressed(state,p.email,p.domain));
+ const isVerified=p=>usableVerification(p.recipient_proof?.verification,p.email)&&!suppressed(state,p.email,p.domain);
+ const verified=ready.filter(isVerified);
  // Why queued inboxes are held, by reason only (no addresses): drives the dashboard and self-diagnosis.
  // Our-side holds older than the verifier's latest successful answer are stale (e.g. a login that has since been fixed).
  const fixedAt=state.verifier_balance&&!state.verifier_balance.error?Date.parse(state.verifier_balance.checked_at):0;
  const holds={};for(const p of ready)if(p.contact_quality?.status==='held'){const k=p.contact_quality.detail||p.contact_quality.reason||'unknown';
   if(!publisherHold(k)&&Date.parse(p.contact_quality.checked_at)<fixedAt)continue;holds[k]=(holds[k]||0)+1}
+ // The ready queue split by what can happen next (counts only): sendable now (verified, or free to be verified this cycle),
+ // waiting for a publisher-side re-check or a cached answer to expire, or held for good (catch-all, invalid, no MX,
+ // suppressed, or the publisher was emailed in the last 90 days).
+ const split={sendable_now:0,retry_later:0,held_permanent:0};let toVerify=0;
+ for(const p of ready){
+  const q=p.contact_quality,d=q?.status==='held'?q.detail||q.reason||'':'';
+  if(suppressed(state,p.email,p.domain)||(state.contacted?.[p.domain]&&ageDays(state.contacted[p.domain])<90)||PERMANENT_HOLD.test(d))split.held_permanent++;
+  else if(isVerified(p))split.sendable_now++;
+  else if(d&&(coolingDown(p,now.getTime())||publisherHold(d)&&ageDays(q.checked_at)<3))split.retry_later++;
+  else{split.sendable_now++;toVerify++}
+ }
+ // Prospects the free screening retired, by the exact reason (counts only), so parser gaps show up as numbers.
+ const retired={};for(const p of Object.values(state.prospects||{}))if(p.status==='contact_unverifiable'){const k=String(p.contact_quality?.detail||'unrecorded').replace(/[^a-z0-9:_-]/gi,'_').slice(0,60);retired[k]=(retired[k]||0)+1}
  return {mode,ready:ready.length,verified_ready:verified.length,pending_verification:ready.length-verified.length,holds,
+  ...split,to_verify:toVerify,retired_by_reason:retired,...sendStats(state,now.getTime()),
   sent_today:sent,cap_today:cap,next_send_at:mode==='off'?null:next?.toISOString()||null,
   sending_now:mode==='send'&&sent<cap&&verified.some(p=>sendWindowOpen(p.domain,now)),reply_health:state.reply_health?.status||'unverified'};
 }
