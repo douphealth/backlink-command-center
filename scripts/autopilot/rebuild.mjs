@@ -130,7 +130,7 @@ export async function rebuildFromMailbox({state,imap,self='',now=()=>Date.now(),
         const who=[...new Set([from,...mapped].filter(Boolean))];
         for(const e of who)suppress(e,'Opt-out (restored from the mailbox)');
         for(const d of new Set(who.map(publisherDomain).filter(Boolean)))suppress(d,'Opt-out (restored from the mailbox)');
-        stats.opt_outs++;
+        if(who.length)stats.opt_outs++;
       }else if(ours||sentTo.has(from))stats.replies++;
     }
     if(msgs.cursor){cursor=msgs.cursor;state.rebuild.cursor=cursor}
