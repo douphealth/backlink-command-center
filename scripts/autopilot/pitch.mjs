@@ -27,11 +27,55 @@ export function assetFacts(asset){
 // Ranking notes meant for the dashboard, never for an editor.
 const INTERNAL_NOTE=/under-linked|flagship|templated|thin content|ymyl|striking distance|est\. monthly visits|expert publishers/i;
 const sentence=s=>s?s[0].toUpperCase()+s.slice(1)+'.':'';
-const valueLine=(asset,site)=>{
-  const d=(asset.description||'').trim().replace(/\s+/g,' ');
-  const facts=assetFacts(asset);
-  return [d&&d.length>=40?(/[.!?]$/.test(d)?d:d+'.'):`It covers ${site.topic} in practical detail.`,facts.length?sentence(facts.join(', and ')):''].filter(Boolean).join(' ');
+/**
+ * Which of the supplied facts an email states. It over-counts on purpose: a fact counted as stated is never
+ * offered as news in a follow-up, so a follow-up cannot present something the first email already said.
+ */
+const FACT_KINDS=[
+  ['tool',/interactive tool|no sign-?up/i,/\bfree\b|sign[- ]?up|interactive|\btools?\b/i],
+  ['depth',/-word guide|in-depth/i,/\bwords?\b|in[- ]depth|detailed|comprehensive/i],
+  ['tables',/data tables?/i,/\btables?\b/i],
+  ['sources',/authoritative sources|^cites\b/i,/\bcit(?:es|ed|ing|ations?)\b|\bsources?\b|\breferences?\b|\bstudies\b|\bresearch\b/i],
+  ['updated',/updated|\brecent/i,/\bupdated?\b|up[- ]to[- ]date|\brecent(?:ly)?\b|\bcurrent\b/i],
+];
+const factKind=f=>FACT_KINDS.find(([,re])=>re.test(String(f)))||null;
+export function factsIn(text,facts=[]){
+  const t=String(text||''),low=t.toLowerCase();
+  return [...new Set(facts.filter(f=>typeof f==='string'&&f))].filter(f=>{const k=factKind(f);if(k)return k[2].test(t);
+    return (f.match(/\d+/g)||[]).some(n=>t.includes(n))||f.toLowerCase().split(/[^a-z]+/).some(w=>w.length>=5&&low.includes(w))});
+}
+/**
+ * A fact about our page that the first email did not contain, or null. When the first email's facts were not
+ * recorded (sent before this was tracked), every fact counts as already stated.
+ */
+export function unusedFact(p,asset){
+  const used=p?.facts_used;if(!Array.isArray(used))return null;
+  const kinds=new Set(used.map(f=>factKind(f)?.[0]).filter(Boolean));
+  return assetFacts(asset).find(f=>!used.includes(f)&&!kinds.has(factKind(f)?.[0]))||null;
+}
+/** Our page's own description plus ONE checkable proof point (the owner's rule: one proof point, nothing invented). */
+const valueOf=(asset,site)=>{
+  const d=(asset.description||'').trim().replace(/\s+/g,' '),all=assetFacts(asset),fact=all[0];
+  const desc=d&&d.length>=40?(/[.!?]$/.test(d)?d:d+'.'):`It covers ${short(site?.topic||'the topic',60)}.`;
+  return {text:[desc,fact?sentence(fact):''].filter(Boolean).join(' '),facts:[...new Set([...(fact?[fact]:[]),...factsIn(desc,all)])]};
 };
+/** A list or roundup page ("best X tools", "top 10 X apps", "X resources list"): the ask is to be added to it. */
+const LIST_NOUN='(?:tools?|resources?|apps?|calculators?|websites?|sites?|blogs?|guides?|courses?|podcasts?|books?|newsletters?|channels?|software|extensions?|plugins?|templates?|generators?|trackers?|planners?|checkers?|platforms?|services?|links)';
+const ROUNDUP=new RegExp(`\\b(?:best|top\\s+\\d+|\\d+\\s+(?:best|top|great|useful|essential|free|must-have))\\b(?:[\\s-]+[\\w'&-]+){0,5}?[\\s-]+${LIST_NOUN}\\b|\\b${LIST_NOUN}\\s+(?:list|roundup|directory)\\b|\\b(?:list|round-?up) of\\b(?:[\\s-]+[\\w'&-]+){0,5}?[\\s-]+${LIST_NOUN}\\b`,'i');
+export function isListPage(p){
+  if(!p||p.kind==='mention')return false;
+  return !!p.list_page||ROUNDUP.test(String(p.title||''));
+}
+const listName=p=>p.list_page?.title||p.title||'';
+/** Where on their page the link would go: the matched section when one is known. */
+const placeOf=(p,list=false)=>p.fit_section?`your "${short(p.fit_section,70)}" section in "${short(list?listName(p):p.title,70)}"`
+  :list?`your list "${short(listName(p),90)}"`:`"${short(p.title,90)}"`;
+const intro=site=>`I'm writing from ${site.domain}, a site about ${short(site.topic,50)}.`;
+const signOff=(senderName,site)=>['Best,',senderName,site?.domain].filter(Boolean);
+/** Said only when one of our pages really links to their article (set from our own crawl); never otherwise. */
+const citedLine=(p,asset)=>{const u=p.cited_by_us?.our_url;if(!u)return '';
+  return u===asset.url?`${short(asset.title,80)} already links to your article.`:`Our page ${String(u).replace(/^https?:\/\/(?:www\.)?/,'').replace(/\/+$/,'')} already links to your article.`};
+export const reSubject=s=>{s=String(s||'').replace(/[\r\n]+/g,' ').trim();return /^re:/i.test(s)?s:`Re: ${s}`};
 /** A readable label for the competitor link the editor already chose ("Doctors of Running's review" or the host). */
 export function linkLabel(c){
   const a=String(c?.anchor||'').trim();
@@ -43,63 +87,78 @@ export function linkLabel(c){
  * as a second option for the same readers. Never claims ours is better and never criticises the other site.
  */
 export function alternativePitch(p,asset,{senderName,site}){
-  const c=p.competitor_link,name=firstName(p.author),kind=KIND[asset.type]||'resource';
+  const c=p.competitor_link,name=firstName(p.author),kind=KIND[asset.type]||'resource',title=short(asset.title,80),v=valueOf(asset,site);
   // "Same topic" is claimed only when the competitor link and our page share specific subject words.
   const opener=c.match==='specific'?`so I thought you might want a second option on the same topic.`
     :`If you ever add another ${short(site.topic,40)} resource there, this one might be useful to the same readers.`;
   return {subject:`Another ${kind} for "${short(p.title,44)}"`,
     body:[`Hi ${name||'there'},`,'',
       c.match==='specific'?`In "${short(p.title,90)}" you link to ${linkLabel(c)}, ${opener}`:`In "${short(p.title,90)}" you link to ${linkLabel(c)}. ${opener}`,'',
-      `${short(asset.title,100)}: ${asset.url}`,'',valueLine(asset,site),'',
-      `If it's useful, it could sit next to the existing link. Either way, thanks for maintaining the page.`,'',
-      `Best,`,senderName,site.domain,'',OPT_OUT].join('\n'),writer:'template'};
+      `${short(asset.title,100)}: ${asset.url}`,'',v.text,'',
+      `Would you consider adding it next to the existing link, with "${title}" as the link text?`,'',
+      ...signOff(senderName,site),'',OPT_OUT].join('\n'),writer:'template',variant:'template:alternative_to_linked_resource',facts_used:v.facts};
+}
+/**
+ * The owner's list-inclusion ask: who we are, one direct ask to be added to their list (in the matched
+ * section when known), at most one checkable proof point, nothing else.
+ */
+export function listInclusionPitch(p,asset,{senderName,site}){
+  const name=firstName(p.author),title=short(asset.title,80),proof=assetFacts(asset)[0],cited=citedLine(p,asset);
+  return {subject:`A suggestion for "${short(listName(p),46)}"`,
+    body:[`Hi ${name||'there'},`,'',
+      `${intro(site)} Would you consider adding ${title} to ${placeOf(p,true)}?${proof?' '+sentence(proof):''}${cited?' '+cited:''}`,'',
+      asset.url,'',
+      `If it fits, the entry could simply be "${title}" with a link to the page above. Happy to send anything you need.`,'',
+      ...signOff(senderName,site),'',OPT_OUT].join('\n'),writer:'template',variant:'template:list_inclusion',facts_used:proof?[proof]:[]};
 }
 export function templatePitch(p,asset,{senderName,site}){
   if(p.broken_link)return brokenLinkPitch(p,asset,{senderName,site});
   if(p.kind==='linkgap'&&p.competitor_link?.host)return alternativePitch(p,asset,{senderName,site});
-  const name=firstName(p.author),kind=KIND[asset.type]||'resource',pick=parseInt(hashId(p.id),36)%3;
+  if(isListPage(p))return listInclusionPitch(p,asset,{senderName,site});
+  const name=firstName(p.author),kind=KIND[asset.type]||'resource',pick=parseInt(hashId(p.id),36)%3,title=short(asset.title,80),v=valueOf(asset,site),cited=citedLine(p,asset);
   const subject=[`Resource for your "${short(p.title,48)}" page`,`A ${kind} for your ${short(site.topic,30)} readers`,`Suggestion for "${short(p.title,48)}"`][pick];
-  const where=p.fit_section?`your "${short(p.fit_section,70)}" section in "${short(p.title,70)}"`:`"${short(p.title,90)}"`;
+  // Who we are, one direct ask, the page, one proof point, and the exact edit proposed. No compliments, no filler.
   const body=[`Hi ${name||'there'},`,'',
-    `I was reading ${where} and thought one resource might be a good fit for it.`,'',
-    `${short(asset.title,100)}: ${asset.url}`,'',valueLine(asset,site),'',
-    `If it would help your readers, feel free to add it to the page. Either way, thanks for putting it together.`,'',
-    `Best,`,senderName,site.domain,'',OPT_OUT].join('\n');
-  return {subject,body,writer:'template'};
+    `${intro(site)} Would you consider adding ${title} to ${placeOf(p)}?`,'',
+    asset.url,'',`${v.text}${cited?' '+cited:''}`,'',
+    `If it fits, the edit would be one link${p.fit_section?' in that section':' on the page'}, with "${title}" as the link text.`,'',
+    ...signOff(senderName,site),'',OPT_OUT].join('\n');
+  return {subject,body,writer:'template',variant:'template:resource_suggestion',facts_used:v.facts};
 }
 const DEAD={not_found:'returns a "page not found" error',gone:'returns a "page removed" error',domain_gone:'points to a domain that no longer exists'};
+const deadLink=b=>b.anchor&&b.anchor.length>=3?`the link to "${short(b.anchor,60)}" (${b.host})`:`the link to ${b.host}`;
 /** A real dead link on their page (re-checked before sending) and our page as a replacement. */
 export function brokenLinkPitch(p,asset,{senderName,site}){
-  const b=p.broken_link,name=firstName(p.author);
-  const label=b.anchor&&b.anchor.length>=3?`"${short(b.anchor,60)}" (${b.host})`:`the ${b.host} link`;
+  const b=p.broken_link,name=firstName(p.author),title=short(asset.title,80),v=valueOf(asset,site);
   return {subject:`Broken link on "${short(p.title,48)}"`,
     body:[`Hi ${name||'there'},`,'',
-      `I was reading "${short(p.title,90)}" and noticed that the link to ${label} ${DEAD[b.reason]||'no longer works'}.`,'',
-      `If you're looking for a replacement, ${short(asset.title,100)} covers the same ground: ${asset.url}`,'',valueLine(asset,site),'',
-      `Either way, it may be worth fixing or removing the old link so readers don't hit a dead end.`,'',
-      `Best,`,senderName,site.domain,'',OPT_OUT].join('\n'),writer:'template'};
+      `In "${short(p.title,90)}", ${deadLink(b)} ${DEAD[b.reason]||'no longer works'}.`,'',
+      `If you'd like a replacement, our ${title} might work: ${asset.url}`,'',v.text,'',
+      `Would you consider pointing ${b.anchor&&b.anchor.length>=3?`"${short(b.anchor,60)}"`:'that link'} to the page above instead?`,'',
+      ...signOff(senderName,site),'',OPT_OUT].join('\n'),writer:'template',variant:'template:broken_link_replacement',facts_used:v.facts};
 }
 const OPT_OUT='P.S. Not relevant for you? Just reply "no" and I won\'t email again.';
 /** The editor already mentions us without a link: thank them, ask for the link. */
 export function mentionPitch(p,asset,{senderName,site}){
-  const name=firstName(p.author),brand=asset.title||site.domain;
+  const name=firstName(p.author),brand=short(asset.title||site.domain,60)||site.domain;
   return {subject:`Thanks for mentioning ${short(brand,40)}`,
     body:[`Hi ${name||'there'},`,'',
-      `Thanks for mentioning ${brand} in "${short(p.title,90)}" — I really appreciate it.`,'',
+      `Thanks for mentioning ${brand} in "${short(p.title,90)}".`,'',
       `Would you consider turning the mention into a link, so readers can find it in one click? Here's the address: ${asset.url}`,'',
-      `Thanks again for including us.`,'',`Best,`,senderName,site.domain,'',OPT_OUT].join('\n'),writer:'template'};
+      ...signOff(senderName,site),'',OPT_OUT].join('\n'),writer:'template',variant:'template:unlinked_mention',facts_used:[]};
 }
 /**
- * One follow-up that adds a NEW reason to reply (a re-checked dead link, or a verifiable fact about the page)
- * instead of "bumping this up", and makes answering a one-word reply.
+ * The one follow-up, in the same thread: the owner's honest one-line nudge. It adds a fact only when the first
+ * email did not contain it (or says a re-checked dead link is still dead), and never claims anything else is new.
  */
-export function followupPitch(p,asset,{senderName}){
-  const name=firstName(p.author),b=p.broken_link,facts=assetFacts(asset);
-  const reason=b?`The link to ${b.anchor&&b.anchor.length>=3?`"${short(b.anchor,60)}" (${b.host})`:`the ${b.host} link`} on that page still ${DEAD[b.reason]||'does not work'}, so this could replace it.`
-    :facts.length?`One detail I didn't mention: ${facts[0]}.`:'';
-  return {subject:/^re:/i.test(p.last_subject||'')?p.last_subject:`Re: ${p.last_subject||short(asset.title)}`,
-    body:[`Hi ${name||'there'},`,'',`Following up on my note about "${short(p.title,80)}".${reason?' '+reason:''}`,'',`Here it is again: ${asset.url}`,'',
-      `If it's not a fit, just reply "no" and I won't email again.`,'',`Best,`,senderName].join('\n'),writer:'template'};
+export function followupPitch(p,asset,{senderName,site,subject}={}){
+  const name=firstName(p.author),b=p.broken_link,fact=b?null:unusedFact(p,asset),title=short(asset.title,80);
+  const ask=p.kind==='mention'?`just checking whether you'd consider turning the mention of ${short(asset.title||site?.domain||'us',60)} in "${short(p.title,80)}" into a link.`
+    :`just checking whether you'd consider adding ${title} to ${placeOf(p,isListPage(p))}.`;
+  const extra=b?sentence(`${deadLink(b)} on that page still ${DEAD[b.reason]||'does not work'}, so this could replace it`):fact?sentence(fact):'';
+  return {subject:subject||reSubject(p.last_subject||short(asset.title)),
+    body:[`Hi ${name||'there'}, ${ask}${extra?' '+extra:''} Happy to send anything you need.`,'',asset.url,'',...signOff(senderName,site),'',OPT_OUT].join('\n'),
+    writer:'template',variant:`template:followup_${b?'broken_link':fact?'fact':'nudge'}`,facts_used:fact?[fact]:[]};
 }
 
 /**
@@ -174,30 +233,45 @@ export function actionsIdentity(env,audience){
 const SCHEMA={type:'object',properties:{subject:{type:'string'},body:{type:'string'}},required:['subject','body'],additionalProperties:false};
 const SYSTEM=`You write short, honest link-suggestion emails to independent website editors.
 Rules:
-- 70 to 130 words in the body. Plain text, no markdown, no emojis.
-- Refer to something specific on the editor's page (its title, a section, or a point made in the excerpt) so it is obviously not a mass email. Say where on their page our resource would fit when a relevant_section is given.
-- Never open with "I hope this finds you well", "I came across your site" or "I was reading"; start with the specific observation.
-- Explain in one or two sentences what our resource adds for THEIR readers. Only state facts present in the provided asset details; never invent statistics, awards, traffic, or that they linked to us before.
+- Plain text, no markdown, no emojis. Body: 60 to 120 words (a "followup": at most 70 words).
+- Name their page by its title, or by relevant_section when one is given, so it is obviously not a mass email. relevant_section_text is the part of their page where our resource would fit: use it to say where the link would go; never quote it at length.
+- Never open with "I hope this finds you well", "I came across your site" or "I was reading". No compliments about their article or site, no "hope you're well", no "happy to help", no labels such as "Details:".
+- Who we are in a few words (sender.website and topic), at most one proof point, one direct ask. Nothing else.
+- Only state facts present in the provided details; never invent statistics, awards, traffic, benefits, or that they linked to us before.
 - Include our asset URL exactly once. Include no other URLs.
-- One soft ask (consider adding it to the page). No pressure, no guilt, no flattery clichés ("I love your blog", "great content"), no offer of payment or link exchange.
+- Never mention pricing, payment, a link exchange or a guest post. No pressure, no guilt.
+- End the ask with a concrete proposed edit: one link with our asset title as the link text, placed in relevant_section when one is given.
 - Greet by first name only if an author name is provided, otherwise "Hi there".
 - Sign off with the sender name and website provided.
 - Subject: under 60 characters, specific, lowercase-friendly, no clickbait.
+- If cited_by_us is given, you may say that our page cited_by_us.our_page already links to their article (name it exactly as given; it is not a URL to include). Never claim that otherwise.
 - If situation is "unlinked_mention": the editor already mentions our brand without a link. Thank them briefly and ask them to turn the mention into a link to our URL. Do not pitch anything else.
 - If situation is "alternative_to_linked_resource": the editor's page already links to competitor_link (name it by its anchor text if it reads naturally, otherwise by its site name; never give its URL). Open with that specific link, then say in one sentence what our resource adds for the same readers, using only the provided facts. Offer it as an additional option next to the existing link. If competitor_link.same_subject is false, do not claim the two cover the same subject: present ours only as another resource the same readers may find useful. Never say ours is better and never criticise the other site.
-- If situation is "broken_link_replacement": open by telling the editor which link on their page is dead (use its anchor text and site name from broken_link, never its URL, and state the problem exactly as given in broken_link.problem). Then offer our page as a replacement covering the same topic. The helpful tip comes first; the ask is secondary.
+- If situation is "broken_link_replacement": open by telling the editor which link on their page is dead (use its anchor text and site name from broken_link, never its URL, and state the problem exactly as given in broken_link.problem). Then offer our page as a replacement. The helpful tip comes first; the ask is secondary.
+- If situation is "list_inclusion": their page is a list or roundup (list.name). Open with who we are, then ask directly: "Would you consider adding <our asset title> to <list.section, when given> your <list.name>?" Add at most one proof point, only from our_asset.facts. Do not describe or praise their list.
+- If situation is "followup": a one-time follow-up in the same thread to the email we already sent. Greet, then one sentence: "just checking whether you'd consider adding <our asset title> to <their page or list>" (for kind "unlinked_mention": whether they'd consider turning the mention into a link). If new_fact is given, add it as one short sentence; never repeat earlier facts and never write "I didn't mention", "just bumping" or "circling back". If broken_link is given, say that this link on their page still has the problem given. Then "Happy to send anything you need.", our URL, the sign-off and the P.S. line. The subject is reply_subject exactly.
 - End with this exact line: P.S. Not relevant for you? Just reply "no" and I won't email again.`;
 
 /** Why a written pitch cannot be sent, or null when it can. The reason is logged, so a failing writer explains itself. */
-export function pitchProblem(out,asset){
+export function pitchProblem(out,asset,{ownSubject=false}={}){
   if(!out||typeof out.subject!=='string'||typeof out.body!=='string')return 'no_subject_or_body';
-  if(out.subject.length<8||out.subject.length>90||/[\r\n]/.test(out.subject))return 'subject_length';
+  // ownSubject: a follow-up's subject is ours ("Re: <original>"), not the writer's, so its length is not the writer's fault.
+  if(!ownSubject&&(out.subject.length<8||out.subject.length>90)||/[\r\n]/.test(out.subject))return 'subject_length';
   if(out.body.length<200)return 'body_too_short';
   if(out.body.length>1400)return 'body_too_long';
   const urls=out.body.match(/https?:\/\/\S+/g)||[];
   if(urls.length!==1)return urls.length?'extra_url':'our_url_missing';
   if(urls[0].replace(/[).,]+$/,'')!==asset.url)return 'wrong_url';
   if(/\[|\{\{|lorem|<\w+>/i.test(out.body))return 'placeholder_or_markup';
+  // The owner's copy rules: no stock openers or flattery, and never an offer of money or a link swap.
+  if(/\b(?:I hope (?:this|you)|hope you(?:'re| are) (?:well|doing)|I came across|I was reading|I stumbled (?:up)?on|love your (?:blog|site|article|post|content)|great (?:article|post|content|blog))\b/i.test(`${out.subject}\n${out.body}`))return 'cliche';
+  if(/\b(?:link exchange|exchange links|swap links|link swap|in exchange for a link|paid placement|we(?:'d| would) (?:happily )?pay)\b/i.test(out.body))return 'offer_not_allowed';
+  return null;
+}
+/** A follow-up must stay a short nudge and must not claim anything is new that the first email already said. */
+export function followupProblem(out){
+  if(String(out?.body||'').replace(OPT_OUT,'').split(/\s+/).filter(Boolean).length>75)return 'followup_too_long';
+  if(/didn'?t mention|did not mention|forgot to mention|one (?:more )?detail|bump(?:ing)? (?:this|it)|circling back|top of your inbox/i.test(String(out?.body||'')))return 'followup_claim';
   return null;
 }
 export const validPitch=(out,asset)=>pitchProblem(out,asset)===null;
@@ -226,6 +300,34 @@ export function tidyPitch(out,asset){
     .replace(/https?:\/\/[^\s<>"')\]]+/g,u=>{const clean=u.replace(/[.,;:!?]+$/,''),tail=u.slice(clean.length);return clean.replace(/\/+$/,'').toLowerCase()===base?asset.url+tail:u})
     .replace(/\n{3,}/g,'\n\n').trim();
   return {subject,body};
+}
+
+/** What the AI writer is told for a first pitch: only crawl- and page-derived facts, and the situation it is in. */
+function pitchFacts(p,asset,site,{senderName}){
+  const list=isListPage(p);
+  const situation=p.kind==='mention'?'unlinked_mention':p.broken_link?'broken_link_replacement':p.kind==='linkgap'&&p.competitor_link?.host?'alternative_to_linked_resource':list?'list_inclusion':'resource_suggestion';
+  const cited=p.cited_by_us?.our_url?String(p.cited_by_us.our_url).replace(/^https?:\/\/(?:www\.)?/,'').replace(/\/+$/,''):null;
+  return {editor_page:{title:p.title,url:p.page_url,author:p.author||null,relevant_section:p.fit_section||null,
+      relevant_section_text:p.fit_excerpt?String(p.fit_excerpt).slice(0,600):null,excerpt:(p.excerpt||'').slice(0,1500)},
+    // A list-inclusion ask carries at most one proof point.
+    our_asset:{title:asset.title,url:asset.url,kind:KIND[asset.type]||'resource',description:asset.description||'',
+      facts:situation==='list_inclusion'?assetFacts(asset).slice(0,1):[...assetFacts(asset),...(asset.reasons||[]).filter(r=>!INTERNAL_NOTE.test(r))],
+      ...(situation==='list_inclusion'?{}:{free_tool:!!asset.interactive})},
+    ...(situation==='list_inclusion'?{list:{name:listName(p),section:p.fit_section||null}}:{}),
+    ...(situation==='alternative_to_linked_resource'?{competitor_link:{site:p.competitor_link.host,anchor:p.competitor_link.anchor||null,surrounding_text:p.competitor_link.context||null,same_subject:p.competitor_link.match==='specific'}}:{}),
+    ...(situation==='broken_link_replacement'?{broken_link:{anchor:p.broken_link.anchor||null,site:p.broken_link.host,problem:DEAD[p.broken_link.reason]||'no longer works'}}:{}),
+    ...(cited&&situation!=='unlinked_mention'?{cited_by_us:{our_page:cited}}:{}),
+    sender:{name:senderName,website:site.domain},topic:site.topic,situation};
+}
+/** What the AI writer is told for the follow-up: the original subject, and at most one fact the first email did not state. */
+function followupFacts(p,asset,site,{senderName,subject}){
+  const fact=p.broken_link?null:unusedFact(p,asset),list=isListPage(p);
+  return {editor_page:{title:p.title,url:p.page_url,author:p.author||null,relevant_section:p.fit_section||null},
+    ...(list?{list:{name:listName(p),section:p.fit_section||null}}:{}),
+    our_asset:{title:asset.title,url:asset.url,facts:fact?[fact]:[]},new_fact:fact,
+    ...(p.broken_link?{broken_link:{anchor:p.broken_link.anchor||null,site:p.broken_link.host,problem:`still ${DEAD[p.broken_link.reason]||'does not work'}`}}:{}),
+    kind:p.kind==='mention'?'unlinked_mention':'suggestion',reply_subject:subject,
+    sender:{name:senderName,website:site?.domain||''},situation:'followup'};
 }
 
 export class PitchWriter{
@@ -315,21 +417,29 @@ export class PitchWriter{
     if(limited&&!lastDetail)return off('quota_used_up',`${p.label}: the free quota is used up for now; it is not used for the rest of this cycle`);
     return off('no_usable_model',`${p.label}: no usable model found (${lastDetail||'no model listed'}); it is not used for the rest of this cycle`);
   }
-  async write(p,asset,site){
-    const template=(p.kind==='mention'?mentionPitch:templatePitch)(p,asset,{senderName:this.senderName,site});
+  /**
+   * The email for one prospect: a first pitch, or with {situation:'followup', subject} the one same-thread follow-up.
+   * `senderName` is the per-site name it is signed with. Every result says how it was written (variant) and
+   * which of our facts it states (facts_used), so a follow-up never presents a stated fact as new.
+   */
+  async write(p,asset,site,{senderName=this.senderName,situation,subject}={}){
+    const followup=situation==='followup';
+    const template=followup?followupPitch(p,asset,{senderName,site,subject})
+      :(p.kind==='mention'?mentionPitch:templatePitch)(p,asset,{senderName,site});
     // Once every free writer is off for this cycle (quota, rejected key), later pitches still record why they are templates.
     if(!this.ai){const why=this.providers.find(x=>x.offWhy)?.offWhy;if(why)this.fail(why);return template}
-    const facts={editor_page:{title:p.title,url:p.page_url,author:p.author||null,relevant_section:p.fit_section||null,excerpt:(p.excerpt||'').slice(0,1500)},
-      our_asset:{title:asset.title,url:asset.url,kind:KIND[asset.type]||'resource',description:asset.description||'',facts:[...assetFacts(asset),...(asset.reasons||[]).filter(r=>!INTERNAL_NOTE.test(r))],free_tool:!!asset.interactive},
-      ...(p.kind==='linkgap'&&p.competitor_link?.host&&!p.broken_link?{competitor_link:{site:p.competitor_link.host,anchor:p.competitor_link.anchor||null,surrounding_text:p.competitor_link.context||null,same_subject:p.competitor_link.match==='specific'}}:{}),
-      ...(p.broken_link&&p.kind!=='mention'?{broken_link:{anchor:p.broken_link.anchor||null,site:p.broken_link.host,problem:DEAD[p.broken_link.reason]||'no longer works'}}:{}),
-      sender:{name:this.senderName,website:site.domain},topic:site.topic,situation:p.kind==='mention'?'unlinked_mention':p.broken_link?'broken_link_replacement':p.kind==='linkgap'&&p.competitor_link?.host?'alternative_to_linked_resource':'resource_suggestion'};
+    const facts=followup?followupFacts(p,asset,site,{senderName,subject:template.subject}):pitchFacts(p,asset,site,{senderName});
+    const stated=facts.our_asset.facts||[];
+    // A follow-up keeps "Re: <original subject>" whatever the model wrote, so it threads.
+    const check=out=>{const o=followup&&out&&typeof out==='object'?{...out,subject:template.subject}:out;
+      return {o,why:pitchProblem(o,asset,{ownSubject:followup})||(followup?followupProblem(o):null)||(grounded(o,facts)?null:'number_not_in_facts')}};
+    const done=(o,writer)=>({subject:o.subject.trim(),body:o.body.trim(),writer,variant:`ai:${facts.situation}`,facts_used:factsIn(`${o.subject}\n${o.body}`,stated)});
     if(!this.client){
       const r=await this.chat(facts);
       if(!r.out){this.fail(r.why,r.detail);return template}
-      const out=tidyPitch(r.out,asset),why=pitchProblem(out,asset)||(grounded(out,facts)?null:'number_not_in_facts');
+      const {o,why}=check(tidyPitch(r.out,asset));
       if(why){this.fail(why,`${r.provider} ${r.model}`);return template}
-      this.usedAi++;this.aiProvider=r.provider;this.aiModel=r.model;return {...out,writer:r.provider};
+      this.usedAi++;this.aiProvider=r.provider;this.aiModel=r.model;return done(o,r.provider);
     }
     try{
       const res=await this.client.beta.messages.create({
@@ -339,9 +449,9 @@ export class PitchWriter{
       });
       if(res.stop_reason==='refusal'){this.fallbacks++;return template}
       const text=res.content.filter(b=>b.type==='text').map(b=>b.text).join('');
-      const out=JSON.parse(text);
-      if(!validPitch(out,asset)||!grounded(out,facts)){this.fallbacks++;return template}
-      this.used++;return {subject:out.subject.trim(),body:out.body.trim(),writer:'claude'};
+      const {o,why}=check(JSON.parse(text));
+      if(why){this.fallbacks++;return template}
+      this.used++;return done(o,'claude');
     }catch(e){
       if(e instanceof Anthropic.AuthenticationError){this.log('claude: API key rejected; using templates');this.client=null}
       else if(e instanceof Anthropic.APIError)this.log(`claude: API error ${e.status}; template used`);
