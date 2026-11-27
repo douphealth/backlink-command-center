@@ -39,7 +39,7 @@ function nextRun(last){const t=Math.max(Date.parse(last||0)+5*36e5,Date.now());c
 const STATUS_ORDER=['positive','won','replied','followed_up','sent','drafted','ready','contact_form','no_contact','contact_unverifiable','already_linked','declined','bounced','skipped_duplicate','rejected'];
 const ui={filter:'active',vault:null,error:'',control:null,configured:null,tokenError:'',showConnect:false,msg:'',err:'',busy:'',settleUntil:0};
 let reloadView=null,pollTimer=null;
-const FIELDS=[
+export const FIELDS=[
   {name:'DATAFORSEO_LOGIN',label:'DataForSEO login (email)',type:'email',kind:'secret',required:true,help:'DataForSEO dashboard → API Access',link:'https://app.dataforseo.com/api-access'},
   {name:'DATAFORSEO_PASSWORD',label:'DataForSEO API password',type:'password',kind:'secret',required:true,help:'The API password, not your website login'},
   {name:'GMAIL_ADDRESS',label:'Gmail address that sends outreach',type:'email',kind:'secret',required:true},
@@ -47,7 +47,7 @@ const FIELDS=[
   {name:'SENDER_NAME',label:'Your name in emails',type:'text',kind:'setting',required:true,help:'Your own name, e.g. Alex Papas (not a site name: every site sends from this one address)'},
   {name:'SENDER_NAMES',label:'Sign-off per site (optional)',type:'textarea',kind:'setting',placeholder:'gearuptofit.com = Alex from GearUpToFit',help:'One per line, e.g. gearuptofit.com = Alex from GearUpToFit. Sites not listed use the name above'},
   {name:'SENDER_POSTAL_ADDRESS',label:'Postal address for the email footer',type:'text',kind:'setting',help:'A P.O. box or mailbox service works. Identifies the sender, as commercial-email rules such as CAN-SPAM expect'},
-  {name:'OUTREACH_MODE',label:'Outreach mode',type:'select',kind:'setting',options:[['send','Hands-free: send pitches + 1 follow-up automatically'],['draft','Safe: write pitches into Gmail Drafts'],['off','Research only']]},
+  {name:'OUTREACH_MODE',label:'Outreach mode',type:'select',kind:'setting',default:'draft',options:[['send','Hands-free: send pitches + 1 follow-up automatically'],['draft','Safe: write pitches into Gmail Drafts'],['off','Research only']]},
   {name:'OUTREACH_DAILY_LIMIT',label:'Max new pitches per day',type:'number',kind:'setting',help:'Starts at 5/day and ramps up by 2/day to this limit'},
   {name:'REPLY_MODE',label:'When a publisher replies',type:'select',kind:'setting',default:'draft',options:[['draft','Write an answer into Gmail Drafts for me (recommended)'],['send','Answer simple replies automatically; drafts for anything with conditions'],['off','Only alert me']]},
   {name:'OUTREACH_DACH',label:'Germany, Austria, Switzerland',type:'select',kind:'setting',default:'NO',options:[['NO','Do not email publishers there (they need prior consent)'],['YES','Email them too (I have checked the rules)']]},
@@ -146,7 +146,7 @@ export async function renderAutopilot(h){
   const banner=(rejectedMsgs.length?`<div class="alert-warning ap-missing"><strong>The last run couldn't log in:</strong><ul class="ap-list">${rejectedMsgs.join('')}</ul>Re-enter them in <b>step 2</b> below and press <b>Save &amp; run now</b>.</div>`:'')
     +(notConnected.length?`<div class="alert-warning ap-missing"><strong>Not connected yet: ${e(notConnected.join(' and '))}.</strong> Runs do research only until you fill in <b>step 2</b> below and press <b>Save &amp; run now</b>. ▶ Run by itself doesn't save credentials.</div>`:'')
     +(!rejectedMsgs.length&&!notConnected.length&&okList.length?`<div class="ap-msg">✓ Verified by the last run: ${e(okList.join(' and '))} logged in successfully.</div>`:'');
-  const setup=ui.showConnect||needsSetup||rejectedMsgs.length||!control.diagnosisOk(ui.diag)?connectPanel(h):'';
+  const setup=ui.showConnect||needsSetup||rejectedMsgs.length||!control.diagnosisOk(ui.diag)?connectPanel(h,s):'';
   // Change since the previous day's record, so progress is visible even when totals look similar.
   const hist=s.history||[],prev=hist.length>1?hist[hist.length-2]:null;
   const delta=k=>{if(!prev)return '';const d=(f[k]||0)-(prev[k]||0);return d?`<small class="ap-delta ${d>0?'up':'down'}">${d>0?'+':''}${n(d)} today</small>`:'<small class="ap-delta">no change today</small>'};
@@ -183,9 +183,10 @@ export async function renderAutopilot(h){
     ['Best URLs to promote',t.promotable,'◎',`${n(t.promoting_now)} promoted now · ${n(t.internal_suggestions)} internal links to add`]];
   const kpiHtml=`<div class="kpi-grid ap-kpis">${kpis.map(([name,val,ico,note],i)=>`<div class="kpi${i===4&&val?' kpi-alert':''}"><div class="kpi-head">${e(name)}<span class="kpi-ico">${ico}</span></div><div class="kpi-value">${n(val)}</div><div class="kpi-foot">${e(note)}</div></div>`).join('')}</div>`;
   // One long page became five tabs; the choice is remembered on this device.
-  const TABS=[['overview','Overview',0,''],['pages','Best pages',t.promotable,''],['index','Indexation',ixBlocking,'warn'],['prospects','Prospects & links',f.ready,''],['sites','Your sites',(s.sites||[]).length,''],['learning','Learning & log',0,'']];
+  const ny=needsYou(f);
+  const TABS=[['overview','Overview',ny.total,'warn'],['pages','Best pages',t.promotable,''],['index','Indexation',ixBlocking,'warn'],['prospects','Prospects & links',f.ready,''],['sites','Your sites',(s.sites||[]).length,''],['learning','Learning & log',0,'']];
   const tab=currentApTab();
-  navCount('nav-ap-pages',t.promotable);navCount('nav-ap-index',ixBlocking,true);navCount('nav-ap-prospects',f.ready);navCount('nav-ap-sites',(s.sites||[]).length);
+  navCount('nav-ap-pages',t.promotable);{const x=document.getElementById('nav-ap-overview');if(x){x.textContent=n(ny.total);x.classList.toggle('hidden',!ny.total)}}navCount('nav-ap-index',ixBlocking,true);navCount('nav-ap-prospects',f.ready);navCount('nav-ap-sites',(s.sites||[]).length);
   // Every site in one table: what was checked, what is worth promoting, and what stops pages from being indexed.
   const ixBy=new Map((ix?.sites||[]).map(x=>[x.site,x]));
   const siteRows2=[...(s.sites||[])].sort((a,b)=>(ixBy.get(b.domain)?.critical||0)-(ixBy.get(a.domain)?.critical||0)||b.eligible-a.eligible).map(x=>{const i=ixBy.get(x.domain)||{};
@@ -194,17 +195,18 @@ export async function renderAutopilot(h){
     siteRows2.length?table(['Site','Pages worth promoting','Cannot be indexed','Needs a look','Thin (indexable)','Best page to promote'],siteRows2):empty('No sites crawled yet','The next cycle crawls every configured site.'));
   const tabBar=`<div class="ap-tabs" role="tablist">${TABS.map(([k,label,count,tone])=>`<button type="button" role="tab" class="ap-tab${k===tab?' active':''}" data-ap-tab="${k}" aria-selected="${k===tab}">${label}${count?`<span class="${tone}">${n(count)}</span>`:''}</button>`).join('')}</div>`;
   const pane=(k,html)=>`<section class="ap-pane${k===tab?'':' hidden'}" data-ap-pane="${k}" role="tabpanel">${html}</section>`;
-  const att=(s.attention||[]).filter(a=>a.level!=='info'||!(s.attention||[]).some(x=>x.level==='action'));
-  const attention=att.length?`<div class="${att.some(a=>a.level==='action')?'alert-warning':'ap-msg'} ap-missing"><strong>${att.some(a=>a.level==='action')?'Needs you:':'Autopilot notes:'}</strong><ul class="ap-list">${att.map(a=>`<li><b>${e(a.message)}</b> ${e(a.fix)}</li>`).join('')}</ul>${s.tuning?.max_queries?`<small>Self-tuning: up to ${n(s.tuning.max_queries)} searches next cycle.</small>`:''}</div>`:'';
+  const alerts=(s.attention||[]).filter(a=>a?.level==='action'&&!STRIP_CODES.has(a.code)).length;
+  const pointerText=[ny.owner&&`${n(ny.owner)} decision${ny.owner===1?'':'s'}`,ny.other&&`${n(ny.other)} repl${ny.other===1?'y':'ies'} to answer`,alerts&&`${n(alerts)} alert${alerts===1?'':'s'}`].filter(Boolean).join(' · ');
+  const attention=pointerText?`<button type="button" class="ap-pointer" data-ap="goto-overview"><span class="ap-needs-dot"></span><span><b>Needs you:</b> ${e(pointerText)}</span><span>Open Overview →</span></button>`:'';
   const bestPanel=`<div class="ap-gap">${panel('Best URLs to promote','Linkability × real search demand; templated duplicates and thin pages are demoted',best.length?table(['#','URL & why','Score','Internal links','Prospects'],best):empty('No promotable URLs yet','The next crawl will rank your pages.'))}</div>`;
   const internalPanel=`<div class="ap-gap">${panel('Internal link plan','Add these links on your own pages: highest-ROI, zero-cost ranking boost',internal.length?table(['On this page','Add anchor','Linking to'],internal):empty('No internal gaps found','Your best URLs are already well linked.'))}</div>`;
   const winsPanel=`<div class="ap-gap">${panel('Backlinks','Won after outreach, or already linking to you (verified on the live page)',wins.length?table(['Publisher','Page','Links to','Status','Found'],wins):empty('No verified backlinks yet','Pitched pages are re-checked every 4 days for 150 days.'))}</div>`;
   const logPanel=`<details class="data-note" open><summary><strong>Last run log</strong></summary><div class="pre-detail ap-log">${e((s.log||[]).join('\n'))}</div></details>`;
   return intro('autopilot','')+status+attention+banner+setup+kpiHtml+tabBar+
-    pane('overview',`<div class="overview-grid">${panel('Outreach funnel','Every number is a stored, verified record',funnel)}${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`)+
+    pane('overview',needsYouStrip(s,h)+`<div class="overview-grid ap-ov">${healthPanel(s,h)}${sendingPanel(s,h)}</div><div class="overview-grid ap-ov-b ap-gap">${workingPanel(s,h)}${panel('Outreach funnel','Every number is a stored, verified record',funnel)}</div><div class="ap-gap ap-stages">${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`)+
     pane('pages',bestPanel+internalPanel)+
     pane('index',ixPanel+spPanel+giPanel+bgLine)+
-    pane('prospects',`<div class="ap-gap">${privatePanel(h)}</div>`+winsPanel)+
+    pane('prospects',`<div class="ap-gap">${privatePanel(h,s)}</div>`+winsPanel)+
     pane('sites',sitesPanel)+
     pane('learning',learningPanel(h,s)+logPanel);
 }
@@ -217,6 +219,150 @@ function learningPanel(h,s){
   const assets=(L.assets||[]).slice(0,10).map(x=>`<tr><td>${external(x.url,new URL(x.url).pathname)}</td><td>${n(x.sent)}</td><td>${n(x.replied)}</td><td>${n(x.positive)}</td><td>${n(x.won)}</td></tr>`);
   return `<div class="ap-gap">${panel('What Autopilot is learning: searches','Search patterns ranked by pitchable prospects found per search; the best ones are used first',fps.length?table(['Search pattern','Searches','Prospects','Yield'],fps):empty('Not enough data yet','Yields appear after the first searches.'))}</div><div class="ap-gap">${panel('Which of your pages earn replies','Pages with better reply and link rates get more prospecting',assets.length?table(['Page','Pitched','Replies','Positive','Links won'],assets):empty('No pitches yet','Results appear after the first pitches.'))}</div>`;
 }
+// ---- Overview: "what needs me, and is the engine working". Built from the public summary only (counts, code names). ----
+const GMAIL_INBOX='https://mail.google.com/mail/u/0/#inbox',MiB=1048576;
+/** A reply that waits for the owner's decision (sticky until the owner answers): the funnel's needs_owner rule. */
+export const needsOwner=p=>!!p?.needs_owner&&!p.owner_decided_at;
+/** Conditions in plain words. */
+export const CONDITION_WORDS={paid:'fee',reciprocal:'link back',guest_post:'guest post'};
+// The "Needs you" strip shows these itself, so the health list leaves them out while the strip is on screen.
+const STRIP_CODES=new Set(['owner_decision_pending','replies_waiting']);
+/** Replies waiting for the owner: decisions, plus other replies nobody has answered yet (awaiting_reply includes the decisions). */
+export function needsYou(f){
+  const int=x=>Math.max(0,Math.floor(Number(x)||0)),owner=int(f?.needs_owner),waiting=int(f?.awaiting_reply),other=Math.max(0,waiting-owner);
+  return {owner,waiting,other,total:owner+other};
+}
+export function needsYouStrip(s,{escapeHTML:e,n}){
+  const ny=needsYou(s?.funnel);if(!ny.total)return '';
+  const said=code=>(s.attention||[]).find(a=>a?.code===code)?.message||'';
+  const mode=s.sender?.reply_mode||'draft';
+  const replyNote={draft:'Autopilot writes an answer into Gmail Drafts for each one: check it and press Send.',send:'Simple replies are answered automatically; anything with a condition gets a draft for you.',
+    off:'Automatic drafts are off ("When a publisher replies: Only alert me"), so answer them in Gmail.'}[mode]||'Answer them in the same Gmail thread.';
+  const item=(count,title,note,tone='')=>`<div class="ap-need ${tone}"><b>${n(count)}</b><div><strong>${e(title)}</strong><small>${e(note)}</small></div></div>`;
+  return `<section class="ap-needs" aria-label="Needs you"><div class="ap-needs-head"><span class="ap-needs-dot"></span><strong>Needs you</strong><span>A reply is the only step between a pitch and a link.</span></div><div class="ap-needs-items">${
+    ny.owner?item(ny.owner,ny.owner===1?'publisher said yes with a condition':'publishers said yes with a condition',said('owner_decision_pending')||'A fee, a link back or a guest post: your call. Autopilot never agrees to terms by itself.','urgent'):''}${
+    ny.other?item(ny.other,`${ny.owner?'other ':''}${ny.other===1?'reply waits':'replies wait'} for an answer`,said('replies_waiting')||replyNote):''}</div>
+    <div class="ap-needs-actions"><a class="primary" href="${GMAIL_INBOX}" target="_blank" rel="noopener noreferrer">Open Gmail ↗</a><button class="secondary" type="button" data-ap="needs-you">Show in Prospects →</button></div></section>`;
+}
+const LEVELS={action:['red','Do this'],warn:['amber','Watch'],info:['blue','Note']};
+// Where each alert is fixed: the Connect form, or an outside page. Only for alerts that ask for something.
+const CONNECT_FIX=new Set(['gmail_send_blocked','gmail_rejected','dataforseo_rejected','verifier_off','verifier_rejected','verifier_permission','hold_with_verified','sender_identity_incomplete','templates_only','mailbox_rebuild_pending']);
+const LINK_FIX={owner_decision_pending:[GMAIL_INBOX,'Open Gmail'],replies_waiting:[GMAIL_INBOX,'Open Gmail'],dataforseo_funds:['https://app.dataforseo.com/','DataForSEO billing'],dataforseo_low:['https://app.dataforseo.com/','DataForSEO billing']};
+/** Self-diagnosis (summary.attention) by level, each with its fix, plus whether the last cycle's stages ran and the vault size. */
+export function healthPanel(s,h){
+  const {escapeHTML:e,n,panel}=h,strip=needsYou(s?.funnel).total>0;
+  const list=(s.attention||[]).filter(a=>a&&!(strip&&STRIP_CODES.has(a.code)));
+  const lvl=a=>LEVELS[a.level]?a.level:'info',count={action:0,warn:0,info:0};for(const a of list)count[lvl(a)]++;
+  const fix=a=>lvl(a)==='info'?'':CONNECT_FIX.has(a.code)?'<button class="outline-btn ap-fix" type="button" data-ap="open-connect">⚙ Open Connect</button>'
+    :LINK_FIX[a.code]?`<a class="outline-btn ap-fix" href="${LINK_FIX[a.code][0]}" target="_blank" rel="noopener noreferrer">${e(LINK_FIX[a.code][1])} ↗</a>`:'';
+  const rows=list.map(a=>{const [tone,label]=LEVELS[lvl(a)];return `<li class="ap-att ap-att-${tone}"><span class="tag ${tone}">${label}</span><div><strong>${e(a.message)}</strong><small>${e(a.fix)}</small>${fix(a)}</div></li>`}).join('');
+  const st=Object.values(s.stages||{}),ran=st.filter(x=>x?.ok===true).length,failed=st.filter(x=>x?.ok===false).length,skipped=st.filter(x=>x?.ok===null).length;
+  const sub=[`Last cycle ${ago(s.generated_at)}`,`${n(ran)} stage${ran===1?'':'s'} ran`,failed&&`${n(failed)} failed`,skipped&&`${n(skipped)} skipped`].filter(Boolean).join(' · ');
+  const ok=!count.action&&!count.warn?`<div class="ap-health-ok"><span class="status-dot"></span><span><strong>Engine healthy.</strong> Nothing to fix from the last cycle${count.info?'; notes below':''}.</span></div>`:'';
+  const counts=count.action||count.warn?`<p class="ap-note">${[count.action&&`<b>${n(count.action)}</b> to do`,count.warn&&`<b>${n(count.warn)}</b> to watch`,count.info&&`${n(count.info)} note${count.info===1?'':'s'}`].filter(Boolean).join(' · ')}</p>`:'';
+  return panel('Engine health',sub,`<div class="panel-pad ap-health">${ok}${counts}${rows?`<ul class="ap-atts">${rows}</ul>`:''}${s.tuning?.max_queries?`<p class="ap-note">Self-tuning: up to ${n(s.tuning.max_queries)} searches next cycle.</p>`:''}${vaultLine(s.capabilities,h)}</div>`);
+}
+const shortDay=d=>{const t=new Date(String(d)+'T12:00:00Z');return Number.isNaN(t.getTime())?String(d||''):t.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'})};
+const LEDGER_COLS=[['checks','Checks'],['valid','Valid'],['invalid','Invalid'],['catch_all','Catch-all'],['unknown','Unknown'],['screen_only','Screen only'],['emails_sent','Sent']];
+/** Sends against the cap, verification credits, the ready queue split and the 14-day verification ledger. */
+export function sendingPanel(s,h){
+  const {escapeHTML:e,n,niceTime,panel}=h,c=s.capabilities||{},o=s.outreach||{},v=c.verifier||{},mode=c.outreach_mode||o.mode;
+  const pct=(a,b)=>b>0?Math.min(100,Math.round(100*a/b)):0;
+  const meter=(label,value,note,fill,tone='')=>`<div class="ap-meter ${tone}"><div class="ap-meter-top"><span>${e(label)}</span><strong>${e(value)}</strong></div>${fill==null?'':`<div class="pipeline-track"><div class="pipeline-fill" data-w="${fill}"></div></div>`}<small>${e(note)}</small></div>`;
+  const sent=Number(o.sent_today)||0,cap=Number(o.cap_today??c.daily_send_cap)||0;
+  const sendM=mode==='send'?meter('Sent today',`${n(sent)} / ${n(cap)}`,cap&&sent>=cap?'Today\'s cap is used; more tomorrow (warm-up ramp)':o.sending_now?'Sending during this cycle':o.next_send_at?`Next pitches from ${niceTime(o.next_send_at)}`:'Waiting for recipients\' business hours (weekdays)',pct(sent,cap))
+    :meter('Sending',mode==='draft'?'Drafts only':'Off',mode==='draft'?'Pitches are written into Gmail Drafts; nothing is sent automatically':'Research only: nothing is written or sent',null,'muted');
+  const used=Number(v.used_today)||0,lim=Number(v.daily_limit)||0,hunter=Number(v.hunter_daily_limit)>0?` · Hunter ${n(v.hunter_used_today)} / ${n(v.hunter_daily_limit)}`:'';
+  const checkM=v.ready?meter('Verification credits today',`${n(used)} / ${n(lim)}`,(used>=lim?'Used up: more after midnight UTC':'Free credits only; every email needs a fresh pass')+hunter,pct(used,lim),used>=lim?'warn':'')
+    :meter('Verification credits today','Off',v.key?'The daily limit is 0, so nothing can be sent':'No verifier connected, so nothing can be sent',null,'warn');
+  const cpe=Number(v.credits_per_email),cpeM=meter('Credits per email (7 days)',v.credits_per_email!=null&&Number.isFinite(cpe)?String(cpe):'—',
+    v.credits_per_email!=null&&Number.isFinite(cpe)?'Verification credits spent for each email sent':Array.isArray(v.ledger)?'No email sent in the last 7 days':'Measured from the next cycle on',null);
+  const split=o.sendable_now!=null?`<div class="ap-split">${[['Sendable now',o.sendable_now,'good'],['Retry later',o.retry_later,''],['Held for good',o.held_permanent,'muted']].map(([l,x,t])=>`<div class="ap-split-item ${t}"><strong>${n(x)}</strong><span>${l}</span></div>`).join('')}</div>
+    <p class="ap-note">Of ${n(o.ready)} ready. Retry later: waiting for a re-check. Held for good: catch-all, invalid, no mail server, suppressed or emailed in the last 90 days.</p>`
+    :o.ready!=null?`<p class="ap-note">${n(o.verified_ready)} of ${n(o.ready)} ready inboxes are verified.</p>`:'';
+  const blocked=s.stages?.outreach?.result?.send_blocked;
+  const alerts=[blocked&&`Gmail refused to send this cycle (${({gmail_auth:'login refused',gmail_limit:'sending limit reached'}[blocked]||String(blocked).replaceAll('_',' ')).slice(0,120)}), so sending stopped until the next cycle.`,
+    c.rebuild_required&&'Sending is held until the mailbox has been read back into the new vault.'].filter(Boolean).map(x=>`<div class="ap-send-alert">${e(x)}</div>`).join('');
+  const L=(Array.isArray(v.ledger)?v.ledger:[]).slice(-14).reverse(),tot=k=>L.reduce((a,x)=>a+(Number(x?.[k])||0),0);
+  const ledger=L.length?`<div class="ap-mini ap-ledger table-wrap"><table><thead><tr><th>Day</th>${LEDGER_COLS.map(([,l])=>`<th>${l}</th>`).join('')}</tr></thead><tbody>${L.map(x=>`<tr><td>${e(shortDay(x.date))}</td>${LEDGER_COLS.map(([k])=>`<td>${n(x[k])}</td>`).join('')}</tr>`).join('')}</tbody>
+    <tfoot><tr><td>${L.length} days</td>${LEDGER_COLS.map(([k])=>`<td>${n(tot(k))}</td>`).join('')}</tr></tfoot></table></div><p class="ap-note">Catch-all and unknown never pass. Screen only: weekend checks with credits that would expire anyway; a send still needs a fresh check.</p>`
+    :`<p class="ap-note">${Array.isArray(v.ledger)?'No mailbox checks in the last 14 days.':'The verification ledger appears after the next cycle.'}</p>`;
+  return panel('Sending','Today against the caps, and what the verification credits bought',`<div class="panel-pad ap-send">${alerts}${sendM}${checkM}${cpeM}${split}<h3 class="ap-sub">Verification, last 14 days</h3>${ledger}</div>`);
+}
+const WRITER={claude:'Claude',cloudflare:'Cloudflare AI (free)',groq:'Groq (free)',gemini:'Gemini (free)',custom:'Custom AI',template:'Template'};
+export const writerLabel=k=>WRITER[k]||String(k).replaceAll('_',' ');
+export function variantLabel(k){
+  if(k==='unrecorded')return 'Before tracking began';
+  const [kind,...rest]=String(k).split(':');
+  return rest.length?`${{ai:'AI',template:'Template'}[kind]||kind.replaceAll('_',' ')} · ${rest.join(':').replaceAll('_',' ')}`:String(k).replaceAll('_',' ');
+}
+const REASON={only_non_editorial_inbox_published:'only a non-editorial inbox',no_email_published:'no email published',publisher_pages_unreachable:'publisher pages unreachable',catch_all_domain:'mail server accepts everything',
+  mailbox_accept_all:'mail server accepts everything',mailbox_invalid:'inbox does not exist',mailbox_unknown:'verifier could not decide',publisher_mismatch:'address of another domain',unrecorded:'reason not recorded'};
+export const reasonLabel=k=>REASON[k]||String(k).replaceAll('_',' ');
+/** "0.029" -> "2.9%"; whole percents from 10% up. */
+export const pctText=x=>{const v=100*(Number(x)||0);return (v>0&&v<10?v.toFixed(1):String(Math.round(v)))+'%'};
+/** Replies per email by writer and by message, with the Wilson 95% range drawn as a range, and what free screening retired. */
+export function workingPanel(s,h){
+  const {escapeHTML:e,n,panel,empty}=h,o=s.outreach||{};
+  const groups=[['Pitch writer',o.by_writer,writerLabel],['Message',o.by_variant,variantLabel]].map(([t,m,label])=>[t,Object.entries(m&&typeof m==='object'?m:{}).filter(([,r])=>r&&Number(r.sent)>0),label]);
+  const ci=r=>Array.isArray(r.reply_ci95)&&r.reply_ci95.length===2&&r.reply_ci95.every(Number.isFinite)?r.reply_ci95:null;
+  const top=Math.max(0.1,...groups.flatMap(([,rows])=>rows.map(([,r])=>ci(r)?.[1]||0)));
+  const at=x=>Math.min(100,Math.round(1000*(Number(x)||0)/top)/10);
+  const rate=r=>{const c=ci(r);return `<strong>${pctText(r.reply_rate)}</strong>${c?`<small>range ${pctText(c[0])}–${pctText(c[1])}</small><span class="ap-range" aria-hidden="true"><i data-l="${at(c[0])}" data-w="${Math.max(1,at(c[1])-at(c[0]))}"></i><b data-l="${at(r.reply_rate)}"></b></span>`:''}`};
+  const tbl=([title,rows,label])=>rows.length?`<div class="ap-mini ap-work table-wrap"><table><thead><tr><th>${e(title)}</th><th>Sent</th><th>Replies</th><th>Positive</th><th>Reply rate</th></tr></thead><tbody>${rows.map(([k,r])=>`<tr><td><strong>${e(label(k))}</strong>${Number.isFinite(r.exposure_days)?`<small>sending for ${n(r.exposure_days)} day${r.exposure_days===1?'':'s'}</small>`:''}</td><td>${n(r.sent)}</td><td>${n(r.replied)}</td><td>${n(r.positive)}</td><td class="ap-rate">${rate(r)}</td></tr>`).join('')}</tbody></table></div>`:'';
+  const tables=groups.map(tbl).join('');
+  const retired=Object.entries(o.retired_by_reason&&typeof o.retired_by_reason==='object'?o.retired_by_reason:{}).filter(([,x])=>Number(x)>0).sort((a,b)=>b[1]-a[1]);
+  const ret=retired.length?`<div class="ap-retired"><h3 class="ap-sub">Retired by free screening</h3><div class="ap-chipline">${retired.map(([k,x])=>`<span>${e(reasonLabel(k))} <b>${n(x)}</b></span>`).join('')}</div><p class="ap-note">Their address could not meet the send rules, so no verification credit was spent on them.</p></div>`:'';
+  return panel('What\'s working','Replies per email sent. The range is the 95% Wilson interval: while ranges overlap, it is too early to call a winner',
+    tables||ret?`<div class="panel-pad ap-working">${tables||'<p class="ap-note">No sends to compare yet: results per writer and message appear after the first emails.</p>'}${ret}</div>`:empty('No sends to compare yet','Results per writer and message appear after the first emails.'));
+}
+/** Size and format of the sealed vault against Cloudflare Pages' 25 MiB per-file limit (warns at 15 MiB, alarms at 22 MiB, as health.mjs does). */
+export function vaultLine(c,{escapeHTML:e}){
+  const b=Number(c?.vault_bytes);if(!(b>0))return '';
+  const size=b<MiB?`${Math.max(1,Math.round(b/1024))} KiB`:`${(b/MiB).toFixed(1)} MiB`,tone=b>=22*MiB?'red':b>=15*MiB?'amber':'';
+  const fmt={'v2-gzip':'compressed (v2)',v1:'uncompressed (v1)'}[c.vault_format]||(c.vault_format?String(c.vault_format):'format unknown');
+  return `<div class="ap-vault-line ${tone}"><span>Sealed vault: <b>${e(size)}</b> of Cloudflare's 25 MiB file limit · ${e(fmt)}${c.rebuild_required?' · mailbox read-back pending':''}</span><span class="ap-vault-bar"><i data-w="${Math.min(100,Math.round(1000*b/(25*MiB))/10)}"></i></span></div>`;
+}
+const ACTIVE=new Set(['positive','won','replied','followed_up','sent','drafted','ready','contact_form','no_contact']);
+const waitsForUs=p=>needsOwner(p)||!!p?.awaiting_us;
+/** The prospect table: decisions first, then replies waiting for an answer, then by status and fit. 'needs_you' shows only those two. */
+export function prospectView(all,filter='active'){
+  return (all||[]).filter(p=>filter==='all'||(filter==='needs_you'?waitsForUs(p):filter==='active'?ACTIVE.has(p.status)||waitsForUs(p):p.status===filter))
+    .sort((a,b)=>(+needsOwner(b)-+needsOwner(a))||(+!!b.awaiting_us-+!!a.awaiting_us)||STATUS_ORDER.indexOf(a.status)-STATUS_ORDER.indexOf(b.status)||(b.score||0)-(a.score||0));
+}
+/** The row badge for a reply that waits for the owner, with the condition in plain words. */
+export function replyBadge(p,{escapeHTML:e}){
+  if(!waitsForUs(p))return '';
+  const d=p.reply_draft,fresh=!!d?.at&&!(Date.parse(d.at)<Date.parse(p.last_reply_at||'')),drafted=fresh&&d.mode==='draft';
+  if(needsOwner(p))return `<span class="tag red ap-need-tag">Needs your answer</span><small class="ap-why">Condition: <b>${e(CONDITION_WORDS[p.condition]||(p.condition?'another condition':'not stated'))}</b>${p.condition==='paid'?' (a fee needs your explicit approval)':''}. ${drafted?'A draft answer is in Gmail Drafts: edit it to say yes or no.':'Answer in the same Gmail thread.'}</small>`;
+  return `<span class="tag amber ap-need-tag">Reply waiting</span><small class="ap-why">${drafted?'An answer is drafted in Gmail Drafts: check it and send.':fresh&&d.mode==='none'&&d.reason?`Not drafted (${e(String(d.reason).replaceAll('_',' '))}): answer in Gmail.`:'Answer in the same Gmail thread.'}</small>`;
+}
+// The engine's live values (public summary) for the settings it publishes, so another device never flips them by accident.
+const LIVE_SETTING={OUTREACH_MODE:s=>s?.capabilities?.outreach_mode,REPLY_MODE:s=>s?.sender?.reply_mode,OUTREACH_DACH:s=>s?.sender&&typeof s.sender.allow_dach==='boolean'?(s.sender.allow_dach?'YES':'NO'):undefined};
+const SENDER_SET={SENDER_NAME:x=>!!x.sender_name,SENDER_POSTAL_ADDRESS:x=>!!x.postal_address,SENDER_NAMES:x=>Number(x.per_site_names)>0};
+/**
+ * The value a setting shows: what this browser saved; for a dropdown without one, the engine's live value, then the safe default
+ * (drafts for outreach and replies, no DACH). Secrets never show a value.
+ */
+export function settingValue(f,saved={},s=null){
+  if(f.kind!=='setting')return '';
+  const mine=saved?.[f.name];
+  if(f.type!=='select')return mine==null?'':String(mine);
+  const ok=x=>f.options.some(([v])=>v===x);
+  return [mine,LIVE_SETTING[f.name]?.(s),f.default].find(ok)??f.options[0][0];
+}
+/** One field of the Connect form. `saved`: this browser's settings; `done`: GitHub has it; `bad`: the last run's login failed with it. */
+export function settingsField(f,{saved={},s=null,done=false,bad=false}={},{escapeHTML:e}){
+  const cur=settingValue(f,saved,s),mine=f.kind==='setting'&&saved?.[f.name]!=null&&saved[f.name]!=='';
+  // Sender details: the last run says whether the engine really has them (one settings secret holds them all).
+  const has=f.kind==='setting'&&!mine&&SENDER_SET[f.name]&&s?.sender?SENDER_SET[f.name](s.sender):done;
+  const ok=has&&!bad,blank=f.type==='select'?'':cur;
+  const input=f.type==='textarea'?`<textarea name="${f.name}" rows="4" spellcheck="false" autocomplete="off" placeholder="${e(f.kind==='setting'?ok&&!mine?'Saved; type all lines again to change':f.placeholder||'':ok?'Connected; leave blank to keep':'{ "type": "service_account", ... }')}">${e(blank)}</textarea>`
+    :f.type==='select'?`<select class="selector" name="${f.name}">${f.options.map(([v,l])=>`<option value="${e(v)}" ${cur===v?'selected':''}>${e(l)}</option>`).join('')}</select>`
+    :`<input name="${f.name}" type="${f.type}" ${f.type==='number'?`min="${f.min??1}" max="${f.max??50}"`:''} autocomplete="${f.type==='password'?'new-password':'off'}" value="${e(blank)}" placeholder="${e(ok&&!blank?(f.kind==='secret'?'Connected; leave blank to keep':'Saved; type to change'):f.placeholder||(f.type==='number'?'12':''))}" ${f.required&&!ok?'required':''}>`;
+  return `<label class="ap-field"><span>${e(f.label)} ${bad?'<b class="ap-need">✗ rejected: re-enter</b>':ok?'<b class="ap-ok">✓ saved</b>':f.required?'<b class="ap-need">needed</b>':f.name==='SENDER_POSTAL_ADDRESS'&&s?.capabilities?.outreach_mode==='send'?'<b class="ap-need">missing while sending</b>':''}</span>${input}${f.help?`<small>${f.link?`<a href="${f.link}" target="_blank" rel="noopener">${e(f.help)} ↗</a>`:e(f.help)}</small>`:''}</label>`;
+}
+
 /** Plain answer to "why aren't more pitches going out?" */
 function outreachLine(s,{escapeHTML:e,n,niceTime}){
   const o=s.outreach,v=s.capabilities?.verifier;
@@ -253,41 +399,40 @@ function tokenStep(h){
     <form id="ap-token-form" class="inline-form ap-token-row"><input id="ap-token" type="password" autocomplete="off" placeholder="${has?'Replace token (optional)':'Paste github_pat_… here'}" ${has?'':'required'} minlength="20">
       <button class="primary" type="submit">${has?'Replace token':'Save token'}</button>${has?'<button class="outline-btn" type="button" data-ap="recheck">Check again</button><button class="outline-btn" type="button" data-ap="forget">Forget token</button>':''}</form></section>`;
 }
-function connectPanel(h){
+function connectPanel(h,s=null){
   const {escapeHTML:e,panel}=h,ready=control.diagnosisOk(ui.diag);
   const c=ui.configured||{secrets:new Set()};
-  const done=f=>fieldDone(f,c),settings=savedSettings.get();
-  const field=f=>{const bad=ui.rejected?.has(f.name),ok=done(f)&&!bad,cur=f.kind==='setting'?settings[f.name]||'':'';
-    const input=f.type==='textarea'?`<textarea name="${f.name}" rows="4" spellcheck="false" autocomplete="off" placeholder="${f.kind==='setting'?e(f.placeholder||''):ok?'Connected; leave blank to keep':'{ \"type\": \"service_account\", ... }'}">${f.kind==='setting'?e(cur):''}</textarea>`:f.type==='select'?`<select class="selector" name="${f.name}">${f.options.map(([v,l])=>`<option value="${v}" ${(cur||f.default||'send')===v?'selected':''}>${e(l)}</option>`).join('')}</select>`
-      :`<input name="${f.name}" type="${f.type}" ${f.type==='number'?`min="${f.min??1}" max="${f.max??50}"`:''} autocomplete="${f.type==='password'?'new-password':'off'}" value="${e(cur)}" placeholder="${ok&&!cur?(f.kind==='secret'?'Connected; leave blank to keep':'Saved; type to change'):f.placeholder||(f.type==='number'?'12':'')}" ${f.required&&!ok?'required':''}>`;
-    return `<label class="ap-field"><span>${e(f.label)} ${bad?'<b class="ap-need">✗ rejected: re-enter</b>':ok?'<b class="ap-ok">✓ saved</b>':f.required?'<b class="ap-need">needed</b>':''}</span>${input}${f.help?`<small>${f.link?`<a href="${f.link}" target="_blank" rel="noopener">${e(f.help)} ↗</a>`:e(f.help)}</small>`:''}</label>`};
+  const settings=savedSettings.get()||{};
+  const field=f=>settingsField(f,{saved:settings,s,done:fieldDone(f,c),bad:!!ui.rejected?.has(f.name)},h);
+  // All settings travel as one secret that GitHub cannot return: a browser without its own copy rewrites every one of them.
+  const sd=s?.sender||{},kept=[sd.postal_address&&'the postal address',Number(sd.per_site_names)>0&&`sign-offs for ${Number(sd.per_site_names)} site${Number(sd.per_site_names)===1?'':'s'}`].filter(Boolean);
+  const fresh=ready&&!Object.keys(settings).length&&c.secrets.has(control.SETTINGS_SECRET)?`<p class="ap-hint ap-warn-hint">This browser has no copy of the settings saved from another device. Typing your name below saves <b>every</b> setting again, so fill in each one you use${kept.length?` (saved now: ${e(kept.join(' and '))})`:''}. Leave your name blank to keep them as they are.</p>`:'';
   return panel('Connect Autopilot','Two steps, once. Everything is encrypted in your browser before it reaches GitHub; nothing can read it back.',
     `<div class="panel-pad ap-connect">${tokenStep(h)}
     <section class="ap-step-card ${ready?'':'ap-locked'}"><h3>2 · DataForSEO, Gmail and your settings</h3>
-      ${ready?'':'<p class="ap-hint">Finish step 1 first; then these fields unlock.</p>'}
+      ${ready?'':'<p class="ap-hint">Finish step 1 first; then these fields unlock.</p>'}${fresh}
       <form id="ap-connect-form"><fieldset ${ready?'':'disabled'}><div class="ap-fields">${FIELDS.map(field).join('')}</div>
       <div class="ap-buttons"><button class="primary" type="submit" ${ui.busy?'disabled':''}>${ui.busy==='connect'?'Saving…':'Save & run now'}</button><button class="outline-btn" type="button" data-ap="close">Close</button></div></fieldset></form></section></div>`,
     ready?`<span class="panel-link">${c.secrets.has('LINKFORGE_DATA_KEY')?'✓ vault key set':'vault key missing'}</span>`:'');
 }
 
-function privatePanel(h){
+function privatePanel(h,s=null){
   const {escapeHTML:e,external,n,niceTime,statusTag,panel,table,empty}=h;
+  const vline=vaultLine(s?.capabilities,h),vaultInfo=vline?`<div class="ap-inset">${vline}</div>`:'';
   if(!ui.vault){
     const canReset=!!ui.diag?.secrets;
     return panel('Prospects & conversations','Encrypted in the public repo · unlocked only in your browser with the vault key',
-    `<div class="ap-inset ap-vault-help"><p>The <b>vault key</b> is not your GitHub token. It is the separate <code>LINKFORGE_DATA_KEY</code> created during setup (saved on the setup computer in <code>.linkforge/autopilot-unlock-key.txt</code>). Don't have it? Create a new one: this browser and GitHub get the same new key automatically.</p></div>
+    `${vaultInfo}<div class="ap-inset ap-vault-help"><p>The <b>vault key</b> is not your GitHub token. It is the separate <code>LINKFORGE_DATA_KEY</code> created during setup (saved on the setup computer in <code>.linkforge/autopilot-unlock-key.txt</code>). Don't have it? Create a new one: this browser and GitHub get the same new key automatically.</p></div>
     <form class="inline-form ap-inset" id="ap-unlock"><input id="ap-key" type="password" autocomplete="off" placeholder="Paste vault key (LINKFORGE_DATA_KEY)" minlength="16" required><button class="primary" type="submit">Unlock</button>
       <button class="outline-btn" type="button" data-ap="newvault" ${canReset&&!ui.busy?'':'disabled'} title="${canReset?'':'Needs a working GitHub token (step 1 above)'}">${ui.busy==='newvault'?'Creating…':'Create a new vault key'}</button></form>${ui.error?`<div class="alert-warning ap-inset">${e(ui.error)}</div>`:''}`);
   }
   const all=Object.values(ui.vault.prospects||{});
-  const active=new Set(['positive','won','replied','followed_up','sent','drafted','ready','contact_form','no_contact']);
-  const rows=all.filter(p=>ui.filter==='all'||(ui.filter==='active'?active.has(p.status):p.status===ui.filter))
-    .sort((a,b)=>(b.needs_owner?1:0)-(a.needs_owner?1:0)||STATUS_ORDER.indexOf(a.status)-STATUS_ORDER.indexOf(b.status)||(b.score||0)-(a.score||0)).slice(0,200)
-    .map(p=>{const last=(p.history||[]).at(-1);const lastReply=[...(p.history||[])].reverse().find(h=>h.type==='reply');return `<tr><td><strong>${e(p.domain)}</strong><small>${e(p.site)} · fit ${n(p.score)}</small></td><td>${external(p.page_url,p.title||p.page_url)}<small>${e(p.reason||p.fit_section||p.query||'')}</small>${p.broken_link?`<small class="ap-why">Dead link to replace: “${e(p.broken_link.anchor||p.broken_link.host)}” (${e(p.broken_link.host)}, ${e(String(p.broken_link.reason).replaceAll('_',' '))})</small>`:''}</td><td>${p.email?e(p.email):p.contact_form?external(p.contact_form,'Contact form'):'—'}${p.contact_quality?`<small>${e(p.contact_quality.status==='verified'?'✓ inbox verified':'held: '+String(p.contact_quality.reason||'').replaceAll('_',' '))}</small>`:''}</td><td>${external(p.asset_url,(p.asset_title||'').slice(0,60))}</td><td>${statusTag(p.status)}${p.needs_owner?`<small class="ap-why"><b>Needs your answer:</b> ${e({reciprocal:'they want a mention back',paid:'they mention a fee',guest_post:'they want a guest post'}[p.condition]||'conditional yes')}</small>`:''}${lastReply?.excerpt?`<small>“${e(lastReply.excerpt.slice(0,160))}”</small>`:''}<small>${last?e(last.type+' · '+niceTime(last.at)):''}</small></td></tr>`});
-  const counts={};for(const p of all)counts[p.status]=(counts[p.status]||0)+1;
-  const opts=['active','all',...STATUS_ORDER.filter(x=>counts[x])].map(x=>`<option value="${x}" ${ui.filter===x?'selected':''}>${x==='active'?'In progress':x==='all'?'All prospects':x.replaceAll('_',' ')} ${counts[x]?`(${counts[x]})`:''}</option>`).join('');
+  const rows=prospectView(all,ui.filter).slice(0,200)
+    .map(p=>{const last=(p.history||[]).at(-1);const lastReply=[...(p.history||[])].reverse().find(h=>h.type==='reply');return `<tr><td><strong>${e(p.domain)}</strong><small>${e(p.site)} · fit ${n(p.score)}</small></td><td>${external(p.page_url,p.title||p.page_url)}<small>${e(p.reason||p.fit_section||p.query||'')}</small>${p.broken_link?`<small class="ap-why">Dead link to replace: “${e(p.broken_link.anchor||p.broken_link.host)}” (${e(p.broken_link.host)}, ${e(String(p.broken_link.reason).replaceAll('_',' '))})</small>`:''}</td><td>${p.email?e(p.email):p.contact_form?external(p.contact_form,'Contact form'):'—'}${p.contact_quality?`<small>${e(p.contact_quality.status==='verified'?'✓ inbox verified':'held: '+String(p.contact_quality.reason||'').replaceAll('_',' '))}</small>`:''}</td><td>${external(p.asset_url,(p.asset_title||'').slice(0,60))}</td><td>${statusTag(p.status)}${replyBadge(p,h)}${lastReply?.excerpt?`<small>“${e(lastReply.excerpt.slice(0,160))}”</small>`:''}<small>${last?e(last.type+' · '+niceTime(last.at)):''}</small></td></tr>`});
+  const counts={needs_you:all.filter(waitsForUs).length};for(const p of all)counts[p.status]=(counts[p.status]||0)+1;
+  const opts=[...(counts.needs_you||ui.filter==='needs_you'?['needs_you']:[]),'active','all',...STATUS_ORDER.filter(x=>counts[x])].map(x=>`<option value="${x}" ${ui.filter===x?'selected':''}>${x==='needs_you'?'Needs you':x==='active'?'In progress':x==='all'?'All prospects':x.replaceAll('_',' ')} ${counts[x]?`(${counts[x]})`:''}</option>`).join('');
   return panel('Prospects & conversations',`${n(all.length)} publishers tracked · decrypted locally`,
-    `<div class="table-toolbar"><select class="selector" id="ap-filter">${opts}</select><button class="outline-btn" id="ap-lock" type="button">Lock</button><button class="outline-btn" type="button" data-ap="copykey">Copy vault key</button></div>${rows.length?table(['Publisher','Their page','Contact','Our asset','Status'],rows):empty('Nothing in this view','Change the filter to see more prospects.')}`);
+    `${vaultInfo}<div class="table-toolbar"><select class="selector" id="ap-filter">${opts}</select><button class="outline-btn" id="ap-lock" type="button">Lock</button><button class="outline-btn" type="button" data-ap="copykey">Copy vault key</button></div>${rows.length?table(['Publisher','Their page','Contact','Our asset','Status'],rows):empty('Nothing in this view','Change the filter to see more prospects.')}`);
 }
 
 async function act(kind,fn,ok){
@@ -299,13 +444,16 @@ export function bindAutopilot(reload){
   reloadView=reload;
   // The CSP forbids inline style attributes; set bar widths through the CSSOM instead.
   const main=document.getElementById('main');
-  if(main)new MutationObserver(()=>main.querySelectorAll('[data-w]').forEach(el=>{el.style.width=el.dataset.w+'%'})).observe(main,{childList:true});
+  if(main)new MutationObserver(()=>{main.querySelectorAll('[data-w]').forEach(el=>{el.style.width=el.dataset.w+'%'});main.querySelectorAll('[data-l]').forEach(el=>{el.style.left=el.dataset.l+'%'})}).observe(main,{childList:true});
   document.addEventListener('click',async ev=>{
     const tb=ev.target.closest('[data-ap-tab]');
     if(tb){showApTab(tb.dataset.apTab);return}
     const b=ev.target.closest('[data-ap]');if(!b)return;const a=b.dataset.ap;
     if(a==='connect'){ui.showConnect=!ui.showConnect;return reload()}
     if(a==='close'){ui.showConnect=false;return reload()}
+    if(a==='open-connect'){ui.showConnect=true;await reload();document.querySelector('.ap-connect')?.scrollIntoView({behavior:'smooth',block:'start'});return}
+    if(a==='goto-overview'){showApTab('overview');window.scrollTo({top:0,behavior:'smooth'});return}
+    if(a==='needs-you'){ui.filter='needs_you';showApTab('prospects');await reload();window.scrollTo({top:0});return}
     if(a==='forget'){control.token.set('');ui.configured=null;ui.diag=null;return reload()}
     if(a==='recheck'){ui.msg='';ui.err='';ui.showConnect=true;ui.forceDiag=true;return reload()}
     if(a==='copykey'){try{await navigator.clipboard.writeText(store.get());ui.msg='Vault key copied. Paste it on your other devices to unlock there.'}catch{ui.err='Clipboard blocked by the browser.'}return reload()}
