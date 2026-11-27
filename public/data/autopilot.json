@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-26T21:31:40.237Z",
- "duration_s": 141,
+ "generated_at": "2026-11-27T02:35:13.333Z",
+ "duration_s": 201,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -31,14 +31,14 @@
    "key": true,
    "enabled": true,
    "daily_limit": 24,
-   "used_today": 24,
+   "used_today": 7,
    "balance": {
     "provider": "verifalia",
-    "free_credits": 1,
-    "reset_in": "02:28:20",
-    "checked_at": "2026-11-26T21:31:40.070Z"
+    "free_credits": 18,
+    "reset_in": "21:25:31",
+    "checked_at": "2026-11-27T02:34:29.029Z"
    },
-   "catch_all_domains_skipped": 61
+   "catch_all_domains_skipped": 63
   }
  },
  "setup": [
@@ -130,15 +130,15 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 12981,
+   "ms": 34226,
    "result": {
     "sites": 21,
-    "pages": 2714
+    "pages": 2808
    }
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 159
@@ -156,7 +156,7 @@
    "ok": true,
    "result": {
     "ranked": 555,
-    "internal_suggestions": 578,
+    "internal_suggestions": 595,
     "pitchable": 85
    }
   },
@@ -172,38 +172,40 @@
   },
   "second_look": {
    "ok": true,
-   "ms": 100639,
+   "ms": 88156,
    "result": {
     "checked": 60,
-    "found": 2,
+    "found": 6,
     "unreachable": 1,
-    "waiting": 337
+    "waiting": 278
    }
   },
   "prospects": {
    "ok": true,
-   "ms": 7408,
+   "ms": 8933,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
-    "candidates": 18,
-    "qualified": 1,
+    "candidates": 26,
+    "qualified": 4,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 17,
-    "with_email": 0,
-    "contact_form": 1,
+    "rejected": 22,
+    "with_email": 1,
+    "contact_form": 0,
     "broken_links": 0,
     "from_queue": 0,
     "linkgap_calls": 0,
     "linkgap_candidates": 0,
     "neighbor_pages": 11,
-    "neighbor_candidates": 18,
+    "neighbor_candidates": 26,
     "filtered": {
-     "already_evaluated": 21,
-     "competitor": 2,
-     "duplicate_this_run": 1
+     "already_evaluated": 18,
+     "duplicate_this_run": 8,
+     "platform_or_giant": 1,
+     "competitor": 5,
+     "gov_or_edu": 8
     },
     "deferred": 0
    }
@@ -214,15 +216,15 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 2259,
+   "ms": 9323,
    "result": {
-    "checked": 1,
-    "found": 0
+    "checked": 3,
+    "found": 1
    }
   },
   "replies": {
    "ok": true,
-   "ms": 2596,
+   "ms": 1388,
    "result": {
     "scanned": 8,
     "replies": 0,
@@ -234,32 +236,32 @@
   },
   "sent_check": {
    "ok": true,
-   "ms": 1377,
+   "ms": 775,
    "result": {
-    "scanned": 156,
+    "scanned": 144,
     "restored": 0,
     "duplicates": 0
    }
   },
   "screen": {
    "ok": true,
-   "ms": 1718,
+   "ms": 4221,
    "result": {
-    "screened": 8,
-    "kept": 2,
-    "retired": 2,
+    "screened": 11,
+    "kept": 0,
+    "retired": 7,
     "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 37,
+   "ms": 40,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 65,
+    "deferred": 66,
     "cap": 12,
     "verification_held": 0
    },
@@ -271,19 +273,18 @@
   },
   "preverify": {
    "ok": true,
-   "ms": 10194,
+   "ms": 38795,
    "result": {
-    "checked": 0,
-    "verified": 0,
-    "held": 0,
-    "out_of_credits": true
+    "checked": 10,
+    "verified": 4,
+    "held": 6
    }
   },
   "link_checks": {
    "ok": true,
-   "ms": 4,
+   "ms": 13424,
    "result": {
-    "checked": 0,
+    "checked": 11,
     "won": 0,
     "lost": 0
    }
@@ -291,10 +292,10 @@
  },
  "totals": {
   "sites": 21,
-  "pages_crawled": 2714,
-  "urls_discovered": 7395,
+  "pages_crawled": 2808,
+  "urls_discovered": 7417,
   "promotable": 555,
-  "internal_suggestions": 578,
+  "internal_suggestions": 595,
   "promoting_now": 48
  },
  "spend": {
@@ -313,26 +314,27 @@
  "outreach": {
   "mode": "send",
   "ready": 64,
-  "verified_ready": 0,
-  "pending_verification": 64,
+  "verified_ready": 4,
+  "pending_verification": 60,
   "holds": {
-   "mailbox_accept_all": 8,
+   "mailbox_accept_all": 10,
    "publisher_mismatch": 3,
-   "mailbox_unknown": 11
+   "mailbox_unknown": 12,
+   "mx_dns_unverified": 1
   },
-  "sent_today": 7,
+  "sent_today": 0,
   "cap_today": 12,
   "next_send_at": "2026-11-27T03:00:00.000Z",
   "sending_now": false,
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 5489,
-  "qualified": 905,
+  "prospects_evaluated": 5515,
+  "qualified": 909,
   "ready": 64,
   "broken_link_ready": 3,
-  "contact_form_only": 175,
-  "no_contact": 332,
+  "contact_form_only": 173,
+  "no_contact": 331,
   "contacted": 102,
   "replied": 3,
   "positive": 0,
@@ -923,6 +925,23 @@
    "declined": 0,
    "bounced": 6,
    "spend_usd": 0
+  },
+  {
+   "date": "2026-11-27",
+   "prospects_evaluated": 5515,
+   "qualified": 909,
+   "ready": 64,
+   "broken_link_ready": 3,
+   "contact_form_only": 173,
+   "no_contact": 331,
+   "contacted": 102,
+   "replied": 3,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 6,
+   "declined": 0,
+   "bounced": 6,
+   "spend_usd": 0
   }
  ],
  "learning": {
@@ -1043,9 +1062,9 @@
    },
    {
     "footprint": "neighbor",
-    "queries": 94,
+    "queries": 105,
     "ready": 7,
-    "rate": 0.082
+    "rate": 0.074
    },
    {
     "footprint": "helpful_resources",
@@ -1688,8 +1707,8 @@
   },
   {
    "domain": "tenderatlas.shop",
-   "pages": 206,
-   "discovered": 3761,
+   "pages": 300,
+   "discovered": 3783,
    "sitemaps": 1,
    "eligible": 28,
    "top": "https://tenderatlas.shop/"
@@ -1788,7 +1807,7 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 300,
-   "words": 1830,
+   "words": 1825,
    "interactive": true,
    "modified": "2026-11-07T19:51:12+00:00",
    "reasons": [
@@ -1848,7 +1867,7 @@
     "top3": 0
    },
    "internal_inlinks": 0,
-   "words": 1211,
+   "words": 1217,
    "interactive": false,
    "modified": null,
    "reasons": [
@@ -2108,8 +2127,8 @@
    "linkability": 88,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 1723,
+   "internal_inlinks": 7,
+   "words": 1721,
    "interactive": true,
    "modified": "2026-11-08T05:33:11+00:00",
    "reasons": [
@@ -2218,7 +2237,7 @@
     "Recently updated"
    ],
    "pitchable": true,
-   "prospects": 8,
+   "prospects": 11,
    "internal_link_suggestions": 0,
    "promoting": false
   },
@@ -2251,16 +2270,16 @@
   {
    "site": "mysticaldigits.com",
    "url": "https://blueprint.mysticaldigits.com/",
-   "title": "Your Mystical Blueprint — Discover Your Numbers | MysticalDigits",
-   "h1": "Free Life Path Blueprint Calculator",
-   "description": "Discover your personal numerology blueprint in under 2 minutes. Uncover your Life Path, Destiny, and Soul Urge numbers with a free personalized reading from MysticalDigits.",
+   "title": "Free Numerology Blueprint: Your 6 Core Numbers | MysticalDigits",
+   "h1": "Free Numerology Blueprint",
+   "description": "Free numerology blueprint: enter your birth name and date to see your Life Path, Destiny, Soul Urge, Personality, Birthday and Personal Year numbers, each with a written reading and a free PDF.",
    "type": "interactive_tool",
    "promotion": 76,
    "linkability": 78,
    "demand": null,
    "metrics": null,
    "internal_inlinks": 299,
-   "words": 147,
+   "words": 9,
    "interactive": true,
    "modified": null,
    "reasons": [
@@ -2270,7 +2289,7 @@
    "flagship": true,
    "pitchable": true,
    "prospects": 0,
-   "internal_link_suggestions": 5,
+   "internal_link_suggestions": 1,
    "promoting": true
   },
   {
@@ -2335,7 +2354,7 @@
    "linkability": 78,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 129,
+   "internal_inlinks": 300,
    "words": 760,
    "interactive": false,
    "modified": null,
@@ -2658,13 +2677,13 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 6,
-   "words": 3586,
+   "internal_inlinks": 4,
+   "words": 3580,
    "interactive": true,
    "modified": "2026-11-07T19:35:50+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,586 words)",
+    "In-depth (3,580 words)",
     "19 data tables",
     "Recently updated"
    ],
@@ -2738,7 +2757,7 @@
    "linkability": 81,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 9,
+   "internal_inlinks": 8,
    "words": 6198,
    "interactive": false,
    "modified": "2026-09-12T09:23:40+00:00",
@@ -2909,22 +2928,22 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
-   "title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
-   "h1": "Pinterest Affiliate Marketing: A Step-by-Step Guide for Beginners (2026)",
-   "description": "Pinterest affiliate marketing step by step: the official rules, best niches, pin design, Amazon tips, an earnings calculator and a 90-day plan.",
+   "url": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-youtube-for-affiliate-marketing/",
+   "title": "How to Set Up Affiliate Links on YouTube (2026 Guide)",
+   "h1": "YouTube Affiliate Marketing: How to Set Up Affiliate Links and Earn (2026)",
+   "description": "Set up YouTube affiliate links the right way: where links are clickable, Shorts workarounds, YouTube Shopping requirements, disclosure and tracking.",
    "type": "commercial",
    "promotion": 70,
    "linkability": 78,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 5,
-   "words": 3542,
+   "internal_inlinks": 7,
+   "words": 3252,
    "interactive": true,
-   "modified": "2026-11-20T17:41:25+00:00",
+   "modified": "2026-11-20T18:16:29+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,542 words)",
+    "In-depth (3,252 words)",
     "3 data tables",
     "Recently updated"
    ],
@@ -3135,7 +3154,7 @@
    ],
    "flagship": true,
    "pitchable": true,
-   "prospects": 29,
+   "prospects": 30,
    "internal_link_suggestions": 1,
    "promoting": true
   },
@@ -3210,7 +3229,7 @@
    "flagship": true,
    "pitchable": true,
    "prospects": 11,
-   "internal_link_suggestions": 2,
+   "internal_link_suggestions": 1,
    "promoting": true
   },
   {
@@ -3545,7 +3564,7 @@
    "linkability": 70,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 4,
+   "internal_inlinks": 3,
    "words": 1062,
    "interactive": false,
    "modified": "2026-09-16T18:01:48+00:00",
@@ -3640,6 +3659,31 @@
    "promoting": false
   },
   {
+   "site": "openclaw-skillshub.com",
+   "url": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "h1": "OpenClaw Skills Security: Are OpenClaw Skills Safe to Install?",
+   "description": "Are OpenClaw skills safe? Learn how to audit permissions, verify skill safety, and install OpenClaw skills securely. Complete security guide with actionable che",
+   "type": "reference",
+   "promotion": 63,
+   "linkability": 63,
+   "demand": null,
+   "metrics": null,
+   "internal_inlinks": 9,
+   "words": 1201,
+   "interactive": false,
+   "modified": "2026-03-07",
+   "reasons": [
+    "Recently updated",
+    "Flagship asset"
+   ],
+   "flagship": true,
+   "pitchable": true,
+   "prospects": 15,
+   "internal_link_suggestions": 5,
+   "promoting": true
+  },
+  {
    "site": "gearuptogrow.com",
    "url": "https://gearuptogrow.com/productivity/improve-focus-7-day-protocol/",
    "title": "How to Improve Focus: A 7-Day Focus Reset Plan",
@@ -3677,8 +3721,8 @@
    "linkability": 82,
    "demand": null,
    "metrics": null,
-   "internal_inlinks": 8,
-   "words": 1816,
+   "internal_inlinks": 6,
+   "words": 1807,
    "interactive": true,
    "modified": "2026-11-08T05:33:11+00:00",
    "reasons": [
@@ -3714,7 +3758,7 @@
    ],
    "pitchable": true,
    "prospects": 0,
-   "internal_link_suggestions": 1,
+   "internal_link_suggestions": 0,
    "promoting": true
   },
   {
@@ -3816,34 +3860,6 @@
    "prospects": 12,
    "internal_link_suggestions": 0,
    "promoting": false
-  },
-  {
-   "site": "frenchyfab.com",
-   "url": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "h1": "French Bulldog Supplements: What the Evidence Supports and What to Skip",
-   "description": "A French Bulldog supplement guide by need: joints, skin, gut and calm. What the evidence supports, ingredients to avoid, dosing cautions, and when to ask your vet.",
-   "type": "practical_guide",
-   "promotion": 61,
-   "linkability": 77,
-   "demand": null,
-   "metrics": null,
-   "internal_inlinks": 1,
-   "words": 1367,
-   "interactive": false,
-   "modified": "2026-10-26T13:31:02+00:00",
-   "reasons": [
-    "1 data table",
-    "Cites 6 authoritative sources",
-    "Recently updated",
-    "Under-linked internally (1 inbound)",
-    "One of 152 templated sibling pages — promote the hub first"
-   ],
-   "pitchable": false,
-   "not_pitched_because": "one of many templated pages",
-   "prospects": 2,
-   "internal_link_suggestions": 5,
-   "promoting": false
   }
  ],
  "internal_links": [
@@ -3889,13 +3905,13 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/street-address-residence-number-compatibility-calculator/",
-   "from_title": "Street Address Compatibility Calculators: How House Number Numerology Is…",
+   "from": "https://mysticaldigits.com/advanced-name-numerology/",
+   "from_title": "Advanced Name Numerology 2026: Blueprint Decode",
    "to": "https://mysticaldigits.com/life-path-number-calculator/",
    "to_title": "Life Path Number Calculator (Free) | Mystical Digits",
    "anchor": "life path",
    "relevance": 8,
-   "from_strength": 55
+   "from_strength": 0
   },
   {
    "site": "openclaw-skillshub.com",
@@ -3905,7 +3921,7 @@
    "to_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
    "anchor": "openclaw skills",
    "relevance": 4,
-   "from_strength": 59
+   "from_strength": 63
   },
   {
    "site": "openclaw-skillshub.com",
@@ -3915,17 +3931,7 @@
    "to_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
    "anchor": "openclaw skills",
    "relevance": 4,
-   "from_strength": 40
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/best-openclaw-skills-2026/",
-   "from_title": "25 Best OpenClaw Skills (2026) — Safe, Rated & Ranked by Category | ClawSkills",
-   "to": "https://openclaw-skillshub.com/",
-   "to_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
-   "anchor": "openclaw skills",
-   "relevance": 4,
-   "from_strength": 40
+   "from_strength": 43
   },
   {
    "site": "openclaw-skillshub.com",
@@ -3935,17 +3941,27 @@
    "to_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
    "anchor": "openclaw skills",
    "relevance": 4,
-   "from_strength": 39
+   "from_strength": 43
   },
   {
    "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/",
-   "from_title": "OpenClaw Guides: Install, Security & Comparisons — ClawSkills",
+   "from": "https://openclaw-skillshub.com/articles/best-openclaw-skills-2026/",
+   "from_title": "25 Best OpenClaw Skills (2026) — Safe, Rated & Ranked by Category | ClawSkills",
    "to": "https://openclaw-skillshub.com/",
    "to_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
    "anchor": "openclaw skills",
    "relevance": 4,
-   "from_strength": 39
+   "from_strength": 42
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/how-to-choose-openclaw-skills/",
+   "from_title": "How to Choose OpenClaw Skills — Decision Guide by Use Case | ClawSkills",
+   "to": "https://openclaw-skillshub.com/",
+   "to_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
+   "anchor": "openclaw skills",
+   "relevance": 4,
+   "from_strength": 41
   },
   {
    "site": "gearuptogrow.com",
@@ -3999,8 +4015,8 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
-   "from_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-youtube-for-affiliate-marketing/",
+   "from_title": "How to Set Up Affiliate Links on YouTube (2026 Guide)",
    "to": "https://affiliatemarketingforsuccess.com/how-to-start/most-suitable-affiliate-program/",
    "to_title": "How to Choose the Right Affiliate Program (2026 Checklist)",
    "anchor": "affiliate program",
@@ -4069,16 +4085,6 @@
   },
   {
    "site": "affiliatemarketingforsuccess.com",
-   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
-   "from_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
-   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
-   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
-   "anchor": "affiliate link",
-   "relevance": 4,
-   "from_strength": 70
-  },
-  {
-   "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/how-to-use-social-media-for-affiliate-marketing/",
    "from_title": "Social Media Marketing 2026: 7 Proven Affiliate Link Hacks",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
@@ -4091,6 +4097,16 @@
    "site": "affiliatemarketingforsuccess.com",
    "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/compliance/",
    "from_title": "Affiliate Marketing Compliance: 2026 Rules & Best Practices",
+   "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
+   "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
+   "anchor": "affiliate link",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "affiliatemarketingforsuccess.com",
+   "from": "https://affiliatemarketingforsuccess.com/affiliate-marketing/affiliate-marketing-on-pinterest/",
+   "from_title": "Pinterest Affiliate Marketing: Beginner's Guide (2026)",
    "to": "https://affiliatemarketingforsuccess.com/tools/affiliate-link-generator/",
    "to_title": "Free Affiliate Link Generator [2026]: Build Trackable Links",
    "anchor": "affiliate link",
@@ -4269,53 +4285,13 @@
   },
   {
    "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-calculators/",
-   "from_title": "Free Numerology Calculators: Birth Date, Name and House Number Tools | Mystical Digits",
+   "from": "https://mysticaldigits.com/free-numerology-blueprint/",
+   "from_title": "Free Numerology Blueprint: Calculate Your Numbers and Download Your Results | Mystical Digits",
    "to": "https://blueprint.mysticaldigits.com/",
-   "to_title": "Your Mystical Blueprint — Discover Your Numbers | MysticalDigits",
-   "anchor": "life path",
-   "relevance": 6,
+   "to_title": "Free Numerology Blueprint: Your 6 Core Numbers | MysticalDigits",
+   "anchor": "numerology blueprint",
+   "relevance": 4,
    "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-marriage-compatibility/",
-   "from_title": "Uniting Souls: The 2026 Blueprint to Numerology Marriage Compatibility…",
-   "to": "https://blueprint.mysticaldigits.com/",
-   "to_title": "Your Mystical Blueprint — Discover Your Numbers | MysticalDigits",
-   "anchor": "life path",
-   "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/life-path-number-calculator/",
-   "from_title": "Life Path Number Calculator (Free) | Mystical Digits",
-   "to": "https://blueprint.mysticaldigits.com/",
-   "to_title": "Your Mystical Blueprint — Discover Your Numbers | MysticalDigits",
-   "anchor": "life path",
-   "relevance": 5,
-   "from_strength": 87
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/discover-your-life-path-with-mobile-numerology-calculator/",
-   "from_title": "Life Path Calculator Mobile: Discover Your Numerology Guide",
-   "to": "https://blueprint.mysticaldigits.com/",
-   "to_title": "Your Mystical Blueprint — Discover Your Numbers | MysticalDigits",
-   "anchor": "life path",
-   "relevance": 5,
-   "from_strength": 79
-  },
-  {
-   "site": "mysticaldigits.com",
-   "from": "https://mysticaldigits.com/numerology-love-meter-calculator/",
-   "from_title": "Numerology Love Meter Calculator [2026] | Mystical Digits",
-   "to": "https://blueprint.mysticaldigits.com/",
-   "to_title": "Your Mystical Blueprint — Discover Your Numbers | MysticalDigits",
-   "anchor": "life path",
-   "relevance": 5,
-   "from_strength": 65
   },
   {
    "site": "micegoneguide.com",
@@ -4535,7 +4511,7 @@
    "to_title": "How to Promote Affiliate Products Without a Website in 2026 (9 Proven Methods)",
    "anchor": "promote affiliate products",
    "relevance": 3,
-   "from_strength": 70
+   "from_strength": 0
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -4619,16 +4595,6 @@
   },
   {
    "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "from_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
-   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
-   "anchor": "french bulldogs",
-   "relevance": 4,
-   "from_strength": 61
-  },
-  {
-   "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/french-bulldog-care-guide/",
    "from_title": "French Bulldog Care Guide: Health, Feeding & Safety | Frenchy Fab",
    "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
@@ -4651,6 +4617,16 @@
    "site": "frenchyfab.com",
    "from": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
    "from_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
+   "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
+   "anchor": "french bulldogs",
+   "relevance": 4,
+   "from_strength": 58
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/french-bulldog-diet-for-seniors/",
+   "from_title": "Senior French Bulldog Nutrition: Step-by-Step Guide",
    "to": "https://frenchyfab.com/best-brushes-for-french-bulldogs/",
    "to_title": "Best Brushes for French Bulldogs: Shiny Coats",
    "anchor": "french bulldogs",
@@ -4916,16 +4892,6 @@
    "anchor": "fitness watch",
    "relevance": 7,
    "from_strength": 62
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/reviews/",
-   "from_title": "Reviews Hub | Running Shoes, Watches & Fitness Gear | GearUpToFit",
-   "to": "https://gearuptofit.com/watch-match/",
-   "to_title": "Fitness Watch Match — Find the Right Watch for Your Training",
-   "anchor": "fitness watch",
-   "relevance": 4,
-   "from_strength": 0
   },
   {
    "site": "gearuptogrow.com",
@@ -5418,6 +5384,56 @@
    "from_strength": 0
   },
   {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/",
+   "from_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
+   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "anchor": "openclaw skills",
+   "relevance": 5,
+   "from_strength": 84
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/how-to-choose-openclaw-skills/",
+   "from_title": "How to Choose OpenClaw Skills — Decision Guide by Use Case | ClawSkills",
+   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "anchor": "openclaw skills",
+   "relevance": 5,
+   "from_strength": 41
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/openclaw-vs-nanoclaw/",
+   "from_title": "OpenClaw vs NanoClaw (2026) — Security-Focused Agent Comparison | ClawSkills",
+   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "anchor": "openclaw skills",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/what-are-openclaw-skills/",
+   "from_title": "What Are OpenClaw Skills? Complete Guide to SKILL.md, ClawHub & Safe Setup (2026) | ClawSkills",
+   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "anchor": "openclaw skills",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/what-is-clawhub/",
+   "from_title": "What Is ClawHub? The OpenClaw Skills Registry Explained (2026) | ClawSkills",
+   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
+   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
+   "anchor": "openclaw skills",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
    "site": "mysticaldigits.com",
    "from": "https://mysticaldigits.com/decode-your-personality-birth-number-7/",
    "from_title": "Birth Number 7 Personality: Traits & Meanings | Mystical Digits",
@@ -5465,66 +5481,6 @@
    "to_title": "Birth Number 6 Personality: 2026 Guide & Insights | Mystical Digits",
    "anchor": "birth number",
    "relevance": 6,
-   "from_strength": 0
-  },
-  {
-   "site": "gearuptofit.com",
-   "from": "https://gearuptofit.com/reviews/",
-   "from_title": "Reviews Hub | Running Shoes, Watches & Fitness Gear | GearUpToFit",
-   "to": "https://gearuptofit.com/watch-match/methodology",
-   "to_title": "How Fitness Watch Match scores watches — methodology",
-   "anchor": "fitness watch",
-   "relevance": 4,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/supplements-for-french-bulldogs-what-you-need-to-know/",
-   "from_title": "Best French Bulldog Supplements: What May Help, What to Skip",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 7,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/french-bulldog-food-sensitivities-definitive-guide/",
-   "from_title": "French Bulldog Food Sensitivities: Diagnosis and Diet",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 57
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/essential-vitamins-and-minerals-for-french-bulldogs/",
-   "from_title": "French Bulldog Vitamins: Nutrition Basics, Deficiencies",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/recognizing-and-managing-arthritis-in-french-bulldogs/",
-   "from_title": "French Bulldog Arthritis Symptoms: Signs, Comfort, Mobility",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
-   "from_strength": 0
-  },
-  {
-   "site": "frenchyfab.com",
-   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
-   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
-   "to": "https://frenchyfab.com/french-bulldog-dietary-supplements-guide/",
-   "to_title": "French Bulldog Supplements Guide: Joints, Skin, Gut and Calm",
-   "anchor": "french bulldog",
-   "relevance": 5,
    "from_strength": 0
   },
   {
@@ -5689,6 +5645,16 @@
   },
   {
    "site": "openclaw-skillshub.com",
+   "from": "https://openclaw-skillshub.com/articles/best-search-research-skills-openclaw/",
+   "from_title": "7 Best Search & Research Skills for OpenClaw (2026) | ClawSkills",
+   "to": "https://openclaw-skillshub.com/skills/search-research/knowledge-graph/",
+   "to_title": "Knowledge Graph OpenClaw Skill: Install & Requirements | ClawSkills",
+   "anchor": "knowledge graph",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "openclaw-skillshub.com",
    "from": "https://openclaw-skillshub.com/skills/notes-pkm/logseq-bridge/",
    "from_title": "Logseq Bridge OpenClaw Skill: Install & Requirements | ClawSkills",
    "to": "https://openclaw-skillshub.com/skills/search-research/knowledge-graph/",
@@ -5699,81 +5665,21 @@
   },
   {
    "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/",
-   "from_title": "OpenClaw Guides: Install, Security & Comparisons — ClawSkills",
+   "from": "https://openclaw-skillshub.com/skills/",
+   "from_title": "OpenClaw Skills Directory — Documented Skill Guides & Catalog Overview | ClawSkills",
    "to": "https://openclaw-skillshub.com/skills/search-research/knowledge-graph/",
    "to_title": "Knowledge Graph OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "openclaw skill",
-   "relevance": 5,
-   "from_strength": 39
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
-   "from_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
-   "to": "https://openclaw-skillshub.com/skills/search-research/knowledge-graph/",
-   "to_title": "Knowledge Graph OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "openclaw skill",
-   "relevance": 4,
-   "from_strength": 59
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/skills/search-research/deep-research/",
-   "from_title": "Deep Research OpenClaw Skill: Install & Requirements | ClawSkills",
-   "to": "https://openclaw-skillshub.com/skills/search-research/knowledge-graph/",
-   "to_title": "Knowledge Graph OpenClaw Skill: Install & Requirements | ClawSkills",
-   "anchor": "openclaw skill",
-   "relevance": 4,
-   "from_strength": 58
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/",
-   "from_title": "OpenClaw Skills Hub — Skill Directory, Install Guides & Trust Scores",
-   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
-   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
-   "anchor": "openclaw skills",
-   "relevance": 5,
-   "from_strength": 84
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/",
-   "from_title": "OpenClaw Guides: Install, Security & Comparisons — ClawSkills",
-   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
-   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
-   "anchor": "openclaw skills",
-   "relevance": 5,
-   "from_strength": 39
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/how-to-choose-openclaw-skills/",
-   "from_title": "How to Choose OpenClaw Skills — Decision Guide by Use Case | ClawSkills",
-   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
-   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
-   "anchor": "openclaw skills",
-   "relevance": 5,
-   "from_strength": 38
-  },
-  {
-   "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/does-nemoclaw-replace-openclaw/",
-   "from_title": "Does NemoClaw Replace OpenClaw? Full 2026 Comparison — Enterprise Guide | ClawSkills",
-   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
-   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
-   "anchor": "openclaw skills",
+   "anchor": "knowledge graph",
    "relevance": 5,
    "from_strength": 0
   },
   {
    "site": "openclaw-skillshub.com",
-   "from": "https://openclaw-skillshub.com/articles/openclaw-vs-nanoclaw/",
-   "from_title": "OpenClaw vs NanoClaw (2026) — Security-Focused Agent Comparison | ClawSkills",
-   "to": "https://openclaw-skillshub.com/articles/openclaw-skills-security/",
-   "to_title": "OpenClaw Skills Security — Are OpenClaw Skills Safe? (2026 Guide) | ClawSkills",
-   "anchor": "openclaw skills",
+   "from": "https://openclaw-skillshub.com/articles/",
+   "from_title": "OpenClaw Guides: Install, Security & Comparisons — ClawSkills",
+   "to": "https://openclaw-skillshub.com/skills/search-research/knowledge-graph/",
+   "to_title": "Knowledge Graph OpenClaw Skill: Install & Requirements | ClawSkills",
+   "anchor": "openclaw skill",
    "relevance": 5,
    "from_strength": 0
   },
@@ -5846,6 +5752,116 @@
    "anchor": "food french",
    "relevance": 7,
    "from_strength": 57
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-dog-food-for-french-bulldogs-with-sensitive-stomach/",
+   "from_title": "Best Dog Food for a French Bulldog With a Sensitive Stomach",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/omega-3-supplements-french-bulldogs/",
+   "from_title": "Fish Oil for French Bulldogs: Omega-3 Benefits and Safety",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/best-hypoallergenic-dog-food-french-bulldogs/",
+   "from_title": "Best Hypoallergenic Dog Food for French Bulldogs",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "food french",
+   "relevance": 7,
+   "from_strength": 0
+  },
+  {
+   "site": "frenchyfab.com",
+   "from": "https://frenchyfab.com/homemade-dog-treat-recipes-french-bulldogs/",
+   "from_title": "Homemade French Bulldog Treats: 4 Safe, Simple Recipes",
+   "to": "https://frenchyfab.com/frenchie-homemade-dog-food-recipes/",
+   "to_title": "Homemade Dog Food for French Bulldogs: How to Do It Safely",
+   "anchor": "french bulldogs",
+   "relevance": 6,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/diseases-from-mice/",
+   "from_title": "Diseases From Mice: Health Risks, Symptoms, and Prevention",
+   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
+   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
+   "anchor": "cleanup safety",
+   "relevance": 5,
+   "from_strength": 53
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/rodent-infestation-cleanup-protocols/",
+   "from_title": "Rodent Infestation Cleanup Protocols for Homes and Storage Areas",
+   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
+   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
+   "anchor": "mouse cleanup",
+   "relevance": 5,
+   "from_strength": 49
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/identifying-mouse-nests-in-your-home/",
+   "from_title": "Identifying Mouse Nests in Your Home: Where Mice Hide",
+   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
+   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
+   "anchor": "cleanup safety",
+   "relevance": 5,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/mouse-traps-baits/",
+   "from_title": "Mouse Traps and Baits: Safer Choices",
+   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
+   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
+   "anchor": "mouse cleanup safety",
+   "relevance": 4,
+   "from_strength": 0
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/mouse-removal/",
+   "from_title": "Mouse Removal Checklist: Traps, Cleanup, and Sealing",
+   "to": "https://micegoneguide.com/mouse-cleanup-safety/",
+   "to_title": "Mouse Cleanup Safety: Disinfection, Disposal & Next Steps",
+   "anchor": "mouse cleanup safety",
+   "relevance": 3,
+   "from_strength": 57
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/safely-remove-mice/",
+   "from_title": "How to Remove Mice Safely: A Step-by-Step Guide",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 56
+  },
+  {
+   "site": "micegoneguide.com",
+   "from": "https://micegoneguide.com/where-to-place-mouse-traps/",
+   "from_title": "Where to Place Mouse Traps: Room-by-Room Placement Guide",
+   "to": "https://micegoneguide.com/snap-traps-for-mice/",
+   "to_title": "Snap Traps for Mice: How to Set, Place & Use Them Safely",
+   "anchor": "snap traps",
+   "relevance": 5,
+   "from_strength": 48
   }
  ],
  "indexation": {
@@ -5989,8 +6005,8 @@
    {
     "site": "openclaw-skillshub.com",
     "checked": 97,
-    "healthy": 64,
-    "problems": 33,
+    "healthy": 75,
+    "problems": 22,
     "critical": 0,
     "review": 0,
     "not_found": 0,
@@ -6001,7 +6017,7 @@
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 33
+    "thin": 22
    },
    {
     "site": "imagealchemy.app",
@@ -6022,21 +6038,20 @@
    },
    {
     "site": "tenderatlas.shop",
-    "checked": 206,
-    "healthy": 23,
-    "problems": 183,
-    "critical": 77,
+    "checked": 300,
+    "healthy": 162,
+    "problems": 138,
+    "critical": 1,
     "review": 0,
     "not_found": 0,
-    "server_error": 77,
-    "noindex": 0,
+    "server_error": 0,
+    "noindex": 1,
     "canonical_mismatch": 0,
     "redirect": 0,
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 106,
-    "alert": "77 of 206 URLs answered HTTP 503 (the site says: database-unavailable). The site itself is failing under light crawling, not individual pages; the crawl stopped early after 15 failures to avoid adding load."
+    "thin": 137
    },
    {
     "site": "signalroom.store",
@@ -6211,128 +6226,17 @@
   ],
   "issues": [
    {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821026-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821037-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821059-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821167-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821174-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821238-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821250-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821263-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821293-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821296-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821372-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/tenders/ted/821425-2026",
-    "issue": "server_error",
-    "label": "Server error (5xx)",
-    "fix": "Check hosting/caching/firewall logs for this URL; Google drops URLs that keep failing.",
-    "severity": 2,
-    "status": 503,
-    "detail": "HTTP 503 · retry-after 3600 · database-unavailable"
-   },
-   {
     "site": "efficientgptprompts.com",
     "url": "https://efficientgptprompts.com/shop",
+    "issue": "noindex",
+    "label": "noindex but listed in sitemap",
+    "fix": "If the page should rank, remove the noindex (SEO plugin / X-Robots-Tag). If not, drop it from the sitemap.",
+    "severity": 3,
+    "status": 200
+   },
+   {
+    "site": "tenderatlas.shop",
+    "url": "https://tenderatlas.shop/countries/es/cpv/72000000",
     "issue": "noindex",
     "label": "noindex but listed in sitemap",
     "fix": "If the page should rank, remove the noindex (SEO plugin / X-Robots-Tag). If not, drop it from the sitemap.",
@@ -6690,113 +6594,33 @@
    },
    {
     "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/articles/best-browser-automation-skills-openclaw",
+    "url": "https://openclaw-skillshub.com/skills/ai-llms",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 224
+    "words": 254
    },
    {
     "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/articles/best-coding-agent-skills-openclaw",
+    "url": "https://openclaw-skillshub.com/skills/browser-automation",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 223
+    "words": 135
    },
    {
     "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/articles/best-devops-cloud-skills-openclaw",
+    "url": "https://openclaw-skillshub.com/skills/coding-agents",
     "issue": "thin",
     "label": "Thin page (under 300 words, no tool)",
     "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
     "severity": 8,
     "status": 200,
-    "words": 215
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/articles/best-marketing-sales-skills-openclaw",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 199
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/articles/best-notes-pkm-skills-openclaw",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 134
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/articles/best-productivity-skills-openclaw",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 216
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/articles/best-search-research-skills-openclaw",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 244
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/articles/best-skills-content-creators",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 142
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/articles/best-web-frontend-skills-openclaw",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 222
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/articles/multi-agent-orchestration-guide",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 287
-   },
-   {
-    "site": "openclaw-skillshub.com",
-    "url": "https://openclaw-skillshub.com/articles/security-audit-checklist-openclaw-skills",
-    "issue": "thin",
-    "label": "Thin page (under 300 words, no tool)",
-    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
-    "severity": 8,
-    "status": 200,
-    "words": 258
+    "words": 138
    },
    {
     "site": "openclaw-skillshub.com",
@@ -6807,6 +6631,86 @@
     "severity": 8,
     "status": 200,
     "words": 98
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/devops-cloud",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 196
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/health-fitness",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 83
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/marketing-sales",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 140
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/notes-pkm",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 123
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/productivity",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 181
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/search-research",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 182
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/skills/web-frontend",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 130
+   },
+   {
+    "site": "openclaw-skillshub.com",
+    "url": "https://openclaw-skillshub.com/tutorials",
+    "issue": "thin",
+    "label": "Thin page (under 300 words, no tool)",
+    "fix": "Expand it to fully answer the query, merge it into a stronger page with a 301, or noindex it.",
+    "severity": 8,
+    "status": 200,
+    "words": 161
    },
    {
     "site": "plantastichaven.com",
@@ -6979,10 +6883,10 @@
     "words": 188
    }
   ],
-  "total_issues": 266,
-  "blocking": 78,
+  "total_issues": 210,
+  "blocking": 2,
   "review": 1,
-  "thin": 187,
+  "thin": 207,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first); up to 12 examples are listed per site and problem."
  },
  "search_performance": null,
@@ -6990,7 +6894,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-26T21:31:21.890Z"
+  "updated_at": "2026-11-27T02:34:05.350Z"
  },
  "wins": [
   {
@@ -7061,54 +6965,47 @@
   }
  ],
  "log": [
-  "21:29:20 connection dataforseo: connected",
-  "21:29:20 connection gmail: connected",
-  "21:29:22 crawl gearuptofit.com: 300/797 urls, fetched 0, 304 0, reused 300",
-  "21:29:23 crawl plantastichaven.com: 154/154 urls, fetched 1, 304 0, reused 153",
-  "21:29:25 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
-  "21:29:25 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
-  "21:29:26 crawl frenchyfab.com: 153/153 urls, fetched 0, 304 0, reused 153",
-  "21:29:27 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
-  "21:29:28 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "21:29:28 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "21:29:28 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
-  "21:29:29 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
-  "21:29:29 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
-  "21:29:29 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
-  "21:29:30 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
-  "21:29:30 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
-  "21:29:31 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
-  "21:29:31 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
-  "21:29:31 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
-  "21:29:31 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
-  "21:29:31 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
-  "21:29:33 crawl tenderatlas.shop: 300/3761 urls, fetched 27, 304 0, reused 117; 15 answered HTTP 503 (database-unavailable), crawl stopped early (156 not requested)",
-  "21:29:33 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "21:29:33 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "21:29:33 - search_performance: skipped (Search Console not connected)",
-  "21:29:33 pitch policy: 85 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
-  "21:29:33 indexation: 78 sitemap URLs cannot be indexed, 1 need a look, 187 are thin (266 in all)",
-  "21:29:33 indexation: tenderatlas.shop: 77 of 206 URLs answered HTTP 503 (the site says: database-unavailable). The site itself is failing under light crawling, not individual pages; the crawl stopped early after 15 failures to avoid adding load.",
-  "21:31:14 second look: 60 qualified pages without an address re-checked, 2 now have one (1 unreachable, 337 waiting for a later cycle)",
-  "21:31:17 link neighbourhood (free): 11 qualified pages mined, 18 recommended sites to evaluate",
-  "21:31:21 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 18 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 18 candidates, 1 qualified (0 unlinked mentions), 0 with email, 0 with a dead link we can replace, 0 already linking",
-  "21:31:21 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "21:31:21 self-tuning: next cycle runs up to 20 searches",
-  "21:31:24 broken links: 1 queued pages scanned, 0 with a dead link our page can replace",
-  "21:31:26 replies: 8 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "21:31:28 sent-folder check: 156 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
-  "21:31:29 queue screening (free, nothing sent): 8 checked, 2 sendable, 2 retired, 0 switched to a better published address",
-  "21:31:29 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "21:31:40 pre-verify (nothing sent): 0 top inboxes checked, 0 verified, 0 held",
-  "21:31:40 link checks: 0 pages, 0 new links won, 0 lost"
+  "02:31:53 connection dataforseo: connected",
+  "02:31:53 connection gmail: connected",
+  "02:31:56 crawl plantastichaven.com: 154/154 urls, fetched 62, 304 0, reused 92",
+  "02:32:02 crawl gearuptofit.com: 300/797 urls, fetched 291, 304 0, reused 9",
+  "02:32:03 crawl gearuptogrow.com: 103/103 urls, fetched 33, 304 0, reused 70",
+  "02:32:04 crawl micegoneguide.com: 41/41 urls, fetched 16, 304 0, reused 25",
+  "02:32:04 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 12, 304 0, reused 101",
+  "02:32:05 crawl mysticaldigits.com: 300/468 urls, fetched 189, 304 0, reused 111",
+  "02:32:06 crawl efficientgptprompts.com: 300/487 urls, fetched 22, 304 0, reused 278",
+  "02:32:07 crawl frenchyfab.com: 153/153 urls, fetched 75, 304 0, reused 78",
+  "02:32:07 crawl imagealchemy.app: 28/28 urls, fetched 21, 304 0, reused 7",
+  "02:32:07 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
+  "02:32:07 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
+  "02:32:07 crawl openclaw-skillshub.com: 97/97 urls, fetched 87, 304 0, reused 10",
+  "02:32:08 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
+  "02:32:08 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
+  "02:32:08 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
+  "02:32:08 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
+  "02:32:09 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
+  "02:32:09 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
+  "02:32:09 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
+  "02:32:09 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
+  "02:32:27 crawl tenderatlas.shop: 300/3783 urls, fetched 171, 304 0, reused 129",
+  "02:32:28 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "02:32:28 - search_performance: skipped (Search Console not connected)",
+  "02:32:28 pitch policy: 85 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
+  "02:32:28 indexation: 2 sitemap URLs cannot be indexed, 1 need a look, 207 are thin (210 in all)",
+  "02:33:56 second look: 60 qualified pages without an address re-checked, 6 now have one (1 unreachable, 278 waiting for a later cycle)",
+  "02:33:58 link neighbourhood (free): 11 qualified pages mined, 26 recommended sites to evaluate",
+  "02:34:05 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 26 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 26 candidates, 4 qualified (0 unlinked mentions), 1 with email, 0 with a dead link we can replace, 0 already linking",
+  "02:34:05 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "02:34:05 self-tuning: next cycle runs up to 20 searches",
+  "02:34:14 broken links: 3 queued pages scanned, 1 with a dead link our page can replace",
+  "02:34:16 replies: 8 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "02:34:16 sent-folder check: 144 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
+  "02:34:21 queue screening (free, nothing sent): 11 checked, 0 sendable, 7 retired, 0 switched to a better published address",
+  "02:34:21 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "02:34:59 pre-verify (nothing sent): 10 top inboxes checked, 4 verified, 6 held",
+  "02:35:13 link checks: 11 pages, 0 new links won, 0 lost"
  ],
  "attention": [
-  {
-   "level": "action",
-   "code": "site_failing",
-   "message": "tenderatlas.shop: 77 of 206 URLs answered HTTP 503 (the site says: database-unavailable). The site itself is failing under light crawling, not individual pages; the crawl stopped early after 15 failures to avoid adding load.",
-   "fix": "Fix the site itself first (hosting, database or plan limits, firewall). Links are not built to pages that fail, and this is re-checked every cycle."
-  },
   {
    "level": "action",
    "code": "dataforseo_funds",
@@ -7118,7 +7015,7 @@
   {
    "level": "info",
    "code": "holds",
-   "message": "22 queued inboxes are held; most often (11) because mailbox unknown.",
+   "message": "26 queued inboxes are held; most often (12) because mailbox unknown.",
    "fix": "Handled automatically; held inboxes are re-checked after 3 days."
   }
  ]
