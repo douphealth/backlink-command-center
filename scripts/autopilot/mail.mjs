@@ -67,7 +67,7 @@ export class Imap{
   if(!/(?:^|\r\n)\* SEARCH(?:[ \t]+\d+)*[ \t]*(?:\r\n|$)/.test(found))throw Error('IMAP search response missing');
   const allUids=(found.match(/\* SEARCH([\d ]*)/)?.[1]||'').trim().split(/\s+/).map(Number).filter(n=>Number.isSafeInteger(n)&&n>after).sort((a,b)=>a-b);
   const uids=[...new Set(allUids)].slice(0,Math.max(1,Math.min(400,max))),out=[];
-  if(uids.length){const raw=await this.cmd(`UID FETCH ${uids.join(',')} (UID BODY.PEEK[HEADER.FIELDS (FROM SUBJECT IN-REPLY-TO REFERENCES AUTO-SUBMITTED MESSAGE-ID CONTENT-TYPE CONTENT-TRANSFER-ENCODING)] BODY.PEEK[TEXT]<0.32768>)`);out.push(...parseFetch(raw))}
+  if(uids.length){const raw=await this.cmd(`UID FETCH ${uids.join(',')} (UID BODY.PEEK[HEADER.FIELDS (FROM SUBJECT DATE IN-REPLY-TO REFERENCES AUTO-SUBMITTED MESSAGE-ID CONTENT-TYPE CONTENT-TRANSFER-ENCODING)] BODY.PEEK[TEXT]<0.32768>)`);out.push(...parseFetch(raw))}
   const parsed=uids.every(u=>out.some(m=>Number(m.uid)===u));
   const result=out.filter(m=>m.from!==String(this.user||'').toLowerCase());
   result.complete=!!validity&&parsed&&allUids.length<=uids.length;
@@ -127,7 +127,7 @@ export function parseFetch(raw){
   const body=(part.match(/BODY\[TEXT\]<0> \{\d+\}\r\n([\s\S]*?)(?:\)(?:\r\n|$)|$)/)||[])[1]||'';
   const unfolded=header.replace(/\r\n[ \t]+/g,' '),h=k=>(unfolded.match(new RegExp('^'+k+':\\s*(.*)$','im'))||[])[1]||'';
   const from=(h('From').match(/<([^>]+)>/)||[])[1]||h('From').trim();
-  out.push({uid:part.match(/\bUID\s+(\d+)/)?.[1]||'',messageId:h('Message-ID'),from:from.toLowerCase(),subject:h('Subject'),inReplyTo:h('In-Reply-To'),references:h('References'),autoSubmitted:h('Auto-Submitted'),body:decodeReplyBody(body,h('Content-Transfer-Encoding'),h('Content-Type'))});
+  out.push({uid:part.match(/\bUID\s+(\d+)/)?.[1]||'',messageId:h('Message-ID'),from:from.toLowerCase(),subject:h('Subject'),date:h('Date'),inReplyTo:h('In-Reply-To'),references:h('References'),autoSubmitted:h('Auto-Submitted'),body:decodeReplyBody(body,h('Content-Transfer-Encoding'),h('Content-Type'))});
  }return out;
 }
 const NEGATIVE=/\b(unsubscribe|remove me|take me off|stop (emailing|contacting)|do not (email|contact)|don't (email|contact)|not interested|no thanks|no thank you|please stop|spam)\b/i;
@@ -135,16 +135,35 @@ const POSITIVE=/\b(added|i've added|i have added|updated the (page|post|article)
 const YES_OPENING=/^(?:(?:hi|hello|hey|dear)\b[^\n,!]{0,40}[,!]?\s*)?(?:yes|yep|yeah|sure|absolutely|of course|definitely)\b/i;
 // Conditions a publisher attaches to a yes. They need the owner's decision, so they are flagged, never auto-handled.
 const CONDITIONS=[
- ['paid',/\b(?:fee|charges?|paid|payment|paypal|pricing|our rates?|sponsored|usd|dollars|euros?)\b|\$\s?\d/i],
- ['reciprocal',/\b(?:if you (?:can )?(?:mention|link|add|feature|include) us|mention us|link (?:back )?to us|link back|in return|in exchange|link exchange|exchange links|reciprocal|return the favou?r|a link from your)\b/i],
- ['guest_post',/\b(?:guest post|write for us|contribute an article|submit an article)\b/i],
+ ['paid',/\b(?:fees?|charges?|paid|payment|paypal|pricing|our rates?|sponsored|usd|eur|gbp|dollars|euros?)\b|[$€£]\s?\d/i],
+ ['reciprocal',/\b(?:if you (?:can )?(?:mention|link|add|feature|include) us|mention us|link (?:back )?to us|link back|in return|in exchange|link exchanges?|exchange links|link swaps?|swap links|reciprocal|return the favou?r|a link from your)\b/i],
+ ['guest_post',/\b(?:guest[- ]?post(?:s|ing)?|guest (?:articles?|blogs?|contributions?)|write for us|contribute an? (?:article|post)|submit an? (?:article|post))\b/i],
 ];
+// Our message ids (<lf-...>) in any header or text; the List-Unsubscribe mailto may leave them URL-encoded in a subject.
+export const lfIds=s=>String(s||'').replace(/%3C/gi,'<').replace(/%3E/gi,'>').replace(/%40/gi,'@').match(/<lf-[^<>\s]+>/g)||[];
+/**
+ * An opt-out by subject alone, whoever sends it: "unsubscribe" (optionally after Re:/Fwd: prefixes), which is what
+ * a mail client's unsubscribe button sends from our List-Unsubscribe mailto ("unsubscribe <lf-...>"), or any subject
+ * that carries one of our message ids (only that mailto ever puts one there).
+ */
+export function optOutSubject(subject){
+ const s=String(subject||'').replace(/%20/g,' ');
+ return /^\s*(?:(?:re|fwd?|fw|aw|wg|tr)\s*:\s*)*unsubscribe\b/i.test(s)||lfIds(s).length>0;
+}
 export function replyText(msg){return String(msg.body||'').split(/\r?\n>|\r?\nOn .{5,160} wrote:|\r?\n-{2,}\s*Original Message/i)[0].trim()}
 export function replyCondition(msg){const t=replyText(msg);for(const [k,re] of CONDITIONS)if(re.test(t))return k;return null}
+const QUESTION_OPENER=/(?:^|[.!?:\n]\s*)(?:(?:hi|hello|hey|dear)\b[^\n,!]{0,40}[,!]\s*)?(?:(?:could|can|would|will|do|does|did|is|are|have|has)\s+(?:you|we|i|there|your|the)\b|(?:what|which|how|where|when|why|who)(?:'s|\s+(?:is|are|was|were|do|does|did|would|should|can|could|kind|type|much|many|long|about|exactly)\b))/i;
+/** The reply asks us something (a "?" in their own text, or a question opener). It never changes the sentiment. */
+export function isQuestion(msg){
+ const t=replyText(msg).replace(/https?:\/\/\S+/g,' ');
+ return /\?/.test(t)||QUESTION_OPENER.test(t);
+}
 export function classifyReply(msg){
  if(/mailer-daemon|postmaster|mail delivery subsystem/i.test(msg.from)||/delivery status notification|undeliverable|failure notice|returned mail/i.test(msg.subject))return 'bounce';
+ if(optOutSubject(msg.subject))return 'negative';
  if(/auto-replied|auto-generated/i.test(msg.autoSubmitted)||/out of (the )?office|automatic reply|auto(matic)?[- ]?reply/i.test(msg.subject))return 'auto';
  const text=replyText(msg);
- if(NEGATIVE.test(text)||/^(?:no|nope|stop)[.!\s]*$/i.test(text)||/^(?:re:\s*)?unsubscribe[.!\s]*$/i.test(msg.subject||''))return 'negative';
+ if(NEGATIVE.test(text)||/^(?:no|nope|stop)[.!\s]*$/i.test(text))return 'negative';
  if(POSITIVE.test(text)||YES_OPENING.test(text))return 'positive';return 'neutral';
 }
+

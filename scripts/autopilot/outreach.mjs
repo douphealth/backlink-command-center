@@ -1,6 +1,6 @@
 /** Outreach state machine with mandatory recipient preflight and reply-health gate. */
 import {createHash} from 'node:crypto';
-import {buildMessage,newMessageId,smtpSend,Imap,classifyReply,replyCondition,replyText} from './mail.mjs';
+import {buildMessage,newMessageId,smtpSend,Imap,classifyReply,replyCondition,replyText,isQuestion,optOutSubject,lfIds} from './mail.mjs';
 import {followupPitch} from './pitch.mjs';
 import {fetchPage,links,hostOf,sameSite,ageDays,NOW,sleep,DAY,pool} from './util.mjs';
 import {QUALIFY_VERSION} from './prospect.mjs';
@@ -52,7 +52,19 @@ export function outreachStatus(state,{limit,mode,qualifyVersion}){
   sent_today:sent,cap_today:cap,next_send_at:mode==='off'?null:next?.toISOString()||null,
   sending_now:mode==='send'&&sent<cap&&verified.some(p=>sendWindowOpen(p.domain,now)),reply_health:state.reply_health?.status||'unverified'};
 }
-/** Late replies from any contacted status, including won/lost, must still suppress. */
+/** A later message can raise, never lower, how far a conversation got: declined (opt-out) > won/lost > positive > replied. */
+const SETTLED=new Set(['positive','won','lost','declined']);
+// Which condition matters most when a publisher raises more than one: a fee always needs the owner's explicit approval.
+const CONDITION_RANK={guest_post:1,reciprocal:2,paid:3};
+/** When their message was written (Date header), never in the future; null when missing or implausible. */
+function sentAt(m,now=Date.now()){const t=Date.parse(m?.date||'');return Number.isFinite(t)&&t>now-90*DAY?new Date(Math.min(t,now)).toISOString():null}
+/**
+ * Late replies from any contacted status, including won/lost, must still suppress.
+ * Status only moves forward: a later neutral or question reply never turns a positive, won or lost conversation
+ * back into "replied"; an opt-out always wins (declined + domain and address suppression). A condition and the
+ * owner flag stay set once raised. Every new human reply that is not an opt-out marks the conversation as waiting
+ * for our answer (awaiting_us) until the owner's own answer shows up in Sent (reconcileSent) or replies.mjs answers.
+ */
 export async function processReplies({state,imap,log=()=>{}}){
  const stats={scanned:0,replies:0,positive:0,negative:0,bounces:0,delays:0};
  state.suppression??={};state.contacted??={};state.seen_replies??={};
@@ -63,10 +75,24 @@ export async function processReplies({state,imap,log=()=>{}}){
   for(const h of failures)if(h.to)state.suppression[h.to.toLowerCase()]??={reason:'Historical delivery failure',at:h.at||NOW()};
   p.no_followup=true;state.contacted[p.domain]??=NOW();if(p.status==='ready')p.status='bounced';
  }
+ // One-time repair: before status became monotonic, a later message overwrote a positive reply with "replied"
+ // (2026-11-24/25), and no conversation was ever marked as waiting for an answer. Restore both from stored replies.
+ state.migrations??={};
+ if(!state.migrations.reply_status_v2){
+  let restored=0,waiting=0;
+  for(const p of Object.values(state.prospects||{})){
+   const rs=(p.history||[]).filter(h=>h.type==='reply');if(!rs.length)continue;
+   if(p.status==='replied'&&rs.some(h=>h.sentiment==='positive')){p.status='positive';p.next_link_check=NOW();restored++}
+   const last=rs.at(-1);
+   if(p.awaiting_us===undefined&&last.sentiment!=='negative'&&p.status!=='declined'&&ageDays(last.at)<30&&!suppressed(state,p.email,p.domain)){p.awaiting_us=true;p.last_reply_at??=last.at;waiting++}
+  }
+  state.migrations.reply_status_v2=NOW();
+  if(restored||waiting)log(`repair: ${restored} positive replies restored after being overwritten, ${waiting} replies marked as waiting for an answer`);
+ }
  const byMsg=new Map(),byEmail=new Map();
  for(const p of Object.values(state.prospects||{})){
   if(!(p.history||[]).some(h=>h.type==='initial'))continue;
-  for(const h of p.history||[]){if(h.message_id)byMsg.set(h.message_id,p);if(h.to)byEmail.set(h.to.toLowerCase(),p)}
+  for(const h of p.history||[]){if(h.message_id&&h.type!=='reply')byMsg.set(h.message_id,p);if(h.to)byEmail.set(h.to.toLowerCase(),p)}
   if(p.email)byEmail.set(p.email.toLowerCase(),p);
  }
  let msgs;
@@ -74,11 +100,18 @@ export async function processReplies({state,imap,log=()=>{}}){
  catch(e){state.reply_health={status:'failed',checked_at:NOW()};throw e}
  stats.scanned=msgs.length;
  for(const m of msgs){
-  const ids=`${m.inReplyTo||''} ${m.references||''} ${m.body||''}`.match(/<lf-[^>]+>/g)||[];
+  // Our ids, most specific first: the message they answer, its thread, the List-Unsubscribe subject, then quoted text.
+  const replyTo=lfIds(m.inReplyTo),refs=lfIds(m.references).reverse(),inSubject=lfIds(m.subject),ids=[...replyTo,...refs,...inSubject,...lfIds(m.body)];
   const from=String(m.from||'').toLowerCase();let p=ids.map(i=>byMsg.get(i)).find(Boolean)||byEmail.get(from);
   const kind=classifyReply(m);
   if(!p&&kind==='bounce'){for(const [e,q] of byEmail)if(String(m.body||'').toLowerCase().includes(e)){p=q;break}}
-  if(!p||kind==='auto')continue;
+  if(!p){
+   // An opt-out we cannot tie to a prospect (forwarded inbox, state lost): never silently dropped. Counted (no
+   // addresses in logs), and the sender's own address is suppressed so it can never be emailed.
+   if(kind==='negative'&&(optOutSubject(m.subject)||ids.length)){stats.unmatched_optouts=(stats.unmatched_optouts||0)+1;const e=normalizeEmail(from);if(e)state.suppression[e]??={reason:'Opt-out (not matched to a prospect)',at:NOW()}}
+   continue;
+  }
+  if(kind==='auto')continue;
   const identity=m.messageId||createHash('sha256').update(JSON.stringify([from,m.subject,m.body,m.uid])).digest('hex');
   const key=p.id+'|'+identity;if(state.seen_replies[key])continue;
   p.history??=[];
@@ -93,19 +126,38 @@ export async function processReplies({state,imap,log=()=>{}}){
    else stats.delays++;
   }else{
    stats.replies++;p.replied_at=NOW();p.no_followup=true;
-   const condition=kind==='negative'?null:replyCondition(m);
+   const negative=kind==='negative',condition=negative?null:replyCondition(m),question=!negative&&isQuestion(m);
+   const theirId=String(m.messageId||'').match(/<[^<>\s]+>/)?.[0]||null,answers=ids.find(i=>byMsg.get(i)===p)||null;
+   if(negative&&inSubject.length&&byMsg.get(inSubject[0])===p)stats.unsubscribe_links=(stats.unsubscribe_links||0)+1;
+   const written=sentAt(m);
    // Stored only in the encrypted vault: the dashboard shows what they asked for without opening Gmail.
-   p.history.push({type:'reply',at:NOW(),from,sentiment:kind,...(condition?{condition}:{}),subject:String(m.subject||'').slice(0,140),excerpt:replyText(m).replace(/\s+/g,' ').slice(0,280)});
-   if(condition){p.condition=condition;p.needs_owner=true;stats.conditional=(stats.conditional||0)+1}
-   if(kind==='negative'){stats.negative++;p.status='declined';state.suppression[p.domain]={reason:'Opt-out',at:NOW()};if(p.email)state.suppression[p.email.toLowerCase()]={reason:'Opt-out',at:NOW()}}
-   else if(kind==='positive'){stats.positive++;p.status='positive';p.next_link_check=NOW()}
-   else p.status='replied';
+   p.history.push({type:'reply',at:NOW(),...(written?{written_at:written}:{}),from,sentiment:kind,...(condition?{condition}:{}),question,message_id:theirId,in_reply_to:answers,
+    subject:String(m.subject||'').slice(0,140),excerpt:replyText(m).replace(/\s+/g,' ').slice(0,600)});
+   if(!(Date.parse(p.last_reply_at)>=Date.parse(written||NOW())))p.last_reply_at=written||NOW();
+   if(condition){
+    if((CONDITION_RANK[condition]||0)>(CONDITION_RANK[p.condition]||0))p.condition=condition;
+    // A new condition re-opens the owner's decision even if an earlier one was already answered.
+    p.needs_owner=true;delete p.owner_decided_at;delete p.owner_decision;stats.conditional=(stats.conditional||0)+1;
+   }
+   if(negative){
+    stats.negative++;p.status='declined';p.awaiting_us=false;
+    state.suppression[p.domain]={reason:'Opt-out',at:NOW()};
+    for(const e of new Set([p.email,from].map(x=>normalizeEmail(String(x||'').toLowerCase())).filter(Boolean)))state.suppression[e]={reason:'Opt-out',at:NOW()};
+    // The publisher closed the conversation: nothing is left for the owner to decide (the flag itself stays).
+    if(p.needs_owner&&!p.owner_decided_at){p.owner_decided_at=NOW();p.owner_decision='closed_by_opt_out'}
+   }else{
+    if(kind==='positive'){stats.positive++;if(!SETTLED.has(p.status))p.status='positive';if(p.status!=='declined')p.next_link_check=NOW()}
+    else if(!SETTLED.has(p.status))p.status='replied';
+    if(question)stats.questions=(stats.questions||0)+1;
+    // A suppressed or declined conversation is never answered again, so it never waits for us either.
+    p.awaiting_us=p.status!=='declined'&&!suppressed(state,p.email,p.domain);
+   }
   }
   state.seen_replies[key]=NOW();
  }
  if(msgs.cursor)state.mail_cursor=msgs.cursor;
  state.reply_health={status:msgs.complete===false?'backlog':'ok',checked_at:NOW(),scanned:msgs.length};
- log(`replies: ${stats.scanned} scanned, ${stats.replies} replies, ${stats.bounces} failures, ${stats.delays} delays; ${state.reply_health.status}`);
+ log(`replies: ${stats.scanned} scanned, ${stats.replies} replies, ${stats.bounces} failures, ${stats.delays} delays; ${state.reply_health.status}${stats.unmatched_optouts?`; ${stats.unmatched_optouts} opt-outs not matched to a prospect (sender suppressed)`:''}`);
  return stats;
 }
 /** Accept a recipient proof only if it is complete, current, first-party and unsuppressed; record the outcome on the prospect. */
@@ -158,6 +210,8 @@ export async function screenQueue({state,mailer,max=40,deadline=Infinity,log=()=
  * Make the Sent folder the ground truth for "already emailed". A prospect whose address is in Sent but whose
  * record has no pitch (state lost or overwritten, as on 2026-11-25 when two cycles overlapped) is marked as
  * contacted so it is never pitched again; anyone who received two emails within a day gets no further email.
+ * It also notices the owner's own answers: mail to a publisher who replied, sent after that reply and not by
+ * Autopilot, means the owner has answered (awaiting_us cleared) and has decided any condition they raised.
  */
 export async function reconcileSent({state,imap,days=30,log=()=>{}}){
  const stats={scanned:0,restored:0,duplicates:0};
@@ -165,9 +219,21 @@ export async function reconcileSent({state,imap,days=30,log=()=>{}}){
  const sent=await imap.sentRecipients(new Date(Date.now()-days*DAY));
  if(!Array.isArray(sent))throw Error('Invalid Sent mailbox response');
  stats.scanned=sent.length;state.contacted??={};
- const byTo=new Map();for(const m of sent){const e=normalizeEmail(m.to);if(!e)continue;(byTo.get(e)||byTo.set(e,[]).get(e)).push(Date.parse(m.at)||Date.now())}
+ const byTo=new Map(),ownBy=new Map();
+ for(const m of sent){const e=normalizeEmail(m.to);if(!e)continue;(byTo.get(e)||byTo.set(e,[]).get(e)).push(Date.parse(m.at)||Date.now());
+  // Only mail with a real Date and without one of our own <lf-...> ids can be the owner's answer.
+  const t=Date.parse(m.at);if(Number.isFinite(t)&&!/<lf-/.test(String(m.message_id||m.messageId||'')))(ownBy.get(e)||ownBy.set(e,[]).get(e)).push(t)}
+ let answered=0;
  for(const p of Object.values(state.prospects||{})){
   const addrs=new Set([p.email,...(p.history||[]).map(h=>h.to)].map(x=>normalizeEmail(x||'')).filter(Boolean));
+  if(p.awaiting_us&&Date.parse(p.last_reply_at)){
+   // Mail Autopilot sent itself (pitches, follow-ups, automatic answers) is in the history: it is not the owner's answer.
+   const ours=(p.history||[]).filter(h=>h.to&&(['initial','followup'].includes(h.type)?h.mode!=='draft':h.via==='send')).map(h=>[normalizeEmail(h.to),Date.parse(h.at)]);
+   const people=new Set([...addrs,...(p.history||[]).filter(h=>h.type==='reply').map(h=>normalizeEmail(h.from||''))].filter(Boolean));
+   const after=Date.parse(p.last_reply_at);
+   const hit=[...people].flatMap(e=>(ownBy.get(e)||[]).map(t=>[e,t])).find(([e,t])=>t>after&&!ours.some(([oe,ot])=>oe===e&&Math.abs(ot-t)<15*60e3));
+   if(hit){p.awaiting_us=false;p.owner_answered_at=new Date(hit[1]).toISOString();if(p.needs_owner&&!p.owner_decided_at){p.owner_decided_at=NOW();p.owner_decision='answered_in_gmail'}answered++}
+  }
   const times=[...addrs].flatMap(e=>byTo.get(e)||[]).sort((a,b)=>a-b);if(!times.length)continue;
   const first=new Date(times[0]).toISOString(),last=new Date(times.at(-1)).toISOString();
   if(!(p.history||[]).some(h=>h.type==='initial'&&h.mode!=='draft')){
@@ -177,10 +243,19 @@ export async function reconcileSent({state,imap,days=30,log=()=>{}}){
   }
   if(!(Date.parse(state.contacted[p.domain])>=times.at(-1)))state.contacted[p.domain]=last;
   // Two emails less than a day apart is never intended (a follow-up comes days later): do not write to them again.
-  if(times.some((t,i)=>i>0&&t-times[i-1]<DAY)&&!p.duplicate_sent){p.duplicate_sent=true;p.no_followup=true;p.no_followup_reason='Received a duplicate email';stats.duplicates++}
+  // The hold applies to every pair; a pair sent after the publisher replied (the owner's or an automatic answer) is a
+  // conversation, so it is counted apart from accidental duplicates.
+  if(times.some((t,i)=>i>0&&t-times[i-1]<DAY)&&!p.duplicate_sent){
+   p.duplicate_sent=true;p.no_followup=true;
+   const firstReply=(p.history||[]).find(h=>h.type==='reply'),replied=Date.parse(firstReply?.written_at||firstReply?.at||'');
+   const cold=Number.isFinite(replied)?times.filter(t=>t<replied):times;
+   if(cold.some((t,i)=>i>0&&t-cold[i-1]<DAY)){p.no_followup_reason='Received a duplicate email';stats.duplicates++}
+   else{p.no_followup_reason??='Two emails within a day in a conversation';stats.conversation_pairs=(stats.conversation_pairs||0)+1}
+  }
  }
+ if(answered)stats.owner_answered=answered;
  state.sent_reconciled_at=NOW();
- log(`sent-folder check: ${stats.scanned} sent emails read, ${stats.restored} unrecorded pitches restored to the record, ${stats.duplicates} recipients found with a duplicate email (no further email to them)`);
+ log(`sent-folder check: ${stats.scanned} sent emails read, ${stats.restored} unrecorded pitches restored to the record, ${stats.duplicates} recipients found with a duplicate email (no further email to them)${answered?`, ${answered} replies answered by you in Gmail`:''}`);
  return stats;
 }
 const NO_CREDITS=/credits_used_up|budget_exhausted/;
