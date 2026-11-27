@@ -118,8 +118,9 @@ export function applyProof(state,p,proof,{followup=false}={}){
   p.contact_quality={status:'held',reason:proof?.reason||'recipient_not_verified',...(detail?{detail}:{}),checked_at:NOW(),
    ...(Date.parse(proof?.retry_after||'')>Date.now()?{retry_after:proof.retry_after}:{})};delete p.recipient_proof;
   // Two publisher-side failures in a row: this publisher has no verifiable editorial inbox. Retire it from the
-  // ready queue (record kept) so each cycle's checks go to prospects that can actually be emailed.
-  if(!followup&&p.status==='ready'&&publisherHold(detail)&&prev?.status==='held'&&publisherHold(prev.detail)){p.status='contact_unverifiable';p.reason=`No verifiable editorial inbox (${detail})`}
+  // ready queue (record kept) so each cycle's checks go to prospects that can actually be emailed. A catch-all server
+  // can never give a positive answer (the recipient rules hold it for good), so a catch-all hold retires on the first strike.
+  if(!followup&&p.status==='ready'&&(CATCH_ALL_HOLD.test(detail||'')||publisherHold(detail)&&prev?.status==='held'&&publisherHold(prev.detail))){p.status='contact_unverifiable';p.reason=`No verifiable editorial inbox (${detail})`}
   return false;
  }
  p.email=e;p.email_source=proof.evidence.source;p.email_rank=proof.evidence.rank;
@@ -130,8 +131,10 @@ export function applyProof(state,p,proof,{followup=false}={}){
  * Holds caused on our side (login, permissions, credits, provider outage, time budget) or with no recorded reason
  * are re-checked on the next run: fixing a login must not leave inboxes stuck for days.
  */
-export const OUR_SIDE_HOLD=/^(?:mailbox_(?:verifalia_|verification_|verifier_|recently_inconclusive$)|time_budget$|verification_error$|recipient_not_verified$)/;
+export const OUR_SIDE_HOLD=/^(?:mailbox_(?:verifalia_|verification_|verifier_|recently_inconclusive$|unknown_server$)|time_budget$|verification_error$|recipient_not_verified$)/;
 export const publisherHold=detail=>!!detail&&!OUR_SIDE_HOLD.test(detail);
+/** Holds that mean "this mail server accepts every address": no check can ever pass there. */
+export const CATCH_ALL_HOLD=/^(?:mailbox_accept_all|catch_all_domain)$/;
 /**
  * Free queue screening (no verification credits): every ready prospect is checked against the strict,
  * first-party recipient rules once every 14 days. Prospects that cannot pass leave the ready queue at once;
@@ -193,36 +196,97 @@ export async function classifyQueue(state,mailer,list,{max=80}={}){
  await pool(due,8,async p=>{const c=await mailer.mxClassOf(p,{state}).catch(()=>null);if(c){p.mx_class=c;p.mx_checked_at=NOW()}});
  return due.length;
 }
-/** Expected value of spending one verification credit here: chance the inbox verifies x chance the pitch earns a link. */
-export const creditValue=(state,p,likelihood)=>likelihood*verifyPassRate(state,p.mx_class);
 /**
- * Verify the best queued inboxes ahead of their send window (no email is sent). Runs every cycle on
- * the free daily credits that would otherwise expire, so a cycle inside the window can send at once
- * instead of spending its time verifying. Only inboxes whose window opens within `withinHours` are
- * checked, so every proof is still under 24 h old when the email goes out.
+ * Expected value of spending one verification credit here: chance the inbox verifies x chance the pitch earns a link.
+ * A recent weekend screen that found the mailbox deliverable makes a pass likely, so that inbox goes first in its window
+ * (the screen itself is never a send proof: a fresh check is still bought).
  */
-export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new Date(),deadline=Infinity,log=()=>{}}){
- const stats={checked:0,verified:0,held:0};
+export const prescreened=(p,now=Date.now())=>p?.prescreen?.result==='valid'&&now-Date.parse(p.prescreen.at)<7*DAY;
+export const creditValue=(state,p,likelihood,now=Date.now())=>likelihood*(prescreened(p,now)?Math.max(0.9,verifyPassRate(state,p.mx_class)):verifyPassRate(state,p.mx_class));
+const utcDay=ms=>new Date(ms).toISOString().slice(0,10);
+/**
+ * Verify the best queued inboxes ahead of their send window (no email is sent). Runs every cycle on the day's free
+ * credits, so a cycle inside the window can send at once instead of spending its time verifying. Only inboxes whose
+ * window opens within `withinHours` are checked, so every proof is still under 24 h old when the email goes out.
+ *
+ * Order: due follow-ups first (only when follow-ups are sent; a re-check of an address that passed days ago is the best use of a credit), then new
+ * prospects by expected value. A follow-up due later today, beyond the horizon, keeps a credit reserved. Checking stops
+ * once fresh proofs plus reserved follow-ups fill each sending day's remaining capacity (cap minus sent that day): any
+ * further proof would expire before it could be used.
+ *
+ * When nothing can be sent before today's credits reset (no window opens within the horizon of the reset, typically
+ * Friday night and Saturday), the leftover credits screen the best queued inboxes instead: "invalid" and catch-all retire
+ * the inbox, "valid" only raises its rank (p.prescreen); a screen is never a send proof.
+ */
+export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new Date(),deadline=Infinity,followups=true,followupDays=6,cap=Infinity,log=()=>{}}){
+ const stats={checked:0,verified:0,held:0},extra={followups_checked:0,followups_verified:0,reserved_for_followups:0,capacity_full:0,catch_all_retired:0,screened:0,prescreen_valid:0,prescreen_retired:0};
  if(typeof mailer?.authorizeRecipient!=='function')return stats;
+ const t=now(),nowMs=t.getTime(),horizon=withinHours*36e5,today=utcDay(nowMs),all=Object.values(state.prospects||{});
+ // Catch-all servers accept every address, so no check can ever pass there: such holds leave the queue at once.
+ for(const p of all)if(p.status==='ready'&&p.contact_quality?.status==='held'&&CATCH_ALL_HOLD.test(p.contact_quality.detail||'')){
+  p.status='contact_unverifiable';p.reason=`No verifiable editorial inbox (${p.contact_quality.detail})`;extra.catch_all_retired++}
  const learned=assetStats(state);
- const queue=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION&&!suppressed(state,p.email,p.domain)&&
-   !(state.contacted?.[p.domain]&&ageDays(state.contacted[p.domain])<90)&&!usableVerification(p.recipient_proof?.verification,p.email)&&
-   !(p.contact_quality?.status==='held'&&publisherHold(p.contact_quality.detail)&&ageDays(p.contact_quality.checked_at)<3)&& // only publisher-side holds wait 3 days
-   !coolingDown(p,now().getTime())&& // a cached "inconclusive" answer cannot change yet
-   (()=>{const w=nextSendWindow(p.domain,now());return !!w&&w-now()<=withinHours*36e5})()) // a proof must not expire before the window
-  .map(p=>[p,linkLikelihood(p,{assets:learned})]).sort((a,b)=>b[1]-a[1]);
- // Credits are the scarce resource: spend them where (chance to verify) x (chance of a link) is highest.
- await classifyQueue(state,mailer,queue.map(x=>x[0]));
- const picked=queue.map(([p,l])=>[p,creditValue(state,p,l)]).sort((a,b)=>b[1]-a[1]).slice(0,Math.max(0,max)).map(x=>x[0]);
- for(const p of picked){
-  // A single slow mail server can take ~2 minutes to verify: never start one without that much time left.
-  if(deadline-Date.now()<150e3)break;stats.checked++;
-  let proof;try{proof=await mailer.authorizeRecipient(p,{state,followup:false,deadline})}catch{proof={ok:false,reason:'verification_error'}}
-  // Out of credits for today: stop, and leave the remaining inboxes untouched instead of marking each one "held".
-  if(!proof?.ok&&NO_CREDITS.test(`${proof?.reason||''} ${proof?.detail||''}`)){stats.checked--;stats.out_of_credits=true;break}
-  if(applyProof(state,p,proof))stats.verified++;else stats.held++;
+ const waiting=p=>(p.contact_quality?.status==='held'&&publisherHold(p.contact_quality.detail)&&ageDays(p.contact_quality.checked_at)<3)|| // only publisher-side holds wait 3 days
+  coolingDown(p,nowMs); // a cached "inconclusive" answer cannot change yet
+ const proofUntil=p=>usableVerification(p.recipient_proof?.verification,p.email)?Date.parse(p.recipient_proof.verification.expires_at):0; // proofs are judged on the real clock, as at send time
+ // Due follow-ups: the first email went out and the follow-up is due by the time its send window opens.
+ const fus=[];if(followups)for(const p of all){
+  if(p.status!=='sent'||p.replied_at||p.no_followup||!p.email||(p.qv||1)<QUALIFY_VERSION||suppressed(state,p.email,p.domain))continue;
+  const initial=(p.history||[]).find(h=>h.type==='initial'&&h.mode!=='draft');if(!initial)continue;
+  const w=nextSendWindow(p.domain,new Date(Math.max(nowMs,(Date.parse(initial.at)||nowMs)+followupDays*DAY)));if(w)fus.push({p,w:w.getTime()});
  }
- log(`pre-verify (nothing sent): ${stats.checked} top inboxes checked, ${stats.verified} verified, ${stats.held} held`);
+ const fresh=all.filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION&&!suppressed(state,p.email,p.domain)&&!(state.contacted?.[p.domain]&&ageDays(state.contacted[p.domain])<90))
+  .map(p=>({p,w:nextSendWindow(p.domain,t)?.getTime()})).filter(x=>x.w);
+ const inH=x=>x.w-nowMs<=horizon; // a proof bought now must not expire before the window
+ // Sending capacity per UTC day: cap minus what was already sent that day, minus proofs and reservations already covering it.
+ const sentOn={};for(const p of all)for(const h of p.history||[])if((h.type==='initial'||h.type==='followup')&&h.mode!=='draft'){const d=String(h.at||'').slice(0,10);sentOn[d]=(sentOn[d]||0)+1}
+ const capN=Number.isFinite(Number(cap))?Number(cap):Infinity,room={},left=d=>(room[d]??=Math.max(0,capN-(sentOn[d]||0))),take=d=>{room[d]=left(d)-1};
+ for(const x of [...fus,...fresh])if(inH(x)&&proofUntil(x.p)>x.w)take(utcDay(x.w));
+ let reserved=0;for(const x of fus)if(!inH(x)&&utcDay(x.w)===today&&!proofUntil(x.p)&&!waiting(x.p)){reserved++;take(today)}
+ // The window to plan for: the inbox's next window on a day that still has room (today's may already be full), within the horizon.
+ const slot=x=>{let w=x.w;for(let i=0;i<2&&w&&left(utcDay(w))<=0;i++){const d=new Date(w);w=nextSendWindow(x.p.domain,new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()+1)))?.getTime()}
+  return w&&w-nowMs<=horizon&&left(utcDay(w))>0?w:null};
+ extra.reserved_for_followups=reserved;
+ const credits=typeof mailer.verifierCredits==='function'?async screen=>{try{const n=await mailer.verifierCredits({state,screen});return Number.isFinite(n)?n:Infinity}catch{return Infinity}}:async()=>Infinity;
+ const ranked=async list=>{await classifyQueue(state,mailer,list.map(x=>x.p));
+  return list.map(x=>({...x,v:creditValue(state,x.p,linkLikelihood(x.p,{assets:learned}),nowMs)})).sort((a,b)=>b.v-a.v)};
+ const resetAt=Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),t.getUTCDate()+1);
+ let n=0;
+ if([...fus,...fresh].some(x=>x.w-resetAt<horizon)){
+  // Credits are the scarce resource: follow-ups first, then where (chance to verify) x (chance of a link) is highest.
+  const due=fus.filter(x=>inH(x)&&!proofUntil(x.p)&&!waiting(x.p)).sort((a,b)=>a.w-b.w);
+  const queue=[...due.map(x=>({...x,followup:true})),...await ranked(fresh.filter(x=>inH(x)&&!proofUntil(x.p)&&!waiting(x.p)))];
+  for(const x of queue){
+   if(n>=max)break;
+   const w=slot(x);if(!w){extra.capacity_full++;continue} // the sends it could go out with are already covered
+   if(!x.followup&&(await credits(false))-reserved<=0){stats.out_of_credits=true;break} // the rest is kept for follow-ups due later today
+   // A single slow mail server can take ~2 minutes to verify: never start one without that much time left.
+   if(deadline-Date.now()<150e3)break;n++;stats.checked++;if(x.followup)extra.followups_checked++;
+   let proof;try{proof=await mailer.authorizeRecipient(x.p,{state,followup:!!x.followup,deadline})}catch{proof={ok:false,reason:'verification_error'}}
+   // Out of credits for today: stop, and leave the remaining inboxes untouched instead of marking each one "held".
+   if(!proof?.ok&&NO_CREDITS.test(`${proof?.reason||''} ${proof?.detail||''}`)){stats.checked--;if(x.followup)extra.followups_checked--;stats.out_of_credits=true;break}
+   if(applyProof(state,x.p,proof,{followup:!!x.followup})){stats.verified++;if(x.followup)extra.followups_verified++;take(utcDay(w))}else stats.held++;
+  }
+ }else if(typeof mailer.prescreenRecipient==='function'){
+  const list=await ranked(fresh.filter(x=>!proofUntil(x.p)&&!waiting(x.p)&&!(nowMs-Date.parse(x.p.prescreen?.at||'')<7*DAY)));
+  for(const x of list){
+   if(n>=max||deadline-Date.now()<150e3)break;
+   if((await credits(true))<=0){stats.out_of_credits=true;break}
+   n++;let r;try{r=await mailer.prescreenRecipient(x.p,{state,deadline})}catch{r=null}
+   if(!r||r.ok)continue; // a screen never authorises anything
+   if(NO_CREDITS.test(`${r.reason||''} ${r.detail||''}`)){stats.out_of_credits=true;break}
+   if(!r.screened){applyProof(state,x.p,r);continue} // failed a free rule before any check (DE/AT/CH, no published inbox...): an ordinary hold
+   if(/^(?:mailbox_(?:verifalia_|verification_|verifier_)|time_budget$|verification_error$)/.test(r.detail||''))continue; // no answer (our side): screen it again later
+   extra.screened++;const at=NOW();x.p.prescreen={result:r.screened||'unknown',at};
+   if(r.screened==='valid')extra.prescreen_valid++;
+   else if(x.p.status==='ready'&&(r.screened==='invalid'||r.screened==='catch_all')){
+    x.p.status='contact_unverifiable';x.p.reason=`No verifiable editorial inbox (${r.detail})`;x.p.contact_quality={status:'held',reason:'no_verified_mailbox',detail:r.detail,checked_at:at};extra.prescreen_retired++}
+  }
+ }
+ for(const [k,v] of Object.entries(extra))if(v)stats[k]=v; // only what happened (keeps the published stage result small)
+ log(`pre-verify (nothing sent): ${stats.checked} top inboxes checked${extra.followups_checked?` (${extra.followups_checked} due follow-ups first)`:''}, ${stats.verified} verified, ${stats.held} held`+
+  `${reserved?`, ${reserved} credits kept for follow-ups due later today`:''}${extra.capacity_full?`, ${extra.capacity_full} skipped (the day's sends are already covered)`:''}${extra.catch_all_retired?`, ${extra.catch_all_retired} catch-all holds retired`:''}`+
+  `${extra.screened?`; no send window before the credits reset, so ${extra.screened} inboxes screened (${extra.prescreen_valid} deliverable, ${extra.prescreen_retired} retired; a screen is never a send proof)`:''}`);
  return stats;
 }
 export async function runOutreach({state,assets,sites,writer,mailer,config,deadline=Infinity,log=()=>{}}){
@@ -349,6 +413,15 @@ export function gmailTransport(env){
   screenRecipient:async(p,{state,deadline})=>{
    if(!verifiers.has(state))verifiers.set(state,new RecipientVerifier({state,fetchPage,env}));
    return verifiers.get(state).verify(p,{deadline,screenOnly:true});
+  },
+  // Weekend screening with credits that would expire: never returns a proof (see RecipientVerifier.verify prescreen).
+  prescreenRecipient:async(p,{state,deadline})=>{
+   if(!verifiers.has(state))verifiers.set(state,new RecipientVerifier({state,fetchPage,env}));
+   return verifiers.get(state).verify(p,{deadline,prescreen:true});
+  },
+  verifierCredits:async({state,screen=false})=>{
+   if(!verifiers.has(state))verifiers.set(state,new RecipientVerifier({state,fetchPage,env}));
+   return verifiers.get(state).creditsLeft({screen});
   },
   send:async({to,raw,recipientProof:p})=>{
    if(!usableVerification(p?.verification,to)||p?.email!==normalizeEmail(to)||!samePublisher(p?.evidence?.source,p?.publisher_domain))throw Error('SMTP blocked: verified recipient evidence required');

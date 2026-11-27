@@ -87,7 +87,7 @@ The setup script stores everything as **encrypted GitHub Actions secrets** (valu
 | `SENDER_NAME` (variable) | Signing pitches | Your name, e.g. "Alex from GearUpToFit" |
 | `OUTREACH_MODE` (variable) | `draft` (default) or `send` for hands-free | — |
 | `VERIFALIA_USERNAME` / `VERIFALIA_PASSWORD` + mailbox checks per day | **Required to send anything.** Every inbox gets a fresh positive mailbox verification before an email goes out | verifalia.com free plan: 25 credits **every day** (Standard quality = 1 credit, so about 24 checks/day by default). Only free credits are used unless `VERIFALIA_ALLOW_PAID=YES`. Set on the dashboard (⚙ Connect); a daily limit above 0 is the opt-in |
-| `HUNTER_API_KEY` *(optional)* | Fallback verifier when the day's Verifalia free credits are used up | hunter.io → API keys |
+| `HUNTER_API_KEY` *(optional)* | Second-opinion and fallback verifier, only within its own `HUNTER_DAILY_LIMIT` (default 0 = never called) | hunter.io → API keys |
 | `ANTHROPIC_API_KEY` *(optional)* | Unique, page-specific pitches written by Claude | console.anthropic.com |
 | `GROQ_API_KEY` or `GEMINI_API_KEY` *(optional)* | Free AI-written pitches when no Anthropic key is set | console.groq.com/keys or aistudio.google.com/apikey |
 | `GSC_SERVICE_ACCOUNT_JSON` *(optional)* | Exact impressions/positions → striking-distance targeting | Google Cloud service account with Search Console access |

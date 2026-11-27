@@ -7,7 +7,7 @@ const url='https://journal.example/contact/';
 const ctx={domain:'journal.example',source:'contact',now};
 const html='<h1>Editorial inquiries and resource suggestions</h1><a href="mailto:editor@journal.example">Contact our editor</a>';
 const data=(e=email,extra={})=>({data:{email:e,status:'valid',regexp:true,gibberish:false,disposable:false,mx_records:true,smtp_server:true,smtp_check:true,accept_all:false,block:false,...extra}});
-const env={EMAIL_VERIFICATION_ENABLED:'YES',HUNTER_API_KEY:'unit-test-not-real',EMAIL_VERIFY_DAILY_LIMIT:'3'};
+const env={EMAIL_VERIFICATION_ENABLED:'YES',HUNTER_API_KEY:'unit-test-not-real',EMAIL_VERIFY_DAILY_LIMIT:'3',HUNTER_DAILY_LIMIT:'3'}; // Hunter has its own daily budget (default 0 = never used)
 const prospect={domain:'journal.example',page_url:'https://journal.example/resources/',email_source:url,email,history:[]};
 function fixture(options={}){
  const state=options.state||{},calls=[],pages=[];
@@ -120,9 +120,9 @@ test('verification cache is email-specific and avoids duplicate billed checks',a
  await f.v.mailbox('other@journal.example');assert.equal(f.calls.length,2);
 });
 test('daily provider cap is persistent and uncertain calls are counted',async()=>{
- let count=0;const state={};const f=fixture({state,env:{...env,EMAIL_VERIFY_DAILY_LIMIT:'1'},fetchImpl:async()=>{count++;throw Error('timeout')}});
+ let count=0;const state={};const f=fixture({state,env:{...env,HUNTER_DAILY_LIMIT:'1'},fetchImpl:async()=>{count++;throw Error('timeout')}});
  assert.equal((await f.v.mailbox(email)).status,'unknown');assert.equal((await f.v.mailbox(email)).reason,'verification_budget_exhausted');assert.equal(count,1);
- assert.equal((await fixture({state,env:{...env,EMAIL_VERIFY_DAILY_LIMIT:'1'}}).v.mailbox(email)).reason,'verification_budget_exhausted');
+ assert.equal((await fixture({state,env:{...env,HUNTER_DAILY_LIMIT:'1'}}).v.mailbox(email)).reason,'verification_budget_exhausted');
 });
 test('rate limits and pending responses never become valid',async()=>{
  for(const status of [202,222,401,429,451,500]){
