@@ -46,3 +46,14 @@ test('a quick answer within a day of the pitch still sets the duplicate hold, bu
   assert.equal(p.duplicate_sent,true,'no further automatic email after two within a day');assert.equal(p.no_followup,true);
   assert.equal(stats.duplicates,0);assert.equal(stats.conversation_pairs,1);assert.equal(p.awaiting_us,false);
 });
+
+test('the owner sending an answer Autopilot saved in Drafts counts as their answer, even if Gmail keeps our id',async()=>{
+  const p=waiting();p.history.push({type:'answer',via:'draft',to:'ed@pub.example',at:ago(3),message_id:'<lf-draft9@owned.example>'});
+  const state={prospects:{a:p}};
+  await reconcileSent({state,imap:{sentRecipients:async()=>[{to:'ed@pub.example',at:ago(1),message_id:'<lf-draft9@owned.example>'}]}});
+  assert.equal(p.awaiting_us,false);assert.equal(p.owner_decision,'answered_in_gmail');
+  // An id we sent ourselves (not a saved draft) still never counts.
+  const q=waiting();const s2={prospects:{a:q}};
+  await reconcileSent({state:s2,imap:{sentRecipients:async()=>[{to:'ed@pub.example',at:ago(1),message_id:'<lf-other@owned.example>'}]}});
+  assert.equal(q.awaiting_us,true);
+});

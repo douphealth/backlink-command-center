@@ -369,9 +369,12 @@ export async function reconcileSent({state,imap,days=90,index=null,now=()=>Date.
  state.contacted??={};
  if(index instanceof Map)for(const m of sent){const e=normalizeEmail(String(m?.to||'').toLowerCase()),t=Date.parse(m?.at);if(e&&Number.isFinite(t)&&!(index.get(e)>=t))index.set(e,t)}
  const byTo=new Map(),ownBy=new Map();
+ // An answer Autopilot saved in Gmail Drafts carries our <lf-...> id: if the owner sends that draft and Gmail keeps the id,
+ // it is still the owner's answer.
+ const draftIds=new Set(Object.values(state.prospects||{}).flatMap(p=>(p.history||[]).filter(h=>h.type==='answer'&&h.via==='draft'&&h.message_id).map(h=>h.message_id)));
  for(const m of sent){const e=normalizeEmail(m.to);if(!e)continue;(byTo.get(e)||byTo.set(e,[]).get(e)).push(Date.parse(m.at)||Date.now());
-  // Only mail with a real Date and without one of our own <lf-...> ids can be the owner's answer.
-  const t=Date.parse(m.at);if(Number.isFinite(t)&&!/<lf-/.test(String(m.message_id||m.messageId||'')))(ownBy.get(e)||ownBy.set(e,[]).get(e)).push(t)}
+  // Only mail with a real Date, and without one of our own <lf-...> ids (unless it is a draft we saved for the owner), can be the owner's answer.
+  const t=Date.parse(m.at),id=String(m.message_id||m.messageId||'');if(Number.isFinite(t)&&(!/<lf-/.test(id)||draftIds.has(id.match(/<lf-[^>]+>/)?.[0])))(ownBy.get(e)||ownBy.set(e,[]).get(e)).push(t)}
  let answered=0;
  for(const p of Object.values(state.prospects||{})){
   const addrs=new Set([p.email,...(p.history||[]).map(h=>h.to)].map(x=>normalizeEmail(x||'')).filter(Boolean));
