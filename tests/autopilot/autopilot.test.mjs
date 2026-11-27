@@ -228,8 +228,11 @@ test('engine refuses a wrong vault key but starts fresh after a dashboard key re
   try{
     const wrong=await runAutopilot({env:{LINKFORGE_DATA_KEY:'new-key-'.repeat(3)},argv:[],fetchImpl:f,write:false,useCache:false});
     assert.equal(wrong.summary.capabilities.vault,false);
+    assert.equal(wrong.summary.funnel_stale,true,'numbers republished from an earlier cycle are marked stale');
+    assert.equal(wrong.summary.attention.find(a=>a.code==='vault_locked')?.level,'action','a locked vault raises an owner alert');
     const reset=await runAutopilot({env:{LINKFORGE_DATA_KEY:'new-key-'.repeat(3),LINKFORGE_VAULT_RESET_AT:new Date(Date.now()+1000).toISOString()},argv:[],fetchImpl:f,write:false,useCache:false});
     assert.equal(reset.summary.capabilities.vault,true);
+    assert.equal(reset.summary.funnel_stale,false);assert.ok(!reset.summary.attention.some(a=>a.code==='vault_locked'));
   }finally{original==null?fs.unlinkSync(path):fs.writeFileSync(path,original)}
 });
 

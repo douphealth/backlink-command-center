@@ -23,6 +23,7 @@ on:
 permissions:
   contents: write
   id-token: write # identity token for the dashboard's free AI pitch writer; no secret is stored
+  issues: write # owner alerts: one issue per problem Autopilot cannot fix by itself (counts only, no prospect data)
 concurrency:
   group: linkforge-autopilot
   cancel-in-progress: false
@@ -145,3 +146,13 @@ jobs:
           if ! git diff --quiet HEAD~1 origin/main -- public/data/vault.json; then echo "::warning::The state file on main changed while this cycle ran. This cycle's state is kept; the Sent-folder check restores any send record the other change held."; fi
           for i in 1 2 3; do git pull --rebase -X theirs origin main && git push && exit 0; sleep 5; done
           exit 1
+      # GitHub emails the owner about new issues, so a stall or a decision the owner owes reaches them within a cycle.
+      # One issue per 'action' code (plus early vault-size and inflow warnings); updated in place, closed when it clears.
+      # Optional repository variable LINKFORGE_ALERT_MENTION = a GitHub login to @mention when an alert opens.
+      - name: Alert the owner (GitHub issues)
+        if: ${{ always() && steps.due.outputs.due == 'true' && !inputs.dry_run }}
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          LINKFORGE_ALERT_MENTION: ${{ vars.LINKFORGE_ALERT_MENTION }}
+        run: node scripts/autopilot/notify.mjs
