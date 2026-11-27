@@ -151,7 +151,9 @@ export class DataForSEO{
   }
   async relevantPages(domain,{limit=100,location=2840,language='en'}={}){
     const r=await this.post('relevant_pages','dataforseo_labs/google/relevant_pages/live',{target:domain,location_code:location,language_code:language,limit,order_by:['metrics.organic.etv,desc'],exclude_top_domains:false});
-    return (r?.[0]?.items||[]).map(x=>{const o=x.metrics?.organic||{};
+    // null = the lookup failed (the caller keeps its previous data); [] = a real answer with no ranking pages.
+    if(!r)return null;
+    return (r[0]?.items||[]).map(x=>{const o=x.metrics?.organic||{};
       return {url:x.page_address,etv:o.etv||0,keywords:o.count||0,striking:(o.pos_4_10||0)+(o.pos_11_20||0),top3:(o.pos_1||0)+(o.pos_2_3||0)}});
   }
 }

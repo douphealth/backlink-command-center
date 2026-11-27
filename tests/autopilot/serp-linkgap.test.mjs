@@ -97,7 +97,7 @@ test('competitor link gap: content links to a rival become warm prospects; sideb
     {url_from:'https://cars.com/engine',domain_from:'cars.com',title:'Engine oil change',url_to:'https://plantcaretoday.com/x',anchor:'oil',location:'article',spam:1,external_links:30}]});
   const f=async url=>{const u=new URL(url);
     if(u.hostname==='plantmom.blog'&&u.pathname.startsWith('/watering-guide'))return resp(article('How Often to Water Houseplants','<a href="https://www.plantcaretoday.com/watering-schedule.html">watering schedule guide</a>'));
-    if(u.hostname==='plantmom.blog'&&u.pathname==='/contact')return resp('<a href="mailto:jess@plantmom.blog">mail</a>');
+    if(u.hostname==='plantmom.blog'&&u.pathname==='/contact')return resp('<a href="mailto:hello@plantmom.blog">mail</a>');
     return resp('<p>home</p>')};
   const state={queries:{},mentions_at:{'plantastichaven.com':new Date().toISOString()}};
   state.queries[`plantastichaven.com|"plantastichaven" OR "plantastichaven.com" -site:plantastichaven.com`]=new Date().toISOString();
@@ -197,7 +197,8 @@ test('contact finder follows the homepage menu and indie contact pages',async()=
   const fetched=[];
   const f=async u=>{fetched.push(u);const b=pages[u.replace(/\/$/,'')]??pages[u];return b?new Response(b,{headers:{'content-type':'text/html'}}):new Response('',{status:404})};
   const c=await findContact('https://plantmom.blog/watering','<main>no contact links here</main>',{fetchImpl:f});
-  assert.equal(c.email,'jess@plantmom.blog');
+  // A first name with no editorial remit is held by the send rules (owner decision pending): found, never queued as ready.
+  assert.equal(c.email,null);assert.equal(c.held_email,'jess@plantmom.blog');
   assert.equal(fetched[1].replace(/\/$/,''),'https://plantmom.blog/contact-me','the homepage menu link is tried before guessed paths');
 });
 

@@ -5,8 +5,10 @@
  * 3. Fetch each page, score topical fit and "links out to resources" behaviour,
  *    detect existing links to us, and find the best editorial contact.
  */
-import {fetchPage,pool,tokens,keyPhrase,links,tagText,jsonLd,mainText,stripTags,extractEmails,rankEmail,hostOf,sameSite,rootDomain,normUrl,hashId,ageDays,NOW} from './util.mjs';
-import {findBrokenLink,assetTerms,outboundCandidates} from './broken.mjs';
+import {fetchPage,pool,tokens,keyPhrase,links,tagText,jsonLd,mainText,stripTags,extractEmails,rankEmail,hostOf,sameSite,rootDomain,normUrl,hashId,ageDays,metaContent,NOW,DAY} from './util.mjs';
+import {findBrokenLink,assetTerms,outboundCandidates,contentHtml} from './broken.mjs';
+import {extractEditorialCandidates,pageKind,isSuppressed,POLICY_VERSION} from './recipient-policy.mjs';
+import {bestPitchAsset} from './assets.mjs';
 import {resolveWrapped} from './serp-unwrap.mjs';
 import {readArticle} from './article.mjs';
 
@@ -73,6 +75,7 @@ export function footprintOf(query,site){
     if(re.test(query))return fp}
   if(/^linkgap:/.test(query))return 'link_gap';
   if(/^neighbor:/.test(query))return 'neighbor';
+  if(/^cited:/.test(query))return 'cited_by_us';
   return /^"[^"]+"( OR "[^"]+")? -site:/.test(query)?'mention':'intent';
 }
 /**
@@ -141,6 +144,48 @@ export function knownDomain(state,site,domain){
   return !!(state.domains?.[`${site}|${domain}`]||state.suppression?.[domain]||state.contacted?.[domain]);
 }
 
+/* ---------- Lists, roundups and the matched section: what an editor would edit ---------- */
+/** "Best X", "top 10", roundups and resource lists: pages whose job is naming outside resources. */
+const LIST_TITLE=/\b(?:best|top\s*\d+|\d+\s+(?:best|top|great|useful|essential|free|popular|favou?rite|recommended|must-have)|round-?up|list of|resources|tools|apps|blogs|websites|sites|alternatives|picks)\b/i;
+/** A section where additions naturally go ("other notable", "honourable mentions"). */
+const OTHER_SECTION=/\b(?:other notable|honou?rable mentions?|also (?:worth|consider)|more (?:tools|resources|options|picks|reading)|other (?:options|tools|resources|picks))\b/i;
+const OWN_PRODUCT_PATH=/\/(?:products?|features?|solutions?|services?|pricing|plans|shop|store|apps?|integrations?|templates?)(?:\/|$)/i;
+// Link text that only appears where spam was injected into a hacked page.
+const SPAM_ANCHOR=/\b(?:viagra|cialis|levitra|online casino|casino online|slots? online|online slots?|judi|togel|poker online|payday loans?|replica (?:watches|bags)|essay writing service|buy (?:followers|likes))\b/i;
+const clip=(t,n)=>t.length<=n?t:t.slice(0,n).replace(/\s+\S*$/,'');
+/**
+ * Is this a list or roundup with entries from several outside companies (skill steps 1-2)? `ownOnly`: every entry is
+ * the publisher's own product (a vendor ranking itself), which never adds a third party. `items`: outside sites named in the content.
+ */
+export function listShape(html,url,title=''){
+  const content=contentHtml(html),host=hostOf(url),label=host.split('.')[0];
+  const site=String(metaContent(html,'og:site_name')||'').toLowerCase().trim();
+  const items=new Set(outboundCandidates(html,url,{max:200}).map(o=>hostOf(o.url))).size;
+  const heads=[...content.matchAll(/<h[23]\b[^>]*>([\s\S]*?)<\/h[23]\s*>/gi)].map(m=>stripTags(m[1])).filter(Boolean);
+  const numbered=heads.filter(h=>/^\s*(?:#\s*)?\d{1,3}\s*[.):\-–—]\s*\S/.test(h)).length;
+  const branded=heads.filter(h=>{const t=h.toLowerCase();return (label.length>=4&&t.includes(label))||(site.length>=4&&t.includes(site))}).length;
+  const ownLinks=new Set(links(content,url).filter(l=>{const h=hostOf(l.url);if(!h||!(sameSite(h,host)||sameSite(host,h)))return false;try{return OWN_PRODUCT_PATH.test(new URL(l.url).pathname)}catch{return false}}).map(l=>normUrl(l.url))).size;
+  const list=LIST_TITLE.test(title)&&(numbered>=3||items>=5);
+  return {list,items,numbered,ownOnly:list&&items<=1&&(branded>=3||ownLinks>=3),other_section:heads.some(h=>OTHER_SECTION.test(h))};
+}
+/**
+ * Up to 600 characters of the page's own words where it matches what we pitch: the text after the matched section
+ * heading, else the sentences where the wanted words cluster. Gives the pitch writer the exact place an edit could go.
+ */
+export function fitExcerpt(html,heading,want=[]){
+  if(heading){
+    for(const m of String(html||'').matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2\s*>/gi)){
+      if(stripTags(m[1])!==heading)continue;
+      const rest=html.slice(m.index+m[0].length,m.index+m[0].length+20000),end=rest.search(/<h[12]\b/i);
+      const t=stripTags((end>=0?rest.slice(0,end):rest).replace(/<(script|style|noscript|form|aside|nav)\b[\s\S]*?<\/\1\s*>/gi,' '));
+      if(t.length>=40)return clip(t,600);break;
+    }
+  }
+  const w=new Set(want),parts=mainText(html).split(/(?<=[.!?])\s+/).slice(0,400);
+  let best=-1,bestN=0;parts.forEach((x,i)=>{const n=tokens(x).filter(t=>w.has(t)).length;if(n>bestN){best=i;bestN=n}});
+  return best<0?null:clip(parts.slice(best).join(' '),600);
+}
+
 export function qualifyPage(url,html,{asset,site,ourDomains,provenLinker=false}){
   const title=tagText(html,'title')[0]||'',h1=tagText(html,'h1')[0]||'',h2=tagText(html,'h2').slice(0,30);
   const text=mainText(html);
@@ -160,15 +205,22 @@ export function qualifyPage(url,html,{asset,site,ourDomains,provenLinker=false})
   const authorRaw=ld.map(x=>x.author).find(Boolean);
   const author=String((Array.isArray(authorRaw)?authorRaw[0]:authorRaw)?.name||authorRaw||'').trim();
   const year=Math.max(0,...[...text.matchAll(/\b(20[12]\d)\b/g)].map(m=>Number(m[1])).filter(y=>y<=new Date().getUTCFullYear()));
-  // A page that already links to a competing resource from its content has shown it adds links like ours.
-  let score=Math.round(relevance*55+Math.min(20,ext.size*1.2)+(resource?15:0)+(provenLinker?12:0)+(fitSection?.n?5:0)+(year>=new Date().getUTCFullYear()-1?5:0));
+  const shape=listShape(html,url,`${title} ${h1}`),list=shape.list&&!shape.ownOnly&&shape.items>=4;
+  const compromised=outs.filter(l=>SPAM_ANCHOR.test(l.anchor)).length>=2;
+  // A page that already links to a competing resource from its content has shown it adds links like ours;
+  // a list naming several outside sites exists to name more of them.
+  let score=Math.round(relevance*55+Math.min(20,ext.size*1.2)+(resource?15:0)+(provenLinker?12:0)+(fitSection?.n?5:0)+(year>=new Date().getUTCFullYear()-1?5:0)+(list?5:0));
   const reasons=[];
   if(ecommerce){score=0;reasons.push('Store/product page')}
+  if(compromised){score=0;reasons.push('Page looks compromised (injected spam links)')}
+  if(shape.ownOnly){score=Math.min(score,30);reasons.push('List of the publisher\'s own products only')}
   if(words<250){score=Math.min(score,30);reasons.push('Thin page')}
   if(ext.size<3){score=Math.min(score,35);reasons.push('Rarely links out')}
   if(relevance<.34)reasons.push('Weak topical match');
   return {title:title.slice(0,180),h1:h1.slice(0,180),relevance:Number(relevance.toFixed(2)),matched,external_domains:ext.size,resource_page:resource,
-    score,qualified:score>=45&&relevance>=.34&&ext.size>=3&&!ecommerce,linksToUs,fit_section:fitSection?.n?fitSection.h:null,
+    score,qualified:score>=45&&relevance>=.34&&ext.size>=3&&!ecommerce&&!compromised&&!shape.ownOnly,linksToUs,fit_section:fitSection?.n?fitSection.h:null,
+    fit_excerpt:fitExcerpt(html,fitSection?.n?fitSection.h:null,want),
+    list_page:list?{items:shape.items,title:(h1||title).slice(0,180),...(shape.other_section?{other_section:true}:{})}:null,
     author:/^[A-Za-z][A-Za-z .'-]{1,40}$/.test(author)&&!/admin|staff|team|editor/i.test(author)?author:null,
     excerpt:text.slice(0,1800),reasons,last_year_mentioned:year||null};
 }
@@ -190,11 +242,28 @@ export function siteKind(html){
 
 /** Pages where a site publishes how to reach it. Impressum/imprint/kontakt: German-language sites must list an address there. */
 const CONTACT_LINK=/contact|about|write-for-us|contribute|work-with-me|get-in-touch|impressum|imprint|kontakt|masthead|editorial-team|our-team|meet-the-team|guest-post|submit-(?:a-)?(?:tip|story|post)/i;
+/** A form a reader can use to write to the site: blog comment, reply, review, search, login and newsletter forms do not count. */
+export function contactForm(html){
+  for(const m of String(html||'').matchAll(/<form\b([^>]*)>([\s\S]*?)<\/form\s*>/gi)){
+    const tag=m[1],body=m[2].slice(0,8000);
+    if(!/<textarea\b/i.test(body))continue;
+    if(/comment|respond|reply|review|search|subscribe|newsletter|login|sign-?in|sign-?up|register/i.test(tag))continue;
+    if(/<textarea\b[^>]*(?:name|id)\s*=\s*["']?(?:comment|reply)/i.test(body)||/name\s*=\s*["']comment_(?:post_ID|parent)["']/i.test(body))continue;
+    return true;
+  }
+  return false;
+}
+/**
+ * The address is chosen by the send gate's own rules (recipient-policy.mjs), so a prospect is 'ready' only with an address that
+ * can pass it. Addresses that discovery reads but the gate would hold are reported as `held_email` and never make a prospect ready.
+ */
 export async function findContact(pageUrl,pageHtml,{fetchImpl=fetch,author=''}={}){
   const origin=new URL(pageUrl).origin,domain=hostOf(pageUrl);
-  const candidates=new Map();let form=null,kind='publisher';
-  const take=(html,url,source)=>{for(const e of extractEmails(html)){const r=rankEmail(e,domain,{source,author});if(r>=0&&!(candidates.get(e)?.rank>=r))candidates.set(e,{email:e,rank:r,source:url})}
-    if(!form&&source!=='other'&&/<form\b[\s\S]{0,4000}<textarea\b/i.test(html))form=url};
+  const candidates=new Map(),held=new Map();let form=null,kind='publisher';
+  const take=(html,url,source)=>{
+    for(const c of extractEditorialCandidates(html,url,{domain,author:author||'',source:pageKind(url)}))if(!(candidates.get(c.email)?.rank>=c.rank))candidates.set(c.email,{email:c.email,rank:c.rank,role:c.role,source:url});
+    for(const e of extractEmails(html)){const r=rankEmail(e,domain,{source,author});if(r>=0&&!(held.get(e)?.rank>=r))held.set(e,{email:e,rank:r,source:url})}
+    if(!form&&source!=='other'&&contactForm(html))form=url};
   take(pageHtml,pageUrl,'page');
   // The homepage is always fetched: it tells us what kind of site this is.
   const home=await fetchPage(origin+'/',{fetchImpl,timeout:9000,maxBytes:300000});
@@ -208,12 +277,24 @@ export async function findContact(pageUrl,pageHtml,{fetchImpl=fetch,author=''}={
   const linked=[...(authorPage?[authorPage]:[]),...contactLinks(pageHtml,pageUrl).slice(0,3),...(home.status===200?contactLinks(home.body,home.url).slice(0,4):[])];
   const paths=[...new Set([...linked,origin+'/contact',origin+'/contact-us',origin+'/contact-me',origin+'/about',origin+'/about-us',origin+'/about-me',origin+'/work-with-me',origin+'/write-for-us',origin+'/impressum'].map(u=>normUrl(u)).filter(Boolean))].slice(0,9);
   for(const p of paths){
-    const best=Math.max(-1,...[...candidates.values()].map(c=>c.rank));if(best>=75)break;
+    const best=Math.max(-1,...[...candidates.values()].map(c=>c.rank));if(best>=85)break; // an editorial inbox or the named author
     const res=await fetchPage(p,{fetchImpl,timeout:9000,maxBytes:250000});
     if(res.status===200&&res.body)take(res.body,res.url,'contact');
   }
   const ranked=[...candidates.values()].sort((a,b)=>b.rank-a.rank);
-  return {email:ranked[0]?.email||null,email_rank:ranked[0]?.rank??null,email_source:ranked[0]?.source||null,alternates:ranked.slice(1,3).map(x=>x.email),contact_form:form,site_kind:kind};
+  // Owner rule: a general inbox is a last resort, never offered while an editorial or named-author address exists.
+  const usable=ranked.some(c=>c.role!=='contact_page_inbox')?ranked.filter(c=>c.role!=='contact_page_inbox'):ranked;
+  const hold=usable.length?null:[...held.values()].sort((a,b)=>b.rank-a.rank)[0];
+  return {email:usable[0]?.email||null,email_rank:usable[0]?.rank??null,email_source:usable[0]?.source||null,alternates:usable.slice(1,3).map(x=>x.email),contact_form:form,site_kind:kind,
+    ...(hold?{held_email:hold.email,held_source:hold.source}:{})};
+}
+/** Status of a qualified prospect from its contact lookup: an address the gate would hold is recorded, never queued. */
+export function contactStatus(c){return c.email?'ready':c.held_email?'contact_unverifiable':c.contact_form?'contact_form':'no_contact'}
+/** Fields a contact lookup writes on a prospect. A held address is kept (sealed vault only) so a later parser version can re-screen it. */
+export function contactFields(c,at=NOW()){
+  const {held_email,held_source,...rest}=c;
+  return c.email||!held_email?rest:{...rest,email:held_email,email_source:held_source,reason:'No verifiable editorial inbox (only_non_editorial_inbox_published)',
+    contact_quality:{status:'held',reason:'no_published_editorial_contact',detail:'only_non_editorial_inbox_published',checked_at:at,via:'discovery'},screen_v:POLICY_VERSION};
 }
 
 /* ---------- Second look at qualified pages that had no usable address ---------- */
@@ -237,7 +318,7 @@ export async function recontact({state,fetchImpl=fetch,deadline=Infinity,max=60,
     if(res.status!==200||!res.body){stats.unreachable++;return}
     const c=await findContact(p.page_url,res.body,{fetchImpl,author:p.author});
     if(c.site_kind!=='publisher')return;
-    if(!c.email){if(c.contact_form&&p.status==='no_contact'){p.contact_form=c.contact_form;p.status='contact_form'}return}
+    if(!c.email){if(c.contact_form&&p.status==='no_contact'){p.contact_form=c.contact_form;p.status='contact_form'}return} // a held address never promotes
     Object.assign(p,{email:c.email,email_rank:c.email_rank,email_source:c.email_source,alternates:c.alternates,contact_form:c.contact_form||p.contact_form||null,site_kind:c.site_kind,status:'ready',recontacted_at:NOW()});
     stats.found++;
   });
@@ -306,19 +387,119 @@ export function pairAsset(link,assets,site){
   return hub&&[...topic].some(w=>ctx.has(w))?{asset:hub,match:'topic'}:null;
 }
 
+/* ---------- Rejections that expire: a page can improve and a server can recover; what a publisher is rarely changes ---------- */
+/** Days until a rejected publisher may be evaluated again, by kind. Publisher-level rejections never expire. */
+export const REJECTION_TTL_DAYS={page:30,transient:14};
+/** {kind:'page'|'transient'|'publisher', code} for a rejection reason (codes only, no prospect data). */
+export function rejectionKind(reason){
+  const r=String(reason||'');
+  const http=r.match(/^HTTP (\S+)/);
+  if(http){const v=http[1];
+    if(/^5\d\d$/.test(v))return {kind:'transient',code:'http_5xx'};
+    if(v==='429')return {kind:'transient',code:'http_429'};
+    if(/^(?:0|timeout|network|too_many_redirects|redirect_without_location|undefined)$/.test(v))return {kind:'transient',code:v==='timeout'?'timeout':'fetch_error'};
+    return {kind:'page',code:/^\d{3}$/.test(v)?`http_${v[0]}xx`:'unsafe_url'}}
+  for(const [re,code] of [[/Software vendor/i,'vendor'],[/Local service business/i,'local_business'],[/not in English/i,'language'],[/site-info page/i,'site_info'],
+    [/University site/i,'academic'],[/Very large brand|Almost no search traffic/i,'traffic']])if(re.test(r))return {kind:'publisher',code};
+  for(const [re,code] of [[/compromised/i,'compromised'],[/own products/i,'own_products_list'],[/Store\/product page/i,'store_page'],[/Brand not actually mentioned/i,'not_mentioned'],
+    [/Thin page/i,'thin'],[/Rarely links out/i,'rare_links'],[/Weak topical match/i,'weak_match'],[/Low fit score/i,'low_fit']])if(re.test(r))return {kind:'page',code};
+  return {kind:'page',code:'other'};
+}
+export function noteRejection(state,p,at=NOW()){(state.domain_rejections??={})[`${p.site}|${p.domain}`]={at,...rejectionKind(p.reason)}}
+/**
+ * Page-level (30 d) and transient (14 d) rejections expire: the publisher may be evaluated again when a discovery source
+ * finds it. Publisher-level rejections never expire, and contacted or suppressed publishers always stay blocked.
+ * Works from state.domain_rejections (rejected prospect records themselves are pruned after a week).
+ */
+export function expireRejections(state,now=Date.now()){
+  let n=0;
+  for(const [key,r] of Object.entries(state.domain_rejections||{})){
+    const ttl=REJECTION_TTL_DAYS[r?.kind];if(!ttl)continue;
+    const at=Date.parse(r.at);if(Number.isFinite(at)&&(now-at)/DAY<=ttl)continue;
+    const domain=key.slice(key.indexOf('|')+1),id=state.domains?.[key],p=id?state.prospects?.[id]:null;
+    delete state.domain_rejections[key];
+    if(state.contacted?.[domain]||isSuppressed(state,'',domain)||(p&&p.status!=='rejected'))continue;
+    if(state.domains)delete state.domains[key];n++;
+  }
+  return n;
+}
+/** One-off: rejections recorded before expiry existed (from the rejected records still kept) get an entry, so they can expire too. */
+export function backfillRejections(state){
+  state.migrations??={};if(state.migrations.rejection_expiry_v1)return 0;
+  let n=0;
+  for(const p of Object.values(state.prospects||{})){const key=`${p.site}|${p.domain}`;
+    if(p.status==='rejected'&&p.site&&p.domain&&state.domains?.[key]===p.id&&!state.domain_rejections?.[key]){noteRejection(state,p,p.found_at||NOW());n++}}
+  state.migrations.rejection_expiry_v1=NOW();return n;
+}
+
+/* ---------- Free sources: a recommended site's own resource page, and pages our own articles cite ---------- */
+const RESOURCE_PATH=/\/(?:(?:[a-z0-9]+-){0,3}(?:resources?|links)|useful-(?:resources|sites)|recommended(?:-[a-z]+)?|tools|toolkit|reading-list|further-reading|blogroll|favou?rite-(?:blogs|sites|tools)|best-of)(?:\.html?)?\/?$/i;
+const RESOURCE_ANCHOR=/^(?:resources?|useful (?:links|resources|sites)|links|recommended(?: reading| tools| resources| sites)?|tools|toolkit|reading list|further reading|blogroll)$/i;
+/**
+ * A site recommended by a page we qualified is often linked by its homepage or one article, neither of which is where an editor
+ * adds resources. Its own resource/links page is: the one its pages link to, else the best match in its sitemap.
+ * At most `maxFetches` (2) extra page fetches; returns the fetched page or null.
+ */
+export async function probeResourcePage(url,html,{fetchImpl=fetch,domain,terms=[],maxFetches=2}={}){
+  let fetches=0;const want=new Set(terms),here=normUrl(url);
+  const get=async(u,accept)=>{if(fetches>=maxFetches)return null;fetches++;const r=await fetchPage(u,{fetchImpl,timeout:10000,maxBytes:accept?1_000_000:500000,...(accept?{accept}:{})});
+    return r.status===200&&r.body&&sameSite(hostOf(r.url),domain)?r:null};
+  const path=u=>{try{return new URL(u).pathname}catch{return ''}};
+  const linked=links(html,url).filter(l=>sameSite(hostOf(l.url),domain)&&normUrl(l.url)!==here&&(RESOURCE_PATH.test(path(l.url))||RESOURCE_ANCHOR.test(l.anchor.trim())));
+  if(linked.length)return get(linked[0].url);
+  let origin='';try{origin=new URL(url).origin}catch{return null}
+  const map=await get(origin+'/sitemap.xml','application/xml,text/xml');
+  if(!map||!/<urlset\b/i.test(map.body))return null;
+  const best=[...map.body.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/gi)].slice(0,5000).map(m=>m[1].replace(/&amp;/g,'&'))
+    .filter(u=>sameSite(hostOf(u),domain)&&RESOURCE_PATH.test(path(u))&&normUrl(u)!==here)
+    .map(u=>({u,n:tokens(path(u).replace(/[-_/.]/g,' ')).filter(w=>want.has(w)).length})).sort((a,b)=>b.n-a.n)[0];
+  return best?get(best.u):null;
+}
+/** Sites with no email sent yet and nothing ready to send: our own pages' outbound editorial links are their first prospects. */
+export function citedCandidates(state,sites,crawl,{pitchList=()=>[]}={}){
+  const out=[];
+  for(const site of sites){
+    const mine=Object.values(state.prospects||{}).filter(p=>p.site===site.domain);
+    if(mine.some(p=>p.status==='ready'||(p.history||[]).some(h=>h.type==='initial'&&h.mode!=='draft')))continue;
+    const list=pitchList(site.domain);if(!list.length)continue; // nothing worth pitching for this site yet
+    const seen=new Set();
+    for(const pg of (crawl||[]).find(c=>c.site===site.domain)?.pages||[]){
+      if(pg.status!==200)continue;const our=pg.final_url||pg.url;
+      for(const l of pg.external_links||[]){const d=hostOf(l.url);if(!d||seen.has(d))continue;seen.add(d);
+        out.push({site,domain:d,url:l.url,anchor:l.anchor||'',our_url:our,asset:list.find(a=>normUrl(a.url)===normUrl(our))||list[0]})}
+    }
+  }
+  return out;
+}
+
 /**
  * Run discovery for the chosen assets. Mutates `state.prospects` / `state.domains`.
  * Returns counters for the run report.
  */
-export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,resolveHost,perAsset=2,maxNewPerRun=60,maxQueries=24,serpDepth=50,linkGapCalls=1,pairPool=null,neighborPages=12,altSearch=null,deadline=Infinity,log=()=>{}}){
+export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,resolveHost,perAsset=2,maxNewPerRun=60,maxQueries=24,serpDepth=50,linkGapCalls=1,pairPool=null,neighborPages=12,altSearch=null,crawl=null,citedPerSite=6,deadline=Infinity,log=()=>{}}){
   state.prospects??={};state.domains??={};state.queries??={};
+  // Page-level and transient rejections expire, so a recovered server or an improved page can be evaluated again.
+  const backfilled=backfillRejections(state),expired=expireRejections(state);
   const ourDomains=sites.map(s=>s.domain),competitors=new Set(sites.flatMap(s=>s.competitors||[]));
   const bySite=new Map(sites.map(s=>[s.domain,s]));
   // Brand-mention searches go first: editors who already mention us convert best.
   const mentions=mentionJobs(sites,state).map(m=>({query:m.query,footprint:'mention',kind:'mention',
     asset:{site:m.site.domain,url:`https://${m.site.domain}/`,title:brandOf(m.site),type:'brand'}}));
   const jobs=[...mentions,...pickQueries(assets,sites,state,{perAsset})];
-  const stats={queries:0,mention_queries:0,serp_results:0,candidates:0,qualified:0,mentions:0,already_linked:0,rejected:0,with_email:0,contact_form:0,broken_links:0};
+  // with_email: new prospects whose address passes the send gate's rules (ready to verify), not merely any address found.
+  const stats={queries:0,mention_queries:0,serp_results:0,candidates:0,qualified:0,mentions:0,already_linked:0,rejected:0,with_email:0,held_address:0,contact_form:0,broken_links:0,
+    rejections_expired:expired,...(backfilled?{rejections_backfilled:backfilled}:{})};
+  // The watchdog pauses paid searches that keep finding nothing; link gap and the free sources continue.
+  const paidSerpPaused=Date.parse(state.paid_serp_paused_until||'')>Date.now();if(paidSerpPaused)stats.paid_serp_paused=true;
+  const pitchList=d=>(pairPool||assets).filter(a=>a.site===d);
+  const slim=a=>({site:a.site,url:a.url,title:a.title,h1:a.h1,type:a.type,terms:(a.terms||[]).slice(0,30)});
+  // Free sources (neighbours, our citations) carry a placeholder pairing until the page is read.
+  const pickAfterFetch=(c,res,site)=>{const list=pitchList(c.site);if(!list.length)return c.asset;
+    const pick=bestPitchAsset({title:tagText(res.body,'title')[0]||'',excerpt:`${tagText(res.body,'h1')[0]||''} ${tagText(res.body,'h2').slice(0,12).join(' ')} ${mainText(res.body).slice(0,1200)}`,page_url:res.url},list,site);
+    // Without a specific match, the placeholder stays when it is pitchable (our citing page, or the recommending page's pairing).
+    return pick&&(pick.match==='specific'||!list.some(a=>a.url===c.asset.url))?slim(pick.asset):c.asset};
+  // Words of every page this site could pitch: a recommended link is worth a fetch only if it shares one of them.
+  const termCache=new Map(),siteTerms=(site,asset)=>{const k=site.domain+'|'+(asset?.url||'');if(!termCache.has(k))termCache.set(k,[...new Set([...assetTerms(asset,site),...pitchList(site.domain).flatMap(a=>assetTerms(a,site))])]);return termCache.get(k)};
   // Paid search results are never thrown away: candidates a previous run could not qualify in time come first.
   const fresh=(state.candidate_queue||[]).filter(c=>ageDays(c.queued_at)<14&&bySite.has(c.site)&&!knownDomain(state,c.site,c.domain));
   stats.from_queue=fresh.length;state.candidate_queue=[];
@@ -368,6 +549,22 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
       log(`link gap: ${job.target} (for ${job.site.domain}) ${r.items.length} referring pages from offset ${job.offset}/${r.total}, ${fresh.length-before} new candidates`);
     }
   }
+  // ---- Our own citations (free, no fetch): for sites with no email sent and nothing ready, the editorial pages our own
+  // articles link to become candidates. They pass admission, qualification and verification like any other. ----
+  stats.cited_candidates=0;
+  if(crawl&&citedPerSite>0&&fresh.length<maxNewPerRun*2){
+    const taken=new Map();
+    for(const c of citedCandidates(state,sites,crawl,{pitchList})){
+      const n=taken.get(c.site.domain)||0;if(n>=citedPerSite||fresh.length>=maxNewPerRun*2)continue;
+      let path='';try{path=new URL(c.url).pathname}catch{continue}
+      if(NOT_A_PAGE.test(path)){dropBy('not_a_page');continue}
+      if(!admit(c.site,c.domain,path,dropBy))continue;
+      fresh.push({site:c.site.domain,domain:c.domain,url:normUrl(c.url),serp_title:c.anchor,query:`cited:${c.domain}`,footprint:'cited_by_us',kind:'cited',rank:null,asset:slim(c.asset),cited_by_us:{our_url:c.our_url}});
+      taken.set(c.site.domain,n+1);stats.cited_candidates++;
+    }
+    for(const d of taken.keys())state.queries[`${d}|cited:${NOW().slice(0,10)}`]=NOW();
+    if(stats.cited_candidates)log(`our own citations (free): ${stats.cited_candidates} pages our articles link to, for ${taken.size} sites with no email sent yet`);
+  }
   // ---- Link neighbourhood (free): the sites that already-qualified pages recommend. Runs after the paid
   // sources so it only fills the room they leave, and keeps prospecting alive when no search credit is left. ----
   stats.neighbor_pages=0;stats.neighbor_candidates=0;
@@ -382,9 +579,11 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
       const site=bySite.get(p.site),a=assetBy.get(p.asset_url)||{site:p.site,url:p.asset_url,title:p.asset_title||''};
       const asset={site:p.site,url:a.url,title:a.title,h1:a.h1,type:a.type,terms:(a.terms||[]).slice(0,30)};
       const before=fresh.length;let taken=0;
-      // Most on-topic links first (anchor and URL words that match what our page covers); at most 8 per source page.
-      for(const l of outboundCandidates(res.body,res.url,{terms:assetTerms(asset,site),ourDomains,max:40})){
+      // Most on-topic links first (anchor and URL words that match what this site's pitchable pages cover); at most 8 per
+      // source page, and a link sharing no word with them is not worth a fetch. The asset is chosen once the page is read.
+      for(const l of outboundCandidates(res.body,res.url,{terms:siteTerms(site,asset),ourDomains,max:40})){
         if(taken>=8||fresh.length>=maxNewPerRun*2)break;
+        if(!l.relevance){dropBy('zero_relevance');continue}
         const domain=hostOf(l.url);let path='';try{path=new URL(l.url).pathname}catch{continue}
         if(NOT_A_PAGE.test(path)){dropBy('not_a_page');continue}
         if(!admit(site,domain,path,dropBy))continue;
@@ -425,8 +624,8 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     // A full candidate list stops topic searches, never the (fortnightly, highest-converting) brand-mention searches.
     if(Date.now()>=serpUntil||Date.now()>=deadline||stats.queries>=maxQueries||(fresh.length>=maxNewPerRun*2&&jobs[i].kind!=='mention'))break;
     // DataForSEO serves searches while it can pay for them; otherwise the optional fallback provider does.
-    const viaAlt=!dfs.canSpend('serp')&&!!altSearch?.canSearch?.();
-    const n=Math.min(4,maxQueries-stats.queries,jobs.length-i,viaAlt?altSearch.remaining():dfs.affordable?dfs.affordable('serp'):(dfs.canSpend('serp')?1:0));
+    const viaAlt=(paidSerpPaused||!dfs.canSpend('serp'))&&!!altSearch?.canSearch?.();
+    const n=Math.min(4,maxQueries-stats.queries,jobs.length-i,viaAlt?altSearch.remaining():paidSerpPaused?0:dfs.affordable?dfs.affordable('serp'):(dfs.canSpend('serp')?1:0));
     if(n<=0)break;
     const batch=jobs.slice(i,i+n);i+=n;
     const results=await Promise.all(batch.map(j=>(viaAlt?altSearch:dfs).serp(j.query,{depth:serpDepth,...marketOf(bySite.get(j.asset.site))})));
@@ -446,7 +645,7 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     if('etv' in fresh[i])continue;
     const why=trafficVerdict(traffic[fresh[i].domain],fresh[i].kind);
     if(why){const f=fresh[i],id=hashId(`${f.site}|${f.url}`);state.prospects[id]={id,site:f.site,domain:f.domain,page_url:f.url,asset_url:f.asset.url,asset_title:f.asset.title,query:f.query,found_at:NOW(),history:[],status:'rejected',reason:why,etv:traffic[f.domain],qv:QUALIFY_VERSION};
-      state.domains[`${f.site}|${f.domain}`]=id;stats.rejected++;fresh.splice(i,1)}
+      state.domains[`${f.site}|${f.domain}`]=id;noteRejection(state,state.prospects[id]);stats.rejected++;fresh.splice(i,1)}
     else fresh[i].etv=traffic[fresh[i].domain]??null;
   }
   stats.candidates=fresh.length;
@@ -459,14 +658,25 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
       url=found.url;res=found.page||null;stats.resolved=(stats.resolved||0)+1;(stats.resolved_via??={})[found.via]=(stats.resolved_via[found.via]||0)+1;
     }
     res??=await fetchPage(url,{fetchImpl,timeout:12000,maxBytes:500000});
+    const site=bySite.get(c.site),mention=c.kind==='mention',free=c.kind==='neighbor'||c.kind==='cited';
+    let asset=c.asset,q=null;
+    if(res.status===200&&res.body){
+      // Free sources carry a placeholder pairing: the page we pitch is chosen for what this page is actually about.
+      if(free)asset=pickAfterFetch(c,res,site);
+      q=qualifyPage(res.url,res.body,{asset,site,ourDomains,provenLinker:c.kind==='linkgap'});
+      // A recommended site's linked page is often its homepage: its own resource page may be the one an editor adds to.
+      if(free&&!q.qualified&&!q.linksToUs&&Date.now()<deadline){
+        const alt=await probeResourcePage(res.url,res.body,{fetchImpl,domain:c.domain,terms:siteTerms(site,asset)}).catch(()=>null);
+        if(alt){const a2=pickAfterFetch(c,alt,site),q2=qualifyPage(alt.url,alt.body,{asset:a2,site,ourDomains});
+          if(q2.qualified||q2.linksToUs){res=alt;url=normUrl(alt.url)||alt.url;asset=a2;q=q2;stats.resource_pages_found=(stats.resource_pages_found||0)+1}}
+      }
+    }
     const id=hashId(`${c.site}|${url}`);
-    const base={id,site:c.site,domain:c.domain,page_url:url,asset_url:c.asset.url,asset_title:c.asset.title,query:c.query,footprint:c.footprint,kind:c.kind,serp_rank:c.rank,etv:c.etv??null,found_at:NOW(),history:[],
-      ...(c.competitor_link?{competitor_link:c.competitor_link}:{}),...(c.authority?{authority:c.authority}:{})};
+    const base={id,site:c.site,domain:c.domain,page_url:url,asset_url:asset.url,asset_title:asset.title,query:c.query,footprint:c.footprint,kind:c.kind,serp_rank:c.rank,etv:c.etv??null,found_at:NOW(),history:[],
+      ...(c.competitor_link?{competitor_link:c.competitor_link}:{}),...(c.authority?{authority:c.authority}:{}),...(c.cited_by_us?{cited_by_us:c.cited_by_us}:{})};
     if(res.status!==200||!res.body)return {...base,status:'rejected',reason:`HTTP ${res.status||res.error}`};
-    const site=bySite.get(c.site),mention=c.kind==='mention';
-    const q=qualifyPage(res.url,res.body,{asset:c.asset,site,ourDomains,provenLinker:c.kind==='linkgap'});
     const rec={...base,page_url:normUrl(res.url)||url,title:q.title||c.serp_title,score:q.score,relevance:q.relevance,external_domains:q.external_domains,
-      resource_page:q.resource_page,fit_section:q.fit_section,author:q.author,excerpt:q.excerpt,last_year_mentioned:q.last_year_mentioned};
+      resource_page:q.resource_page,fit_section:q.fit_section,fit_excerpt:q.fit_excerpt,...(q.list_page?{list_page:q.list_page}:{}),author:q.author,excerpt:q.excerpt,last_year_mentioned:q.last_year_mentioned};
     if(q.linksToUs)return {...rec,status:'already_linked',reason:'Already links to us',existing_link:{url:q.linksToUs.url,anchor:q.linksToUs.anchor,rel:q.linksToUs.rel}};
     // A mention is relevant by definition; it only has to really name us (search engines are fuzzy).
     if(mention){if(!mentionsUs(res.body,site))return {...rec,status:'rejected',reason:'Brand not actually mentioned'};
@@ -486,11 +696,11 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
     const contact=await findContact(rec.page_url,res.body,{fetchImpl,author:rec.author});
     // Vendors that mention us may still link; for cold pitches they're competitors.
     if(contact.site_kind==='local_business'||(contact.site_kind==='software_vendor'&&!mention))return {...rec,qv:QUALIFY_VERSION,status:'rejected',reason:contact.site_kind==='software_vendor'?'Software vendor (competing product)':'Local service business'};
-    const status=contact.email?'ready':contact.contact_form?'contact_form':'no_contact';
+    const status=contactStatus(contact);
     // A dead link on their page that our asset replaces is the strongest reason for an editor to reply.
     let broken=null;
-    if(status!=='no_contact'&&!mention&&Date.now()<deadline)broken=await findBrokenLink(res.body,rec.page_url,{terms:assetTerms(c.asset,site),ourDomains,fetchImpl,resolveHost,deadline}).catch(()=>null);
-    return {...rec,...contact,qv:QUALIFY_VERSION,status,broken_link:broken,broken_checked_at:NOW()};
+    if((status==='ready'||status==='contact_form')&&!mention&&Date.now()<deadline)broken=await findBrokenLink(res.body,rec.page_url,{terms:assetTerms(asset,site),ourDomains,fetchImpl,resolveHost,deadline}).catch(()=>null);
+    return {...rec,...contactFields(contact),qv:QUALIFY_VERSION,status,broken_link:broken,broken_checked_at:NOW()};
   });
   // Anything not qualified this run (time or volume) is queued for the next one.
   const deferred=[...checked.filter(x=>x?.deferred).map(x=>x.deferred),...fresh.slice(maxNewPerRun*2)];
@@ -498,13 +708,14 @@ export async function discoverProspects({assets,sites,state,dfs,fetchImpl=fetch,
   for(const p of checked){
     if(p?.unresolved){stats.unresolved=(stats.unresolved||0)+1;continue}
     if(!p||p.error||p.deferred)continue;
-    if(p.status==='rejected'||p.status==='already_linked')delete p.excerpt;
+    if(p.status==='rejected'||p.status==='already_linked'){delete p.excerpt;delete p.fit_excerpt}
     state.prospects[p.id]=p;state.domains[`${p.site}|${p.domain}`]=p.id;
     if(p.status==='already_linked')stats.already_linked++;
-    else if(p.status==='rejected')stats.rejected++;
-    else{stats.qualified++;if(p.kind==='mention')stats.mentions++;if(p.email)stats.with_email++;else if(p.contact_form)stats.contact_form++;if(p.broken_link)stats.broken_links++}
+    else if(p.status==='rejected'){stats.rejected++;noteRejection(state,p)}
+    else{stats.qualified++;if(p.kind==='mention')stats.mentions++;if(p.status==='ready')stats.with_email++;else if(p.status==='contact_unverifiable')stats.held_address++;else if(p.contact_form)stats.contact_form++;
+      if(p.broken_link)stats.broken_links++;if(p.list_page)stats.list_pages=(stats.list_pages||0)+1;if(p.cited_by_us)stats.cited_qualified=(stats.cited_qualified||0)+1}
   }
-  log(`prospects: ${stats.from_queue} from the saved queue, ${stats.deferred} saved for next run; ${stats.linkgap_calls} competitor link-gap pulls (${stats.linkgap_candidates} candidates); ${stats.neighbor_candidates} from the link neighbourhood; ${stats.queries} queries (${stats.mention_queries} brand-mention), ${stats.resolved||0} Google-wrapped results resolved, ${stats.unresolved||0} unresolvable; ${stats.candidates} candidates, ${stats.qualified} qualified (${stats.mentions} unlinked mentions), ${stats.with_email} with email, ${stats.broken_links} with a dead link we can replace, ${stats.already_linked} already linking`);
+  log(`prospects: ${stats.from_queue} from the saved queue, ${stats.deferred} saved for next run; ${stats.linkgap_calls} competitor link-gap pulls (${stats.linkgap_candidates} candidates); ${stats.cited_candidates} from our own citations; ${stats.neighbor_candidates} from the link neighbourhood; ${stats.queries} queries (${stats.mention_queries} brand-mention)${paidSerpPaused?' [paid searches paused]':''}, ${stats.resolved||0} Google-wrapped results resolved, ${stats.unresolved||0} unresolvable; ${stats.candidates} candidates, ${stats.qualified} qualified (${stats.mentions} unlinked mentions), ${stats.with_email} with a usable email, ${stats.held_address} with only an address the send rules hold, ${stats.broken_links} with a dead link we can replace, ${stats.already_linked} already linking; ${stats.rejections_expired} old rejections expired`);
   return stats;
 }
 
@@ -518,7 +729,7 @@ export async function requalify({state,dfs,fetchImpl=fetch,deadline=Infinity,log
   const stats={checked:0,rejected:0,no_followup:0,recontacted:0};
   if(!due.length)return stats;
   const traffic=dfs.canSpend('traffic')?await dfs.domainTraffic([...new Set(due.map(p=>p.domain))]):null;
-  const fail=(p,reason)=>{if(p.status==='sent'){p.no_followup=true;p.no_followup_reason=reason;stats.no_followup++}else{p.status='rejected';p.reason=reason;stats.rejected++}};
+  const fail=(p,reason)=>{if(p.status==='sent'){p.no_followup=true;p.no_followup_reason=reason;stats.no_followup++}else{p.status='rejected';p.reason=reason;stats.rejected++;if(p.site&&p.domain)noteRejection(state,p)}};
   await pool(due,4,async p=>{
     if(Date.now()>deadline)return;
     stats.checked++;p.qv=QUALIFY_VERSION;
@@ -529,8 +740,8 @@ export async function requalify({state,dfs,fetchImpl=fetch,deadline=Infinity,log
     const c=await findContact(p.page_url,res.body,{fetchImpl,author:p.author});
     if(c.site_kind!=='publisher')return fail(p,c.site_kind==='software_vendor'?'Software vendor (competing product)':'Local service business');
     if(p.status==='sent'){if(!c.email||(c.email!==p.email&&!c.alternates.includes(p.email)))fail(p,'Emailed address no longer passes inbox rules');return}
-    Object.assign(p,{email:c.email,email_source:c.email_source,alternates:c.alternates,contact_form:c.contact_form,site_kind:c.site_kind});
-    p.status=c.email?'ready':c.contact_form?'contact_form':'no_contact';if(c.email)stats.recontacted++;
+    const f=contactFields(c);Object.assign(p,{email:f.email,email_source:f.email_source,alternates:f.alternates,contact_form:f.contact_form,site_kind:f.site_kind,...(f.contact_quality?{reason:f.reason,contact_quality:f.contact_quality,screen_v:f.screen_v}:{})});
+    p.status=contactStatus(c);if(c.email)stats.recontacted++;
   });
   log(`requalify: ${stats.checked} re-checked, ${stats.rejected} dropped, ${stats.no_followup} follow-ups cancelled, ${stats.recontacted} still ready`);
   return stats;

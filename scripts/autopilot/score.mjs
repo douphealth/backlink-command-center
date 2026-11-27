@@ -4,7 +4,7 @@
  * Demand comes from Search Console when connected, else DataForSEO page traffic.
  */
 import {classifyAsset} from '../editorial-opportunity-engine.mjs';
-import {clamp,ageDays,tokens,keyPhrase} from './util.mjs';
+import {clamp,ageDays,tokens,keyPhrase,normUrl} from './util.mjs';
 
 const RICH_SCHEMA=/HowTo|FAQPage|Dataset|WebApplication|SoftwareApplication|Recipe|Quiz|ItemList/;
 
@@ -47,9 +47,19 @@ export function demandScore(m){
   return clamp(Math.round(Math.log10(etv+1)*24+Math.log10(kw+1)*14+Math.min(18,striking*3)),0,100);
 }
 
+/**
+ * Demand assumed for a page with no demand data: the lower quartile of the measured pages (15..45), else 30.
+ * Pages missing from the demand sources mostly have little search traffic, so an unmeasured page no longer outranks
+ * an identical measured page; a measured page with real demand now beats it.
+ */
+export function demandPrior(values){
+  const v=values.filter(Number.isFinite).sort((a,b)=>a-b);
+  return v.length>=5?clamp(Math.round(v[Math.floor((v.length-1)/4)]),15,45):30;
+}
 /** Rank every page in the portfolio. Returns sorted assets with reasons and internal-link stats. */
 export function rankPortfolio(crawl,{demand={},maxPerSite=25}={}){
   const out=[];
+  const prior=demandPrior(Object.values(demand||{}).map(demandScore));
   for(const site of crawl){
     const pages=site.pages.filter(p=>p.status===200);
     const inlinks=new Map();
@@ -66,7 +76,7 @@ export function rankPortfolio(crawl,{demand={},maxPerSite=25}={}){
       const m=demand[p.url]||demand[p.final_url];
       const dem=demandScore(m);
       const internal=Math.max(inlinks.get(p.url)||0,inlinks.get(p.final_url)||0);
-      let promotion=dem==null?Math.round(link.score*.9):Math.round(link.score*.55+dem*.45);
+      let promotion=Math.round(link.score*.55+(dem??prior)*.45);
       const reasons=[...link.reasons];
       if(m?.source==='gsc'&&m.position>=4&&m.position<=20)reasons.unshift(`Striking distance: avg position ${Number(m.position).toFixed(1)} on ${Math.round(m.impressions).toLocaleString('en-US')} impressions`);
       else if(m?.etv)reasons.unshift(`~${Math.round(m.etv).toLocaleString('en-US')} est. monthly visits from ${m.keywords} keywords`);
@@ -93,23 +103,30 @@ export function rankPortfolio(crawl,{demand={},maxPerSite=25}={}){
  * Internal links are the fastest free ranking lever: find same-site pages that
  * discuss an asset's topic but do not link to it yet, with a natural anchor.
  */
-export function internalLinkPlan(crawl,assets,{perAsset=5,topPerSite=12}={}){
+export function internalLinkPlan(crawl,assets,{perAsset=5,topPerSite=12,sitewide=0.8}={}){
+  // URLs are compared normalised (a final_url ends in '/', crawled links do not), so existing links are never suggested again.
+  const key=u=>normUrl(u)||u;
   const bySite=new Map(crawl.map(s=>[s.site,s.pages.filter(p=>p.status===200&&p.words>=250)]));
-  const promo=new Map(assets.map(a=>[a.url,a.promotion]));
+  const promo=new Map(assets.map(a=>[key(a.url),a.promotion]));
+  // Targets linked from (nearly) every crawled page sit in the menu or footer already: a suggestion adds nothing.
+  const linkedSitewide=new Map(crawl.map(s=>{const pages=s.pages.filter(p=>p.status===200),n=new Map();
+    for(const p of pages)for(const l of new Set((p.internal_links||[]).map(key)))n.set(l,(n.get(l)||0)+1);
+    return [s.site,new Set(pages.length>=5?[...n].filter(([,c])=>c>=pages.length*sitewide).map(([u])=>u):[])]}));
   const counts=new Map(),plan=[];
   for(const a of assets){
+    const target=key(a.url);if(linkedSitewide.get(a.site)?.has(target))continue;
     const n=counts.get(a.site)||0;if(n>=topPerSite)continue;counts.set(a.site,n+1);
     const phrase=keyPhrase(a.h1||a.title,5),core=[...new Set(tokens(phrase))];if(core.length<2)continue;
     const bigrams=core.slice(0,-1).map((w,i)=>w+' '+core[i+1]);
     const suggestions=[];
     for(const q of bySite.get(a.site)||[]){
-      const qUrl=q.final_url||q.url;if(qUrl===a.url||q.url===a.url)continue;
-      if((q.internal_links||[]).includes(a.url))continue;
+      const qUrl=q.final_url||q.url;if(key(qUrl)===target||key(q.url)===target)continue;
+      if((q.internal_links||[]).some(l=>key(l)===target))continue;
       const terms=new Set(q.terms||[]);
       const uni=core.filter(w=>terms.has(w)).length,bi=bigrams.filter(b=>terms.has(b));
       if(uni<2||(uni<3&&!bi.length))continue;
       suggestions.push({from:qUrl,from_title:q.title,to:a.url,to_title:a.title,anchor:bi[0]||core.slice(0,3).join(' '),
-        relevance:uni+bi.length*2,from_strength:promo.get(qUrl)??0});
+        relevance:uni+bi.length*2,from_strength:promo.get(key(qUrl))??0});
     }
     suggestions.sort((x,y)=>y.relevance-x.relevance||y.from_strength-x.from_strength);
     plan.push(...suggestions.slice(0,perAsset).map(s=>({site:a.site,...s})));

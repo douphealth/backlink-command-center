@@ -36,8 +36,10 @@ export async function dfsDemand(sites,dfs,state,{covered=new Set(),maxAgeDays=7,
     if(covered.has(s.domain))continue;
     let entry=state.demand_cache[s.domain];
     if((!entry||ageDays(entry.at)>maxAgeDays)&&dfs.canSpend('relevant_pages')){
+      // A failed lookup (null) keeps the cached pages: one provider error must not wipe a week of demand data.
       const items=await dfs.relevantPages(s.domain);
-      if(items){entry={at:NOW(),items:items.slice(0,150)};state.demand_cache[s.domain]=entry;log(`dataforseo demand: ${s.domain} ${items.length} ranking pages`)}
+      if(Array.isArray(items)){entry={at:NOW(),items:items.slice(0,150)};state.demand_cache[s.domain]=entry;log(`dataforseo demand: ${s.domain} ${items.length} ranking pages`)}
+      else if(entry)log(`dataforseo demand: ${s.domain} lookup failed; keeping the pages cached ${Math.round(ageDays(entry.at))} days ago`);
     }
     for(const x of entry?.items||[]){const url=normUrl(x.url);if(url)out[url]={source:'dataforseo',...x}}
   }

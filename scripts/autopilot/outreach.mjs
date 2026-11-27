@@ -130,28 +130,57 @@ export function applyProof(state,p,proof,{followup=false}={}){
  * Holds caused on our side (login, permissions, credits, provider outage, time budget) or with no recorded reason
  * are re-checked on the next run: fixing a login must not leave inboxes stuck for days.
  */
-export const OUR_SIDE_HOLD=/^(?:mailbox_(?:verifalia_|verification_|verifier_|recently_inconclusive$)|time_budget$|verification_error$|recipient_not_verified$)/;
+export const OUR_SIDE_HOLD=/^(?:mailbox_(?:verifalia_|verification_|verifier_|recently_inconclusive$)|time_budget$|verification_error$|recipient_not_verified$|email_source_unreachable$)/;
 export const publisherHold=detail=>!!detail&&!OUR_SIDE_HOLD.test(detail);
+import {POLICY_VERSION} from './recipient-policy.mjs';
+/** Retirements decided by the address parser (not by a mailbox check): the only ones a parser improvement can change. */
+const PARSER_RETIREMENT=new Set(['no_email_published','only_non_editorial_inbox_published','publisher_pages_unreachable','email_source_unreachable']);
+const retiredDetail=p=>p.contact_quality?.detail||(String(p.reason||'').match(/\(([a-z_]+)\)$/)||[])[1]||'';
 /**
  * Free queue screening (no verification credits): every ready prospect is checked against the strict,
- * first-party recipient rules once every 14 days. Prospects that cannot pass leave the ready queue at once;
- * the rest carry their best strictly qualified address, so outreach's checks go only to sendable inboxes.
+ * first-party recipient rules once every 14 days. A publisher-side failure is held and screened again a day
+ * later; two in a row retire the prospect from the ready queue. Passing prospects carry their best strictly
+ * qualified address, so outreach's checks go only to sendable inboxes. After the address parser improves
+ * (POLICY_VERSION), retired prospects that were never emailed get one free re-screen and return to 'ready' if they pass.
  */
-export async function screenQueue({state,mailer,max=40,deadline=Infinity,log=()=>{}}){
- const stats={screened:0,kept:0,retired:0,address_updated:0};
+export async function screenQueue({state,mailer,max=40,rescreenMax=30,deadline=Infinity,log=()=>{}}){
+ const stats={screened:0,kept:0,held:0,retired:0,address_updated:0,rescreened:0,recovered:0};
  if(typeof mailer?.screenRecipient!=='function')return stats;
- const due=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&ageDays(p.screened_at)>14&&!suppressed(state,p.email,p.domain))
+ const due=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&ageDays(p.screened_at)>(p.screen_strike?1:14)&&!suppressed(state,p.email,p.domain))
   .sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,max);
+ // Our side (pages that did not load, an unreachable address source) is never held against the publisher: retried next cycle.
+ const theirs=r=>publisherHold(r?.detail)&&r.detail!=='publisher_pages_unreachable';
+ const byReason=(k,detail)=>{stats[k]??={};stats[k][detail]=(stats[k][detail]||0)+1};
  await pool(due,4,async p=>{
   if(Date.now()>deadline)return;
   let r;try{r=await mailer.screenRecipient(p,{state,deadline})}catch{return}
   stats.screened++;
-  // A temporarily unreachable publisher is not marked screened: it is retried next cycle.
-  if(r?.ok||publisherHold(r?.detail)&&r.detail!=='publisher_pages_unreachable')p.screened_at=NOW();
-  if(r?.ok){stats.kept++;const e=normalizeEmail(r.email);if(e&&e!==normalizeEmail(p.email)){p.email=e;p.email_source=r.evidence?.source;p.email_rank=r.evidence?.rank;stats.address_updated++}}
-  else if(publisherHold(r?.detail)&&r.detail!=='publisher_pages_unreachable'){p.status='contact_unverifiable';p.reason=`No verifiable editorial inbox (${r.detail})`;p.contact_quality={status:'held',reason:r.reason,detail:r.detail,checked_at:NOW()};stats.retired++}
+  if(r?.ok){stats.kept++;p.screened_at=NOW();delete p.screen_strike;if(p.contact_quality?.via==='screen')delete p.contact_quality;
+   const e=normalizeEmail(r.email);if(e&&e!==normalizeEmail(p.email)){p.email=e;p.email_source=r.evidence?.source;p.email_rank=r.evidence?.rank;stats.address_updated++}}
+  else if(theirs(r)){
+   p.screened_at=NOW();p.contact_quality={status:'held',reason:r.reason,detail:r.detail,checked_at:NOW(),via:'screen'};
+   if(p.screen_strike){p.status='contact_unverifiable';p.reason=`No verifiable editorial inbox (${r.detail})`;delete p.screen_strike;stats.retired++;byReason('retired_by',r.detail)}
+   else{p.screen_strike={detail:r.detail,at:NOW()};stats.held++}
+  }
  });
- log(`queue screening (free, nothing sent): ${stats.screened} checked, ${stats.kept} sendable, ${stats.retired} retired, ${stats.address_updated} switched to a better published address`);
+ const retired=Object.values(state.prospects||{}).filter(p=>p.status==='contact_unverifiable'&&(p.screen_v||1)<POLICY_VERSION&&p.page_url&&PARSER_RETIREMENT.has(retiredDetail(p))&&
+   !(p.history||[]).some(h=>h.type==='initial'||h.type==='followup')&&!state.contacted?.[p.domain]&&!suppressed(state,p.email,p.domain))
+  .sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,Math.max(0,rescreenMax));
+ await pool(retired,4,async p=>{
+  if(Date.now()>deadline)return;
+  let r;try{r=await mailer.screenRecipient(p,{state,deadline})}catch{return}
+  stats.rescreened++;
+  const e=r?.ok?normalizeEmail(r.email):'';
+  if(e&&!suppressed(state,e,p.domain)){
+   Object.assign(p,{status:'ready',email:e,email_source:r.evidence?.source,email_rank:r.evidence?.rank,screened_at:NOW(),screen_v:POLICY_VERSION,recovered_at:NOW()});
+   delete p.reason;delete p.contact_quality;delete p.screen_strike;stats.recovered++;return;
+  }
+  // An unreachable publisher gets two more tries in later cycles before this parser version is settled for it.
+  if(!theirs(r)&&(p.rescreen_tries=(p.rescreen_tries||0)+1)<3)return;
+  p.screen_v=POLICY_VERSION;delete p.rescreen_tries;
+ });
+ log(`queue screening (free, nothing sent): ${stats.screened} checked, ${stats.kept} sendable, ${stats.held} held for a second look, ${stats.retired} retired, ${stats.address_updated} switched to a better published address`+
+  (stats.rescreened?`; ${stats.rescreened} retired prospects re-screened under the improved address rules, ${stats.recovered} back in the queue`:''));
  return stats;
 }
 /**
@@ -317,19 +346,22 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
 }
 /** Existing link checking is unchanged; attribution hardening remains in PR 25. */
 export async function checkLinks({state,ourDomains,fetchImpl=fetch,max=60,deadline=Infinity,log=()=>{}}){
- const stats={checked:0,won:0,lost:0};
+ const stats={checked:0,won:0,lost:0,unverifiable:0};
  const due=Object.values(state.prospects||{}).filter(p=>{
   if(p.status==='won')return ageDays(p.won?.checked_at)>14;
   const first=(p.history||[]).find(h=>h.type==='initial');
   return first&&ageDays(first.at)<150&&!['declined','bounced'].includes(p.status)&&(!p.next_link_check||p.next_link_check<=NOW());
  }).slice(0,max);
  for(const p of due){if(Date.now()>deadline)break;
-  const res=await fetchPage(p.page_url,{fetchImpl,timeout:12000,maxBytes:800000});stats.checked++;p.next_link_check=new Date(Date.now()+4*DAY).toISOString();if(res.status!==200)continue;
+  const res=await fetchPage(p.page_url,{fetchImpl,timeout:12000,maxBytes:800000});stats.checked++;p.next_link_check=new Date(Date.now()+4*DAY).toISOString();
+  // A page that does not answer 200 cannot show whether the link is there: recorded as unverifiable, never read as won or lost.
+  p.link_check={status:res.status||0,at:NOW(),...(res.error?{error:String(res.error).slice(0,40)}:{})};
+  if(res.status!==200){stats.unverifiable++;continue}
   const hit=links(res.body,res.url).find(l=>ourDomains.some(d=>sameSite(hostOf(l.url),d)));
   if(hit){if(p.status!=='won'){stats.won++;p.history.push({type:'won',at:NOW(),url:hit.url})}p.status='won';p.won={target:hit.url,anchor:hit.anchor,rel:hit.rel||'follow',found_at:p.won?.found_at||NOW(),checked_at:NOW()}}
   else if(p.status==='won'){stats.lost++;p.status='lost';p.history.push({type:'lost',at:NOW()})}
  }
- log(`link checks: ${stats.checked} pages, ${stats.won} new links won, ${stats.lost} lost`);return stats;
+ log(`link checks: ${stats.checked} pages, ${stats.won} new links won, ${stats.lost} lost${stats.unverifiable?`, ${stats.unverifiable} pages did not load (unverifiable this time)`:''}`);return stats;
 }
 /** A second guard at the real SMTP boundary prevents missing-proof sends. */
 export function gmailTransport(env){
