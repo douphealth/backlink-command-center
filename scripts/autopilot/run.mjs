@@ -21,7 +21,7 @@ import {DataForSEO,trackExternalSpend} from './dataforseo.mjs';
 import {BraveSearch} from './search.mjs';
 import {pitchable,pitchableAssets,bestPitchAsset} from './assets.mjs';
 import {gscDemand,dfsDemand} from './demand.mjs';
-import {discoverProspects,requalify,recontact,enrichBrokenLinks,freshQueryCount,QUALIFY_VERSION} from './prospect.mjs';
+import {discoverProspects,requalify,recontact,enrichBrokenLinks,freshQueryCount,noteRejection,QUALIFY_VERSION} from './prospect.mjs';
 import {indexationReport} from './indexation.mjs';
 import {autotune,diagnose,TUNING,dailyEntry,recordDiscovery,paidDiscoveryBreaker,replySignals,inSendWindow} from './health.mjs';
 import {gscClient,monitorIndex,indexReport,searchPerformance} from './searchconsole.mjs';
@@ -36,7 +36,7 @@ import {verifyLedger} from './recipient-policy.mjs';
 import {NOW,ageDays,normUrl} from './util.mjs';
 
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'../..');
-const P={summary:resolve(ROOT,'public/data/autopilot.json'),vault:resolve(ROOT,'public/data/vault.json'),cache:resolve(ROOT,'.autopilot-cache/crawl.json')};
+const PATHS={summary:resolve(ROOT,'public/data/autopilot.json'),vault:resolve(ROOT,'public/data/vault.json'),cache:resolve(ROOT,'.autopilot-cache/crawl.json')};
 const readJson=async(f,fallback)=>{try{return JSON.parse(await readFile(f,'utf8'))}catch{return fallback}};
 const num=(v,d)=>Number.isFinite(Number(v))&&String(v).trim()!==''?Number(v):d;
 
@@ -185,7 +185,9 @@ export function prune(state,{rejectedDays=REJECTED_KEEP_DAYS}={}){
   let rejected=0;state.domains??={};
   for(const [id,p] of Object.entries(state.prospects||{})){
     if(p?.status!=='rejected'||!(ageDays(p.found_at)>rejectedDays)||(p.history||[]).some(h=>['initial','followup','reply','bounce','delivery_delay'].includes(h?.type)))continue;
-    if(p.site&&p.domain)state.domains[`${p.site}|${p.domain}`]??=id; // dedup must survive the record
+    const key=`${p.site}|${p.domain}`;
+    if(p.site&&p.domain){state.domains[key]??=id; // dedup must survive the record, and so must its expiry date (prospect.mjs)
+      if(state.domains[key]===id&&!state.domain_rejections?.[key])noteRejection(state,p,p.found_at||NOW())}
     delete state.prospects[id];rejected++;
   }
   state.ledger=(state.ledger||[]).filter(x=>ageDays(x.at)<400);
@@ -214,8 +216,9 @@ export function funnel(state){
     needs_owner:ps.filter(p=>p.needs_owner&&!p.owner_decided_at).length,awaiting_reply:ps.filter(p=>p.awaiting_us).length};
 }
 
-export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=fetch,mailer:injectedMailer,write=true,useCache=true}={}){
+export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=fetch,mailer:injectedMailer,write=true,useCache=true,paths={}}={}){
   const cfg=loadConfig(env,argv),started=Date.now(),deadline=started+cfg.minutes*60e3;
+  const P={...PATHS,...paths}; // summary, vault and crawl-cache files (tests run whole cycles against a temporary folder)
   env=verifierDefaults(withDashboardSettings(env)); // the recipient verifier reads its opt-in and budget from here
   // Logs are published in the public summary: never let an address through.
   const logs=[],log=m=>{const line=String(m).replace(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi,'[email]');logs.push(`${new Date().toISOString().slice(11,19)} ${line}`);console.log(line)};
@@ -370,10 +373,12 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     // Every cycle: spend today's leftover free verification credits on the best inboxes whose send window opens within 20 h
     // (due follow-ups first, never beyond the day's sending capacity), so the next in-window cycle (started by the send-window
     // waker) sends at once. Verification needs no Gmail login: only the vault, a ready verifier and the transport's recipient check.
-    await stage('preverify',vaultOk&&!noVerifier&&typeof mailer?.authorizeRecipient==='function',
+    // A pending mailbox rebuild holds it too: proofs last 24 h, and until contact history is restored a check could go to a
+    // publisher that was already emailed.
+    await stage('preverify',vaultOk&&!noVerifier&&typeof mailer?.authorizeRecipient==='function'&&!state.rebuild_required,
       ()=>preverify({state,mailer,max:cfg.preverifyMax,followups:cfg.outreach.mode==='send',followupDays:cfg.outreach.followupDays,
         cap:cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit,deadline:deadline-90e3,log}),
-      !vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':'no Gmail transport',{until:deadline-30e3});
+      !vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':!mailer?.authorizeRecipient?'no Gmail transport':rebuildHold(state,stages.rebuild),{until:deadline-30e3});
   }finally{await mailer?.close?.().catch(()=>{})}
   // ---- 6. Link verification ----
   await stage('link_checks',vaultOk,()=>checkLinks({state,ourDomains:SITES.map(s=>s.domain),fetchImpl,deadline,log}),privateWhy,{until:deadline+90e3});
@@ -438,7 +443,8 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   // History and signals are counts only; the outcome rules (stalls, throughput, inflow) never fire on weekends, holds or dry runs.
   summary.attention=diagnose({stages,capabilities:summary.capabilities,outreach:summary.outreach||{},funnel:summary.funnel||{},spend:summary.spend,held:cfg.outreach.mode==='off',noPitchSites,indexation,
     history,sender:summary.sender,signals:{now:now.toISOString(),dry_run:cfg.dryRun,hold,mode:cfg.outreach.mode,reply_mode:cfg.outreach.replyMode,vault:{key:!!cfg.dataKey,open:vaultOk},
-      ...(vaultOk?{discovery:state.discovery_log||[],paid_discovery:paidDiscovery,...replySignals(state,now)}:{})}});
+      ...(vaultOk?{discovery:state.discovery_log||[],paid_discovery:paidDiscovery,...replySignals(state,now),
+        ...(state.rebuild_required?{rebuild_days:Math.max(0,Math.floor((now-Date.parse(state.rebuild?.requested_at||state.rebuild_required))/864e5))||0}:{})}:{})}});
   if(write&&!cfg.dryRun){
     await mkdir(dirname(P.summary),{recursive:true});
     const vault=sealer?await sealer.seal():null;if(vault)summary.capabilities.vault_bytes=vault.bytes;

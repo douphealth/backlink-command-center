@@ -310,7 +310,7 @@ export function bindAutopilot(reload){
     if(a==='recheck'){ui.msg='';ui.err='';ui.showConnect=true;ui.forceDiag=true;return reload()}
     if(a==='copykey'){try{await navigator.clipboard.writeText(store.get());ui.msg='Vault key copied. Paste it on your other devices to unlock there.'}catch{ui.err='Clipboard blocked by the browser.'}return reload()}
     if(a==='newvault'){
-      if(!confirm('Create a new vault key?\n\nThe current vault can no longer be opened, so private history (prospects, who was contacted, opt-outs) starts fresh on the next run. Only do this if you never had the old key.'))return;
+      if(!confirm('Create a new vault key?\n\nThe current vault can no longer be opened, so the prospect list starts fresh on the next run. Who was emailed and who opted out are read back from Gmail first, and nothing is sent until that has finished. Only do this if you never had the old key.'))return;
       ui.forceDiag=true;
       return act('newvault',async()=>{
         const key=[...crypto.getRandomValues(new Uint8Array(24))].map(b=>b.toString(16).padStart(2,'0')).join('');

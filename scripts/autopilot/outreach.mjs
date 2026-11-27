@@ -389,7 +389,8 @@ export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new D
  // Due follow-ups: the first email went out and the follow-up is due by the time its send window opens.
  const fus=[];if(followups)for(const p of all){
   if(p.status!=='sent'||p.replied_at||p.no_followup||!p.email||(p.qv||1)<QUALIFY_VERSION||suppressed(state,p.email,p.domain))continue;
-  const initial=(p.history||[]).find(h=>h.type==='initial'&&h.mode!=='draft');if(!initial)continue;
+  // A follow-up only goes in the same thread: a pitch restored from the Sent folder (no message id) is never followed up.
+  const initial=(p.history||[]).find(h=>h.type==='initial'&&h.mode!=='draft');if(!initial?.message_id)continue;
   const w=nextSendWindow(p.domain,new Date(Math.max(nowMs,(Date.parse(initial.at)||nowMs)+followupDays*DAY)));if(w)fus.push({p,w:w.getTime()});
  }
  const fresh=all.filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION&&!suppressed(state,p.email,p.domain)&&!(state.contacted?.[p.domain]&&ageDays(state.contacted[p.domain])<90))

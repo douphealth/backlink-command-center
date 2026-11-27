@@ -17,7 +17,9 @@ test('due follow-ups are verified first (followup:true), then new prospects',asy
   const at=Date.parse('2026-11-25T05:00:00Z'); // Wednesday: EU window opens 07:00, US 13:00
   const state={prospects:{
     n1:mk('n1',{score:95}),n2:mk('n2',{score:90}),
-    fu:mk('fu',{status:'sent',domain:'fu.co.uk',email:'editor@fu.co.uk',history:[{type:'initial',at:iso(at-7*864e5),mode:'send',to:'editor@fu.co.uk'}]}),
+    fu:mk('fu',{status:'sent',domain:'fu.co.uk',email:'editor@fu.co.uk',history:[{type:'initial',at:iso(at-7*864e5),mode:'send',to:'editor@fu.co.uk',message_id:'<lf-a-b@sender.example>'}]}),
+    // Restored from the Sent folder (no message id): never followed up, so no credit is spent on it.
+    unthreaded:mk('unthreaded',{status:'sent',domain:'un.co.uk',email:'editor@un.co.uk',history:[{type:'initial',at:iso(at-8*864e5),mode:'send',to:'editor@un.co.uk',reconciled:true}]}),
     early:mk('early',{status:'sent',history:[{type:'initial',at:iso(at-2*864e5),mode:'send'}]}), // not due for days
     replied:mk('replied',{status:'sent',replied_at:iso(at),history:[{type:'initial',at:iso(at-9*864e5),mode:'send'}]})}};
   const {asked,mailer}=recorder();
@@ -54,7 +56,7 @@ test('checking stops once proofs fill the day\'s remaining sending capacity',asy
 
 test('a follow-up due later today keeps a credit reserved',async()=>{
   const at=Date.parse('2026-11-25T00:30:00Z'); // horizon ends 20:30; the follow-up is due 20:45 (US window open until 21:00)
-  const state={prospects:{n:mk('n'),fu:mk('fu',{status:'sent',history:[{type:'initial',at:'2026-11-19T20:45:00.000Z',mode:'send'}]})}};
+  const state={prospects:{n:mk('n'),fu:mk('fu',{status:'sent',history:[{type:'initial',at:'2026-11-19T20:45:00.000Z',mode:'send',message_id:'<lf-a-b@sender.example>'}]})}};
   let {asked,mailer}=recorder({credits:()=>1});
   let r=await preverify({state,mailer,max:5,now:()=>new Date(at)});
   assert.deepEqual(asked,[],'the last credit is kept for the follow-up');assert.equal(r.reserved_for_followups,1);assert.equal(r.out_of_credits,true);
@@ -67,7 +69,7 @@ test('a follow-up due later today keeps a credit reserved',async()=>{
 
 test('weekend: leftover credits screen the queue, and a screen never becomes a send proof',async()=>{
   const sat=Date.parse('2026-11-28T10:00:00Z');
-  const state={prospects:{a:mk('a',{score:40}),b:mk('b'),c:mk('c'),d:mk('d'),e:mk('e'),fu:mk('fu',{status:'sent',history:[{type:'initial',at:iso(sat-8*864e5),mode:'send'}]})}};
+  const state={prospects:{a:mk('a',{score:40}),b:mk('b'),c:mk('c'),d:mk('d'),e:mk('e'),fu:mk('fu',{status:'sent',history:[{type:'initial',at:iso(sat-8*864e5),mode:'send',message_id:'<lf-a-b@sender.example>'}]})}};
   const results={a:{ok:false,reason:'screen_only',screened:'valid',email:'editor@a.com'},b:{ok:false,reason:'screen_only',screened:'invalid',detail:'mailbox_invalid'},
     c:{ok:false,reason:'screen_only',screened:'catch_all',detail:'mailbox_accept_all'},d:{ok:false,reason:'screen_only',screened:'unknown',detail:'mailbox_verification_unavailable'},
     e:{ok:false,reason:'jurisdiction_consent_required',detail:'jurisdiction_consent_required'}};

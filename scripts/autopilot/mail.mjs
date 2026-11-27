@@ -165,7 +165,12 @@ const CONDITIONS=[
  ['guest_post',/\b(?:guest[- ]?post(?:s|ing)?|guest (?:articles?|blogs?|contributions?)|write for us|contribute an? (?:article|post)|submit an? (?:article|post))\b/i],
 ];
 // Our message ids (<lf-...>) in any header or text; the List-Unsubscribe mailto may leave them URL-encoded in a subject.
-export const lfIds=s=>String(s||'').replace(/%3C/gi,'<').replace(/%3E/gi,'>').replace(/%40/gi,'@').match(/<lf-[^<>\s]+>/g)||[];
+// That mailto (unsubscribeHeader) carries the bare id, so "unsubscribe lf-...@domain" is read as <lf-...@domain> too.
+const BARE_UNSUBSCRIBE_ID=/\bunsubscribe\s+(lf-[a-z0-9-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+)/gi;
+export const lfIds=s=>{
+ const t=String(s||'').replace(/%3C/gi,'<').replace(/%3E/gi,'>').replace(/%40/gi,'@').replace(/%20/g,' ');
+ return [...(t.match(/<lf-[^<>\s]+>/g)||[]),...[...t.matchAll(BARE_UNSUBSCRIBE_ID)].map(m=>`<${m[1]}>`)];
+};
 /**
  * An opt-out by subject alone, whoever sends it: "unsubscribe" (optionally after Re:/Fwd: prefixes), which is what
  * a mail client's unsubscribe button sends from our List-Unsubscribe mailto ("unsubscribe <lf-...>"), or any subject

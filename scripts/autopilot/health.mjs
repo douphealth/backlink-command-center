@@ -126,9 +126,18 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
   }
   if(signals.vault?.key&&signals.vault.open===false)add('action','vault_locked','The private vault could not be opened with the saved key, so prospecting, outreach and reply reading are stopped, and the published funnel is from an earlier cycle.',
     'Restore the LINKFORGE_DATA_KEY secret that sealed public/data/vault.json (GitHub → Settings → Secrets and variables → Actions). Use "Create a new vault key" only if the old key is truly lost: a new vault forgets who was contacted and who opted out.');
+  // A pending mailbox rebuild (a new vault) holds every send: pitches, follow-ups and automatic answers (rebuild.mjs).
+  if(capabilities.rebuild_required){
+    const rb=stages.rebuild,days=Number(signals.rebuild_days)||0,stuck=rb?.ok!==true||days>=2;
+    const why=rb?.ok===false?`reading the mailbox failed (${String(rb.error||'unknown error').slice(0,100)})`:rb?.ok===null?`the mailbox could not be read (${String(rb.skipped||'').slice(0,100)})`
+      :!rb?'the mailbox was not read this cycle':`the mailbox is still being read${rb.result?.why?` (${String(rb.result.why).replaceAll('_',' ').slice(0,100)})`:''}`;
+    add(stuck?'action':'info','mailbox_rebuild_pending',`A new vault was started, so nothing is sent (no pitch, follow-up or automatic answer) until who was emailed and who opted out are restored from Gmail; ${why}${days?`. Pending for ${plural(days,'day','days')}`:''}.`,
+      stuck?'Check the Gmail connection under ⚙ Connect (app password, IMAP on, the Sent Mail and All Mail folders visible to IMAP), then press Save & run now. Sending resumes by itself once the mailbox has been read back; never skip this step, it is what keeps opt-outs and the 90-day rule intact.'
+        :'Handled automatically: sending resumes by itself once the mailbox has been read back.');
+  }
   const blocked=stages.outreach?.result?.send_blocked;
   if(blocked){
-    const why=String(blocked).replace(EMAIL,'[email]').slice(0,120);
+    const why=({gmail_auth:'login refused',gmail_limit:'sending limit reached'}[blocked]||String(blocked)).replace(EMAIL,'[email]').slice(0,120);
     add('action','gmail_send_blocked',`Gmail refused to send (${why}), so sending stopped for the rest of this cycle.`,
       /auth|login|password|credential|53[45]/i.test(why)?'Create a new Gmail app password (Google Account → Security → App passwords) and save it under ⚙ Connect, then press Save & run now.'
       :/limit|quota|rate|too many|daily/i.test(why)?'Gmail\'s sending limit was reached. Sending resumes by itself on a later cycle; if this repeats, lower the daily limit under ⚙ Connect.'
@@ -239,7 +248,7 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
   else if(p?.ok&&p.result?.queries>=8&&!p.result?.qualified&&!p.result?.deferred)add('warn','no_qualified',`${p.result.queries} searches produced 0 qualified prospects this cycle.`,'Usually transient; if it repeats, the promoted pages may need stronger topical matches.');
   if(p?.result&&(p.result.failed_queries||0)>Math.max(2,p.result.queries/3))add('warn','dataforseo_errors',`${p.result.failed_queries} DataForSEO searches failed (provider errors); they are retried next cycle.`,'No action unless it persists for a day.');
   if(spend.daily_cap_usd&&spend.today_usd>=spend.daily_cap_usd*0.95)add('info','spend_cap','Today\'s DataForSEO spend cap is reached; prospecting resumes tomorrow.','Raise DATAFORSEO_DAILY_USD only if you want faster prospecting.');
-  for(const [name,s] of Object.entries(stages))if(s?.ok===false&&!['prospects','preverify'].includes(name))add('warn',`stage_${name}`,`The ${name.replace('_',' ')} stage failed: ${String(s.error||'').slice(0,120)}`,'It retries automatically next cycle.');
+  for(const [name,s] of Object.entries(stages))if(s?.ok===false&&!['prospects','preverify','rebuild'].includes(name))add('warn',`stage_${name}`,`The ${name.replace('_',' ')} stage failed: ${String(s.error||'').slice(0,120)}`,'It retries automatically next cycle.');
   if((funnel.ready||0)<20&&!out.some(x=>x.level==='action'))add('info','queue_low','Fewer than 20 pitch-ready prospects are queued.','Autopilot widens its searches automatically; no action needed.');
   const rank={action:0,warn:1,info:2};
   return out.sort((a,b)=>rank[a.level]-rank[b.level]);
