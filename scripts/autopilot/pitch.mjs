@@ -345,16 +345,52 @@ export class PitchWriter{
     this.reasons[why]=(this.reasons[why]||0)+1;
   }
   get ai(){return this.client?'claude':this.providers.find(p=>!p.off)?.name||null}
-  /** One chat completion from the first free writer that can answer. Returns {out:{subject,body},provider,model} or {why, detail} (never throws). */
-  async chat(facts){
+  /**
+   * One chat completion from the first free writer that can answer. Returns {out:{subject,body},provider,model} or {why, detail} (never throws).
+   * With `req` ({system,user,maxTokens}) the caller's own prompt is sent and the plain answer comes back as {text,provider,model}.
+   */
+  async chat(facts,req=null){
     let first=null;
     for(const p of this.providers){
       if(p.off)continue;
-      const r=await this.ask(p,facts);
-      if(r.out)return r;
+      const r=await this.ask(p,facts,req);
+      if(r.out||r.text)return r;
       first??=r;
     }
     return first||{why:this.providers.find(p=>p.offWhy)?.offWhy||'writer_off'};
+  }
+  /**
+   * A short plain-text completion for anything other than a pitch (answers to publisher replies): the same writers
+   * as pitches (Claude when its key is set, else the free writers), the caller's own system prompt. Returns
+   * {text,writer} or {why} and never throws. `check(text)` may return a reason to reject the answer; the caller
+   * then uses its safe template. Pitch counters are not touched.
+   */
+  async complete({system,user,maxTokens=1500,check}={}){
+    if(!system||!user)return {why:'no_prompt'};
+    const verdict=(text,writer)=>{
+      text=String(text||'').replace(/<think>[\s\S]*?<\/think>/gi,'').replace(/^```[a-z]*\s*|\s*```$/gi,'').trim();
+      if(!text)return {why:'empty_answer'};
+      const why=typeof check==='function'?check(text):null;
+      if(why){this.completionFailures=(this.completionFailures||0)+1;return {why}}
+      this.completions=(this.completions||0)+1;return {text,writer};
+    };
+    if(this.client){
+      try{
+        const res=await this.client.beta.messages.create({
+          model:this.model,max_tokens:maxTokens,betas:['server-side-fallback-2026-07-01'],fallbacks:'default',
+          output_config:{effort:'low'},system,messages:[{role:'user',content:user}],
+        });
+        if(res.stop_reason==='refusal')return {why:'refusal'};
+        if(res.stop_reason==='max_tokens')return {why:'answer_cut_off'};
+        return verdict(res.content.filter(b=>b.type==='text').map(b=>b.text).join(''),'claude');
+      }catch(e){
+        if(e instanceof Anthropic.AuthenticationError){this.log('claude: API key rejected; using templates');this.client=null}
+        return {why:e instanceof Anthropic.APIError?`claude_http_${e.status}`:'claude_unreachable'};
+      }
+    }
+    if(!this.ai)return {why:this.providers.find(x=>x.offWhy)?.offWhy||'writer_off'};
+    const r=await this.chat(null,{system,user,maxTokens});
+    return r.text?verdict(r.text,r.provider):{why:r.why||'no_answer'};
   }
   /** Model ids the provider lists for this key ([] when the list cannot be read). */
   async listModels(p,headers){
@@ -368,14 +404,15 @@ export class PitchWriter{
     const ids=await read(p.base+'/models',headers);
     return ids.length||!p.nativeList?ids:read(p.nativeList.url,{[p.nativeList.keyHeader]:p.key});
   }
-  async ask(p,facts){
+  async ask(p,facts,req=null){
     const key=p.getKey?await p.getKey(this.fetch):p.key;
     if(!key){p.off=true;p.offWhy='not_permitted';this.log(`${p.label}: no identity token from GitHub Actions (the workflow needs "id-token: write"); it is not used for the rest of this cycle`);return {why:'not_permitted'}}
     const headers={Authorization:'Bearer '+key,'Content-Type':'application/json'};
     // Plain "Subject:" format: small models keep to it far more reliably than to JSON with line breaks inside strings.
-    const system=SYSTEM+'\nAnswer in exactly this format, with nothing before or after it:\nSubject: <the subject line>\n\n<the email body>';
+    const system=req?req.system:SYSTEM+'\nAnswer in exactly this format, with nothing before or after it:\nSubject: <the subject line>\n\n<the email body>';
+    const user=req?req.user:'Write the email from these facts (JSON):\n'+JSON.stringify(facts);
     // max_tokens leaves room for models that reason before answering; the body length is validated afterwards.
-    const body=model=>JSON.stringify({model,temperature:0.5,max_tokens:2000,messages:[{role:'system',content:system},{role:'user',content:'Write the email from these facts (JSON):\n'+JSON.stringify(facts)}]});
+    const body=model=>JSON.stringify({model,temperature:req?0.3:0.5,max_tokens:req?.maxTokens||2000,messages:[{role:'system',content:system},{role:'user',content:user}]});
     const off=(why,line)=>{p.off=true;p.offWhy=why;this.log(line);return {why}};
     if(!p.candidates)p.candidates=[...new Set([...(p.model?[p.model]:[]),...pickModels(await this.listModels(p,headers),p.prefer||[]),...(p.fallback||[])])].slice(0,6);
     const order=[...new Set([...(p.working?[p.working]:[]),...p.candidates])].filter(m=>!p.limited.has(m));
@@ -409,6 +446,7 @@ export class PitchWriter{
       const text=(Array.isArray(content)?content.map(part=>typeof part==='string'?part:part?.text||'').join(''):String(content||'')).replace(/<think>[\s\S]*?<\/think>/gi,'').trim();
       if(!text)return {why:json?'empty_answer':'answer_not_json',
         detail:`${p.label} ${model}: HTTP ${res.status} ${res.headers?.get?.('content-type')||'no content-type'}: ${(raw||'(empty body)').slice(0,100)}`};
+      if(req){p.working=model;return {text,provider:p.name,model}}
       const out=parseAnswer(text);
       if(!out)return {why:'answer_not_in_format',detail:`${p.label} ${model}: ${text.slice(0,80)}`};
       p.working=model;

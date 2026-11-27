@@ -29,6 +29,7 @@ import {submitToBing} from './bing.mjs';
 import {PitchWriter,aiProviders} from './pitch.mjs';
 import {processReplies,reconcileSent,runOutreach,preverify,screenQueue,checkLinks,gmailTransport,dailyCap,outreachStatus} from './outreach.mjs';
 import {assetStats,learningSummary} from './learn.mjs';
+import {answerReplies} from './replies.mjs';
 import {sealJson,open,vaultFormat} from './vault.mjs';
 import {requireRebuild,rebuildHold,rebuildFromMailbox,linkRestoredSends,pruneRestoredSends} from './rebuild.mjs';
 import {verifyLedger} from './recipient-policy.mjs';
@@ -360,6 +361,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     const sentUnknown=stages.sent_check?.ok===false;
     await stage('screen',vaultOk&&!!mailer,()=>screenQueue({state,mailer,deadline:deadline-4*60e3,log}),privateWhy,{until:deadline-3.5*60e3});
     const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',fetchImpl,log});
+    await stage('reply_drafts',vaultOk&&gmailOk&&cfg.outreach.replyMode!=='off'&&typeof mailer?.draft==='function',()=>answerReplies({state,writer,mailer,config:cfg.outreach,assets:ranked,deadline:deadline-4*60e3,log}),!vaultOk?privateWhy:!mailer?'Gmail app password not set':!gmailOk?connections.gmail.error:cfg.outreach.replyMode==='off'?'REPLY_MODE=off':'transport cannot save drafts',{until:deadline-3.5*60e3});
     await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown&&!state.rebuild_required,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets,pickAsset},deadline:deadline-2*60e3,log}),mailWhy||rebuildHold(state,stages.rebuild)||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,free_ai:writer.usedAi,template_fallbacks:writer.fallbacks,...(writer.aiModel?{ai_provider:writer.aiProvider,ai_model:writer.aiModel}:{}),...(Object.keys(writer.reasons||{}).length?{fallback_reasons:writer.reasons}:{})};
     aiWriter=writer.ai;
