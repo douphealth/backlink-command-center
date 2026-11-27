@@ -11,10 +11,15 @@ const store={get:()=>{try{return localStorage.getItem(KEY)||''}catch{return ''}}
 if(location.hash.startsWith('#key=')){store.set(decodeURIComponent(location.hash.slice(5)));history.replaceState(null,'',location.pathname+'#autopilot')}
 
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+// v1: AES-GCM over the JSON text; v2: the JSON was gzipped before encryption ({z:'gzip'}), see scripts/autopilot/vault.mjs.
 async function openVault(box,pass){
+  if(!box||![1,2].includes(box.v)||!box.ct||(box.v===2&&box.z!=='gzip'))throw Error('Unrecognized vault format');
   const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
   const key=await crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt:b64(box.salt),iterations:box.iterations},base,{name:'AES-GCM',length:256},false,['decrypt']);
-  return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(box.iv)},key,b64(box.ct))));
+  let plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(box.iv)},key,b64(box.ct));
+  if(box.v===2){if(typeof DecompressionStream!=='function')throw Error('This browser cannot unpack the vault; update it');
+    plain=await new Response(new Blob([plain]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer()}
+  return JSON.parse(new TextDecoder().decode(plain));
 }
 // One retry on network failure, then a clear error the view can explain (instead of a raw "Failed to fetch").
 const fetchJson=async url=>{
