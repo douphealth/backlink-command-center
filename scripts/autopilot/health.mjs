@@ -91,7 +91,8 @@ export function replySignals(state,now=new Date()){
   const owner_conditions={};for(const p of owner){const k=/^[a-z_]{1,20}$/.test(p.condition||'')?p.condition:'other';owner_conditions[k]=(owner_conditions[k]||0)+1}
   const since=owner.map(p=>Date.parse(p.last_reply_at||p.replied_at||'')).filter(Number.isFinite);
   const waiting=ps.filter(p=>p.awaiting_us&&!pending(p));
-  const drafted=waiting.filter(p=>p.reply_draft?.at&&!(Date.parse(p.reply_draft.at)<Date.parse(p.last_reply_at||'')));
+  // Only an answer that really sits in Gmail Drafts counts as drafted (an automatic send that failed is not one).
+  const drafted=waiting.filter(p=>p.reply_draft?.at&&(p.reply_draft.mode==='draft'||p.reply_draft.mode==='send'&&!p.reply_draft.reason)&&!(Date.parse(p.reply_draft.at)<Date.parse(p.last_reply_at||'')));
   return {owner_conditions,owner_oldest_days:since.length?Math.max(0,Math.floor((now.getTime()-Math.min(...since))/DAY)):null,
     replies_unanswered:waiting.length,replies_drafted:drafted.length};
 }
@@ -102,7 +103,16 @@ const HOLD_WHY={only_non_editorial_inbox_published:'the only address is not on t
   catch_all_domain:'the mail server accepts every address, so no inbox can be proven',mailbox_invalid:'the inbox does not exist',
   'mailbox_verifalia_free_credits_used_up':'today\'s free verification credits are used up','mailbox_verification_budget_exhausted':'today\'s verification limit is used up'};
 const holdWhy=k=>HOLD_WHY[k]||String(k).replaceAll('_',' ');
-const CONDITION={paid:'mentions a fee',reciprocal:'wants a link back',guest_post:'wants a guest post',other:'has another condition'};
+/**
+ * Which outcome rules this cycle could evaluate (published as summary.watchdog, read by notify.mjs): the stall and
+ * throughput rules are quiet on weekends, holds, other modes, dry runs and a locked vault; the Gmail-block rule only
+ * speaks when a send was attempted. A rule that did not run says nothing about whether its problem is fixed.
+ */
+export function watchdogStatus({signals={},stages={}}={}){
+  const now=signals.now?new Date(signals.now):new Date(),vault_open=signals.vault?.open!==false;
+  const reason=signals.dry_run?'dry_run':!vault_open?'vault_locked':signals.hold?'hold':signals.mode!=='send'?'not_sending':!isWeekday(now)?'weekend':null;
+  return {quiet:!!reason,...(reason?{reason}:{}),vault_open,send_attempted:(Number(stages.outreach?.result?.attempted)||0)>0};
+}
 /** Days that could have sent: weekdays before today with at least one in-window cycle in send mode without a hold. */
 const sendDays=(history,today)=>history.filter(h=>h&&h.date<today&&isWeekday(h.date)&&(Number(h.in_window_cycles)||0)>0);
 
@@ -119,10 +129,11 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
   // A positive reply that waits for a decision is the only step between a pitch and a link: it goes first.
   const owner=Number(funnel.needs_owner)||0;
   if(owner>0){
-    const conds=Object.entries(signals.owner_conditions||{}).filter(([,n])=>n>0).map(([k,n])=>`${n} ${CONDITION[k]||CONDITION.other}`).join(', ');
+    // Count only: which condition a publisher attached (a fee, a link back) is their private negotiation, and joined with
+    // the public list of won links it would name a publisher that sold a link. The kinds show only in the unlocked vault.
     const days=signals.owner_oldest_days;
-    add('action','owner_decision_pending',`${plural(owner,'publisher reply is','publisher replies are')} waiting for your decision${conds?` (${conds})`:''}${Number.isFinite(days)?`; the oldest has waited ${plural(days,'day','days')}`:''}. Autopilot never answers these or agrees to terms by itself.`,
-      'Read the thread in Gmail, or in the dashboard\'s Prospects tab (unlock the vault; "Needs your answer" rows sort first), and answer it yourself in the same thread. A fee needs your explicit approval; a link swap or guest post is your call.');
+    add('action','owner_decision_pending',`${plural(owner,'publisher reply is','publisher replies are')} waiting for your decision${Number.isFinite(days)?`; the oldest has waited ${plural(days,'day','days')}`:''}. Autopilot never answers these or agrees to terms by itself.`,
+      'Read the thread in Gmail, or in the dashboard\'s Prospects tab (unlock the vault; "Needs your answer" rows sort first, with what each one asks for), and answer it yourself in the same thread. A fee needs your explicit approval; a link swap or guest post is your call.');
   }
   if(signals.vault?.key&&signals.vault.open===false)add('action','vault_locked','The private vault could not be opened with the saved key, so prospecting, outreach and reply reading are stopped, and the published funnel is from an earlier cycle.',
     'Restore the LINKFORGE_DATA_KEY secret that sealed public/data/vault.json (GitHub → Settings → Secrets and variables → Actions). Use "Create a new vault key" only if the old key is truly lost: a new vault forgets who was contacted and who opted out.');
@@ -147,9 +158,10 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
   for(const s of indexation?.sites||[])if(s.alert&&s.server_error>=10)add('action','site_failing',`${s.site}: ${s.alert}`,
     'Fix the site itself first (hosting, database or plan limits, firewall). Links are not built to pages that fail, and this is re-checked every cycle.');
   for(const [k,label] of [['dataforseo','DataForSEO'],['gmail','Gmail']])if(c[k]?.status==='rejected')
-    add('action',`${k}_rejected`,`${label} rejected the saved login, so that part of the pipeline is stopped.`,`Re-enter the ${label} credentials under ⚙ Connect.`);
+    add('action',`${k}_rejected`,k==='dataforseo'?'DataForSEO rejected the saved login, so paid searches and link-gap discovery are stopped; the free sources (link neighbourhood, pages we cite, second looks) keep running.'
+      :`${label} rejected the saved login, so that part of the pipeline is stopped.`,`Re-enter the ${label} credentials under ⚙ Connect.`);
   if(!v.ready)add('action','verifier_off',v.key?'Inbox verification is switched off (daily limit is 0), so no email can ever be sent.':'No inbox verifier is connected, so no email can ever be sent.',
-    v.key?'Set "Mailbox checks per day" to 12 under ⚙ Connect (or leave it blank).':'Add a free Verifalia login under ⚙ Connect.');
+    v.key?'Set "Mailbox checks per day" to 25 under ⚙ Connect (or leave it blank for 25, the Verifalia free plan\'s daily credits).':'Add a free Verifalia login under ⚙ Connect.');
   // The verifier's most recent answer is the truth: old hold reasons never override a later successful login.
   const denied=v.balance?v.balance.error||'':(Object.keys(outreach.holds||{}).find(k=>/verifalia_(login_rejected|permission_denied)/.test(k))||'').replace(/^mailbox_verifalia_/,'');
   if(denied==='permission_denied')add('action','verifier_permission',
@@ -158,8 +170,11 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
   else if(denied==='login_rejected'||stages.preverify?.ok===false&&/login/.test(stages.preverify.error||''))add('action','verifier_rejected',
     'Verifalia rejected the saved login (HTTP 401), so no inbox can be verified or emailed.',
     'Check, in this order: (1) the account email is confirmed; (2) you saved the Verifalia USERNAME shown in app.verifalia.com → Users (may differ from your sign-up email) and its password, with no extra spaces; (3) two-factor authentication is OFF for that user (create a dedicated API user without 2FA). Then re-save under ⚙ Connect and press Save & run now.');
+  // Proofs last 24 h and no inbox is verified while outreach is off, so this only names proofs bought while sending was on.
+  // Under the deliberate OUTREACH_HOLD brake it is a note, not a request to switch sending back on.
   if(held&&outreach.mode==='off'&&(outreach.verified_ready||0)>0)
-    add('action','hold_with_verified',`${outreach.verified_ready} verified inboxes are ready, but outreach is off.`,'Set the outreach mode to Hands-free under ⚙ Connect, and make sure repository variable OUTREACH_HOLD is not YES.');
+    add(signals.brake?'info':'action','hold_with_verified',`${outreach.verified_ready} verified inboxes are ready, but outreach is off${signals.brake?' (OUTREACH_HOLD=YES)':''}; their proofs expire within 24 hours.`,
+      signals.brake?'Nothing to do while the brake is on on purpose. To send again, remove the OUTREACH_HOLD repository variable.':'Set the outreach mode to Hands-free under ⚙ Connect, and make sure repository variable OUTREACH_HOLD is not YES.');
   const holds=outreach.holds||{},heldCount=Object.values(holds).reduce((a,b)=>a+b,0);
   const topHold=Object.entries(holds).sort((a,b)=>b[1]-a[1])[0]||null;
   // ---- Outcome watchdog: sending that should happen but does not. Never on weekends, deliberate holds, dry runs or a locked vault. ----
@@ -175,8 +190,13 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
       const credits=days.every(h=>Number.isFinite(h.verifier_used))?`${sum(days,h=>h.verifier_used)} verification credits were used on those days (daily limit ${v.daily_limit||0})`:`${v.used_today||0} of ${v.daily_limit||0} verification credits used today`;
       const skipped=stages.outreach?.skipped?` The outreach stage was skipped: ${String(stages.outreach.skipped).slice(0,120)}.`
         :stages.outreach?.result?.blocked_reason?` Sending was blocked: ${String(stages.outreach.result.blocked_reason).replaceAll('_',' ')}.`:'';
-      add('action','sending_stalled',`No new publisher was emailed on the last 2 weekdays with open send windows, although ${ready} prospects are ready (${outreach.verified_ready||0} verified now).${topHold?` Most held inboxes wait because ${holdWhy(topHold[0])} (${topHold[1]}).`:''} ${credits}.${skipped}`,
-        'Autopilot keeps retrying every cycle. If the outreach stage is skipped, fix that setting under ⚙ Connect; if credits run out before any inbox passes, the queue needs fresher, author-level addresses. To pause sending on purpose, set repository variable OUTREACH_HOLD=YES (this alert then stays quiet).');
+      // Out of credits with Verifalia's free balance at 0 (or fewer used than the daily limit): the credits were never there.
+      const outOf=!!(stages.outreach?.result?.out_of_credits||stages.preverify?.result?.out_of_credits),used=days.every(h=>Number.isFinite(h.verifier_used))?sum(days,h=>h.verifier_used):null;
+      const empty=outOf&&!v.balance?.error&&(Number(v.balance?.free_credits)===0||(used!=null&&v.daily_limit>0&&used<v.daily_limit*days.length));
+      const reset=String(v.balance?.reset_in||'').replace(/[^0-9:.]/g,'').slice(0,12);
+      add('action','sending_stalled',`No new publisher was emailed on the last 2 weekdays with open send windows, although ${ready} prospects are ready (${outreach.verified_ready||0} verified now).${empty?` Verifalia's free credit balance was empty${reset?` (it resets in ${reset})`:''}, so no inbox could be verified.`:topHold?` Most held inboxes wait because ${holdWhy(topHold[0])} (${topHold[1]}).`:''} ${credits}.${skipped}`,
+        empty?'Check the Verifalia account (app.verifalia.com → Credits): whether the free plan and its daily credits are still active, and whether another tool or user spends the same free credits (give Autopilot its own sub-user). Autopilot uses only free credits unless VERIFALIA_ALLOW_PAID=YES, which is your decision.'
+          :'Autopilot keeps retrying every cycle. If the outreach stage is skipped, fix that setting under ⚙ Connect; if credits run out before any inbox passes, the queue needs fresher, author-level addresses. To pause sending on purpose, set repository variable OUTREACH_HOLD=YES (this alert then stays quiet).');
     }
   }
   if(!quiet&&!stalled&&v.ready&&ready>0){
@@ -215,8 +235,9 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
     add(sender.sender_name?'warn':'action','sender_identity_incomplete',`Hands-free sending is on without ${missing.join(' and without ')}.`,
       'Add it under ⚙ Connect (a P.O. box or mailbox service works for the postal address). Commercial-email rules such as CAN-SPAM expect a postal address in every email; sending is not paused for it.');
   }
-  const waiting=Number(signals.replies_unanswered??funnel.awaiting_reply)||0,rd=stages.reply_drafts,rr=rd?.result||{};
-  if(waiting>0&&!(rd?.ok&&(Number(rr.drafted)||0)+(Number(rr.sent)||0)>0)){
+  // Every cycle while a reply waits (also the one that drafted its answer): a draft is not an answer until the owner sends it.
+  const waiting=Number(signals.replies_unanswered??funnel.awaiting_reply)||0,rd=stages.reply_drafts;
+  if(waiting>0){
     const drafted=Math.min(waiting,Number(signals.replies_drafted)||0);
     const why=drafted>=waiting?`${drafted===1?'its answer is':'their answers are'} drafted in Gmail Drafts, waiting for you to send`
       :signals.reply_mode==='off'?'automatic reply drafts are off (REPLY_MODE=off)':rd?.ok===false?'drafting an answer failed this cycle'

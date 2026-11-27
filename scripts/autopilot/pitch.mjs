@@ -67,9 +67,13 @@ export function isListPage(p){
   return !!p.list_page||ROUNDUP.test(String(p.title||''));
 }
 const listName=p=>p.list_page?.title||p.title||'';
+/** A list's own section for additions ("Other notable tools", "Honourable mentions"), read from the page; '' when none. */
+const addSection=p=>typeof p.list_page?.other_section==='string'?p.list_page.other_section:'';
+/** The section a list-inclusion ask names: the list's section for additions when it has one (skill step 2), else the matched section. */
+const listSection=p=>addSection(p)||p.fit_section||null;
 /** Where on their page the link would go: the matched section when one is known. */
-const placeOf=(p,list=false)=>p.fit_section?`your "${short(p.fit_section,70)}" section in "${short(list?listName(p):p.title,70)}"`
-  :list?`your list "${short(listName(p),90)}"`:`"${short(p.title,90)}"`;
+const placeOf=(p,list=false)=>{const sec=list?listSection(p):p.fit_section;
+  return sec?`your "${short(sec,70)}" section in "${short(list?listName(p):p.title,70)}"`:list?`your list "${short(listName(p),90)}"`:`"${short(p.title,90)}"`};
 const intro=site=>`I'm writing from ${site.domain}, a site about ${short(site.topic,50)}.`;
 const signOff=(senderName,site)=>['Best,',senderName,site?.domain].filter(Boolean);
 /** Said only when one of our pages really links to their article (set from our own crawl); never otherwise. */
@@ -313,7 +317,7 @@ function pitchFacts(p,asset,site,{senderName}){
     our_asset:{title:asset.title,url:asset.url,kind:KIND[asset.type]||'resource',description:asset.description||'',
       facts:situation==='list_inclusion'?assetFacts(asset).slice(0,1):[...assetFacts(asset),...(asset.reasons||[]).filter(r=>!INTERNAL_NOTE.test(r))],
       ...(situation==='list_inclusion'?{}:{free_tool:!!asset.interactive})},
-    ...(situation==='list_inclusion'?{list:{name:listName(p),section:p.fit_section||null}}:{}),
+    ...(situation==='list_inclusion'?{list:{name:listName(p),section:listSection(p)}}:{}),
     ...(situation==='alternative_to_linked_resource'?{competitor_link:{site:p.competitor_link.host,anchor:p.competitor_link.anchor||null,surrounding_text:p.competitor_link.context||null,same_subject:p.competitor_link.match==='specific'}}:{}),
     ...(situation==='broken_link_replacement'?{broken_link:{anchor:p.broken_link.anchor||null,site:p.broken_link.host,problem:DEAD[p.broken_link.reason]||'no longer works'}}:{}),
     ...(cited&&situation!=='unlinked_mention'?{cited_by_us:{our_page:cited}}:{}),
@@ -323,7 +327,7 @@ function pitchFacts(p,asset,site,{senderName}){
 function followupFacts(p,asset,site,{senderName,subject}){
   const fact=p.broken_link?null:unusedFact(p,asset),list=isListPage(p);
   return {editor_page:{title:p.title,url:p.page_url,author:p.author||null,relevant_section:p.fit_section||null},
-    ...(list?{list:{name:listName(p),section:p.fit_section||null}}:{}),
+    ...(list?{list:{name:listName(p),section:listSection(p)}}:{}),
     our_asset:{title:asset.title,url:asset.url,facts:fact?[fact]:[]},new_fact:fact,
     ...(p.broken_link?{broken_link:{anchor:p.broken_link.anchor||null,site:p.broken_link.host,problem:`still ${DEAD[p.broken_link.reason]||'does not work'}`}}:{}),
     kind:p.kind==='mention'?'unlinked_mention':'suggestion',reply_subject:subject,

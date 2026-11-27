@@ -1,6 +1,7 @@
 /** Outreach state machine with mandatory recipient preflight and reply-health gate. */
 import {createHash} from 'node:crypto';
-import {buildMessage,newMessageId,smtpSend,Imap,classifyReply,replyCondition,replyText,isQuestion,optOutSubject,lfIds} from './mail.mjs';
+import {buildMessage,newMessageId,smtpSend,Imap,classifyReply,replyCondition,replyText,isQuestion,optOutSubject,lfIds,baseSubject} from './mail.mjs';
+import {readSent,publisherDomain} from './rebuild.mjs';
 import {followupPitch,reSubject} from './pitch.mjs';
 import {fetchPage,links,hostOf,sameSite,ageDays,NOW,sleep,DAY,pool} from './util.mjs';
 import {QUALIFY_VERSION} from './prospect.mjs';
@@ -109,6 +110,26 @@ export function outreachStatus(state,{limit,mode,qualifyVersion,now=new Date()})
 const SETTLED=new Set(['positive','won','lost','declined']);
 // Which condition matters most when a publisher raises more than one: a fee always needs the owner's explicit approval.
 const CONDITION_RANK={guest_post:1,reciprocal:2,paid:3};
+/** An opt-out: declined, no follow-up, and the publisher domain plus every address involved suppressed for good. */
+export function applyOptOut(state,p,from){
+ state.suppression??={};const at=NOW();
+ p.status='declined';p.awaiting_us=false;p.no_followup=true;
+ if(p.domain)state.suppression[p.domain]={reason:'Opt-out',at};
+ for(const e of new Set([p.email,from].map(x=>normalizeEmail(String(x||'').toLowerCase())).filter(Boolean)))state.suppression[e]={reason:'Opt-out',at};
+ // The publisher closed the conversation: nothing is left for the owner to decide (the flag itself stays).
+ if(p.needs_owner&&!p.owner_decided_at){p.owner_decided_at=at;p.owner_decision='closed_by_opt_out'}
+}
+/**
+ * A condition (fee, link back, guest post) raises the owner flag; the strongest one is kept. `at`: when the message was
+ * received, so a decision the owner already made after it is not re-opened. Returns whether the flag is (re)opened.
+ */
+export function noteCondition(p,condition,{at=null}={}){
+ if((CONDITION_RANK[condition]||0)>(CONDITION_RANK[p.condition]||0))p.condition=condition;
+ if(at&&Date.parse(p.owner_decided_at)>=Date.parse(at))return false;
+ p.needs_owner=true;delete p.owner_decided_at;delete p.owner_decision;return true;
+}
+const ADDRESS=/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi;
+const REPLY_SUBJECT=/^\s*(?:re|aw|sv|antw|fwd?|fw|wg|tr)\s*(?:\[\d+\])?\s*:/i;
 /** When their message was written (Date header), never in the future; null when missing or implausible. */
 function sentAt(m,now=Date.now()){const t=Date.parse(m?.date||'');return Number.isFinite(t)&&t>now-90*DAY?new Date(Math.min(t,now)).toISOString():null}
 /**
@@ -118,7 +139,7 @@ function sentAt(m,now=Date.now()){const t=Date.parse(m?.date||'');return Number.
  * owner flag stay set once raised. Every new human reply that is not an opt-out marks the conversation as waiting
  * for our answer (awaiting_us) until the owner's own answer shows up in Sent (reconcileSent) or replies.mjs answers.
  */
-export async function processReplies({state,imap,log=()=>{}}){
+export async function processReplies({state,imap,self='',log=()=>{}}){
  const stats={scanned:0,replies:0,positive:0,negative:0,bounces:0,delays:0};
  state.suppression??={};state.contacted??={};state.seen_replies??={};
  state.reply_health={status:'checking',checked_at:NOW()};
@@ -142,12 +163,29 @@ export async function processReplies({state,imap,log=()=>{}}){
   state.migrations.reply_status_v2=NOW();
   if(restored||waiting)log(`repair: ${restored} positive replies restored after being overwritten, ${waiting} replies marked as waiting for an answer`);
  }
- const byMsg=new Map(),byEmail=new Map();
+ // One-time repair: replies stored under the narrower rules (before 2026-11-27) are read again. "No" with a signature,
+ // "please remove us", "we have never linked" and fee or swap wording the old patterns missed become what they are.
+ if(!state.migrations.reply_class_v3){
+  let optOuts=0,flagged=0;
+  for(const p of Object.values(state.prospects||{}))for(const h of (p.history||[]).filter(h=>h.type==='reply'&&h.sentiment!=='negative')){
+   const msg={from:h.from,subject:h.subject||'',body:h.excerpt||''},k=classifyReply(msg);
+   if(k==='negative'){h.sentiment='negative';h.reread=true;applyOptOut(state,p,h.from);optOuts++;continue}
+   if((k==='positive'||k==='neutral')&&k!==h.sentiment){h.sentiment=k;h.reread=true}
+   if(!h.condition){const c=replyCondition(msg);if(c){h.condition=c;if(p.status!=='declined'&&noteCondition(p,c,{at:h.at}))flagged++}}
+  }
+  state.migrations.reply_class_v3=NOW();
+  if(optOuts||flagged)log(`repair: ${optOuts} earlier replies re-read as opt-outs (suppressed), ${flagged} as replies with a condition (flagged for you)`);
+ }
+ const byMsg=new Map(),byEmail=new Map(),byDomain=new Map(),bySubject=new Map();
  for(const p of Object.values(state.prospects||{})){
   if(!(p.history||[]).some(h=>h.type==='initial'))continue;
-  for(const h of p.history||[]){if(h.message_id&&h.type!=='reply')byMsg.set(h.message_id,p);if(h.to)byEmail.set(h.to.toLowerCase(),p)}
+  for(const h of p.history||[]){if(h.message_id&&h.type!=='reply')byMsg.set(h.message_id,p);if(h.to)byEmail.set(h.to.toLowerCase(),p)
+   if(['initial','followup'].includes(h.type)&&h.subject){const k=baseSubject(h.subject);if(k.length>=8)(bySubject.get(k)||bySubject.set(k,new Set()).get(k)).add(p)}}
   if(p.email)byEmail.set(p.email.toLowerCase(),p);
+  if(p.domain)(byDomain.get(p.domain)||byDomain.set(p.domain,[]).get(p.domain)).push(p);
  }
+ const lastContact=p=>Math.max(0,...(p.history||[]).filter(h=>h.type==='initial'||h.type==='followup').map(h=>Date.parse(h.at)||0));
+ const me=normalizeEmail(String(self||'').toLowerCase());
  let msgs;
  try{msgs=await imap.recentHeaders(new Date(Date.now()-35*DAY),{cursor:state.mail_cursor});if(!Array.isArray(msgs))throw Error('Invalid mailbox response')}
  catch(e){state.reply_health={status:'failed',checked_at:NOW()};throw e}
@@ -158,22 +196,47 @@ export async function processReplies({state,imap,log=()=>{}}){
   const from=String(m.from||'').toLowerCase();let p=ids.map(i=>byMsg.get(i)).find(Boolean)||byEmail.get(from);
   const kind=classifyReply(m);
   if(!p&&kind==='bounce'){for(const [e,q] of byEmail)if(String(m.body||'').toLowerCase().includes(e)){p=q;break}}
+  // Not in our thread and not from an address we wrote to: a colleague at the publisher, or someone answering a forwarded copy.
+  // An opt-out is tied to a publisher by any of: a pitched address quoted in it (the forwarded header), the sender's own
+  // publisher domain (never a webmail domain), or our exact subject when only one publisher got it. Anything else is
+  // tied only when it is about our email (our subject) and comes from that publisher or quotes its address.
+  const fromDomain=publisherDomain(from),subject=baseSubject(m.subject);
+  const bySubj=subject.length>=8?[...(bySubject.get(subject)||[])]:[];
+  if(!p&&kind!=='bounce'&&kind!=='auto'){
+   const quoted=[...new Set((String(m.body||'').match(ADDRESS)||[]).map(e=>e.toLowerCase()))].map(e=>byEmail.get(e)).filter(Boolean);
+   const sameDomain=(fromDomain&&byDomain.get(fromDomain)||[]).slice().sort((a,b)=>lastContact(b)-lastContact(a));
+   p=kind==='negative'?quoted[0]||sameDomain[0]||(bySubj.length===1?bySubj[0]:null):[...quoted,...sameDomain].find(q=>bySubj.includes(q))||null;
+  }
+  const indirect=!!p&&!ids.some(i=>byMsg.get(i)===p)&&byEmail.get(from)!==p&&kind!=='bounce';
   if(!p){
-   // An opt-out we cannot tie to a prospect (forwarded inbox, state lost): never silently dropped. Counted (no
-   // addresses in logs), and the sender's own address is suppressed so it can never be emailed.
-   if(kind==='negative'&&(optOutSubject(m.subject)||ids.length)){stats.unmatched_optouts=(stats.unmatched_optouts||0)+1;const e=normalizeEmail(from);if(e)state.suppression[e]??={reason:'Opt-out (not matched to a prospect)',at:NOW()}}
+   // An opt-out we cannot tie to a prospect (forwarded inbox, state lost, an email sent before the vault was replaced):
+   // never silently dropped when it answers our outreach. Counted (no addresses in logs); the sender's address is
+   // suppressed, and so are the recipient and publisher an id restored from the Sent folder names, and a publisher
+   // domain we are known to have emailed.
+   if(kind==='negative'){
+    const restored=ids.map(i=>state.restored_ids?.[i]).find(x=>x?.to);
+    const contactedDomain=fromDomain&&state.contacted?.[fromDomain]?fromDomain:'';
+    const ours=ids.length>0||optOutSubject(m.subject)||!!restored||bySubj.length>0||REPLY_SUBJECT.test(String(m.subject||''))||!!contactedDomain||(me&&String(m.body||'').toLowerCase().includes(me));
+    if(ours){
+     stats.unmatched_optouts=(stats.unmatched_optouts||0)+1;const at=NOW(),reason='Opt-out (not matched to a prospect)';
+     for(const e of new Set([from,restored?.to].map(x=>normalizeEmail(String(x||'').toLowerCase())).filter(x=>x&&x!==me)))state.suppression[e]??={reason,at};
+     for(const d of new Set([contactedDomain,publisherDomain(restored?.to||'')].filter(Boolean)))state.suppression[d]??={reason,at};
+    }
+   }
    continue;
   }
   if(kind==='auto')continue;
   const identity=m.messageId||createHash('sha256').update(JSON.stringify([from,m.subject,m.body,m.uid])).digest('hex');
   const key=p.id+'|'+identity;if(state.seen_replies[key])continue;
+  if(indirect)stats.matched_indirectly=(stats.matched_indirectly||0)+1;
   p.history??=[];
   if(kind==='bounce'){
    const delayed=/notification\s*\(delay\)|delivery (?:incomplete|delayed)|will retry|Action:\s*delayed|Status:\s*4\./i.test((m.subject||'')+'\n'+(m.body||''));
    const failed=(String(m.body||'').match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi)||[]).map(e=>e.toLowerCase()).find(e=>byEmail.get(e)===p)||p.email;
    p.history.push({type:delayed?'delivery_delay':'bounce',at:NOW(),to:failed});
    state.contacted[p.domain]??=NOW();
-   p.status=delayed?'delivery_delayed':'bounced';p.no_followup=true;
+   // A delivery problem with a later email (an answer, a thank-you) never undoes a reply, a yes, a won link or a decline.
+   if(!SETTLED.has(p.status)&&p.status!=='replied')p.status=delayed?'delivery_delayed':'bounced';p.no_followup=true;
    // Keep publisher deduplication intact. Do not try another person after any delivery failure.
    if(!delayed){stats.bounces++;if(failed)state.suppression[failed.toLowerCase()]={reason:'Delivery failure; re-contact prohibited',at:NOW()}}
    else stats.delays++;
@@ -187,18 +250,10 @@ export async function processReplies({state,imap,log=()=>{}}){
    p.history.push({type:'reply',at:NOW(),...(written?{written_at:written}:{}),from,sentiment:kind,...(condition?{condition}:{}),question,message_id:theirId,in_reply_to:answers,
     subject:String(m.subject||'').slice(0,140),excerpt:replyText(m).replace(/\s+/g,' ').slice(0,600)});
    if(!(Date.parse(p.last_reply_at)>=Date.parse(written||NOW())))p.last_reply_at=written||NOW();
-   if(condition){
-    if((CONDITION_RANK[condition]||0)>(CONDITION_RANK[p.condition]||0))p.condition=condition;
-    // A new condition re-opens the owner's decision even if an earlier one was already answered.
-    p.needs_owner=true;delete p.owner_decided_at;delete p.owner_decision;stats.conditional=(stats.conditional||0)+1;
-   }
-   if(negative){
-    stats.negative++;p.status='declined';p.awaiting_us=false;
-    state.suppression[p.domain]={reason:'Opt-out',at:NOW()};
-    for(const e of new Set([p.email,from].map(x=>normalizeEmail(String(x||'').toLowerCase())).filter(Boolean)))state.suppression[e]={reason:'Opt-out',at:NOW()};
-    // The publisher closed the conversation: nothing is left for the owner to decide (the flag itself stays).
-    if(p.needs_owner&&!p.owner_decided_at){p.owner_decided_at=NOW();p.owner_decision='closed_by_opt_out'}
-   }else{
+   // A new condition re-opens the owner's decision even if an earlier one was already answered.
+   if(condition){noteCondition(p,condition);stats.conditional=(stats.conditional||0)+1}
+   if(negative){stats.negative++;applyOptOut(state,p,from)}
+   else{
     if(kind==='positive'){stats.positive++;if(!SETTLED.has(p.status))p.status='positive';if(p.status!=='declined')p.next_link_check=NOW()}
     else if(!SETTLED.has(p.status))p.status='replied';
     if(question)stats.questions=(stats.questions||0)+1;
@@ -297,13 +352,22 @@ export async function screenQueue({state,mailer,max=40,rescreenMax=30,deadline=I
  * contacted so it is never pitched again; anyone who received two emails within a day gets no further email.
  * It also notices the owner's own answers: mail to a publisher who replied, sent after that reply and not by
  * Autopilot, means the owner has answered (awaiting_us cleared) and has decided any condition they raised.
+ *
+ * The whole contact window (90 days) is read, paging back past the newest 1000 messages; if it cannot be read in
+ * full this throws, so the stage fails and nothing is sent. `index` (a Map, optional) receives every recipient
+ * address with its newest send time, so the send step can check an address chosen after this ran (in memory only).
  */
-export async function reconcileSent({state,imap,days=30,log=()=>{}}){
- const stats={scanned:0,restored:0,duplicates:0};
+export async function reconcileSent({state,imap,days=90,index=null,now=()=>Date.now(),deadline=Infinity,log=()=>{}}){
+ // Published: outreach counts only. How much mail the owner's account sent (the 90 days read) is not published.
+ const stats={restored:0,duplicates:0};
+ // Until this cycle's check succeeds, an earlier cycle's timestamp must not pass for a current one (automatic answers read it).
+ delete state.sent_reconciled_at;
  if(typeof imap?.sentRecipients!=='function')return stats;
- const sent=await imap.sentRecipients(new Date(Date.now()-days*DAY));
+ const since=new Date(now()-days*DAY),{sent,complete,oldest}=await readSent(imap,since,{now,deadline,pages:10,pageSize:1000});
  if(!Array.isArray(sent))throw Error('Invalid Sent mailbox response');
- stats.scanned=sent.length;state.contacted??={};
+ if(!complete&&!(oldest<=since.getTime()+DAY))throw Error(`the Sent folder could not be read back ${days} days in full, so nothing is sent this cycle`);
+ state.contacted??={};
+ if(index instanceof Map)for(const m of sent){const e=normalizeEmail(String(m?.to||'').toLowerCase()),t=Date.parse(m?.at);if(e&&Number.isFinite(t)&&!(index.get(e)>=t))index.set(e,t)}
  const byTo=new Map(),ownBy=new Map();
  for(const m of sent){const e=normalizeEmail(m.to);if(!e)continue;(byTo.get(e)||byTo.set(e,[]).get(e)).push(Date.parse(m.at)||Date.now());
   // Only mail with a real Date and without one of our own <lf-...> ids can be the owner's answer.
@@ -340,12 +404,38 @@ export async function reconcileSent({state,imap,days=30,log=()=>{}}){
  }
  if(answered)stats.owner_answered=answered;
  state.sent_reconciled_at=NOW();
- log(`sent-folder check: ${stats.scanned} sent emails read, ${stats.restored} unrecorded pitches restored to the record, ${stats.duplicates} recipients found with a duplicate email (no further email to them)${answered?`, ${answered} replies answered by you in Gmail`:''}`);
+ log(`sent-folder check (last ${days} days, complete): ${stats.restored} unrecorded pitches restored to the record, ${stats.duplicates} recipients found with a duplicate email (no further email to them)${answered?`, ${answered} replies answered by you in Gmail`:''}`);
  return stats;
 }
 const NO_CREDITS=/credits_used_up|budget_exhausted/;
 /** The verifier already holds an inconclusive answer for this inbox that cannot change yet: asking again only wastes a slot. */
 export const coolingDown=(p,now=Date.now())=>p.contact_quality?.status==='held'&&Date.parse(p.contact_quality.retry_after||'')>now;
+/** A publisher-side hold (screen or mailbox check) waits 3 days: the same pages and mailbox give the same answer before then. */
+export const heldByPublisher=(p,now=Date.now())=>p.contact_quality?.status==='held'&&publisherHold(p.contact_quality.detail)&&now-Date.parse(p.contact_quality.checked_at)<3*DAY;
+/**
+ * Every address already emailed, with its newest send (ms): pitches, follow-ups and automatic answers on record, the
+ * addresses restored from the Sent folder after a vault reset (state.restored_sent), and this cycle's Sent-folder read
+ * (`sentIndex`). One person who publishes the same address on two sites is still one person.
+ */
+export function emailedAddresses(state,{sentIndex=null}={}){
+ const out=new Map(),mark=(e,t)=>{e=normalizeEmail(String(e||'').toLowerCase());const ms=typeof t==='number'?t:Date.parse(t);if(e&&Number.isFinite(ms)&&!(out.get(e)>=ms))out.set(e,ms)};
+ for(const p of Object.values(state.prospects||{}))for(const h of p.history||[])if(((h.type==='initial'||h.type==='followup')&&h.mode!=='draft')||(h.type==='answer'&&h.via==='send'))mark(h.to,h.at);
+ for(const [e,t] of Object.entries(state.restored_sent||{}))mark(e,t);
+ if(sentIndex instanceof Map)for(const [e,t] of sentIndex)mark(e,t);
+ return out;
+}
+/** When this address was last emailed (ms) if that was within the 90-day contact window, else 0. */
+export const emailedWithin=(emailed,e,now=Date.now())=>{const t=emailed.get(normalizeEmail(String(e||'').toLowerCase()));return Number.isFinite(t)&&now-t<90*DAY?t:0};
+/**
+ * The pitched page's search demand when its first email goes out (counts only, from the demand data the cycle already
+ * fetched): the "before" value that traffic around a won link is later compared with. Recorded once per page.
+ */
+export function noteBaseline(state,url,demand){
+ const k=normUrlKey(url),d=k&&demand?.[k];if(!d||state.asset_baseline?.[k])return false;
+ const pick=Object.fromEntries(['impressions','clicks','position','etv','keywords','striking','top3'].filter(f=>d[f]!==null&&d[f]!==''&&Number.isFinite(Number(d[f]))).map(f=>[f,Number(d[f])]));
+ if(!Object.keys(pick).length)return false;
+ (state.asset_baseline??={})[k]={at:NOW(),source:d.source==='gsc'?'gsc':'dataforseo',...pick};return true;
+}
 /** Free DNS lookups: learn the mail-host class of queued inboxes (at most `max` per cycle, 30-day memory). */
 export async function classifyQueue(state,mailer,list,{max=80}={}){
  if(typeof mailer?.mxClassOf!=='function')return 0;
@@ -375,7 +465,7 @@ const utcDay=ms=>new Date(ms).toISOString().slice(0,10);
  * Friday night and Saturday), the leftover credits screen the best queued inboxes instead: "invalid" and catch-all retire
  * the inbox, "valid" only raises its rank (p.prescreen); a screen is never a send proof.
  */
-export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new Date(),deadline=Infinity,followups=true,followupDays=6,cap=Infinity,log=()=>{}}){
+export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new Date(),deadline=Infinity,followups=true,followupDays=6,cap=Infinity,drafts=false,sentIndex=null,log=()=>{}}){
  const stats={checked:0,verified:0,held:0},extra={followups_checked:0,followups_verified:0,reserved_for_followups:0,capacity_full:0,catch_all_retired:0,screened:0,prescreen_valid:0,prescreen_retired:0};
  if(typeof mailer?.authorizeRecipient!=='function')return stats;
  const t=now(),nowMs=t.getTime(),horizon=withinHours*36e5,today=utcDay(nowMs),all=Object.values(state.prospects||{});
@@ -383,8 +473,10 @@ export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new D
  for(const p of all)if(p.status==='ready'&&p.contact_quality?.status==='held'&&CATCH_ALL_HOLD.test(p.contact_quality.detail||'')){
   p.status='contact_unverifiable';p.reason=`No verifiable editorial inbox (${p.contact_quality.detail})`;extra.catch_all_retired++}
  const learned=assetStats(state);
- const waiting=p=>(p.contact_quality?.status==='held'&&publisherHold(p.contact_quality.detail)&&ageDays(p.contact_quality.checked_at)<3)|| // only publisher-side holds wait 3 days
+ const waiting=p=>heldByPublisher(p)|| // only publisher-side holds wait 3 days
   coolingDown(p,nowMs); // a cached "inconclusive" answer cannot change yet
+ // An address already emailed (for another publisher, or before the vault was replaced) is never pitched again: no credit for it.
+ const emailed=emailedAddresses(state,{sentIndex});
  const proofUntil=p=>usableVerification(p.recipient_proof?.verification,p.email)?Date.parse(p.recipient_proof.verification.expires_at):0; // proofs are judged on the real clock, as at send time
  // Due follow-ups: the first email went out and the follow-up is due by the time its send window opens.
  const fus=[];if(followups)for(const p of all){
@@ -393,13 +485,18 @@ export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new D
   const initial=(p.history||[]).find(h=>h.type==='initial'&&h.mode!=='draft');if(!initial?.message_id)continue;
   const w=nextSendWindow(p.domain,new Date(Math.max(nowMs,(Date.parse(initial.at)||nowMs)+followupDays*DAY)));if(w)fus.push({p,w:w.getTime()});
  }
- const fresh=all.filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION&&!suppressed(state,p.email,p.domain)&&!(state.contacted?.[p.domain]&&ageDays(state.contacted[p.domain])<90))
+ const fresh=all.filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION&&!suppressed(state,p.email,p.domain)&&!(state.contacted?.[p.domain]&&ageDays(state.contacted[p.domain])<90)&&!emailedWithin(emailed,p.email))
   .map(p=>({p,w:nextSendWindow(p.domain,t)?.getTime()})).filter(x=>x.w);
  const inH=x=>x.w-nowMs<=horizon; // a proof bought now must not expire before the window
- // Sending capacity per UTC day: cap minus what was already sent that day, minus proofs and reservations already covering it.
- const sentOn={};for(const p of all)for(const h of p.history||[])if((h.type==='initial'||h.type==='followup')&&h.mode!=='draft'){const d=String(h.at||'').slice(0,10);sentOn[d]=(sentOn[d]||0)+1}
+ // Sending capacity per UTC day: cap minus what was already sent (in draft mode: drafted) that day, minus proofs and
+ // reservations already covering it. A page gets at most PER_ASSET_DAILY first emails a day (runOutreach), so a proof for
+ // a prospect whose page is already full that day would expire unused.
+ const sentOn={},assetOn={},counts=h=>(h.type==='initial'||h.type==='followup')&&(drafts?h.mode==='draft':h.mode!=='draft');
+ for(const p of all)for(const h of p.history||[])if(counts(h)){const d=String(h.at||'').slice(0,10);sentOn[d]=(sentOn[d]||0)+1;if(h.type==='initial'&&p.asset_url){const k=d+'|'+p.asset_url;assetOn[k]=(assetOn[k]||0)+1}}
  const capN=Number.isFinite(Number(cap))?Number(cap):Infinity,room={},left=d=>(room[d]??=Math.max(0,capN-(sentOn[d]||0))),take=d=>{room[d]=left(d)-1};
- for(const x of [...fus,...fresh])if(inH(x)&&proofUntil(x.p)>x.w)take(utcDay(x.w));
+ const aRoom={},aLeft=(d,u)=>(aRoom[d+'|'+u]??=Math.max(0,PER_ASSET_DAILY-(assetOn[d+'|'+u]||0))),aTake=(d,u)=>{aRoom[d+'|'+u]=aLeft(d,u)-1};
+ for(const x of fus)if(inH(x)&&proofUntil(x.p)>x.w)take(utcDay(x.w));
+ for(const x of fresh)if(inH(x)&&proofUntil(x.p)>x.w){take(utcDay(x.w));aTake(utcDay(x.w),x.p.asset_url)}
  let reserved=0;for(const x of fus)if(!inH(x)&&utcDay(x.w)===today&&!proofUntil(x.p)&&!waiting(x.p)){reserved++;take(today)}
  // The window to plan for: the inbox's next window on a day that still has room (today's may already be full), within the horizon.
  const slot=x=>{let w=x.w;for(let i=0;i<2&&w&&left(utcDay(w))<=0;i++){const d=new Date(w);w=nextSendWindow(x.p.domain,new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()+1)))?.getTime()}
@@ -417,13 +514,14 @@ export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new D
   for(const x of queue){
    if(n>=max)break;
    const w=slot(x);if(!w){extra.capacity_full++;continue} // the sends it could go out with are already covered
+   if(!x.followup&&aLeft(utcDay(w),x.p.asset_url)<=0){extra.asset_full=(extra.asset_full||0)+1;continue} // its page already has its first emails for that day
    if(!x.followup&&(await credits(false))-reserved<=0){stats.out_of_credits=true;break} // the rest is kept for follow-ups due later today
    // A single slow mail server can take ~2 minutes to verify: never start one without that much time left.
    if(deadline-Date.now()<150e3)break;n++;stats.checked++;if(x.followup)extra.followups_checked++;
    let proof;try{proof=await mailer.authorizeRecipient(x.p,{state,followup:!!x.followup,deadline})}catch{proof={ok:false,reason:'verification_error'}}
    // Out of credits for today: stop, and leave the remaining inboxes untouched instead of marking each one "held".
    if(!proof?.ok&&NO_CREDITS.test(`${proof?.reason||''} ${proof?.detail||''}`)){stats.checked--;if(x.followup)extra.followups_checked--;stats.out_of_credits=true;break}
-   if(applyProof(state,x.p,proof,{followup:!!x.followup})){stats.verified++;if(x.followup)extra.followups_verified++;take(utcDay(w))}else stats.held++;
+   if(applyProof(state,x.p,proof,{followup:!!x.followup})){stats.verified++;if(x.followup)extra.followups_verified++;take(utcDay(w));if(!x.followup)aTake(utcDay(w),x.p.asset_url)}else stats.held++;
   }
  }else if(typeof mailer.prescreenRecipient==='function'){
   const list=await ranked(fresh.filter(x=>!proofUntil(x.p)&&!waiting(x.p)&&!(nowMs-Date.parse(x.p.prescreen?.at||'')<7*DAY)));
@@ -443,7 +541,7 @@ export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new D
  }
  for(const [k,v] of Object.entries(extra))if(v)stats[k]=v; // only what happened (keeps the published stage result small)
  log(`pre-verify (nothing sent): ${stats.checked} top inboxes checked${extra.followups_checked?` (${extra.followups_checked} due follow-ups first)`:''}, ${stats.verified} verified, ${stats.held} held`+
-  `${reserved?`, ${reserved} credits kept for follow-ups due later today`:''}${extra.capacity_full?`, ${extra.capacity_full} skipped (the day's sends are already covered)`:''}${extra.catch_all_retired?`, ${extra.catch_all_retired} catch-all holds retired`:''}`+
+  `${reserved?`, ${reserved} credits kept for follow-ups due later today`:''}${extra.capacity_full?`, ${extra.capacity_full} skipped (the day's sends are already covered)`:''}${extra.asset_full?`, ${extra.asset_full} skipped (their page already has its first emails for that day)`:''}${extra.catch_all_retired?`, ${extra.catch_all_retired} catch-all holds retired`:''}`+
   `${extra.screened?`; no send window before the credits reset, so ${extra.screened} inboxes screened (${extra.prescreen_valid} deliverable, ${extra.prescreen_retired} retired; a screen is never a send proof)`:''}`);
  return stats;
 }
@@ -505,7 +603,7 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   const messageId=newMessageId(config.fromAddress.split('@')[1]),{subject,body}=pitch;
   const raw=buildMessage({from:config.fromAddress,fromName:senderName,to:p.email,subject,text:body+emailFooter(config.postalAddress,p.email_source),messageId,inReplyTo,references:inReplyTo,unsubscribe:true});
   const verified=usableVerification(p.recipient_proof?.verification,p.email),by=pitch.writer||'template';
-  if(config.mode==='send')await mailer.send({to:p.email,raw,recipientProof:p.recipient_proof});else await mailer.draft(raw);
+  if(config.mode==='send'){stats.attempted=(stats.attempted||0)+1;await mailer.send({to:p.email,raw,recipientProof:p.recipient_proof})}else await mailer.draft(raw);
   p.history??=[];p.history.push({type,at:NOW(),message_id:messageId,subject,to:p.email,mode:config.mode,writer:by,
    variant:pitch.variant||`${by==='template'?'template':'ai'}:${type==='followup'?'followup':'pitch'}`,rev,verified,
    facts_used:Array.isArray(pitch.facts_used)?pitch.facts_used:[],sender_name:senderName||null});
@@ -567,6 +665,11 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
    await sleep(config.gapMs())}
   catch(e){if(failed(p,e,'followup')){stop=true;break}}
  }
+ // An address already emailed is never pitched again within 90 days, whichever publisher it is found on now. Checked before
+ // and after verification, which may switch to another published address.
+ const emailed=emailedAddresses(state,{sentIndex:config.sentIndex});
+ const sameAddress=(p,t)=>{p.status='skipped_duplicate';p.skip_reason='This address was already emailed';
+  if(!(Date.parse(state.contacted[p.domain])>=t))state.contacted[p.domain]=new Date(t).toISOString();stats.skipped++;stats.address_already_emailed=(stats.address_already_emailed||0)+1};
  const learned=assetStats(state),ready=Object.values(state.prospects||{}).filter(p=>p.status==='ready'&&p.email&&(p.qv||1)>=QUALIFY_VERSION)
   .map(p=>{p.likelihood=linkLikelihood(p,{assets:learned});return p}).sort((a,b)=>b.likelihood-a.likelihood||(b.score||0)-(a.score||0));
  // Already-verified inboxes go first (they need no credit); the rest by expected value per verification credit.
@@ -583,8 +686,12 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   if(suppressed(state,p.email,p.domain)||(last&&ageDays(last)<90)){p.status='skipped_duplicate';stats.skipped++;continue}
   const site=siteBy.get(p.site);if(!site){p.status='stale_asset';stats.skipped++;continue}
   if(config.blockedAssets?.has(normUrlKey(p.asset_url))){stats.asset_not_indexable=(stats.asset_not_indexable||0)+1;continue} // wait until the page is fixed
-  if(requiresProof&&coolingDown(p)&&!usableVerification(p.recipient_proof?.verification,p.email)){stats.cooling=(stats.cooling||0)+1;continue} // no slot for a cached answer
+  {const t=emailedWithin(emailed,p.email);if(t){sameAddress(p,t);continue}}
+  // No slot for a cached answer, nor for a publisher-side hold under 3 days old: the same pages give the same answer, and a
+  // second check minutes after the free screen would count as the second strike and retire the prospect the same cycle.
+  if(requiresProof&&(coolingDown(p)||heldByPublisher(p))&&!usableVerification(p.recipient_proof?.verification,p.email)){stats.cooling=(stats.cooling||0)+1;continue}
   if(!await prepare(p,false))continue;
+  {const t=emailedWithin(emailed,p.email);if(t){sameAddress(p,t);delete p.recipient_proof;continue}}
   // Pitch only a page an editor would link to: a prospect paired with a thin, templated or review page is
   // re-paired with the site's best pitchable page for that editor's topic before anything is written.
   if(config.pickAsset&&p.kind!=='mention'){
@@ -603,7 +710,8 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   if(p.broken_link){const r=await (config.recheckBroken||(u=>checkDead(u)))(p.broken_link.url).catch(()=>null);if(!r?.dead){p.broken_link_cleared_at=NOW();delete p.broken_link}else stats.broken_link_pitches=(stats.broken_link_pitches||0)+1}
   const senderName=senderFor(p);
   const pitch=await writer.write(p,asset,site,{senderName});p.writer=pitch.writer;
-  try{await deliver(p,pitch,'initial',{senderName});state.contacted[p.domain]=NOW();if(config.mode==='send')state.first_send_at??=NOW();
+  try{await deliver(p,pitch,'initial',{senderName});state.contacted[p.domain]=NOW();emailed.set(normalizeEmail(p.email),Date.now()); // also a draft: one address gets one pitch per run
+   if(config.mode==='send'){state.first_send_at??=NOW();noteBaseline(state,p.asset_url,config.demand)}
    // The facts this email states: a follow-up may add only a fact that is not among them.
    if(Array.isArray(pitch.facts_used))p.facts_used=pitch.facts_used;else delete p.facts_used;
    p.status=config.mode==='send'?'sent':'drafted';p.next_link_check=new Date(Date.now()+5*DAY).toISOString();

@@ -23,7 +23,7 @@ import {pitchable,pitchableAssets,bestPitchAsset} from './assets.mjs';
 import {gscDemand,dfsDemand} from './demand.mjs';
 import {discoverProspects,requalify,recontact,enrichBrokenLinks,freshQueryCount,noteRejection,QUALIFY_VERSION} from './prospect.mjs';
 import {indexationReport} from './indexation.mjs';
-import {autotune,diagnose,TUNING,dailyEntry,recordDiscovery,paidDiscoveryBreaker,replySignals,inSendWindow} from './health.mjs';
+import {autotune,diagnose,TUNING,dailyEntry,recordDiscovery,paidDiscoveryBreaker,replySignals,inSendWindow,watchdogStatus} from './health.mjs';
 import {gscClient,monitorIndex,indexReport,searchPerformance} from './searchconsole.mjs';
 import {submitToBing} from './bing.mjs';
 import {PitchWriter,aiProviders} from './pitch.mjs';
@@ -32,7 +32,7 @@ import {assetStats,learningSummary} from './learn.mjs';
 import {answerReplies} from './replies.mjs';
 import {sealJson,open,vaultFormat} from './vault.mjs';
 import {requireRebuild,rebuildHold,rebuildFromMailbox,linkRestoredSends,pruneRestoredSends} from './rebuild.mjs';
-import {verifyLedger} from './recipient-policy.mjs';
+import {verifyLedger,mxClassStats} from './recipient-policy.mjs';
 import {NOW,ageDays,normUrl} from './util.mjs';
 
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'../..');
@@ -208,7 +208,8 @@ export function vaultSealer(state,key){
 export function funnel(state){
   const ps=Object.values(state.prospects||{}),by=s=>ps.filter(p=>s.includes(p.status)).length;
   const contacted=ps.filter(p=>(p.history||[]).some(h=>h.type==='initial')).length;
-  return {prospects_evaluated:Object.keys(state.domains||{}).length,qualified:ps.filter(p=>!['rejected','already_linked'].includes(p.status)).length,
+  // Cumulative: keys whose rejection expired (prospect.mjs expireRejections) were still evaluated once.
+  return {prospects_evaluated:Object.keys(state.domains||{}).length+(Number(state.evaluated_expired)||0),qualified:ps.filter(p=>!['rejected','already_linked'].includes(p.status)).length,
     ready:by(['ready']),broken_link_ready:ps.filter(p=>p.status==='ready'&&p.broken_link).length,contact_form_only:by(['contact_form']),no_contact:by(['no_contact']),contacted,
     replied:ps.filter(p=>p.replied_at).length,positive:by(['positive']),won:by(['won']),existing_links:by(['already_linked']),
     declined:by(['declined']),bounced:by(['bounced']),
@@ -334,11 +335,15 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   await stage('requalify',vaultOk,()=>requalify({state,dfs,fetchImpl,deadline:deadline-8*60e3,log}),privateWhy,{until:deadline-7*60e3});
   // Free: plain page fetches of prospects that already passed qualification but had no usable address.
   await stage('second_look',vaultOk,()=>recontact({state,fetchImpl,deadline:deadline-8*60e3,max:cfg.secondLook,log}),privateWhy,{until:deadline-7*60e3});
-  // Runs even with no fresh asset searches: brand-mention searches have their own schedule.
-  await stage('prospects',vaultOk&&(dfs.enabled||!!brave),()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,linkGapCalls:cfg.linkGapCalls,
+  // Runs even with no fresh asset searches: brand-mention searches have their own schedule. Without a usable DataForSEO login
+  // (missing, rejected or out of funds) and without Brave, only the paid sources are skipped (canSpend is false): the free
+  // sources (link neighbourhood, pages we cite, resource-page probes) keep the inflow going.
+  await stage('prospects',vaultOk,()=>discoverProspects({assets:chosen,sites:SITES,state,dfs,fetchImpl,perAsset:cfg.queriesPerAsset,maxNewPerRun:cfg.maxNewProspects,linkGapCalls:cfg.linkGapCalls,
     neighborPages:cfg.neighborPages,altSearch:brave,crawl,
     pairPool:linkable,maxQueries:cfg.maxQueries??(state.tuning?.max_queries||TUNING.start),serpDepth:cfg.serpDepth,deadline:deadline-7*60e3,log}),
-    !vaultOk?privateWhy:(dfs.authError||'DataForSEO credentials not set'),{until:deadline-5.5*60e3});
+    privateWhy,{until:deadline-5.5*60e3});
+  // Published with the stage: why paid search and link gap did not run (the free sources still did).
+  if(stages.prospects&&stages.prospects.ok!==null&&!dfs.enabled)stages.prospects.paid_skipped=dfs.authError||'DataForSEO credentials not set';
   await stage('bing_submit',vaultOk&&!!env.BING_WEBMASTER_API_KEY&&crawl.length>0,()=>submitToBing({state,env,sites:SITES,crawl,ranked,fetchImpl,deadline:deadline-6*60e3,log}),
     !vaultOk?privateWhy:'Bing Webmaster API key not set (BING_WEBMASTER_API_KEY)',{until:deadline-5.5*60e3});
   if(vaultOk&&stages.prospects&&stages.prospects.ok!==null)log(`self-tuning: next cycle runs up to ${autotune(state,stages.prospects,{envQueries:cfg.maxQueries})} searches`);
@@ -348,24 +353,30 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   // ---- 5. Mail ----
   // The production transport demands verified-mailbox proof for every recipient: without a verifier nothing could go out.
   const noVerifier=typeof mailer?.authorizeRecipient==='function'&&!verifierReady(cfg);
+  const sentIndex=new Map();
   let aiWriter=cfg.claude.apiKey?'claude':cfg.claude.providers[0]?.name||null;
   const mailWhy=!vaultOk?privateWhy:!mailer?'Gmail app password not set':!gmailOk?connections.gmail.error
     :cfg.outreach.mode==='off'?'OUTREACH_MODE=off':noVerifier?'mailbox verifier not configured (Verifalia login or Hunter key, plus a verification daily limit)':'';
   try{
     // A stalled mailbox connection (30 s timeout, seen 2026-11-26) blocked that cycle's sending: retry once on a fresh connection.
+    const self=cfg.outreach.fromAddress;
     await stage('replies',vaultOk&&gmailOk,async()=>{
-      try{return await processReplies({state,imap:mailer.imap,log})}
+      try{return await processReplies({state,imap:mailer.imap,self,log})}
       catch(e){if(!/timeout|socket|ECONN|EPIPE|closed/i.test(String(e?.message))||typeof mailer.reset!=='function')throw e;
-        log('replies: mailbox connection stalled; retrying once on a fresh connection');await mailer.reset();return processReplies({state,imap:mailer.imap,log})}
+        log('replies: mailbox connection stalled; retrying once on a fresh connection');await mailer.reset();return processReplies({state,imap:mailer.imap,self,log})}
     },mailWhy||'Gmail not set');
     // Gmail's Sent folder is the ground truth for who was already emailed; a failed check blocks sending this cycle.
+    // sentIndex (in memory only, never published or sealed): every address in the last 90 days of Sent mail, so an address
+    // chosen later this cycle (a better published inbox, the verified one) is checked against it too.
     const canReadSent=typeof mailer?.imap?.sentRecipients==='function';
-    await stage('sent_check',vaultOk&&gmailOk&&canReadSent,()=>reconcileSent({state,imap:mailer.imap,log}),!vaultOk?privateWhy:!canReadSent?'transport cannot read the Sent folder':mailWhy||'Gmail not set');
+    await stage('sent_check',vaultOk&&gmailOk&&canReadSent,()=>reconcileSent({state,imap:mailer.imap,index:sentIndex,log}),!vaultOk?privateWhy:!canReadSent?'transport cannot read the Sent folder':mailWhy||'Gmail not set');
     const sentUnknown=stages.sent_check?.ok===false;
     await stage('screen',vaultOk&&!!mailer,()=>screenQueue({state,mailer,deadline:deadline-4*60e3,log}),privateWhy,{until:deadline-3.5*60e3});
+    // Screening may have switched addresses or returned retired prospects to the queue: link them to emails sent before the vault was replaced.
+    if(vaultOk){const n=linkRestoredSends(state);if(n)log(`rebuild: ${n} more prospects matched to emails sent before the vault was replaced after screening`)}
     const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',fetchImpl,log});
     await stage('reply_drafts',vaultOk&&gmailOk&&cfg.outreach.replyMode!=='off'&&typeof mailer?.draft==='function',()=>answerReplies({state,writer,mailer,config:cfg.outreach,assets:ranked,deadline:deadline-4*60e3,log}),!vaultOk?privateWhy:!mailer?'Gmail app password not set':!gmailOk?connections.gmail.error:cfg.outreach.replyMode==='off'?'REPLY_MODE=off':'transport cannot save drafts',{until:deadline-3.5*60e3});
-    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown&&!state.rebuild_required,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets,pickAsset},deadline:deadline-2*60e3,log}),mailWhy||rebuildHold(state,stages.rebuild)||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
+    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown&&!state.rebuild_required,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets,pickAsset,sentIndex,demand},deadline:deadline-2*60e3,log}),mailWhy||rebuildHold(state,stages.rebuild)||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,free_ai:writer.usedAi,template_fallbacks:writer.fallbacks,...(writer.aiModel?{ai_provider:writer.aiProvider,ai_model:writer.aiModel}:{}),...(Object.keys(writer.reasons||{}).length?{fallback_reasons:writer.reasons}:{})};
     aiWriter=writer.ai;
     if(stages.outreach?.ok&&(writer.used+writer.usedAi+writer.fallbacks)>0){const why=Object.entries(writer.reasons||{}).map(([k,n])=>`${k} x${n}`).join(', ');
@@ -375,10 +386,13 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     // waker) sends at once. Verification needs no Gmail login: only the vault, a ready verifier and the transport's recipient check.
     // A pending mailbox rebuild holds it too: proofs last 24 h, and until contact history is restored a check could go to a
     // publisher that was already emailed.
-    await stage('preverify',vaultOk&&!noVerifier&&typeof mailer?.authorizeRecipient==='function'&&!state.rebuild_required,
-      ()=>preverify({state,mailer,max:cfg.preverifyMax,followups:cfg.outreach.mode==='send',followupDays:cfg.outreach.followupDays,
+    // With outreach off (or the OUTREACH_HOLD brake) nothing can be sent, so no inbox is checked: no credit is spent and no
+    // address is sent to the verifier without the intent to email it.
+    const braked=cfg.outreach.mode==='off'||env.OUTREACH_HOLD==='YES';
+    await stage('preverify',vaultOk&&!braked&&!noVerifier&&typeof mailer?.authorizeRecipient==='function'&&!state.rebuild_required,
+      ()=>preverify({state,mailer,max:cfg.preverifyMax,followups:cfg.outreach.mode==='send',followupDays:cfg.outreach.followupDays,drafts:cfg.outreach.mode==='draft',sentIndex,
         cap:cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit,deadline:deadline-90e3,log}),
-      !vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':!mailer?.authorizeRecipient?'no Gmail transport':rebuildHold(state,stages.rebuild),{until:deadline-30e3});
+      !vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':braked?'outreach is off, so no inbox is verified':!mailer?.authorizeRecipient?'no Gmail transport':rebuildHold(state,stages.rebuild),{until:deadline-30e3});
   }finally{await mailer?.close?.().catch(()=>{})}
   // ---- 6. Link verification ----
   await stage('link_checks',vaultOk,()=>checkLinks({state,ourDomains:SITES.map(s=>s.domain),fetchImpl,deadline,log}),privateWhy,{until:deadline+90e3});
@@ -414,7 +428,11 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
       daily_send_cap:cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit,
       verifier:{ready:verifierReady(cfg),providers:cfg.verifier.providers,key:cfg.verifier.providers.length>0,enabled:cfg.verifier.enabled,daily_limit:cfg.verifier.dailyLimit,
         used_today:state.email_verifier_usage?.[NOW().slice(0,10)]||0,balance:state.verifier_balance||null,catch_all_domains_skipped:Object.keys(state.catch_all_domains||{}).length,
-        hunter_daily_limit:cfg.verifier.hunterDailyLimit,hunter_used_today:state.hunter_usage?.[NOW().slice(0,10)]||0,ledger:vLedger.ledger,credits_per_email:vLedger.credits_per_email}},
+        hunter_daily_limit:cfg.verifier.hunterDailyLimit,hunter_used_today:state.hunter_usage?.[NOW().slice(0,10)]||0,ledger:vLedger.ledger,credits_per_email:vLedger.credits_per_email,
+        // Learned outcomes by mail-host class (counts only; the classes are fixed names such as google or microsoft).
+        by_mx_class:vaultOk?mxClassStats(state):previous.capabilities?.verifier?.by_mx_class||{}},
+      // Pages whose search demand was recorded when their first email went out (the "before" for traffic around won links).
+      asset_baselines:vaultOk?Object.keys(state.asset_baseline||{}).length:previous.capabilities?.asset_baselines??0},
     // Booleans only, never the values: lets self-diagnosis flag a missing sender identity.
     sender:{sender_name:!!cfg.outreach.senderName,postal_address:!!cfg.outreach.postalAddress,per_site_names:Object.keys(cfg.outreach.senderNames).length,reply_mode:cfg.outreach.replyMode,allow_dach:cfg.outreach.allowDach},
     setup:setupChecklist(cfg),stages,
@@ -441,10 +459,13 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   Object.assign(summary.capabilities,{vault_bytes:sealed?sealed.bytes:await stat(P.vault).then(s=>s.size,()=>null),vault_format:vaultFormat(sealed?.box||box),rebuild_required:vaultOk&&!!state.rebuild_required});
   // Self-diagnosis: what Autopilot cannot fix by itself, with the exact fix.
   // History and signals are counts only; the outcome rules (stalls, throughput, inflow) never fire on weekends, holds or dry runs.
-  summary.attention=diagnose({stages,capabilities:summary.capabilities,outreach:summary.outreach||{},funnel:summary.funnel||{},spend:summary.spend,held:cfg.outreach.mode==='off',noPitchSites,indexation,
-    history,sender:summary.sender,signals:{now:now.toISOString(),dry_run:cfg.dryRun,hold,mode:cfg.outreach.mode,reply_mode:cfg.outreach.replyMode,vault:{key:!!cfg.dataKey,open:vaultOk},
+  const signals={now:now.toISOString(),dry_run:cfg.dryRun,hold,brake:env.OUTREACH_HOLD==='YES',mode:cfg.outreach.mode,reply_mode:cfg.outreach.replyMode,vault:{key:!!cfg.dataKey,open:vaultOk},
       ...(vaultOk?{discovery:state.discovery_log||[],paid_discovery:paidDiscovery,...replySignals(state,now),
-        ...(state.rebuild_required?{rebuild_days:Math.max(0,Math.floor((now-Date.parse(state.rebuild?.requested_at||state.rebuild_required))/864e5))||0}:{})}:{})}});
+        ...(state.rebuild_required?{rebuild_days:Math.max(0,Math.floor((now-Date.parse(state.rebuild?.requested_at||state.rebuild_required))/864e5))||0}:{})}:{})};
+  summary.attention=diagnose({stages,capabilities:summary.capabilities,outreach:summary.outreach||{},funnel:summary.funnel||{},spend:summary.spend,held:cfg.outreach.mode==='off',noPitchSites,indexation,
+    history,sender:summary.sender,signals});
+  // Which watchdog rules this cycle could evaluate, so the issue notifier never reads a paused rule as "resolved".
+  summary.watchdog=watchdogStatus({signals,stages});
   if(write&&!cfg.dryRun){
     await mkdir(dirname(P.summary),{recursive:true});
     const vault=sealer?await sealer.seal():null;if(vault)summary.capabilities.vault_bytes=vault.bytes;

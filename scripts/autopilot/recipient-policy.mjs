@@ -23,7 +23,15 @@ const BAD_LOCAL=/^(?:noreply|no-reply|donotreply|abuse|postmaster|mailer-daemon|
 const PLACEHOLDER=/(?:^|\.)(?:example\.(?:com|org|net)|invalid|test|localhost|yourdomain\.com|domain\.com)$/;
 const EDITOR=/^(?:editor|editors|editorial|submissions?|contribute|content|blog)(?:[._+-]|$)/;
 const PURPOSE=/\b(?:editorial|editor|article submissions?|contribut(?:e|ions|ors)|resource suggestions?|suggest (?:an? )?(?:article|resource))\b/i;
-const DENIED=/\b(?:no (?:unsolicited |link )?(?:pitches|submissions)|do not (?:pitch|contact)|not accept(?:ing)? (?:guest posts|pitches|submissions))\b/i;
+// A publisher's published "do not pitch us" notice, in the forms sites actually use (contractions included). The objects
+// are named ("unsolicited pitches", "link requests"), so "we do not accept responsibility" or "don't send attachments" pass.
+const DENIED=new RegExp(['\\bno (?:unsolicited |link |guest post |sponsored |backlink |seo )?(?:pitches|submissions)\\b',
+  '\\bno (?:link|guest[- ]?post|sponsored(?: post)?|backlink|link exchange|link insertion|seo|outreach)s? (?:requests|pitches|emails)\\b',
+  "\\b(?:do not|don't|dont|doesn't|does not|never|will not|won't) (?:pitch|solicit|spam)\\b",'\\bdo not contact\\b',
+  "\\b(?:do not|don't|dont|doesn't|does not|never|will not|won't|no longer) (?:accept|want|take|consider|respond to|reply to|read|answer)\\s+(?:any\\s+)?(?:unsolicited|guest|sponsored|link|outreach|marketing|seo|promotional|backlink|pitch)\\b[^.!?]{0,30}?\\b(?:pitch(?:es)?|submissions|posts?|requests|e-?mails|messages|insertions|exchanges|content|outreach|solicitations)\\b",
+  '\\bnot accept(?:ing)? (?:guest posts|pitches|submissions|unsolicited|link (?:requests|insertions|exchanges))\\b',
+  '\\bunsolicited (?:pitches|e-?mails|requests|submissions|messages|link requests)\\s+(?:will be|are|get|may be)\\s+(?:ignored|deleted|discarded|not (?:answered|read|responded to|reviewed))\\b'].join('|'),'i');
+const denied=t=>DENIED.test(String(t||'').replace(/[\u2018\u2019]|&rsquo;|&lsquo;/g,"'"));
 // Owner decision (Nov 2026): a site's general inbox may be used, strictly: own domain, published on its own
 // contact/about page, only when no editorial or named-author address exists, and only after a
 // Deliverable mailbox check (catch-all never). Sales/support/privacy etc. stay excluded via BAD_LOCAL.
@@ -84,7 +92,7 @@ export function extractEditorialCandidates(html,url,{domain,author='',source='pa
   const add=(email,context,method,{ownDomain=false}={})=>{
     const e=normalizeEmail(email);if(!e)return;
     const [local,d]=e.split('@');if(BAD_LOCAL.test(local)||PLACEHOLDER.test(d)||/\.(png|jpg|gif|svg|webp)$/.test(d))return;
-    if(host(d)!==host(domain)&&(ownDomain||!FREEMAIL.test(d)))return;if(DENIED.test(context))return;
+    if(host(d)!==host(domain)&&(ownDomain||!FREEMAIL.test(d)))return;if(denied(context))return;
     const names=author.toLowerCase().split(/[^a-z]+/).filter(x=>x.length>=3),named=names.length>=2&&names.every(x=>local.includes(x));
     const purpose=PURPOSE.test(context),official=source==='contact'||source==='author';let rank=0,role='';
     if(named&&(purpose||source==='author'||/\b(?:author|writer)\b/i.test(context))){rank=100;role='named_author'}
@@ -103,6 +111,8 @@ export function extractEditorialCandidates(html,url,{domain,author='',source='pa
     .replace(/<([a-z][a-z0-9]*)\b[^>]*data-cfemail\s*=\s*["']([0-9a-f]+)["'][^>]*>[\s\S]*?<\/\1\s*>/gi,(m,tag,hex)=>{const e=decodeCloudflare(hex);return e?mark(e,'cloudflare_published',e):' '})
     .replace(/<a\b[^>]*href\s*=\s*["']mailto:([^"']+)["'][^>]*>([\s\S]*?)<\/a\s*>/gi,(m,to,inner)=>{let e;try{e=decodeURIComponent(decode(to).split('?')[0])}catch{return ' '}return mark(e,'mailto',inner)});
   const text=plain(marked).replace(/\s*\[at\]\s*/gi,'@').replace(/\s*\[dot\]\s*/gi,'.');
+  // A contact, about, team or write-for-us page that asks not to be pitched anywhere on it: no address from that page is used.
+  if(source==='contact'&&denied(text.replace(/\u0001\d+\u0001/g,' ')))return [];
   const shown=s=>s.replace(/\u0001(\d+)\u0001/g,(_,n)=>marks[n]?.e||' ');
   for(const m of text.matchAll(/\u0001(\d+)\u0001/g)){const k=marks[m[1]];if(k)add(k.e,shown(text.slice(Math.max(0,m.index-180),m.index+m[0].length+180)),k.method)}
   // A protected address whose element could not be delimited (broken markup) is still read, with the text around it as context.
@@ -110,7 +120,7 @@ export function extractEditorialCandidates(html,url,{domain,author='',source='pa
   const visible=text.replace(/\u0001\d+\u0001/g,' ');
   for(const m of visible.matchAll(/[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9.-]+\.[a-z]{2,63}/gi))add(m[0],visible.slice(Math.max(0,m.index-180),m.index+m[0].length+180),'visible_text');
   // Structured data counts only for the publisher's own domain, and never on a page that asks not to be pitched.
-  if(!DENIED.test(visible))for(const x of structuredEmails(html,domain))add(x.email,x.context,'structured_data',{ownDomain:true});
+  if(!denied(visible))for(const x of structuredEmails(html,domain))add(x.email,x.context,'structured_data',{ownDomain:true});
   return [...found.values()].sort((a,b)=>b.rank-a.rank||a.email.localeCompare(b.email));
 }
 export function isSuppressed(state,email,domain){
@@ -179,6 +189,15 @@ export function verifaliaVerdict(entry,email,now=Date.now()){
   return {policy_version:POLICY_VERSION,email,status:valid?'valid':addr===email&&e.classification==='Undeliverable'?'invalid':catchAll?'accept_all':'unknown',
     provider:'verifalia',provider_status:String(e.status||'').slice(0,60),provider_class:String(e.classification||'').slice(0,20),checked_at:new Date(now).toISOString(),expires_at:new Date(now+DAY).toISOString(),
     smtp_check:valid,accept_all:!valid,block:!valid,disposable:valid?false:e.isDisposableEmailAddress!==false,catch_all:catchAll};
+}
+/**
+ * Learned verification outcomes by mail-host class (counts only, safe to publish; classes are fixed names from mxClass):
+ * how many checks, how many passed, how many were catch-all. Decayed counts are rounded to one decimal.
+ */
+export function mxClassStats(state){
+  const r=x=>Math.round((Number(x)||0)*10)/10,out={};
+  for(const [k,v] of Object.entries(state?.verify_stats||{}))if(/^[a-z]{1,20}$/.test(k)&&v&&typeof v==='object')out[k]={n:r(v.n),valid:r(v.valid),catch_all:r(v.catch_all)};
+  return out;
 }
 /** Which kind of mail host serves a domain (from its MX records). Verification pass rates differ a lot by host. */
 export function mxClass(records){
@@ -253,7 +272,8 @@ export class RecipientVerifier{
     if(!this.enabled)return 0;const day=this.day();let n=0;
     if(this.providers.includes('verifalia')&&!this.verifaliaOff){
       const left=Math.max(0,this.dailyLimit-(this.state.email_verifier_usage[day]||0));
-      if(this.env.VERIFALIA_ALLOW_PAID==='YES')n+=left;
+      // A screen never backs a send, so it only ever uses free credits that would otherwise expire, even with VERIFALIA_ALLOW_PAID=YES.
+      if(this.env.VERIFALIA_ALLOW_PAID==='YES'&&!screen)n+=left;
       else if(!await this.verifaliaBalance())n+=Math.min(left,Math.floor(Math.max(0,this.verifaliaFree)/this.cost));
     }
     if(!screen&&this.providers.includes('hunter'))n+=Math.max(0,this.hunterLimit-(this.state.hunter_usage?.[day]||0));
@@ -347,7 +367,8 @@ export class RecipientVerifier{
     const quality=Object.hasOwn(VERIFALIA_COST,this.env.VERIFALIA_QUALITY)?this.env.VERIFALIA_QUALITY:'Standard',cost=VERIFALIA_COST[quality];
     // Free credits only, unless the owner explicitly allows paid credit packs: this provider can never cost money by default.
     // Each day spends min(owner's daily limit, live free credits).
-    const paid=this.env.VERIFALIA_ALLOW_PAID==='YES';
+    // A weekend screen (screen) never backs a send: it uses free credits only, whatever VERIFALIA_ALLOW_PAID says.
+    const paid=this.env.VERIFALIA_ALLOW_PAID==='YES'&&!screen;
     if(!paid){
       const failed=await this.verifaliaBalance();if(failed)return failed;
       if(this.verifaliaFree<cost)return {reason:'verifalia_free_credits_used_up'};

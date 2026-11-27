@@ -49,7 +49,7 @@ export const FIELDS=[
   {name:'SENDER_POSTAL_ADDRESS',label:'Postal address for the email footer',type:'text',kind:'setting',help:'A P.O. box or mailbox service works. Identifies the sender, as commercial-email rules such as CAN-SPAM expect'},
   {name:'OUTREACH_MODE',label:'Outreach mode',type:'select',kind:'setting',default:'draft',options:[['send','Hands-free: send pitches + 1 follow-up automatically'],['draft','Safe: write pitches into Gmail Drafts'],['off','Research only']]},
   {name:'OUTREACH_DAILY_LIMIT',label:'Max new pitches per day',type:'number',kind:'setting',help:'Starts at 5/day and ramps up by 2/day to this limit'},
-  {name:'REPLY_MODE',label:'When a publisher replies',type:'select',kind:'setting',default:'draft',options:[['draft','Write an answer into Gmail Drafts for me (recommended)'],['send','Answer simple replies automatically; drafts for anything with conditions'],['off','Only alert me']]},
+  {name:'REPLY_MODE',label:'When a publisher replies',type:'select',kind:'setting',default:'draft',options:[['draft','Write an answer into Gmail Drafts for me (recommended)'],['send','Answer a plain yes automatically; drafts for everything else'],['off','Only alert me']]},
   {name:'OUTREACH_DACH',label:'Germany, Austria, Switzerland',type:'select',kind:'setting',default:'NO',options:[['NO','Do not email publishers there (they need prior consent)'],['YES','Email them too (I have checked the rules)']]},
   {name:'ANTHROPIC_API_KEY',label:'Anthropic API key (optional)',type:'password',kind:'secret',help:'Claude writes a unique pitch for every page'},
   {name:'GROQ_API_KEY',label:'Groq API key (optional, free AI pitch writer)',type:'password',kind:'secret',help:'Free plan, no card. Used to write each pitch when no Anthropic key is set. console.groq.com → API Keys',link:'https://console.groq.com/keys'},
@@ -60,7 +60,7 @@ export const FIELDS=[
   {name:'GSC_SERVICE_ACCOUNT_JSON',label:'Google Search Console service-account JSON',type:'textarea',kind:'secret',help:'Paste the whole JSON key file. Add its client_email as a user on each Search Console property. Unlocks the Google index monitor and clicks tracking'},
   {name:'BING_WEBMASTER_API_KEY',label:'Bing Webmaster Tools API key',type:'password',kind:'secret',help:'Bing Webmaster Tools → Settings → API access. New and changed pages are submitted to Bing daily',link:'https://www.bing.com/webmasters'},
   {name:'BRAVE_SEARCH_API_KEY',label:'Brave Search API key (optional fallback search)',type:'password',kind:'secret',help:'Used only when DataForSEO cannot run a search (balance or cap used up). Capped at 900 requests a month',link:'https://brave.com/search/api/'},
-  {name:'HUNTER_API_KEY',label:'Hunter API key (optional second opinion)',type:'password',kind:'secret',help:'Asked only when Verifalia cannot decide (unknown, not catch-all), within its own daily budget below. hunter.io → API keys',link:'https://hunter.io/api-keys'},
+  {name:'HUNTER_API_KEY',label:'Hunter API key (optional second opinion)',type:'password',kind:'secret',help:'Used within its own daily budget below: as a second opinion when Verifalia cannot decide (unknown, not catch-all), and as the fallback when Verifalia\'s free credits for the day are used up (most weekdays). Size the budget for both. hunter.io → API keys',link:'https://hunter.io/api-keys'},
   {name:'HUNTER_DAILY_LIMIT',label:'Hunter checks per day',type:'number',kind:'setting',min:0,max:50,placeholder:'0 (off)',help:'Check your Hunter plan\'s free monthly quota first; about quota / 30'},
 ];
 // Settings travel as one encrypted secret (no Variables permission needed); this browser remembers them for display.
@@ -236,7 +236,7 @@ export function needsYouStrip(s,{escapeHTML:e,n}){
   const ny=needsYou(s?.funnel);if(!ny.total)return '';
   const said=code=>(s.attention||[]).find(a=>a?.code===code)?.message||'';
   const mode=s.sender?.reply_mode||'draft';
-  const replyNote={draft:'Autopilot writes an answer into Gmail Drafts for each one: check it and press Send.',send:'Simple replies are answered automatically; anything with a condition gets a draft for you.',
+  const replyNote={draft:'Autopilot writes an answer into Gmail Drafts for each one: check it and press Send.',send:'A plain yes is answered automatically; everything else (conditions, questions, anything unclear) gets a draft for you.',
     off:'Automatic drafts are off ("When a publisher replies: Only alert me"), so answer them in Gmail.'}[mode]||'Answer them in the same Gmail thread.';
   const item=(count,title,note,tone='')=>`<div class="ap-need ${tone}"><b>${n(count)}</b><div><strong>${e(title)}</strong><small>${e(note)}</small></div></div>`;
   return `<section class="ap-needs" aria-label="Needs you"><div class="ap-needs-head"><span class="ap-needs-dot"></span><strong>Needs you</strong><span>A reply is the only step between a pitch and a link.</span></div><div class="ap-needs-items">${

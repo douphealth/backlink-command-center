@@ -47,11 +47,11 @@ for(const [name,label,hidden] of steps){
   const v=await ask(`${label}${have.has(name)?' (set)':''}`,{hidden});
   if(v)setSecret(name,v);
 }
-const sender=await ask('Sender name shown in emails (e.g. "Alex from GearUpToFit")');if(sender)setVar('SENDER_NAME',sender);
+const sender=await ask('Your name for signing emails (a person, e.g. "Alex Papas"; per-site names can be added later as SENDER_NAMES on the dashboard)');if(sender)setVar('SENDER_NAME',sender);
 const mode=await ask('Outreach mode: draft (pitches land in Gmail Drafts) or send (fully hands-free)',{def:'draft'});
 if(['draft','send','off'].includes(mode))setVar('OUTREACH_MODE',mode);
 const limit=await ask('Max new pitches per day',{def:'12'});if(/^\d+$/.test(limit))setVar('OUTREACH_DAILY_LIMIT',limit);
-const checks=await ask('Mailbox checks per day (0 = verification and sending off; Verifalia free plan covers about 12)',{def:'12'});
+const checks=await ask('Mailbox checks per day (0 = verification and sending off; the Verifalia free plan gives 25 credits a day)',{def:'25'});
 if(/^\d+$/.test(checks)){setVar('EMAIL_VERIFY_DAILY_LIMIT',checks);setVar('EMAIL_VERIFICATION_ENABLED',Number(checks)>0?'YES':'NO')}
 
 const run=await ask('Start the first Autopilot run now? (y/n)',{def:'y'});

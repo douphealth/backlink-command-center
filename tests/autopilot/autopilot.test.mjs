@@ -251,7 +251,8 @@ test('connection checks: DataForSEO rejection and Gmail rejection give exact rea
   const mailer={check:async()=>({status:'rejected',error:'Gmail rejected the login for me@gmail.com.'}),send:async()=>{throw Error('must not send')},draft:async()=>{},imap:{recentHeaders:async()=>[]},close:async()=>{}};
   const {summary}=await runAutopilot({env:{LINKFORGE_DATA_KEY:'k'.repeat(24),LINKFORGE_VAULT_RESET_AT:new Date(Date.now()+1e3).toISOString(),DATAFORSEO_LOGIN:'a@b.com',DATAFORSEO_PASSWORD:'wrong',SENDER_NAME:'Alex',OUTREACH_MODE:'send'},argv:[],fetchImpl:f,mailer,write:false,useCache:false});
   assert.equal(summary.capabilities.connections.dataforseo.status,'rejected');
-  assert.match(summary.stages.prospects.skipped,/rejected the login .*api password/i);
+  // Free discovery keeps running without paid sources (the stage is no longer skipped); why paid search did not run is published.
+  assert.notEqual(summary.stages.prospects.ok,null);assert.match(summary.stages.prospects.paid_skipped,/rejected the login .*api password/i);
   assert.equal(summary.capabilities.connections.gmail.status,'rejected');
   assert.match(summary.stages.outreach.skipped,/Gmail rejected/);
   assert.ok(!JSON.stringify(summary).includes('me@gmail.com'),'addresses redacted from the public summary');

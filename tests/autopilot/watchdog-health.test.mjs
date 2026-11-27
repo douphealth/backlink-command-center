@@ -97,15 +97,17 @@ test('gmail_send_blocked names the refusal without the address and picks the rig
 test('owner_decision_pending comes first and carries counts only',()=>{
   const d=diagnose({...withSignals({owner_conditions:{paid:1,reciprocal:1},owner_oldest_days:3}),funnel:{ready:60,contacted:52,needs_owner:2}});
   assert.equal(d[0].code,'owner_decision_pending');assert.equal(d[0].level,'action');
-  assert.match(d[0].message,/^2 publisher replies are waiting for your decision \(1 mentions a fee, 1 wants a link back\); the oldest has waited 3 days\./);
+  // Counts only: which condition each publisher attached never reaches the public summary or a GitHub issue.
+  assert.match(d[0].message,/^2 publisher replies are waiting for your decision; the oldest has waited 3 days\./);assert.doesNotMatch(d[0].message,/fee|link back|guest post/i);
   assert.match(d[0].fix,/Gmail/);assert.match(d[0].fix,/Prospects tab/);
   assert.match(find(diagnose({funnel:{needs_owner:1,ready:30}}),'owner_decision_pending').message,/^1 publisher reply is waiting/);
   assert.ok(!find(diagnose({funnel:{needs_owner:0,ready:30}}),'owner_decision_pending'));
 });
-test('replies_waiting warns until an answer is drafted or sent, and says why',()=>{
+test('replies_waiting warns while a reply waits (also in the cycle that drafted its answer), and says why',()=>{
   const base={capabilities:{verifier:{ready:true}},funnel:{ready:30,awaiting_reply:2}};
   const none=find(diagnose(base),'replies_waiting');assert.equal(none.level,'warn');assert.match(none.message,/^2 publisher replies are waiting for an answer; no reply drafting ran this cycle\./);
-  assert.ok(!find(diagnose({...base,stages:{reply_drafts:{ok:true,result:{drafted:1,sent:0,skipped:0,owner_needed:0}}}}),'replies_waiting'),'an answer was produced this cycle');
+  // A draft is not an answer until the owner sends it: the cycle that drafted it already tells the owner (it used to stay quiet).
+  assert.match(find(diagnose({...base,signals:{replies_unanswered:2,replies_drafted:1},stages:{reply_drafts:{ok:true,result:{drafted:1,sent:0,skipped:0,owner_needed:0}}}}),'replies_waiting').message,/\(1 already drafted\)/);
   assert.match(find(diagnose({...base,signals:{reply_mode:'off'},stages:{reply_drafts:{ok:null,skipped:'REPLY_MODE=off'}}}),'replies_waiting').message,/REPLY_MODE=off/);
   assert.match(find(diagnose({...base,stages:{reply_drafts:{ok:false,error:'x'}}}),'replies_waiting').message,/drafting an answer failed/);
   assert.match(find(diagnose({...base,signals:{replies_unanswered:2,replies_drafted:2}}),'replies_waiting').message,/drafted in Gmail Drafts, waiting for you to send/);

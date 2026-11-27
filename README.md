@@ -85,7 +85,7 @@ The setup script stores everything as **encrypted GitHub Actions secrets** (valu
 | `LINKFORGE_DATA_KEY` | Encrypting prospects & outreach history (repo is public) | Generated automatically; saved to `.linkforge/autopilot-unlock-key.txt` |
 | `DATAFORSEO_LOGIN` / `DATAFORSEO_PASSWORD` | Google prospect searches, page-traffic estimates | DataForSEO dashboard → API Access |
 | `GMAIL_ADDRESS` / `GMAIL_APP_PASSWORD` | Drafts, sending, reply & bounce detection | myaccount.google.com/apppasswords (2-Step Verification required) |
-| `SENDER_NAME` (variable) | Signing pitches | Your name, e.g. "Alex from GearUpToFit" |
+| `SENDER_NAME` (variable) | Signing pitches | Your own name, e.g. "Alex Papas" (a person, not a site name). Per-site sign-offs go in `SENDER_NAMES` (one `domain = Name` per line) |
 | `OUTREACH_MODE` (variable) | `draft` (default) or `send` for hands-free | — |
 | `VERIFALIA_USERNAME` / `VERIFALIA_PASSWORD` + mailbox checks per day | **Required to send anything.** Every inbox gets a fresh positive mailbox verification before an email goes out | verifalia.com free plan: 25 credits **every day** (Standard quality = 1 credit, so about 24 checks/day by default). Only free credits are used unless `VERIFALIA_ALLOW_PAID=YES`. Set on the dashboard (⚙ Connect); a daily limit above 0 is the opt-in |
 | `HUNTER_API_KEY` *(optional)* | Second-opinion and fallback verifier, only within its own `HUNTER_DAILY_LIMIT` (default 0 = never called) | hunter.io → API keys |

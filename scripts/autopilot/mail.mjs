@@ -23,6 +23,14 @@ export function buildMessage({from,fromName,to,subject,text,messageId,inReplyTo,
  'MIME-Version: 1.0','Content-Type: text/plain; charset=UTF-8','Content-Transfer-Encoding: base64'];
  return headers.join(CRLF)+CRLF+CRLF+wrap76(b64(text.replace(/\r?\n/g,CRLF)))+CRLF;
 }
+/** RFC 2047 encoded words ("=?UTF-8?B?...?=") as plain text, so "Re:" subjects read naturally. */
+export function decodeWords(s){
+ return String(s||'').replace(/=\?([^?]+)\?([bq])\?([^?]*)\?=(?:\s+(?==\?))?/gi,(m,cs,enc,t)=>{
+  try{const buf=enc.toLowerCase()==='b'?Buffer.from(t,'base64'):Buffer.from(t.replace(/_/g,' ').replace(/=([0-9a-f]{2})/gi,(_,h)=>String.fromCharCode(parseInt(h,16))),'latin1');
+   return /utf-?8/i.test(cs)?buf.toString('utf8'):buf.toString('latin1')}catch{return m}});
+}
+/** A subject without Re:/Fwd: prefixes, lower case: how a forwarded or re-sent copy of our email is recognised. */
+export const baseSubject=s=>decodeWords(s).replace(/[\r\n]+/g,' ').replace(/^\s*(?:(?:re|aw|sv|antw|fwd?|fw|wg|tr)\s*(?:\[\d+\])?\s*:\s*)+/i,'').replace(/\s+/g,' ').trim().toLowerCase();
 export const newMessageId=domain=>`<lf-${Date.now().toString(36)}-${randomId(8)}@${domain}>`;
 function defaultConnect(host,port){return tls.connect({host,port,servername:host,timeout:30000})}
 class Wire{
@@ -155,13 +163,21 @@ export function parseFetch(raw){
   out.push({uid:part.match(/\bUID\s+(\d+)/)?.[1]||'',messageId:h('Message-ID'),from:from.toLowerCase(),subject:h('Subject'),date:h('Date'),inReplyTo:h('In-Reply-To'),references:h('References'),autoSubmitted:h('Auto-Submitted'),body:decodeReplyBody(body,h('Content-Transfer-Encoding'),h('Content-Type'))});
  }return out;
 }
-const NEGATIVE=/\b(unsubscribe|remove me|take me off|stop (emailing|contacting)|do not (email|contact)|don't (email|contact)|not interested|no thanks|no thank you|please stop|spam)\b/i;
-const POSITIVE=/\b(added|i've added|i have added|updated the (page|post|article)|included (it|your)|linked|great resource|happy to (add|include)|sounds good|will add|we'll add|(?:i|we) can (?:do|add|include) (?:that|it|this)|can do that|go ahead)\b/i;
-const YES_OPENING=/^(?:(?:hi|hello|hey|dear)\b[^\n,!]{0,40}[,!]?\s*)?(?:yes|yep|yeah|sure|absolutely|of course|definitely)\b/i;
+// Opt-outs, in their own words (quoted text is never read). Every pitch's P.S. says 'reply "no"', so a reply that starts
+// with no / nope / stop / unsubscribe (greeting and signature aside: "No\n\nSent from my iPhone") is an opt-out too.
+const NEGATIVE=/\b(?:unsubscribe|remove (?:me|us|my (?:e-?mail|address)|our (?:e-?mail|address|site|blog)|this (?:e-?mail|address))|take (?:me|us|my (?:e-?mail|address)|our (?:e-?mail|address)) off|opt (?:me|us) out|opt[- ]?out (?:of|from) (?:your|these|this|further|future|all)\b|(?:please|want to|like to|wish to) opt[- ]?out|stop (?:e-?mailing|contacting|messaging|writing|sending)|(?:do not|don't|dont|never) (?:e-?mail|contact|message|write to|send (?:me|us|any|further|more|another|these|this|them|e-?mails?))|no (?:more|further) (?:e-?mails|messages)|not interested|no,? thanks\b|no,? thank you|please stop|spam|not for us|(?:we|i)(?:'ll| will) pass|pass on this|not (?:a |the right |a good )?fit for us)\b/i;
+const LEAD_NO=/^(?:no|nope|nah|stop|unsubscribe)\b(?:[\s,]*(?:thanks|thank you|thx)\b)?\s*(?:[.!,;:\u2013\u2014-]|$)/i;
+// An explicit refusal to link ("we have never linked to commercial sites", "we don't add links"). Not one that names a time ("until", "yet").
+const DECLINE=/\b(?:we|i)(?:'ve|'d|'m|'re| have| do| did| will| would| are| am)?\s*(?:never|don't|do not|doesn't|does not|won't|will not|wouldn't|would not|can't|cannot|can not|couldn't|could not|no longer|not able to|unable to|not)\s+(?:(?:usually|normally|generally|ever|currently|really|typically|accept|do)\s+)?(?:link|add|include|accept (?:links?|external|outside|unsolicited|guest|link|submissions|resources?|suggestions?)|feature|publish|place|take (?:links?|requests|submissions))\w*\b(?![^.!?\n]{0,40}\b(?:until|yet|right now|at the moment|this week|today|tomorrow|before|soon)\b)/i;
+const POSITIVE=/\b(?:added|i've added|i have added|updated the (?:page|post|article)|included (?:it|your)|linked|great resource|happy to (?:add|include)|sounds good|will add|we'll add|(?:i|we) can (?:do|add|include) (?:that|it|this)|can do that|go ahead)\b/gi;
+const YES_OPENING=/^(?:(?:hi|hello|hey|dear)\b[^\n,!]{0,40}[,!]?\s*)?(?:yes|yep|yeah|sure|absolutely|of course|definitely)\b(?![\s,]*not\b)/i;
+// A yes that a negation in the same clause turns around: "we have never linked", "I haven't added it".
+const NEGATION=/(?:\b(?:not|never|no longer|cannot|nor|neither)\b|n't\b)/i;
 // Conditions a publisher attaches to a yes. They need the owner's decision, so they are flagged, never auto-handled.
+// Over-flagging only costs an owner look; a missed fee or swap could be answered as if it were accepted.
 const CONDITIONS=[
- ['paid',/\b(?:fees?|charges?|paid|payment|paypal|pricing|our rates?|sponsored|usd|eur|gbp|dollars|euros?)\b|[$€£]\s?\d/i],
- ['reciprocal',/\b(?:if you (?:can )?(?:mention|link|add|feature|include) us|mention us|link (?:back )?to us|link back|in return|in exchange|link exchanges?|exchange links|link swaps?|swap links|reciprocal|return the favou?r|a link from your)\b/i],
+ ['paid',/\b(?:fees?|charges?|paid|pay|paying|payment|paypal|pric(?:e|es|ed|ing)|costs?|costing|rates?|invoice|budget|compensat\w*|contribution|donation|sponsor(?:ed|ship)?|usd|eur|gbp|dollars?|euros?)\b|[$\u20ac\u00a3]\s?\d|\b\d+(?:[.,]\d+)?\s?(?:usd|eur|gbp|dollars?|euros?|pounds?|bucks)\b|\bper (?:year|month|post|link|article|placement|insertion)\b/i],
+ ['reciprocal',/\b(?:if you (?:can )?(?:mention|link|add|feature|include) (?:to )?(?:us|our|ours|my)\b|mention us|link (?:back )?to us|link back|link to (?:our|my) (?:site|blog|page|website|article|post|resource|shop|store)|add (?:us|ours)\b|in return|in exchange|link exchanges?|exchange links|link swaps?|swap links|reciprocal|return the favou?r|a link from your)\b/i],
  ['guest_post',/\b(?:guest[- ]?post(?:s|ing)?|guest (?:articles?|blogs?|contributions?)|write for us|contribute an? (?:article|post)|submit an? (?:article|post))\b/i],
 ];
 // Our message ids (<lf-...>) in any header or text; the List-Unsubscribe mailto may leave them URL-encoded in a subject.
@@ -181,7 +197,22 @@ export function optOutSubject(subject){
  return /^\s*(?:(?:re|fwd?|fw|aw|wg|tr)\s*:\s*)*unsubscribe\b/i.test(s)||lfIds(s).length>0;
 }
 export function replyText(msg){return String(msg.body||'').split(/\r?\n>|\r?\nOn .{5,160} wrote:|\r?\n-{2,}\s*Original Message/i)[0].trim()}
-export function replyCondition(msg){const t=replyText(msg);for(const [k,re] of CONDITIONS)if(re.test(t))return k;return null}
+// Where a signature starts: a "--" or "__" line, " -- " in flattened text, or a phone/app footer.
+const SIGNATURE=/(?:^|\n)[ \t]*(?:--|__+)[ \t]*(?:\n|$)|\s--\s|(?:^|\s)(?:sent from my|sent from (?:mail|yahoo|outlook|gmail|samsung)|get outlook for)\b/i;
+/** Their own words without the signature, with typographic apostrophes made plain. */
+export function ownText(msg){
+ const t=replyText(msg).replace(/\r\n?/g,'\n').replace(/[\u2018\u2019]/g,"'"),i=t.search(SIGNATURE);
+ return (i>=0?t.slice(0,i):t).trim();
+}
+/** The first line they wrote, after any greeting ("Hi Alex,"). */
+const leadOf=own=>own.replace(/^(?:hi|hello|hey|dear)\b[^\n,!.]{0,40}[,!.]?[ \t]*\n?/i,'').trim().split('\n')[0].trim();
+/** A yes that no negation in the same clause turns around. */
+function affirmative(text){
+ if(YES_OPENING.test(text))return true;
+ for(const m of text.matchAll(POSITIVE)){const before=text.slice(Math.max(0,m.index-30),m.index).split(/[,;:.!?\n]/).pop();if(!NEGATION.test(before))return true}
+ return false;
+}
+export function replyCondition(msg){const t=replyText(msg).replace(/[\u2018\u2019]/g,"'");for(const [k,re] of CONDITIONS)if(re.test(t))return k;return null}
 const QUESTION_OPENER=/(?:^|[.!?:\n]\s*)(?:(?:hi|hello|hey|dear)\b[^\n,!]{0,40}[,!]\s*)?(?:(?:could|can|would|will|do|does|did|is|are|have|has)\s+(?:you|we|i|there|your|the)\b|(?:what|which|how|where|when|why|who)(?:'s|\s+(?:is|are|was|were|do|does|did|would|should|can|could|kind|type|much|many|long|about|exactly)\b))/i;
 /** The reply asks us something (a "?" in their own text, or a question opener). It never changes the sentiment. */
 export function isQuestion(msg){
@@ -192,8 +223,10 @@ export function classifyReply(msg){
  if(/mailer-daemon|postmaster|mail delivery subsystem/i.test(msg.from)||/delivery status notification|undeliverable|failure notice|returned mail/i.test(msg.subject))return 'bounce';
  if(optOutSubject(msg.subject))return 'negative';
  if(/auto-replied|auto-generated/i.test(msg.autoSubmitted)||/out of (the )?office|automatic reply|auto(matic)?[- ]?reply/i.test(msg.subject))return 'auto';
- const text=replyText(msg);
- if(NEGATIVE.test(text)||/^(?:no|nope|stop)[.!\s]*$/i.test(text))return 'negative';
- if(POSITIVE.test(text)||YES_OPENING.test(text))return 'positive';return 'neutral';
+ const text=replyText(msg).replace(/[\u2018\u2019]/g,"'");
+ if(NEGATIVE.test(text)||LEAD_NO.test(leadOf(ownText(msg))))return 'negative';
+ // A refusal is declined, never positive; one that also says yes is left to the owner (neutral: a draft at most).
+ const yes=affirmative(text);
+ if(DECLINE.test(text))return yes?'neutral':'negative';
+ return yes?'positive':'neutral';
 }
-

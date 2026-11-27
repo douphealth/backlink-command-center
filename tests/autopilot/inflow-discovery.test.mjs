@@ -139,7 +139,7 @@ test('roundups and "best X" lists are recognised; lists of the publisher\'s own 
   const opts={asset:general,site,ourDomains:[site.domain]};
   const list=`<html><head><title>10 Best Houseplant Care Apps (2026)</title></head><body><main><h1>10 Best Houseplant Care Apps</h1>${[1,2,3,4,5,6].map(i=>`<h2>${i}. App ${i}</h2><p>${words(60)} <a href="https://app${i}.io/">App ${i}</a></p>`).join('')}<h2>Other notable apps</h2><p>${words(40)}</p></main></body></html>`;
   const q=qualifyPage('https://plantlists.org/best-apps',list,opts);
-  assert.deepEqual(q.list_page,{items:6,title:'10 Best Houseplant Care Apps',other_section:true});assert.equal(q.qualified,true);
+  assert.deepEqual(q.list_page,{items:6,title:'10 Best Houseplant Care Apps',other_section:'Other notable apps'});assert.equal(q.qualified,true);
   assert.equal(qualifyPage('https://x.org/guide',article('Houseplant Watering Guide'),opts).list_page,null,'an ordinary guide is not a list');
   const own=`<html><head><title>Best Plant Care Tools</title><meta property="og:site_name" content="PlantPal"></head><body><main><h1>The 5 best plant care tools</h1>${[1,2,3,4].map(i=>`<h2>${i}. PlantPal Tool ${i}</h2><p>${words(80)} <a href="/products/tool-${i}">Get it</a></p>`).join('')}</main>
     <footer><a href="https://facebook.com/plantpal">fb</a><a href="https://twitter.com/plantpal">tw</a><a href="https://pinterest.com/plantpal">pin</a></footer></body></html>`;

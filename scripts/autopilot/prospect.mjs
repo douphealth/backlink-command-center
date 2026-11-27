@@ -166,7 +166,8 @@ export function listShape(html,url,title=''){
   const branded=heads.filter(h=>{const t=h.toLowerCase();return (label.length>=4&&t.includes(label))||(site.length>=4&&t.includes(site))}).length;
   const ownLinks=new Set(links(content,url).filter(l=>{const h=hostOf(l.url);if(!h||!(sameSite(h,host)||sameSite(host,h)))return false;try{return OWN_PRODUCT_PATH.test(new URL(l.url).pathname)}catch{return false}}).map(l=>normUrl(l.url))).size;
   const list=LIST_TITLE.test(title)&&(numbered>=3||items>=5);
-  return {list,items,numbered,ownOnly:list&&items<=1&&(branded>=3||ownLinks>=3),other_section:heads.some(h=>OTHER_SECTION.test(h))};
+  // other_section: the heading of the section where additions naturally go ("Other notable tools"), or null.
+  return {list,items,numbered,ownOnly:list&&items<=1&&(branded>=3||ownLinks>=3),other_section:clip(heads.find(h=>OTHER_SECTION.test(h))||'',120)||null};
 }
 /**
  * Up to 600 characters of the page's own words where it matches what we pitch: the text after the matched section
@@ -220,7 +221,7 @@ export function qualifyPage(url,html,{asset,site,ourDomains,provenLinker=false})
   return {title:title.slice(0,180),h1:h1.slice(0,180),relevance:Number(relevance.toFixed(2)),matched,external_domains:ext.size,resource_page:resource,
     score,qualified:score>=45&&relevance>=.34&&ext.size>=3&&!ecommerce&&!compromised&&!shape.ownOnly,linksToUs,fit_section:fitSection?.n?fitSection.h:null,
     fit_excerpt:fitExcerpt(html,fitSection?.n?fitSection.h:null,want),
-    list_page:list?{items:shape.items,title:(h1||title).slice(0,180),...(shape.other_section?{other_section:true}:{})}:null,
+    list_page:list?{items:shape.items,title:(h1||title).slice(0,180),...(shape.other_section?{other_section:shape.other_section}:{})}:null,
     author:/^[A-Za-z][A-Za-z .'-]{1,40}$/.test(author)&&!/admin|staff|team|editor/i.test(author)?author:null,
     excerpt:text.slice(0,1800),reasons,last_year_mentioned:year||null};
 }
@@ -423,7 +424,8 @@ export function expireRejections(state,now=Date.now()){
     const domain=key.slice(key.indexOf('|')+1),id=state.domains?.[key],p=id?state.prospects?.[id]:null;
     delete state.domain_rejections[key];
     if(state.contacted?.[domain]||isSuppressed(state,'',domain)||(p&&p.status!=='rejected'))continue;
-    if(state.domains)delete state.domains[key];n++;
+    // The published "prospects evaluated" count is cumulative: the expired key was still evaluated once (run.mjs funnel).
+    if(state.domains?.[key]){delete state.domains[key];state.evaluated_expired=(Number(state.evaluated_expired)||0)+1}n++;
   }
   return n;
 }

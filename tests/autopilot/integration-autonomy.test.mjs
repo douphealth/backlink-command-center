@@ -98,7 +98,8 @@ test('two cycles: a v1 vault is re-sealed as v2, a positive then a neutral reply
     const codes=c2.summary.attention.map(a=>a.code);
     assert.ok(codes.some(c=>['owner_decision_pending','replies_waiting'].includes(c)),codes.join(','));
     const owner=c2.summary.attention.find(a=>a.code==='owner_decision_pending');
-    assert.equal(owner.level,'action');assert.match(owner.message,/1 wants a guest post/);
+    // Public: the count only. Which condition a publisher attached stays in the vault (PRIV-1).
+    assert.equal(owner.level,'action');assert.match(owner.message,/^1 publisher reply is waiting for your decision/);assert.doesNotMatch(owner.message,/fee|link back|guest post|condition/i);
     assert.equal(c2.summary.history.filter(h=>h.date===new Date().toISOString().slice(0,10)).length,1,'one history entry per day');
     assert.equal(c2.summary.history.at(-1).cycles,2);
     assert.equal(g2.sent.length,0);

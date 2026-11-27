@@ -67,14 +67,21 @@ test('a cycle is "in window" when a queued inbox is inside its business hours',(
   assert.equal(inSendWindow(state,at('2026-11-25T20:00:00Z')),false,'outside UK hours; the US prospect is not queued');
   assert.equal(inSendWindow(state,at('2026-11-28T10:00:00Z')),false,'Saturday');
 });
-test('the workflow may open issues and alerts the owner after every real cycle without failing it',()=>{
+test('the workflow alerts the owner after every real cycle from its own least-privilege job, without failing the cycle',()=>{
   const y=readFileSync(new URL('../../.github/workflows/autopilot.yml',import.meta.url),'utf8');
-  assert.match(y,/permissions:\n\s+contents: write\n\s+id-token: write[^\n]*\n\s+issues: write/);
-  const step=y.slice(y.indexOf('- name: Alert the owner'));
-  assert.ok(y.indexOf('- name: Alert the owner')>y.indexOf('- name: Commit results'),'runs after the commit step');
-  assert.match(step,/if: \$\{\{ always\(\) && steps\.due\.outputs\.due == 'true' && !inputs\.dry_run \}\}/);
+  // Workflow default is read-only; only the alert job's token may write issues (SEC-2), and the cycle job keeps what it uses.
+  assert.match(y,/^permissions:\n\s+contents: read\n/m);
+  const cycle=y.slice(y.indexOf('  autopilot:'),y.indexOf('  alert:')),alert=y.slice(y.indexOf('  alert:'));
+  assert.match(cycle,/permissions:\n\s+contents: write\n\s+id-token: write/);assert.doesNotMatch(cycle,/issues: write/);
+  assert.match(cycle,/due: \$\{\{ steps\.due\.outputs\.due \}\}/);
+  const keep=cycle.slice(cycle.indexOf('- name: Keep the public summary'));
+  assert.ok(cycle.indexOf('- name: Keep the public summary')>cycle.indexOf('- name: Commit results'),'kept after the commit step');
+  assert.match(keep,/if: \$\{\{ always\(\) && steps\.due\.outputs\.due == 'true' && !inputs\.dry_run \}\}/);assert.match(keep,/path: public\/data\/autopilot\.json/);
+  assert.match(alert,/needs: autopilot/);assert.match(alert,/if: \$\{\{ always\(\) && needs\.autopilot\.outputs\.due == 'true' && !inputs\.dry_run \}\}/);
+  assert.match(alert,/permissions:\n\s+contents: read\n\s+issues: write/);assert.match(alert,/persist-credentials: false/);assert.doesNotMatch(alert,/npm ci|LINKFORGE_DATA_KEY/);
+  const step=alert.slice(alert.indexOf('- name: Alert the owner'));
   assert.match(step,/continue-on-error: true/);assert.match(step,/GITHUB_TOKEN: \$\{\{ github\.token \}\}/);
-  assert.match(step,/LINKFORGE_ALERT_MENTION: \$\{\{ vars\.LINKFORGE_ALERT_MENTION \}\}/);assert.match(step,/run: node scripts\/autopilot\/notify\.mjs/);
+  assert.match(step,/LINKFORGE_ALERT_MENTION: \$\{\{ vars\.LINKFORGE_ALERT_MENTION \}\}/);assert.match(step,/run: node scripts\/autopilot\/notify\.mjs cycle-summary\/autopilot\.json/);
 });
 test('a full cycle publishes the outcome history, the outreach split and passes the watchdog inputs',async()=>{
   const resp=(body,{status=200,type='text/html'}={})=>new Response(body,{status,headers:{'content-type':type}});

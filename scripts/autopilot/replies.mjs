@@ -2,31 +2,26 @@
  * Answers to publisher replies (stage "reply_drafts"): every conversation that waits for us (awaiting_us, set by
  * processReplies) gets one in-thread answer per reply, never two.
  *  - REPLY_MODE=draft (default): the answer is saved to Gmail Drafts for the owner to review and send.
- *  - REPLY_MODE=send: only an unconditional positive or neutral answer (no question in it) may go out by itself,
- *    only while outreach sending is on, only to the verified first-party address the reply came from, only with a
- *    fresh mailbox proof and a current reply scan and Sent check, and at most once per conversation. Anything
- *    else falls back to a draft.
+ *  - REPLY_MODE=send: only an answer to an unconditional positive reply (no question, no numbers in it) may go out by
+ *    itself, only while outreach sending is on, only to the verified first-party address the reply came from, only with
+ *    a fresh mailbox proof and a current reply scan and Sent check, and at most once per conversation. Anything else
+ *    (neutral replies included: they may be a refusal in other words) falls back to a draft.
  *  - Paid placement is never drafted: it is flagged for the owner. Link-exchange and guest-post offers get a draft
  *    that only asks the questions the owner needs answered (which site, page and anchor; the guidelines).
  *    No answer ever agrees to, declines or prices any terms.
  * Only counts are logged; addresses, names and reply text stay in the sealed vault.
  */
 import {createHash} from 'node:crypto';
-import {buildMessage,newMessageId} from './mail.mjs';
+import {buildMessage,newMessageId,classifyReply,replyCondition,decodeWords} from './mail.mjs';
 import {grounded} from './pitch.mjs';
-import {applyProof} from './outreach.mjs';
+import {applyProof,applyOptOut,noteCondition,sendFailure} from './outreach.mjs';
 import {isSuppressed,usableVerification,normalizeEmail} from './recipient-policy.mjs';
 
 const EMAIL=/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi;
 const iso=ms=>new Date(ms).toISOString();
 const short=(s,n=70)=>{s=String(s||'').split(/\s[|–—-]\s/)[0].replace(/\s+/g,' ').trim();return s.length>n?s.slice(0,n-1).replace(/\s+\S*$/,'')+'…':s};
 const firstName=a=>{const f=String(a||'').trim().split(/\s+/)[0]||'';return /^\p{L}[\p{L}'-]{1,30}$/u.test(f)?f:''};
-/** RFC 2047 encoded words ("=?UTF-8?B?...?=") as plain text, so "Re:" subjects read naturally. */
-export function decodeWords(s){
-  return String(s||'').replace(/=\?([^?]+)\?([bq])\?([^?]*)\?=(?:\s+(?==\?))?/gi,(m,cs,enc,t)=>{
-    try{const buf=enc.toLowerCase()==='b'?Buffer.from(t,'base64'):Buffer.from(t.replace(/_/g,' ').replace(/=([0-9a-f]{2})/gi,(_,h)=>String.fromCharCode(parseInt(h,16))),'latin1');
-      return /utf-?8/i.test(cs)?buf.toString('utf8'):buf.toString('latin1')}catch{return m}});
-}
+export {decodeWords};
 /** "Re: <their subject>" without stacking prefixes. */
 export function answerSubject(theirs,fallback=''){
   const t=decodeWords(theirs).replace(/[\r\n]+/g,' ').replace(/^\s*(?:(?:re|aw|sv|antw|fwd?|fw|wg)\s*(?:\[\d+\])?\s*:\s*)+/i,'').trim();
@@ -41,12 +36,13 @@ export const replyKey=r=>r?.message_id||'h:'+createHash('sha256').update(JSON.st
  */
 export function answerKind(p,reply){
   if(!reply||reply.sentiment==='negative')return null;
-  const cond=reply.condition||(p.needs_owner&&!p.owner_decided_at?p.condition:null);
+  // A reply stored without a condition (or by an earlier, narrower rule) is read again with the current rule.
+  const cond=reply.condition||replyCondition({body:reply.excerpt||''})||(p.needs_owner&&!p.owner_decided_at?p.condition:null);
   if(cond)return ['paid','reciprocal','guest_post'].includes(cond)?cond:'owner';
   if(reply.sentiment==='positive')return 'positive';
   return reply.question?'question':'neutral';
 }
-const PRICE=/[$€£]\s?\d|\d\s?(?:usd|eur|gbp|dollars?|euros?|pounds?)\b|\b(?:pay|paid|paying|payment|fees?|price[sd]?|pricing|invoice|compensat\w*|sponsor\w*|paypal|budget|cost)\b/i;
+const PRICE=/[$€£]\s?\d|\d\s?(?:usd|eur|gbp|dollars?|euros?|pounds?)\b|\b(?:pay|paid|paying|payment|fees?|price[sd]?|pricing|invoice|compensat\w*|sponsor\w*|paypal|budget|costs?|costing|rates?|charge[sd]?|contribution|donation)\b/i;
 const TERMS=/\b(?:link exchanges?|exchange links?|link swaps?|swap links|link back|reciprocal|in return|in exchange|guest[- ]?posts?|i agree|we agree|it'?s a deal|accept your)\b/i;
 const PROMISE=/\b(?:i|we)(?:'ll|'d| will| would| can| could| am happy to| are happy to| am glad to)\s+(?:gladly\s+|also\s+|happily\s+)?(?:link|add (?:a )?link|mention|feature|promote|write|contribute|share|pay|send (?:you )?(?:a |the |an )?(?:payment|fee|article|post|guest))/i;
 const PLACEHOLDER=/\[[^\]]*\]|\{\{|\}\}|<[a-z][^>]*>|lorem|\b(?:your name|first name|insert|todo|tbd)\b|\bxx+\b/i;
@@ -69,10 +65,12 @@ export function answerProblem(text,{url,facts}={}){
   if(urls.length!==1)return urls.length?'extra_url':'our_url_missing';
   if(urls[0]!==url)return 'wrong_url';
   if(new RegExp(EMAIL.source,'i').test(t))return 'contains_email';
-  // Words that are part of our own page's title or description ("Budget planner", "price comparison") are allowed.
-  const page=JSON.stringify(facts?.our_page||{}).toLowerCase(),said=re=>[...t.matchAll(new RegExp(re.source,'gi'))].some(m=>!page.includes(m[0].toLowerCase()));
-  if(said(PRICE))return 'mentions_money';
-  if(said(TERMS)||PROMISE.test(t))return 'commits_to_terms';
+  // Money and terms words are allowed only inside our page's exact title or link text, copied verbatim ("Price Comparison Tool"):
+  // "That price works for us" is a reply to their price, whatever our page is about.
+  const names=[facts?.our_page?.title,facts?.suggested_anchor].map(x=>String(x||'').trim()).filter(x=>x.length>=3).sort((a,b)=>b.length-a.length);
+  let bare=t.replace(/https?:\/\/[^\s<>"')\]]+/g,' ');for(const n of names)bare=bare.split(n).join(' ');
+  if(PRICE.test(bare))return 'mentions_money';
+  if(TERMS.test(bare)||PROMISE.test(t))return 'commits_to_terms';
   if(PLACEHOLDER.test(t))return 'placeholder_or_markup';
   if(FLUFF.test(t))return 'filler';
   if(facts&&!grounded({subject:'',body:t},facts))return 'number_not_in_facts';
@@ -124,6 +122,11 @@ export async function answerReplies({state,writer,mailer,config={},assets=[],log
     const at=iso(t()),done=(m,reason)=>{p.reply_draft={for:key,at,mode:m,...(reason?{reason}:{})}};
     const to=normalizeEmail(String(reply.from||'').toLowerCase())||normalizeEmail(String(p.email||'').toLowerCase());
     if(p.status==='declined'||reply.sentiment==='negative'||isSuppressed(state,p.email,p.domain)||(to&&isSuppressed(state,to,p.domain))){p.awaiting_us=false;done('none','opted_out');stats.skipped++;continue}
+    // The stored words are read again with the current rules: an opt-out an earlier rule missed is honoured, never answered,
+    // and a fee or swap it missed goes to the owner instead of getting an answer that reads like acceptance.
+    const reread=classifyReply({from:reply.from,subject:reply.subject||'',body:reply.excerpt||''});
+    if(reread==='negative'){reply.sentiment='negative';applyOptOut(state,p,reply.from);done('none','opted_out');stats.skipped++;stats.opt_outs_reread=(stats.opt_outs_reread||0)+1;continue}
+    if(!reply.condition){const c=replyCondition({body:reply.excerpt||''});if(c){reply.condition=c;noteCondition(p,c,{at:reply.at})}}
     const kind=answerKind(p,reply);
     if(kind==='paid'||kind==='owner'){p.needs_owner=true;done('none',kind==='paid'?'paid_placement':'owner_decision');stats.owner_needed++;continue}
     const asset=assetBy.get(p.asset_url)||{url:p.asset_url,title:p.asset_title,description:''};
@@ -152,28 +155,48 @@ export async function answerReplies({state,writer,mailer,config={},assets=[],log
     // Automatic sending: every gate must pass, otherwise the answer is a draft and the reason is recorded.
     let via='draft',why=null;
     if(mode==='send'){
+      // Only a plain yes gets an automatic answer: a neutral reply may be a refusal in other words, and any number in their
+      // text (a price, a date, a count) is something the owner should read first.
+      const digits=/\d/.test(String(reply.excerpt||'').replace(/https?:\/\/\S+/g,' '));
       why=sendStopped?(sendWhy||'sending_stopped'):conditional?'needs_owner':kind==='question'||reply.question?'question':!theirId?'no_thread_id'
         :to!==normalizeEmail(String(p.email||'').toLowerCase())?'different_address':p.duplicate_sent?'duplicate_guard':!name?'no_sender_name'
-        :autoSent>=maxAutoSends?'cycle_limit':(p.history||[]).some(h=>h.type==='answer'&&h.via==='send')?'one_automatic_answer':null;
+        :autoSent>=maxAutoSends?'cycle_limit':(p.history||[]).some(h=>h.type==='answer'&&h.via==='send')?'one_automatic_answer'
+        :kind!=='positive'||reply.sentiment!=='positive'||reread!=='positive'?'not_positive':digits?'contains_numbers':null;
       if(!why){
         let proof;try{proof=await mailer.authorizeRecipient(p,{state,followup:true,deadline})}catch{proof={ok:false,reason:'verification_error'}}
-        if(applyProof(state,p,proof,{followup:true})&&p.email===to&&usableVerification(p.recipient_proof?.verification,p.email)&&!isSuppressed(state,p.email,p.domain))via='send';
-        else why='recipient_not_verified';
+        if(applyProof(state,p,proof,{followup:true})&&p.email===to&&usableVerification(p.recipient_proof?.verification,p.email)&&!isSuppressed(state,p.email,p.domain)){
+          // An address emailed before the vault was replaced, by a conversation this vault does not hold, is not answered automatically.
+          const r=state.restored_sent?.[p.email],own=(p.history||[]).some(h=>['initial','followup'].includes(h.type)&&h.mode!=='draft'&&normalizeEmail(String(h.to||''))===p.email);
+          if(!own&&Date.parse(r)>t()-90*864e5)why='restored_contact';else via='send';
+        }else why='recipient_not_verified';
       }
     }
     const messageId=newMessageId(String(config.fromAddress).split('@')[1]);
     const raw=buildMessage({from:config.fromAddress,fromName:name,to:via==='send'?p.email:to,subject,text,messageId,...(theirId?{inReplyTo:theirId,references:refs}:{}),unsubscribe:true});
     p.history??=[];
     if(via==='send'){
-      try{await mailer.send({to:p.email,raw,recipientProof:p.recipient_proof})}
-      catch{
-        // Delivery unknown: never retried (no double answers); the owner sees the conversation still waiting.
+      let failure=null;try{await mailer.send({to:p.email,raw,recipientProof:p.recipient_proof})}catch(e){failure=sendFailure(e)}
+      if(failure?.uncertain){
+        // Delivery unknown (at or after DATA): never retried (no double answers); the owner sees the conversation still waiting.
         p.history.push({type:'answer',at,message_id:messageId,to:p.email,subject,via:'send',writer:wrote,kind,answers:key,delivery_uncertain:true});
         done('send','delivery_uncertain');stats.uncertain=(stats.uncertain||0)+1;sendStopped=true;continue;
       }
+      if(failure){
+        // Refused before DATA: nothing was delivered. Automatic sending stops for this cycle and the same answer becomes a draft.
+        sendStopped=true;stats.send_failed=(stats.send_failed||0)+1;if(failure.block)stats.send_blocked=failure.block;
+        if(failure.refused){
+          // The mailbox itself was refused: a bounce in all but name (suppressed, no draft to a dead address).
+          const e=normalizeEmail(String(p.email||'').toLowerCase());p.history.push({type:'bounce',at,to:e,stage:'rcpt',code:failure.code});
+          if(e)state.suppression[e]={reason:'Mailbox refused by the mail server; re-contact prohibited',at};p.awaiting_us=false;p.no_followup=true;done('none','mailbox_refused');continue;
+        }
+        via='draft';why=`send_failed_${failure.stage||'unknown'}`;
+      }
+    }
+    if(via==='send'){
       p.history.push({type:'answer',at,message_id:messageId,to:p.email,subject,via:'send',writer:wrote,kind,answers:key});
       done('send');p.awaiting_us=false;state.contacted??={};state.contacted[p.domain]=at;stats.sent++;autoSent++;
     }else{
+      // (After a refused automatic send `to` is p.email, so the same message is saved.)
       try{await mailer.draft(raw)}catch{stats.draft_errors=++draftErrors;if(draftErrors>=2)break;continue} // retried next cycle
       p.history.push({type:'answer',at,message_id:messageId,to,subject,via:'draft',writer:wrote,kind,answers:key});
       done('draft',why);stats.drafted++;
