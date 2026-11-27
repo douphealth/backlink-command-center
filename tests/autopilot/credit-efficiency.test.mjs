@@ -66,7 +66,7 @@ test('mail hosts are classed from MX records and their verification rate is lear
   assert.ok(creditValue(state,{mx_class:'google'},60)>creditValue(state,{mx_class:'other'},80));
 });
 
-const env={EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:'24',HUNTER_API_KEY:'real-key'};
+const env={EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:'24',HUNTER_API_KEY:'real-key',HUNTER_DAILY_LIMIT:'24'};
 const hunter=status=>json({data:{email:'ed@pub.com',status,regexp:true,mx_records:true,smtp_server:true,smtp_check:status==='valid',accept_all:false,block:false,disposable:false,gibberish:false}});
 test('an inbox that stays "unknown" waits longer each time and reports when it can be retried',async()=>{
   let now=Date.parse('2026-11-26T00:00:00Z'),calls=0;const state={};

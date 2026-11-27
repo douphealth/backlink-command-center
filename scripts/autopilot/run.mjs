@@ -31,6 +31,7 @@ import {processReplies,reconcileSent,runOutreach,preverify,screenQueue,checkLink
 import {assetStats,learningSummary} from './learn.mjs';
 import {sealJson,open,vaultFormat} from './vault.mjs';
 import {requireRebuild,rebuildHold,rebuildFromMailbox,linkRestoredSends,pruneRestoredSends} from './rebuild.mjs';
+import {verifyLedger} from './recipient-policy.mjs';
 import {NOW,ageDays,normUrl} from './util.mjs';
 
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'../..');
@@ -364,10 +365,13 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     aiWriter=writer.ai;
     if(stages.outreach?.ok&&(writer.used+writer.usedAi+writer.fallbacks)>0){const why=Object.entries(writer.reasons||{}).map(([k,n])=>`${k} x${n}`).join(', ');
       log(`pitch writer: ${writer.used+writer.usedAi} written by AI${writer.aiModel?` (${writer.aiProvider}: ${writer.aiModel})`:''}, ${writer.fallbacks} from the template${why?` (${why})`:''}`)}
-    // Every cycle: spend today's leftover free verification credits on the best inboxes whose send window opens within 20 h,
-    // so the next in-window cycle (started by the send-window waker) sends at once.
-    await stage('preverify',vaultOk&&gmailOk&&!noVerifier&&typeof mailer?.authorizeRecipient==='function',
-      ()=>preverify({state,mailer,max:cfg.preverifyMax,deadline:deadline-90e3,log}),!vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':'no Gmail transport',{until:deadline-30e3});
+    // Every cycle: spend today's leftover free verification credits on the best inboxes whose send window opens within 20 h
+    // (due follow-ups first, never beyond the day's sending capacity), so the next in-window cycle (started by the send-window
+    // waker) sends at once. Verification needs no Gmail login: only the vault, a ready verifier and the transport's recipient check.
+    await stage('preverify',vaultOk&&!noVerifier&&typeof mailer?.authorizeRecipient==='function',
+      ()=>preverify({state,mailer,max:cfg.preverifyMax,followups:cfg.outreach.mode==='send',followupDays:cfg.outreach.followupDays,
+        cap:cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit,deadline:deadline-90e3,log}),
+      !vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':'no Gmail transport',{until:deadline-30e3});
   }finally{await mailer?.close?.().catch(()=>{})}
   // ---- 6. Link verification ----
   await stage('link_checks',vaultOk,()=>checkLinks({state,ourDomains:SITES.map(s=>s.domain),fetchImpl,deadline,log}),privateWhy,{until:deadline+90e3});
@@ -381,13 +385,16 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     ...(state.index_status?{google_indexed:Object.values(state.index_status).filter(x=>x.class==='indexed').length,google_not_indexed:Object.values(state.index_status).filter(x=>x.class!=='indexed').length}:{})});
   const prospectsByAsset=new Map();for(const p of Object.values(state.prospects))if(p.status!=='rejected')prospectsByAsset.set(p.asset_url,(prospectsByAsset.get(p.asset_url)||0)+1);
   const internalByAsset=new Map();for(const s of internal)internalByAsset.set(s.to,(internalByAsset.get(s.to)||0)+1);
+  // Verification ledger by day (counts only): what the credits bought and how many emails they backed.
+  const vLedger=vaultOk?verifyLedger(state):{ledger:previous.capabilities?.verifier?.ledger||[],credits_per_email:previous.capabilities?.verifier?.credits_per_email??null};
   const summary={
     schema:'linkforge-autopilot/1',generated_at:NOW(),duration_s:Math.round((Date.now()-started)/1000),dry_run:cfg.dryRun,
     schedule:"Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
     capabilities:{ai_writer:aiWriter,vault:vaultOk,dataforseo:dfs.enabled,gmail:cfg.outreach.gmail&&gmailOk,connections,outreach_mode:cfg.outreach.mode,claude:!!cfg.claude.apiKey,gsc:cfg.gsc,
       daily_send_cap:cfg.outreach.mode==='send'?dailyCap(state,cfg.outreach.dailyLimit):cfg.outreach.dailyLimit,
       verifier:{ready:verifierReady(cfg),providers:cfg.verifier.providers,key:cfg.verifier.providers.length>0,enabled:cfg.verifier.enabled,daily_limit:cfg.verifier.dailyLimit,
-        used_today:state.email_verifier_usage?.[NOW().slice(0,10)]||0,balance:state.verifier_balance||null,catch_all_domains_skipped:Object.keys(state.catch_all_domains||{}).length}},
+        used_today:state.email_verifier_usage?.[NOW().slice(0,10)]||0,balance:state.verifier_balance||null,catch_all_domains_skipped:Object.keys(state.catch_all_domains||{}).length,
+        hunter_daily_limit:cfg.verifier.hunterDailyLimit,hunter_used_today:state.hunter_usage?.[NOW().slice(0,10)]||0,ledger:vLedger.ledger,credits_per_email:vLedger.credits_per_email}},
     // Booleans only, never the values: lets self-diagnosis flag a missing sender identity.
     sender:{sender_name:!!cfg.outreach.senderName,postal_address:!!cfg.outreach.postalAddress,per_site_names:Object.keys(cfg.outreach.senderNames).length,reply_mode:cfg.outreach.replyMode,allow_dach:cfg.outreach.allowDach},
     setup:setupChecklist(cfg),stages,

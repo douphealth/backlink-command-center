@@ -50,7 +50,7 @@ test('free credits only: no submission when today\'s free credits cannot cover t
   assert.ok(!paid.calls.some(c=>c.u.endsWith('/credits/balance')));
 });
 test('falls back to Hunter when Verifalia free credits are used up',async()=>{
-  const f=fixture({free:0,envChange:{HUNTER_API_KEY:'unit-test-key'}});const r=await f.v.mailbox(email);
+  const f=fixture({free:0,envChange:{HUNTER_API_KEY:'unit-test-key',HUNTER_DAILY_LIMIT:'5'}});const r=await f.v.mailbox(email);
   assert.equal(r.status,'valid');assert.equal(r.provider,'hunter');assert.equal(f.posts().length,0);
 });
 test('balance is read once per run and decremented locally',async()=>{
