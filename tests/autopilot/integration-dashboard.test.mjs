@@ -18,14 +18,17 @@ const DAY=864e5,ago=d=>new Date(Date.now()-d*DAY).toISOString();
 const xp=(id,status,extra={})=>({id,domain:`${id}.example`,site:'gearuptofit.com',page_url:`https://${id}.example/a/`,title:'Their <b>article</b>',asset_url:'https://gearuptofit.com/shoe-finder',asset_title:'Shoe Finder',status:'won',
   exchange:{partner_site:'gearuptogrow.com',partner_page:`https://gearuptogrow.com/p-${id}`,partner_title:'Marathon recovery',their_url:`https://${id}.example/a/`,their_title:'Their <b>article</b>',status,offered_at:ago(20),via:'email',...extra}});
 
-test('Exchanges: overdue return links first, then due, agreed and offered, fulfilled last; closed ones are left out',()=>{
+test('Exchanges: overdue return links first, then due, agreed and offered; fulfilled, declined and lapsed collapsed below',()=>{
   const all=[xp('fulfilled','fulfilled',{fulfilled_at:ago(1)}),xp('offered','offered'),xp('due','their_link_live',{their_link_at:ago(2),owed_by:ago(-5)}),
-    xp('late','their_link_live',{their_link_at:ago(9),owed_by:ago(2)}),xp('agreed','accepted',{accepted_at:ago(3)}),xp('lapsed','lapsed'),xp('declined','declined'),{id:'plain',status:'sent'}];
-  assert.deepEqual(view.exchangeView(all).map(p=>p.id),['late','due','agreed','offered','fulfilled']);
+    xp('late','their_link_live',{their_link_at:ago(9),owed_by:ago(2)}),xp('agreed','accepted',{accepted_at:ago(3)}),xp('lapsed','lapsed',{lapsed_at:ago(4),lapse_reason:'no_reply'}),xp('declined','declined',{declined_at:ago(2)}),{id:'plain',status:'sent'}];
+  assert.deepEqual(view.exchangeView(all).map(p=>p.id),['late','due','agreed','offered','fulfilled','declined','lapsed']);
   const html=view.exchangesPanel(all,h);
   assert.match(html,/2 return links to add \(1 overdue\)/);
   for(const s of ['late.example','https://late.example/a/','https://gearuptogrow.com/p-late','on gearuptogrow.com','https://gearuptofit.com/shoe-finder','Overdue since','Due by','Agreed','Offered','Done: both links verified'])assert.ok(html.includes(s),s);
-  assert.ok(!html.includes('lapsed.example')&&!html.includes('declined.example'),'closed exchanges are not listed');
+  const closed=html.slice(html.indexOf('<details class="ap-closed">'));
+  assert.match(closed,/^<details class="ap-closed"><summary>1 fulfilled · 2 declined or lapsed<\/summary>/,'closed exchanges sit collapsed');
+  for(const s of ['fulfilled.example','declined.example','lapsed.example','no answer within 60 days'])assert.ok(closed.includes(s)&&!html.slice(0,html.indexOf('<details')).includes(s),s);
+  assert.ok(!html.includes('plain'),'a prospect without an exchange is not listed');
   assert.ok(!html.includes('<b>article</b>')&&html.includes('&lt;b&gt;article&lt;/b&gt;'),'titles are escaped');
   assert.match(view.exchangesPanel([],h),/No link exchanges yet/);
 });

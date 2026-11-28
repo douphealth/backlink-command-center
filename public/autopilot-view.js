@@ -188,7 +188,9 @@ export async function renderAutopilot(h){
     ['Best URLs to promote',t.promotable,'◎',`${n(t.promoting_now)} promoted now · ${n(t.internal_suggestions)} internal links to add`]];
   const kpiHtml=`<div class="kpi-grid ap-kpis">${kpis.map(([name,val,ico,note],i)=>`<div class="kpi${i===4&&val?' kpi-alert':''}"><div class="kpi-head">${e(name)}<span class="kpi-ico">${ico}</span></div><div class="kpi-value">${n(val)}</div><div class="kpi-foot">${e(note)}</div></div>`).join('')}</div>`;
   // One long page became five tabs; the choice is remembered on this device.
-  const ny=needsYou(f);
+  // With the vault open, the contact-form count leaves out what this browser marked as pasted.
+  const vp=ui.vault?Object.values(ui.vault.prospects||{}):null,pasted=vp?prunePasted(vp):{};
+  const ny=ownerTasks(s,vp?{forms:formsLeft(vp,pasted)}:{}),shown=stripCodes(ny);
   const TABS=[['overview','Overview',ny.total,'warn'],['pages','Best pages',t.promotable,''],['index','Indexation',ixBlocking,'warn'],['prospects','Prospects & links',f.ready,''],['sites','Your sites',(s.sites||[]).length,''],['learning','Learning & log',0,'']];
   const tab=currentApTab();
   navCount('nav-ap-pages',t.promotable);{const x=document.getElementById('nav-ap-overview');if(x){x.textContent=n(ny.total);x.classList.toggle('hidden',!ny.total)}}navCount('nav-ap-index',ixBlocking,true);navCount('nav-ap-prospects',f.ready);navCount('nav-ap-sites',(s.sites||[]).length);
@@ -200,18 +202,19 @@ export async function renderAutopilot(h){
     siteRows2.length?table(['Site','Pages worth promoting','Cannot be indexed','Needs a look','Thin (indexable)','Best page to promote'],siteRows2):empty('No sites crawled yet','The next cycle crawls every configured site.'));
   const tabBar=`<div class="ap-tabs" role="tablist">${TABS.map(([k,label,count,tone])=>`<button type="button" role="tab" class="ap-tab${k===tab?' active':''}" data-ap-tab="${k}" aria-selected="${k===tab}">${label}${count?`<span class="${tone}">${n(count)}</span>`:''}</button>`).join('')}</div>`;
   const pane=(k,html)=>`<section class="ap-pane${k===tab?'':' hidden'}" data-ap-pane="${k}" role="tabpanel">${html}</section>`;
-  const alerts=(s.attention||[]).filter(a=>a?.level==='action'&&!STRIP_CODES.has(a.code)).length;
-  const pointerText=[ny.owner&&`${n(ny.owner)} decision${ny.owner===1?'':'s'}`,ny.other&&`${n(ny.other)} repl${ny.other===1?'y':'ies'} to answer`,alerts&&`${n(alerts)} alert${alerts===1?'':'s'}`].filter(Boolean).join(' · ');
+  const alerts=(s.attention||[]).filter(a=>a?.level==='action'&&!STRIP_CODES.has(a.code)&&!shown.has(a.code)).length;
+  const pointerText=[ny.owner&&`${n(ny.owner)} decision${ny.owner===1?'':'s'}`,ny.other&&`${n(ny.other)} repl${ny.other===1?'y':'ies'} to answer`,ny.overdue&&`${n(ny.overdue)} return link${ny.overdue===1?'':'s'} overdue`,
+    ny.forms&&`${n(ny.forms)} contact form${ny.forms===1?'':'s'} to paste`,alerts&&`${n(alerts)} alert${alerts===1?'':'s'}`].filter(Boolean).join(' · ');
   const attention=pointerText?`<button type="button" class="ap-pointer" data-ap="goto-overview"><span class="ap-needs-dot"></span><span><b>Needs you:</b> ${e(pointerText)}</span><span>Open Overview →</span></button>`:'';
   const bestPanel=`<div class="ap-gap">${panel('Best URLs to promote','Linkability × real search demand; templated duplicates and thin pages are demoted',best.length?table(['#','URL & why','Score','Internal links','Prospects'],best):empty('No promotable URLs yet','The next crawl will rank your pages.'))}</div>`;
   const internalPanel=`<div class="ap-gap">${panel('Internal link plan','Add these links on your own pages: highest-ROI, zero-cost ranking boost',internal.length?table(['On this page','Add anchor','Linking to'],internal):empty('No internal gaps found','Your best URLs are already well linked.'))}</div>`;
   const winsPanel=`<div class="ap-gap">${panel('Backlinks','Won after outreach, or already linking to you (verified on the live page)',wins.length?table(['Publisher','Page','Links to','Status','Found'],wins):empty('No verified backlinks yet','Pitched pages are re-checked every 4 days for 150 days.'))}</div>`;
   const logPanel=`<details class="data-note" open><summary><strong>Last run log</strong></summary><div class="pre-detail ap-log">${e((s.log||[]).join('\n'))}</div></details>`;
   return intro('autopilot','')+status+attention+banner+setup+kpiHtml+tabBar+
-    pane('overview',needsYouStrip(s,h)+`<div class="overview-grid ap-ov">${healthPanel(s,h)}${sendingPanel(s,h)}</div><div class="overview-grid ap-ov-b ap-gap">${workingPanel(s,h)}${panel('Outreach funnel','Every number is a stored, verified record',funnel)}</div><div class="ap-gap ap-stages">${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`)+
+    pane('overview',needsYouStrip(s,h,ny)+`<div class="overview-grid ap-ov">${healthPanel(s,h,ny)}${sendingPanel(s,h)}</div><div class="overview-grid ap-ov-b ap-gap">${workingPanel(s,h)}${panel('Outreach funnel','Every number is a stored, verified record',funnel+exchangeFunnel(s,h))}</div><div class="ap-gap ap-stages">${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`)+
     pane('pages',bestPanel+internalPanel)+
     pane('index',ixPanel+spPanel+giPanel+bgLine)+
-    pane('prospects',`<div class="ap-gap">${privatePanel(h,s)}</div>`+(ui.vault?`<div class="ap-gap">${exchangesPanel(Object.values(ui.vault.prospects||{}),h)}</div><div class="ap-gap">${formsPanel(Object.values(ui.vault.prospects||{}),h)}</div>`:'')+winsPanel)+
+    pane('prospects',`<div class="ap-gap ap-anchor" id="ap-private">${privatePanel(h,s,ny)}</div>`+(vp?`<div class="ap-gap ap-anchor" id="ap-exchanges">${exchangesPanel(vp,h)}</div><div class="ap-gap ap-anchor" id="ap-forms">${formsPanel(vp,h,pasted)}</div>`:'')+winsPanel)+
     pane('sites',sitesPanel)+
     pane('learning',learningPanel(h,s)+logPanel);
 }
@@ -237,28 +240,51 @@ export function needsYou(f){
   const int=x=>Math.max(0,Math.floor(Number(x)||0)),owner=int(f?.needs_owner),waiting=int(f?.awaiting_reply),other=Math.max(0,waiting-owner);
   return {owner,waiting,other,total:owner+other};
 }
-export function needsYouStrip(s,{escapeHTML:e,n}){
-  const ny=needsYou(s?.funnel);if(!ny.total)return '';
+/**
+ * Everything that waits for the owner, from the public summary (counts only): reply decisions and other unanswered replies,
+ * promised return links that are overdue (owed: overdue plus those still due), and contact-form messages to paste.
+ * `local.forms` replaces the public form count with what this browser has not marked as pasted (vault open).
+ */
+export function ownerTasks(s,local={}){
+  const int=x=>Math.max(0,Math.floor(Number(x)||0)),ny=needsYou(s?.funnel),f=s?.funnel||{};
+  const overdue=int(f.exchanges_overdue),owed=Math.max(overdue,int(f.exchanges_owed)),forms=int(local?.forms??s?.outreach?.form_queue?.ready);
+  return {...ny,replies:ny.total,overdue,owed,forms,total:ny.total+overdue+forms};
+}
+/** The watchdog codes the strip shows itself while it is on screen (the health list and the alert count leave them out). */
+export const stripCodes=t=>new Set([...(t?.replies?STRIP_CODES:[]),...(t?.overdue?['exchange_owed']:[]),...(t?.forms?['forms_ready']:[])]);
+export function needsYouStrip(s,{escapeHTML:e,n},tasks=ownerTasks(s)){
+  const t=tasks;if(!t.total)return '';
   const said=code=>(s.attention||[]).find(a=>a?.code===code)?.message||'';
   const mode=s.sender?.reply_mode||'draft';
   const replyNote={draft:'Autopilot writes an answer into Gmail Drafts for each one: check it and press Send.',send:'A plain yes is answered automatically; everything else (conditions, questions, anything unclear) gets a draft for you.',
     off:'Automatic drafts are off ("When a publisher replies: Only alert me"), so answer them in Gmail.'}[mode]||'Answer them in the same Gmail thread.';
   const item=(count,title,note,tone='')=>`<div class="ap-need ${tone}"><b>${n(count)}</b><div><strong>${e(title)}</strong><small>${e(note)}</small></div></div>`;
-  return `<section class="ap-needs" aria-label="Needs you"><div class="ap-needs-head"><span class="ap-needs-dot"></span><strong>Needs you</strong><span>A reply is the only step between a pitch and a link.</span></div><div class="ap-needs-items">${
-    ny.owner?item(ny.owner,ny.owner===1?'publisher said yes with a condition':'publishers said yes with a condition',said('owner_decision_pending')||'A fee, a link back or a guest post: your call. Autopilot never agrees to terms by itself.','urgent'):''}${
-    ny.other?item(ny.other,`${ny.owner?'other ':''}${ny.other===1?'reply waits':'replies wait'} for an answer`,said('replies_waiting')||replyNote):''}</div>
-    <div class="ap-needs-actions"><a class="primary" href="${GMAIL_INBOX}" target="_blank" rel="noopener noreferrer">Open Gmail ↗</a><button class="secondary" type="button" data-ap="needs-you">Show in Prospects →</button></div></section>`;
+  const due=t.owed-t.overdue;
+  const xNote=`${t.overdue===1?'The publisher':'The publishers'} already linked to you. Prospects > Exchanges shows the exact page and the link to add${due>0?`; ${n(due)} more ${due===1?'is':'are'} due within 7 days`:''}.${s?.exchanges?.paused?' New exchange offers pause until they are added.':''}`;
+  const cls=k=>k?'secondary':'primary';
+  const acts=[t.replies?`<a class="primary" href="${GMAIL_INBOX}" target="_blank" rel="noopener noreferrer">Open Gmail ↗</a><button class="secondary" type="button" data-ap="needs-you">Show in Prospects →</button>`:'',
+    t.overdue?`<button class="${cls(t.replies)}" type="button" data-ap="goto-exchanges">Open Exchanges →</button>`:'',
+    t.forms?`<button class="${cls(t.replies||t.overdue)}" type="button" data-ap="goto-forms">Open contact forms →</button>`:''].join('');
+  return `<section class="ap-needs" aria-label="Needs you"><div class="ap-needs-head"><span class="ap-needs-dot"></span><strong>Needs you</strong><span>${t.replies?'A reply is the only step between a pitch and a link.':'Only you can do these: Autopilot never edits your sites or submits a form.'}</span></div><div class="ap-needs-items">${
+    t.owner?item(t.owner,t.owner===1?'publisher said yes with a condition':'publishers said yes with a condition',said('owner_decision_pending')||'A fee, a link back or a guest post: your call. Autopilot never agrees to terms by itself.','urgent'):''}${
+    t.other?item(t.other,`${t.owner?'other ':''}${t.other===1?'reply waits':'replies wait'} for an answer`,said('replies_waiting')||replyNote):''}${
+    t.overdue?item(t.overdue,t.overdue===1?'return link you promised is overdue':'return links you promised are overdue',xNote,'urgent'):''}${
+    t.forms?item(t.forms,t.forms===1?'contact-form message to paste':'contact-form messages to paste','These publishers publish no email address. Copy each prepared message into their form and send it yourself; Autopilot never submits a form.'):''}</div>
+    <div class="ap-needs-actions">${acts}</div></section>`;
 }
 const LEVELS={action:['red','Do this'],warn:['amber','Watch'],info:['blue','Note']};
 // Where each alert is fixed: the Connect form, or an outside page. Only for alerts that ask for something.
 const CONNECT_FIX=new Set(['gmail_send_blocked','gmail_rejected','dataforseo_rejected','verifier_off','verifier_rejected','verifier_permission','hold_with_verified','sender_identity_incomplete','templates_only','mailbox_rebuild_pending']);
+// Alerts fixed on this page: the button opens that section of the Prospects tab.
+const GOTO_FIX={exchange_owed:['goto-exchanges','Open Exchanges'],exchange_due:['goto-exchanges','Open Exchanges']};
 const LINK_FIX={owner_decision_pending:[GMAIL_INBOX,'Open Gmail'],replies_waiting:[GMAIL_INBOX,'Open Gmail'],dataforseo_funds:['https://app.dataforseo.com/','DataForSEO billing'],dataforseo_low:['https://app.dataforseo.com/','DataForSEO billing']};
 /** Self-diagnosis (summary.attention) by level, each with its fix, plus whether the last cycle's stages ran and the vault size. */
-export function healthPanel(s,h){
-  const {escapeHTML:e,n,panel}=h,strip=needsYou(s?.funnel).total>0;
-  const list=(s.attention||[]).filter(a=>a&&!(strip&&STRIP_CODES.has(a.code)));
+export function healthPanel(s,h,tasks=ownerTasks(s)){
+  const {escapeHTML:e,n,panel}=h,shown=stripCodes(tasks);
+  const list=(s.attention||[]).filter(a=>a&&!shown.has(a.code));
   const lvl=a=>LEVELS[a.level]?a.level:'info',count={action:0,warn:0,info:0};for(const a of list)count[lvl(a)]++;
   const fix=a=>lvl(a)==='info'?'':CONNECT_FIX.has(a.code)?'<button class="outline-btn ap-fix" type="button" data-ap="open-connect">⚙ Open Connect</button>'
+    :GOTO_FIX[a.code]?`<button class="outline-btn ap-fix" type="button" data-ap="${GOTO_FIX[a.code][0]}">${e(GOTO_FIX[a.code][1])} →</button>`
     :LINK_FIX[a.code]?`<a class="outline-btn ap-fix" href="${LINK_FIX[a.code][0]}" target="_blank" rel="noopener noreferrer">${e(LINK_FIX[a.code][1])} ↗</a>`:'';
   const rows=list.map(a=>{const [tone,label]=LEVELS[lvl(a)];return `<li class="ap-att ap-att-${tone}"><span class="tag ${tone}">${label}</span><div><strong>${e(a.message)}</strong><small>${e(a.fix)}</small>${fix(a)}</div></li>`}).join('');
   const st=Object.values(s.stages||{}),ran=st.filter(x=>x?.ok===true).length,failed=st.filter(x=>x?.ok===false).length,skipped=st.filter(x=>x?.ok===null).length;
@@ -266,6 +292,15 @@ export function healthPanel(s,h){
   const ok=!count.action&&!count.warn?`<div class="ap-health-ok"><span class="status-dot"></span><span><strong>Engine healthy.</strong> Nothing to fix from the last cycle${count.info?'; notes below':''}.</span></div>`:'';
   const counts=count.action||count.warn?`<p class="ap-note">${[count.action&&`<b>${n(count.action)}</b> to do`,count.warn&&`<b>${n(count.warn)}</b> to watch`,count.info&&`${n(count.info)} note${count.info===1?'':'s'}`].filter(Boolean).join(' · ')}</p>`:'';
   return panel('Engine health',sub,`<div class="panel-pad ap-health">${ok}${counts}${rows?`<ul class="ap-atts">${rows}</ul>`:''}${s.tuning?.max_queries?`<p class="ap-note">Self-tuning: up to ${n(s.tuning.max_queries)} searches next cycle.</p>`:''}${vaultLine(s.capabilities,h)}</div>`);
+}
+/** The funnel card's 3-way exchange counts (public): offered, accepted, owed by the owner (overdue in red) and fulfilled. */
+export function exchangeFunnel(s,{escapeHTML:e,n}){
+  const f=s?.funnel||{};if(f.exchanges_offered==null)return '';
+  const int=x=>Math.max(0,Math.floor(Number(x)||0)),over=int(f.exchanges_overdue),owed=Math.max(over,int(f.exchanges_owed)),sites=int(s?.exchanges?.by_partner_site_count);
+  const items=[['Offered',f.exchanges_offered,''],['Accepted',f.exchanges_accepted,''],[over?`Owed by you · ${n(over)} overdue`:'Owed by you',owed,over?'bad':owed?'warn':''],['Fulfilled',f.exchanges_fulfilled,'good']];
+  const note=[s?.sender?.link_exchange==='off'?'New offers are off (setting: Offer a 3-way link exchange).':s?.exchanges?.paused?'New offers are paused until the overdue return links are added.':'Pitches offer a return link from a related page on another of your sites, never from the site they link to.',
+    sites?`${n(sites)} of your sites ${sites===1?'gives or owes':'give or owe'} return links.`:''].filter(Boolean).join(' ');
+  return `<div class="panel-pad ap-xfunnel"><h3 class="ap-sub">3-way link exchanges</h3><div class="ap-split ap-split-4">${items.map(([l,x,t])=>`<div class="ap-split-item ${t}"><strong>${n(int(x))}</strong><span>${e(l)}</span></div>`).join('')}</div><p class="ap-note">${e(note)}</p></div>`;
 }
 const shortDay=d=>{const t=new Date(String(d)+'T12:00:00Z');return Number.isNaN(t.getTime())?String(d||''):t.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'})};
 const LEDGER_COLS=[['checks','Checks'],['valid','Valid'],['invalid','Invalid'],['catch_all','Catch-all'],['unknown','Unknown'],['screen_only','Screen only'],['emails_sent','Sent']];
@@ -426,45 +461,83 @@ function connectPanel(h,s=null){
 }
 
 // 3-way link exchanges (vault only, decrypted in this browser): what the owner promised, where, and by when.
-const XCH_ORDER=['their_link_live','accepted','offered','fulfilled'];
-const XCH_WORDS={their_link_live:'Their link is live: add yours',accepted:'Agreed: waiting for their link',offered:'Offered, no answer yet',fulfilled:'Done: both links verified'};
+const XCH_OPEN=['their_link_live','accepted','offered'],XCH_CLOSED=['fulfilled','declined','lapsed'],XCH_ORDER=[...XCH_OPEN,...XCH_CLOSED];
+const XCH_WORDS={their_link_live:'Their link is live: add yours',accepted:'Agreed: waiting for their link',offered:'Offered, no answer yet',fulfilled:'Done: both links verified',declined:'Declined',lapsed:'Lapsed'};
+const LAPSE_WORDS={no_reply:'no answer within 60 days',no_link:'no link within 120 days of their answer',bounced:'the email bounced'};
 const lateOwed=(x,now)=>x?.status==='their_link_live'&&Date.parse(x.owed_by)<now;
-/** Open and fulfilled exchanges: overdue return links first, then those due, agreed and offered; fulfilled last. */
-export function exchangeView(all,now=Date.now()){
-  const when=x=>String(x.owed_by||x.accepted_at||x.offered_at||'');
-  return (all||[]).filter(p=>XCH_ORDER.includes(p?.exchange?.status))
-    .sort((a,b)=>(+lateOwed(b.exchange,now)-+lateOwed(a.exchange,now))||XCH_ORDER.indexOf(a.exchange.status)-XCH_ORDER.indexOf(b.exchange.status)||when(a.exchange).localeCompare(when(b.exchange)));
+const httpUrl=u=>/^https?:\/\/\S+$/i.test(String(u||'').trim())?String(u).trim():'';
+/** A natural anchor for the return link: their article's title without a site-name suffix ("Title | Site"), else the domain. */
+export function naturalAnchor(x,p={}){
+  const t=String(x?.their_title||p?.title||'').replace(/\s+/g,' ').trim(),head=t.split(/\s+[|–—·]\s+/)[0].trim();
+  return (head.length>=12?head:t)||String(p?.domain||'their article');
 }
-/** Prospects > Exchanges: which publisher (B), which page of ours links back (C), the page they link to (A), and the due date. */
+/** The exact HTML the owner pastes on the partner page (HTML-escaped as markup, so it is safe to paste as is). */
+export const returnLinkHtml=(url,anchor)=>`<a href="${String(url).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'%3C').replace(/>/g,'%3E')}">${String(anchor).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</a>`;
+/** Every exchange: overdue return links first, then those due, agreed and offered; then fulfilled, declined and lapsed (newest first). */
+export function exchangeView(all,now=Date.now()){
+  const when=x=>String(x.owed_by||x.accepted_at||x.offered_at||''),ended=x=>String(x.fulfilled_at||x.declined_at||x.lapsed_at||x.offered_at||'');
+  const rank=x=>lateOwed(x,now)?-1:XCH_ORDER.indexOf(x.status);
+  return (all||[]).filter(p=>XCH_ORDER.includes(p?.exchange?.status))
+    .sort((a,b)=>rank(a.exchange)-rank(b.exchange)||(XCH_CLOSED.includes(a.exchange.status)?ended(b.exchange).localeCompare(ended(a.exchange)):when(a.exchange).localeCompare(when(b.exchange))));
+}
+const copyBtn=(id,label)=>`<button class="outline-btn ap-copy" type="button" data-ap="copy" data-copy="${id}">${label}</button>`;
+/**
+ * Prospects > Exchanges: which publisher (B) and article, which page of ours links back (C), the page they link to (A),
+ * and the status. A live link of theirs gets the exact "Add this link" instruction with the HTML to paste; overdue ones
+ * come first, in red. Fulfilled, declined and lapsed exchanges sit collapsed below.
+ */
 export function exchangesPanel(all,h,now=Date.now()){
   const {escapeHTML:e,external,niceTime,panel,table,empty}=h,list=exchangeView(all,now);
-  const owed=list.filter(p=>p.exchange.status==='their_link_live').length,late=list.filter(p=>lateOwed(p.exchange,now)).length;
-  const rows=list.map(p=>{const x=p.exchange,overdue=lateOwed(x,now),tone=overdue?'red':x.status==='their_link_live'?'amber':x.status==='fulfilled'?'green':'blue';
-    const note=x.status==='their_link_live'?`${overdue?'Overdue since':'Due by'} ${niceTime(x.owed_by)}`:x.status==='fulfilled'?`Verified ${niceTime(x.fulfilled_at)}`
-      :x.status==='accepted'?`Agreed ${niceTime(x.accepted_at)}`:`Offered ${niceTime(x.offered_at)}${x.via==='form'?' on their contact form':''}`;
-    return `<tr><td><strong>${e(p.domain)}</strong>${external(x.their_url||p.page_url,(x.their_title||p.title||x.their_url||'').slice(0,80))}</td><td>${external(x.partner_page,(x.partner_title||x.partner_page||'').slice(0,80))}<small>on ${e(x.partner_site)}: a contextual link to their article, in the text</small></td><td>${external(p.asset_url,(p.asset_title||p.asset_url||'').slice(0,60))}<small>${e(p.site)}</small></td><td><span class="tag ${tone}">${e(XCH_WORDS[x.status])}</span><small>${e(note)}</small></td></tr>`});
+  const open=list.filter(p=>XCH_OPEN.includes(p.exchange.status)),closed=list.filter(p=>XCH_CLOSED.includes(p.exchange.status));
+  const owed=open.filter(p=>p.exchange.status==='their_link_live').length,late=open.filter(p=>lateOwed(p.exchange,now)).length;
+  const HEAD=['Publisher and their article','Your page that links back','Their link goes to','Status'];
+  const row=(p,i)=>{const x=p.exchange,overdue=lateOwed(x,now),live=x.status==='their_link_live';
+    const tone=overdue?'red':live?'amber':x.status==='fulfilled'?'green':XCH_CLOSED.includes(x.status)?'':'blue';
+    const note=live?`${overdue?'Overdue since':'Due by'} ${niceTime(x.owed_by)}`:x.status==='fulfilled'?`Verified ${niceTime(x.fulfilled_at)}`
+      :x.status==='accepted'?`Agreed ${niceTime(x.accepted_at)}`:x.status==='declined'?`Declined ${niceTime(x.declined_at)}`
+      :x.status==='lapsed'?`Lapsed ${niceTime(x.lapsed_at)}${LAPSE_WORDS[x.lapse_reason]?`: ${LAPSE_WORDS[x.lapse_reason]}`:''}`
+      :`Offered ${niceTime(x.offered_at)}${x.via==='form'?' on their contact form':''}`;
+    const main=`<tr class="ap-xrow${overdue?' ap-late':live?' ap-owed':''}"><td data-th="Publisher (B)"><strong>${e(p.domain)}</strong><small>${external(x.their_url||p.page_url,(x.their_title||p.title||x.their_url||'').slice(0,80))}</small></td><td data-th="Your page that links back (C)">${external(x.partner_page,(x.partner_title||x.partner_page||'').slice(0,80))}<small>on ${e(x.partner_site)}: a contextual link to their article, in the text</small></td><td data-th="Their link goes to (A)">${external(p.asset_url,(p.asset_title||p.asset_url||'').slice(0,60))}<small>${e(p.site)}</small></td><td data-th="Status"><span class="tag ${tone}">${e(XCH_WORDS[x.status])}</span><small>${e(note)}</small></td></tr>`;
+    if(!live)return main;
+    const url=httpUrl(x.their_url),anchor=naturalAnchor(x,p),id=`apx-${i}`;
+    return main+`<tr class="ap-xdo${overdue?' ap-late':' ap-owed'}"><td colspan="4"><div class="ap-addlink"><strong>Add this link${overdue?' now: it is overdue':''}</strong>
+      <p>On ${external(x.partner_page,x.partner_page)}, add a link to ${url?external(url,url):'their article (open it from the first column)'} inside the body text, with a natural anchor such as <b>“${e(anchor)}”</b>.</p>
+      ${url?`<div class="ap-snippet"><code id="${id}">${e(returnLinkHtml(url,anchor))}</code>${copyBtn(id,'Copy HTML')}<span class="ap-hidden-copy" id="${id}-u">${e(url)}</span>${copyBtn(id+'-u','Copy URL')}</div>`:''}
+      <small>Autopilot finds the link on the next crawl and marks this exchange done.</small></div></td></tr>`};
+  const f=closed.filter(p=>p.exchange.status==='fulfilled').length,gone=closed.length-f;
+  const closedHtml=closed.length?`<details class="ap-closed"><summary>${[f&&`${f} fulfilled`,gone&&`${gone} declined or lapsed`].filter(Boolean).join(' · ')}</summary><div class="ap-stack">${table(HEAD,closed.map((p,i)=>row(p,open.length+i)))}</div></details>`:'';
+  const body=open.length?`<div class="ap-stack">${table(HEAD,open.map(row))}</div>`:closed.length?`<p class="ap-note ap-pad">No open exchanges right now.</p>`:'';
   return panel('Exchanges',owed?`${owed} return link${owed===1?'':'s'} to add${late?` (${late} overdue)`:''}. Autopilot verifies each one from the next crawl. Decrypted locally.`:'3-way exchanges: they link to one of your sites, you link back from a related page on another of your sites. Decrypted locally.',
-    rows.length?table(['Publisher and their article','Your page that links back','Their link goes to','Status'],rows):empty('No link exchanges yet','Pitches offer one when a genuinely related page on another of your sites can link back.'));
+    list.length?body+closedHtml:empty('No link exchanges yet','Pitches offer one when a genuinely related page on another of your sites can link back.'));
 }
 /** Contact-form messages waiting to be pasted, newest first (Autopilot never submits a form). */
 export function formQueueView(all){
   return (all||[]).filter(p=>p?.status==='form_ready'&&p.form_message?.body).sort((a,b)=>String(b.form_message.at||'').localeCompare(String(a.form_message.at||'')));
 }
-export function formsPanel(all,h){
-  const {escapeHTML:e,external,niceTime,panel,table,empty}=h,list=formQueueView(all);
-  const rows=list.map(p=>{const m=p.form_message;
-    return `<tr><td><strong>${e(p.domain)}</strong>${external(p.page_url,(p.title||p.page_url||'').slice(0,80))}<small>Prepared ${e(niceTime(m.at))}${p.exchange?.via==='form'&&p.exchange.status==='offered'?` · offers a link from ${e(p.exchange.partner_site)}`:''}</small></td><td>${external(m.form_url,'Open contact form')}</td><td><small>Subject</small><input class="ap-form-copy" type="text" readonly value="${e(m.subject)}"><small>Message</small><textarea class="ap-form-copy" rows="8" readonly>${e(m.body)}</textarea></td></tr>`});
-  return panel('Contact-form messages',`${list.length} ready to paste: these publishers publish no email address. Autopilot never submits a form, and expires a message after 21 days. Decrypted locally.`,
-    rows.length?table(['Publisher','Form','Subject and message'],rows):empty('No contact-form messages waiting','Up to the daily setting are prepared each day for publishers that only have a contact form.'));
+// Which prepared messages the owner marked as pasted, in this browser only (the engine cannot see a form being sent).
+const PASTED=local('linkforge-forms-pasted',{});
+/** Prospects > Contact forms: the publisher, their form (new tab), the subject and message to copy, and when it was prepared. Copy only. */
+export function formsPanel(all,h,pasted={}){
+  const {escapeHTML:e,external,niceTime,panel,table,empty}=h,list=formQueueView(all),done=p=>!!pasted?.[p.id];
+  const row=(p,i)=>{const m=p.form_message,id=`apf-${i}`,form=httpUrl(m.form_url),was=done(p);
+    return `<tr class="${was?'ap-pasted':''}"><td data-th="Publisher"><strong>${e(p.domain)}</strong><small>${external(p.page_url,(p.title||p.page_url||'').slice(0,80))}</small><small>Prepared ${e(niceTime(m.at))}${p.exchange?.via==='form'&&p.exchange.status==='offered'?` · offers a link from ${e(p.exchange.partner_site)}`:''}</small></td><td data-th="Form">${form?external(form,'Open contact form'):'—'}<small>Opens their site in a new tab. Paste, check and send it there yourself.</small><button class="outline-btn ap-mark" type="button" data-ap="form-pasted" data-id="${e(p.id)}">${was?'Undo: not pasted yet':'Mark as pasted'}</button></td><td data-th="Subject and message"><div class="ap-copyhead"><span>Subject</span>${copyBtn(id+'-s','Copy subject')}</div><input id="${id}-s" class="ap-form-copy" type="text" readonly value="${e(m.subject)}"><div class="ap-copyhead"><span>Message</span>${copyBtn(id+'-b','Copy message')}</div><textarea id="${id}-b" class="ap-form-copy" rows="8" readonly>${e(m.body)}</textarea></td></tr>`};
+  const HEAD=['Publisher','Form','Subject and message'],todo=list.filter(p=>!done(p)),marked=list.filter(done);
+  const markedHtml=marked.length?`<details class="ap-closed"><summary>${marked.length} marked as pasted in this browser</summary><div class="ap-stack">${table(HEAD,marked.map((p,i)=>row(p,todo.length+i)))}</div></details>`:'';
+  return panel('Contact forms',`${list.length} ready to paste${marked.length?` (${marked.length} marked as pasted here)`:''}: these publishers publish no email address. Autopilot never submits a form, and expires a message after 21 days. Decrypted locally.`,
+    list.length?(todo.length?`<div class="ap-stack">${table(HEAD,todo.map(row))}</div>`:'<p class="ap-note ap-pad">Every prepared message is marked as pasted in this browser.</p>')+markedHtml
+      :empty('No contact-form messages waiting','Up to the daily setting are prepared each day for publishers that only have a contact form.'));
 }
+/** Prepared messages not yet marked as pasted in this browser (the vault is open), for the Needs-you count. */
+export const formsLeft=(all,pasted={})=>formQueueView(all).filter(p=>!pasted?.[p.id]).length;
 
-function privatePanel(h,s=null){
+function privatePanel(h,s=null,tasks=ownerTasks(s)){
   const {escapeHTML:e,external,n,niceTime,statusTag,panel,table,empty}=h;
   const vline=vaultLine(s?.capabilities,h),vaultInfo=vline?`<div class="ap-inset">${vline}</div>`:'';
   if(!ui.vault){
     const canReset=!!ui.diag?.secrets;
+    const waiting=[tasks.owed&&`${n(tasks.owed)} return link${tasks.owed===1?'':'s'} to add${tasks.overdue?` (${n(tasks.overdue)} overdue)`:''}`,tasks.forms&&`${n(tasks.forms)} contact-form message${tasks.forms===1?'':'s'} to paste`].filter(Boolean);
     return panel('Prospects & conversations','Encrypted in the public repo · unlocked only in your browser with the vault key',
-    `${vaultInfo}<div class="ap-inset ap-vault-help"><p>The <b>vault key</b> is not your GitHub token. It is the separate <code>LINKFORGE_DATA_KEY</code> created during setup (saved on the setup computer in <code>.linkforge/autopilot-unlock-key.txt</code>). Don't have it? Create a new one: this browser and GitHub get the same new key automatically.</p></div>
+    `${vaultInfo}${waiting.length?`<div class="ap-inset ap-unlock-why"><b>Unlock to see:</b> ${e(waiting.join(' and '))}, with the exact pages and text.</div>`:''}<div class="ap-inset ap-vault-help"><p>The <b>vault key</b> is not your GitHub token. It is the separate <code>LINKFORGE_DATA_KEY</code> created during setup (saved on the setup computer in <code>.linkforge/autopilot-unlock-key.txt</code>). Don't have it? Create a new one: this browser and GitHub get the same new key automatically.</p></div>
     <form class="inline-form ap-inset" id="ap-unlock"><input id="ap-key" type="password" autocomplete="off" placeholder="Paste vault key (LINKFORGE_DATA_KEY)" minlength="16" required><button class="primary" type="submit">Unlock</button>
       <button class="outline-btn" type="button" data-ap="newvault" ${canReset&&!ui.busy?'':'disabled'} title="${canReset?'':'Needs a working GitHub token (step 1 above)'}">${ui.busy==='newvault'?'Creating…':'Create a new vault key'}</button></form>${ui.error?`<div class="alert-warning ap-inset">${e(ui.error)}</div>`:''}`);
   }
@@ -477,6 +550,24 @@ function privatePanel(h,s=null){
     `${vaultInfo}<div class="table-toolbar"><select class="selector" id="ap-filter">${opts}</select><button class="outline-btn" id="ap-lock" type="button">Lock</button><button class="outline-btn" type="button" data-ap="copykey">Copy vault key</button></div>${rows.length?table(['Publisher','Their page','Contact','Our asset','Status'],rows):empty('Nothing in this view','Change the filter to see more prospects.')}`);
 }
 
+/** This browser's "pasted" marks, kept only for messages still waiting to be pasted. */
+function prunePasted(all){
+  const marks=PASTED.get()||{},live=new Set(formQueueView(all).map(p=>p.id)),kept=Object.fromEntries(Object.entries(marks).filter(([id])=>live.has(id)));
+  if(Object.keys(kept).length!==Object.keys(marks).length)PASTED.set(kept);
+  return kept;
+}
+/** Copy a field's text: the Clipboard API, else a selection and execCommand (older or non-secure contexts). */
+async function copyText(el){
+  const text=el?('value' in el?el.value:el.textContent):'';if(!text)return false;
+  try{await navigator.clipboard.writeText(text);return true}catch{}
+  try{if(typeof el.select==='function')el.select();else{const r=document.createRange();r.selectNodeContents(el);const sel=getSelection();sel.removeAllRanges();sel.addRange(r)}return document.execCommand('copy')}catch{return false}
+}
+/** Open a Prospects section; with the vault locked, the unlock form (and the section opens once it is unlocked). */
+function jumpTo(id){
+  showApTab('prospects');const el=document.getElementById(id);
+  if(el){ui.jump='';el.scrollIntoView({behavior:'smooth',block:'start'});return}
+  ui.jump=id;document.getElementById('ap-private')?.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('ap-key')?.focus({preventScroll:true});
+}
 async function act(kind,fn,ok){
   ui.busy=kind;ui.err='';ui.msg='';await reloadView();
   try{await fn();ui.msg=ok}catch(err){ui.err=err.message}
@@ -496,6 +587,10 @@ export function bindAutopilot(reload){
     if(a==='open-connect'){ui.showConnect=true;await reload();document.querySelector('.ap-connect')?.scrollIntoView({behavior:'smooth',block:'start'});return}
     if(a==='goto-overview'){showApTab('overview');window.scrollTo({top:0,behavior:'smooth'});return}
     if(a==='needs-you'){ui.filter='needs_you';showApTab('prospects');await reload();window.scrollTo({top:0});return}
+    if(a==='goto-exchanges'||a==='goto-forms')return jumpTo(a==='goto-forms'?'ap-forms':'ap-exchanges');
+    if(a==='copy'){const ok=await copyText(document.getElementById(b.dataset.copy));b.dataset.label??=b.textContent;b.textContent=ok?'Copied ✓':'Copy blocked: select the text';b.classList.toggle('ap-copied',ok);
+      clearTimeout(b._t);b._t=setTimeout(()=>{b.textContent=b.dataset.label;b.classList.remove('ap-copied')},1800);return}
+    if(a==='form-pasted'){const marks={...(PASTED.get()||{})},id=b.dataset.id;if(marks[id])delete marks[id];else marks[id]=new Date().toISOString();PASTED.set(marks);return reload()}
     if(a==='forget'){control.token.set('');ui.configured=null;ui.diag=null;return reload()}
     if(a==='recheck'){ui.msg='';ui.err='';ui.showConnect=true;ui.forceDiag=true;return reload()}
     if(a==='copykey'){try{await navigator.clipboard.writeText(store.get());ui.msg='Vault key copied. Paste it on your other devices to unlock there.'}catch{ui.err='Clipboard blocked by the browser.'}return reload()}
@@ -543,6 +638,7 @@ export function bindAutopilot(reload){
     const v=document.getElementById('ap-key').value.trim();
     if(/^(github_pat_|ghp_|gho_)/.test(v)){ui.error='That is your GitHub token, not the vault key. Put the token in step 1 of "Connect Autopilot" above. If you don\'t have the vault key, click "Create a new vault key".';return reload()}
     store.set(v);ui.vault=null;ui.error='';await reload();
+    if(ui.jump&&ui.vault)jumpTo(ui.jump);
   });
   document.addEventListener('change',async ev=>{if(ev.target.id==='ap-filter'){ui.filter=ev.target.value;await reload()}});
   document.addEventListener('click',async ev=>{if(ev.target.id==='ap-lock'){store.set('');ui.vault=null;ui.error='';await reload()}});
