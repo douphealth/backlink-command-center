@@ -9,6 +9,7 @@
  * Everything published from here is counts only: no addresses, no prospect names or domains, no reply text.
  */
 import {sendWindowOpen} from './outreach.mjs';
+import {EXCHANGE_PAUSE_AT} from './exchange.mjs';
 
 export const TUNING={minQueries:8,maxQueries:40,step:4,start:24};
 const DAY=864e5,MiB=1048576;
@@ -245,6 +246,19 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
     add('warn','replies_waiting',`${plural(waiting,'publisher reply is','publisher replies are')} waiting for an answer; ${why}${drafted&&drafted<waiting?` (${drafted} already drafted)`:''}.`,
       'Answer in the same Gmail thread (drafts Autopilot wrote are in Gmail Drafts), or see the dashboard\'s Prospects tab. A reply is the only step between a pitch and a link.');
   }
+  // 3-way exchanges: a publisher who linked to us is owed the return link the owner promised (counts only; which publisher
+  // and which of our pages live in the vault). Offers pause by themselves while EXCHANGE_PAUSE_AT or more are overdue.
+  const xOverdue=Number(funnel.exchanges_overdue)||0,xOwed=Number(funnel.exchanges_owed)||0;
+  if(xOverdue>0)add('action','exchange_owed',`${plural(xOverdue,'return link you promised is','return links you promised are')} overdue; the ${xOverdue===1?'publisher':'publishers'} already linked to you. Open Prospects > Exchanges to see exactly where to add each one.`,
+    'Unlock the vault on the dashboard, open Prospects > Exchanges and add each link as shown there: a contextual link to their article from the page of your other site that is named. Autopilot finds it on the next crawl and closes this alert.');
+  else if(xOwed>0)add('warn','exchange_due',`${plural(xOwed,'publisher has','publishers have')} linked to you in a link exchange; the return link you promised is due within 7 days of their link.`,
+    'Unlock the vault on the dashboard, open Prospects > Exchanges and add each link from the page shown there. Autopilot verifies it from the crawl by itself.');
+  if(xOverdue>=EXCHANGE_PAUSE_AT&&sender?.link_exchange!=='off')add('info','exchanges_paused',`New link-exchange offers are paused while ${plural(xOverdue,'promised return link is','promised return links are')} overdue; pitches still go out, asking for the link only.`,
+    `Add the overdue return links (Prospects > Exchanges). Offers resume by themselves once fewer than ${EXCHANGE_PAUSE_AT} are overdue.`);
+  // Contact-form-only publishers: messages prepared for the owner to paste (forms.mjs). Autopilot never submits a form.
+  const forms=Number(outreach.form_queue?.ready)||0;
+  if(forms>0)add('info','forms_ready',`${plural(forms,'contact-form message is','contact-form messages are')} prepared for you to paste (these publishers publish no email address).`,
+    'Optional: unlock the vault on the dashboard, where each message shows the publisher\'s contact-form link and the text to paste. Autopilot never submits a form itself.');
   if(noPitchSites.length)add('warn','no_pitchable_page',`${noPitchSites.length} site${noPitchSites.length>1?'s have':' has'} no page worth pitching (${noPitchSites.slice(0,6).join(', ')}), so nothing is pitched for ${noPitchSites.length>1?'them':'it'}.`,
     'Editors link to tools, original data and in-depth guides. List that site\'s best such page under "assets" in functions/_lib/sites.js, or publish one.');
   const bal=c.dataforseo?.balance_usd,ext=spend.external||{};

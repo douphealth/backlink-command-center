@@ -742,24 +742,32 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
  }
  log(`outreach: ${stats.sent} sent, ${stats.followups} follow-ups, ${stats.drafted} drafts, ${stats.verification_held} held for verification${stats.followups_retired?`, ${stats.followups_retired} follow-ups retired (address no longer verifiable)`:''}${stats.send_blocked?`; sending stopped (${stats.send_blocked})`:''}`);return stats;
 }
-/** Existing link checking is unchanged; attribution hardening remains in PR 25. */
-export async function checkLinks({state,ourDomains,fetchImpl=fetch,max=60,deadline=Infinity,log=()=>{}}){
+/**
+ * Won and lost links from the live page (attribution hardening remains in PR 25). 3-way exchanges (exchange.mjs): a link to
+ * the pitched site A on a page with an open offer starts our return-link obligation in the same cycle (owed within
+ * `fulfilDays`), and its removal before our link is up cancels it. Offers made on a contact form (no email in the history)
+ * are checked too.
+ */
+export async function checkLinks({state,ourDomains,fetchImpl=fetch,max=60,deadline=Infinity,fulfilDays=7,log=()=>{}}){
  const stats={checked:0,won:0,lost:0,unverifiable:0};
  const due=Object.values(state.prospects||{}).filter(p=>{
   if(p.status==='won')return ageDays(p.won?.checked_at)>14;
-  const first=(p.history||[]).find(h=>h.type==='initial');
+  const first=(p.history||[]).find(h=>h.type==='initial')||(p.exchange?.via==='form'&&p.exchange.offered_at?{at:p.exchange.offered_at}:null);
   return first&&ageDays(first.at)<150&&!['declined','bounced'].includes(p.status)&&(!p.next_link_check||p.next_link_check<=NOW());
  }).slice(0,max);
+ const xch=due.some(p=>p.exchange)?await import('./exchange.mjs'):null;
  for(const p of due){if(Date.now()>deadline)break;
   const res=await fetchPage(p.page_url,{fetchImpl,timeout:12000,maxBytes:800000});stats.checked++;p.next_link_check=new Date(Date.now()+4*DAY).toISOString();
   // A page that does not answer 200 cannot show whether the link is there: recorded as unverifiable, never read as won or lost.
   p.link_check={status:res.status||0,at:NOW(),...(res.error?{error:String(res.error).slice(0,40)}:{})};
   if(res.status!==200){stats.unverifiable++;continue}
-  const hit=links(res.body,res.url).find(l=>ourDomains.some(d=>sameSite(hostOf(l.url),d)));
-  if(hit){if(p.status!=='won'){stats.won++;p.history.push({type:'won',at:NOW(),url:hit.url})}p.status='won';p.won={target:hit.url,anchor:hit.anchor,rel:hit.rel||'follow',found_at:p.won?.found_at||NOW(),checked_at:NOW()}}
-  else if(p.status==='won'){stats.lost++;p.status='lost';p.history.push({type:'lost',at:NOW()})}
+  const all=links(res.body,res.url),hit=all.find(l=>ourDomains.some(d=>sameSite(hostOf(l.url),d)));
+  if(hit){if(p.status!=='won'){stats.won++;(p.history??=[]).push({type:'won',at:NOW(),url:hit.url})}p.status='won';p.won={target:hit.url,anchor:hit.anchor,rel:hit.rel||'follow',found_at:p.won?.found_at||NOW(),checked_at:NOW()}}
+  else if(p.status==='won'){stats.lost++;p.status='lost';(p.history??=[]).push({type:'lost',at:NOW()})}
+  // Only a link to A itself counts for an exchange (a link to C would make it a direct swap).
+  if(xch&&p.exchange){if(p.site&&all.some(l=>sameSite(hostOf(l.url),p.site))){if(xch.noteTheirLink(p,{fulfilDays}))stats.exchange_links=(stats.exchange_links||0)+1}else xch.noteTheirLinkLost(p)}
  }
- log(`link checks: ${stats.checked} pages, ${stats.won} new links won, ${stats.lost} lost${stats.unverifiable?`, ${stats.unverifiable} pages did not load (unverifiable this time)`:''}`);return stats;
+ log(`link checks: ${stats.checked} pages, ${stats.won} new links won, ${stats.lost} lost${stats.exchange_links?`, ${stats.exchange_links} exchange partners linked (return links now owed)`:''}${stats.unverifiable?`, ${stats.unverifiable} pages did not load (unverifiable this time)`:''}`);return stats;
 }
 /** A second guard at the real SMTP boundary prevents missing-proof sends. */
 export function gmailTransport(env){
