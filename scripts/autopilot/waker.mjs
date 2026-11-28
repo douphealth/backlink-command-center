@@ -14,9 +14,11 @@ import {fileURLToPath} from 'node:url';
 
 // keepaliveHours: GitHub dropped every scheduled slot for 10+ hours on 2026-11-25, so the waker is now the
 // primary scheduler: the next cycle always starts within this many hours of the last one (cron is the backup).
-// sundayHours: Saturday's free verification credits can never back a send (a proof lasts 24 h), but Sunday's can verify
-// inboxes whose Monday window opens within 20 h. Pre-verify runs every cycle, so a few Sunday cycles from 11:00 UTC
-// (EU Monday 07:00 is then 20 h away; the 19:00 cycle reaches the US Monday window) spend them.
+// Saturday mornings (recipient-local 09-13: EU 08-12, US 14-18 UTC) are send windows unless the owner turned them off, so
+// Saturday cycles come from next_send_at like any weekday's; Friday's and Saturday's credits back those sends.
+// sundayHours: Sunday never sends, but its free credits can verify inboxes whose Monday window opens within 20 h.
+// Pre-verify runs every cycle, so a few Sunday cycles from 11:00 UTC (EU Monday 07:00 is then 20 h away; the 19:00
+// cycle reaches the US Monday window) spend them.
 export const WAKER={minGapHours:2,maxWaitHours:5.5,recentHours:1.5,keepaliveHours:5,sundayHours:[11,15,19]};
 
 /** The first Sunday verification slot (UTC) at or after `from` on the same Sunday, or null. */
@@ -29,8 +31,10 @@ export function sundaySlot(from,hours=WAKER.sundayHours){
 /**
  * When should the next cycle start? At the next recipient send window if pitches are queued (but at least
  * minGapHours after the last cycle), and never later than keepaliveHours after it, so prospecting, reply
- * reading and link checks keep running even when GitHub skips the schedule. On Sundays with inboxes queued, the next
- * Sunday verification slot is used instead of the keep-alive when it comes first.
+ * reading and link checks keep running even when GitHub skips the schedule. The window comes from the cycle's own
+ * next_send_at, so a Saturday-morning window is planned like a weekday one (and not at all once the owner turns
+ * Saturday sending off). On Sundays with inboxes queued, the next Sunday verification slot is used instead of the
+ * keep-alive when it comes first.
  */
 export function planWake(summary,now=Date.now(),{minGapHours=WAKER.minGapHours,keepaliveHours=WAKER.keepaliveHours,after=null,sundayHours=WAKER.sundayHours}={}){
   if(!summary?.generated_at)return {wake:false,reason:'no published summary'};

@@ -231,6 +231,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   const cfg=loadConfig(env,argv),started=Date.now(),deadline=started+cfg.minutes*60e3;
   const P={...PATHS,...paths}; // summary, vault and crawl-cache files (tests run whole cycles against a temporary folder)
   env=verifierDefaults(withDashboardSettings(env)); // the recipient verifier reads its opt-in and budget from here
+  (await import('./outreach.mjs')).setSendPolicy({saturday:cfg.outreach.saturday}); // Saturday-morning send windows follow the owner's setting, for every stage
   // Logs are published in the public summary: never let an address through.
   const logs=[],log=m=>{const line=String(m).replace(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi,'[email]');logs.push(`${new Date().toISOString().slice(11,19)} ${line}`);console.log(line)};
   const stages={};

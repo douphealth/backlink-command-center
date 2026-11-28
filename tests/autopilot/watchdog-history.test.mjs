@@ -65,7 +65,9 @@ test('a cycle is "in window" when a queued inbox is inside its business hours',(
   const state={prospects:{a:{status:'ready',email:'e@a.co.uk',domain:'a.co.uk'},b:{status:'sent',email:'e@b.com',domain:'b.com'}}};
   assert.equal(inSendWindow(state,at('2026-11-25T10:00:00Z')),true);
   assert.equal(inSendWindow(state,at('2026-11-25T20:00:00Z')),false,'outside UK hours; the US prospect is not queued');
-  assert.equal(inSendWindow(state,at('2026-11-28T10:00:00Z')),false,'Saturday');
+  assert.equal(inSendWindow(state,at('2026-11-28T10:00:00Z')),true,'Saturday morning in the UK');
+  assert.equal(inSendWindow(state,at('2026-11-28T13:00:00Z')),false,'Saturday afternoon');
+  assert.equal(inSendWindow(state,at('2026-11-29T10:00:00Z')),false,'Sunday');
 });
 test('the workflow alerts the owner after every real cycle from its own least-privilege job, without failing the cycle',()=>{
   const y=readFileSync(new URL('../../.github/workflows/autopilot.yml',import.meta.url),'utf8');

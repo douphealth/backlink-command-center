@@ -312,7 +312,7 @@ test('requalify drops poor-fit queued prospects and cancels follow-ups to bad in
   assert.equal(r.checked,4);
 });
 
-test('send windows follow the recipient region and skip weekends',async()=>{
+test('send windows follow the recipient region and skip Sundays and Saturday afternoons',async()=>{
   const {sendWindowOpen}=await import('../../scripts/autopilot/outreach.mjs');
   const at=(iso)=>new Date(iso);
   assert.equal(sendWindowOpen('blog.com',at('2026-10-27T15:00:00Z')),true,'US business hours (Tue)');
@@ -320,7 +320,8 @@ test('send windows follow the recipient region and skip weekends',async()=>{
   assert.equal(sendWindowOpen('blog.co.uk',at('2026-10-27T10:00:00Z')),true);
   assert.equal(sendWindowOpen('blog.co.uk',at('2026-10-27T19:00:00Z')),false);
   assert.equal(sendWindowOpen('blog.com.au',at('2026-10-27T23:00:00Z')),true,'window wraps midnight UTC');
-  assert.equal(sendWindowOpen('blog.com',at('2026-10-31T15:00:00Z')),false,'Saturday');
+  assert.equal(sendWindowOpen('blog.com',at('2026-10-31T19:00:00Z')),false,'Saturday afternoon (only Saturday mornings send)');
+  assert.equal(sendWindowOpen('blog.com',at('2026-11-01T15:00:00Z')),false,'Sunday');
   const prospects={w:{id:'w',site:'mice.com',domain:'night.com',email:'editor@night.com',status:'ready',score:90,asset_url:'https://mice.com/a',page_url:'https://night.com/r',title:'R',history:[],qv:2}};
   const stats=await runOutreach({state:{prospects},assets:[],sites:[{domain:'mice.com',topic:'mice'}],writer:{write:async()=>({subject:'s',body:'b'})},mailer:{send:async()=>{throw Error('must wait')}},
     config:{mode:'send',sendWindow:true,now:()=>at('2026-10-27T03:00:00Z'),fromAddress:'me@gmail.com',senderName:'A',dailyLimit:5,followupDays:6,gapMs:()=>0}});
@@ -393,7 +394,7 @@ test('DataForSEO partial results are kept, not thrown away',async()=>{
 
 test('outreach status says when the next pitches can go out',async()=>{
   const {nextSendWindow,outreachStatus}=await import('../../scripts/autopilot/outreach.mjs');
-  const sat=new Date('2026-10-24T09:00:00Z');
+  const sat=new Date('2026-10-24T19:00:00Z'); // Saturday evening: the Saturday-morning windows have closed
   assert.equal(nextSendWindow('blog.com',sat).toISOString(),'2026-10-26T13:00:00.000Z','US: Monday 13:00 UTC');
   assert.equal(nextSendWindow('blog.co.uk',sat).toISOString(),'2026-10-26T07:00:00.000Z','UK: Monday 07:00 UTC');
   const tue=new Date('2026-10-27T15:30:00Z');assert.equal(nextSendWindow('blog.com',tue).getTime(),tue.getTime(),'already open');
