@@ -1,7 +1,7 @@
 {
  "schema": "linkforge-autopilot/1",
- "generated_at": "2026-11-27T21:12:55.475Z",
- "duration_s": 41,
+ "generated_at": "2026-11-28T02:14:14.151Z",
+ "duration_s": 58,
  "dry_run": false,
  "schedule": "Hourly check starts a cycle when the last one is 5+ hours old (about 4 a day); sends only in recipients' business hours",
  "capabilities": {
@@ -31,7 +31,7 @@
    "key": true,
    "enabled": true,
    "daily_limit": 24,
-   "used_today": 24,
+   "used_today": 0,
    "balance": {
     "provider": "verifalia",
     "free_credits": 1,
@@ -130,7 +130,7 @@
   },
   "crawl": {
    "ok": true,
-   "ms": 10004,
+   "ms": 31908,
    "result": {
     "sites": 21,
     "pages": 2809
@@ -138,7 +138,7 @@
   },
   "demand": {
    "ok": true,
-   "ms": 1,
+   "ms": 2,
    "result": {
     "gsc_pages": 0,
     "dataforseo_pages": 159
@@ -156,7 +156,7 @@
    "ok": true,
    "result": {
     "ranked": 555,
-    "internal_suggestions": 624,
+    "internal_suggestions": 598,
     "pitchable": 97
    }
   },
@@ -182,16 +182,16 @@
   },
   "prospects": {
    "ok": true,
-   "ms": 20355,
+   "ms": 20046,
    "result": {
     "queries": 0,
     "mention_queries": 0,
     "serp_results": 0,
-    "candidates": 11,
-    "qualified": 1,
+    "candidates": 17,
+    "qualified": 4,
     "mentions": 0,
     "already_linked": 0,
-    "rejected": 10,
+    "rejected": 13,
     "with_email": 1,
     "contact_form": 0,
     "broken_links": 0,
@@ -199,11 +199,14 @@
     "linkgap_calls": 0,
     "linkgap_candidates": 0,
     "neighbor_pages": 12,
-    "neighbor_candidates": 11,
+    "neighbor_candidates": 17,
     "filtered": {
-     "already_evaluated": 11,
-     "competitor": 3,
-     "platform_or_giant": 2
+     "already_evaluated": 14,
+     "forum_or_ugc": 1,
+     "platform_or_giant": 3,
+     "duplicate_this_run": 1,
+     "competitor": 2,
+     "gov_or_edu": 1
     },
     "deferred": 0
    }
@@ -214,7 +217,7 @@
   },
   "broken_links": {
    "ok": true,
-   "ms": 3,
+   "ms": 4,
    "result": {
     "checked": 0,
     "found": 0
@@ -222,9 +225,9 @@
   },
   "replies": {
    "ok": true,
-   "ms": 1337,
+   "ms": 1961,
    "result": {
-    "scanned": 5,
+    "scanned": 7,
     "replies": 0,
     "positive": 0,
     "negative": 0,
@@ -234,32 +237,32 @@
   },
   "sent_check": {
    "ok": true,
-   "ms": 732,
+   "ms": 1192,
    "result": {
-    "scanned": 146,
+    "scanned": 134,
     "restored": 0,
     "duplicates": 0
    }
   },
   "screen": {
    "ok": true,
-   "ms": 6473,
+   "ms": 4,
    "result": {
-    "screened": 11,
-    "kept": 6,
+    "screened": 6,
+    "kept": 0,
     "retired": 0,
     "address_updated": 0
    }
   },
   "outreach": {
    "ok": true,
-   "ms": 219,
+   "ms": 45,
    "result": {
     "followups": 0,
     "sent": 0,
     "drafted": 0,
     "skipped": 0,
-    "deferred": 69,
+    "deferred": 70,
     "cap": 12,
     "verification_held": 0
    },
@@ -280,7 +283,7 @@
   },
   "link_checks": {
    "ok": true,
-   "ms": 4,
+   "ms": 3,
    "result": {
     "checked": 0,
     "won": 0,
@@ -291,9 +294,9 @@
  "totals": {
   "sites": 21,
   "pages_crawled": 2809,
-  "urls_discovered": 7445,
+  "urls_discovered": 7739,
   "promotable": 555,
-  "internal_suggestions": 624,
+  "internal_suggestions": 598,
   "promoting_now": 49
  },
  "spend": {
@@ -311,9 +314,9 @@
  },
  "outreach": {
   "mode": "send",
-  "ready": 67,
+  "ready": 68,
   "verified_ready": 6,
-  "pending_verification": 61,
+  "pending_verification": 62,
   "holds": {
    "mailbox_unknown": 16,
    "mailbox_accept_all": 18,
@@ -327,12 +330,12 @@
   "reply_health": "ok"
  },
  "funnel": {
-  "prospects_evaluated": 5694,
-  "qualified": 924,
-  "ready": 67,
+  "prospects_evaluated": 5711,
+  "qualified": 928,
+  "ready": 68,
   "broken_link_ready": 4,
   "contact_form_only": 171,
-  "no_contact": 322,
+  "no_contact": 325,
   "contacted": 102,
   "replied": 3,
   "positive": 0,
@@ -940,6 +943,23 @@
    "declined": 0,
    "bounced": 6,
    "spend_usd": 0
+  },
+  {
+   "date": "2026-11-28",
+   "prospects_evaluated": 5711,
+   "qualified": 928,
+   "ready": 68,
+   "broken_link_ready": 4,
+   "contact_form_only": 171,
+   "no_contact": 325,
+   "contacted": 102,
+   "replied": 3,
+   "positive": 0,
+   "won": 0,
+   "existing_links": 6,
+   "declined": 0,
+   "bounced": 6,
+   "spend_usd": 0
   }
  ],
  "learning": {
@@ -1072,9 +1092,9 @@
    },
    {
     "footprint": "neighbor",
-    "queries": 210,
-    "ready": 11,
-    "rate": 0.056
+    "queries": 222,
+    "ready": 12,
+    "rate": 0.058
    },
    {
     "footprint": "resources",
@@ -1706,7 +1726,7 @@
   {
    "domain": "tenderatlas.shop",
    "pages": 300,
-   "discovered": 4082,
+   "discovered": 4376,
    "sitemaps": 1,
    "eligible": 28,
    "top": "https://tenderatlas.shop/"
@@ -2365,12 +2385,12 @@
    "demand": null,
    "metrics": null,
    "internal_inlinks": 5,
-   "words": 3514,
+   "words": 3661,
    "interactive": true,
    "modified": "2026-11-15T07:33:08+00:00",
    "reasons": [
     "Has an interactive tool/quiz — earns links naturally",
-    "In-depth (3,514 words)",
+    "In-depth (3,661 words)",
     "6 data tables",
     "Recently updated"
    ],
@@ -4122,6 +4142,16 @@
   },
   {
    "site": "gearuptogrow.com",
+   "from": "https://gearuptogrow.com/productivity/time-blocking-guide/",
+   "from_title": "Time Blocking Template: Build a Weekly Schedule",
+   "to": "https://gearuptogrow.com/productivity/focus-at-work-when-interrupted/",
+   "to_title": "How to Focus at Work When You Keep Getting Interrupted",
+   "anchor": "focus work keep",
+   "relevance": 3,
+   "from_strength": 62
+  },
+  {
+   "site": "gearuptogrow.com",
    "from": "https://gearuptogrow.com/productivity/free-time-blocking-template/",
    "from_title": "Free Time Blocking Template: Daily, Weekly, Deep Work",
    "to": "https://gearuptogrow.com/productivity/focus-at-work-when-interrupted/",
@@ -4129,16 +4159,6 @@
    "anchor": "focus work keep",
    "relevance": 3,
    "from_strength": 60
-  },
-  {
-   "site": "gearuptogrow.com",
-   "from": "https://gearuptogrow.com/productivity/deep-work/",
-   "from_title": "Deep Work: Practical Focus System & Guide | Gear Up to Grow",
-   "to": "https://gearuptogrow.com/productivity/focus-at-work-when-interrupted/",
-   "to_title": "How to Focus at Work When You Keep Getting Interrupted",
-   "anchor": "focus work keep",
-   "relevance": 3,
-   "from_strength": 57
   },
   {
    "site": "affiliatemarketingforsuccess.com",
@@ -6066,19 +6086,19 @@
    {
     "site": "tenderatlas.shop",
     "checked": 300,
-    "healthy": 228,
-    "problems": 72,
-    "critical": 1,
+    "healthy": 255,
+    "problems": 45,
+    "critical": 0,
     "review": 0,
     "not_found": 0,
     "server_error": 0,
-    "noindex": 1,
+    "noindex": 0,
     "canonical_mismatch": 0,
     "redirect": 0,
     "unreachable": 0,
     "bot_blocked": 0,
     "missing_canonical": 0,
-    "thin": 71
+    "thin": 45
    },
    {
     "site": "signalroom.store",
@@ -6255,15 +6275,6 @@
    {
     "site": "efficientgptprompts.com",
     "url": "https://efficientgptprompts.com/shop",
-    "issue": "noindex",
-    "label": "noindex but listed in sitemap",
-    "fix": "If the page should rank, remove the noindex (SEO plugin / X-Robots-Tag). If not, drop it from the sitemap.",
-    "severity": 3,
-    "status": 200
-   },
-   {
-    "site": "tenderatlas.shop",
-    "url": "https://tenderatlas.shop/countries/nl/cpv/34000000",
     "issue": "noindex",
     "label": "noindex but listed in sitemap",
     "fix": "If the page should rank, remove the noindex (SEO plugin / X-Robots-Tag). If not, drop it from the sitemap.",
@@ -6940,10 +6951,10 @@
     "words": 244
    }
   ],
-  "total_issues": 147,
-  "blocking": 2,
+  "total_issues": 120,
+  "blocking": 1,
   "review": 1,
-  "thin": 144,
+  "thin": 118,
   "note": "Covers the sitemap URLs crawled this cycle (up to 300 per site, newest first); up to 12 examples are listed per site and problem."
  },
  "search_performance": null,
@@ -6951,7 +6962,7 @@
  "bing": null,
  "tuning": {
   "max_queries": 20,
-  "updated_at": "2026-11-27T21:12:46.575Z"
+  "updated_at": "2026-11-28T02:14:10.733Z"
  },
  "wins": [
   {
@@ -7022,44 +7033,44 @@
   }
  ],
  "log": [
-  "21:12:15 connection dataforseo: connected",
-  "21:12:15 connection gmail: connected",
-  "21:12:16 crawl plantastichaven.com: 155/155 urls, fetched 1, 304 0, reused 154",
-  "21:12:20 crawl gearuptogrow.com: 103/103 urls, fetched 0, 304 0, reused 103",
-  "21:12:22 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 0, 304 0, reused 113",
-  "21:12:22 crawl mysticaldigits.com: 300/468 urls, fetched 0, 304 0, reused 300",
-  "21:12:22 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
-  "21:12:22 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
-  "21:12:23 crawl frenchyfab.com: 153/153 urls, fetched 0, 304 0, reused 153",
-  "21:12:23 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
-  "21:12:23 crawl tenderatlas.shop: 300/4082 urls, fetched 0, 304 0, reused 300",
-  "21:12:23 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
-  "21:12:23 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
-  "21:12:23 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
-  "21:12:24 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
-  "21:12:24 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
-  "21:12:24 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
-  "21:12:24 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
-  "21:12:24 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
-  "21:12:25 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
-  "21:12:25 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
-  "21:12:25 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
-  "21:12:25 crawl gearuptofit.com: 300/525 urls, fetched 0, 304 0, reused 300",
-  "21:12:26 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
-  "21:12:26 - search_performance: skipped (Search Console not connected)",
-  "21:12:26 pitch policy: 97 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
-  "21:12:26 indexation: 2 sitemap URLs cannot be indexed, 1 need a look, 144 are thin (147 in all)",
-  "21:12:32 link neighbourhood (free): 12 qualified pages mined, 11 recommended sites to evaluate",
-  "21:12:46 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 11 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 11 candidates, 1 qualified (0 unlinked mentions), 1 with email, 0 with a dead link we can replace, 0 already linking",
-  "21:12:46 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
-  "21:12:46 self-tuning: next cycle runs up to 20 searches",
-  "21:12:46 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
-  "21:12:47 replies: 5 scanned, 0 replies, 0 failures, 0 delays; ok",
-  "21:12:48 sent-folder check: 146 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
-  "21:12:55 queue screening (free, nothing sent): 11 checked, 6 sendable, 0 retired, 0 switched to a better published address",
-  "21:12:55 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
-  "21:12:55 pre-verify (nothing sent): 0 top inboxes checked, 0 verified, 0 held",
-  "21:12:55 link checks: 0 pages, 0 new links won, 0 lost"
+  "02:13:18 connection dataforseo: connected",
+  "02:13:18 connection gmail: connected",
+  "02:13:19 crawl gearuptofit.com: 300/525 urls, fetched 0, 304 0, reused 300",
+  "02:13:22 crawl plantastichaven.com: 155/155 urls, fetched 10, 304 0, reused 145",
+  "02:13:22 crawl gearuptogrow.com: 103/103 urls, fetched 1, 304 0, reused 102",
+  "02:13:26 crawl mysticaldigits.com: 300/468 urls, fetched 10, 304 0, reused 290",
+  "02:13:28 crawl frenchyfab.com: 153/153 urls, fetched 2, 304 0, reused 151",
+  "02:13:28 crawl openclaw-skillshub.com: 97/97 urls, fetched 0, 304 0, reused 97",
+  "02:13:29 crawl imagealchemy.app: 28/28 urls, fetched 0, 304 0, reused 28",
+  "02:13:30 crawl affiliatemarketingforsuccess.com: 113/113 urls, fetched 4, 304 0, reused 109",
+  "02:13:30 crawl micegoneguide.com: 41/41 urls, fetched 0, 304 0, reused 41",
+  "02:13:30 crawl signalroom.store: 142/142 urls, fetched 0, 304 0, reused 142",
+  "02:13:30 crawl stainsolver.shop: 67/67 urls, fetched 0, 304 0, reused 67",
+  "02:13:31 crawl checkthetag.shop: 125/125 urls, fetched 0, 304 0, reused 125",
+  "02:13:31 crawl borderwise.online: 300/574 urls, fetched 0, 304 0, reused 300",
+  "02:13:31 crawl solarpayback.shop: 44/44 urls, fetched 0, 304 0, reused 44",
+  "02:13:31 crawl stopthat.shop: 84/84 urls, fetched 0, 304 0, reused 84",
+  "02:13:31 crawl buyonce.site: 27/27 urls, fetched 0, 304 0, reused 27",
+  "02:13:32 crawl cabinvolt.shop: 48/48 urls, fetched 0, 304 0, reused 48",
+  "02:13:32 crawl bordercover.shop: 71/71 urls, fetched 0, 304 0, reused 71",
+  "02:13:32 crawl fixorrefund.shop: 11/11 urls, fetched 0, 304 0, reused 11",
+  "02:13:34 crawl efficientgptprompts.com: 300/487 urls, fetched 0, 304 0, reused 300",
+  "02:13:50 crawl tenderatlas.shop: 300/4376 urls, fetched 89, 304 0, reused 211",
+  "02:13:50 - index_monitor: skipped (Search Console not connected (GSC_SERVICE_ACCOUNT_JSON))",
+  "02:13:50 - search_performance: skipped (Search Console not connected)",
+  "02:13:50 pitch policy: 97 of 555 ranked pages are worth pitching (tools, original methods, in-depth guides, flagships)",
+  "02:13:50 indexation: 1 sitemap URLs cannot be indexed, 1 need a look, 118 are thin (120 in all)",
+  "02:13:53 link neighbourhood (free): 12 qualified pages mined, 17 recommended sites to evaluate",
+  "02:14:10 prospects: 0 from the saved queue, 0 saved for next run; 0 competitor link-gap pulls (0 candidates); 17 from the link neighbourhood; 0 queries (0 brand-mention), 0 Google-wrapped results resolved, 0 unresolvable; 17 candidates, 4 qualified (0 unlinked mentions), 1 with email, 0 with a dead link we can replace, 0 already linking",
+  "02:14:10 - bing_submit: skipped (Bing Webmaster API key not set (BING_WEBMASTER_API_KEY))",
+  "02:14:10 self-tuning: next cycle runs up to 20 searches",
+  "02:14:10 broken links: 0 queued pages scanned, 0 with a dead link our page can replace",
+  "02:14:12 replies: 7 scanned, 0 replies, 0 failures, 0 delays; ok",
+  "02:14:13 sent-folder check: 134 sent emails read, 0 unrecorded pitches restored to the record, 0 recipients found with a duplicate email (no further email to them)",
+  "02:14:13 queue screening (free, nothing sent): 6 checked, 0 sendable, 0 retired, 0 switched to a better published address",
+  "02:14:13 outreach: 0 sent, 0 follow-ups, 0 drafts, 0 held for verification",
+  "02:14:13 pre-verify (nothing sent): 0 top inboxes checked, 0 verified, 0 held",
+  "02:14:14 link checks: 0 pages, 0 new links won, 0 lost"
  ],
  "attention": [
   {
