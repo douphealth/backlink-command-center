@@ -40,11 +40,11 @@ test('F8: weekend screening never buys paid credits, even with VERIFALIA_ALLOW_P
   assert.ok(await f.v.creditsLeft({screen:false})>0,'paid credits allowed for send checks');
   const r=await f.v.verify(p,{prescreen:true});
   assert.equal(r.ok,false);assert.equal(f.posts(),0,'no validation job submitted');
-  // Through preverify on a Saturday night: screens stop at once.
+  // Through preverify on a Saturday evening (the Saturday-morning windows have closed): screens stop at once.
   const state={prospects:{a:{id:'a',status:'ready',email:'editor@pub.example',domain:'pub.example',page_url:'https://pub.example/r/',qv:2,score:60,history:[]}}};
   const g=verifier({free:0});
   const s=await preverify({state,mailer:{authorizeRecipient:async()=>({ok:false}),verifierCredits:async o=>g.v.creditsLeft(o),prescreenRecipient:async q=>g.v.verify(q,{prescreen:true})},
-    max:5,now:()=>new Date('2026-11-28T01:00:00Z')});
+    max:5,now:()=>new Date('2026-11-28T19:00:00Z')});
   assert.equal(g.posts(),0);assert.equal(s.out_of_credits,true);
   // With free credits that would expire, the screen runs and uses them.
   const h=verifier({free:5});await h.v.verify(p,{prescreen:true});assert.equal(h.posts(),1);assert.equal(h.state.verifier_balance.free_credits,4);

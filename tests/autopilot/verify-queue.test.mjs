@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {preverify,creditValue,gmailTransport,applyProof} from '../../scripts/autopilot/outreach.mjs';
+import {preverify,creditValue,gmailTransport,applyProof,setSendPolicy} from '../../scripts/autopilot/outreach.mjs';
 import {RecipientVerifier,verifaliaVerdict,usableVerification} from '../../scripts/autopilot/recipient-policy.mjs';
 
 const iso=ms=>new Date(ms).toISOString();
@@ -68,14 +68,14 @@ test('a follow-up due later today keeps a credit reserved',async()=>{
 });
 
 test('weekend: leftover credits screen the queue, and a screen never becomes a send proof',async()=>{
-  const sat=Date.parse('2026-11-28T10:00:00Z');
+  const sat=Date.parse('2026-11-28T19:00:00Z'); // Saturday evening: the Saturday-morning windows have closed, Monday is beyond the horizon
   const state={prospects:{a:mk('a',{score:40}),b:mk('b'),c:mk('c'),d:mk('d'),e:mk('e'),fu:mk('fu',{status:'sent',history:[{type:'initial',at:iso(sat-8*864e5),mode:'send',message_id:'<lf-a-b@sender.example>'}]})}};
   const results={a:{ok:false,reason:'screen_only',screened:'valid',email:'editor@a.com'},b:{ok:false,reason:'screen_only',screened:'invalid',detail:'mailbox_invalid'},
     c:{ok:false,reason:'screen_only',screened:'catch_all',detail:'mailbox_accept_all'},d:{ok:false,reason:'screen_only',screened:'unknown',detail:'mailbox_verification_unavailable'},
     e:{ok:false,reason:'jurisdiction_consent_required',detail:'jurisdiction_consent_required'}};
   const {asked,mailer}=recorder({screen:p=>results[p.id],credits:o=>o.screen?10:10});
   const r=await preverify({state,mailer,max:10,now:()=>new Date(sat)});
-  assert.ok(asked.every(x=>x.startsWith('screen:')),'no send-proof check on a Saturday');assert.ok(!asked.includes('screen:fu'),'follow-ups are not screened');
+  assert.ok(asked.every(x=>x.startsWith('screen:')),'no send-proof check once Saturday\'s windows have closed');assert.ok(!asked.includes('screen:fu'),'follow-ups are not screened');
   const {a,b,c,d,e}=state.prospects;
   assert.equal(a.prescreen.result,'valid');assert.equal(a.status,'ready');assert.equal(a.recipient_proof,undefined);assert.equal(a.contact_quality,undefined);
   assert.equal(b.status,'contact_unverifiable');assert.equal(c.status,'contact_unverifiable');assert.equal(d.prescreen,undefined,'no answer: screened again later');
@@ -93,11 +93,19 @@ test('weekend: leftover credits screen the queue, and a screen never becomes a s
 
 test('screening runs only when the credits would otherwise expire',async()=>{
   const state=()=>({prospects:{a:mk('a'),uk:mk('uk',{domain:'uk.co.uk',email:'editor@uk.co.uk'})}});
-  for(const [when,expect] of [['2026-11-27T22:00:00Z',['screen:a','screen:uk']],['2026-11-29T09:00:00Z',[]],['2026-11-29T12:00:00Z',['uk']]]){
+  // Friday night verifies for Saturday morning (EU 08:00, US 14:00 UTC); Saturday 13:00 verifies for the US window only;
+  // Saturday evening screens; Sunday morning saves credits for Monday; Sunday noon verifies for Monday 07:00.
+  for(const [when,expect] of [['2026-11-27T22:00:00Z',['a','uk']],['2026-11-28T13:00:00Z',['a']],['2026-11-28T19:00:00Z',['screen:a','screen:uk']],['2026-11-29T09:00:00Z',[]],['2026-11-29T12:00:00Z',['uk']]]){
     const {asked,mailer}=recorder({screen:()=>({ok:false,reason:'screen_only',screened:'valid'})});
     await preverify({state:state(),mailer,max:5,now:()=>new Date(when)});
-    assert.deepEqual(asked.sort(),expect,when); // Friday night screens; Sunday morning saves credits for Monday; Sunday noon verifies for Monday 07:00
+    assert.deepEqual(asked.sort(),expect,when);
   }
+  // Saturday sending off: Friday night screens again, as before.
+  try{setSendPolicy({saturday:false});
+    const {asked,mailer}=recorder({screen:()=>({ok:false,reason:'screen_only',screened:'valid'})});
+    await preverify({state:state(),mailer,max:5,now:()=>new Date('2026-11-27T22:00:00Z')});
+    assert.deepEqual(asked.sort(),['screen:a','screen:uk']);
+  }finally{setSendPolicy({saturday:true})}
 });
 
 test('a real weekend screen with the verifier: stored as screen-only, refused by every send gate, re-bought before a send',async()=>{

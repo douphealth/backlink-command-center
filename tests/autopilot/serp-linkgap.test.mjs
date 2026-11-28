@@ -161,7 +161,7 @@ test('pre-verification only spends credits on inboxes whose send window opens wi
   const {preverify}=await import('../../scripts/autopilot/outreach.mjs');
   const asked=[];const mailer={authorizeRecipient:async p=>{asked.push(p.id);return {ok:false,reason:'x',detail:'mailbox_unknown'}}};
   const state={prospects:{us:{id:'us',status:'ready',email:'e@us-blog.com',domain:'us-blog.com',qv:2,history:[]},uk:{id:'uk',status:'ready',email:'e@uk-blog.co.uk',domain:'uk-blog.co.uk',qv:2,history:[]}}};
-  await preverify({state,mailer,max:5,now:()=>new Date('2026-11-27T22:00:00Z')}); // Friday night: next windows are Monday
+  await preverify({state,mailer,max:5,now:()=>new Date('2026-11-28T19:00:00Z')}); // Saturday evening: next windows are Monday
   assert.deepEqual(asked,[],'a proof bought now would expire before Monday');
   await preverify({state,mailer,max:5,now:()=>new Date('2026-11-25T03:00:00Z')}); // Wednesday night: windows open in 4 h (EU) and 10 h (US)
   assert.deepEqual(asked.sort(),['uk','us']);

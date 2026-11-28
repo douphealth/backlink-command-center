@@ -10,15 +10,27 @@ import {RecipientVerifier,isSuppressed,usableVerification,samePublisher,normaliz
 import {checkDead} from './broken.mjs';
 import {normUrl as normUrlKey} from './util.mjs';
 export const PER_ASSET_DAILY=2;
+// Recipient regions: [TLD pattern, weekday window as UTC hours [from,to), UTC offset in hours]. The offset decides the
+// recipient's own weekday, and places the Saturday-morning window in their local time.
 const REGIONS=[
  [/\.(uk|ie|de|fr|es|it|nl|be|pt|gr|se|no|dk|fi|pl|cz|at|ch|eu|za|ro|hu|sk|si|hr|bg|lt|lv|ee|lu|cy|mt)$/,[7,16],1],
  [/\.(au|nz)$/,[21,6],10],[/\.in$/,[3,12],5],[/\.(jp|sg|my|ph|hk|kr|cn|id|th|vn|tw)$/,[0,9],8]
 ];
 const DEFAULT_REGION=[null,[13,21],-5];
+/** Saturday morning in the recipient's local time, [from,to) hours: EU 08-12 UTC, US (default) 14-18 UTC. Sunday never sends. */
+export const SATURDAY_HOURS=[9,13];
+const SEND_POLICY={saturday:true};
+/**
+ * Which days send (run.mjs sets it once per cycle from the owner's SATURDAY_SENDS setting; tests reset it).
+ * Saturday mornings are on unless `saturday` is exactly false. Returns the policy now in force.
+ */
+export function setSendPolicy({saturday=true}={}){SEND_POLICY.saturday=saturday!==false;return {...SEND_POLICY}}
+export const sendPolicy=()=>({...SEND_POLICY});
 export function sendWindowOpen(domain,now=new Date()){
  const [,[from,to],offset]=REGIONS.find(([re])=>re.test(domain))||DEFAULT_REGION;
- const h=now.getUTCHours(),d=new Date(now.getTime()+offset*36e5).getUTCDay();
- return d!==0&&d!==6&&(from<to?h>=from&&h<to:h>=from||h<to);
+ const h=now.getUTCHours(),local=new Date(now.getTime()+offset*36e5),d=local.getUTCDay();
+ if(d===6)return SEND_POLICY.saturday&&local.getUTCHours()>=SATURDAY_HOURS[0]&&local.getUTCHours()<SATURDAY_HOURS[1];
+ return d!==0&&(from<to?h>=from&&h<to:h>=from||h<to);
 }
 export function nextSendWindow(domain,from=new Date()){
  if(sendWindowOpen(domain,from))return new Date(from);
@@ -464,9 +476,14 @@ const utcDay=ms=>new Date(ms).toISOString().slice(0,10);
  * once fresh proofs plus reserved follow-ups fill each sending day's remaining capacity (cap minus sent that day): any
  * further proof would expire before it could be used.
  *
- * When nothing can be sent before today's credits reset (no window opens within the horizon of the reset, typically
- * Friday night and Saturday), the leftover credits screen the best queued inboxes instead: "invalid" and catch-all retire
- * the inbox, "valid" only raises its rank (p.prescreen); a screen is never a send proof.
+ * Saturday mornings are send windows (setSendPolicy), so Friday's and Saturday's credits back Saturday sends like any
+ * weekday's; Sunday never sends, and its credits back Monday's windows from the moment those are within the horizon.
+ *
+ * When nothing can be sent before today's credits reset (no queued inbox's window opens within the horizon of any moment
+ * before the reset: Saturday afternoon and evening once the last Saturday window has closed, or Friday night and all of
+ * Saturday with Saturday sending off), the leftover credits screen the best queued inboxes instead: "invalid" and
+ * catch-all retire the inbox, "valid" only raises its rank (p.prescreen); a screen is never a send proof. Sunday's credits
+ * are never screened away: Monday's windows come within the horizon later that day.
  */
 export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new Date(),deadline=Infinity,followups=true,followupDays=6,cap=Infinity,drafts=false,sentIndex=null,log=()=>{}}){
  const stats={checked:0,verified:0,held:0},extra={followups_checked:0,followups_verified:0,reserved_for_followups:0,capacity_full:0,catch_all_retired:0,screened:0,prescreen_valid:0,prescreen_retired:0};
@@ -509,8 +526,10 @@ export async function preverify({state,mailer,max=5,withinHours=20,now=()=>new D
  const ranked=async list=>{await classifyQueue(state,mailer,list.map(x=>x.p));
   return list.map(x=>({...x,v:creditValue(state,x.p,linkLikelihood(x.p,{assets:learned}),nowMs)})).sort((a,b)=>b.v-a.v)};
  const resetAt=Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),t.getUTCDate()+1);
+ // Today's credits can still back a send if a queued inbox's window comes within the horizon before they reset.
+ const backable=x=>x.w-resetAt<horizon;
  let n=0;
- if([...fus,...fresh].some(x=>x.w-resetAt<horizon)){
+ if([...fus,...fresh].some(backable)){
   // Credits are the scarce resource: follow-ups first, then where (chance to verify) x (chance of a link) is highest.
   const due=fus.filter(x=>inH(x)&&!proofUntil(x.p)&&!waiting(x.p)).sort((a,b)=>a.w-b.w);
   const queue=[...due.map(x=>({...x,followup:true})),...await ranked(fresh.filter(x=>inH(x)&&!proofUntil(x.p)&&!waiting(x.p)))];
