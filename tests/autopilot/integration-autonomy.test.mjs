@@ -72,7 +72,7 @@ test('two cycles: a v1 vault is re-sealed as v2, a positive then a neutral reply
     assert.deepEqual({drafted:c1.summary.stages.reply_drafts.result.drafted,sent:c1.summary.stages.reply_drafts.result.sent},{drafted:1,sent:0});
     assert.equal(g1.drafts.length,1);assert.equal(g1.sent.length,0,'nothing is sent in draft mode');
     const d1=readDraft(g1.drafts[0]);
-    assert.match(d1.head,/In-Reply-To: <m1@pubsite\.example>/);assert.match(d1.head,/Subject: Re: Mouse Proofing Planner for your resources page/);assert.match(d1.head,/List-Unsubscribe: <mailto:me@owned\.example\?subject=unsubscribe%20lf-/);
+    assert.match(d1.head,/In-Reply-To: <m1@pubsite\.example>/);assert.match(d1.head,/Subject: Re: Mouse Proofing Planner for your resources page/);assert.doesNotMatch(d1.head,/List-Unsubscribe/,'answers carry no List-Unsubscribe header unless LIST_UNSUBSCRIBE_HEADER=on');
     assert.ok(d1.body.includes(ASSET),'the answer gives the exact page');assert.match(d1.body,/^Hi Jane,/);assert.match(d1.body,/\nAlex\r?\n/);
     assert.equal(p1.reply_draft.mode,'draft');
     // Pruned: the old rejected record is gone, its domain stays deduplicated and now has an expiry entry.

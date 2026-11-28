@@ -166,23 +166,27 @@ export function parseFetch(raw){
   out.push({uid:part.match(/\bUID\s+(\d+)/)?.[1]||'',messageId:h('Message-ID'),from:from.toLowerCase(),subject:h('Subject'),date:h('Date'),inReplyTo:h('In-Reply-To'),references:h('References'),autoSubmitted:h('Auto-Submitted'),body:decodeReplyBody(body,h('Content-Transfer-Encoding'),h('Content-Type'))});
  }return out;
 }
-// Opt-outs, in their own words (quoted text is never read). Every pitch closes with "If it's not a fit, just say so and I
-// won't follow up." (pitch.mjs OPT_OUT; earlier pitches had a P.S. saying 'reply "no"'), so "no thanks", "not interested",
-// "not for us", "we'll pass" and a reply that starts with no / nope / stop / unsubscribe (greeting and signature aside:
-// "No\n\nSent from my iPhone") are opt-outs too.
+// Opt-outs, in their own words (quoted text is never read). Every pitch and follow-up closes with one plain sentence on how
+// to stop all email ("If it's not a fit, just say so and I won't follow up.", pitch.mjs OPT_OUT; earlier pitches had a P.S.
+// saying 'reply "no"'), so "no thanks", "not interested", "not for us", "we'll pass", a reply that starts with no / nope /
+// stop / unsubscribe (greeting and signature aside: "No\n\nSent from my iPhone") or one that says it is not a fit is an opt-out.
 const NEGATIVE=/\b(?:unsubscribe|remove (?:me|us|my (?:e-?mail|address)|our (?:e-?mail|address|site|blog)|this (?:e-?mail|address))|take (?:me|us|my (?:e-?mail|address)|our (?:e-?mail|address)) off|opt (?:me|us) out|opt[- ]?out (?:of|from) (?:your|these|this|further|future|all)\b|(?:please|want to|like to|wish to) opt[- ]?out|stop (?:e-?mailing|contacting|messaging|writing|sending)|(?:do not|don't|dont|never) (?:e-?mail|contact|message|write to|send (?:me|us|any|further|more|another|these|this|them|e-?mails?))|no (?:more|further) (?:e-?mails|messages)|not interested|no,? thanks\b|no,? thank you|please stop|spam|not for us|(?:we|i)(?:'ll| will) pass|pass on this|not (?:a |the right |a good )?fit for us)\b/i;
 const LEAD_NO=/^(?:no|nope|nah|stop|unsubscribe)\b(?:[\s,]*(?:thanks|thank you|thx)\b)?\s*(?:[.!,;:\u2013\u2014-]|$)/i;
+// "Not a fit" / "isn't a fit for us" / "doesn't fit": the answer that closing sentence invites. Our own conditional wording
+// ("if it's not a fit", e.g. in a copy quoted without markers) is not their answer.
+const NOT_A_FIT=/(?<!\bif\s+(?:it'?s|it\s+is|this\s+is|that'?s|this'?s)\s+)\bnot\s+(?:really\s+|quite\s+)?(?:a\s+|the\s+right\s+|a\s+good\s+)?fit\b|(?<!\bif\s+(?:it|this|that)\s+)\bisn'?t\s+(?:really\s+|quite\s+)?(?:a\s+|the\s+right\s+|a\s+good\s+)?fit\b|\b(?:doesn'?t|does\s+not|don'?t|do\s+not)\s+(?:really\s+)?fit\s+(?:us|our|my|in|with|here|the)\b/i;
 // An explicit refusal to link ("we have never linked to commercial sites", "we don't add links"). Not one that names a time ("until", "yet").
 const DECLINE=/\b(?:we|i)(?:'ve|'d|'m|'re| have| do| did| will| would| are| am)?\s*(?:never|don't|do not|doesn't|does not|won't|will not|wouldn't|would not|can't|cannot|can not|couldn't|could not|no longer|not able to|unable to|not)\s+(?:(?:usually|normally|generally|ever|currently|really|typically|accept|do)\s+)?(?:link|add|include|accept (?:links?|external|outside|unsolicited|guest|link|submissions|resources?|suggestions?)|feature|publish|place|take (?:links?|requests|submissions))\w*\b(?![^.!?\n]{0,40}\b(?:until|yet|right now|at the moment|this week|today|tomorrow|before|soon)\b)/i;
-const POSITIVE=/\b(?:added|i've added|i have added|updated the (?:page|post|article)|included (?:it|your)|linked|great resource|happy to (?:add|include)|sounds good|will add|we'll add|(?:i|we) can (?:do|add|include) (?:that|it|this)|can do that|go ahead)\b/gi;
-const YES_OPENING=/^(?:(?:hi|hello|hey|dear)\b[^\n,!]{0,40}[,!]?\s*)?(?:yes|yep|yeah|sure|absolutely|of course|definitely)\b(?![\s,]*not\b)/i;
+// Includes the words of a yes to a 3-way link exchange ("deal", "happy to swap", "works for me"); the swap itself is a condition.
+const POSITIVE=/\b(?:added|i've added|i have added|updated the (?:page|post|article)|included (?:it|your)|linked|great resource|happy to (?:add|include|swap|exchange|do (?:that|this|it|the (?:swap|exchange)))|sounds (?:good|fair|great)|will add|we'll add|(?:i|we) can (?:do|add|include) (?:that|it|this)|can do that|go ahead|(?:it's|that's|it is|that is) a deal|works for (?:me|us)|let's do (?:it|this|that)|count (?:me|us) in)\b/gi;
+const YES_OPENING=/^(?:(?:hi|hello|hey|dear)\b[^\n,!]{0,40}[,!]?\s*)?(?:yes|yep|yeah|sure|absolutely|of course|definitely|deal|agreed)\b(?![\s,]*not\b)/i;
 // A yes that a negation in the same clause turns around: "we have never linked", "I haven't added it".
 const NEGATION=/(?:\b(?:not|never|no longer|cannot|nor|neither)\b|n't\b)/i;
 // Conditions a publisher attaches to a yes. They need the owner's decision, so they are flagged, never auto-handled.
 // Over-flagging only costs an owner look; a missed fee or swap could be answered as if it were accepted.
 const CONDITIONS=[
  ['paid',/\b(?:fees?|charges?|paid|pay|paying|payment|paypal|pric(?:e|es|ed|ing)|costs?|costing|rates?|invoice|budget|compensat\w*|contribution|donation|sponsor(?:ed|ship)?|usd|eur|gbp|dollars?|euros?)\b|[$\u20ac\u00a3]\s?\d|\b\d+(?:[.,]\d+)?\s?(?:usd|eur|gbp|dollars?|euros?|pounds?|bucks)\b|\bper (?:year|month|post|link|article|placement|insertion)\b/i],
- ['reciprocal',/\b(?:if you (?:can )?(?:mention|link|add|feature|include) (?:to )?(?:us|our|ours|my)\b|mention us|link (?:back )?to us|link back|link to (?:our|my) (?:site|blog|page|website|article|post|resource|shop|store)|add (?:us|ours)\b|in return|in exchange|link exchanges?|exchange links|link swaps?|swap links|reciprocal|return the favou?r|a link from your)\b/i],
+ ['reciprocal',/\b(?:if you (?:can )?(?:mention|link|add|feature|include) (?:to )?(?:us|our|ours|my)\b|mention us|link (?:back )?to us|link back|link to (?:our|my) (?:site|blog|page|website|article|post|resource|shop|store)|add (?:us|ours)\b|in return|in exchange|link exchanges?|exchange links|link swaps?|swap(?:s|ping)?|(?:happy|glad|open) to exchange|(?:do|doing) (?:an |the )?exchange|reciprocal|return the favou?r|a link from your)\b/i],
  ['guest_post',/\b(?:guest[- ]?post(?:s|ing)?|guest (?:articles?|blogs?|contributions?)|write for us|contribute an? (?:article|post)|submit an? (?:article|post))\b/i],
 ];
 // Our message ids (<lf-...>) in any header or text; the List-Unsubscribe mailto may leave them URL-encoded in a subject.
@@ -201,7 +205,8 @@ export function optOutSubject(subject){
  const s=String(subject||'').replace(/%20/g,' ');
  return /^\s*(?:(?:re|fwd?|fw|aw|wg|tr)\s*:\s*)*unsubscribe\b/i.test(s)||lfIds(s).length>0;
 }
-export function replyText(msg){return String(msg.body||'').split(/\r?\n>|\r?\nOn .{5,160} wrote:|\r?\n-{2,}\s*Original Message/i)[0].trim()}
+// Quoted text starts at a "> " line, an "On ... wrote:" line, an "Original Message" line, or an Outlook header block ("From: ...\nSent: ...").
+export function replyText(msg){return String(msg.body||'').split(/\r?\n>|\r?\nOn .{5,160} wrote:|\r?\n-{2,}\s*Original Message|\r?\n[ \t]*From:[^\r\n]{1,200}\r?\n[ \t]*(?:Sent|Date):/i)[0].trim()}
 // Where a signature starts: a "--" or "__" line, " -- " in flattened text, or a phone/app footer.
 const SIGNATURE=/(?:^|\n)[ \t]*(?:--|__+)[ \t]*(?:\n|$)|\s--\s|(?:^|\s)(?:sent from my|sent from (?:mail|yahoo|outlook|gmail|samsung)|get outlook for)\b/i;
 /** Their own words without the signature, with typographic apostrophes made plain. */
@@ -217,7 +222,47 @@ function affirmative(text){
  for(const m of text.matchAll(POSITIVE)){const before=text.slice(Math.max(0,m.index-30),m.index).split(/[,;:.!?\n]/).pop();if(!NEGATION.test(before))return true}
  return false;
 }
-export function replyCondition(msg){const t=replyText(msg).replace(/[\u2018\u2019]/g,"'");for(const [k,re] of CONDITIONS)if(re.test(t))return k;return null}
+export function replyCondition(msg){return replyConditions(msg)[0]||null}
+/** Every condition the reply raises, strongest first by list order (a fee, then a link back, then a guest post). */
+export function replyConditions(msg){const t=replyText(msg).replace(/[\u2018\u2019]/g,"'");return CONDITIONS.filter(([,re])=>re.test(t)).map(([k])=>k)}
+// Where our return link would come from, in their words: the site they were pitched (A), "the same site", "directly",
+// "your site", or a domain we did not offer. Only read when the reply also talks about a link to them (RETURN_TALK).
+const RETURN_TALK=/\bcomes? from\b|\binstead\b/i;
+// They will link but want nothing back: the exchange is off, the yes stands.
+const NO_EXCHANGE=/\b(?:no (?:link )?(?:exchanges?|swaps?)|no need (?:for|to) (?:a |the |any )?(?:link back|return link|link exchange|swap|exchange|return the favou?r)|(?:don't|do not|doesn't|does not) need (?:a |the |any )?(?:link back|return link|link in return|swap|exchange)|without (?:a |the |any )?(?:link back|return link|swap|exchange)|not interested in (?:a |the |any )?(?:link )?(?:exchanges?|swaps?))\b/i;
+const DIRECT=/\b(?:same (?:site|website|domain|blog|page)|direct(?:ly)?|(?:the|that) (?:page|tool|guide|article) you (?:sent|mentioned|shared|suggested)|your\s+(?!(?:other|separate|second|sister|partner)\b)(?:[\w-]+\s+){0,2}?(?:site|website|blog|domain|homepage))\b/i;
+const DOMAINS=/\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:com|net|org|io|co|uk|de|fr|es|it|nl|eu|info|blog|site|online|app|dev|me|us|ca|au|nz|in|ch|at|be|se|no|dk|fi|pl|cz|ie|pt|gr|shop|store|tech|xyz|example)\b/gi;
+const bareHost=s=>String(s||'').toLowerCase().replace(/^https?:\/\//,'').split(/[\/?#:]/)[0].replace(/^www\./,'');
+const stemOf=d=>{const s=bareHost(d).split('.')[0]||'';return s.length>=5?s:''};
+const under=(h,d)=>!!d&&(h===d||h.endsWith('.'+d));
+/**
+ * How a reply answers our 3-way exchange offer (`offer`: p.exchange, `site`: the site they were pitched, A; `domain`:
+ * their own domain). 'owner': a fee or a guest post was raised (the owner decides). 'counter': they want the link back
+ * from A itself, "the same site", "directly", "your site" or another site than the one offered (the owner decides; any
+ * doubt lands here). 'decline': they want nothing back ("no exchange needed"); the exchange is off, their yes stands.
+ * 'question': they ask about the link back without saying yes. 'accept': a yes, or the link back we already offered
+ * ("sure, if you link back", "deal", "happy to swap"). null: nothing about the exchange (a plain "thanks, I'll look").
+ * `sentiment`/`question` are classifyReply/isQuestion for the same message.
+ */
+export function exchangeIntent(msg,{offer={},site='',domain='',sentiment='neutral',question=false}={}){
+ const conds=replyConditions(msg);
+ if(conds.includes('paid')||conds.includes('guest_post'))return 'owner';
+ const text=ownText(msg),low=text.toLowerCase();
+ const A=bareHost(site),C=bareHost(offer.partner_site),B=bareHost(domain);
+ const named=d=>!!d&&(low.includes(d)||(stemOf(d)&&new RegExp(`\\b${stemOf(d)}\\b`,'i').test(low)));
+ const title=String(offer.partner_title||'').trim().toLowerCase();
+ const partner=named(C)||(title.length>=8&&low.includes(title));
+ if(NO_EXCHANGE.test(text))return 'decline';
+ const returnTalk=conds.includes('reciprocal')||RETURN_TALK.test(text);
+ // Another domain in their words that is neither theirs, nor the one we offered, nor A (A is judged on its own below).
+ const others=[...new Set((low.match(DOMAINS)||[]).map(bareHost))].filter(h=>!under(h,B)&&!under(B,h)&&!under(h,C)&&!under(h,A));
+ // A link to them "from A" / "on A" is a request for a link from A, even when the site we offered is named too.
+ const fromA=!!A&&new RegExp(`\\b(?:from|on|via)\\s+(?:https?:\\/\\/)?(?:www\\.)?(?:${A.replace(/[.]/g,'\\.')}${stemOf(A)?'|'+stemOf(A):''})\\b`,'i').test(text);
+ if(returnTalk&&(fromA||others.length||!partner&&(named(A)||DIRECT.test(text))))return 'counter';
+ if(sentiment==='positive')return 'accept';
+ if(question)return returnTalk?'question':null;
+ return conds.includes('reciprocal')?'accept':null;
+}
 const QUESTION_OPENER=/(?:^|[.!?:\n]\s*)(?:(?:hi|hello|hey|dear)\b[^\n,!]{0,40}[,!]\s*)?(?:(?:could|can|would|will|do|does|did|is|are|have|has)\s+(?:you|we|i|there|your|the)\b|(?:what|which|how|where|when|why|who)(?:'s|\s+(?:is|are|was|were|do|does|did|would|should|can|could|kind|type|much|many|long|about|exactly)\b))/i;
 /** The reply asks us something (a "?" in their own text, or a question opener). It never changes the sentiment. */
 export function isQuestion(msg){
@@ -229,7 +274,7 @@ export function classifyReply(msg){
  if(optOutSubject(msg.subject))return 'negative';
  if(/auto-replied|auto-generated/i.test(msg.autoSubmitted)||/out of (the )?office|automatic reply|auto(matic)?[- ]?reply/i.test(msg.subject))return 'auto';
  const text=replyText(msg).replace(/[\u2018\u2019]/g,"'");
- if(NEGATIVE.test(text)||LEAD_NO.test(leadOf(ownText(msg))))return 'negative';
+ if(NEGATIVE.test(text)||NOT_A_FIT.test(text)||LEAD_NO.test(leadOf(ownText(msg))))return 'negative';
  // A refusal is declined, never positive; one that also says yes is left to the owner (neutral: a draft at most).
  const yes=affirmative(text);
  if(DECLINE.test(text))return yes?'neutral':'negative';
