@@ -169,16 +169,32 @@ export function parseFetch(raw){
 // Opt-outs, in their own words (quoted text is never read). Every pitch and follow-up closes with one plain sentence on how
 // to stop all email ("If it's not a fit, just say so and I won't follow up.", pitch.mjs OPT_OUT; earlier pitches had a P.S.
 // saying 'reply "no"'), so "no thanks", "not interested", "not for us", "we'll pass", a reply that starts with no / nope /
-// stop / unsubscribe (greeting and signature aside: "No\n\nSent from my iPhone") or one that says it is not a fit is an opt-out.
-const NEGATIVE=/\b(?:unsubscribe|remove (?:me|us|my (?:e-?mail|address)|our (?:e-?mail|address|site|blog)|this (?:e-?mail|address))|take (?:me|us|my (?:e-?mail|address)|our (?:e-?mail|address)) off|opt (?:me|us) out|opt[- ]?out (?:of|from) (?:your|these|this|further|future|all)\b|(?:please|want to|like to|wish to) opt[- ]?out|stop (?:e-?mailing|contacting|messaging|writing|sending)|(?:do not|don't|dont|never) (?:e-?mail|contact|message|write to|send (?:me|us|any|further|more|another|these|this|them|e-?mails?))|no (?:more|further) (?:e-?mails|messages)|not interested|no,? thanks\b|no,? thank you|please stop|spam|not for us|(?:we|i)(?:'ll| will) pass|pass on this|not (?:a |the right |a good )?fit for us)\b/i;
-const LEAD_NO=/^(?:no|nope|nah|stop|unsubscribe)\b(?:[\s,]*(?:thanks|thank you|thx)\b)?\s*(?:[.!,;:\u2013\u2014-]|$)/i;
-// "Not a fit" / "isn't a fit for us" / "doesn't fit": the answer that closing sentence invites. Our own conditional wording
-// ("if it's not a fit", e.g. in a copy quoted without markers) is not their answer.
-const NOT_A_FIT=/(?<!\bif\s+(?:it'?s|it\s+is|this\s+is|that'?s|this'?s)\s+)\bnot\s+(?:really\s+|quite\s+)?(?:a\s+|the\s+right\s+|a\s+good\s+)?fit\b|(?<!\bif\s+(?:it|this|that)\s+)\bisn'?t\s+(?:really\s+|quite\s+)?(?:a\s+|the\s+right\s+|a\s+good\s+)?fit\b|\b(?:doesn'?t|does\s+not|don'?t|do\s+not)\s+(?:really\s+)?fit\s+(?:us|our|my|in|with|here|the)\b/i;
+// stop / unsubscribe / pass (greeting and signature aside: "No\n\nSent from my iPhone") or one that says it is not a fit is an
+// opt-out.
+const NEGATIVE=/\b(?:unsubscribe|remove (?:me|us|my (?:e-?mail|address)|our (?:e-?mail|address|site|blog)|this (?:e-?mail|address))|take (?:me|us|my (?:e-?mail|address)|our (?:e-?mail|address)) off|opt (?:me|us) out|opt[- ]?out (?:of|from) (?:your|these|this|further|future|all)\b|(?:please|want to|like to|wish to) opt[- ]?out|stop (?:e-?mailing|contacting|messaging|writing|sending)|(?:do not|don't|dont|never) (?:e-?mail|contact|message|write to|send (?:me|us|any|further|more|another|these|this|them|e-?mails?))|no (?:more|further) (?:e-?mails|messages)|not interested|no,? thanks\b|no,? thank you|please stop|spam|not for us|(?:we|i)(?:'ll| will) pass|pass on this)\b/i;
+// A first line that is only a refusal: "No", "Nope, thanks", "Pass." Softer ones ("No need, thanks.", "Not now", "Not right
+// now, thanks.") are read like "not a fit" below: an opt-out unless the same reply also says yes.
+const LEAD_NO=/^(?:no|nope|nah|stop|unsubscribe|pass)\b(?:[\s,]*(?:thanks|thank you|thx)\b)?\s*(?:[.!,;:\u2013\u2014-]|$)/i;
+const LEAD_SOFT_NO=/^(?:no need|not (?:right )?now|not at (?:the|this) (?:moment|time))\b(?:[\s,]*(?:thanks|thank you|thx)\b)?\s*(?:[.!,;:\u2013\u2014-]|$)/i;
+// The answers that closing sentence invites, in their words: "not a fit" / "isn't a fit for us" / "doesn't fit us", "not relevant",
+// "not suitable", "not a good match", "not for me", "no interest", "please don't follow up", "no need to follow up", "thanks, but
+// no". They are opt-outs, unless the same reply also says yes ("not a fit for the intro, so I added it lower down"): that one is
+// left to the owner (neutral, a draft at most). Our own conditional ("if it's not a fit", e.g. in a copy quoted without markers)
+// and the old P.S. ("Not relevant for you?") are not their answer.
+const NOT_A_FIT=/(?<!\bif\s+(?:it'?s|it\s+is|this\s+is|that'?s|this'?s)\s+)\bnot\s+(?:really\s+|quite\s+)?(?:a\s+|the\s+right\s+|the\s+best\s+|a\s+(?:good|great|right)\s+)?(?:fit|match)\b|(?<!\bif\s+(?:it|this|that)\s+)\bisn'?t\s+(?:really\s+|quite\s+)?(?:a\s+|the\s+right\s+|a\s+(?:good|great|right)\s+)?(?:fit|match)\b|\b(?:doesn'?t|does\s+not|don'?t|do\s+not)\s+(?:really\s+|quite\s+)?(?:fit|suit)\s+(?:(?:in\s+)?with\s+)?(?:us|our|my)\b/i;
+const SOFT_NO=[NOT_A_FIT,
+ /(?<!\bif\s+(?:it'?s|it\s+is|this\s+is|that'?s)\s+)\b(?:not|isn'?t|aren'?t)\s+(?:really\s+|very\s+|that\s+|quite\s+)?(?:relevant|suitable|right\s+for\s+(?:us|me|our))\b(?!\s+for\s+you\b)/i,
+ /\bnot\s+(?:really\s+)?for\s+me\b|\bno\s+interest\b/i,
+ /(?<!\b(?:if|when|so)\s+(?:you|i)\s+)\b(?:(?:please|pls)\s+)?(?:do\s+not|don'?t|dont)\s+(?:need\s+to\s+)?follow[- ]?up\b|\bno\s+need\s+(?:for\s+(?:a\s+)?|to\s+)follow[- ]?up\b|\bno\s+follow[- ]?ups?\b/i,
+ // A standalone "no" in their own words: "Thanks, but no." / "but no thanks" (not "no problem", not "No?").
+ /(?:^|[,;:.!\u2013\u2014-][ \t]*|\bbut[ \t]+)no\b(?:[ \t,]+(?:thanks|thank you|thx))?[ \t]*(?:[.!,;:\u2013\u2014-]|$)/im];
+// A refusal of the deal itself: "No deal.", "No swap, sorry." An opt-out on its own; with a yes ("happy to add it, no swap
+// needed") the yes stands and only the exchange is off (exchangeIntent).
+const NO_TO_DEAL=/\bno\s+(?:deal|(?:link\s+)?(?:swaps?|exchanges?))\b/i;
 // An explicit refusal to link ("we have never linked to commercial sites", "we don't add links"). Not one that names a time ("until", "yet").
 const DECLINE=/\b(?:we|i)(?:'ve|'d|'m|'re| have| do| did| will| would| are| am)?\s*(?:never|don't|do not|doesn't|does not|won't|will not|wouldn't|would not|can't|cannot|can not|couldn't|could not|no longer|not able to|unable to|not)\s+(?:(?:usually|normally|generally|ever|currently|really|typically|accept|do)\s+)?(?:link|add|include|accept (?:links?|external|outside|unsolicited|guest|link|submissions|resources?|suggestions?)|feature|publish|place|take (?:links?|requests|submissions))\w*\b(?![^.!?\n]{0,40}\b(?:until|yet|right now|at the moment|this week|today|tomorrow|before|soon)\b)/i;
 // Includes the words of a yes to a 3-way link exchange ("deal", "happy to swap", "works for me"); the swap itself is a condition.
-const POSITIVE=/\b(?:added|i've added|i have added|updated the (?:page|post|article)|included (?:it|your)|linked|great resource|happy to (?:add|include|swap|exchange|do (?:that|this|it|the (?:swap|exchange)))|sounds (?:good|fair|great)|will add|we'll add|(?:i|we) can (?:do|add|include) (?:that|it|this)|can do that|go ahead|(?:it's|that's|it is|that is) a deal|works for (?:me|us)|let's do (?:it|this|that)|count (?:me|us) in)\b/gi;
+const POSITIVE=/\b(?:added|i've added|i have added|updated the (?:page|post|article)|included (?:it|your)|linked|great resource|happy to (?:add|include|swap|exchange|do (?:that|this|it|the (?:swap|exchange)))|sounds (?:good|fair|great)|will add|(?:i|we)'ll (?:add|include|link)|(?:i|we)(?:'d| would) (?:add|include|link) (?:it|it in|that|this|you|your)|(?:i|we) can (?:do|add|include) (?:that|it|this)|can do that|go ahead|(?:it's|that's|it is|that is) a deal|works for (?:me|us)|let's do (?:it|this|that)|count (?:me|us) in)\b/gi;
 const YES_OPENING=/^(?:(?:hi|hello|hey|dear)\b[^\n,!]{0,40}[,!]?\s*)?(?:yes|yep|yeah|sure|absolutely|of course|definitely|deal|agreed)\b(?![\s,]*not\b)/i;
 // A yes that a negation in the same clause turns around: "we have never linked", "I haven't added it".
 const NEGATION=/(?:\b(?:not|never|no longer|cannot|nor|neither)\b|n't\b)/i;
@@ -225,43 +241,85 @@ function affirmative(text){
 export function replyCondition(msg){return replyConditions(msg)[0]||null}
 /** Every condition the reply raises, strongest first by list order (a fee, then a link back, then a guest post). */
 export function replyConditions(msg){const t=replyText(msg).replace(/[\u2018\u2019]/g,"'");return CONDITIONS.filter(([,re])=>re.test(t)).map(([k])=>k)}
-// Where our return link would come from, in their words: the site they were pitched (A), "the same site", "directly",
-// "your site", or a domain we did not offer. Only read when the reply also talks about a link to them (RETURN_TALK).
-const RETURN_TALK=/\bcomes? from\b|\binstead\b/i;
+// Where the link back to them would come from, in their words. Read per sentence, so their own link ("I'll add it on our
+// resources page") is never taken for ours: the link back named ("link back", "return link", "link to us", "a link from your
+// shoe guide", "you link") with a place right after it ("from", "on", "via", "has to come from"), or, in a sentence about a
+// link, swap or exchange, a preference ("prefer", "rather", "the same site", "from your running site", "comes from"; "instead"
+// only next to the link back). Unless they name the site we offered (C), any of it is a counter: the owner decides (fail closed).
+const LINK_BACK=String.raw`\b(?:link(?:s|ed|ing)?\s+back|return\s+link|back-?links?|link(?:s|ing)?\s+(?:back\s+)?to\s+(?:us|me|my|our|mine|ours)\b|link(?:s|ing)?\s+(?:back\s+)?from\s+(?:you|your)\b|you(?:'d|'ll|\s+would|\s+will|\s+can|\s+could)?\s+(?:also\s+)?link\b)`;
+const NOT_OURS=String.raw`(?!(?:other|separate|second|sister|side|end|part)\b)`;
+const RETURN_PLACE=new RegExp(LINK_BACK+String.raw`[^.!?\n]{0,60}?\b(?:from|on|via|placed|hosted|go(?:es)?\s+on|sits?\s+on|(?:be|is)\s+on|come\s+from)\b|\blink(?:s|ing)?\s+(?:back\s+)?from\s+your\s+`+NOT_OURS,'i');
+const RETURN_PREFER=new RegExp(String.raw`\b(?:prefer\w*|rather|comes?\s+from|same\s+(?:site|website|domain|blog|page)|(?:from|on|via)\s+your\s+`+NOT_OURS+String.raw`(?:[\w'-]+\s+){0,3}?(?:site|website|blog|domain|homepage|page|guide|tool|finder|one|article|post)|only\s+(?:do\s+)?(?:swaps?|exchanges?|links?)\s+(?:with|from))\b`,'i');
+const LINKISH=/\b(?:link\w*|backlinks?|swap\w*|exchange\w*|in return|reciprocal\w*)\b/i;
+const sentencesIn=t=>String(t||'').split(/(?<=[.!?])\s+|\n+/);
+/** Their reply says where the link back to them should come from (see above). */
+export const returnWhere=text=>sentencesIn(String(text||'').replace(/[\u2018\u2019]/g,"'")).some(s=>RETURN_PLACE.test(s)||LINKISH.test(s)&&RETURN_PREFER.test(s)||new RegExp(LINK_BACK,'i').test(s)&&/\binstead\b/i.test(s));
+// Words that put a condition on the link back ("but", "prefer", "only", "must", "as long as"): an automatic confirmation is
+// never sent for such a reply unless it names the site we offered.
+const RETURN_IF=/\b(?:but|only|must|has\s+to|have\s+to|had\s+to|as\s+long\s+as|provided|on\s+condition|prefer\w*|rather|instead|unless|not\s+the|not\s+from|not\s+on)\b/i;
 // They will link but want nothing back: the exchange is off, the yes stands.
-const NO_EXCHANGE=/\b(?:no (?:link )?(?:exchanges?|swaps?)|no need (?:for|to) (?:a |the |any )?(?:link back|return link|link exchange|swap|exchange|return the favou?r)|(?:don't|do not|doesn't|does not) need (?:a |the |any )?(?:link back|return link|link in return|swap|exchange)|without (?:a |the |any )?(?:link back|return link|swap|exchange)|not interested in (?:a |the |any )?(?:link )?(?:exchanges?|swaps?))\b/i;
-const DIRECT=/\b(?:same (?:site|website|domain|blog|page)|direct(?:ly)?|(?:the|that) (?:page|tool|guide|article) you (?:sent|mentioned|shared|suggested)|your\s+(?!(?:other|separate|second|sister|partner)\b)(?:[\w-]+\s+){0,2}?(?:site|website|blog|domain|homepage))\b/i;
+const NO_EXCHANGE=/\b(?:no (?:link )?(?:exchanges?|swaps?)|no deal|no need (?:for|to) (?:a |the |any )?(?:link back|return link|link exchange|swap|exchange|return the favou?r)|(?:don't|do not|doesn't|does not) need (?:a |the |any )?(?:link back|return link|link in return|swap|exchange)|without (?:a |the |any )?(?:link back|return link|swap|exchange)|not interested in (?:a |the |any )?(?:link )?(?:exchanges?|swaps?))\b/i;
+const DIRECT=/\b(?:same (?:site|website|domain|blog|page)|direct(?:ly)?|(?:the|that) (?:page|tool|guide|article) you (?:sent|mentioned|shared|suggested)|(?:the\s+)?(?:site|page|domain|one)\s+(?:i|we)(?:'m|'re| am| are)?\s+(?:linking|link)\s+to|your\s+(?!(?:other|separate|second|sister|partner)\b)(?:[\w-]+\s+){0,2}?(?:site|website|blog|domain|homepage))\b/i;
 const DOMAINS=/\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:com|net|org|io|co|uk|de|fr|es|it|nl|eu|info|blog|site|online|app|dev|me|us|ca|au|nz|in|ch|at|be|se|no|dk|fi|pl|cz|ie|pt|gr|shop|store|tech|xyz|example)\b/gi;
 const bareHost=s=>String(s||'').toLowerCase().replace(/^https?:\/\//,'').split(/[\/?#:]/)[0].replace(/^www\./,'');
 const stemOf=d=>{const s=bareHost(d).split('.')[0]||'';return s.length>=5?s:''};
 const under=(h,d)=>!!d&&(h===d||h.endsWith('.'+d));
+// A site's name however they write it: "gearuptofit.com", "gearuptofit", "Gear Up To Fit", "GearUpToFit", "gear-up-to-fit".
+const squash=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const BROAD=new Set('about best free guide page site tool tools with your from this that their them they what when where which your blog post article review list'.split(' '));
+/** Does their text name this site (domain, name or name written in words), or, for C, the title of the page we offered? */
+function namesSite(text,d,title=''){
+ const low=String(text).toLowerCase(),stem=stemOf(d),t=String(title||'').trim().toLowerCase();
+ return !!d&&(low.includes(d)||!!stem&&(new RegExp(`\\b${stem}\\b`,'i').test(low)||squash(low).includes(stem)))||t.length>=8&&low.includes(t);
+}
 /**
  * How a reply answers our 3-way exchange offer (`offer`: p.exchange, `site`: the site they were pitched, A; `domain`:
- * their own domain). 'owner': a fee or a guest post was raised (the owner decides). 'counter': they want the link back
- * from A itself, "the same site", "directly", "your site" or another site than the one offered (the owner decides; any
- * doubt lands here). 'decline': they want nothing back ("no exchange needed"); the exchange is off, their yes stands.
- * 'question': they ask about the link back without saying yes. 'accept': a yes, or the link back we already offered
+ * their own domain; `assetTitle`: the title of our page on A). 'owner': a fee or a guest post was raised (the owner decides).
+ * 'counter': they want the link back from A itself (by domain, name or "Gear Up To Fit"), "the same site", "directly",
+ * "your site", our page they were sent, or another site than the one offered; or they say where the link back should come
+ * from without naming the site we offered (the owner decides; any doubt lands here, fail closed). 'decline': they want
+ * nothing back ("no exchange needed"); the exchange is off, their yes stands. 'question': they ask or talk about the link
+ * back without a yes (a neutral reply never accepts). 'accept': a positive reply, including the link back we already offered
  * ("sure, if you link back", "deal", "happy to swap"). null: nothing about the exchange (a plain "thanks, I'll look").
  * `sentiment`/`question` are classifyReply/isQuestion for the same message.
  */
-export function exchangeIntent(msg,{offer={},site='',domain='',sentiment='neutral',question=false}={}){
+export function exchangeIntent(msg,{offer={},site='',domain='',sentiment='neutral',question=false,assetTitle=''}={}){
  const conds=replyConditions(msg);
  if(conds.includes('paid')||conds.includes('guest_post'))return 'owner';
  const text=ownText(msg),low=text.toLowerCase();
  const A=bareHost(site),C=bareHost(offer.partner_site),B=bareHost(domain);
- const named=d=>!!d&&(low.includes(d)||(stemOf(d)&&new RegExp(`\\b${stemOf(d)}\\b`,'i').test(low)));
- const title=String(offer.partner_title||'').trim().toLowerCase();
- const partner=named(C)||(title.length>=8&&low.includes(title));
+ // "Your other site" / "the separate site" is how our offer described C: they name what we offered.
+ const partner=namesSite(text,C,offer.partner_title)||/\b(?:your|the|that)\s+(?:other|separate|second|sister)\s+(?:site|website|blog)\b/i.test(text);
  if(NO_EXCHANGE.test(text))return 'decline';
- const returnTalk=conds.includes('reciprocal')||RETURN_TALK.test(text);
+ const where=returnWhere(text),returnTalk=conds.includes('reciprocal')||where;
  // Another domain in their words that is neither theirs, nor the one we offered, nor A (A is judged on its own below).
  const others=[...new Set((low.match(DOMAINS)||[]).map(bareHost))].filter(h=>!under(h,B)&&!under(B,h)&&!under(h,C)&&!under(h,A));
  // A link to them "from A" / "on A" is a request for a link from A, even when the site we offered is named too.
- const fromA=!!A&&new RegExp(`\\b(?:from|on|via)\\s+(?:https?:\\/\\/)?(?:www\\.)?(?:${A.replace(/[.]/g,'\\.')}${stemOf(A)?'|'+stemOf(A):''})\\b`,'i').test(text);
- if(returnTalk&&(fromA||others.length||!partner&&(named(A)||DIRECT.test(text))))return 'counter';
+ const stemA=stemOf(A),fromA=!!A&&[...text.matchAll(/\b(?:from|on|via)\s+(?:the\s+)?(?:https?:\/\/)?(?:www\.)?([^.!?\n]{0,40})/gi)].some(m=>{const w=squash(m[1]);return w.startsWith(squash(A))||!!stemA&&w.startsWith(stemA)});
+ // Words of our page's title on A ("shoe", "finder") said about the link back read like A itself.
+ const aWords=String(assetTitle||'').toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>=4&&!BROAD.has(w));
+ const aboutA=namesSite(text,A)||DIRECT.test(text)||where&&aWords.some(w=>new RegExp(`\\b${w}`,'i').test(low));
+ if(returnTalk&&(fromA||others.length||!partner&&aboutA))return 'counter';
+ // Where the link back comes from, without the site we offered: a counter, unless it is only a question about it.
+ if(where&&!partner)return question&&!RETURN_IF.test(text)?'question':'counter';
  if(sentiment==='positive')return 'accept';
- if(question)return returnTalk?'question':null;
- return conds.includes('reciprocal')?'accept':null;
+ // A neutral reply never accepts an open offer; about a deal already agreed, mentioning the link back is just the deal.
+ if(conds.includes('reciprocal')&&offer.status&&offer.status!=='offered')return 'accept';
+ return returnTalk?'question':null;
+}
+/**
+ * May a confirmation of the 3-way exchange go out automatically for this reply? Only when it names the site we offered, or
+ * is a plain yes that says nothing about where the link back comes from and attaches no "but", "prefer", "only", "must",
+ * "has to" or "as long as"; and never when it adds terms of its own (dofollow, a placement, a deadline, who goes first).
+ * Everything else is a draft for the owner.
+ */
+// Terms beyond the deal we offered, even next to C's name: a link attribute, a placement, a deadline, who goes first.
+const EXTRA_TERMS=/\b(?:do-?follow|no-?follow|follow(?:ed)? links?|permanent\w*|forever|home ?page|sidebar|footer|site-?wide|anchor|within|deadline|asap|urgent\w*|by (?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|tonight|the end)|this week|next week|first)\b/i;
+export function exchangeAutoOk(text,offer={}){
+ const t=String(text||'').replace(/[‘’]/g,"'");
+ if(EXTRA_TERMS.test(t))return false;
+ if(namesSite(t,bareHost(offer.partner_site),offer.partner_title))return true;
+ return !returnWhere(t)&&!RETURN_IF.test(t);
 }
 const QUESTION_OPENER=/(?:^|[.!?:\n]\s*)(?:(?:hi|hello|hey|dear)\b[^\n,!]{0,40}[,!]\s*)?(?:(?:could|can|would|will|do|does|did|is|are|have|has)\s+(?:you|we|i|there|your|the)\b|(?:what|which|how|where|when|why|who)(?:'s|\s+(?:is|are|was|were|do|does|did|would|should|can|could|kind|type|much|many|long|about|exactly)\b))/i;
 /** The reply asks us something (a "?" in their own text, or a question opener). It never changes the sentiment. */
@@ -269,14 +327,30 @@ export function isQuestion(msg){
  const t=replyText(msg).replace(/https?:\/\/\S+/g,' ');
  return /\?/.test(t)||QUESTION_OPENER.test(t);
 }
+// Machine answers that carry no Auto-Submitted header: a contact form's acknowledgement mailed to the address the owner typed
+// in (wordpress@, noreply@, forms@...), "Thank you for contacting us / we have received your message". Not the publisher's
+// answer: they never take a contact-form match, so the editor's real reply later is still recorded.
+const ROBOT_SENDER=/^(?:no-?reply|do-?not-?reply|donotreply|wordpress|wp-?forms?|forms?|form-?submissions?|notifications?|notify|mailer|automated|auto-?(?:confirm\w*|responder)|contact-?form\w*)(?:[+._-][^@]*)?@/i;
+const ACK_SUBJECT=/\b(?:thank(?:s| you) for (?:contacting|reaching out|getting in touch|your (?:message|submission|enquiry|inquiry|email|request))|(?:we(?:'ve| have)?|i(?:'ve| have)?) received your (?:message|submission|enquiry|inquiry|request|email)|we got your (?:message|email)|(?:submission|message|enquiry|inquiry) (?:received|confirmation)|auto(?:matic)?[- ]?(?:response|confirmation))\b/i;
+const ACK_BODY=/\b(?:thank(?:s| you) for (?:contacting|reaching out|getting in touch|your (?:message|submission|enquiry|inquiry))|(?:we(?:'ve| have)?|i(?:'ve| have)?) received your (?:message|submission|enquiry|inquiry|request))\b[\s\S]{0,240}?\b(?:get back to you|respond|reply to you|be in touch|contact you|answer)\b/i;
 export function classifyReply(msg){
  if(/mailer-daemon|postmaster|mail delivery subsystem/i.test(msg.from)||/delivery status notification|undeliverable|failure notice|returned mail/i.test(msg.subject))return 'bounce';
  if(optOutSubject(msg.subject))return 'negative';
  if(/auto-replied|auto-generated/i.test(msg.autoSubmitted)||/out of (the )?office|automatic reply|auto(matic)?[- ]?reply/i.test(msg.subject))return 'auto';
- const text=replyText(msg).replace(/[\u2018\u2019]/g,"'");
- if(NEGATIVE.test(text)||NOT_A_FIT.test(text)||LEAD_NO.test(leadOf(ownText(msg))))return 'negative';
+ const text=replyText(msg).replace(/[\u2018\u2019]/g,"'"),lead=leadOf(ownText(msg)),optOut=NEGATIVE.test(text)||LEAD_NO.test(lead);
+ const soft=SOFT_NO.some(re=>re.test(text))||LEAD_SOFT_NO.test(lead);
+ // A no-reply or form-system sender is a machine, unless its text says no (a help desk relaying a person's opt-out): an
+ // opt-out is honoured whoever sends it.
+ if(ROBOT_SENDER.test(String(msg.from||'').trim())&&!optOut&&!soft)return 'auto';
+ // "Thanks for contacting us, we have received your message and will get back to you": an acknowledgement, not an answer.
+ // A person's words that say no are still read as an opt-out, a yes as a yes, and a question as a question.
+ const said=optOut||soft||affirmative(text)||isQuestion(msg);
+ if(!said&&(ACK_SUBJECT.test(decodeWords(msg.subject||''))||ACK_BODY.test(text)&&text.length<500))return 'auto';
+ if(optOut)return 'negative';
  // A refusal is declined, never positive; one that also says yes is left to the owner (neutral: a draft at most).
  const yes=affirmative(text);
+ if(soft)return yes?'neutral':'negative';
+ if(NO_TO_DEAL.test(text)&&!yes)return 'negative';
  if(DECLINE.test(text))return yes?'neutral':'negative';
  return yes?'positive':'neutral';
 }

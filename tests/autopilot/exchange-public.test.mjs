@@ -35,10 +35,13 @@ test('watchdog: overdue return links are an action, links coming due a warning, 
   const owed=at({funnel:{ready:30,exchanges_owed:3,exchanges_overdue:2}});
   const a=owed.find(z=>z.code==='exchange_owed');
   assert.equal(a.level,'action');
-  assert.equal(a.message,'2 return links you promised are overdue; the publishers already linked to you. Open Prospects > Exchanges to see exactly where to add each one.');
-  assert.match(a.fix,/vault/);assert.ok(!owed.some(z=>z.code==='exchange_due'),'one alert while any is overdue');
+  assert.equal(a.message,'2 return links you promised are overdue; the publishers already linked to you. 1 more is due within 7 days of their link. Open Prospects > Exchanges to see exactly where to add each one.');
+  assert.match(a.fix,/vault/);assert.equal(owed.filter(z=>/^exchange_(?:owed|due)$/.test(z.code)).length,1,'one alert while any is owed');
+  assert.equal(at({funnel:{ready:30,exchanges_owed:4,exchanges_overdue:2}}).find(z=>z.code==='exchange_owed').message,
+    '2 return links you promised are overdue; the publishers already linked to you. 2 more are due within 7 days of their link. Open Prospects > Exchanges to see exactly where to add each one.','both numbers in one alert');
   assert.match(at({funnel:{ready:30,exchanges_owed:1,exchanges_overdue:1}}).find(z=>z.code==='exchange_owed').message,/^1 return link you promised is overdue; the publisher already linked/);
-  const due=at({funnel:{ready:30,exchanges_owed:2,exchanges_overdue:0}}).find(z=>z.code==='exchange_due');
+  // Coming due: the same code at warning level (it escalates in the same issue once one is overdue).
+  const due=at({funnel:{ready:30,exchanges_owed:2,exchanges_overdue:0}}).find(z=>z.code==='exchange_owed');
   assert.equal(due.level,'warn');assert.match(due.message,/^2 publishers have linked to you in a link exchange; the return link you promised is due within 7 days/);
   assert.ok(!at({funnel:{ready:30}}).some(z=>/^exchange/.test(z.code)),'nothing without obligations');
   const paused=at({funnel:{ready:30,exchanges_owed:4,exchanges_overdue:3}});
@@ -52,13 +55,13 @@ test('watchdog: overdue return links are an action, links coming due a warning, 
 });
 
 test('owner alerts: an overdue return link opens an issue (action) and so does one coming due (warning code)',()=>{
-  assert.ok(WARN_CODES.has('exchange_due'));
+  assert.ok(WARN_CODES.has('exchange_owed'));assert.ok(!WARN_CODES.has('exchange_due'),'one code: due escalates to overdue in the same issue');
   const attention=diagnose({capabilities:{verifier:{ready:true}},funnel:{ready:30,exchanges_owed:4,exchanges_overdue:3},sender:{link_exchange:'abc'}});
   const m=alertsOf({attention});
   assert.ok(m.has('exchange_owed'));assert.equal(m.get('exchange_owed').level,'action');
   assert.ok(!m.has('exchanges_paused'),'a note is not an issue');
   const m2=alertsOf({attention:diagnose({capabilities:{verifier:{ready:true}},funnel:{ready:30,exchanges_owed:1,exchanges_overdue:0}})});
-  assert.ok(m2.has('exchange_due'));
+  assert.ok(m2.has('exchange_owed'));assert.equal(m2.get('exchange_owed').level,'warn');
 });
 
 test('a whole cycle: a link to A starts the obligation, a fetched partner page fulfils another, and the public summary holds counts only',async()=>{
@@ -89,13 +92,15 @@ test('a whole cycle: a link to A starts the obligation, a fetched partner page f
     assert.equal(s.prospects.pub1.exchange.status,'offered');
     assert.equal(s.prospects.pub2.exchange.status,'fulfilled');assert.equal(s.prospects.pub2.exchange.verified_by,'fetch');
     assert.equal(s.prospects.pub3.status,'won');assert.equal(s.prospects.pub3.exchange.status,'their_link_live','the link check started it this cycle');assert.ok(s.prospects.pub3.exchange.owed_by);
-    assert.equal(summary.stages.link_checks.result.exchange_links,1);
+    assert.equal(summary.stages.link_checks.result.exchange_links,undefined,'no per-cycle exchange count next to the public win list');
     assert.equal(summary.stages.exchanges.ok,true);
     assert.deepEqual({fulfilled:summary.stages.exchanges.result.fulfilled,owed:summary.stages.exchanges.result.owed,overdue:summary.stages.exchanges.result.overdue},{fulfilled:1,owed:1,overdue:0});
     assert.deepEqual(Object.fromEntries(Object.entries(summary.funnel).filter(([k])=>k.startsWith('exchanges_'))),
       {exchanges_offered:3,exchanges_accepted:2,exchanges_owed:1,exchanges_overdue:0,exchanges_fulfilled:1});
     assert.deepEqual(summary.exchanges,{by_partner_site_count:1,paused:false});
-    assert.equal(summary.attention.find(a=>a.code==='exchange_due')?.level,'warn');
+    assert.equal(summary.attention.find(a=>a.code==='exchange_owed')?.level,'warn');
+    // Publishers in an exchange are not in the public list of won links (pub3 linked this cycle, pub2 earlier).
+    assert.ok(!(summary.wins||[]).some(w=>/pub[23]-secret/.test(`${w.publisher} ${w.page_url}`)),JSON.stringify(summary.wins));
     // Public: no publisher still in negotiation, no partner page, no exchange record fields, no addresses.
     const text=await readFile(paths.summary,'utf8');
     for(const t of [JSON.stringify(summary),text]){

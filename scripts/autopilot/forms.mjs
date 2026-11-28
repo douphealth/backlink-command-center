@@ -19,6 +19,7 @@ import {bestPitchAsset,pitchable} from './assets.mjs';
 import {assetStats,linkLikelihood} from './learn.mjs';
 import {assetFacts,isListPage} from './pitch.mjs';
 import * as copy from './pitch.mjs';
+import {publisherFootprint} from './exchange.mjs';
 
 export const FORM_EXPIRE_DAYS=21,FORM_CHECK_VERSION=1,FORM_WORDS=[60,100];
 const CONTACT_DAYS=90,RECHECK_DAYS=3,MAX_TRIES=3,SCAN_MAX_AGE=25*60e3;
@@ -244,7 +245,9 @@ export async function prepareForms({state,writer=null,config={},exchangePartner=
       if(!v.ok){skip(v.why);continue}
     }
     let offer=null;
-    if(exchangeOn){let raw=null;try{raw=await exchangePartner(p,site)}catch{raw=null}offer=validOffer(raw,p,sites);if(raw&&!offer)stats.offers_rejected=(stats.offers_rejected||0)+1}
+    // One exchange per publisher domain at a time (another prospect of the same publisher may hold one already).
+    const busy=exchangeOn&&publisherFootprint(state,p.domain,{except:p}).running;if(busy)stats.offers_publisher_busy=(stats.offers_publisher_busy||0)+1;
+    if(exchangeOn&&!busy){let raw=null;try{raw=await exchangePartner(p,site)}catch{raw=null}offer=validOffer(raw,p,sites);if(raw&&!offer)stats.offers_rejected=(stats.offers_rejected||0)+1}
     const msg=await composeForm(p,asset,site,{writer,senderName,from,offer,optOut,stats});
     if(!msg){skip('copy_rejected');continue}
     if(repaired){p.asset_repaired_from=p.asset_url;p.asset_url=repaired.url;p.asset_title=repaired.title;stats.repaired=(stats.repaired||0)+1}

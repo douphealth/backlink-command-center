@@ -21,8 +21,9 @@ import {fileURLToPath} from 'node:url';
 
 export const LABEL='linkforge-alert';
 // Warnings that still need the owner: a reply waiting for an answer (often a draft only the owner can send), email going
-// out without the postal-address footer and a promised exchange link coming due are told by email too, not only on the dashboard.
-export const WARN_CODES=new Set(['vault_size','prospect_inflow_low','replies_waiting','sender_identity_incomplete','exchange_due']);
+// out without the postal-address footer and a promised exchange link coming due (exchange_owed at warn level; it escalates to
+// an action in the same issue once overdue) are told by email too, not only on the dashboard.
+export const WARN_CODES=new Set(['vault_size','prospect_inflow_low','replies_waiting','sender_identity_incomplete','exchange_owed']);
 const RANK={info:0,warn:1,action:2};
 const EMAIL=/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi;
 const MARK=/<!--\s*linkforge-alert\s+(\{[^<>]*?\})\s*-->/,MARKS=new RegExp(MARK.source,'g');

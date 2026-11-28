@@ -75,10 +75,11 @@ test('settings: List-Unsubscribe off unless turned on, Saturday mornings on unle
   assert.equal(on.outreach.listUnsubscribe,true);assert.equal(on.outreach.saturday,false);assert.equal(on.exchange.mode,'off');assert.equal(on.forms.daily,0);
 });
 
-test('an offer drafted as an answer (not sent yet) holds its partner page and site for 30 days, like a sent one',()=>{
+test('an offer drafted as an answer (not sent yet) holds its partner page while it may still be sent, and its site for 30 days',()=>{
   const draft=(d,at)=>({exchange_draft:{partner_site:C,partner_page:C_LOC,partner_title:'T',their_url:`https://${d}/a`,message_id:`<lf-${d}@x>`,at}});
-  const t=exchangeTally({prospects:{a:draft('one.example',iso(Date.now()-2*DAY)),b:draft('two.example',iso(Date.now()-40*DAY))}});
-  assert.equal(t.page.get(C_PAGE),1,'the recent draft counts, the 40-day-old one no longer does');assert.equal(t.site.get(C),1);
+  const t=exchangeTally({prospects:{a:draft('one.example',iso(Date.now()-2*DAY)),b:draft('two.example',iso(Date.now()-40*DAY)),c:draft('three.example',iso(Date.now()-130*DAY))}});
+  assert.equal(t.page.get(C_PAGE),2,'the 40-day-old draft still holds its page (the owner can still send it); the 130-day-old one no longer does');
+  assert.equal(t.site.get(C),1,'the site cap counts the last 30 days only');
   const sent=exchangeTally({prospects:{a:{...draft('one.example',iso(Date.now()-2*DAY)),exchange:{partner_site:C,partner_page:C_PAGE,status:'offered',offered_at:iso(Date.now()-DAY)}}}});
   assert.equal(sent.page.get(C_PAGE),1,'never counted twice once the offer is on record');
 });
@@ -90,7 +91,7 @@ test('a 3-way exchange from first pitch to verified return link, across four cyc
     const found=iso(Date.now()-3*DAY);
     const state0={v:1,created_at:iso(Date.now()-30*DAY),suppression:{},queries:{},ledger:[],contacted:{},domains:{[`${A}|${B}`]:'b1',[`${A}|${F}`]:'f1'},
       // The mailbox is current (no rebuild pending) and earlier repairs ran.
-      migrations:{reply_status_v2:found,reply_class_v3:found},
+      migrations:{reply_status_v2:found,reply_class_v4:found},
       prospects:{
         b1:{id:'b1',site:A,domain:B,page_url:B_URL,title:B_TITLE,email:ED,author:'Sam Lee',status:'ready',qv:QUALIFY_VERSION,contact_v:CONTACT_VERSION,score:82,
           asset_url:ASSET,asset_title:'Shoe Finder',fit_section:'Marathon recovery',excerpt:'Recovery after a marathon means sleep, gentle stretching and foam rolling.',
@@ -168,13 +169,13 @@ test('a 3-way exchange from first pitch to verified return link, across four cyc
     s=await vaultOf(paths);b=s.prospects.b1;
     assert.equal(b.status,'won');assert.equal(b.exchange.status,'their_link_live');
     assert.ok(Math.abs(Date.parse(b.exchange.owed_by)-Date.parse(b.exchange.their_link_at)-7*DAY)<1000,'owed within 7 days of their link');
-    assert.equal(c3.summary.stages.link_checks.result.exchange_links,1);
+    assert.equal(c3.summary.stages.link_checks.result.exchange_links,undefined,'no per-cycle exchange count next to the public win list');
     assert.deepEqual(exchangeFunnel(c3.summary.funnel),{exchanges_offered:2,exchanges_accepted:1,exchanges_owed:1,exchanges_overdue:0,exchanges_fulfilled:0});
-    const due=c3.summary.attention.find(a=>a.code==='exchange_due');
+    const due=c3.summary.attention.find(a=>a.code==='exchange_owed');
     assert.equal(due?.level,'warn','the owner is told a return link is due');assert.doesNotMatch(`${due.message} ${due.fix}`,/https?:|runnerblog|gearuptogrow/);
     assert.deepEqual(c3.summary.exchanges,{by_partner_site_count:1,paused:false});
-    // B is a won link now (the existing public wins list), but nothing says which page of ours owes it a link.
-    await assertPublic(c3.summary,paths,{publisherAllowed:true});
+    // B is a won link now, but a publisher in an exchange is left out of the public list of won links altogether.
+    await assertPublic(c3.summary,paths);
 
     // ---- Cycle 4: the owner placed the link; the crawl of C's page finds it ----
     phase.now='fulfilled';
@@ -184,7 +185,7 @@ test('a 3-way exchange from first pitch to verified return link, across four cyc
     assert.equal(c4.summary.stages.exchanges.result.fulfilled,1);
     assert.deepEqual(exchangeFunnel(c4.summary.funnel),{exchanges_offered:2,exchanges_accepted:1,exchanges_owed:0,exchanges_overdue:0,exchanges_fulfilled:1});
     assert.ok(!c4.summary.attention.some(a=>/^exchange/.test(a.code)),'nothing owed, nothing to tell');
-    await assertPublic(c4.summary,paths,{publisherAllowed:true});
+    await assertPublic(c4.summary,paths);
   }finally{setSendPolicy({saturday:true});await rm(dir,{recursive:true,force:true})}
 });
 
@@ -192,7 +193,7 @@ test('a link-back request on an older pitch that offered nothing gets a drafted 
   const dir=await mkdtemp(join(tmpdir(),'lf-exchange-old-')),O='oldpitch.example',O_ED=`kim@${O}`,MID='<lf-mi0old-k3y5z8q1@owned.example>',sentAt=iso(Date.now()-4*DAY);
   const paths={vault:join(dir,'vault.json'),summary:join(dir,'autopilot.json'),cache:join(dir,'crawl.json')};
   try{
-    const state0={v:1,created_at:iso(Date.now()-30*DAY),suppression:{},queries:{},ledger:[],contacted:{[O]:sentAt},domains:{[`${A}|${O}`]:'o1'},migrations:{reply_status_v2:sentAt,reply_class_v3:sentAt},
+    const state0={v:1,created_at:iso(Date.now()-30*DAY),suppression:{},queries:{},ledger:[],contacted:{[O]:sentAt},domains:{[`${A}|${O}`]:'o1'},migrations:{reply_status_v2:sentAt,reply_class_v4:sentAt},
       prospects:{o1:{id:'o1',site:A,domain:O,page_url:`https://${O}/marathon-recovery-tips/`,title:'Marathon recovery tips: sleep, stretching and foam rolling',email:O_ED,author:'Kim Ray',status:'sent',qv:QUALIFY_VERSION,score:75,
         asset_url:ASSET,asset_title:'Shoe Finder',found_at:iso(Date.now()-9*DAY),next_link_check:iso(Date.now()+3*DAY),last_subject:'Shoe Finder for your recovery tips',
         history:[{type:'initial',at:sentAt,to:O_ED,subject:'Shoe Finder for your recovery tips',message_id:MID,mode:'send',variant:'template:resource_suggestion',writer:'template',verified:true,sender_name:'Alex'}]}}};

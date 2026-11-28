@@ -79,7 +79,9 @@ test('validation: return-link wording needs the offer and the partner\'s name; p
   assert.equal(chk(t.body.replace('Answer six questions','Answer six questions. '+'More words here. '.repeat(14))),'exchange_too_long');
   // Without an offer, a pitch naming our own citation of their article is still fine.
   const cited=templatePitch({...p,cited_by_us:{our_url:'https://gearuptofit.com/guide/'}},asset,{senderName:'Alex',site});
-  assert.match(cited.body,/already links to your article/);assert.equal(pitchProblem(cited,asset),null);
+  assert.match(cited.body,/already links to your article/);assert.equal(pitchProblem(cited,asset,{cited:true}),null);
+  // Only when that citation is on record: otherwise "already links to your article" is a claim nobody checked.
+  assert.equal(pitchProblem(cited,asset),'claims_placed');
   assert.ok(EXCHANGE_MAX_WORDS>=100);
 });
 

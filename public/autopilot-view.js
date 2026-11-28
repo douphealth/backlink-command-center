@@ -208,7 +208,7 @@ export async function renderAutopilot(h){
   const attention=pointerText?`<button type="button" class="ap-pointer" data-ap="goto-overview"><span class="ap-needs-dot"></span><span><b>Needs you:</b> ${e(pointerText)}</span><span>Open Overview →</span></button>`:'';
   const bestPanel=`<div class="ap-gap">${panel('Best URLs to promote','Linkability × real search demand; templated duplicates and thin pages are demoted',best.length?table(['#','URL & why','Score','Internal links','Prospects'],best):empty('No promotable URLs yet','The next crawl will rank your pages.'))}</div>`;
   const internalPanel=`<div class="ap-gap">${panel('Internal link plan','Add these links on your own pages: highest-ROI, zero-cost ranking boost',internal.length?table(['On this page','Add anchor','Linking to'],internal):empty('No internal gaps found','Your best URLs are already well linked.'))}</div>`;
-  const winsPanel=`<div class="ap-gap">${panel('Backlinks','Won after outreach, or already linking to you (verified on the live page)',wins.length?table(['Publisher','Page','Links to','Status','Found'],wins):empty('No verified backlinks yet','Pitched pages are re-checked every 4 days for 150 days.'))}</div>`;
+  const winsPanel=`<div class="ap-gap">${panel('Backlinks','Won after outreach, or already linking to you (verified on the live page). Publishers in a 3-way exchange are listed only under Prospects > Exchanges (vault)',wins.length?table(['Publisher','Page','Links to','Status','Found'],wins):empty('No verified backlinks yet','Pitched pages are re-checked every 4 days for 150 days.'))}</div>`;
   const logPanel=`<details class="data-note" open><summary><strong>Last run log</strong></summary><div class="pre-detail ap-log">${e((s.log||[]).join('\n'))}</div></details>`;
   return intro('autopilot','')+status+attention+banner+setup+kpiHtml+tabBar+
     pane('overview',needsYouStrip(s,h,ny)+`<div class="overview-grid ap-ov">${healthPanel(s,h,ny)}${sendingPanel(s,h)}</div><div class="overview-grid ap-ov-b ap-gap">${workingPanel(s,h)}${panel('Outreach funnel','Every number is a stored, verified record',funnel+exchangeFunnel(s,h))}</div><div class="ap-gap ap-stages">${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`)+
@@ -463,7 +463,8 @@ function connectPanel(h,s=null){
 // 3-way link exchanges (vault only, decrypted in this browser): what the owner promised, where, and by when.
 const XCH_OPEN=['their_link_live','accepted','offered'],XCH_CLOSED=['fulfilled','declined','lapsed'],XCH_ORDER=[...XCH_OPEN,...XCH_CLOSED];
 const XCH_WORDS={their_link_live:'Their link is live: add yours',accepted:'Agreed: waiting for their link',offered:'Offered, no answer yet',fulfilled:'Done: both links verified',declined:'Declined',lapsed:'Lapsed'};
-const LAPSE_WORDS={no_reply:'no answer within 60 days',no_link:'no link within 120 days of their answer',bounced:'the email bounced'};
+const LAPSE_WORDS={no_reply:'no answer within 60 days',no_link:'no link within 120 days of their answer',bounced:'the email bounced',
+  countered:'they asked for the link back from another site or page, so nothing is owed from this page; that conversation is yours to settle',partner_gone:'the partner site is no longer one of your sites'};
 const lateOwed=(x,now)=>x?.status==='their_link_live'&&Date.parse(x.owed_by)<now;
 const httpUrl=u=>/^https?:\/\/\S+$/i.test(String(u||'').trim())?String(u).trim():'';
 /** A natural anchor for the return link: their article's title without a site-name suffix ("Title | Site"), else the domain. */
@@ -503,6 +504,7 @@ export function exchangesPanel(all,h,now=Date.now()){
     return main+`<tr class="ap-xdo${overdue?' ap-late':' ap-owed'}"><td colspan="4"><div class="ap-addlink"><strong>Add this link${overdue?' now: it is overdue':''}</strong>
       <p>On ${external(x.partner_page,x.partner_page)}, add a link to ${url?external(url,url):'their article (open it from the first column)'} inside the body text, with a natural anchor such as <b>“${e(anchor)}”</b>.</p>
       ${url?`<div class="ap-snippet"><code id="${id}">${e(returnLinkHtml(url,anchor))}</code>${copyBtn(id,'Copy HTML')}<span class="ap-hidden-copy" id="${id}-u">${e(url)}</span>${copyBtn(id+'-u','Copy URL')}</div>`:''}
+      ${x.over_cap?`<small>This page already carries 2 exchanges: you may add the link on another related page of ${e(x.partner_site)} instead; Autopilot accepts it from any page of that site.</small>`:''}
       <small>Autopilot finds the link on the next crawl and marks this exchange done.</small></div></td></tr>`};
   const f=closed.filter(p=>p.exchange.status==='fulfilled').length,gone=closed.length-f;
   const closedHtml=closed.length?`<details class="ap-closed"><summary>${[f&&`${f} fulfilled`,gone&&`${gone} declined or lapsed`].filter(Boolean).join(' · ')}</summary><div class="ap-stack">${table(HEAD,closed.map((p,i)=>row(p,open.length+i)))}</div></details>`:'';

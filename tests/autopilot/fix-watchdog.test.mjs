@@ -91,7 +91,7 @@ const openIssue=(code,n,absent=0)=>({number:n,title:`LinkForge: ${code}`,state:'
   body:issueBody({code,level:'action',message:'m',fix:'f'},{code,level:'action',sig:'s',since:'2026-11-26T05:00:00Z',updated:'2026-11-26T05:00:00Z',absent,cycle:'2026-11-27T19:00:00Z'})});
 
 test('E2E-2: a stall or Gmail block is not "cleared" by weekend, locked-vault or no-send cycles; it is when its rule ran and stayed quiet',async()=>{
-  const sat='2026-11-28T13:00:00Z',signals={now:sat,mode:'send',vault:{key:true,open:true}};
+  const sat='2026-11-29T13:00:00Z',signals={now:sat,mode:'send',vault:{key:true,open:true}}; // Sunday (Saturday mornings send)
   const w=watchdogStatus({signals,stages:{}});assert.deepEqual(w,{quiet:true,reason:'weekend',vault_open:true,send_attempted:false});
   assert.equal(evaluated('sending_stalled',w),false);assert.equal(evaluated('gmail_send_blocked',w),false);assert.equal(evaluated('vault_locked',w),true);
   const issues=[openIssue('sending_stalled',1,1),openIssue('gmail_send_blocked',2,1)],gh=gitHub(issues);

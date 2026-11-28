@@ -5,7 +5,7 @@
  */
 import {fetchPage,pool,normUrl,sameSite,rootDomain,mainText,tagText,metaContent,links,jsonLd,topTerms,ageDays,NOW,attr,sleep} from './util.mjs';
 import {evaluatePublicPage} from '../refresh-public-intelligence.mjs';
-import {outboundCandidates} from './broken.mjs';
+import {outboundCandidates,contentHtml} from './broken.mjs';
 
 const SKIP_PATH=/(?:^|\/)(?:wp-admin|wp-json|wp-content|wp-includes|tag|tags|author|category|categories|feed|page\/\d+|privacy(?:-policy)?|terms(?:-of-(?:service|use)|-and-conditions|-conditions)?|cookie(?:-policy)?|disclaimer|disclosure|affiliate-disclosure|editorial-policy|contact(?:-us)?|about(?:-us|-me)?|cart|checkout|my-account|login|register|search|sitemap|html-sitemap|thank-you|thanks)(?:\/|$)|\.(?:xml|json|jpe?g|png|gif|webp|svg|pdf|zip|mp4|mp3|css|js)$/i;
 const AUTHORITY=/(?:\.gov|\.edu|\.ac\.[a-z]{2}|\.nhs\.uk|who\.int|nih\.gov|ncbi\.nlm|pubmed|doi\.org|sciencedirect|springer|nature\.com|wiley\.com|jamanetwork|bmj\.com|thelancet|cdc\.gov|wikipedia\.org|arxiv\.org|acm\.org|ieee\.org|extension\.)/i;
@@ -84,6 +84,9 @@ export function extractFeatures(url,html,domain){
     internal_links:[...internal].slice(0,400),terms:topTerms(`${title} ${h1} ${h1} ${h2.join(' ')} ${text}`,60),
     // Pages this article cites from its own content (no navigation, footer, social or shop links): free prospects for sites with no sends yet.
     external_links:outboundCandidates(html,url,{ourDomains:[domain],max:20}).map(l=>({url:l.url,anchor:l.anchor.slice(0,80)})),
+    // Every host this page's content links to, unfiltered (wordpress.com, share- paths and all): what 3-way exchanges check for
+    // a return link to a publisher, and for "this page already links to that publisher" (exchange.mjs).
+    external_hosts:[...new Set(links(contentHtml(html),url).map(l=>{try{return rootDomain(new URL(l.url).hostname)}catch{return ''}}).filter(h=>h&&!sameSite(h,domain)))].slice(0,60),
     og_image:attr((html.match(/<meta\b[^>]*property=["']og:image["'][^>]*>/i)||[''])[0],'content')||null,
   };
 }

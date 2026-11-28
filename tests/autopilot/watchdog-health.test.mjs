@@ -28,7 +28,7 @@ test('sending_stalled fires after 2 in-window weekdays with no new publisher, na
   assert.match(find(diagnose({...stalled(),stages:{outreach:{ok:null,skipped:'SENDER_NAME not set'}}}),'sending_stalled').message,/skipped: SENDER_NAME not set/);
 });
 test('sending_stalled stays quiet on weekends, deliberate holds, dry runs, other modes and a locked vault',()=>{
-  assert.ok(!find(diagnose(withSignals({now:'2026-11-28T14:00:00Z'})),'sending_stalled'),'Saturday');
+  assert.ok(!find(diagnose(withSignals({now:'2026-11-28T14:00:00Z',saturday:false})),'sending_stalled'),'Saturday with Saturday sending off (with it on, Saturday is a send day: fix-saturday-watchdog)');
   assert.ok(!find(diagnose(withSignals({now:'2026-11-29T14:00:00Z'})),'sending_stalled'),'Sunday');
   assert.ok(!find(diagnose(withSignals({hold:true})),'sending_stalled'),'OUTREACH_HOLD');
   assert.ok(!find(diagnose(withSignals({mode:'off'})),'sending_stalled'),'outreach off');
@@ -66,7 +66,7 @@ test('low_throughput warns when 5 weekdays sent under 40% of the cap while prosp
 });
 test('low_throughput stays quiet on weekends, holds, dry runs, with too little history or nothing ready',()=>{
   const sig=x=>{const b=slow();return {...b,signals:{...b.signals,...x}}};
-  assert.ok(!find(diagnose(sig({now:'2026-11-28T10:00:00Z'})),'low_throughput'),'weekend');
+  assert.ok(!find(diagnose(sig({now:'2026-11-29T10:00:00Z'})),'low_throughput'),'Sunday');
   assert.ok(!find(diagnose(sig({hold:true})),'low_throughput'),'hold');
   assert.ok(!find(diagnose(sig({mode:'off'})),'low_throughput'),'outreach off');
   assert.ok(!find(diagnose(sig({dry_run:true})),'low_throughput'),'dry run');

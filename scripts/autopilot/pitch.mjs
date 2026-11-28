@@ -89,9 +89,14 @@ export const OPT_OUT="If it's not a fit, just say so and I won't follow up.";
 const SIGN_OFF_LINE=/^[ \t]*(?:best(?: regards| wishes)?|kind regards|warm(?: regards)?|regards|thanks(?: again)?|thank you|many thanks|cheers|all the best|sincerely|warmly)[ \t]*[,.!]?[ \t]*$/im;
 // A reworded closing sentence ("...and I won't email again."): only that sentence is replaced, never the rest of its line.
 const NEAR_OPT_OUT=/[^.!?\n]*\b(?:won[\u2019']?t|will not)[ \t]+(?:follow[ -]up|e-?mail(?: you)? again|write again|contact you again)\b[^.!?\n]*[.!?]?/i;
-/** The body with OPT_OUT exactly once: a reworded closing line is replaced; a missing one goes before the sign-off (or last). */
+// The old 'P.S. ... reply "no"' line (a model's habit): never sent. A P.S. line or paragraph is dropped before the closing sentence goes in.
+const PS_LINE=/^[ \t]*P\.?[ \t]?S\.?(?=[\s:,.!-]|$)/im;
+const dropPs=b=>{if(!PS_LINE.test(b))return b;const lines=b.split('\n'),i=lines.findIndex(l=>PS_LINE.test(l));
+  let j=i+1;while(j<lines.length&&lines[j].trim()&&!SIGN_OFF_LINE.test(lines[j]))j++;
+  return [...lines.slice(0,i),...lines.slice(j)].join('\n').replace(/\n{3,}/g,'\n\n').trimEnd()};
+/** The body with OPT_OUT exactly once: a reworded closing line is replaced; a missing one goes before the sign-off (or last). A P.S. is removed. */
 export function withOptOut(body){
-  const b=String(body||'');if(b.includes(OPT_OUT))return b;
+  const b=dropPs(String(body||''));if(b.includes(OPT_OUT))return b;
   if(NEAR_OPT_OUT.test(b))return b.replace(NEAR_OPT_OUT,m=>m.match(/^\s*/)[0]+OPT_OUT);
   const lines=b.split('\n');let i=-1;lines.forEach((l,k)=>{if(SIGN_OFF_LINE.test(l))i=k});
   if(i>0&&lines.length-i<=4)return [...lines.slice(0,i),OPT_OUT,'',...lines.slice(i)].join('\n').replace(/\n{3,}/g,'\n\n');
@@ -208,8 +213,8 @@ export function mentionPitch(p,asset,{senderName,site}){
  * The one follow-up, in the same thread: the owner's honest one-line nudge. It adds a fact only when the first
  * email did not contain it (or says a re-checked dead link is still dead), and never claims anything else is new.
  */
-export function followupPitch(p,asset,{senderName,site,subject}={}){
-  const name=firstName(p.author),b=p.broken_link,fact=b?null:unusedFact(p,asset),title=short(asset.title,80),ex=standingOffer(p,site,asset);
+export function followupPitch(p,asset,{senderName,site,subject,restate=true}={}){
+  const name=firstName(p.author),b=p.broken_link,fact=b?null:unusedFact(p,asset),title=short(asset.title,80),ex=restate===false?null:standingOffer(p,site,asset);
   // An offer the first email made is restated in one clause, so the follow-up alone still says what is offered and by whom.
   const ask=p.kind==='mention'?`just checking whether you'd consider turning the mention of ${short(asset.title||site?.domain||'us',60)} in "${short(p.title,80)}" into a link.`
     :`just checking whether you'd consider adding ${title} to ${placeOf(p,isListPage(p))}${ex?`, in return for a link to ${theirRef(p,ex)} from ${bareHost(ex.partner_site)} (a separate site I run)`:''}.`;
@@ -314,26 +319,52 @@ Rules:
 
 // Money is never offered, with or without a 3-way offer (a paid offer from a publisher goes to the owner, replies.mjs).
 const PAYMENT=/\b(?:paid (?:placements?|links?|posts?|guest posts?|mentions?)|sponsored (?:posts?|links?|placements?)|(?:i|we)(?:'d| would| will|'ll| can| could)(?: be)?(?: happy| glad)?(?: to)? (?:happily |gladly )?(?:pay|compensate|sponsor)\b|pay(?:ing)? (?:you|for (?:the|a|your|this) (?:link|placement|post|mention))\b|(?:offer|make|send) (?:you )?(?:a )?(?:payment|compensation)\b|(?:payment|compensation|a fee|our fee|a small fee) (?:for|in return for) (?:the|a|your|this) (?:link|placement|post|mention)\b)/i;
+// An offer of money in any wording: "I'm happy to pay a small fee", "I can offer a small payment", "we're willing to compensate you".
+const PAY_OFFER=/\b(?:i|we)(?:'d|'m|'re|'ll| would| will| can| could| am| are)?(?: be)?(?: (?:happy|glad|willing|able|open))?(?: to)? (?:gladly |happily |also )?(?:pay|compensate|sponsor|offer (?:you )?(?:a |some |any )?(?:small |modest |one-time |flat )?(?:fee|payment|compensation|sponsorship|budget))\b/i;
+// Money words, as replies.mjs PRICE reads them. One that our own page's title, description or topic uses ("transfer fees") is
+// allowed; an offer of money (PAYMENT, PAY_OFFER) never is.
+const MONEY_WORDS=/\b(?:pay|paid|paying|payments?|fees?|compensat\w*|sponsor\w*|invoices?)\b|[$€£]\s?\d|\b\d+(?:[.,]\d+)?\s?(?:usd|eur|gbp|dollars?|euros?|pounds?|bucks)\b/gi;
 // Naming it as a scheme is never allowed: the owner's offer is a plain "I'd link to your article from my other site".
 const SWAP=/\b(?:link[- ]?exchanges?|exchange (?:of )?links|swap(?:ping)? links|link[- ]?swap(?:s|ping)?|(?:exchange|link) schemes?|link farms?|reciprocal links?|link partnerships?)\b/i;
-// Wording that offers something in return for the link: allowed only with a 3-way offer that names our partner site.
-const RETURN_OFFER=/\b(?:in return|in exchange|return the favou?r|reciprocat\w*|(?:i|we)(?:'d| would|'ll| will| can| could)(?: (?:be )?(?:happy|glad|gladly|happily)(?: to)?)? (?:(?:add|place|put|give you) (?:a |one )?link|link(?:ing)?) (?:back )?to (?:your|their)\b)/i;
+// Wording that offers something in return for the link: allowed only with a 3-way offer, and only in a sentence that names C.
+const RETURN_OFFER=/\b(?:in return|in exchange|return the favou?r|reciprocat\w*|(?:i|we)(?:'d| would|'ll| will| can| could)(?:\s+(?:also|gladly|happily|then|certainly|definitely|be\s+(?:happy|glad)\s+to|(?:happy|glad|love|like)\s+to))*\s+(?:(?:add|place|put|give\s+you|include)\s+(?:a\s+|one\s+|another\s+)?link|link(?:ing)?)\s+(?:back\s+)?to\s+(?:you|your|their)\b)/i;
+// Other wordings of a return favour: a link to their page from somewhere, a link back, featuring or listing their article on our side.
+const RETURN_FAVOUR=[RETURN_OFFER,/\blink(?:s|ed|ing)?\s+(?:back\s+)?to\s+(?:you|your|their)\b[^.!?\n]{0,80}\bfrom\b/i,/\blink(?:s|ed|ing)?\s+back\s+(?:to\s+(?:you|your|their)\b|from\b)/i,
+  /\b(?:feature|mention|promote|share|spotlight|list)\s+your\b/i,/\b(?:i|we)(?:'d| would|'ll| will| can| could)(?:\s+also)?\s+(?:add|include)\s+your\s+(?:[\w-]+\s+){0,3}?(?:to|on|in)\s+(?:my|our)\b/i];
+const returnFavour=s=>RETURN_FAVOUR.some(re=>re.test(s));
+// Without an offer: also any mention of another site of ours, which only an offer may name.
+const OTHER_SITE=/\b(?:my|our) other (?:sites?|blogs?|websites?)\b|\b(?:separate|sister|second) (?:site|blog|website)\b/i;
 const CLAIMS_PLACED=/\balready (?:added|placed|linked|put|included|published|links?|live|up|in place)\b|\b(?:i|we)(?:'ve| have| had) (?:already )?(?:added|placed|put|included|published|linked)\b|\b(?:the|my|our) link (?:to your \w+ )?is (?:already |now )?(?:live|up|in place)\b|\bnow links? to your\b/i;
+// The same claim read anywhere in the body: "already" with a link word, or "I've added/placed ..." about a link or their page
+// ("We've published a guide" is not a claim about them).
+const CLAIMS_ANY=/\balready (?:added|placed|linked|put|included|published|links?|live|up|in place)\b|\b(?:i|we)(?:'ve| have| had) (?:just |now |already )*(?:linked\b|(?:added|placed|put|included|published)\b(?=[^.!?\n]{0,60}\b(?:links?|your (?:article|page|post|guide|piece|list|resource|site)|their (?:article|page|post|guide)|it there)\b))|\b(?:the|my|our) link (?:to your \w+ )?is (?:already |now )?(?:live|up|in place)\b|\bnow links? to your\b/i;
+// A site named in the text (common top-level domains, so "Node.js" is not a site).
+const SITE_NAME=/\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:com|net|org|io|co|uk|de|fr|es|it|nl|eu|info|blog|site|online|app|dev|me|us|ca|au|nz|in|ch|at|be|se|no|dk|fi|pl|cz|ie|pt|gr|shop|store|tech|xyz|ai|tv|example)\b/gi;
+const EMAIL_ADDR=/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi;
 const OVERPROMISE=/\b(?:guarantee\w*|permanent\w*|forever|site-?wide|homepage|footer|sidebar|do-?follow|traffic|visitors|authority|domain rating|page ?rank)\b/i,METRIC=/\b(?:DA|DR)\b/;
-// C is ours, and the email has to say so: never presented as an independent site.
+// C is ours, and the email has to say so, in the sentence that names C: never presented as an independent site.
 const DISCLOSED=/\b(?:separate|other|second|sister) (?:site|blog|website) (?:that )?(?:i|we) (?:also )?(?:run|own|manage|publish|edit)\b|\b(?:i|we) also (?:run|own|manage|publish|edit)\b|\b(?:my|our) other (?:site|blog|website)\b/i;
+const INDEPENDENT=/\b(?:independent|unaffiliated|not (?:affiliated|connected|related) (?:to|with)|a friend'?s|(?:my|our|a) (?:friend|colleague|partner|client)'?s?\b|partner (?:sites?|blogs?|websites?)|third[- ]party|someone else'?s)\b/i;
+// Our own page citing their article (p.cited_by_us, from our crawl) is the one true "already links" sentence a pitch may carry.
+const CITED=/\balready links? to your (?:article|page|post|guide)\b/i;
+const DOMAIN=/\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,24}\b/gi;
 export const EXCHANGE_MAX_WORDS=120;
 const wordCount=s=>String(s||'').split(/\s+/).filter(Boolean).length;
 const sentencesOf=t=>String(t||'').replace(/https?:\/\/\S+/g,' ').split(/(?<=[.!?])\s+|\n+/).map(x=>x.trim()).filter(Boolean);
 const namesHost=(text,host)=>!!host&&new RegExp(`(?:^|[^a-z0-9.-])(?:www\\.)?${host.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?![a-z0-9-])`,'i').test(text);
 /** A sentence without the page titles it quotes, so a title that happens to say "traffic" or "already" is not read as a claim. */
-const withoutTitles=(s,ex)=>[ex.partner_title,ex.their_title].filter(t=>String(t||'').trim().length>=4).reduce((t,x)=>t.split(String(x).trim()).join(' '),s).replace(/"[^"\n]{0,160}"|\u201c[^\u201d\n]{0,160}\u201d/g,' ');
+const withoutTitles=(s,ex,more=[])=>[ex.partner_title,ex.their_title,...more].filter(t=>String(t||'').trim().length>=4).sort((a,b)=>String(b).length-String(a).length)
+  .reduce((t,x)=>t.split(String(x).trim()).join(' '),s).replace(/"[^"\n]{0,160}"|“[^”\n]{0,160}”/g,' ');
 /**
  * Why a written pitch cannot be sent, or null when it can. The reason is logged, so a failing writer explains itself.
  * With `exchange` (the 3-way offer this email is meant to make) and `site` (the promoted site A), the body must make
- * that offer: name the partner site C, say C is ours, never offer a link from A, never claim the link is in place.
+ * that offer: name the partner site C in the offer sentence and say there that C is ours; every return favour it mentions
+ * names C, and none names A or any other site; nothing anywhere in it claims a link is in place, promises traffic, a
+ * permanent or site-wide link, or calls C independent. Without an offer, no return favour and no other site of ours is
+ * mentioned at all. Money is never offered. `cited`: the prospect has our citation of their article on record (the one
+ * "already links to your article" sentence allowed).
  */
-export function pitchProblem(out,asset,{ownSubject=false,exchange=null,site=null}={}){
+export function pitchProblem(out,asset,{ownSubject=false,exchange=null,site=null,cited=false,titles:quoted=[]}={}){
   if(!out||typeof out.subject!=='string'||typeof out.body!=='string')return 'no_subject_or_body';
   // ownSubject: a follow-up's subject is ours ("Re: <original>"), not the writer's, so its length is not the writer's fault.
   if(!ownSubject&&(out.subject.length<8||out.subject.length>90)||/[\r\n]/.test(out.subject))return 'subject_length';
@@ -343,25 +374,59 @@ export function pitchProblem(out,asset,{ownSubject=false,exchange=null,site=null
   if(urls.length!==1)return urls.length?'extra_url':'our_url_missing';
   if(urls[0].replace(/[).,]+$/,'')!==asset.url)return 'wrong_url';
   if(/\[|\{\{|lorem|<\w+>/i.test(out.body))return 'placeholder_or_markup';
+  // The old P.S. line is gone for good (withOptOut drops it from a model's draft first).
+  if(PS_LINE.test(out.body))return 'ps_not_allowed';
   // The owner's copy rules: no stock openers or flattery, and never an offer of money or a link swap.
   if(/\b(?:I hope (?:this|you)|hope you(?:'re| are) (?:well|doing)|I came across|I was reading|I stumbled (?:up)?on|love your (?:blog|site|article|post|content)|great (?:article|post|content|blog))\b/i.test(`${out.subject}\n${out.body}`))return 'cliche';
-  if(PAYMENT.test(`${out.subject}\n${out.body}`))return 'payment_not_allowed';
-  if(SWAP.test(`${out.subject}\n${out.body}`))return 'offer_not_allowed';
   const ex=usableOffer(exchange,site,asset);
-  if(!ex)return RETURN_OFFER.test(out.body)?'offer_not_allowed':null;
-  const c=bareHost(ex.partner_site),own=[bareHost(site?.domain),bareHost(asset.url)].filter(Boolean);
-  if(!namesHost(out.body,c))return RETURN_OFFER.test(out.body)?'exchange_partner_missing':'exchange_offer_missing';
-  for(const s of sentencesOf(out.body)){
-    const offers=RETURN_OFFER.test(s)||namesHost(s,c)||/\blink\w*\b[^.!?]*\bfrom\b/i.test(s);
-    if(offers&&own.some(d=>namesHost(s,d)))return 'exchange_from_target_site';
-    if(RETURN_OFFER.test(s)&&!namesHost(s,c)&&/\bfrom (?:this|our|my|the same) (?:site|blog|website)\b/i.test(s))return 'exchange_from_target_site';
-    const said=namesHost(s,c)?withoutTitles(s,ex):'';
-    if(said&&CLAIMS_PLACED.test(said))return 'exchange_claims_placed';
-    if(said&&(OVERPROMISE.test(said)||METRIC.test(said)))return 'exchange_overpromise';
+  // Titles are quoted from pages, never written by the model: a title that says "Fees" or "Traffic" is not a claim.
+  const titles=[asset.title,short(asset.title,80),short(asset.title,100),...quoted];
+  const bare=withoutTitles(`${out.subject}\n${out.body}`.replace(/https?:\/\/\S+/g,' '),ex||{},titles);
+  if(PAYMENT.test(`${out.subject}\n${out.body}`)||PAY_OFFER.test(bare))return 'payment_not_allowed';
+  {const ours=`${asset.title||''} ${asset.description||''} ${site?.topic||''}`.toLowerCase();
+    if((bare.match(MONEY_WORDS)||[]).some(w=>!/^[a-z]+$/i.test(w)||!new RegExp(`\\b${w.toLowerCase()}\\b`).test(ours)))return 'payment_not_allowed'}
+  if(SWAP.test(`${out.subject}\n${out.body}`))return 'offer_not_allowed';
+  // The one true "already links to your article" sentence (our citation, from our crawl) aside, nothing claims a link is in place.
+  const claims=t=>sentencesOf(withoutTitles(t,ex||{},titles)).filter(s=>!(cited&&CITED.test(s)&&!/\b(?:i|we)(?:'ve| have| had)\b/i.test(s))).join(' ');
+  if(!ex){
+    // Without an offer nothing is offered in return, and no other site of ours is named: a promise nobody records is never made.
+    if(sentencesOf(withoutTitles(out.body,{},titles)).some(s=>returnFavour(s)||OTHER_SITE.test(s)))return 'offer_not_allowed';
+    if(CLAIMS_ANY.test(claims(out.body)))return 'claims_placed';
+    return null;
   }
-  if(!DISCLOSED.test(out.body))return 'exchange_not_disclosed';
+  const c=bareHost(ex.partner_site),own=[bareHost(site?.domain),bareHost(asset.url)].filter(Boolean);
+  if(!namesHost(out.body,c))return returnFavour(out.body)?'exchange_partner_missing':'exchange_offer_missing';
+  let disclosed=false;
+  for(const s of sentencesOf(out.body)){
+    const favour=returnFavour(s),offers=favour||namesHost(s,c)||/\blink\w*\b[^.!?]*\bfrom\b/i.test(s);
+    if(offers&&own.some(d=>namesHost(s,d)))return 'exchange_from_target_site';
+    if(favour&&!namesHost(s,c)&&/\bfrom (?:this|our|my|the same) (?:site|blog|website)\b/i.test(s))return 'exchange_from_target_site';
+    // Every return favour is the one offer, from C: never a second one from the page above, our tool or another site.
+    if(favour&&!namesHost(s,c))return 'exchange_extra_offer';
+    if(favour&&(withoutTitles(s,ex,titles).match(DOMAIN)||[]).map(bareHost).some(h=>h!==c&&!h.endsWith('.'+c)))return 'exchange_extra_offer';
+    if(namesHost(s,c)&&DISCLOSED.test(s))disclosed=true;
+    // The offer sentence itself is read strictly: no "I've added/put/published" about the return link at all.
+    if((favour||namesHost(s,c))&&CLAIMS_PLACED.test(withoutTitles(s,ex,titles)))return 'exchange_claims_placed';
+  }
+  // Claims, promises and independence are read in the whole body (titles and the true citation of their article aside).
+  const said=claims(out.body);
+  if(CLAIMS_ANY.test(said))return 'exchange_claims_placed';
+  if(OVERPROMISE.test(said)||METRIC.test(said))return 'exchange_overpromise';
+  if(!disclosed)return 'exchange_not_disclosed';
+  if(INDEPENDENT.test(said))return 'exchange_implies_independent';
   if(wordCount(out.body.replace(OPT_OUT,''))>EXCHANGE_MAX_WORDS)return 'exchange_too_long';
   return null;
+}
+/**
+ * A model-written email names only sites someone checked: ours (A and our page's host), the publisher's own, C when the email
+ * makes the 3-way offer, and those the writer was given in its facts (`hosts`: a dead link's host, a competitor link). Any other
+ * site ("a link from runnersworld-blog.net", "it could also appear on ...") is a promise or a claim nobody can track.
+ * Quoted page titles, URLs and addresses aside. Templates name only these by construction.
+ */
+export function namedSitesProblem(out,asset,{exchange=null,site=null,publisher='',hosts=[],titles=[]}={}){
+  const ex=usableOffer(exchange,site,asset),allowed=[site?.domain,asset?.url,ex?.partner_site,publisher,...hosts].map(bareHost).filter(Boolean);
+  const text=withoutTitles(`${out?.subject||''}\n${out?.body||''}`.replace(/https?:\/\/\S+/g,' ').replace(EMAIL_ADDR,' '),ex||{},[asset?.title,...titles]);
+  return (text.match(SITE_NAME)||[]).map(bareHost).some(h=>!allowed.some(d=>h===d||h.endsWith('.'+d)))?'unknown_site':null;
 }
 /** A follow-up must stay a short nudge and must not claim anything is new that the first email already said. */
 export function followupProblem(out){
@@ -563,10 +628,11 @@ export class PitchWriter{
    * really makes that offer (AI or template), so the caller records the promise only then. A follow-up restates the
    * offer its first email made (p.exchange, status 'offered'). Mentions never carry an offer.
    */
-  async write(p,asset,site,{senderName=this.senderName,situation,subject,exchange=null}={}){
+  async write(p,asset,site,{senderName=this.senderName,situation,subject,exchange=null,restate=true}={}){
     const followup=situation==='followup';
-    const ex=p.kind==='mention'?null:followup?standingOffer(p,site,asset):usableOffer(exchange,site,asset,p);
-    const template=followup?followupPitch(p,asset,{senderName,site,subject})
+    // restate:false (runOutreach): the first email's offer is not repeated (its partner site is failing or no longer ours).
+    const ex=p.kind==='mention'?null:followup?(restate===false?null:standingOffer(p,site,asset)):usableOffer(exchange,site,asset,p);
+    const template=followup?followupPitch(p,asset,{senderName,site,subject,restate})
       :p.kind==='mention'?mentionPitch(p,asset,{senderName,site}):templatePitch(p,asset,{senderName,site,exchange:ex});
     // Once every free writer is off for this cycle (quota, rejected key), later pitches still record why they are templates.
     if(!this.ai){const why=this.providers.find(x=>x.offWhy)?.offWhy;if(why)this.fail(why);return template}
@@ -575,7 +641,9 @@ export class PitchWriter{
     // A follow-up keeps "Re: <original subject>" whatever the model wrote, so it threads. The closing opt-out sentence is
     // put in when the model left it out (or reworded it), so every email still says how to stop all further email.
     const check=out=>{const o=out&&typeof out==='object'&&typeof out.body==='string'?{...out,body:withOptOut(out.body),...(followup?{subject:template.subject}:{})}:out;
-      return {o,why:pitchProblem(o,asset,{ownSubject:followup,exchange:ex,site})||(followup?followupProblem(o):null)||(grounded(o,facts)?null:'number_not_in_facts')}};
+      const titles=[p.title,p.fit_section,p.list_page?.title,p.list_page?.other_section];
+      return {o,why:pitchProblem(o,asset,{ownSubject:followup,exchange:ex,site,cited:!!p.cited_by_us?.our_url,titles})||(followup?followupProblem(o):null)
+        ||namedSitesProblem(o,asset,{exchange:ex,site,publisher:p.domain||p.page_url,hosts:JSON.stringify(facts).match(SITE_NAME)||[],titles})||(grounded(o,facts)?null:'number_not_in_facts')}};
     const done=(o,writer)=>({subject:o.subject.trim(),body:o.body.trim(),writer,facts_used:factsIn(`${o.subject}\n${o.body}`,stated),
       ...(ex&&!followup?{variant:'ai:link_exchange',base_variant:`ai:${facts.situation}`,exchange:ex}:{variant:`ai:${facts.situation}`,...(ex?{exchange:ex}:{})})});
     if(!this.client){

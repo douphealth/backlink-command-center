@@ -8,7 +8,7 @@
  *     raised within about 2 weekdays instead of lasting until someone happens to look.
  * Everything published from here is counts only: no addresses, no prospect names or domains, no reply text.
  */
-import {sendWindowOpen} from './outreach.mjs';
+import {sendWindowOpen,sendPolicy} from './outreach.mjs';
 import {EXCHANGE_PAUSE_AT} from './exchange.mjs';
 
 export const TUNING={minQueries:8,maxQueries:40,step:4,start:24};
@@ -17,6 +17,11 @@ const EMAIL=/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi;
 const isoDay=t=>new Date(t).toISOString().slice(0,10);
 /** Monday to Friday (UTC) for a YYYY-MM-DD date or a timestamp. */
 export const isWeekday=t=>{const d=new Date(/^\d{4}-\d{2}-\d{2}$/.test(String(t))?`${t}T12:00:00Z`:t).getUTCDay();return d>0&&d<6};
+/**
+ * A day that can send (UTC): Monday to Friday, and Saturday while Saturday mornings are send windows (`saturday`: the owner's
+ * SATURDAY_SENDS, signals.saturday; else the send policy in force). Sunday never sends.
+ */
+export const isSendDay=(t,saturday=sendPolicy().saturday)=>isWeekday(t)||saturday!==false&&new Date(/^\d{4}-\d{2}-\d{2}$/.test(String(t))?`${t}T12:00:00Z`:t).getUTCDay()===6;
 const plural=(n,one,many)=>`${n} ${n===1?one:many}`;
 const sum=(xs,f)=>xs.reduce((n,x)=>n+(Number(f(x))||0),0);
 
@@ -111,11 +116,13 @@ const holdWhy=k=>HOLD_WHY[k]||String(k).replaceAll('_',' ');
  */
 export function watchdogStatus({signals={},stages={}}={}){
   const now=signals.now?new Date(signals.now):new Date(),vault_open=signals.vault?.open!==false;
-  const reason=signals.dry_run?'dry_run':!vault_open?'vault_locked':signals.hold?'hold':signals.mode!=='send'?'not_sending':!isWeekday(now)?'weekend':null;
+  const reason=signals.dry_run?'dry_run':!vault_open?'vault_locked':signals.hold?'hold':signals.mode!=='send'?'not_sending':!isSendDay(now,signals.saturday??sendPolicy().saturday)?'weekend':null;
   return {quiet:!!reason,...(reason?{reason}:{}),vault_open,send_attempted:(Number(stages.outreach?.result?.attempted)||0)>0};
 }
-/** Days that could have sent: weekdays before today with at least one in-window cycle in send mode without a hold. */
-const sendDays=(history,today)=>history.filter(h=>h&&h.date<today&&isWeekday(h.date)&&(Number(h.in_window_cycles)||0)>0);
+/** "weekdays", or "send days" when a Saturday (a send day while Saturday mornings send) is among them. */
+const dayWord=days=>days.some(h=>new Date(`${h.date}T12:00:00Z`).getUTCDay()===6)?'send days':'weekdays';
+/** Days that could have sent: send days (weekdays, and Saturdays while they send) before today with at least one in-window cycle in send mode without a hold. */
+const sendDays=(history,today,saturday)=>history.filter(h=>h&&h.date<today&&isSendDay(h.date,saturday)&&(Number(h.in_window_cycles)||0)>0);
 
 /**
  * What needs the owner, most important first. Public data: no addresses, no prospect names.
@@ -179,10 +186,11 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
   const holds=outreach.holds||{},heldCount=Object.values(holds).reduce((a,b)=>a+b,0);
   const topHold=Object.entries(holds).sort((a,b)=>b[1]-a[1])[0]||null;
   // ---- Outcome watchdog: sending that should happen but does not. Never on weekends, deliberate holds, dry runs or a locked vault. ----
-  const quiet=!!signals.dry_run||!!signals.hold||mode!=='send'||!isWeekday(now)||signals.vault?.open===false;
+  const saturday=signals.saturday??sender?.saturday??sendPolicy().saturday;
+  const quiet=!!signals.dry_run||!!signals.hold||mode!=='send'||!isSendDay(now,saturday)||signals.vault?.open===false;
   const ready=Number(funnel.ready)||0;let stalled=false;
   if(!quiet&&v.ready&&ready>0){
-    const days=sendDays(history,today).slice(-2),base=days.length===2?history.filter(h=>h.date<days[0].date).at(-1):null;
+    const days=sendDays(history,today,saturday).slice(-2),base=days.length===2?history.filter(h=>h.date<days[0].date).at(-1):null;
     const recent=days.length===2&&Date.parse(today)-Date.parse(days[1].date)<=4*DAY; // Friday counts on Monday, older stretches do not
     const capUsed=days.length===2&&days.every(h=>Number.isFinite(h.sent)&&h.cap>0&&h.sent>=h.cap); // follow-ups filled the cap: not a stall
     if(recent&&!capUsed&&Number.isFinite(base?.contacted)&&(Number(funnel.contacted)||0)<=base.contacted){
@@ -195,18 +203,18 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
       const outOf=!!(stages.outreach?.result?.out_of_credits||stages.preverify?.result?.out_of_credits),used=days.every(h=>Number.isFinite(h.verifier_used))?sum(days,h=>h.verifier_used):null;
       const empty=outOf&&!v.balance?.error&&(Number(v.balance?.free_credits)===0||(used!=null&&v.daily_limit>0&&used<v.daily_limit*days.length));
       const reset=String(v.balance?.reset_in||'').replace(/[^0-9:.]/g,'').slice(0,12);
-      add('action','sending_stalled',`No new publisher was emailed on the last 2 weekdays with open send windows, although ${ready} prospects are ready (${outreach.verified_ready||0} verified now).${empty?` Verifalia's free credit balance was empty${reset?` (it resets in ${reset})`:''}, so no inbox could be verified.`:topHold?` Most held inboxes wait because ${holdWhy(topHold[0])} (${topHold[1]}).`:''} ${credits}.${skipped}`,
+      add('action','sending_stalled',`No new publisher was emailed on the last 2 ${dayWord(days)} with open send windows, although ${ready} prospects are ready (${outreach.verified_ready||0} verified now).${empty?` Verifalia's free credit balance was empty${reset?` (it resets in ${reset})`:''}, so no inbox could be verified.`:topHold?` Most held inboxes wait because ${holdWhy(topHold[0])} (${topHold[1]}).`:''} ${credits}.${skipped}`,
         empty?'Check the Verifalia account (app.verifalia.com → Credits): whether the free plan and its daily credits are still active, and whether another tool or user spends the same free credits (give Autopilot its own sub-user). Autopilot uses only free credits unless VERIFALIA_ALLOW_PAID=YES, which is your decision.'
           :'Autopilot keeps retrying every cycle. If the outreach stage is skipped, fix that setting under ⚙ Connect; if credits run out before any inbox passes, the queue needs fresher, author-level addresses. To pause sending on purpose, set repository variable OUTREACH_HOLD=YES (this alert then stays quiet).');
     }
   }
   if(!quiet&&!stalled&&v.ready&&ready>0){
-    const days=sendDays(history,today).filter(h=>Number.isFinite(h.sent)).slice(-5);
+    const days=sendDays(history,today,saturday).filter(h=>Number.isFinite(h.sent)).slice(-5);
     if(days.length===5&&Date.parse(today)-Date.parse(days[4].date)<=4*DAY){
       const sent=sum(days,h=>h.sent),cap=sum(days,h=>Number.isFinite(h.cap)?h.cap:capabilities.daily_send_cap);
       if(cap>0&&sent<0.4*cap){
         const dry=days.filter(h=>v.daily_limit>0&&h.verifier_used>=v.daily_limit).length;
-        add('warn','low_throughput',`${plural(sent,'email','emails')} went out over the last 5 weekdays, ${Math.round(100*sent/cap)}% of the ${cap} the daily cap allowed, while ${ready} prospects are ready.${dry?` Verification credits ran out on ${dry} of those days.`:''}${topHold?` Most held inboxes wait because ${holdWhy(topHold[0])}.`:''}`,
+        add('warn','low_throughput',`${plural(sent,'email','emails')} went out over the last 5 ${dayWord(days)}, ${Math.round(100*sent/cap)}% of the ${cap} the daily cap allowed, while ${ready} prospects are ready.${dry?` Verification credits ran out on ${dry} of those days.`:''}${topHold?` Most held inboxes wait because ${holdWhy(topHold[0])}.`:''}`,
           'Usually the verification credits and the pass rate of queued inboxes set this ceiling (catch-all and unknown answers never pass). Fresher, author-level addresses raise it; a larger verification budget is your decision (paid credits stay off unless VERIFALIA_ALLOW_PAID=YES).');
       }
     }
@@ -248,10 +256,12 @@ export function diagnose({stages={},capabilities={},outreach={},funnel={},spend=
   }
   // 3-way exchanges: a publisher who linked to us is owed the return link the owner promised (counts only; which publisher
   // and which of our pages live in the vault). Offers pause by themselves while EXCHANGE_PAUSE_AT or more are overdue.
-  const xOverdue=Number(funnel.exchanges_overdue)||0,xOwed=Number(funnel.exchanges_owed)||0;
-  if(xOverdue>0)add('action','exchange_owed',`${plural(xOverdue,'return link you promised is','return links you promised are')} overdue; the ${xOverdue===1?'publisher':'publishers'} already linked to you. Open Prospects > Exchanges to see exactly where to add each one.`,
+  // One code for every return link owed: a warning while they are only due, escalated to an action once any is overdue (notify.mjs
+  // then adds one "Escalated" comment), and closed only when none is owed. Both counts are in the message.
+  const xOverdue=Number(funnel.exchanges_overdue)||0,xOwed=Math.max(xOverdue,Number(funnel.exchanges_owed)||0),xDue=xOwed-xOverdue;
+  if(xOverdue>0)add('action','exchange_owed',`${plural(xOverdue,'return link you promised is','return links you promised are')} overdue; the ${xOverdue===1?'publisher':'publishers'} already linked to you${xDue?`. ${plural(xDue,'more is','more are')} due within 7 days of their link`:''}. Open Prospects > Exchanges to see exactly where to add each one.`,
     'Unlock the vault on the dashboard, open Prospects > Exchanges and add each link as shown there: a contextual link to their article from the page of your other site that is named. Autopilot finds it on the next crawl and closes this alert.');
-  else if(xOwed>0)add('warn','exchange_due',`${plural(xOwed,'publisher has','publishers have')} linked to you in a link exchange; the return link you promised is due within 7 days of their link.`,
+  else if(xOwed>0)add('warn','exchange_owed',`${plural(xOwed,'publisher has','publishers have')} linked to you in a link exchange; the return link you promised is due within 7 days of their link (none is overdue yet).`,
     'Unlock the vault on the dashboard, open Prospects > Exchanges and add each link from the page shown there. Autopilot verifies it from the crawl by itself.');
   if(xOverdue>=EXCHANGE_PAUSE_AT&&sender?.link_exchange!=='off')add('info','exchanges_paused',`New link-exchange offers are paused while ${plural(xOverdue,'promised return link is','promised return links are')} overdue; pitches still go out, asking for the link only.`,
     `Add the overdue return links (Prospects > Exchanges). Offers resume by themselves once fewer than ${EXCHANGE_PAUSE_AT} are overdue.`);

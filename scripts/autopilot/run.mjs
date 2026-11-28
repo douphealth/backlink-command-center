@@ -35,6 +35,8 @@ import {requireRebuild,rebuildHold,rebuildFromMailbox,linkRestoredSends,pruneRes
 import {verifyLedger,mxClassStats} from './recipient-policy.mjs';
 import {buildPartnerIndex,pickPartner,failingSites,trackExchanges,exchangeCounts,exchangeSummary} from './exchange.mjs';
 import {NOW,ageDays,normUrl} from './util.mjs';
+/** Exchange states whose publisher stays out of the public list of won links (they show in the vault's Exchanges view only). */
+const EXCHANGE_SHOWN=new Set(['offered','accepted','their_link_live','fulfilled']);
 
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'../..');
 const PATHS={summary:resolve(ROOT,'public/data/autopilot.json'),vault:resolve(ROOT,'public/data/vault.json'),cache:resolve(ROOT,'.autopilot-cache/crawl.json')};
@@ -397,7 +399,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     await stage('reply_drafts',vaultOk&&gmailOk&&cfg.outreach.replyMode!=='off'&&typeof mailer?.draft==='function',()=>answerReplies({state,writer,mailer,config:{...cfg.outreach,exchange:cfg.exchange,exchangeMode:cfg.exchange.mode},exchangePartner,assets:ranked,deadline:deadline-4*60e3,log}),!vaultOk?privateWhy:!mailer?'Gmail app password not set':!gmailOk?connections.gmail.error:cfg.outreach.replyMode==='off'?'REPLY_MODE=off':'transport cannot save drafts',{until:deadline-3.5*60e3});
     // Contact-form-only publishers: messages for the owner to paste by hand (never submitted), counted as contacted (forms.mjs).
     await stage('forms',vaultOk,()=>import('./forms.mjs').then(m=>m.prepareForms({state,writer,exchangePartner,sites:SITES,assets:ranked,fetchImpl,log,deadline:deadline-3.5*60e3,config:{...cfg.outreach,daily:cfg.forms.daily,exchangeMode:cfg.exchange.mode,pickAsset,blockedAssets,hold:!gmailOk?'gmail_not_connected':cfg.outreach.mode==='off'?'outreach_off':env.OUTREACH_HOLD==='YES'?'outreach_hold':sentUnknown?'sent_check_failed':state.rebuild_required?'mailbox_rebuild_pending':''}})),privateWhy,{until:deadline-3*60e3});
-    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown&&!state.rebuild_required,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets,pickAsset,sentIndex,demand,exchange:cfg.exchange,exchangePartner},deadline:deadline-2*60e3,log}),mailWhy||rebuildHold(state,stages.rebuild)||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
+    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown&&!state.rebuild_required,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets,pickAsset,sentIndex,demand,exchange:cfg.exchange,exchangePartner,failingSites:failingSites(indexation)},deadline:deadline-2*60e3,log}),mailWhy||rebuildHold(state,stages.rebuild)||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,free_ai:writer.usedAi,template_fallbacks:writer.fallbacks,...(writer.aiModel?{ai_provider:writer.aiProvider,ai_model:writer.aiModel}:{}),...(Object.keys(writer.reasons||{}).length?{fallback_reasons:writer.reasons}:{})};
     aiWriter=writer.ai;
     if(stages.outreach?.ok&&(writer.used+writer.usedAi+writer.fallbacks)>0){const why=Object.entries(writer.reasons||{}).map(([k,n])=>`${k} x${n}`).join(', ');
@@ -416,7 +418,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
       !vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':braked?'outreach is off, so no inbox is verified':!mailer?.authorizeRecipient?'no Gmail transport':rebuildHold(state,stages.rebuild),{until:deadline-30e3});
   }finally{await mailer?.close?.().catch(()=>{})}
   // ---- 6. Link verification ----
-  await stage('link_checks',vaultOk,()=>checkLinks({state,ourDomains:SITES.map(s=>s.domain),fetchImpl,deadline,fulfilDays:cfg.exchange.fulfilDays,log}),privateWhy,{until:deadline+90e3});
+  await stage('link_checks',vaultOk,()=>checkLinks({state,ourDomains:SITES.map(s=>s.domain),fetchImpl,deadline,fulfilDays:cfg.exchange.fulfilDays,pageCap:cfg.exchange.perPartnerPage,log}),privateWhy,{until:deadline+90e3});
   // Every cycle, free: opt-outs close offers, stale offers lapse, and each return link owed is looked for on its partner page.
   await stage('exchanges',vaultOk,()=>trackExchanges({state,index:partnerIndex,cfg:cfg.exchange,fetchImpl,now:new Date(),deadline:deadline+120e3,log}),privateWhy,{until:deadline+150e3});
   // ---- Outputs ----
@@ -473,7 +475,9 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     internal_links:internal.slice(0,200),indexation,search_performance:search,
     google_index:vaultOk&&state.index_status?indexReport(state,SITES,ranked):previous.google_index||null,
     bing:vaultOk&&state.bing?{submitted_total:Object.keys(state.bing.submitted||{}).length,last_run:stages.bing_submit?.result||null,errors:state.bing.errors||{}}:previous.bing||null,tuning:vaultOk?state.tuning||null:previous.tuning||null,
-    wins:Object.values(state.prospects).filter(p=>p.status==='won'||p.status==='already_linked').map(p=>({site:p.site,publisher:p.domain,page_url:p.page_url,title:p.title,
+    // A publisher in a 3-way exchange is left out of the public list (it is in the vault's Exchanges view): with the public
+    // exchange counts, a won link listed here would name a link-exchange partner.
+    wins:Object.values(state.prospects).filter(p=>(p.status==='won'||p.status==='already_linked')&&!EXCHANGE_SHOWN.has(p.exchange?.status)&&!p.exchange_draft).map(p=>({site:p.site,publisher:p.domain,page_url:p.page_url,title:p.title,
       kind:p.status==='won'?'won':'existing',target:p.won?.target||p.existing_link?.url||null,anchor:p.won?.anchor||p.existing_link?.anchor||'',rel:p.won?.rel||p.existing_link?.rel||'',found_at:p.won?.found_at||p.found_at})).sort((a,b)=>String(b.found_at).localeCompare(String(a.found_at))).slice(0,200),
     log:logs.slice(-80),
   };
@@ -484,7 +488,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   Object.assign(summary.capabilities,{vault_bytes:sealed?sealed.bytes:await stat(P.vault).then(s=>s.size,()=>null),vault_format:vaultFormat(sealed?.box||box),rebuild_required:vaultOk&&!!state.rebuild_required});
   // Self-diagnosis: what Autopilot cannot fix by itself, with the exact fix.
   // History and signals are counts only; the outcome rules (stalls, throughput, inflow) never fire on weekends, holds or dry runs.
-  const signals={now:now.toISOString(),dry_run:cfg.dryRun,hold,brake:env.OUTREACH_HOLD==='YES',mode:cfg.outreach.mode,reply_mode:cfg.outreach.replyMode,vault:{key:!!cfg.dataKey,open:vaultOk},
+  const signals={now:now.toISOString(),dry_run:cfg.dryRun,hold,brake:env.OUTREACH_HOLD==='YES',mode:cfg.outreach.mode,reply_mode:cfg.outreach.replyMode,saturday:cfg.outreach.saturday,vault:{key:!!cfg.dataKey,open:vaultOk},
       ...(vaultOk?{discovery:state.discovery_log||[],paid_discovery:paidDiscovery,...replySignals(state,now),
         ...(state.rebuild_required?{rebuild_days:Math.max(0,Math.floor((now-Date.parse(state.rebuild?.requested_at||state.rebuild_required))/864e5))||0}:{})}:{})};
   summary.attention=diagnose({stages,capabilities:summary.capabilities,outreach:summary.outreach||{},funnel:summary.funnel||{},spend:summary.spend,held:cfg.outreach.mode==='off',noPitchSites,indexation,

@@ -11,12 +11,12 @@ const H=36e5;
 const summary=(generated_at,next_send_at,over={})=>({generated_at,capabilities:{outreach_mode:'send'},outreach:{ready:12,next_send_at,reply_health:'ok'},...over});
 
 test('waker: a Saturday-morning send window is planned like a weekday one',()=>{
-  // Saturday 05:30 UTC, the UK window opens at 08:00: wake then (2 h gap and 5 h keep-alive both allow it).
-  let p=planWake(summary('2026-11-28T05:30:00Z','2026-11-28T08:00:00.000Z'),Date.parse('2026-11-28T05:31:00Z'));
-  assert.equal(p.at,'2026-11-28T08:00:00.000Z');assert.match(p.reason,/send window 2026-11-28T08:00Z/);
-  // After the UK window, the US Saturday window (14:00 UTC).
-  p=planWake(summary('2026-11-28T11:00:00Z','2026-11-28T14:00:00.000Z'),Date.parse('2026-11-28T11:01:00Z'));
-  assert.equal(p.at,'2026-11-28T14:00:00.000Z');assert.match(p.reason,/send window/);
+  // Saturday 05:30 UTC, the UK window opens at 09:00: wake then (2 h gap and 5 h keep-alive both allow it).
+  let p=planWake(summary('2026-11-28T05:30:00Z','2026-11-28T09:00:00.000Z'),Date.parse('2026-11-28T05:31:00Z'));
+  assert.equal(p.at,'2026-11-28T09:00:00.000Z');assert.match(p.reason,/send window 2026-11-28T09:00Z/);
+  // After the UK window, the US Saturday window (17:00 UTC: 09:00 in Los Angeles, 12:00 in New York).
+  p=planWake(summary('2026-11-28T13:00:00Z','2026-11-28T17:00:00.000Z'),Date.parse('2026-11-28T13:01:00Z'));
+  assert.equal(p.at,'2026-11-28T17:00:00.000Z');assert.match(p.reason,/send window/);
   // A window open now still waits for the 2 h gap.
   assert.equal(planWake(summary('2026-11-28T09:10:00Z','2026-11-28T09:10:00.000Z'),Date.parse('2026-11-28T09:11:00Z')).at,'2026-11-28T11:10:00.000Z');
 });
@@ -33,11 +33,14 @@ test('waker: a chained weekend reaches both Saturday-morning windows and keeps t
   setSendPolicy({saturday:true});
   const cycles=chain(queued(),'2026-11-27T20:30:00Z','2026-11-30T00:30:00Z');
   const forWindow=c=>/next send window/.test(c.reason);
-  assert.ok(inside(cycles,'2026-11-28T08:00','2026-11-28T12:00').some(forWindow),'a cycle inside the EU Saturday window (08-12 UTC)');
-  assert.ok(inside(cycles,'2026-11-28T14:00','2026-11-28T18:00').some(forWindow),'a cycle inside the US Saturday window (14-18 UTC)');
+  assert.ok(inside(cycles,'2026-11-28T09:00','2026-11-28T13:00').some(forWindow),'a cycle inside the UK Saturday window (09-13 UTC in winter)');
+  assert.ok(inside(cycles,'2026-11-28T17:00','2026-11-28T18:00').some(forWindow),'a cycle inside the US Saturday window (17-18 UTC: 09-13 on both coasts)');
   assert.ok(!inside(cycles,'2026-11-29T00:00','2026-11-30T00:00').some(forWindow),'Sunday never has a send window');
-  const sunday=inside(cycles,'2026-11-29T10:00','2026-11-29T20:00').map(c=>c.at.slice(11));
-  for(const h of ['11:00','15:00','19:00'])assert.ok(sunday.includes(h),`Sunday verification slot ${h}: ${sunday}`);
+  // Sunday verification slots: with the US Saturday window ending at 18:00 UTC the chain's keep-alive lands at 10:00, so the
+  // 11:00 slot is inside the 2 h gap; 15:00 (UK Monday 07:00 is 16 h away) and 19:00 (US Monday) still verify Monday's inboxes.
+  const sunday=inside(cycles,'2026-11-29T10:00','2026-11-29T20:00').filter(c=>/Sunday verification/.test(c.reason)).map(c=>c.at.slice(11));
+  assert.ok(sunday.includes('19:00'),`Sunday verification slot 19:00: ${sunday}`);
+  assert.ok(inside(cycles,'2026-11-29T11:00','2026-11-29T17:00').length>0,'a Sunday cycle within 20 h of the UK Monday window');
   for(let i=1;i<cycles.length;i++){const d=(Date.parse(cycles[i].at)-Date.parse(cycles[i-1].at))/H;assert.ok(d>=2-1/60&&d<=5,`${cycles[i].at}: ${d} h after the last cycle`)}
 });
 

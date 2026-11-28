@@ -56,7 +56,7 @@ test('F1/F6: replies stored under the old rules are read again once: hidden opt-
   await processReplies({state,imap:inbox(),log:m=>logs.push(m)});
   assert.equal(optOut.status,'declined');assert.ok(isSuppressed(state,'ed@pub.example','pub.example'));assert.equal(optOut.history.at(-1).sentiment,'negative');
   assert.equal(fee.needs_owner,true);assert.equal(fee.condition,'paid');assert.equal(fee.history.at(-1).condition,'paid');
-  assert.ok(state.migrations.reply_class_v3);assert.ok(logs.some(l=>/1 earlier replies re-read as opt-outs.*1 as replies with a condition/.test(l)));
+  assert.ok(state.migrations.reply_class_v4);assert.ok(logs.some(l=>/1 earlier replies re-read as opt-outs.*1 as replies with a condition/.test(l)));
   // The fee reply gets no draft and no automatic email, only the owner flag.
   const m=transport();const r=await answerReplies({state:ready(state),mailer:m,assets:[ASSET],config:sendCfg});
   assert.equal(m.drafts.length+m.sent.length,0);assert.equal(r.owner_needed,1);assert.equal(fee.reply_draft.reason,'paid_placement');

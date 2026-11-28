@@ -17,11 +17,13 @@
  * Only counts are logged; addresses, names and reply text stay in the sealed vault.
  */
 import {createHash} from 'node:crypto';
-import {buildMessage,newMessageId,classifyReply,replyCondition,decodeWords} from './mail.mjs';
+import {buildMessage,newMessageId,classifyReply,replyCondition,decodeWords,exchangeAutoOk} from './mail.mjs';
 import {grounded} from './pitch.mjs';
 import {applyProof,applyOptOut,noteCondition,sendFailure} from './outreach.mjs';
 import {isSuppressed,usableVerification,normalizeEmail} from './recipient-policy.mjs';
 import {SITES} from '../../functions/_lib/sites.js';
+import {STALE_DAYS} from './exchange.mjs';
+import {DAY} from './util.mjs';
 
 const EMAIL=/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi;
 const iso=ms=>new Date(ms).toISOString();
@@ -170,7 +172,7 @@ Rules:
  * The plain answer text for a template situation: always safe, used whenever the AI writer is off or its answer fails a
  * check. `offer` (3-way kinds): {partner_site, partner_page, partner_title, their_url}; `status`: the exchange's status.
  */
-export function templateAnswer(kind,{anchor,url,description,offer={},status}){
+export function templateAnswer(kind,{anchor,url,description,offer={},status,question=true}){
   const desc=description?[description]:[];
   const their=offer.their_url,page=offer.partner_page,site=bareHost(offer.partner_site),title=offer.partner_title?`"${short(offer.partner_title,80)}"`:'a related page';
   const live=status==='their_link_live';
@@ -178,8 +180,8 @@ export function templateAnswer(kind,{anchor,url,description,offer={},status}){
     exchange:[live?`Thanks for adding the link.`:`Thanks, glad this works for you.`,'',
       `To confirm the details: you add a link from your article (${their}) to ${url}, with "${anchor}" as the link text. I'll add the link to your article from ${title} (${page}) on ${site}, a separate site I run, ${live?'now that yours is live':'as soon as yours is live'}.`],
     exchange_question:[`Thanks for getting back to me.`,'',
-      `To recap what I suggested: you add a link from your article (${their}) to ${url}, with "${anchor}" as the link text, and I add a link to your article from ${title} (${page}) on ${site}, a separate site I run, once yours is live.`,'',
-      `I'll check your question and come back to you shortly.`],
+      `To recap what I suggested: you add a link from your article (${their}) to ${url}, with "${anchor}" as the link text, and I add a link to your article from ${title} (${page}) on ${site}, a separate site I run, once yours is live.`,
+      ...(question?['',`I'll check your question and come back to you shortly.`]:[])],
     exchange_counter:[`Thanks for the reply.`,'',
       `Just so I have it right: which site and which page would you want the link to your article to come from? What I suggested was a link from ${title} (${page}) on ${site}, a separate site I run.`],
     exchange_offer:[`Thanks for the reply.`,'',
@@ -191,6 +193,11 @@ export function templateAnswer(kind,{anchor,url,description,offer={},status}){
     guest_post:[`Thanks for the reply.`,'',`Could you send me your contributor guidelines and the topics you are looking for at the moment? I'll take a look.`],
   })[kind].join('\n');
 }
+// Their reply says their link is already up ("Done, the link is live", "I've added it"): the confirmation is worded for a live link
+// even before this cycle's link check has seen it (the obligation itself still starts only once the link is verified).
+const LINK_UP=/\b(?:(?:the |your |my )?link (?:is|'s) (?:now )?(?:up|live|in place|added)|(?:it'?s|it is) (?:now )?(?:up|live)|(?:i|we)(?:'ve| have)? (?:just |now |already )?(?:added|linked|put|placed|included) (?:it|the link|your link|a link|you|your page)|added (?:it|the link|your link)|is now live|now live|done[,.!]? (?:it'?s|the link is) (?:up|live|in))\b/i;
+export const saysLinkUp=text=>{const t=String(text||'').replace(/[\u2018\u2019]/g,"'");const m=t.match(LINK_UP);
+  return !!m&&!/(?:\b(?:not|never|haven't|hasn't|isn't|won't|will|yet)\b|n't\b)[^.!?\n]{0,25}$/i.test(t.slice(Math.max(0,m.index-30),m.index))&&!/^[^.!?\n]{0,20}\b(?:yet|soon|tomorrow|next week|later)\b/i.test(t.slice(m.index+m[0].length))};
 const cleanDescription=d=>{d=String(d||'').replace(/\s+/g,' ').trim();if(d.length<30)return '';d=d.length>220?d.slice(0,219).replace(/\s+\S*$/,'')+'…':d;return /[.!?…]$/.test(d)?d:d+'.'};
 const fresh=(t,nowMs,max=25*60e3)=>{const age=nowMs-Date.parse(t||'');return Number.isFinite(age)&&age>=0&&age<=max};
 
@@ -217,14 +224,18 @@ export async function answerReplies({state,writer,mailer,config={},assets=[],exc
     if(t()>deadline||handled>=maxAnswers)break;
     const reply=[...(p.history||[])].reverse().find(h=>h.type==='reply');
     if(!reply){p.awaiting_us=false;continue}
-    const key=replyKey(reply);if(p.reply_draft?.for===key)continue; // never answer the same reply twice
-    const at=iso(t()),done=(m,reason)=>{p.reply_draft={for:key,at,mode:m,...(reason?{reason}:{})}};
+    const key=replyKey(reply),at=iso(t()),done=(m,reason)=>{p.reply_draft={for:key,at,mode:m,...(reason?{reason}:{})}};
+    // The stored words are read again with the current rules, also for a reply already answered (a draft still waiting for the
+    // owner): an opt-out an earlier rule missed is honoured, never answered, and a fee or swap it missed goes to the owner
+    // instead of getting an answer that reads like acceptance.
+    const reread=reply.sentiment==='negative'?'negative':classifyReply({from:reply.from,subject:reply.subject||'',body:reply.excerpt||''});
+    if(reread==='negative'&&reply.sentiment!=='negative'&&p.status!=='declined'){reply.sentiment='negative';applyOptOut(state,p,reply.from);done('none','opted_out');stats.skipped++;stats.opt_outs_reread=(stats.opt_outs_reread||0)+1;continue}
+    // A form system's acknowledgement stored before such mail was recognised (wordpress@, "we have received your message"):
+    // nobody wrote it, so nobody is answered and nothing waits for the owner.
+    if(reread==='auto'){p.awaiting_us=false;done('none','automatic_reply');stats.skipped++;continue}
+    if(p.reply_draft?.for===key)continue; // never answer the same reply twice
     const to=normalizeEmail(String(reply.from||'').toLowerCase())||normalizeEmail(String(p.email||'').toLowerCase());
     if(p.status==='declined'||reply.sentiment==='negative'||isSuppressed(state,p.email,p.domain)||(to&&isSuppressed(state,to,p.domain))){p.awaiting_us=false;done('none','opted_out');stats.skipped++;continue}
-    // The stored words are read again with the current rules: an opt-out an earlier rule missed is honoured, never answered,
-    // and a fee or swap it missed goes to the owner instead of getting an answer that reads like acceptance.
-    const reread=classifyReply({from:reply.from,subject:reply.subject||'',body:reply.excerpt||''});
-    if(reread==='negative'){reply.sentiment='negative';applyOptOut(state,p,reply.from);done('none','opted_out');stats.skipped++;stats.opt_outs_reread=(stats.opt_outs_reread||0)+1;continue}
     // (The link back we offered ourselves, accepted or asked about, is not a condition for the owner.)
     if(!reply.condition){const c=replyCondition({body:reply.excerpt||''});if(c){reply.condition=c;if(!(c==='reciprocal'&&OUR_TERMS.includes(reply.exchange)))noteCondition(p,c,{at:reply.at})}}
     let kind=answerKind(p,reply),offer=null;
@@ -234,7 +245,9 @@ export async function answerReplies({state,writer,mailer,config={},assets=[],exc
       offer=p.exchange;if(offerProblem(offer,p,sites)){p.needs_owner=true;done('none','exchange_offer_invalid');stats.owner_needed++;continue}
     }else if(kind==='reciprocal'&&!p.exchange&&typeof exchangePartner==='function'&&config.exchangeMode!=='off'&&config.exchange?.mode!=='off'){
       // A link-back request on a pitch that offered no exchange: answered with the 3-way offer when a partner page is free.
-      let o=p.exchange_draft?offerFields(p.exchange_draft):null;
+      // An earlier draft's offer is reused while it still holds its page (exchange.mjs exchangeTally); an older one is picked again,
+      // so the page cap is checked afresh.
+      let o=p.exchange_draft&&t()-Date.parse(p.exchange_draft.at)<STALE_DAYS*DAY?offerFields(p.exchange_draft):null;
       if(!o)try{o=await exchangePartner(p,(sites||[]).find(x=>x.domain===p.site)||{domain:p.site||'',topic:''})}catch{o=null}
       if(o&&!offerProblem(o,p,sites)){offer=offerFields(o);kind='exchange_offer'}
     }
@@ -247,13 +260,14 @@ export async function answerReplies({state,writer,mailer,config={},assets=[],exc
     const name=first?.sender_name||config.senderNames?.[p.site]||config.senderName||'';
     // Questions-only drafts for the owner: never written by AI, never sent automatically.
     const conditional=['reciprocal','guest_post','exchange_counter','exchange_offer'].includes(kind);
-    let middle=templateAnswer(kind,{anchor,url:asset.url,description,offer:offer||{},status:p.exchange?.status}),wrote='template';
+    const status=p.exchange?.status==='their_link_live'||kind==='exchange'&&saysLinkUp(reply.excerpt)?'their_link_live':p.exchange?.status;
+    let middle=templateAnswer(kind,{anchor,url:asset.url,description,offer:offer||{},status,question:!!reply.question}),wrote='template';
     if(['positive','neutral','question','exchange'].includes(kind)&&typeof writer?.complete==='function'){
       const theirs=String(reply.excerpt||'').replace(EMAIL,'(address removed)').replace(/\+?\d[\d\s().-]{7,}\d/g,'(number removed)').slice(0,600);
       const facts={situation:kind==='exchange'?'exchange_confirmation':kind,their_reply:theirs,our_page:{title:short(asset.title,120),url:asset.url,description:description||null},suggested_anchor:anchor,
         ...(kind==='exchange'?{their_article:{url:offer.their_url,title:short(offer.their_title,120)||null},
           return_link:{site:bareHost(offer.partner_site),page_url:offer.partner_page,page_title:short(offer.partner_title,120)||null,disclosure:'a separate site I run',
-            when:p.exchange.status==='their_link_live'?'now that their link is live':'as soon as their link is live'}}:{})};
+            when:status==='their_link_live'?'now that their link is live':'as soon as their link is live'}}:{})};
       const urls=kind==='exchange'?[asset.url,offer.their_url,offer.partner_page]:asset.url;
       const check=kind==='exchange'?text=>exchangeProblem(tidyAnswer(text,urls),{url:asset.url,offer,site:p.site,facts}):text=>answerProblem(tidyAnswer(text,urls),{url:asset.url,facts});
       const r=await writer.complete({system:kind==='exchange'?SYSTEM_EXCHANGE:SYSTEM,user:'Write the reply from these facts (JSON):\n'+JSON.stringify(facts),maxTokens:1500,check}).catch(()=>({why:'writer_error'}));
@@ -276,7 +290,10 @@ export async function answerReplies({state,writer,mailer,config={},assets=[],exc
       why=sendStopped?(sendWhy||'sending_stopped'):conditional?'needs_owner':kind==='question'||kind==='exchange_question'||reply.question?'question':!theirId?'no_thread_id'
         :to!==normalizeEmail(String(p.email||'').toLowerCase())?'different_address':p.duplicate_sent?'duplicate_guard':!name?'no_sender_name'
         :autoSent>=maxAutoSends?'cycle_limit':(p.history||[]).some(h=>h.type==='answer'&&h.via==='send')?'one_automatic_answer'
-        :!['positive','exchange'].includes(kind)||reply.sentiment!=='positive'||reread!=='positive'?'not_positive':digits?'contains_numbers':null;
+        :!['positive','exchange'].includes(kind)||reply.sentiment!=='positive'||reread!=='positive'?'not_positive':digits?'contains_numbers'
+        // A 3-way confirmation goes out by itself only for a plain yes, or one that names the site we offered: never for one that
+        // says where the link back should come from or attaches a "but", "prefer", "only", "must" or "as long as" (any doubt: a draft).
+        :kind==='exchange'&&!exchangeAutoOk(reply.excerpt,offer)?'exchange_conditions':null;
       if(!why){
         let proof;try{proof=await mailer.authorizeRecipient(p,{state,followup:true,deadline})}catch{proof={ok:false,reason:'verification_error'}}
         if(applyProof(state,p,proof,{followup:true})&&p.email===to&&usableVerification(p.recipient_proof?.verification,p.email)&&!isSuppressed(state,p.email,p.domain)){

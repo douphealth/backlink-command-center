@@ -1,6 +1,6 @@
 /** Outreach state machine with mandatory recipient preflight and reply-health gate. */
 import {createHash} from 'node:crypto';
-import {buildMessage,newMessageId,smtpSend,Imap,classifyReply,replyCondition,replyText,isQuestion,optOutSubject,lfIds,baseSubject} from './mail.mjs';
+import {buildMessage,newMessageId,smtpSend,Imap,classifyReply,replyCondition,replyText,isQuestion,optOutSubject,lfIds,baseSubject,decodeWords} from './mail.mjs';
 import {readSent,publisherDomain} from './rebuild.mjs';
 import {followupPitch,reSubject} from './pitch.mjs';
 import {fetchPage,links,hostOf,sameSite,ageDays,NOW,sleep,DAY,pool} from './util.mjs';
@@ -10,16 +10,40 @@ import {RecipientVerifier,isSuppressed,usableVerification,samePublisher,normaliz
 import {checkDead} from './broken.mjs';
 import {normUrl as normUrlKey} from './util.mjs';
 import {formQueue} from './forms.mjs';
+import {publisherFootprint} from './exchange.mjs';
 export const PER_ASSET_DAILY=2;
 // Recipient regions: [TLD pattern, weekday window as UTC hours [from,to), UTC offset in hours]. The offset decides the
-// recipient's own weekday, and places the Saturday-morning window in their local time.
+// recipient's own weekday for the weekday windows.
 const REGIONS=[
  [/\.(uk|ie|de|fr|es|it|nl|be|pt|gr|se|no|dk|fi|pl|cz|at|ch|eu|za|ro|hu|sk|si|hr|bg|lt|lv|ee|lu|cy|mt)$/,[7,16],1],
  [/\.(au|nz)$/,[21,6],10],[/\.in$/,[3,12],5],[/\.(jp|sg|my|ph|hk|kr|cn|id|th|vn|tw)$/,[0,9],8]
 ];
 const DEFAULT_REGION=[null,[13,21],-5];
-/** Saturday morning in the recipient's local time, [from,to) hours: EU 08-12 UTC, US (default) 14-18 UTC. Sunday never sends. */
+/** Saturday morning in the recipient's local time, [from,to) hours. Sunday never sends. */
 export const SATURDAY_HOURS=[9,13];
+// The recipient's real time zones (daylight saving included) for the Saturday window, by top-level domain. Where one domain
+// spans several zones (.com and other generic domains: the US East and West coasts; .au: Sydney and Perth; .id) only the
+// hours that are Saturday 09:00-13:00 in all of them send, so no recipient there gets a Saturday email outside that time.
+const ZONES={uk:['Europe/London'],ie:['Europe/Dublin'],pt:['Europe/Lisbon'],de:['Europe/Berlin'],fr:['Europe/Paris'],es:['Europe/Madrid'],it:['Europe/Rome'],
+ nl:['Europe/Amsterdam'],be:['Europe/Brussels'],gr:['Europe/Athens'],se:['Europe/Stockholm'],no:['Europe/Oslo'],dk:['Europe/Copenhagen'],fi:['Europe/Helsinki'],
+ pl:['Europe/Warsaw'],cz:['Europe/Prague'],at:['Europe/Vienna'],ch:['Europe/Zurich'],eu:['Europe/Brussels'],za:['Africa/Johannesburg'],ro:['Europe/Bucharest'],
+ hu:['Europe/Budapest'],sk:['Europe/Bratislava'],si:['Europe/Ljubljana'],hr:['Europe/Zagreb'],bg:['Europe/Sofia'],lt:['Europe/Vilnius'],lv:['Europe/Riga'],
+ ee:['Europe/Tallinn'],lu:['Europe/Luxembourg'],cy:['Asia/Nicosia'],mt:['Europe/Malta'],au:['Australia/Sydney','Australia/Perth'],nz:['Pacific/Auckland'],
+ in:['Asia/Kolkata'],jp:['Asia/Tokyo'],sg:['Asia/Singapore'],my:['Asia/Kuala_Lumpur'],ph:['Asia/Manila'],hk:['Asia/Hong_Kong'],kr:['Asia/Seoul'],
+ cn:['Asia/Shanghai'],id:['Asia/Jakarta','Asia/Jayapura'],th:['Asia/Bangkok'],vn:['Asia/Ho_Chi_Minh'],tw:['Asia/Taipei']};
+const DEFAULT_ZONES=['America/New_York','America/Los_Angeles'];
+const zoneFormat=new Map();
+/** Local weekday (0 = Sunday) and hour in an IANA time zone. */
+function localTime(zone,t){
+ let f=zoneFormat.get(zone);if(!f)zoneFormat.set(zone,f=new Intl.DateTimeFormat('en-US',{timeZone:zone,weekday:'short',hour:'2-digit',hourCycle:'h23'}));
+ const parts=Object.fromEntries(f.formatToParts(t).map(x=>[x.type,x.value]));
+ return {day:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(parts.weekday),hour:Number(parts.hour)%24};
+}
+/** Saturday 09:00-13:00 in every time zone of the recipient's domain. */
+export function saturdayMorning(domain,now=new Date()){
+ const tld=String(domain||'').toLowerCase().replace(/\.$/,'').split('.').pop();
+ return (ZONES[tld]||DEFAULT_ZONES).every(z=>{const l=localTime(z,now);return l.day===6&&l.hour>=SATURDAY_HOURS[0]&&l.hour<SATURDAY_HOURS[1]});
+}
 const SEND_POLICY={saturday:true};
 /**
  * Which days send (run.mjs sets it once per cycle from the owner's SATURDAY_SENDS setting; tests reset it).
@@ -29,9 +53,9 @@ export function setSendPolicy({saturday=true}={}){SEND_POLICY.saturday=saturday!
 export const sendPolicy=()=>({...SEND_POLICY});
 export function sendWindowOpen(domain,now=new Date()){
  const [,[from,to],offset]=REGIONS.find(([re])=>re.test(domain))||DEFAULT_REGION;
- const h=now.getUTCHours(),local=new Date(now.getTime()+offset*36e5),d=local.getUTCDay();
- if(d===6)return SEND_POLICY.saturday&&local.getUTCHours()>=SATURDAY_HOURS[0]&&local.getUTCHours()<SATURDAY_HOURS[1];
- return d!==0&&(from<to?h>=from&&h<to:h>=from||h<to);
+ if(SEND_POLICY.saturday&&saturdayMorning(domain,now))return true;
+ const h=now.getUTCHours(),d=new Date(now.getTime()+offset*36e5).getUTCDay();
+ return d!==0&&d!==6&&(from<to?h>=from&&h<to:h>=from||h<to);
 }
 export function nextSendWindow(domain,from=new Date()){
  if(sendWindowOpen(domain,from))return new Date(from);
@@ -148,14 +172,20 @@ export function noteCondition(p,condition,{at=null}={}){
 import {replyConditions,exchangeIntent} from './mail.mjs';
 /** 3-way exchange states in which our offer still stands: a reply about the link back is about this offer. */
 const EXCHANGE_OPEN=new Set(['offered','accepted','their_link_live']);
+/** History entries that mean we wrote to the publisher (a reply to any of them is theirs). */
+const OUTBOUND=new Set(['initial','followup','answer','form_prepared']);
 /**
  * An exchange offer from an answer draft (replies.mjs, kind exchange_offer) counts as offered only once the owner has
  * sent that draft: their reply to its id, or its id in the Sent folder. Never when another exchange is on record.
- * Sending it is the owner's answer to the link-back request that draft answered.
+ * Sending it is the owner's answer to the link-back request that draft answered. The draft held its page while it waited
+ * (exchange.mjs exchangeTally); if the page is still over its cap (`pageCap`, an older draft), the offer that went out is
+ * recorded as made, flagged `over_cap` so the owner may place the link on another related page of the same site.
  */
-export function promoteExchangeDraft(p,at=NOW()){
+export function promoteExchangeDraft(p,at=NOW(),{state=null,pageCap=2}={}){
  const d=p.exchange_draft;if(!d||p.exchange)return false;
- const {message_id,at:drafted,...offer}=d;p.exchange={...offer,status:'offered',offered_at:at,via:'email'};delete p.exchange_draft;
+ const {message_id,at:drafted,...offer}=d,u=normUrlKey(offer.partner_page||'');
+ const load=state&&u?Object.values(state.prospects||{}).filter(q=>q!==p&&['offered','accepted','their_link_live','fulfilled'].includes(q?.exchange?.status)&&normUrlKey(q.exchange.partner_page||'')===u).length:0;
+ p.exchange={...offer,status:'offered',offered_at:at,via:'email',...(load>=Math.max(1,Number(pageCap)||2)?{over_cap:true}:{})};delete p.exchange_draft;
  settleLinkBack(p,'exchange_offer_sent',at);return true;
 }
 /** A pending owner flag raised only by a link-back request is settled once our own 3-way offer answers it (a fee or guest post is not). */
@@ -202,9 +232,11 @@ export async function processReplies({state,imap,self='',log=()=>{}}){
   state.migrations.reply_status_v2=NOW();
   if(restored||waiting)log(`repair: ${restored} positive replies restored after being overwritten, ${waiting} replies marked as waiting for an answer`);
  }
- // One-time repair: replies stored under the narrower rules (before 2026-11-27) are read again. "No" with a signature,
- // "please remove us", "we have never linked" and fee or swap wording the old patterns missed become what they are.
- if(!state.migrations.reply_class_v3){
+ // One-time repair: replies stored under the narrower rules are read again with the current ones. "No" with a signature,
+ // "please remove us", "we have never linked" and fee or swap wording the old patterns missed (v3, 2026-11-27), and the answers
+ // the closing sentence invites ("isn't a fit", "please don't follow up", "thanks, but no", "no deal": v4, 2026-11-28) become
+ // what they are: an opt-out suppresses the publisher and declines an open exchange offer.
+ if(!state.migrations.reply_class_v4){
   let optOuts=0,flagged=0;
   for(const p of Object.values(state.prospects||{}))for(const h of (p.history||[]).filter(h=>h.type==='reply'&&h.sentiment!=='negative')){
    const msg={from:h.from,subject:h.subject||'',body:h.excerpt||''},k=classifyReply(msg);
@@ -212,21 +244,33 @@ export async function processReplies({state,imap,self='',log=()=>{}}){
    if((k==='positive'||k==='neutral')&&k!==h.sentiment){h.sentiment=k;h.reread=true}
    if(!h.condition&&!h.exchange){const c=replyCondition(msg);if(c){h.condition=c;if(p.status!=='declined'&&noteCondition(p,c,{at:h.at}))flagged++}}
   }
-  state.migrations.reply_class_v3=NOW();
+  state.migrations.reply_class_v4=NOW();
   if(optOuts||flagged)log(`repair: ${optOuts} earlier replies re-read as opt-outs (suppressed), ${flagged} as replies with a condition (flagged for you)`);
  }
  const byMsg=new Map(),byEmail=new Map(),byDomain=new Map(),bySubject=new Map();
  for(const p of Object.values(state.prospects||{})){
-  if(!(p.history||[]).some(h=>h.type==='initial'))continue;
+  // Every prospect we wrote to: an emailed pitch or follow-up, an answer (also one written for a contact-form conversation),
+  // or a contact-form message the owner was given to paste.
+  if(!(p.history||[]).some(h=>OUTBOUND.has(h.type)))continue;
   for(const h of p.history||[]){if(h.message_id&&h.type!=='reply')byMsg.set(h.message_id,p);if(h.to)byEmail.set(h.to.toLowerCase(),p)
    if(['initial','followup'].includes(h.type)&&h.subject){const k=baseSubject(h.subject);if(k.length>=8)(bySubject.get(k)||bySubject.set(k,new Set()).get(k)).add(p)}}
   if(p.email)byEmail.set(p.email.toLowerCase(),p);
+  if(p.form_contact)byEmail.set(String(p.form_contact).toLowerCase(),p);
   if(p.domain)(byDomain.get(p.domain)||byDomain.set(p.domain,[]).get(p.domain)).push(p);
  }
  const lastContact=p=>Math.max(0,...(p.history||[]).filter(h=>h.type==='initial'||h.type==='followup').map(h=>Date.parse(h.at)||0));
- // The contact-form queue (forms.mjs): nobody was emailed, so only the sender's domain can tie a reply to it.
- const byForm=new Map();
- for(const p of Object.values(state.prospects||{}))if(p.status==='form_ready'&&p.domain){const d=String(p.domain).toLowerCase().replace(/^www\./,'');(byForm.get(d)||byForm.set(d,[]).get(d)).push(p)}
+ // Contact-form messages (forms.mjs) prepared in the last 150 days, whatever happened since (a first reply, an auto-acknowledgement,
+ // expiry): nobody was emailed, so the sender's domain, or our message quoted back, ties a reply to them.
+ const byForm=new Map(),formed=p=>(p.history||[]).some(h=>h.type==='form_prepared'&&ageDays(h.at)<150);
+ for(const p of Object.values(state.prospects||{}))if(p?.domain&&(p.status==='form_ready'||formed(p))){const d=String(p.domain).toLowerCase().replace(/^www\./,'');(byForm.get(d)||byForm.set(d,[]).get(d)).push(p)}
+ // A reply from a webmail address (small sites that only publish a form): it quotes our message, so our page's URL and their
+ // own domain or page title are in it. Matched only when exactly one prepared message fits.
+ const formQuoted=m=>{
+  const text=`${decodeWords(m.subject||'')}\n${m.body||''}`.toLowerCase(),bare=u=>String(u||'').toLowerCase().replace(/^https?:\/\/(?:www\.)?/,'').replace(/\/+$/,'');
+  const fits=[...byForm.values()].flat().filter(q=>q.form_message&&bare(q.asset_url).length>8&&text.includes(bare(q.asset_url))&&
+   (text.includes(String(q.domain).toLowerCase())||String(q.title||'').trim().length>=12&&text.includes(String(q.title).trim().toLowerCase())||text.includes(String(q.form_message.subject||'').toLowerCase().slice(0,60))));
+  return fits.length===1?fits[0]:null;
+ };
  const formMatch=(from,m)=>{
   let h=String(from.split('@')[1]||'').toLowerCase().replace(/^www\./,'');const written=Date.parse(m.date||'');
   // An address at the prospect's domain (or a subdomain of it), written after the message was prepared; the newest first.
@@ -234,7 +278,7 @@ export async function processReplies({state,imap,self='',log=()=>{}}){
    const q=(byForm.get(h)||[]).filter(q=>!(Number.isFinite(written)&&Date.parse(q.form_message?.at)>written)).sort((a,b)=>(Date.parse(b.form_message?.at)||0)-(Date.parse(a.form_message?.at)||0))[0];
    if(q)return q;
   }
-  return null;
+  return formQuoted(m);
  };
  const me=normalizeEmail(String(self||'').toLowerCase());
  let msgs;
@@ -282,7 +326,8 @@ export async function processReplies({state,imap,self='',log=()=>{}}){
   const identity=m.messageId||createHash('sha256').update(JSON.stringify([from,m.subject,m.body,m.uid])).digest('hex');
   const key=p.id+'|'+identity;if(state.seen_replies[key])continue;
   if(indirect)stats.matched_indirectly=(stats.matched_indirectly||0)+1;
-  if(viaForm)stats.form_replies=(stats.form_replies||0)+1;
+  // The address a contact-form publisher answered from: later messages (and answers to our answer) match it directly.
+  if(viaForm){stats.form_replies=(stats.form_replies||0)+1;if(!p.email&&!p.form_contact&&from)p.form_contact=from}
   p.history??=[];
   if(kind==='bounce'){
    const delayed=/notification\s*\(delay\)|delivery (?:incomplete|delayed)|will retry|Action:\s*delayed|Status:\s*4\./i.test((m.subject||'')+'\n'+(m.body||''));
@@ -300,10 +345,10 @@ export async function processReplies({state,imap,self='',log=()=>{}}){
    const theirId=String(m.messageId||'').match(/<[^<>\s]+>/)?.[0]||null,answers=ids.find(i=>byMsg.get(i)===p)||null;
    if(negative&&inSubject.length&&byMsg.get(inSubject[0])===p)stats.unsubscribe_links=(stats.unsubscribe_links||0)+1;
    // An exchange offered in an answer draft: their reply to that draft shows the owner sent it.
-   if(p.exchange_draft&&[...replyTo,...refs].includes(p.exchange_draft.message_id)&&promoteExchangeDraft(p))stats.exchange_offers_sent=(stats.exchange_offers_sent||0)+1;
+   if(p.exchange_draft&&[...replyTo,...refs].includes(p.exchange_draft.message_id)&&promoteExchangeDraft(p,NOW(),{state}))stats.exchange_offers_sent=(stats.exchange_offers_sent||0)+1;
    // How this reply answers a 3-way exchange we offered (null when none is open or it says nothing about it).
    const ex=!negative&&EXCHANGE_OPEN.has(p.exchange?.status)?p.exchange:null;
-   const intent=ex?exchangeIntent(m,{offer:ex,site:p.site,domain:p.domain,sentiment:kind,question}):null;
+   const intent=ex?exchangeIntent(m,{offer:ex,site:p.site,domain:p.domain,sentiment:kind,question,assetTitle:p.asset_title||''}):null;
    const mark=intent==='accept'?(ex.status==='offered'?'accepted':'agreed'):intent==='decline'?'declined':intent==='counter'||intent==='question'?intent:null;
    // The link back we offered ourselves is not a condition for the owner; a different one (from A, another site) is, and
    // so is a fee or a guest post raised alongside it (that one is kept: the link back was ours).
@@ -315,8 +360,11 @@ export async function processReplies({state,imap,self='',log=()=>{}}){
    if(!(Date.parse(p.last_reply_at)>=Date.parse(written||NOW())))p.last_reply_at=written||NOW();
    // A new condition re-opens the owner's decision even if an earlier one was already answered.
    if(owned){noteCondition(p,condition);stats.conditional=(stats.conditional||0)+1}
+   // A yes to the offer as made clears an earlier counter; a counter (the link back from A or elsewhere) means the offer as made
+   // is not agreed, so a link they place later starts no obligation from C (exchange.mjs noteTheirLink) until they accept it.
+   if(mark==='accepted'||mark==='agreed')delete ex.countered_at;
    if(mark==='accepted'){ex.status='accepted';ex.accepted_at=NOW();stats.exchange_accepted=(stats.exchange_accepted||0)+1;settleLinkBack(p,'exchange_accepted')}
-   else if(mark==='counter')stats.exchange_counter=(stats.exchange_counter||0)+1;
+   else if(mark==='counter'){ex.countered_at=NOW();stats.exchange_counter=(stats.exchange_counter||0)+1}
    // They want nothing back: an exchange they have not linked for yet is off (a link already live stays owed).
    else if(mark==='declined'&&['offered','accepted'].includes(ex.status)){ex.status='declined';ex.declined_at=NOW();stats.exchange_declined=(stats.exchange_declined||0)+1}
    if(negative){stats.negative++;applyOptOut(state,p,from)}
@@ -448,7 +496,7 @@ export async function reconcileSent({state,imap,days=90,index=null,now=()=>Date.
  let answered=0;
  for(const p of Object.values(state.prospects||{})){
   const offerSent=sentById.get(p.exchange_draft?.message_id);
-  if(offerSent&&promoteExchangeDraft(p,new Date(offerSent).toISOString()))stats.exchange_offers_sent=(stats.exchange_offers_sent||0)+1;
+  if(offerSent&&promoteExchangeDraft(p,new Date(offerSent).toISOString(),{state}))stats.exchange_offers_sent=(stats.exchange_offers_sent||0)+1;
   const addrs=new Set([p.email,...(p.history||[]).map(h=>h.to)].map(x=>normalizeEmail(x||'')).filter(Boolean));
   if(p.awaiting_us&&Date.parse(p.last_reply_at)){
    // Mail Autopilot sent itself (pitches, follow-ups, automatic answers) is in the history: it is not the owner's answer.
@@ -720,6 +768,8 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   return true;
  };
  let fuChecks=0,stop=false;
+ const bare=d=>String(d||'').trim().toLowerCase().replace(/^[a-z]+:\/\//,'').replace(/^www\./,'').replace(/[/?#:].*$/,''),ours=new Set(sites.map(s=>bare(s.domain)));
+ const failingSites=new Set([...(config.failingSites||[])].map(bare));
  if(config.mode==='send')for(const p of Object.values(state.prospects||{})){
   if(stop||budget<=0||Date.now()>deadline||checked>=24)break;
   if(p.status!=='sent'||p.replied_at||p.no_followup||(p.qv||1)<QUALIFY_VERSION||suppressed(state,p.email,p.domain))continue;
@@ -741,8 +791,15 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   // Same name as the first email (older records: SENDER_NAME, which signed them), same thread, same subject.
   const site=siteBy.get(p.site)||{domain:p.site||'',topic:''},senderName=initial.sender_name||config.senderName;
   const subject=reSubject(initial.subject||p.last_subject||asset.title||site.domain);
-  let pitch=null;try{pitch=await writer.write(p,asset,site,{situation:'followup',senderName,subject})}catch{}
-  if(typeof pitch?.body!=='string'||!pitch.body.trim())pitch=followupPitch(p,asset,{senderName,site,subject});
+  // The first email's 3-way offer is restated only while C is still one of our sites (and never A): a site the owner no longer
+  // runs ends the offer (lapsed, partner_gone); a site failing right now is just not restated this time.
+  let restate=true;
+  if(p.exchange?.status==='offered'){const c=bare(p.exchange.partner_site);
+   if(!c||!ours.has(c)||c===bare(site.domain)){p.exchange.status='lapsed';p.exchange.lapsed_at=NOW();p.exchange.lapse_reason='partner_gone';stats.exchange_partner_gone=(stats.exchange_partner_gone||0)+1;restate=false}
+   else if(failingSites.has(c))restate=false;
+  }
+  let pitch=null;try{pitch=await writer.write(p,asset,site,{situation:'followup',senderName,subject,...(restate?{}:{restate:false})})}catch{}
+  if(typeof pitch?.body!=='string'||!pitch.body.trim())pitch=followupPitch(p,asset,{senderName,site,subject,restate});
   pitch={...pitch,subject};
   try{await deliver(p,pitch,'followup',{inReplyTo:initial.message_id,senderName});p.status='followed_up';stats.followups++;budget--;
    if(pitch.facts_used?.length)p.facts_used=[...new Set([...(p.facts_used||[]),...pitch.facts_used])];
@@ -765,10 +822,10 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
  const perAsset=new Map();for(const p of Object.values(state.prospects||{}))if((p.history||[]).some(h=>h.type==='initial'&&String(h.at).startsWith(NOW().slice(0,10))))perAsset.set(p.asset_url,(perAsset.get(p.asset_url)||0)+1);
  // 3-way exchange (cfg.exchange.mode 'abc'): exchange.mjs picks a related page on another of our sites (C) whose link to the
  // editor's article is offered in return. Only first pitches; never a mention; never C = A, and C must be one of our sites.
- const bare=d=>String(d||'').trim().toLowerCase().replace(/^[a-z]+:\/\//,'').replace(/^www\./,'').replace(/[/?#:].*$/,''),ours=new Set(sites.map(s=>bare(s.domain)));
  const offerFor=(p,site)=>{
   if(config.exchange?.mode!=='abc'||typeof config.exchangePartner!=='function'||p.kind==='mention')return null;
-  if(p.exchange&&!['declined','lapsed'].includes(p.exchange.status))return null; // one open promise per publisher
+  if(p.exchange&&!['declined','lapsed'].includes(p.exchange.status))return null; // one open promise per prospect
+  if(publisherFootprint(state,p.domain,{except:p}).running){stats.exchange_publisher_busy=(stats.exchange_publisher_busy||0)+1;return null} // and per publisher domain
   let o=null;try{o=config.exchangePartner(p,site)||null}catch{o=null}
   if(!o)return null;
   const c=bare(o.partner_site);
@@ -826,8 +883,11 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
  * the pitched site A on a page with an open offer starts our return-link obligation in the same cycle (owed within
  * `fulfilDays`), and its removal before our link is up cancels it. Prospects reached through a prepared contact-form message
  * (no email in the history) are checked too, from the day the message was prepared or the offer made.
+ * A page that answers 404/410 is unverifiable once; answering 404/410 again at least 7 days later, it is gone, and so is the
+ * link on it: a won link is lost, and a return link owed for it is no longer owed. Which links belong to an exchange is never
+ * published (counts in the vault-free stats would name the partner next to the public list of won links).
  */
-export async function checkLinks({state,ourDomains,fetchImpl=fetch,max=60,deadline=Infinity,fulfilDays=7,log=()=>{}}){
+export async function checkLinks({state,ourDomains,fetchImpl=fetch,max=60,deadline=Infinity,fulfilDays=7,pageCap=2,log=()=>{}}){
  const stats={checked:0,won:0,lost:0,unverifiable:0};
  const due=Object.values(state.prospects||{}).filter(p=>{
   if(p.status==='won')return ageDays(p.won?.checked_at)>14;
@@ -840,14 +900,23 @@ export async function checkLinks({state,ourDomains,fetchImpl=fetch,max=60,deadli
   const res=await fetchPage(p.page_url,{fetchImpl,timeout:12000,maxBytes:800000});stats.checked++;p.next_link_check=new Date(Date.now()+4*DAY).toISOString();
   // A page that does not answer 200 cannot show whether the link is there: recorded as unverifiable, never read as won or lost.
   p.link_check={status:res.status||0,at:NOW(),...(res.error?{error:String(res.error).slice(0,40)}:{})};
-  if(res.status!==200){stats.unverifiable++;continue}
+  if(res.status!==200){stats.unverifiable++;
+   if(res.status===404||res.status===410){p.page_gone_since??=NOW();
+    if(ageDays(p.page_gone_since)>=7){
+     if(p.status==='won'){stats.lost++;p.status='lost';(p.history??=[]).push({type:'lost',at:NOW(),reason:'page_gone'})}
+     if(xch&&p.exchange?.status==='their_link_live')xch.noteTheirLinkLost(p);
+    }
+   }
+   continue;
+  }
+  delete p.page_gone_since;
   const all=links(res.body,res.url),hit=all.find(l=>ourDomains.some(d=>sameSite(hostOf(l.url),d)));
   if(hit){if(p.status!=='won'){stats.won++;(p.history??=[]).push({type:'won',at:NOW(),url:hit.url})}p.status='won';p.won={target:hit.url,anchor:hit.anchor,rel:hit.rel||'follow',found_at:p.won?.found_at||NOW(),checked_at:NOW()}}
   else if(p.status==='won'){stats.lost++;p.status='lost';(p.history??=[]).push({type:'lost',at:NOW()})}
   // Only a link to A itself counts for an exchange (a link to C would make it a direct swap).
-  if(xch&&p.exchange){if(p.site&&all.some(l=>sameSite(hostOf(l.url),p.site))){if(xch.noteTheirLink(p,{fulfilDays}))stats.exchange_links=(stats.exchange_links||0)+1}else xch.noteTheirLinkLost(p)}
+  if(xch&&p.exchange){if(p.site&&all.some(l=>sameSite(hostOf(l.url),p.site)))xch.noteTheirLink(p,{fulfilDays,state,pageCap});else xch.noteTheirLinkLost(p)}
  }
- log(`link checks: ${stats.checked} pages, ${stats.won} new links won, ${stats.lost} lost${stats.exchange_links?`, ${stats.exchange_links} exchange partners linked (return links now owed)`:''}${stats.unverifiable?`, ${stats.unverifiable} pages did not load (unverifiable this time)`:''}`);return stats;
+ log(`link checks: ${stats.checked} pages, ${stats.won} new links won, ${stats.lost} lost${stats.unverifiable?`, ${stats.unverifiable} pages did not load (unverifiable this time)`:''}`);return stats;
 }
 /** A second guard at the real SMTP boundary prevents missing-proof sends. */
 export function gmailTransport(env){

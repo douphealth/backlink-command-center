@@ -21,7 +21,7 @@ test('a link from B to A found by the link check starts the obligation in the sa
     if(h==='b1.example'||h==='b3.example')return resp(page('<p>Read <a href="https://www.study.example/spaced-repetition/">this guide</a>.</p>'));
     return resp(page('<p>See <a href="https://lang.example/flashcards-for-vocabulary">flashcards</a>.</p>'))};
   const before=Date.now(),r=await checkLinks({state,ourDomains:OURS,fetchImpl:f,fulfilDays:7});
-  assert.equal(r.won,3);assert.equal(r.exchange_links,2);
+  assert.equal(r.won,3);assert.equal(r.exchange_links,undefined,'which won links belong to an exchange is never in the public stage result');
   const {b1,b2,b3}=state.prospects;
   for(const p of [b1,b3]){assert.equal(p.status,'won');assert.equal(p.exchange.status,'their_link_live');
     const owed=Date.parse(p.exchange.owed_by)-Date.parse(p.exchange.their_link_at);assert.equal(owed,7*DAY,'owed within fulfilDays of their link');
