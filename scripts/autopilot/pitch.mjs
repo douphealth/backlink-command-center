@@ -163,7 +163,7 @@ export function templatePitch(p,asset,{senderName,site,exchange}={}){
   if(isListPage(p))return listInclusionPitch(p,asset,o);
   if(usableOffer(exchange,site,asset,p))return exchangePitch(p,asset,o);
   const name=firstName(p.author),kind=KIND[asset.type]||'resource',pick=parseInt(hashId(p.id),36)%3,title=short(asset.title,80),v=valueOf(asset,site),cited=citedLine(p,asset);
-  const subject=[`Resource for your "${short(p.title,48)}" page`,`A ${kind} for your ${short(site.topic,30)} readers`,`Suggestion for "${short(p.title,48)}"`][pick];
+  const subject=[`Resource for your "${short(p.title,48)}" page`,`A ${kind} for your "${short(p.fit_section||p.title,40)}" readers`,`Suggestion for "${short(p.title,48)}"`][pick];
   // Who we are, one direct ask, the page, one proof point, and the exact edit proposed. No compliments, no filler.
   const body=[`Hi ${name||'there'},`,'',
     `${intro(site)} Would you consider adding ${title} to ${placeOf(p)}?`,'',
@@ -180,7 +180,7 @@ export function templatePitch(p,asset,{senderName,site,exchange}={}){
 export function exchangePitch(p,asset,{senderName,site,exchange}={}){
   const ex=usableOffer(exchange,site,asset,p);if(!ex)return templatePitch(p,asset,{senderName,site});
   const name=firstName(p.author),kind=KIND[asset.type]||'resource',pick=parseInt(hashId(p.id),36)%3,title=short(asset.title,80),v=valueOf(asset,site);
-  const subject=[`Resource for your "${short(p.title,48)}" page`,`A ${kind} for your ${short(site.topic,30)} readers`,`Suggestion for "${short(p.title,48)}"`][pick];
+  const subject=[`Resource for your "${short(p.title,48)}" page`,`A ${kind} for your "${short(p.fit_section||p.title,40)}" readers`,`Suggestion for "${short(p.title,48)}"`][pick];
   const body=[`Hi ${name||'there'},`,'',
     `${intro(site)} Would you consider adding ${title} to ${placeOf(p)}? ${exchangeLine(p,ex)}`,'',
     asset.url,'',v.text,'',
