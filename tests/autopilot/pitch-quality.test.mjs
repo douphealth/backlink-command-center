@@ -77,7 +77,7 @@ test('outreach writes the pitch for the re-paired page, and sends nothing when a
 
 const asset={url:'https://gearuptofit.com/shoe-finder/',title:'Running Shoe Finder',type:'interactive_tool',interactive:true,description:'Answer six questions and get matched to running shoes by gait and terrain.',reasons:['2 data tables']};
 const prospect={id:'x',title:'Resources for New Runners',page_url:'https://pub.example/resources',fit_section:'Choosing shoes',excerpt:'A list of tools for new runners.'};
-const goodBody=`Your "Choosing shoes" section in Resources for New Runners points readers to fitting advice. Our Running Shoe Finder asks six questions and matches runners to shoes by gait and terrain, free and without sign-up: ${asset.url}\n\nIf it fits, it could sit in that section.\n\nBest,\nAlex\ngearuptofit.com\n\nP.S. Not relevant for you? Just reply "no" and I won't email again.`;
+const goodBody=`Your "Choosing shoes" section in Resources for New Runners points readers to fitting advice. Our Running Shoe Finder asks six questions and matches runners to shoes by gait and terrain, free and without sign-up: ${asset.url}\n\nIf it fits, it could sit in that section.\n\nIf it's not a fit, just say so and I won't follow up.\n\nBest,\nAlex\ngearuptofit.com`;
 const completion=(content,status=200)=>new Response(JSON.stringify({choices:[{message:{content}}]}),{status,headers:{'content-type':'application/json'}});
 
 const modelList=ids=>new Response(JSON.stringify({object:'list',data:ids.map(id=>({id}))}),{headers:{'content-type':'application/json'}});
@@ -189,7 +189,7 @@ test('the Autopilot workflow passes the free AI writer keys and no longer asks f
 
 test('a model answer in the plain "Subject:" format, with markdown and a missing trailing slash, is tidied and used',async()=>{
   const {parseAnswer,tidyPitch,pitchProblem}=await import('../../scripts/autopilot/pitch.mjs');
-  const raw=`Subject: A shoe finder for your new-runner resources\n\nYour "Choosing shoes" section in Resources for New Runners points readers to fitting advice. Our **Running Shoe Finder** asks six questions and matches runners to shoes by gait and terrain, free and without sign-up: [Running Shoe Finder](https://gearuptofit.com/shoe-finder).\n\nIf it fits, it could sit in that section.\n\nBest,\nAlex\ngearuptofit.com\n\nP.S. Not relevant for you? Just reply "no" and I won't email again.`;
+  const raw=`Subject: A shoe finder for your new-runner resources\n\nYour "Choosing shoes" section in Resources for New Runners points readers to fitting advice. Our **Running Shoe Finder** asks six questions and matches runners to shoes by gait and terrain, free and without sign-up: [Running Shoe Finder](https://gearuptofit.com/shoe-finder).\n\nIf it fits, it could sit in that section.\n\nIf it's not a fit, just say so and I won't follow up.\n\nBest,\nAlex\ngearuptofit.com`;
   const w=new PitchWriter({senderName:'Alex',providers:groq(),fetchImpl:api(async()=>completion(raw))});
   const out=await w.write(prospect,asset,site);
   assert.equal(out.writer,'groq');assert.deepEqual(out.body.match(/https?:\/\/\S+/g),['https://gearuptofit.com/shoe-finder/.']);
@@ -232,4 +232,14 @@ test('a "success" with no completion in it is reported with provider, model, sta
   assert.deepEqual(moved.reasons,{redirected:1});assert.match(logs.at(-1),/redirected: Groq: HTTP 302 to https:\/\/example\.com\/login/);
   const parts=mk(api(async()=>new Response(JSON.stringify({choices:[{message:{content:[{type:'text',text:`Subject: A shoe finder for your new-runner resources\n\n${goodBody}`}]}}]}),{headers:{'content-type':'application/json'}})));
   assert.equal((await parts.write(prospect,asset,site)).writer,'groq','content given as parts is read');
+});
+
+test('an AI pitch that left out our page gets the address on its own line before the closing, not the template',async()=>{
+  const {withAssetUrl,tidyPitch,OPT_OUT}=await import('../../scripts/autopilot/pitch.mjs');
+  const asset={url:'https://gearuptofit.com/tools/running-shoe-finder/'};
+  const body=`Hi Sam,\n\nWould you consider adding our running shoe finder to your stability shoes section?\n\n${OPT_OUT}\n\nBest,\nAlex`;
+  const fixed=withAssetUrl(body,asset);
+  assert.equal(fixed.split('\n\n')[2],asset.url);assert.ok(fixed.indexOf(asset.url)<fixed.indexOf(OPT_OUT));
+  assert.equal(withAssetUrl('Hi,\n\nSee https://other.example/x\n\nBest,\nA',asset),'Hi,\n\nSee https://other.example/x\n\nBest,\nA','a body with another URL is left for pitchProblem to judge');
+  assert.match(tidyPitch({subject:'S',body:'Hi Sam,\n\nOne ask.\n\nBest,\nAlex'},asset).body,/One ask\.\n\nhttps:\/\/gearuptofit\.com\/tools\/running-shoe-finder\/\n\nBest,/);
 });

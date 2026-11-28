@@ -20,9 +20,9 @@ on:
         description: 'AI writer endpoint override (testing a preview deployment only)'
         type: string
         default: ''
+# Least privilege: nothing by default; each job asks only for what it uses.
 permissions:
-  contents: write
-  id-token: write # identity token for the dashboard's free AI pitch writer; no secret is stored
+  contents: read
 concurrency:
   group: linkforge-autopilot
   cancel-in-progress: false
@@ -30,6 +30,11 @@ jobs:
   autopilot:
     runs-on: ubuntu-latest
     timeout-minutes: 35
+    permissions:
+      contents: write
+      id-token: write # identity token for the dashboard's free AI pitch writer; no secret is stored
+    outputs:
+      due: ${{ steps.due.outputs.due }}
     steps:
       # Always the branch's newest commit, never the commit the trigger fired on: a run that waited behind
       # another cycle (concurrency) must start from that cycle's results. On 2026-11-25 a queued run started
@@ -45,13 +50,15 @@ jobs:
           MIN_HOURS: ${{ vars.AUTOPILOT_MIN_HOURS || '5' }}
         run: |
           node -e "
-          const fs=require('fs');let last=0;
-          try{last=Date.parse(JSON.parse(fs.readFileSync('public/data/autopilot.json','utf8')).generated_at)||0}catch{}
-          const now=new Date(),h=now.getUTCHours(),weekday=now.getUTCDay()>0&&now.getUTCDay()<6;
+          const fs=require('fs');let last=0,s={};
+          try{s=JSON.parse(fs.readFileSync('public/data/autopilot.json','utf8'))||{};last=Date.parse(s.generated_at)||0}catch{}
+          const now=new Date(),h=now.getUTCHours(),day=now.getUTCDay(),weekday=day>0&&day<6;
           // Extra cycles every 2 h on weekdays 07-21 UTC: the EU and US send windows, so verified inboxes get emailed the same day.
+          // Saturdays 07-18 UTC too (Saturday-morning windows: EU 08-12, US 14-18 UTC), unless the last cycle reports Saturday sending off.
+          const saturday=day===6&&s.sender?.saturday!==false,busy=weekday&&h>=7&&h<21||saturday&&h>=7&&h<18;
           const hours=(Date.now()-last)/36e5;
           // A started run (dashboard, send-window waker) still never follows another cycle by under 10 minutes: that is a duplicate that queued behind it.
-          const due=process.env.DRY_RUN==='1'||(process.env.EVENT!=='schedule'?hours*60>=10:hours>=Number(process.env.MIN_HOURS)||(weekday&&h>=7&&h<21&&hours>=2));
+          const due=process.env.DRY_RUN==='1'||(process.env.EVENT!=='schedule'?hours*60>=10:hours>=Number(process.env.MIN_HOURS)||(busy&&hours>=2));
           console.log('Last cycle '+hours.toFixed(1)+' h ago; due: '+due);
           fs.appendFileSync(process.env.GITHUB_OUTPUT,'due='+due+String.fromCharCode(10))"
       - uses: actions/setup-node@v4
@@ -145,3 +152,47 @@ jobs:
           if ! git diff --quiet HEAD~1 origin/main -- public/data/vault.json; then echo "::warning::The state file on main changed while this cycle ran. This cycle's state is kept; the Sent-folder check restores any send record the other change held."; fi
           for i in 1 2 3; do git pull --rebase -X theirs origin main && git push && exit 0; sleep 5; done
           exit 1
+      # The alert job reads this cycle's public summary (counts only) from here, even if the commit step failed.
+      - name: Keep the public summary for the alert job
+        if: ${{ always() && steps.due.outputs.due == 'true' && !inputs.dry_run }}
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: autopilot-summary
+          path: public/data/autopilot.json
+          retention-days: 3
+          if-no-files-found: ignore
+  # GitHub emails the owner about new issues, so a stall or a decision the owner owes reaches them within a cycle.
+  # One issue per 'action' code (plus the early warnings in notify.mjs WARN_CODES); updated in place, closed when it clears.
+  # Its own job: only this token may write issues, and it never runs next to dependency installs, untrusted pages or
+  # mail, or the vault key. Optional repository variable LINKFORGE_ALERT_MENTION = a GitHub login to @mention on open.
+  alert:
+    needs: autopilot
+    if: ${{ always() && needs.autopilot.outputs.due == 'true' && !inputs.dry_run }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write # owner alerts: one issue per problem Autopilot cannot fix by itself (counts only, no prospect data)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          persist-credentials: false
+          sparse-checkout: scripts/autopilot/notify.mjs
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fetch this cycle's public summary
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: autopilot-summary
+          path: cycle-summary
+      - name: Alert the owner (GitHub issues)
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          LINKFORGE_ALERT_MENTION: ${{ vars.LINKFORGE_ALERT_MENTION }}
+        run: node scripts/autopilot/notify.mjs cycle-summary/autopilot.json

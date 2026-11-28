@@ -35,7 +35,7 @@ test('a pitch that is in Sent but missing from the record is restored, and never
     untouched:{id:'untouched',status:'ready',email:'ed@new.com',domain:'new.com',history:[]}},contacted:{}};
   const imap={sentRecipients:async()=>[{to:'ed@lost.com',at:t1},{to:'ed@fine.com',at:t1},{to:'ed@dup.com',at:t1},{to:'ed@dup.com',at:iso(now-2*3600e3+7*60e3)},{to:'friend@personal.example',at:t1}]};
   const stats=await reconcileSent({state,imap});
-  assert.deepEqual(stats,{scanned:5,restored:1,duplicates:1});
+  assert.deepEqual(stats,{restored:1,duplicates:1}); // the owner's Sent volume is not published (PRIV-2)
   assert.equal(state.prospects.lost.status,'sent');assert.equal(state.prospects.lost.history[0].reconciled,true);assert.ok(state.contacted['lost.com']);
   assert.equal(state.prospects.fine.history.length,1,'recorded pitches are left alone');
   assert.equal(state.prospects.dup.no_followup,true);assert.match(state.prospects.dup.no_followup_reason,/duplicate/);
@@ -50,7 +50,7 @@ test('a pitch that is in Sent but missing from the record is restored, and never
 });
 
 test('a transport that cannot read Sent is a no-op; a broken answer throws so sending is blocked',async()=>{
-  assert.deepEqual(await reconcileSent({state:{prospects:{}},imap:{}}),{scanned:0,restored:0,duplicates:0});
+  assert.deepEqual(await reconcileSent({state:{prospects:{}},imap:{}}),{restored:0,duplicates:0});
   await assert.rejects(reconcileSent({state:{prospects:{}},imap:{sentRecipients:async()=>null}}),/Invalid Sent/);
 });
 

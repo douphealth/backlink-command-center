@@ -50,7 +50,7 @@ test('free credits only: no submission when today\'s free credits cannot cover t
   assert.ok(!paid.calls.some(c=>c.u.endsWith('/credits/balance')));
 });
 test('falls back to Hunter when Verifalia free credits are used up',async()=>{
-  const f=fixture({free:0,envChange:{HUNTER_API_KEY:'unit-test-key'}});const r=await f.v.mailbox(email);
+  const f=fixture({free:0,envChange:{HUNTER_API_KEY:'unit-test-key',HUNTER_DAILY_LIMIT:'5'}});const r=await f.v.mailbox(email);
   assert.equal(r.status,'valid');assert.equal(r.provider,'hunter');assert.equal(f.posts().length,0);
 });
 test('balance is read once per run and decremented locally',async()=>{
@@ -154,9 +154,14 @@ test('free queue screening retires unsendable prospects, upgrades addresses and 
     fetchPage:async u=>{const h=new URL(u).hostname,body=pages[h];return body?{status:200,url:u,body}:{status:503,url:u,body:''}},resolveMx:async()=>[]});
   const mailer={screenRecipient:(p,o)=>v.verify(p,{...o,screenOnly:true})};
   const r=await screenQueue({state:st,mailer});
-  assert.deepEqual(r,{screened:3,kept:1,retired:1,address_updated:1});
-  assert.equal(st.prospects.a.status,'contact_unverifiable');assert.equal(st.prospects.b.email,'editor@b.example');
+  // A first publisher-side failure is held and looked at again a day later; two in a row retire the prospect.
+  assert.deepEqual(r,{screened:3,kept:1,held:1,retired:0,address_updated:1,rescreened:0,recovered:0});
+  assert.equal(st.prospects.a.status,'ready');assert.equal(st.prospects.a.contact_quality.status,'held');assert.equal(st.prospects.b.email,'editor@b.example');
   assert.equal(st.prospects.c.status,'ready'); // unreachable pages: retried later, never retired
   assert.equal(calls.length,0,'screening must not call any paid provider');
-  assert.equal((await screenQueue({state:st,mailer})).screened,1); // only c is due again: a retired, b screened for 14 days
+  assert.equal((await screenQueue({state:st,mailer})).screened,1); // only c is due again: a waits a day, b screened for 14 days
+  st.prospects.a.screened_at=new Date(Date.now()-2*86400e3).toISOString();
+  const again=await screenQueue({state:st,mailer});
+  assert.equal(st.prospects.a.status,'contact_unverifiable');assert.equal(again.retired,1);assert.deepEqual(again.retired_by,{no_email_published:1});
+  assert.equal(calls.length,0,'screening must not call any paid provider');
 });

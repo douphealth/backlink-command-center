@@ -8,6 +8,18 @@ name: LinkForge Send-Window Waker
 # the chain used to stop after one hop. The waker therefore starts its own successor (workflow_dispatch
 # is exempt from that guard). Cron-started cycles and dashboard runs re-enter through `workflow_run`.
 # The dashboard's Stop button disables Autopilot: the start then fails and the chain ends.
+#
+# One chain, never cancelled from outside. Concurrency is set on the job, not the workflow, and never
+# cancels a run in progress:
+#  - a waker whose job is skipped (its Autopilot run failed or was cancelled, or ran on another branch)
+#    never enters the group, so it cannot touch the live chain (a workflow-level group with
+#    cancel-in-progress used to cancel the live chain at that point and leave nothing running);
+#  - a cron-started waker waits as "pending" behind the live chain and is replaced by the chain's own
+#    successor (GitHub keeps one pending run per group), so there is always exactly one chain; if the
+#    chain dies, the pending waker takes over;
+#  - instead of a takeover, the live chain re-plans every 10 minutes from the newest published results,
+#    so a send window found by another cycle (cron or dashboard) is still caught on time.
+# GitHub API calls are retried (3 tries, 15 s and 45 s apart): one transient error no longer ends the chain.
 on:
   workflow_run:
     workflows: [LinkForge Autopilot]
@@ -21,14 +33,14 @@ on:
 permissions:
   actions: write
   contents: read
-concurrency:
-  group: linkforge-waker
-  cancel-in-progress: true
 jobs:
   wake:
     if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     timeout-minutes: 345
+    concurrency:
+      group: linkforge-waker
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,29 +58,54 @@ jobs:
             if node scripts/autopilot/waker.mjs fresh "$AFTER"; then echo "The cycle published its results"; break; fi
             sleep 30
           done
-      - name: Plan the next cycle
+      - name: Wait until the next cycle is due (re-planned every 10 minutes from the newest results)
         id: plan
         env:
           WAKER_AFTER: ${{ github.event_name == 'workflow_dispatch' && inputs.after || '' }}
-        run: node scripts/autopilot/waker.mjs plan >> "$GITHUB_OUTPUT"
-      - name: Wait for the send window
-        if: steps.plan.outputs.wake == 'true'
-        run: sleep "${{ steps.plan.outputs.wait_s }}"
+        run: |
+          # Hand over to a successor well before this job's 345-minute limit.
+          END=$(( $(date +%s) + 270*60 ))
+          while :; do
+            git fetch -q origin main && git checkout -q FETCH_HEAD -- public/data/autopilot.json || echo "Could not refresh the results; planning from the last copy"
+            node scripts/autopilot/waker.mjs plan > "$RUNNER_TEMP/plan.txt"
+            WAKE="$(sed -n 's/^wake=//p' "$RUNNER_TEMP/plan.txt")"
+            WAIT="$(sed -n 's/^wait_s=//p' "$RUNNER_TEMP/plan.txt")"
+            case "$WAIT" in ''|*[!0-9]*) WAIT=0 ;; esac
+            if [ "$WAKE" != "true" ]; then echo "wake=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+            if [ "$WAIT" -le 0 ]; then echo "wake=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+            if [ "$(date +%s)" -ge "$END" ]; then echo "wake=handover" >> "$GITHUB_OUTPUT"; exit 0; fi
+            sleep $(( WAIT < 600 ? WAIT : 600 ))
+          done
       - name: Start an Autopilot cycle and the next waker
-        if: steps.plan.outputs.wake == 'true'
+        if: steps.plan.outputs.wake == 'true' || steps.plan.outputs.wake == 'handover'
         env:
           GH_TOKEN: ${{ github.token }}
+          WAKE: ${{ steps.plan.outputs.wake }}
+          WAKER_AFTER: ${{ github.event_name == 'workflow_dispatch' && inputs.after || '' }}
         run: |
-          git fetch -q origin main && git checkout -q FETCH_HEAD -- public/data/autopilot.json
-          STARTED=""
-          if node scripts/autopilot/waker.mjs recheck; then
-            NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-            if gh workflow run autopilot.yml --ref main; then
-              STARTED="$NOW"
-            else
-              echo "Autopilot is stopped (workflow disabled); no cycle started and the chain ends here"
-              exit 0
+          retry() { for pause in 0 15 45; do sleep "$pause"; if "$@"; then return 0; fi; done; return 1; }
+          # A hand-over keeps this run's spacing; a successor after a started cycle waits for that cycle.
+          STARTED="$WAKER_AFTER"
+          if [ "$WAKE" = "true" ]; then
+            STARTED=""
+            git fetch -q origin main && git checkout -q FETCH_HEAD -- public/data/autopilot.json
+            if node scripts/autopilot/waker.mjs recheck; then
+              NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+              if retry gh workflow run autopilot.yml --ref main; then
+                STARTED="$NOW"
+              else
+                STATE="$(retry gh api "repos/$GITHUB_REPOSITORY/actions/workflows/autopilot.yml" --jq .state || true)"
+                case "$STATE" in
+                  *disabled*|*deleted*)
+                    echo "Autopilot is stopped (workflow disabled); no cycle started and the chain ends here"
+                    exit 0 ;;
+                esac
+                # Still active (or unknown): keep the chain, and let the successor wait the normal 2 h gap
+                # before trying again, so repeated failures cannot spin.
+                echo "::warning::Could not start an Autopilot cycle after 3 tries; the next waker tries again in about 2 h"
+                STARTED="$NOW"
+              fi
             fi
           fi
           # Keep the chain alive: this run's own successor plans the cycle after this one.
-          gh workflow run autopilot-waker.yml --ref main -f after="$STARTED"
+          retry gh workflow run autopilot-waker.yml --ref main -f after="$STARTED"

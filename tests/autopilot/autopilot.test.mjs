@@ -132,7 +132,8 @@ test('outreach respects warm-up, dedupes domains, honours opt-outs and follows u
   assert.equal(stats.sent,5,'warm-up cap on day one');
   assert.ok(!sent.some(m=>m.to==='ed@pub1.org'),'suppressed domain skipped');
   assert.equal(prospects.p8.status,'skipped_duplicate');
-  assert.ok(sent.every(m=>m.raw.includes('List-Unsubscribe')));
+  // The List-Unsubscribe header is off by default (LIST_UNSUBSCRIBE_HEADER=on adds it); the closing sentence is the opt-out.
+  assert.ok(sent.every(m=>!m.raw.includes('List-Unsubscribe')));
   // Age the first pitch past the follow-up window and simulate a reply on another.
   prospects.p0.history[0].at=new Date(Date.now()-7*864e5).toISOString();
   prospects.p2.history[0].at=new Date(Date.now()-7*864e5).toISOString();
@@ -228,8 +229,11 @@ test('engine refuses a wrong vault key but starts fresh after a dashboard key re
   try{
     const wrong=await runAutopilot({env:{LINKFORGE_DATA_KEY:'new-key-'.repeat(3)},argv:[],fetchImpl:f,write:false,useCache:false});
     assert.equal(wrong.summary.capabilities.vault,false);
+    assert.equal(wrong.summary.funnel_stale,true,'numbers republished from an earlier cycle are marked stale');
+    assert.equal(wrong.summary.attention.find(a=>a.code==='vault_locked')?.level,'action','a locked vault raises an owner alert');
     const reset=await runAutopilot({env:{LINKFORGE_DATA_KEY:'new-key-'.repeat(3),LINKFORGE_VAULT_RESET_AT:new Date(Date.now()+1000).toISOString()},argv:[],fetchImpl:f,write:false,useCache:false});
     assert.equal(reset.summary.capabilities.vault,true);
+    assert.equal(reset.summary.funnel_stale,false);assert.ok(!reset.summary.attention.some(a=>a.code==='vault_locked'));
   }finally{original==null?fs.unlinkSync(path):fs.writeFileSync(path,original)}
 });
 
@@ -248,7 +252,8 @@ test('connection checks: DataForSEO rejection and Gmail rejection give exact rea
   const mailer={check:async()=>({status:'rejected',error:'Gmail rejected the login for me@gmail.com.'}),send:async()=>{throw Error('must not send')},draft:async()=>{},imap:{recentHeaders:async()=>[]},close:async()=>{}};
   const {summary}=await runAutopilot({env:{LINKFORGE_DATA_KEY:'k'.repeat(24),LINKFORGE_VAULT_RESET_AT:new Date(Date.now()+1e3).toISOString(),DATAFORSEO_LOGIN:'a@b.com',DATAFORSEO_PASSWORD:'wrong',SENDER_NAME:'Alex',OUTREACH_MODE:'send'},argv:[],fetchImpl:f,mailer,write:false,useCache:false});
   assert.equal(summary.capabilities.connections.dataforseo.status,'rejected');
-  assert.match(summary.stages.prospects.skipped,/rejected the login .*api password/i);
+  // Free discovery keeps running without paid sources (the stage is no longer skipped); why paid search did not run is published.
+  assert.notEqual(summary.stages.prospects.ok,null);assert.match(summary.stages.prospects.paid_skipped,/rejected the login .*api password/i);
   assert.equal(summary.capabilities.connections.gmail.status,'rejected');
   assert.match(summary.stages.outreach.skipped,/Gmail rejected/);
   assert.ok(!JSON.stringify(summary).includes('me@gmail.com'),'addresses redacted from the public summary');
@@ -308,7 +313,7 @@ test('requalify drops poor-fit queued prospects and cancels follow-ups to bad in
   assert.equal(r.checked,4);
 });
 
-test('send windows follow the recipient region and skip weekends',async()=>{
+test('send windows follow the recipient region and skip Sundays and Saturday afternoons',async()=>{
   const {sendWindowOpen}=await import('../../scripts/autopilot/outreach.mjs');
   const at=(iso)=>new Date(iso);
   assert.equal(sendWindowOpen('blog.com',at('2026-10-27T15:00:00Z')),true,'US business hours (Tue)');
@@ -316,7 +321,8 @@ test('send windows follow the recipient region and skip weekends',async()=>{
   assert.equal(sendWindowOpen('blog.co.uk',at('2026-10-27T10:00:00Z')),true);
   assert.equal(sendWindowOpen('blog.co.uk',at('2026-10-27T19:00:00Z')),false);
   assert.equal(sendWindowOpen('blog.com.au',at('2026-10-27T23:00:00Z')),true,'window wraps midnight UTC');
-  assert.equal(sendWindowOpen('blog.com',at('2026-10-31T15:00:00Z')),false,'Saturday');
+  assert.equal(sendWindowOpen('blog.com',at('2026-10-31T19:00:00Z')),false,'Saturday afternoon (only Saturday mornings send)');
+  assert.equal(sendWindowOpen('blog.com',at('2026-11-01T15:00:00Z')),false,'Sunday');
   const prospects={w:{id:'w',site:'mice.com',domain:'night.com',email:'editor@night.com',status:'ready',score:90,asset_url:'https://mice.com/a',page_url:'https://night.com/r',title:'R',history:[],qv:2}};
   const stats=await runOutreach({state:{prospects},assets:[],sites:[{domain:'mice.com',topic:'mice'}],writer:{write:async()=>({subject:'s',body:'b'})},mailer:{send:async()=>{throw Error('must wait')}},
     config:{mode:'send',sendWindow:true,now:()=>at('2026-10-27T03:00:00Z'),fromAddress:'me@gmail.com',senderName:'A',dailyLimit:5,followupDays:6,gapMs:()=>0}});
@@ -364,7 +370,7 @@ test('unlinked brand mentions become warm prospects with a thank-you pitch',asyn
   assert.equal(stats.mention_queries,1);assert.equal(p.kind,'mention');assert.equal(p.status,'ready');assert.equal(p.email,'editor@homeblog.net');
   const pitch=mentionPitch(p,{url:'https://micegoneguide.com/',title:'micegoneguide'},{senderName:'Alex',site});
   assert.match(pitch.subject,/Thanks for mentioning/);assert.equal((pitch.body.match(/https:\/\/micegoneguide\.com\//g)||[]).length,1);
-  assert.match(pitch.body,/reply "no"/);
+  assert.ok(pitch.body.includes("If it's not a fit, just say so and I won't follow up."));assert.doesNotMatch(pitch.body,/P\.S\.|reply "no"/);
   assert.ok(state.mentions_at['micegoneguide.com'],'mention search rotates (not repeated next run)');
 });
 
@@ -389,7 +395,7 @@ test('DataForSEO partial results are kept, not thrown away',async()=>{
 
 test('outreach status says when the next pitches can go out',async()=>{
   const {nextSendWindow,outreachStatus}=await import('../../scripts/autopilot/outreach.mjs');
-  const sat=new Date('2026-10-24T09:00:00Z');
+  const sat=new Date('2026-10-24T19:00:00Z'); // Saturday evening: the Saturday-morning windows have closed
   assert.equal(nextSendWindow('blog.com',sat).toISOString(),'2026-10-26T13:00:00.000Z','US: Monday 13:00 UTC');
   assert.equal(nextSendWindow('blog.co.uk',sat).toISOString(),'2026-10-26T07:00:00.000Z','UK: Monday 07:00 UTC');
   const tue=new Date('2026-10-27T15:30:00Z');assert.equal(nextSendWindow('blog.com',tue).getTime(),tue.getTime(),'already open');

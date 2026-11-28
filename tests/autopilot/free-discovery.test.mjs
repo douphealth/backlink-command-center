@@ -28,10 +28,11 @@ test('with no search credit at all, prospects still come from the sites that qua
     if(u.hostname==='cars.example.net')return html(article('Engine oil change').replaceAll('houseplant','engine').replaceAll('watering','oil').replaceAll('care','motor'));
     return html('<p>home</p>')};
   const stats=await discoverProspects({assets:[asset],sites:[site],state,dfs:noFunds,fetchImpl:f,perAsset:0,linkGapCalls:0});
-  assert.equal(stats.neighbor_pages,1);assert.ok(stats.neighbor_candidates>=2);assert.equal(stats.queries,0);
+  assert.equal(stats.neighbor_pages,1);assert.equal(stats.neighbor_candidates,1);assert.equal(stats.queries,0);
+  assert.equal(stats.filtered.zero_relevance,1,'a recommended link sharing no word with any page we pitch is not fetched');
   const p=Object.values(state.prospects).find(x=>x.domain==='leafyhome.blog');
   assert.equal(p.kind,'neighbor');assert.equal(p.footprint,'neighbor');assert.equal(p.status,'ready');assert.equal(p.email,'hello@leafyhome.blog');
-  assert.equal(Object.values(state.prospects).find(x=>x.domain==='cars.example.net').status,'rejected','off-topic recommendations are still rejected by qualification');
+  assert.ok(!Object.values(state.prospects).some(x=>x.domain==='cars.example.net'),'off-topic recommendations never become prospects');
   assert.ok(!Object.values(state.prospects).some(x=>/youtube|files\.example|plantastichaven/.test(x.domain)),'platforms, files and our own sites are never candidates');
   assert.ok(source.mined_at,'a source page is mined once, then rests for 90 days');
   assert.equal(neighborSources(state,[site]).filter(x=>x.id==='src').length,0);
@@ -52,7 +53,8 @@ test('Brave fallback: same result shape, real URLs, monthly cap, unsupported ope
   assert.equal(braveQuery('houseplant care inurl:resources'),'houseplant care resources');
   assert.equal(braveQuery('intitle:resources houseplant care'),'intitle:resources houseplant care');
   const seen=[];const state={};
-  const brave=new BraveSearch({apiKey:'k',state,monthlyRequests:2,gapMs:0,fetchImpl:async(u,o)=>{seen.push([u,o.headers['X-Subscription-Token']]);
+  // The last day of the month: the whole remaining monthly budget is today's (daily pacing is tested in inflow-brave).
+  const brave=new BraveSearch({apiKey:'k',state,monthlyRequests:2,gapMs:0,now:()=>Date.parse('2026-11-30T12:00:00Z'),fetchImpl:async(u,o)=>{seen.push([u,o.headers['X-Subscription-Token']]);
     return json({web:{results:[{title:'Leafy Home',url:'https://www.leafyhome.blog/guide',description:'d'},{title:'no url'}]}})}});
   const r=await brave.serp('houseplant care inurl:resources',{location:2826,language:'en'});
   assert.deepEqual(r,[{url:'https://www.leafyhome.blog/guide',domain:'leafyhome.blog',title:'Leafy Home',description:'d',rank:1}]);
@@ -65,7 +67,7 @@ test('Brave fallback: same result shape, real URLs, monthly cap, unsupported ope
 });
 
 test('searches switch to the fallback only when DataForSEO cannot pay for them',async()=>{
-  const page=async url=>{const u=new URL(url);return u.pathname==='/contact'?html('<a href="mailto:ed@indieplants.net">m</a>'):u.hostname==='indieplants.net'?html(article('Houseplant Care Guide')):html('<p>home</p>')};
+  const page=async url=>{const u=new URL(url);return u.pathname==='/contact'?html('<a href="mailto:editor@indieplants.net">m</a>'):u.hostname==='indieplants.net'?html(article('Houseplant Care Guide')):html('<p>home</p>')};
   const alt=()=>{const calls=[];return {calls,canSearch:()=>true,remaining:()=>50,serp:async q=>{calls.push(q);return [{url:'https://indieplants.net/houseplant-care',domain:'indieplants.net',title:'Houseplant Care Guide',rank:1}]}}};
   const a1=alt(),s1=quiet({});
   const stats=await discoverProspects({assets:[asset],sites:[site],state:s1,dfs:noFunds,altSearch:a1,fetchImpl:page,perAsset:1,linkGapCalls:0,neighborPages:0});
@@ -93,5 +95,6 @@ test('the waker workflow starts its own successor and never interpolates input i
   assert.match(y,/AFTER: \$\{\{ inputs\.after \}\}/,'the input reaches the script through an environment variable');
   const scripts=y.split(/\n\s+run: /).slice(1).join('\n');
   assert.ok(!/\$\{\{\s*inputs\./.test(scripts.replace(/env:[\s\S]*?run:/g,'')),'no ${{ inputs.* }} inside a run script');
-  assert.match(y,/the chain ends here/);assert.match(y,/cancel-in-progress: true/);
+  // Job-level and never cancelling: a skipped or failed cron-started waker must not cancel the live chain (see vault-waker tests).
+  assert.match(y,/the chain ends here/);assert.match(y,/\n    concurrency:\n      group: linkforge-waker\n      cancel-in-progress: false/);
 });

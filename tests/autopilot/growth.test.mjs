@@ -55,7 +55,7 @@ test('broken-link pitch names the dead link without its URL and carries exactly 
   assert.match(out.subject,/^Broken link on "Resources for New Runners"$/);
   assert.match(out.body,/^Hi Jane,/);assert.match(out.body,/"shoe fit guide" \(deadshoes\.com\) points to a domain that no longer exists/);
   assert.deepEqual(out.body.match(/https?:\/\/\S+/g),[asset.url]);
-  assert.doesNotMatch(out.body,/Under-linked|Flagship/);assert.match(out.body,/reply "no"/);
+  assert.doesNotMatch(out.body,/Under-linked|Flagship/);assert.match(out.body,/If it's not a fit, just say so and I won't follow up\.\n\nBest,/);
 });
 test('standard pitch stays specific and honest',()=>{
   const out=templatePitch({id:'y',title:'Best Running Resources',fit_section:'Choosing shoes'},asset,{senderName:'Alex',site});
@@ -113,7 +113,7 @@ test('asset rotation skips pages whose searches are all on cooldown',()=>{
 });
 test('verifier opt-in and budget can come from the dashboard settings secret',()=>{
   const cfg=loadConfig({HUNTER_API_KEY:'k',LINKFORGE_SETTINGS:JSON.stringify({EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:'500'})},[]);
-  assert.deepEqual(cfg.verifier,{providers:['hunter'],enabled:true,dailyLimit:100});
+  assert.deepEqual(cfg.verifier,{providers:['hunter'],enabled:true,dailyLimit:100,hunterDailyLimit:0});
   assert.equal(setupChecklist(cfg).find(x=>x.key.startsWith('VERIFALIA')).done,true);
   const both=loadConfig({VERIFALIA_USERNAME:'u',VERIFALIA_PASSWORD:'p',HUNTER_API_KEY:'k',EMAIL_VERIFICATION_ENABLED:'YES',EMAIL_VERIFY_DAILY_LIMIT:'12'},[]);
   assert.deepEqual(both.verifier.providers,['verifalia','hunter']);
@@ -137,7 +137,7 @@ test('queued prospects are back-filled with dead-link evidence once per 30 days'
 test('a saved Verifalia login turns free verification on at 12/day unless the owner set a limit',async()=>{
   const {verifierDefaults}=await import('../../scripts/autopilot/run.mjs');
   const v={VERIFALIA_USERNAME:'u',VERIFALIA_PASSWORD:'p',EMAIL_VERIFICATION_ENABLED:'NO',EMAIL_VERIFY_DAILY_LIMIT:'0'};
-  assert.equal(loadConfig(v,[]).verifier.enabled,true);assert.equal(loadConfig(v,[]).verifier.dailyLimit,24);
+  assert.equal(loadConfig(v,[]).verifier.enabled,true);assert.equal(loadConfig(v,[]).verifier.dailyLimit,25);
   const off={...v,LINKFORGE_SETTINGS:JSON.stringify({EMAIL_VERIFICATION_ENABLED:'NO',EMAIL_VERIFY_DAILY_LIMIT:'0'})};
   assert.equal(loadConfig(off,[]).verifier.enabled,false);
   assert.equal(loadConfig({...v,VERIFALIA_ALLOW_PAID:'YES'},[]).verifier.enabled,false); // paid use needs an explicit opt-in
@@ -178,7 +178,11 @@ test('follow-up adds a new, verifiable reason and an easy one-word reply',async(
   const {followupPitch}=await import('../../scripts/autopilot/pitch.mjs');
   const f=followupPitch({title:'Best Running Resources',author:'Jane Doe',last_subject:'Resource for your page'},asset,{senderName:'Alex'});
   assert.equal(f.subject,'Re: Resource for your page');assert.match(f.body,/^Hi Jane,/);
-  assert.match(f.body,/One detail I didn't mention: it is a free interactive tool/);assert.match(f.body,/reply "no"/);
+  // Never claims a fact is new: the first email's facts were not recorded, so this is the honest one-line nudge.
+  assert.doesNotMatch(f.body,/didn't mention|free interactive tool/);assert.match(f.body,/just checking whether you'd consider adding Running Shoe Finder/);assert.match(f.body,/If it's not a fit, just say so and I won't follow up\./);
+  // Only a fact the first email did not contain is added.
+  const g=followupPitch({title:'Best Running Resources',author:'Jane Doe',last_subject:'x',facts_used:['it is a free interactive tool (no sign-up needed)']},asset,{senderName:'Alex'});
+  assert.match(g.body,/It includes 2 data tables\./);assert.doesNotMatch(g.body,/free interactive tool|didn't mention/);
   assert.deepEqual(f.body.match(/https?:\/\/\S+/g),[asset.url]);assert.doesNotMatch(f.body,/top of your inbox/);
   const b=followupPitch({title:'X',broken_link:{anchor:'shoe fit guide',host:'deadshoes.com',reason:'not_found'}},asset,{senderName:'Alex'});
   assert.match(b.body,/"shoe fit guide" \(deadshoes\.com\) on that page still returns a "page not found" error/);
@@ -191,4 +195,25 @@ test('every dropped search result is counted by reason',async()=>{
   const state={queries:{},prospects:{},domains:{'gearuptofit.com|known.example':'x'}};
   const r=await discoverProspects({assets:[{site:s.domain,url:'https://gearuptofit.com/a',title:'Shoe Finder',type:'interactive_tool',linkability:80}],sites:[s],state,dfs,perAsset:1,maxQueries:1,fetchImpl:async()=>new Response('',{status:404,headers:{'content-type':'text/html'}})});
   assert.deepEqual(r.filtered,{platform_or_giant:1,own_site:1,already_evaluated:1,forum_or_ugc:1});assert.equal(r.new_domains,1);
+});
+
+test('sender names per site are read from JSON or "domain = Name" lines, and reply/DACH settings default to the safe choice',async()=>{
+  const {parseSenderNames,loadConfig:load}=await import('../../scripts/autopilot/run.mjs');
+  assert.deepEqual(parseSenderNames('gearuptofit.com = Alex from GearUpToFit\nhttps://www.plantastichaven.com/ : Alex, Plantastic Haven\nbad line\n= nobody'),{'gearuptofit.com':'Alex from GearUpToFit','plantastichaven.com':'Alex, Plantastic Haven'});
+  assert.deepEqual(parseSenderNames('{"micegoneguide.com":"Alex","x":"no tld","y.com":5}'),{'micegoneguide.com':'Alex'});
+  assert.deepEqual(parseSenderNames(''),{});
+  const c=load({LINKFORGE_SETTINGS:JSON.stringify({SENDER_NAMES:'a.com = A',REPLY_MODE:'send',SENDER_POSTAL_ADDRESS:' PO Box 1 '})},[]);
+  assert.deepEqual(c.outreach.senderNames,{'a.com':'A'});assert.equal(c.outreach.replyMode,'send');assert.equal(c.outreach.postalAddress,'PO Box 1');
+  const d=load({},[]);assert.equal(d.outreach.replyMode,'draft');assert.equal(d.outreach.allowDach,false);assert.equal(d.verifier.hunterDailyLimit,0);
+  assert.equal(load({REPLY_MODE:'loud',OUTREACH_DACH:'YES',HUNTER_DAILY_LIMIT:'500'},[]).outreach.replyMode,'draft');
+  assert.equal(load({OUTREACH_DACH:'YES',HUNTER_DAILY_LIMIT:'500'},[]).verifier.hunterDailyLimit,50);
+});
+
+test('exchange, Saturday, unsubscribe-header and form-queue settings default to the owner\'s choices and can be switched off',async()=>{
+  const {loadConfig:load}=await import('../../scripts/autopilot/run.mjs');
+  const d=load({},[]);
+  assert.deepEqual(d.exchange,{mode:'abc',perPartnerSiteMonth:6,perPartnerPage:2,fulfilDays:7});
+  assert.equal(d.outreach.listUnsubscribe,false);assert.equal(d.outreach.saturday,true);assert.equal(d.forms.daily,5);
+  const o=load({LINKFORGE_SETTINGS:JSON.stringify({LINK_EXCHANGE:'off',SATURDAY_SENDS:'NO',LIST_UNSUBSCRIBE_HEADER:'on',FORM_QUEUE_DAILY:'0',EXCHANGE_PER_SITE_MONTH:'99'})},[]);
+  assert.equal(o.exchange.mode,'off');assert.equal(o.exchange.perPartnerSiteMonth,20);assert.equal(o.outreach.saturday,false);assert.equal(o.outreach.listUnsubscribe,true);assert.equal(o.forms.daily,0);
 });

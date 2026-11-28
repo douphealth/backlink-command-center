@@ -17,11 +17,13 @@ test('contact discovery follows the author page and an impressum page',async()=>
   const byAuthor=await findContact('https://trailblog.com/best-trail-shoes',article('<p>By <a href="/author/maria-lopez/">Maria Lopez</a></p>'),{author:'Maria Lopez',fetchImpl:site({
     '/':'<html><body><h1>Trail Blog</h1><p>Stories from the trail.</p></body></html>',
     '/author/maria-lopez':'<html><body><h1>Maria Lopez</h1><p>Write to me: maria@trailblog.com</p></body></html>'})});
-  assert.equal(byAuthor.email,'maria@trailblog.com');assert.match(byAuthor.email_source,/author\/maria-lopez/);
+  // Both pages are followed. A first-name address (maria@) and a German role address on an impressum page are not accepted
+  // by the send rules (owner decision pending; DE/AT/CH are not relaxed), so they are held and never make a prospect ready.
+  assert.equal(byAuthor.email,null);assert.equal(byAuthor.held_email,'maria@trailblog.com');assert.match(byAuthor.held_source,/author\/maria-lopez/);
   const german=await findContact('https://laufblog.de/trailschuhe',article(),{fetchImpl:site({
     '/':'<html><body><h1>Laufblog</h1><footer><a href="/impressum/">Impressum</a></footer></body></html>',
     '/impressum':'<html><body><h1>Impressum</h1><p>E-Mail: redaktion@laufblog.de</p></body></html>'})});
-  assert.equal(german.email,'redaktion@laufblog.de');
+  assert.equal(german.email,null);assert.equal(german.held_email,'redaktion@laufblog.de');
 });
 
 test('second look: a qualified page without an address is promoted when one is found, and never demoted',async()=>{
