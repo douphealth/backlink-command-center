@@ -824,14 +824,15 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
 /**
  * Won and lost links from the live page (attribution hardening remains in PR 25). 3-way exchanges (exchange.mjs): a link to
  * the pitched site A on a page with an open offer starts our return-link obligation in the same cycle (owed within
- * `fulfilDays`), and its removal before our link is up cancels it. Offers made on a contact form (no email in the history)
- * are checked too.
+ * `fulfilDays`), and its removal before our link is up cancels it. Prospects reached through a prepared contact-form message
+ * (no email in the history) are checked too, from the day the message was prepared or the offer made.
  */
 export async function checkLinks({state,ourDomains,fetchImpl=fetch,max=60,deadline=Infinity,fulfilDays=7,log=()=>{}}){
  const stats={checked:0,won:0,lost:0,unverifiable:0};
  const due=Object.values(state.prospects||{}).filter(p=>{
   if(p.status==='won')return ageDays(p.won?.checked_at)>14;
-  const first=(p.history||[]).find(h=>h.type==='initial')||(p.exchange?.via==='form'&&p.exchange.offered_at?{at:p.exchange.offered_at}:null);
+  // A contact-form message the owner was given to paste (forms.mjs, history 'form_prepared') counts as a first contact too.
+  const first=(p.history||[]).find(h=>h.type==='initial'||h.type==='form_prepared')||(p.exchange?.via==='form'&&p.exchange.offered_at?{at:p.exchange.offered_at}:null);
   return first&&ageDays(first.at)<150&&!['declined','bounced'].includes(p.status)&&(!p.next_link_check||p.next_link_check<=NOW());
  }).slice(0,max);
  const xch=due.some(p=>p.exchange)?await import('./exchange.mjs'):null;

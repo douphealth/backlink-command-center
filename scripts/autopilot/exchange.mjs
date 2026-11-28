@@ -95,11 +95,15 @@ export function relevance(c,{head,ctx,pairs}){
 
 /**
  * Exchange load from the vault: per partner page (every open or fulfilled exchange ever), per partner site (offers and
- * obligations active in the last 30 days, plus every link still owed) and the overdue count.
+ * obligations active in the last 30 days, plus every link still owed) and the overdue count. An offer drafted as an answer
+ * for the owner to send (p.exchange_draft, replies.mjs) holds its page and site for 30 days, sent or not.
  */
 export function exchangeTally(state,now=Date.now()){
   const t=ms(now),site=new Map(),page=new Map();let overdue=0;
-  for(const p of Object.values(state?.prospects||{})){const x=p?.exchange;if(!x||!ACTIVE.has(x.status))continue;
+  for(const p of Object.values(state?.prospects||{})){const x=p?.exchange;
+    if(!x||!ACTIVE.has(x.status)){const d=p?.exchange_draft,u=normUrl(d?.partner_page||''),c=rootDomain(d?.partner_site||'');
+      if(d&&t-Date.parse(d.at)<30*DAY){if(u)page.set(u,(page.get(u)||0)+1);if(c)site.set(c,(site.get(c)||0)+1)}
+      continue}
     const u=normUrl(x.partner_page||''),d=rootDomain(x.partner_site);
     if(u)page.set(u,(page.get(u)||0)+1);
     const last=Math.max(...[x.offered_at,x.accepted_at,x.their_link_at,x.fulfilled_at].map(v=>Date.parse(v||'')).filter(Number.isFinite));

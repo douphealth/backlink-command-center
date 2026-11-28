@@ -36,7 +36,7 @@ function offlineCard(h){
 const ago=t=>{if(!t)return 'never';const m=Math.round((Date.now()-Date.parse(t))/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':Math.round(m/1440)+' d ago'};
 function nextRun(last){const t=Math.max(Date.parse(last||0)+5*36e5,Date.now());const d=new Date(t);if(d.getUTCMinutes()>23)d.setUTCHours(d.getUTCHours()+1);d.setUTCMinutes(23,0,0);return d}
 
-const STATUS_ORDER=['positive','won','replied','followed_up','sent','drafted','ready','contact_form','no_contact','contact_unverifiable','already_linked','declined','bounced','skipped_duplicate','rejected'];
+const STATUS_ORDER=['positive','won','replied','followed_up','sent','drafted','ready','form_ready','contact_form','no_contact','contact_unverifiable','already_linked','form_expired','declined','bounced','skipped_duplicate','rejected'];
 const ui={filter:'active',vault:null,error:'',control:null,configured:null,tokenError:'',showConnect:false,msg:'',err:'',busy:'',settleUntil:0};
 let reloadView=null,pollTimer=null;
 export const FIELDS=[
@@ -211,7 +211,7 @@ export async function renderAutopilot(h){
     pane('overview',needsYouStrip(s,h)+`<div class="overview-grid ap-ov">${healthPanel(s,h)}${sendingPanel(s,h)}</div><div class="overview-grid ap-ov-b ap-gap">${workingPanel(s,h)}${panel('Outreach funnel','Every number is a stored, verified record',funnel)}</div><div class="ap-gap ap-stages">${panel('Last cycle','Each stage runs independently',`<div class="sites-list">${stageRows}</div>`)}</div>`)+
     pane('pages',bestPanel+internalPanel)+
     pane('index',ixPanel+spPanel+giPanel+bgLine)+
-    pane('prospects',`<div class="ap-gap">${privatePanel(h,s)}</div>`+winsPanel)+
+    pane('prospects',`<div class="ap-gap">${privatePanel(h,s)}</div>`+(ui.vault?`<div class="ap-gap">${exchangesPanel(Object.values(ui.vault.prospects||{}),h)}</div><div class="ap-gap">${formsPanel(Object.values(ui.vault.prospects||{}),h)}</div>`:'')+winsPanel)+
     pane('sites',sitesPanel)+
     pane('learning',learningPanel(h,s)+logPanel);
 }
@@ -270,12 +270,14 @@ export function healthPanel(s,h){
 const shortDay=d=>{const t=new Date(String(d)+'T12:00:00Z');return Number.isNaN(t.getTime())?String(d||''):t.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'})};
 const LEDGER_COLS=[['checks','Checks'],['valid','Valid'],['invalid','Invalid'],['catch_all','Catch-all'],['unknown','Unknown'],['screen_only','Screen only'],['emails_sent','Sent']];
 /** Sends against the cap, verification credits, the ready queue split and the 14-day verification ledger. */
+/** When pitches can go out, in the recipient's own time: weekdays, plus Saturday mornings unless the owner turned them off. */
+const sendDays=s=>s?.sender?.saturday===false?'weekdays':'weekdays and Saturday mornings';
 export function sendingPanel(s,h){
   const {escapeHTML:e,n,niceTime,panel}=h,c=s.capabilities||{},o=s.outreach||{},v=c.verifier||{},mode=c.outreach_mode||o.mode;
   const pct=(a,b)=>b>0?Math.min(100,Math.round(100*a/b)):0;
   const meter=(label,value,note,fill,tone='')=>`<div class="ap-meter ${tone}"><div class="ap-meter-top"><span>${e(label)}</span><strong>${e(value)}</strong></div>${fill==null?'':`<div class="pipeline-track"><div class="pipeline-fill" data-w="${fill}"></div></div>`}<small>${e(note)}</small></div>`;
   const sent=Number(o.sent_today)||0,cap=Number(o.cap_today??c.daily_send_cap)||0;
-  const sendM=mode==='send'?meter('Sent today',`${n(sent)} / ${n(cap)}`,cap&&sent>=cap?'Today\'s cap is used; more tomorrow (warm-up ramp)':o.sending_now?'Sending during this cycle':o.next_send_at?`Next pitches from ${niceTime(o.next_send_at)}`:'Waiting for recipients\' business hours (weekdays)',pct(sent,cap))
+  const sendM=mode==='send'?meter('Sent today',`${n(sent)} / ${n(cap)}`,cap&&sent>=cap?'Today\'s cap is used; more tomorrow (warm-up ramp)':o.sending_now?'Sending during this cycle':o.next_send_at?`Next pitches from ${niceTime(o.next_send_at)}`:`Waiting for recipients' business hours (${sendDays(s)})`,pct(sent,cap))
     :meter('Sending',mode==='draft'?'Drafts only':'Off',mode==='draft'?'Pitches are written into Gmail Drafts; nothing is sent automatically':'Research only: nothing is written or sent',null,'muted');
   const used=Number(v.used_today)||0,lim=Number(v.daily_limit)||0,hunter=Number(v.hunter_daily_limit)>0?` · Hunter ${n(v.hunter_used_today)} / ${n(v.hunter_daily_limit)}`:'';
   const checkM=v.ready?meter('Verification credits today',`${n(used)} / ${n(lim)}`,(used>=lim?'Used up: more after midnight UTC':'Free credits only; every email needs a fresh pass')+hunter,pct(used,lim),used>=lim?'warn':'')
@@ -328,7 +330,7 @@ export function vaultLine(c,{escapeHTML:e}){
   const fmt={'v2-gzip':'compressed (v2)',v1:'uncompressed (v1)'}[c.vault_format]||(c.vault_format?String(c.vault_format):'format unknown');
   return `<div class="ap-vault-line ${tone}"><span>Sealed vault: <b>${e(size)}</b> of Cloudflare's 25 MiB file limit · ${e(fmt)}${c.rebuild_required?' · mailbox read-back pending':''}</span><span class="ap-vault-bar"><i data-w="${Math.min(100,Math.round(1000*b/(25*MiB))/10)}"></i></span></div>`;
 }
-const ACTIVE=new Set(['positive','won','replied','followed_up','sent','drafted','ready','contact_form','no_contact']);
+const ACTIVE=new Set(['positive','won','replied','followed_up','sent','drafted','ready','form_ready','contact_form','no_contact']);
 const waitsForUs=p=>needsOwner(p)||!!p?.awaiting_us;
 /** The prospect table: decisions first, then replies waiting for an answer, then by status and fit. 'needs_you' shows only those two. */
 export function prospectView(all,filter='active'){
@@ -343,7 +345,9 @@ export function replyBadge(p,{escapeHTML:e}){
   return `<span class="tag amber ap-need-tag">Reply waiting</span><small class="ap-why">${drafted?'An answer is drafted in Gmail Drafts: check it and send.':fresh&&d.mode==='none'&&d.reason?`Not drafted (${e(String(d.reason).replaceAll('_',' '))}): answer in Gmail.`:'Answer in the same Gmail thread.'}</small>`;
 }
 // The engine's live values (public summary) for the settings it publishes, so another device never flips them by accident.
-const LIVE_SETTING={OUTREACH_MODE:s=>s?.capabilities?.outreach_mode,REPLY_MODE:s=>s?.sender?.reply_mode,OUTREACH_DACH:s=>s?.sender&&typeof s.sender.allow_dach==='boolean'?(s.sender.allow_dach?'YES':'NO'):undefined};
+const yesNo=(v,y,n)=>typeof v==='boolean'?(v?y:n):undefined;
+const LIVE_SETTING={OUTREACH_MODE:s=>s?.capabilities?.outreach_mode,REPLY_MODE:s=>s?.sender?.reply_mode,OUTREACH_DACH:s=>yesNo(s?.sender?.allow_dach,'YES','NO'),
+  LINK_EXCHANGE:s=>s?.sender?.link_exchange,SATURDAY_SENDS:s=>yesNo(s?.sender?.saturday,'YES','NO'),LIST_UNSUBSCRIBE_HEADER:s=>yesNo(s?.sender?.list_unsubscribe,'on','off')};
 const SENDER_SET={SENDER_NAME:x=>!!x.sender_name,SENDER_POSTAL_ADDRESS:x=>!!x.postal_address,SENDER_NAMES:x=>Number(x.per_site_names)>0};
 /**
  * The value a setting shows: what this browser saved; for a dropdown without one, the engine's live value, then the safe default
@@ -375,7 +379,7 @@ function outreachLine(s,{escapeHTML:e,n,niceTime}){
   const verify=v?`<p class="ap-outreach"><b>Mailbox verifier:</b> ${v.ready?`${e((v.providers||[]).join(' → '))} · ${n(v.used_today)}/${n(v.daily_limit)} checks used today${bal}${v.catch_all_domains_skipped?` · ${n(v.catch_all_domains_skipped)} catch-all domains skipped`:''}`:v.key?'login saved, but the daily limit is 0 (set "Mailbox checks per day")':'not connected. Add a free Verifalia login under ⚙ Connect, or nothing can be sent'}${o?` · ${n(o.verified_ready)} of ${n(o.ready)} queued inboxes verified`:''}${o?.holds&&Object.keys(o.holds).length?`<br><small>Held: ${Object.entries(o.holds).sort((a,b)=>b[1]-a[1]).map(([k,c])=>`${e(k.replaceAll('_',' '))} ${n(c)}`).join(' · ')}</small>`:''}</p>`:'';
   if(!o||o.mode==='off')return verify;
   const next=o.next_send_at?niceTime(o.next_send_at):null;
-  const why=o.sent_today>=o.cap_today?`today's warm-up limit is used (${n(o.sent_today)}/${n(o.cap_today)})`:o.sending_now?'sending during this run':`waiting for recipients' business hours (weekdays)`;
+  const why=o.sent_today>=o.cap_today?`today's warm-up limit is used (${n(o.sent_today)}/${n(o.cap_today)})`:o.sending_now?'sending during this run':`waiting for recipients' business hours (${sendDays(s)})`;
   return `<p class="ap-outreach"><b>Pitches:</b> ${n(o.ready)} ready · ${e(why)}${next&&!o.sending_now?` · next pitches from <b>${e(next)}</b>`:''}</p>`+verify;
 }
 function fullyConfigured(){
@@ -419,6 +423,39 @@ function connectPanel(h,s=null){
       <form id="ap-connect-form"><fieldset ${ready?'':'disabled'}><div class="ap-fields">${FIELDS.map(field).join('')}</div>
       <div class="ap-buttons"><button class="primary" type="submit" ${ui.busy?'disabled':''}>${ui.busy==='connect'?'Saving…':'Save & run now'}</button><button class="outline-btn" type="button" data-ap="close">Close</button></div></fieldset></form></section></div>`,
     ready?`<span class="panel-link">${c.secrets.has('LINKFORGE_DATA_KEY')?'✓ vault key set':'vault key missing'}</span>`:'');
+}
+
+// 3-way link exchanges (vault only, decrypted in this browser): what the owner promised, where, and by when.
+const XCH_ORDER=['their_link_live','accepted','offered','fulfilled'];
+const XCH_WORDS={their_link_live:'Their link is live: add yours',accepted:'Agreed: waiting for their link',offered:'Offered, no answer yet',fulfilled:'Done: both links verified'};
+const lateOwed=(x,now)=>x?.status==='their_link_live'&&Date.parse(x.owed_by)<now;
+/** Open and fulfilled exchanges: overdue return links first, then those due, agreed and offered; fulfilled last. */
+export function exchangeView(all,now=Date.now()){
+  const when=x=>String(x.owed_by||x.accepted_at||x.offered_at||'');
+  return (all||[]).filter(p=>XCH_ORDER.includes(p?.exchange?.status))
+    .sort((a,b)=>(+lateOwed(b.exchange,now)-+lateOwed(a.exchange,now))||XCH_ORDER.indexOf(a.exchange.status)-XCH_ORDER.indexOf(b.exchange.status)||when(a.exchange).localeCompare(when(b.exchange)));
+}
+/** Prospects > Exchanges: which publisher (B), which page of ours links back (C), the page they link to (A), and the due date. */
+export function exchangesPanel(all,h,now=Date.now()){
+  const {escapeHTML:e,external,niceTime,panel,table,empty}=h,list=exchangeView(all,now);
+  const owed=list.filter(p=>p.exchange.status==='their_link_live').length,late=list.filter(p=>lateOwed(p.exchange,now)).length;
+  const rows=list.map(p=>{const x=p.exchange,overdue=lateOwed(x,now),tone=overdue?'red':x.status==='their_link_live'?'amber':x.status==='fulfilled'?'green':'blue';
+    const note=x.status==='their_link_live'?`${overdue?'Overdue since':'Due by'} ${niceTime(x.owed_by)}`:x.status==='fulfilled'?`Verified ${niceTime(x.fulfilled_at)}`
+      :x.status==='accepted'?`Agreed ${niceTime(x.accepted_at)}`:`Offered ${niceTime(x.offered_at)}${x.via==='form'?' on their contact form':''}`;
+    return `<tr><td><strong>${e(p.domain)}</strong>${external(x.their_url||p.page_url,(x.their_title||p.title||x.their_url||'').slice(0,80))}</td><td>${external(x.partner_page,(x.partner_title||x.partner_page||'').slice(0,80))}<small>on ${e(x.partner_site)}: a contextual link to their article, in the text</small></td><td>${external(p.asset_url,(p.asset_title||p.asset_url||'').slice(0,60))}<small>${e(p.site)}</small></td><td><span class="tag ${tone}">${e(XCH_WORDS[x.status])}</span><small>${e(note)}</small></td></tr>`});
+  return panel('Exchanges',owed?`${owed} return link${owed===1?'':'s'} to add${late?` (${late} overdue)`:''}. Autopilot verifies each one from the next crawl. Decrypted locally.`:'3-way exchanges: they link to one of your sites, you link back from a related page on another of your sites. Decrypted locally.',
+    rows.length?table(['Publisher and their article','Your page that links back','Their link goes to','Status'],rows):empty('No link exchanges yet','Pitches offer one when a genuinely related page on another of your sites can link back.'));
+}
+/** Contact-form messages waiting to be pasted, newest first (Autopilot never submits a form). */
+export function formQueueView(all){
+  return (all||[]).filter(p=>p?.status==='form_ready'&&p.form_message?.body).sort((a,b)=>String(b.form_message.at||'').localeCompare(String(a.form_message.at||'')));
+}
+export function formsPanel(all,h){
+  const {escapeHTML:e,external,niceTime,panel,table,empty}=h,list=formQueueView(all);
+  const rows=list.map(p=>{const m=p.form_message;
+    return `<tr><td><strong>${e(p.domain)}</strong>${external(p.page_url,(p.title||p.page_url||'').slice(0,80))}<small>Prepared ${e(niceTime(m.at))}${p.exchange?.via==='form'&&p.exchange.status==='offered'?` · offers a link from ${e(p.exchange.partner_site)}`:''}</small></td><td>${external(m.form_url,'Open contact form')}</td><td><small>Subject</small><input class="ap-form-copy" type="text" readonly value="${e(m.subject)}"><small>Message</small><textarea class="ap-form-copy" rows="8" readonly>${e(m.body)}</textarea></td></tr>`});
+  return panel('Contact-form messages',`${list.length} ready to paste: these publishers publish no email address. Autopilot never submits a form, and expires a message after 21 days. Decrypted locally.`,
+    rows.length?table(['Publisher','Form','Subject and message'],rows):empty('No contact-form messages waiting','Up to the daily setting are prepared each day for publishers that only have a contact form.'));
 }
 
 function privatePanel(h,s=null){
