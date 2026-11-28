@@ -233,3 +233,13 @@ test('a "success" with no completion in it is reported with provider, model, sta
   const parts=mk(api(async()=>new Response(JSON.stringify({choices:[{message:{content:[{type:'text',text:`Subject: A shoe finder for your new-runner resources\n\n${goodBody}`}]}}]}),{headers:{'content-type':'application/json'}})));
   assert.equal((await parts.write(prospect,asset,site)).writer,'groq','content given as parts is read');
 });
+
+test('an AI pitch that left out our page gets the address on its own line before the closing, not the template',async()=>{
+  const {withAssetUrl,tidyPitch,OPT_OUT}=await import('../../scripts/autopilot/pitch.mjs');
+  const asset={url:'https://gearuptofit.com/tools/running-shoe-finder/'};
+  const body=`Hi Sam,\n\nWould you consider adding our running shoe finder to your stability shoes section?\n\n${OPT_OUT}\n\nBest,\nAlex`;
+  const fixed=withAssetUrl(body,asset);
+  assert.equal(fixed.split('\n\n')[2],asset.url);assert.ok(fixed.indexOf(asset.url)<fixed.indexOf(OPT_OUT));
+  assert.equal(withAssetUrl('Hi,\n\nSee https://other.example/x\n\nBest,\nA',asset),'Hi,\n\nSee https://other.example/x\n\nBest,\nA','a body with another URL is left for pitchProblem to judge');
+  assert.match(tidyPitch({subject:'S',body:'Hi Sam,\n\nOne ask.\n\nBest,\nAlex'},asset).body,/One ask\.\n\nhttps:\/\/gearuptofit\.com\/tools\/running-shoe-finder\/\n\nBest,/);
+});

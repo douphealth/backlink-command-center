@@ -459,7 +459,18 @@ export function tidyPitch(out,asset){
     .replace(/\*\*/g,'')
     .replace(/https?:\/\/[^\s<>"')\]]+/g,u=>{const clean=u.replace(/[.,;:!?]+$/,''),tail=u.slice(clean.length);return clean.replace(/\/+$/,'').toLowerCase()===base?asset.url+tail:u})
     .replace(/\n{3,}/g,'\n\n').trim();
-  return {subject,body};
+  return {subject,body:withAssetUrl(body,asset)};
+}
+/**
+ * The page we suggest is the one fact every pitch must carry. A model that wrote the whole email but left the address out
+ * (seen in production, 2026-11-28) gets it added on its own line before the closing, instead of the email being thrown
+ * away for the template. A body with any other URL is left alone (pitchProblem judges it).
+ */
+export function withAssetUrl(body,asset){
+  if(!asset?.url||/https?:\/\//i.test(body))return body;
+  const parts=body.split(/\n{2,}/),close=parts.findIndex((x,i)=>i>0&&(/^(?:best|thanks|thank you|cheers|kind regards|regards|all the best)\b/i.test(x.trim())||x.trim()===OPT_OUT||/won't follow up/i.test(x)));
+  parts.splice(close>0?close:parts.length,0,asset.url);
+  return parts.join('\n\n');
 }
 
 /** The 3-way offer as the AI writer is told it: names and titles only (no URL goes into the email but ours). */
