@@ -118,6 +118,9 @@ export function applyOptOut(state,p,from){
  for(const e of new Set([p.email,from].map(x=>normalizeEmail(String(x||'').toLowerCase())).filter(Boolean)))state.suppression[e]={reason:'Opt-out',at};
  // The publisher closed the conversation: nothing is left for the owner to decide (the flag itself stays).
  if(p.needs_owner&&!p.owner_decided_at){p.owner_decided_at=at;p.owner_decision='closed_by_opt_out'}
+ // A 3-way exchange they had not linked for yet is off (one whose link is already live is still owed to them).
+ if(['offered','accepted'].includes(p.exchange?.status)){p.exchange.status='declined';p.exchange.declined_at=at}
+ delete p.exchange_draft;
 }
 /**
  * A condition (fee, link back, guest post) raises the owner flag; the strongest one is kept. `at`: when the message was
@@ -128,6 +131,21 @@ export function noteCondition(p,condition,{at=null}={}){
  if(at&&Date.parse(p.owner_decided_at)>=Date.parse(at))return false;
  p.needs_owner=true;delete p.owner_decided_at;delete p.owner_decision;return true;
 }
+import {replyConditions,exchangeIntent} from './mail.mjs';
+/** 3-way exchange states in which our offer still stands: a reply about the link back is about this offer. */
+const EXCHANGE_OPEN=new Set(['offered','accepted','their_link_live']);
+/**
+ * An exchange offer from an answer draft (replies.mjs, kind exchange_offer) counts as offered only once the owner has
+ * sent that draft: their reply to its id, or its id in the Sent folder. Never when another exchange is on record.
+ * Sending it is the owner's answer to the link-back request that draft answered.
+ */
+export function promoteExchangeDraft(p,at=NOW()){
+ const d=p.exchange_draft;if(!d||p.exchange)return false;
+ const {message_id,at:drafted,...offer}=d;p.exchange={...offer,status:'offered',offered_at:at,via:'email'};delete p.exchange_draft;
+ settleLinkBack(p,'exchange_offer_sent',at);return true;
+}
+/** A pending owner flag raised only by a link-back request is settled once our own 3-way offer answers it (a fee or guest post is not). */
+function settleLinkBack(p,decision,at=NOW()){if(p.needs_owner&&!p.owner_decided_at&&p.condition==='reciprocal'){p.owner_decided_at=at;p.owner_decision=decision}}
 const ADDRESS=/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi;
 const REPLY_SUBJECT=/^\s*(?:re|aw|sv|antw|fwd?|fw|wg|tr)\s*(?:\[\d+\])?\s*:/i;
 /** When their message was written (Date header), never in the future; null when missing or implausible. */
@@ -138,6 +156,13 @@ function sentAt(m,now=Date.now()){const t=Date.parse(m?.date||'');return Number.
  * back into "replied"; an opt-out always wins (declined + domain and address suppression). A condition and the
  * owner flag stay set once raised. Every new human reply that is not an opt-out marks the conversation as waiting
  * for our answer (awaiting_us) until the owner's own answer shows up in Sent (reconcileSent) or replies.mjs answers.
+ *
+ * 3-way exchange (p.exchange, offered by our email or contact-form message): a reply that accepts (a yes, or the link
+ * back we offered ourselves: "sure, if you link back", "deal", "happy to swap") sets the exchange to accepted and the
+ * conversation to positive, with no owner flag, since the owner approved these exchanges in advance. A fee, a guest post,
+ * or a link back from the site they were pitched or from a site we did not offer still needs the owner (exchangeIntent).
+ * An opt-out declines the exchange. A reply from an address at the domain of a prospect waiting in the contact-form queue
+ * (status form_ready) is recorded on it when nothing else matches.
  */
 export async function processReplies({state,imap,self='',log=()=>{}}){
  const stats={scanned:0,replies:0,positive:0,negative:0,bounces:0,delays:0};
@@ -171,7 +196,7 @@ export async function processReplies({state,imap,self='',log=()=>{}}){
    const msg={from:h.from,subject:h.subject||'',body:h.excerpt||''},k=classifyReply(msg);
    if(k==='negative'){h.sentiment='negative';h.reread=true;applyOptOut(state,p,h.from);optOuts++;continue}
    if((k==='positive'||k==='neutral')&&k!==h.sentiment){h.sentiment=k;h.reread=true}
-   if(!h.condition){const c=replyCondition(msg);if(c){h.condition=c;if(p.status!=='declined'&&noteCondition(p,c,{at:h.at}))flagged++}}
+   if(!h.condition&&!h.exchange){const c=replyCondition(msg);if(c){h.condition=c;if(p.status!=='declined'&&noteCondition(p,c,{at:h.at}))flagged++}}
   }
   state.migrations.reply_class_v3=NOW();
   if(optOuts||flagged)log(`repair: ${optOuts} earlier replies re-read as opt-outs (suppressed), ${flagged} as replies with a condition (flagged for you)`);
@@ -185,6 +210,18 @@ export async function processReplies({state,imap,self='',log=()=>{}}){
   if(p.domain)(byDomain.get(p.domain)||byDomain.set(p.domain,[]).get(p.domain)).push(p);
  }
  const lastContact=p=>Math.max(0,...(p.history||[]).filter(h=>h.type==='initial'||h.type==='followup').map(h=>Date.parse(h.at)||0));
+ // The contact-form queue (forms.mjs): nobody was emailed, so only the sender's domain can tie a reply to it.
+ const byForm=new Map();
+ for(const p of Object.values(state.prospects||{}))if(p.status==='form_ready'&&p.domain){const d=String(p.domain).toLowerCase().replace(/^www\./,'');(byForm.get(d)||byForm.set(d,[]).get(d)).push(p)}
+ const formMatch=(from,m)=>{
+  let h=String(from.split('@')[1]||'').toLowerCase().replace(/^www\./,'');const written=Date.parse(m.date||'');
+  // An address at the prospect's domain (or a subdomain of it), written after the message was prepared; the newest first.
+  for(;h.includes('.');h=h.slice(h.indexOf('.')+1)){
+   const q=(byForm.get(h)||[]).filter(q=>!(Number.isFinite(written)&&Date.parse(q.form_message?.at)>written)).sort((a,b)=>(Date.parse(b.form_message?.at)||0)-(Date.parse(a.form_message?.at)||0))[0];
+   if(q)return q;
+  }
+  return null;
+ };
  const me=normalizeEmail(String(self||'').toLowerCase());
  let msgs;
  try{msgs=await imap.recentHeaders(new Date(Date.now()-35*DAY),{cursor:state.mail_cursor});if(!Array.isArray(msgs))throw Error('Invalid mailbox response')}
@@ -207,7 +244,9 @@ export async function processReplies({state,imap,self='',log=()=>{}}){
    const sameDomain=(fromDomain&&byDomain.get(fromDomain)||[]).slice().sort((a,b)=>lastContact(b)-lastContact(a));
    p=kind==='negative'?quoted[0]||sameDomain[0]||(bySubj.length===1?bySubj[0]:null):[...quoted,...sameDomain].find(q=>bySubj.includes(q))||null;
   }
-  const indirect=!!p&&!ids.some(i=>byMsg.get(i)===p)&&byEmail.get(from)!==p&&kind!=='bounce';
+  // Nothing else matched: an address at the domain of a publisher whose contact-form message is waiting for the owner.
+  const viaForm=!p&&kind!=='bounce'&&kind!=='auto'&&!!(p=formMatch(from,m));
+  const indirect=!!p&&!viaForm&&!ids.some(i=>byMsg.get(i)===p)&&byEmail.get(from)!==p&&kind!=='bounce';
   if(!p){
    // An opt-out we cannot tie to a prospect (forwarded inbox, state lost, an email sent before the vault was replaced):
    // never silently dropped when it answers our outreach. Counted (no addresses in logs); the sender's address is
@@ -229,6 +268,7 @@ export async function processReplies({state,imap,self='',log=()=>{}}){
   const identity=m.messageId||createHash('sha256').update(JSON.stringify([from,m.subject,m.body,m.uid])).digest('hex');
   const key=p.id+'|'+identity;if(state.seen_replies[key])continue;
   if(indirect)stats.matched_indirectly=(stats.matched_indirectly||0)+1;
+  if(viaForm)stats.form_replies=(stats.form_replies||0)+1;
   p.history??=[];
   if(kind==='bounce'){
    const delayed=/notification\s*\(delay\)|delivery (?:incomplete|delayed)|will retry|Action:\s*delayed|Status:\s*4\./i.test((m.subject||'')+'\n'+(m.body||''));
@@ -242,19 +282,32 @@ export async function processReplies({state,imap,self='',log=()=>{}}){
    else stats.delays++;
   }else{
    stats.replies++;p.replied_at=NOW();p.no_followup=true;
-   const negative=kind==='negative',condition=negative?null:replyCondition(m),question=!negative&&isQuestion(m);
+   const negative=kind==='negative',conds=negative?[]:replyConditions(m),question=!negative&&isQuestion(m);
    const theirId=String(m.messageId||'').match(/<[^<>\s]+>/)?.[0]||null,answers=ids.find(i=>byMsg.get(i)===p)||null;
    if(negative&&inSubject.length&&byMsg.get(inSubject[0])===p)stats.unsubscribe_links=(stats.unsubscribe_links||0)+1;
+   // An exchange offered in an answer draft: their reply to that draft shows the owner sent it.
+   if(p.exchange_draft&&[...replyTo,...refs].includes(p.exchange_draft.message_id)&&promoteExchangeDraft(p))stats.exchange_offers_sent=(stats.exchange_offers_sent||0)+1;
+   // How this reply answers a 3-way exchange we offered (null when none is open or it says nothing about it).
+   const ex=!negative&&EXCHANGE_OPEN.has(p.exchange?.status)?p.exchange:null;
+   const intent=ex?exchangeIntent(m,{offer:ex,site:p.site,domain:p.domain,sentiment:kind,question}):null;
+   const mark=intent==='accept'?(ex.status==='offered'?'accepted':'agreed'):intent==='decline'?'declined':intent==='counter'||intent==='question'?intent:null;
+   // The link back we offered ourselves is not a condition for the owner; a different one (from A, another site) is, and
+   // so is a fee or a guest post raised alongside it (that one is kept: the link back was ours).
+   const condition=(intent==='owner'?conds.find(c=>c!=='reciprocal'):conds[0])||(mark==='counter'?'reciprocal':null),owned=condition&&!['accepted','agreed','question','declined'].includes(mark);
    const written=sentAt(m);
    // Stored only in the encrypted vault: the dashboard shows what they asked for without opening Gmail.
-   p.history.push({type:'reply',at:NOW(),...(written?{written_at:written}:{}),from,sentiment:kind,...(condition?{condition}:{}),question,message_id:theirId,in_reply_to:answers,
+   p.history.push({type:'reply',at:NOW(),...(written?{written_at:written}:{}),from,sentiment:kind,...(condition?{condition}:{}),...(mark?{exchange:mark}:{}),question,message_id:theirId,in_reply_to:answers,
     subject:String(m.subject||'').slice(0,140),excerpt:replyText(m).replace(/\s+/g,' ').slice(0,600)});
    if(!(Date.parse(p.last_reply_at)>=Date.parse(written||NOW())))p.last_reply_at=written||NOW();
    // A new condition re-opens the owner's decision even if an earlier one was already answered.
-   if(condition){noteCondition(p,condition);stats.conditional=(stats.conditional||0)+1}
+   if(owned){noteCondition(p,condition);stats.conditional=(stats.conditional||0)+1}
+   if(mark==='accepted'){ex.status='accepted';ex.accepted_at=NOW();stats.exchange_accepted=(stats.exchange_accepted||0)+1;settleLinkBack(p,'exchange_accepted')}
+   else if(mark==='counter')stats.exchange_counter=(stats.exchange_counter||0)+1;
+   // They want nothing back: an exchange they have not linked for yet is off (a link already live stays owed).
+   else if(mark==='declined'&&['offered','accepted'].includes(ex.status)){ex.status='declined';ex.declined_at=NOW();stats.exchange_declined=(stats.exchange_declined||0)+1}
    if(negative){stats.negative++;applyOptOut(state,p,from)}
    else{
-    if(kind==='positive'){stats.positive++;if(!SETTLED.has(p.status))p.status='positive';if(p.status!=='declined')p.next_link_check=NOW()}
+    if(kind==='positive'||mark==='accepted'){if(kind==='positive')stats.positive++;if(!SETTLED.has(p.status))p.status='positive';if(p.status!=='declined')p.next_link_check=NOW()}
     else if(!SETTLED.has(p.status))p.status='replied';
     if(question)stats.questions=(stats.questions||0)+1;
     // A suppressed or declined conversation is never answered again, so it never waits for us either.
@@ -265,7 +318,7 @@ export async function processReplies({state,imap,self='',log=()=>{}}){
  }
  if(msgs.cursor)state.mail_cursor=msgs.cursor;
  state.reply_health={status:msgs.complete===false?'backlog':'ok',checked_at:NOW(),scanned:msgs.length};
- log(`replies: ${stats.scanned} scanned, ${stats.replies} replies, ${stats.bounces} failures, ${stats.delays} delays; ${state.reply_health.status}${stats.unmatched_optouts?`; ${stats.unmatched_optouts} opt-outs not matched to a prospect (sender suppressed)`:''}`);
+ log(`replies: ${stats.scanned} scanned, ${stats.replies} replies, ${stats.bounces} failures, ${stats.delays} delays; ${state.reply_health.status}${stats.unmatched_optouts?`; ${stats.unmatched_optouts} opt-outs not matched to a prospect (sender suppressed)`:''}${stats.exchange_accepted?`; ${stats.exchange_accepted} 3-way exchanges accepted`:''}${stats.form_replies?`; ${stats.form_replies} replies to contact-form messages`:''}`);
  return stats;
 }
 /** Accept a recipient proof only if it is complete, current, first-party and unsuppressed; record the outcome on the prospect. */
@@ -351,7 +404,8 @@ export async function screenQueue({state,mailer,max=40,rescreenMax=30,deadline=I
  * record has no pitch (state lost or overwritten, as on 2026-11-25 when two cycles overlapped) is marked as
  * contacted so it is never pitched again; anyone who received two emails within a day gets no further email.
  * It also notices the owner's own answers: mail to a publisher who replied, sent after that reply and not by
- * Autopilot, means the owner has answered (awaiting_us cleared) and has decided any condition they raised.
+ * Autopilot, means the owner has answered (awaiting_us cleared) and has decided any condition they raised. A 3-way
+ * exchange offer Autopilot saved as an answer draft becomes an offer on record once that draft is in Sent.
  *
  * The whole contact window (90 days) is read, paging back past the newest 1000 messages; if it cannot be read in
  * full this throws, so the stage fails and nothing is sent. `index` (a Map, optional) receives every recipient
@@ -375,8 +429,12 @@ export async function reconcileSent({state,imap,days=90,index=null,now=()=>Date.
  for(const m of sent){const e=normalizeEmail(m.to);if(!e)continue;(byTo.get(e)||byTo.set(e,[]).get(e)).push(Date.parse(m.at)||Date.now());
   // Only mail with a real Date, and without one of our own <lf-...> ids (unless it is a draft we saved for the owner), can be the owner's answer.
   const t=Date.parse(m.at),id=String(m.message_id||m.messageId||'');if(Number.isFinite(t)&&(!/<lf-/.test(id)||draftIds.has(id.match(/<lf-[^>]+>/)?.[0])))(ownBy.get(e)||ownBy.set(e,[]).get(e)).push(t)}
+ // An exchange offer saved as an answer draft is on record once the owner has sent that draft (its id is in Sent).
+ const sentById=new Map();for(const m of sent){const id=String(m?.message_id||m?.messageId||'').match(/<lf-[^>]+>/)?.[0],t=Date.parse(m?.at);if(id&&Number.isFinite(t))sentById.set(id,t)}
  let answered=0;
  for(const p of Object.values(state.prospects||{})){
+  const offerSent=sentById.get(p.exchange_draft?.message_id);
+  if(offerSent&&promoteExchangeDraft(p,new Date(offerSent).toISOString()))stats.exchange_offers_sent=(stats.exchange_offers_sent||0)+1;
   const addrs=new Set([p.email,...(p.history||[]).map(h=>h.to)].map(x=>normalizeEmail(x||'')).filter(Boolean));
   if(p.awaiting_us&&Date.parse(p.last_reply_at)){
    // Mail Autopilot sent itself (pitches, follow-ups, automatic answers) is in the history: it is not the owner's answer.
