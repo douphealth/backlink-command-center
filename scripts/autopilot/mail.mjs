@@ -10,16 +10,19 @@ const cleanHeader=s=>String(s||'').replace(/[\r\n]+/g,' ').trim();
  * The opt-out address carries this message's own lf- id in its subject ("unsubscribe lf-..."), so an unsubscribe
  * sent by a mail client's button, even from a forwarding address, still matches the email it answers.
  * mailto only: no one-click POST endpoint exists, so List-Unsubscribe-Post is deliberately not sent.
+ * The header marks mail as bulk, so outreach adds it only when the owner turns it on (LIST_UNSUBSCRIBE_HEADER=on,
+ * config.listUnsubscribe); the body's closing sentence is the opt-out either way. Old emails' ids keep matching.
  */
 export function unsubscribeHeader(from,messageId){
  const id=cleanHeader(messageId).replace(/^<|>$/g,'');
  return `List-Unsubscribe: <mailto:${cleanHeader(from)}?subject=unsubscribe${/^lf-[a-z0-9.@-]+$/i.test(id)?'%20'+id:''}>`;
 }
-export function buildMessage({from,fromName,to,subject,text,messageId,inReplyTo,references,unsubscribe}){
+/** A plain-text email. `unsubscribe: true` adds the List-Unsubscribe header (callers pass config.listUnsubscribe). */
+export function buildMessage({from,fromName,to,subject,text,messageId,inReplyTo,references,unsubscribe=false}){
  const headers=[`From: ${fromName?`"${encWord(cleanHeader(fromName)).replace(/"/g,'')}" `:''}<${from}>`,`To: <${cleanHeader(to)}>`,
  `Subject: ${encWord(cleanHeader(subject))}`,`Date: ${new Date().toUTCString().replace('GMT','+0000')}`,`Message-ID: ${messageId}`,
  ...(inReplyTo?[`In-Reply-To: ${inReplyTo}`,`References: ${references||inReplyTo}`]:[]),
- ...(unsubscribe?[unsubscribeHeader(from,messageId)]:[]),
+ ...(unsubscribe===true?[unsubscribeHeader(from,messageId)]:[]),
  'MIME-Version: 1.0','Content-Type: text/plain; charset=UTF-8','Content-Transfer-Encoding: base64'];
  return headers.join(CRLF)+CRLF+CRLF+wrap76(b64(text.replace(/\r?\n/g,CRLF)))+CRLF;
 }
@@ -163,8 +166,10 @@ export function parseFetch(raw){
   out.push({uid:part.match(/\bUID\s+(\d+)/)?.[1]||'',messageId:h('Message-ID'),from:from.toLowerCase(),subject:h('Subject'),date:h('Date'),inReplyTo:h('In-Reply-To'),references:h('References'),autoSubmitted:h('Auto-Submitted'),body:decodeReplyBody(body,h('Content-Transfer-Encoding'),h('Content-Type'))});
  }return out;
 }
-// Opt-outs, in their own words (quoted text is never read). Every pitch's P.S. says 'reply "no"', so a reply that starts
-// with no / nope / stop / unsubscribe (greeting and signature aside: "No\n\nSent from my iPhone") is an opt-out too.
+// Opt-outs, in their own words (quoted text is never read). Every pitch closes with "If it's not a fit, just say so and I
+// won't follow up." (pitch.mjs OPT_OUT; earlier pitches had a P.S. saying 'reply "no"'), so "no thanks", "not interested",
+// "not for us", "we'll pass" and a reply that starts with no / nope / stop / unsubscribe (greeting and signature aside:
+// "No\n\nSent from my iPhone") are opt-outs too.
 const NEGATIVE=/\b(?:unsubscribe|remove (?:me|us|my (?:e-?mail|address)|our (?:e-?mail|address|site|blog)|this (?:e-?mail|address))|take (?:me|us|my (?:e-?mail|address)|our (?:e-?mail|address)) off|opt (?:me|us) out|opt[- ]?out (?:of|from) (?:your|these|this|further|future|all)\b|(?:please|want to|like to|wish to) opt[- ]?out|stop (?:e-?mailing|contacting|messaging|writing|sending)|(?:do not|don't|dont|never) (?:e-?mail|contact|message|write to|send (?:me|us|any|further|more|another|these|this|them|e-?mails?))|no (?:more|further) (?:e-?mails|messages)|not interested|no,? thanks\b|no,? thank you|please stop|spam|not for us|(?:we|i)(?:'ll| will) pass|pass on this|not (?:a |the right |a good )?fit for us)\b/i;
 const LEAD_NO=/^(?:no|nope|nah|stop|unsubscribe)\b(?:[\s,]*(?:thanks|thank you|thx)\b)?\s*(?:[.!,;:\u2013\u2014-]|$)/i;
 // An explicit refusal to link ("we have never linked to commercial sites", "we don't add links"). Not one that names a time ("until", "yet").

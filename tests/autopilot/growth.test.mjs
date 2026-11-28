@@ -55,7 +55,7 @@ test('broken-link pitch names the dead link without its URL and carries exactly 
   assert.match(out.subject,/^Broken link on "Resources for New Runners"$/);
   assert.match(out.body,/^Hi Jane,/);assert.match(out.body,/"shoe fit guide" \(deadshoes\.com\) points to a domain that no longer exists/);
   assert.deepEqual(out.body.match(/https?:\/\/\S+/g),[asset.url]);
-  assert.doesNotMatch(out.body,/Under-linked|Flagship/);assert.match(out.body,/reply "no"/);
+  assert.doesNotMatch(out.body,/Under-linked|Flagship/);assert.match(out.body,/If it's not a fit, just say so and I won't follow up\.\n\nBest,/);
 });
 test('standard pitch stays specific and honest',()=>{
   const out=templatePitch({id:'y',title:'Best Running Resources',fit_section:'Choosing shoes'},asset,{senderName:'Alex',site});
@@ -179,7 +179,7 @@ test('follow-up adds a new, verifiable reason and an easy one-word reply',async(
   const f=followupPitch({title:'Best Running Resources',author:'Jane Doe',last_subject:'Resource for your page'},asset,{senderName:'Alex'});
   assert.equal(f.subject,'Re: Resource for your page');assert.match(f.body,/^Hi Jane,/);
   // Never claims a fact is new: the first email's facts were not recorded, so this is the honest one-line nudge.
-  assert.doesNotMatch(f.body,/didn't mention|free interactive tool/);assert.match(f.body,/just checking whether you'd consider adding Running Shoe Finder/);assert.match(f.body,/reply "no"/);
+  assert.doesNotMatch(f.body,/didn't mention|free interactive tool/);assert.match(f.body,/just checking whether you'd consider adding Running Shoe Finder/);assert.match(f.body,/If it's not a fit, just say so and I won't follow up\./);
   // Only a fact the first email did not contain is added.
   const g=followupPitch({title:'Best Running Resources',author:'Jane Doe',last_subject:'x',facts_used:['it is a free interactive tool (no sign-up needed)']},asset,{senderName:'Alex'});
   assert.match(g.body,/It includes 2 data tables\./);assert.doesNotMatch(g.body,/free interactive tool|didn't mention/);

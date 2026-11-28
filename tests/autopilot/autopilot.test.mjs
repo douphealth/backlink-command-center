@@ -132,7 +132,8 @@ test('outreach respects warm-up, dedupes domains, honours opt-outs and follows u
   assert.equal(stats.sent,5,'warm-up cap on day one');
   assert.ok(!sent.some(m=>m.to==='ed@pub1.org'),'suppressed domain skipped');
   assert.equal(prospects.p8.status,'skipped_duplicate');
-  assert.ok(sent.every(m=>m.raw.includes('List-Unsubscribe')));
+  // The List-Unsubscribe header is off by default (LIST_UNSUBSCRIBE_HEADER=on adds it); the closing sentence is the opt-out.
+  assert.ok(sent.every(m=>!m.raw.includes('List-Unsubscribe')));
   // Age the first pitch past the follow-up window and simulate a reply on another.
   prospects.p0.history[0].at=new Date(Date.now()-7*864e5).toISOString();
   prospects.p2.history[0].at=new Date(Date.now()-7*864e5).toISOString();
@@ -369,7 +370,7 @@ test('unlinked brand mentions become warm prospects with a thank-you pitch',asyn
   assert.equal(stats.mention_queries,1);assert.equal(p.kind,'mention');assert.equal(p.status,'ready');assert.equal(p.email,'editor@homeblog.net');
   const pitch=mentionPitch(p,{url:'https://micegoneguide.com/',title:'micegoneguide'},{senderName:'Alex',site});
   assert.match(pitch.subject,/Thanks for mentioning/);assert.equal((pitch.body.match(/https:\/\/micegoneguide\.com\//g)||[]).length,1);
-  assert.match(pitch.body,/reply "no"/);
+  assert.ok(pitch.body.includes("If it's not a fit, just say so and I won't follow up."));assert.doesNotMatch(pitch.body,/P\.S\.|reply "no"/);
   assert.ok(state.mentions_at['micegoneguide.com'],'mention search rotates (not repeated next run)');
 });
 

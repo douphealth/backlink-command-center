@@ -80,6 +80,42 @@ const signOff=(senderName,site)=>['Best,',senderName,site?.domain].filter(Boolea
 const citedLine=(p,asset)=>{const u=p.cited_by_us?.our_url;if(!u)return '';
   return u===asset.url?`${short(asset.title,80)} already links to your article.`:`Our page ${String(u).replace(/^https?:\/\/(?:www\.)?/,'').replace(/\/+$/,'')} already links to your article.`};
 export const reSubject=s=>{s=String(s||'').replace(/[\r\n]+/g,' ').trim();return /^re:/i.test(s)?s:`Re: ${s}`};
+/**
+ * The opt-out every first pitch and follow-up closes with, on its own line right before the sign-off (the owner's
+ * wording since Nov 2026; it replaced the 'P.S. ... reply "no"' line). One answer stops all further email: replies.mjs
+ * reads "no thanks", "not interested", "not for us" and the like as an opt-out and suppresses the publisher.
+ */
+export const OPT_OUT="If it's not a fit, just say so and I won't follow up.";
+const SIGN_OFF_LINE=/^[ \t]*(?:best(?: regards| wishes)?|kind regards|warm(?: regards)?|regards|thanks(?: again)?|thank you|many thanks|cheers|all the best|sincerely|warmly)[ \t]*[,.!]?[ \t]*$/im;
+// A reworded closing sentence ("...and I won't email again."): only that sentence is replaced, never the rest of its line.
+const NEAR_OPT_OUT=/[^.!?\n]*\b(?:won[\u2019']?t|will not)[ \t]+(?:follow[ -]up|e-?mail(?: you)? again|write again|contact you again)\b[^.!?\n]*[.!?]?/i;
+/** The body with OPT_OUT exactly once: a reworded closing line is replaced; a missing one goes before the sign-off (or last). */
+export function withOptOut(body){
+  const b=String(body||'');if(b.includes(OPT_OUT))return b;
+  if(NEAR_OPT_OUT.test(b))return b.replace(NEAR_OPT_OUT,m=>m.match(/^\s*/)[0]+OPT_OUT);
+  const lines=b.split('\n');let i=-1;lines.forEach((l,k)=>{if(SIGN_OFF_LINE.test(l))i=k});
+  if(i>0&&lines.length-i<=4)return [...lines.slice(0,i),OPT_OUT,'',...lines.slice(i)].join('\n').replace(/\n{3,}/g,'\n\n');
+  return `${b.trimEnd()}\n\n${OPT_OUT}`;
+}
+/** "https://www.Site.com/x" or "www.site.com" -> "site.com". */
+const bareHost=d=>String(d||'').trim().toLowerCase().replace(/^[a-z]+:\/\//,'').replace(/^www\./,'').replace(/[/?#:].*$/,'');
+const samePage=(a,b)=>{const n=u=>String(u||'').trim().toLowerCase().replace(/^[a-z]+:\/\/(?:www\.)?/,'').replace(/[?#].*$/,'').replace(/\/+$/,'');return !!a&&n(a)===n(b)};
+/**
+ * A 3-way offer the email may make, or null: it must name one of our OTHER sites (C) and its page title, and C is
+ * never the promoted site A (nor the editor's own site). Callers check that C is one of SITES; this only refuses A.
+ */
+export function usableOffer(ex,site,asset,p){
+  if(!ex||typeof ex!=='object')return null;
+  const c=bareHost(ex.partner_site),near=(x,y)=>!!x&&!!y&&(x===y||x.endsWith('.'+y)||y.endsWith('.'+x));
+  if(!/^[a-z0-9-]+(?:\.[a-z0-9-]+)+$/.test(c)||!String(ex.partner_title||'').trim())return null;
+  return [site?.domain,asset?.url,p?.domain].some(d=>near(c,bareHost(d)))?null:ex;
+}
+/** The offer the first email made, restated in the follow-up while it is still open. */
+const standingOffer=(p,site,asset)=>p?.kind!=='mention'&&p?.exchange?.status==='offered'?usableOffer(p.exchange,site,asset,p):null;
+const theirRef=(p,ex)=>{const t=short(ex.their_title||'',70);return !ex.their_url||samePage(ex.their_url,p.page_url)||!t?'your page':`your article "${t}"`};
+/** The one offer sentence: plain, peer to peer, and honest that C is ours. Their link comes first; ours follows once it is up. */
+export const exchangeLine=(p,ex)=>`In return, once your link is up, I'd link to ${theirRef(p,ex)} from "${short(ex.partner_title,70)}" on ${bareHost(ex.partner_site)}, a separate site I run.`;
+const variantOf=(base,ex)=>ex?{variant:'template:link_exchange',base_variant:base,exchange:ex}:{variant:base};
 /** A readable label for the competitor link the editor already chose ("Doctors of Running's review" or the host). */
 export function linkLabel(c){
   const a=String(c?.anchor||'').trim();
@@ -90,8 +126,8 @@ export function linkLabel(c){
  * The editor already links to a competing resource from this page: point to that exact link and offer ours
  * as a second option for the same readers. Never claims ours is better and never criticises the other site.
  */
-export function alternativePitch(p,asset,{senderName,site}){
-  const c=p.competitor_link,name=firstName(p.author),kind=KIND[asset.type]||'resource',title=short(asset.title,80),v=valueOf(asset,site);
+export function alternativePitch(p,asset,{senderName,site,exchange}={}){
+  const c=p.competitor_link,name=firstName(p.author),kind=KIND[asset.type]||'resource',title=short(asset.title,80),v=valueOf(asset,site),ex=usableOffer(exchange,site,asset,p);
   // "Same topic" is claimed only when the competitor link and our page share specific subject words.
   const opener=c.match==='specific'?`so I thought you might want a second option on the same topic.`
     :`If you ever add another ${short(site.topic,40)} resource there, this one might be useful to the same readers.`;
@@ -99,26 +135,28 @@ export function alternativePitch(p,asset,{senderName,site}){
     body:[`Hi ${name||'there'},`,'',
       c.match==='specific'?`In "${short(p.title,90)}" you link to ${linkLabel(c)}, ${opener}`:`In "${short(p.title,90)}" you link to ${linkLabel(c)}. ${opener}`,'',
       `${short(asset.title,100)}: ${asset.url}`,'',v.text,'',
-      `Would you consider adding it next to the existing link, with "${title}" as the link text?`,'',
-      ...signOff(senderName,site),'',OPT_OUT].join('\n'),writer:'template',variant:'template:alternative_to_linked_resource',facts_used:v.facts};
+      `Would you consider adding it next to the existing link, with "${title}" as the link text?${ex?' '+exchangeLine(p,ex):''}`,'',
+      OPT_OUT,'',...signOff(senderName,site)].join('\n'),writer:'template',...variantOf('template:alternative_to_linked_resource',ex),facts_used:v.facts};
 }
 /**
  * The owner's list-inclusion ask: who we are, one direct ask to be added to their list (in the matched
  * section when known), at most one checkable proof point, nothing else.
  */
-export function listInclusionPitch(p,asset,{senderName,site}){
-  const name=firstName(p.author),title=short(asset.title,80),proof=assetFacts(asset)[0],cited=citedLine(p,asset);
+export function listInclusionPitch(p,asset,{senderName,site,exchange}={}){
+  const name=firstName(p.author),title=short(asset.title,80),proof=assetFacts(asset)[0],cited=citedLine(p,asset),ex=usableOffer(exchange,site,asset,p);
   return {subject:`A suggestion for "${short(listName(p),46)}"`,
     body:[`Hi ${name||'there'},`,'',
-      `${intro(site)} Would you consider adding ${title} to ${placeOf(p,true)}?${proof?' '+sentence(proof):''}${cited?' '+cited:''}`,'',
+      `${intro(site)} Would you consider adding ${title} to ${placeOf(p,true)}?${ex?' '+exchangeLine(p,ex):''}${proof?' '+sentence(proof):''}${cited?' '+cited:''}`,'',
       asset.url,'',
-      `If it fits, the entry could simply be "${title}" with a link to the page above. Happy to send anything you need.`,'',
-      ...signOff(senderName,site),'',OPT_OUT].join('\n'),writer:'template',variant:'template:list_inclusion',facts_used:proof?[proof]:[]};
+      `If it fits, the entry could simply be "${title}" with a link to the page above.${ex?'':' Happy to send anything you need.'}`,'',
+      OPT_OUT,'',...signOff(senderName,site)].join('\n'),writer:'template',...variantOf('template:list_inclusion',ex),facts_used:proof?[proof]:[]};
 }
-export function templatePitch(p,asset,{senderName,site}){
-  if(p.broken_link)return brokenLinkPitch(p,asset,{senderName,site});
-  if(p.kind==='linkgap'&&p.competitor_link?.host)return alternativePitch(p,asset,{senderName,site});
-  if(isListPage(p))return listInclusionPitch(p,asset,{senderName,site});
+export function templatePitch(p,asset,{senderName,site,exchange}={}){
+  const o={senderName,site,exchange};
+  if(p.broken_link)return brokenLinkPitch(p,asset,o);
+  if(p.kind==='linkgap'&&p.competitor_link?.host)return alternativePitch(p,asset,o);
+  if(isListPage(p))return listInclusionPitch(p,asset,o);
+  if(usableOffer(exchange,site,asset,p))return exchangePitch(p,asset,o);
   const name=firstName(p.author),kind=KIND[asset.type]||'resource',pick=parseInt(hashId(p.id),36)%3,title=short(asset.title,80),v=valueOf(asset,site),cited=citedLine(p,asset);
   const subject=[`Resource for your "${short(p.title,48)}" page`,`A ${kind} for your ${short(site.topic,30)} readers`,`Suggestion for "${short(p.title,48)}"`][pick];
   // Who we are, one direct ask, the page, one proof point, and the exact edit proposed. No compliments, no filler.
@@ -126,22 +164,37 @@ export function templatePitch(p,asset,{senderName,site}){
     `${intro(site)} Would you consider adding ${title} to ${placeOf(p)}?`,'',
     asset.url,'',`${v.text}${cited?' '+cited:''}`,'',
     `If it fits, the edit would be one link${p.fit_section?' in that section':' on the page'}, with "${title}" as the link text.`,'',
-    ...signOff(senderName,site),'',OPT_OUT].join('\n');
+    OPT_OUT,'',...signOff(senderName,site)].join('\n');
   return {subject,body,writer:'template',variant:'template:resource_suggestion',facts_used:v.facts};
+}
+/**
+ * The 3-way offer (cfg.exchange.mode 'abc'): the one direct ask, then one sentence offering a link to their article
+ * from a related page on another of our sites (C, never the promoted site A), said to be a separate site we run. The
+ * owner places that link; the engine records the promise only once this email is delivered. Never money, never "a swap".
+ */
+export function exchangePitch(p,asset,{senderName,site,exchange}={}){
+  const ex=usableOffer(exchange,site,asset,p);if(!ex)return templatePitch(p,asset,{senderName,site});
+  const name=firstName(p.author),kind=KIND[asset.type]||'resource',pick=parseInt(hashId(p.id),36)%3,title=short(asset.title,80),v=valueOf(asset,site);
+  const subject=[`Resource for your "${short(p.title,48)}" page`,`A ${kind} for your ${short(site.topic,30)} readers`,`Suggestion for "${short(p.title,48)}"`][pick];
+  const body=[`Hi ${name||'there'},`,'',
+    `${intro(site)} Would you consider adding ${title} to ${placeOf(p)}? ${exchangeLine(p,ex)}`,'',
+    asset.url,'',v.text,'',
+    `The edit would be one link${p.fit_section?' in that section':''}, with "${title}" as the link text.`,'',
+    OPT_OUT,'',...signOff(senderName,site)].join('\n');
+  return {subject,body,writer:'template',...variantOf('template:resource_suggestion',ex),facts_used:v.facts};
 }
 const DEAD={not_found:'returns a "page not found" error',gone:'returns a "page removed" error',domain_gone:'points to a domain that no longer exists'};
 const deadLink=b=>b.anchor&&b.anchor.length>=3?`the link to "${short(b.anchor,60)}" (${b.host})`:`the link to ${b.host}`;
 /** A real dead link on their page (re-checked before sending) and our page as a replacement. */
-export function brokenLinkPitch(p,asset,{senderName,site}){
-  const b=p.broken_link,name=firstName(p.author),title=short(asset.title,80),v=valueOf(asset,site);
+export function brokenLinkPitch(p,asset,{senderName,site,exchange}={}){
+  const b=p.broken_link,name=firstName(p.author),title=short(asset.title,80),v=valueOf(asset,site),ex=usableOffer(exchange,site,asset,p);
   return {subject:`Broken link on "${short(p.title,48)}"`,
     body:[`Hi ${name||'there'},`,'',
       `In "${short(p.title,90)}", ${deadLink(b)} ${DEAD[b.reason]||'no longer works'}.`,'',
       `If you'd like a replacement, our ${title} might work: ${asset.url}`,'',v.text,'',
-      `Would you consider pointing ${b.anchor&&b.anchor.length>=3?`"${short(b.anchor,60)}"`:'that link'} to the page above instead?`,'',
-      ...signOff(senderName,site),'',OPT_OUT].join('\n'),writer:'template',variant:'template:broken_link_replacement',facts_used:v.facts};
+      `Would you consider pointing ${b.anchor&&b.anchor.length>=3?`"${short(b.anchor,60)}"`:'that link'} to the page above instead?${ex?' '+exchangeLine(p,ex):''}`,'',
+      OPT_OUT,'',...signOff(senderName,site)].join('\n'),writer:'template',...variantOf('template:broken_link_replacement',ex),facts_used:v.facts};
 }
-const OPT_OUT='P.S. Not relevant for you? Just reply "no" and I won\'t email again.';
 /** The editor already mentions us without a link: thank them, ask for the link. */
 export function mentionPitch(p,asset,{senderName,site}){
   const name=firstName(p.author),brand=short(asset.title||site.domain,60)||site.domain;
@@ -149,20 +202,21 @@ export function mentionPitch(p,asset,{senderName,site}){
     body:[`Hi ${name||'there'},`,'',
       `Thanks for mentioning ${brand} in "${short(p.title,90)}".`,'',
       `Would you consider turning the mention into a link, so readers can find it in one click? Here's the address: ${asset.url}`,'',
-      ...signOff(senderName,site),'',OPT_OUT].join('\n'),writer:'template',variant:'template:unlinked_mention',facts_used:[]};
+      OPT_OUT,'',...signOff(senderName,site)].join('\n'),writer:'template',variant:'template:unlinked_mention',facts_used:[]};
 }
 /**
  * The one follow-up, in the same thread: the owner's honest one-line nudge. It adds a fact only when the first
  * email did not contain it (or says a re-checked dead link is still dead), and never claims anything else is new.
  */
 export function followupPitch(p,asset,{senderName,site,subject}={}){
-  const name=firstName(p.author),b=p.broken_link,fact=b?null:unusedFact(p,asset),title=short(asset.title,80);
+  const name=firstName(p.author),b=p.broken_link,fact=b?null:unusedFact(p,asset),title=short(asset.title,80),ex=standingOffer(p,site,asset);
+  // An offer the first email made is restated in one clause, so the follow-up alone still says what is offered and by whom.
   const ask=p.kind==='mention'?`just checking whether you'd consider turning the mention of ${short(asset.title||site?.domain||'us',60)} in "${short(p.title,80)}" into a link.`
-    :`just checking whether you'd consider adding ${title} to ${placeOf(p,isListPage(p))}.`;
+    :`just checking whether you'd consider adding ${title} to ${placeOf(p,isListPage(p))}${ex?`, in return for a link to ${theirRef(p,ex)} from ${bareHost(ex.partner_site)} (a separate site I run)`:''}.`;
   const extra=b?sentence(`${deadLink(b)} on that page still ${DEAD[b.reason]||'does not work'}, so this could replace it`):fact?sentence(fact):'';
   return {subject:subject||reSubject(p.last_subject||short(asset.title)),
-    body:[`Hi ${name||'there'}, ${ask}${extra?' '+extra:''} Happy to send anything you need.`,'',asset.url,'',...signOff(senderName,site),'',OPT_OUT].join('\n'),
-    writer:'template',variant:`template:followup_${b?'broken_link':fact?'fact':'nudge'}`,facts_used:fact?[fact]:[]};
+    body:[`Hi ${name||'there'}, ${ask}${extra?' '+extra:''} Happy to send anything you need.`,'',asset.url,'',OPT_OUT,'',...signOff(senderName,site)].join('\n'),
+    writer:'template',variant:`template:followup_${b?'broken_link':fact?'fact':'nudge'}`,facts_used:fact?[fact]:[],...(ex?{exchange:ex}:{})};
 }
 
 /**
@@ -237,15 +291,18 @@ export function actionsIdentity(env,audience){
 const SCHEMA={type:'object',properties:{subject:{type:'string'},body:{type:'string'}},required:['subject','body'],additionalProperties:false};
 const SYSTEM=`You write short, honest link-suggestion emails to independent website editors.
 Rules:
-- Plain text, no markdown, no emojis. Body: 60 to 120 words (a "followup": at most 70 words).
+- Plain text, no markdown, no emojis. Body: 60 to 120 words (with exchange: 60 to 100 words; a "followup": at most 70 words).
 - Name their page by its title, or by relevant_section when one is given, so it is obviously not a mass email. relevant_section_text is the part of their page where our resource would fit: use it to say where the link would go; never quote it at length.
 - Never open with "I hope this finds you well", "I came across your site" or "I was reading". No compliments about their article or site, no "hope you're well", no "happy to help", no labels such as "Details:".
 - Who we are in a few words (sender.website and topic), at most one proof point, one direct ask. Nothing else.
 - Only state facts present in the provided details; never invent statistics, awards, traffic, benefits, or that they linked to us before.
 - Include our asset URL exactly once. Include no other URLs.
-- Never mention pricing, payment, a link exchange or a guest post. No pressure, no guilt.
+- Never mention pricing, payment, money or a guest post. No pressure, no guilt.
+- Without exchange: never offer anything in return for the link (no return link, no "link exchange").
+- If exchange is given (we offer a return link): right after the one direct ask, add exactly one sentence offering, in return, to link to their article (by exchange.their_title, or "your page" when exchange.same_page is true) from the page exchange.partner_title on exchange.partner_site, and say plainly that exchange.partner_site is "a separate site I run". Write exchange.partner_site exactly as given and give no URL for it or for their article. Their link comes first; ours follows once theirs is up. Never offer a link from sender.website or from any other site, never offer or accept money, never say the return link is already in place, never promise traffic, authority, or a site-wide or permanent link, and never call it an exchange, a scheme or a swap. Plain and peer to peer.
 - End the ask with a concrete proposed edit: one link with our asset title as the link text, placed in relevant_section when one is given.
 - Greet by first name only if an author name is provided, otherwise "Hi there".
+- End the email, on its own line right before the sign-off, with exactly this sentence: ${OPT_OUT}
 - Sign off with the sender name and website provided.
 - Subject: under 60 characters, specific, lowercase-friendly, no clickbait.
 - If cited_by_us is given, you may say that our page cited_by_us.our_page already links to their article (name it exactly as given; it is not a URL to include). Never claim that otherwise.
@@ -253,11 +310,30 @@ Rules:
 - If situation is "alternative_to_linked_resource": the editor's page already links to competitor_link (name it by its anchor text if it reads naturally, otherwise by its site name; never give its URL). Open with that specific link, then say in one sentence what our resource adds for the same readers, using only the provided facts. Offer it as an additional option next to the existing link. If competitor_link.same_subject is false, do not claim the two cover the same subject: present ours only as another resource the same readers may find useful. Never say ours is better and never criticise the other site.
 - If situation is "broken_link_replacement": open by telling the editor which link on their page is dead (use its anchor text and site name from broken_link, never its URL, and state the problem exactly as given in broken_link.problem). Then offer our page as a replacement. The helpful tip comes first; the ask is secondary.
 - If situation is "list_inclusion": their page is a list or roundup (list.name). Open with who we are, then ask directly: "Would you consider adding <our asset title> to <list.section, when given> your <list.name>?" Add at most one proof point, only from our_asset.facts. Do not describe or praise their list.
-- If situation is "followup": a one-time follow-up in the same thread to the email we already sent. Greet, then one sentence: "just checking whether you'd consider adding <our asset title> to <their page or list>" (for kind "unlinked_mention": whether they'd consider turning the mention into a link). If new_fact is given, add it as one short sentence; never repeat earlier facts and never write "I didn't mention", "just bumping" or "circling back". If broken_link is given, say that this link on their page still has the problem given. Then "Happy to send anything you need.", our URL, the sign-off and the P.S. line. The subject is reply_subject exactly.
-- End with this exact line: P.S. Not relevant for you? Just reply "no" and I won't email again.`;
+- If situation is "followup": a one-time follow-up in the same thread to the email we already sent. Greet, then one sentence: "just checking whether you'd consider adding <our asset title> to <their page or list>" (for kind "unlinked_mention": whether they'd consider turning the mention into a link). If new_fact is given, add it as one short sentence; never repeat earlier facts and never write "I didn't mention", "just bumping" or "circling back". If broken_link is given, say that this link on their page still has the problem given. If exchange is given, restate our offer in one short clause in that sentence (a link to their article from exchange.partner_site, a separate site I run). Then "Happy to send anything you need.", our URL, the closing sentence and the sign-off. The subject is reply_subject exactly.`;
 
-/** Why a written pitch cannot be sent, or null when it can. The reason is logged, so a failing writer explains itself. */
-export function pitchProblem(out,asset,{ownSubject=false}={}){
+// Money is never offered, with or without a 3-way offer (a paid offer from a publisher goes to the owner, replies.mjs).
+const PAYMENT=/\b(?:paid (?:placements?|links?|posts?|guest posts?|mentions?)|sponsored (?:posts?|links?|placements?)|(?:i|we)(?:'d| would| will|'ll| can| could)(?: be)?(?: happy| glad)?(?: to)? (?:happily |gladly )?(?:pay|compensate|sponsor)\b|pay(?:ing)? (?:you|for (?:the|a|your|this) (?:link|placement|post|mention))\b|(?:offer|make|send) (?:you )?(?:a )?(?:payment|compensation)\b|(?:payment|compensation|a fee|our fee|a small fee) (?:for|in return for) (?:the|a|your|this) (?:link|placement|post|mention)\b)/i;
+// Naming it as a scheme is never allowed: the owner's offer is a plain "I'd link to your article from my other site".
+const SWAP=/\b(?:link[- ]?exchanges?|exchange (?:of )?links|swap(?:ping)? links|link[- ]?swap(?:s|ping)?|(?:exchange|link) schemes?|link farms?|reciprocal links?|link partnerships?)\b/i;
+// Wording that offers something in return for the link: allowed only with a 3-way offer that names our partner site.
+const RETURN_OFFER=/\b(?:in return|in exchange|return the favou?r|reciprocat\w*|(?:i|we)(?:'d| would|'ll| will| can| could)(?: (?:be )?(?:happy|glad|gladly|happily)(?: to)?)? (?:(?:add|place|put|give you) (?:a |one )?link|link(?:ing)?) (?:back )?to (?:your|their)\b)/i;
+const CLAIMS_PLACED=/\balready (?:added|placed|linked|put|included|published|links?|live|up|in place)\b|\b(?:i|we)(?:'ve| have| had) (?:already )?(?:added|placed|put|included|published|linked)\b|\b(?:the|my|our) link (?:to your \w+ )?is (?:already |now )?(?:live|up|in place)\b|\bnow links? to your\b/i;
+const OVERPROMISE=/\b(?:guarantee\w*|permanent\w*|forever|site-?wide|homepage|footer|sidebar|do-?follow|traffic|visitors|authority|domain rating|page ?rank)\b/i,METRIC=/\b(?:DA|DR)\b/;
+// C is ours, and the email has to say so: never presented as an independent site.
+const DISCLOSED=/\b(?:separate|other|second|sister) (?:site|blog|website) (?:that )?(?:i|we) (?:also )?(?:run|own|manage|publish|edit)\b|\b(?:i|we) also (?:run|own|manage|publish|edit)\b|\b(?:my|our) other (?:site|blog|website)\b/i;
+export const EXCHANGE_MAX_WORDS=120;
+const wordCount=s=>String(s||'').split(/\s+/).filter(Boolean).length;
+const sentencesOf=t=>String(t||'').replace(/https?:\/\/\S+/g,' ').split(/(?<=[.!?])\s+|\n+/).map(x=>x.trim()).filter(Boolean);
+const namesHost=(text,host)=>!!host&&new RegExp(`(?:^|[^a-z0-9.-])(?:www\\.)?${host.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?![a-z0-9-])`,'i').test(text);
+/** A sentence without the page titles it quotes, so a title that happens to say "traffic" or "already" is not read as a claim. */
+const withoutTitles=(s,ex)=>[ex.partner_title,ex.their_title].filter(t=>String(t||'').trim().length>=4).reduce((t,x)=>t.split(String(x).trim()).join(' '),s).replace(/"[^"\n]{0,160}"|\u201c[^\u201d\n]{0,160}\u201d/g,' ');
+/**
+ * Why a written pitch cannot be sent, or null when it can. The reason is logged, so a failing writer explains itself.
+ * With `exchange` (the 3-way offer this email is meant to make) and `site` (the promoted site A), the body must make
+ * that offer: name the partner site C, say C is ours, never offer a link from A, never claim the link is in place.
+ */
+export function pitchProblem(out,asset,{ownSubject=false,exchange=null,site=null}={}){
   if(!out||typeof out.subject!=='string'||typeof out.body!=='string')return 'no_subject_or_body';
   // ownSubject: a follow-up's subject is ours ("Re: <original>"), not the writer's, so its length is not the writer's fault.
   if(!ownSubject&&(out.subject.length<8||out.subject.length>90)||/[\r\n]/.test(out.subject))return 'subject_length';
@@ -269,7 +345,22 @@ export function pitchProblem(out,asset,{ownSubject=false}={}){
   if(/\[|\{\{|lorem|<\w+>/i.test(out.body))return 'placeholder_or_markup';
   // The owner's copy rules: no stock openers or flattery, and never an offer of money or a link swap.
   if(/\b(?:I hope (?:this|you)|hope you(?:'re| are) (?:well|doing)|I came across|I was reading|I stumbled (?:up)?on|love your (?:blog|site|article|post|content)|great (?:article|post|content|blog))\b/i.test(`${out.subject}\n${out.body}`))return 'cliche';
-  if(/\b(?:link exchange|exchange links|swap links|link swap|in exchange for a link|paid placement|we(?:'d| would) (?:happily )?pay)\b/i.test(out.body))return 'offer_not_allowed';
+  if(PAYMENT.test(`${out.subject}\n${out.body}`))return 'payment_not_allowed';
+  if(SWAP.test(`${out.subject}\n${out.body}`))return 'offer_not_allowed';
+  const ex=usableOffer(exchange,site,asset);
+  if(!ex)return RETURN_OFFER.test(out.body)?'offer_not_allowed':null;
+  const c=bareHost(ex.partner_site),own=[bareHost(site?.domain),bareHost(asset.url)].filter(Boolean);
+  if(!namesHost(out.body,c))return RETURN_OFFER.test(out.body)?'exchange_partner_missing':'exchange_offer_missing';
+  for(const s of sentencesOf(out.body)){
+    const offers=RETURN_OFFER.test(s)||namesHost(s,c)||/\blink\w*\b[^.!?]*\bfrom\b/i.test(s);
+    if(offers&&own.some(d=>namesHost(s,d)))return 'exchange_from_target_site';
+    if(RETURN_OFFER.test(s)&&!namesHost(s,c)&&/\bfrom (?:this|our|my|the same) (?:site|blog|website)\b/i.test(s))return 'exchange_from_target_site';
+    const said=namesHost(s,c)?withoutTitles(s,ex):'';
+    if(said&&CLAIMS_PLACED.test(said))return 'exchange_claims_placed';
+    if(said&&(OVERPROMISE.test(said)||METRIC.test(said)))return 'exchange_overpromise';
+  }
+  if(!DISCLOSED.test(out.body))return 'exchange_not_disclosed';
+  if(wordCount(out.body.replace(OPT_OUT,''))>EXCHANGE_MAX_WORDS)return 'exchange_too_long';
   return null;
 }
 /** A follow-up must stay a short nudge and must not claim anything is new that the first email already said. */
@@ -306,8 +397,11 @@ export function tidyPitch(out,asset){
   return {subject,body};
 }
 
+/** The 3-way offer as the AI writer is told it: names and titles only (no URL goes into the email but ours). */
+const exchangeFacts=(p,ex)=>({exchange:{partner_site:bareHost(ex.partner_site),partner_title:String(ex.partner_title),their_title:ex.their_title||null,their_url:ex.their_url||null,
+  same_page:!ex.their_url||samePage(ex.their_url,p.page_url),relationship:'a separate site I run'}});
 /** What the AI writer is told for a first pitch: only crawl- and page-derived facts, and the situation it is in. */
-function pitchFacts(p,asset,site,{senderName}){
+function pitchFacts(p,asset,site,{senderName,exchange=null}){
   const list=isListPage(p);
   const situation=p.kind==='mention'?'unlinked_mention':p.broken_link?'broken_link_replacement':p.kind==='linkgap'&&p.competitor_link?.host?'alternative_to_linked_resource':list?'list_inclusion':'resource_suggestion';
   const cited=p.cited_by_us?.our_url?String(p.cited_by_us.our_url).replace(/^https?:\/\/(?:www\.)?/,'').replace(/\/+$/,''):null;
@@ -321,16 +415,18 @@ function pitchFacts(p,asset,site,{senderName}){
     ...(situation==='alternative_to_linked_resource'?{competitor_link:{site:p.competitor_link.host,anchor:p.competitor_link.anchor||null,surrounding_text:p.competitor_link.context||null,same_subject:p.competitor_link.match==='specific'}}:{}),
     ...(situation==='broken_link_replacement'?{broken_link:{anchor:p.broken_link.anchor||null,site:p.broken_link.host,problem:DEAD[p.broken_link.reason]||'no longer works'}}:{}),
     ...(cited&&situation!=='unlinked_mention'?{cited_by_us:{our_page:cited}}:{}),
+    ...(exchange&&situation!=='unlinked_mention'?exchangeFacts(p,exchange):{}),
     sender:{name:senderName,website:site.domain},topic:site.topic,situation};
 }
 /** What the AI writer is told for the follow-up: the original subject, and at most one fact the first email did not state. */
-function followupFacts(p,asset,site,{senderName,subject}){
+function followupFacts(p,asset,site,{senderName,subject,exchange=null}){
   const fact=p.broken_link?null:unusedFact(p,asset),list=isListPage(p);
   return {editor_page:{title:p.title,url:p.page_url,author:p.author||null,relevant_section:p.fit_section||null},
     ...(list?{list:{name:listName(p),section:listSection(p)}}:{}),
     our_asset:{title:asset.title,url:asset.url,facts:fact?[fact]:[]},new_fact:fact,
     ...(p.broken_link?{broken_link:{anchor:p.broken_link.anchor||null,site:p.broken_link.host,problem:`still ${DEAD[p.broken_link.reason]||'does not work'}`}}:{}),
     kind:p.kind==='mention'?'unlinked_mention':'suggestion',reply_subject:subject,
+    ...(exchange?exchangeFacts(p,exchange):{}),
     sender:{name:senderName,website:site?.domain||''},situation:'followup'};
 }
 
@@ -463,19 +559,25 @@ export class PitchWriter{
    * The email for one prospect: a first pitch, or with {situation:'followup', subject} the one same-thread follow-up.
    * `senderName` is the per-site name it is signed with. Every result says how it was written (variant) and
    * which of our facts it states (facts_used), so a follow-up never presents a stated fact as new.
+   * `exchange` (first pitches): the 3-way offer from exchange.mjs. The result carries `exchange` only when the email
+   * really makes that offer (AI or template), so the caller records the promise only then. A follow-up restates the
+   * offer its first email made (p.exchange, status 'offered'). Mentions never carry an offer.
    */
-  async write(p,asset,site,{senderName=this.senderName,situation,subject}={}){
+  async write(p,asset,site,{senderName=this.senderName,situation,subject,exchange=null}={}){
     const followup=situation==='followup';
+    const ex=p.kind==='mention'?null:followup?standingOffer(p,site,asset):usableOffer(exchange,site,asset,p);
     const template=followup?followupPitch(p,asset,{senderName,site,subject})
-      :(p.kind==='mention'?mentionPitch:templatePitch)(p,asset,{senderName,site});
+      :p.kind==='mention'?mentionPitch(p,asset,{senderName,site}):templatePitch(p,asset,{senderName,site,exchange:ex});
     // Once every free writer is off for this cycle (quota, rejected key), later pitches still record why they are templates.
     if(!this.ai){const why=this.providers.find(x=>x.offWhy)?.offWhy;if(why)this.fail(why);return template}
-    const facts=followup?followupFacts(p,asset,site,{senderName,subject:template.subject}):pitchFacts(p,asset,site,{senderName});
+    const facts=followup?followupFacts(p,asset,site,{senderName,subject:template.subject,exchange:ex}):pitchFacts(p,asset,site,{senderName,exchange:ex});
     const stated=facts.our_asset.facts||[];
-    // A follow-up keeps "Re: <original subject>" whatever the model wrote, so it threads.
-    const check=out=>{const o=followup&&out&&typeof out==='object'?{...out,subject:template.subject}:out;
-      return {o,why:pitchProblem(o,asset,{ownSubject:followup})||(followup?followupProblem(o):null)||(grounded(o,facts)?null:'number_not_in_facts')}};
-    const done=(o,writer)=>({subject:o.subject.trim(),body:o.body.trim(),writer,variant:`ai:${facts.situation}`,facts_used:factsIn(`${o.subject}\n${o.body}`,stated)});
+    // A follow-up keeps "Re: <original subject>" whatever the model wrote, so it threads. The closing opt-out sentence is
+    // put in when the model left it out (or reworded it), so every email still says how to stop all further email.
+    const check=out=>{const o=out&&typeof out==='object'&&typeof out.body==='string'?{...out,body:withOptOut(out.body),...(followup?{subject:template.subject}:{})}:out;
+      return {o,why:pitchProblem(o,asset,{ownSubject:followup,exchange:ex,site})||(followup?followupProblem(o):null)||(grounded(o,facts)?null:'number_not_in_facts')}};
+    const done=(o,writer)=>({subject:o.subject.trim(),body:o.body.trim(),writer,facts_used:factsIn(`${o.subject}\n${o.body}`,stated),
+      ...(ex&&!followup?{variant:'ai:link_exchange',base_variant:`ai:${facts.situation}`,exchange:ex}:{variant:`ai:${facts.situation}`,...(ex?{exchange:ex}:{})})});
     if(!this.client){
       const r=await this.chat(facts);
       if(!r.out){this.fail(r.why,r.detail);return template}

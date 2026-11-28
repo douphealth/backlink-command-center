@@ -623,12 +623,14 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
  const deliver=async(p,pitch,type,{inReplyTo,senderName=config.senderName}={})=>{
   if(suppressed(state,p.email,p.domain)||(requiresProof&&!usableVerification(p.recipient_proof?.verification,p.email))){const e=Error('Recipient verification no longer valid');e.stage='precheck';throw e}
   const messageId=newMessageId(config.fromAddress.split('@')[1]),{subject,body}=pitch;
-  const raw=buildMessage({from:config.fromAddress,fromName:senderName,to:p.email,subject,text:body+emailFooter(config.postalAddress,p.email_source),messageId,inReplyTo,references:inReplyTo,unsubscribe:true});
+  // List-Unsubscribe marks mail as bulk: off unless the owner turns it on (LIST_UNSUBSCRIBE_HEADER=on). The body's closing
+  // sentence (pitch.mjs OPT_OUT) is the opt-out either way.
+  const raw=buildMessage({from:config.fromAddress,fromName:senderName,to:p.email,subject,text:body+emailFooter(config.postalAddress,p.email_source),messageId,inReplyTo,references:inReplyTo,unsubscribe:config.listUnsubscribe===true});
   const verified=usableVerification(p.recipient_proof?.verification,p.email),by=pitch.writer||'template';
   if(config.mode==='send'){stats.attempted=(stats.attempted||0)+1;await mailer.send({to:p.email,raw,recipientProof:p.recipient_proof})}else await mailer.draft(raw);
   p.history??=[];p.history.push({type,at:NOW(),message_id:messageId,subject,to:p.email,mode:config.mode,writer:by,
    variant:pitch.variant||`${by==='template'?'template':'ai'}:${type==='followup'?'followup':'pitch'}`,rev,verified,
-   facts_used:Array.isArray(pitch.facts_used)?pitch.facts_used:[],sender_name:senderName||null});
+   facts_used:Array.isArray(pitch.facts_used)?pitch.facts_used:[],sender_name:senderName||null,...(pitch.base_variant?{base_variant:pitch.base_variant}:{})});
   p.last_subject=subject;
  };
  /** Book a failed send. Returns true when nothing more may be sent this cycle. */
@@ -701,6 +703,19 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   ready.sort((a,b)=>key(b)-key(a));
  }
  const perAsset=new Map();for(const p of Object.values(state.prospects||{}))if((p.history||[]).some(h=>h.type==='initial'&&String(h.at).startsWith(NOW().slice(0,10))))perAsset.set(p.asset_url,(perAsset.get(p.asset_url)||0)+1);
+ // 3-way exchange (cfg.exchange.mode 'abc'): exchange.mjs picks a related page on another of our sites (C) whose link to the
+ // editor's article is offered in return. Only first pitches; never a mention; never C = A, and C must be one of our sites.
+ const bare=d=>String(d||'').trim().toLowerCase().replace(/^[a-z]+:\/\//,'').replace(/^www\./,'').replace(/[/?#:].*$/,''),ours=new Set(sites.map(s=>bare(s.domain)));
+ const offerFor=(p,site)=>{
+  if(config.exchange?.mode!=='abc'||typeof config.exchangePartner!=='function'||p.kind==='mention')return null;
+  if(p.exchange&&!['declined','lapsed'].includes(p.exchange.status))return null; // one open promise per publisher
+  let o=null;try{o=config.exchangePartner(p,site)||null}catch{o=null}
+  if(!o)return null;
+  const c=bare(o.partner_site);
+  if(!c||!ours.has(c)||c===bare(site.domain)||!String(o.partner_title||'').trim()||!sameSite(hostOf(o.partner_page),c)||!sameSite(hostOf(o.their_url),bare(p.domain))){stats.exchange_refused=(stats.exchange_refused||0)+1;return null}
+  return o;
+ };
+ const madeOffer=(pitch,o)=>bare(pitch.exchange?.partner_site)===bare(o.partner_site)&&String(pitch.body||'').toLowerCase().includes(bare(o.partner_site));
  for(const p of ready){
   if(stop||budget<=0||Date.now()>deadline||checked>=24)break;
   if((perAsset.get(p.asset_url)||0)>=PER_ASSET_DAILY)continue;if(outOfHours(p)){stats.deferred++;continue}
@@ -730,9 +745,13 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
   const asset=assetByUrl.get(p.asset_url)||{url:p.asset_url,title:p.asset_title||site.domain,type:p.kind==='mention'?'brand':'resource',description:''};
   // The email states that a link is dead: confirm it still is, seconds before writing it.
   if(p.broken_link){const r=await (config.recheckBroken||(u=>checkDead(u)))(p.broken_link.url).catch(()=>null);if(!r?.dead){p.broken_link_cleared_at=NOW();delete p.broken_link}else stats.broken_link_pitches=(stats.broken_link_pitches||0)+1}
-  const senderName=senderFor(p);
-  const pitch=await writer.write(p,asset,site,{senderName});p.writer=pitch.writer;
+  const senderName=senderFor(p),offer=offerFor(p,site);
+  const pitch=await writer.write(p,asset,site,{senderName,...(offer?{exchange:offer}:{})});p.writer=pitch.writer;
   try{await deliver(p,pitch,'initial',{senderName});state.contacted[p.domain]=NOW();emailed.set(normalizeEmail(p.email),Date.now()); // also a draft: one address gets one pitch per run
+   // The return-link promise is recorded only once the email that makes it is delivered (or saved as the owner's draft),
+   // and only when the email really makes it: a writer that left the offer out promised nothing.
+   if(offer&&pitch.exchange&&madeOffer(pitch,offer)){p.exchange={...offer,status:'offered',offered_at:NOW(),via:'email'};stats.exchange_offered=(stats.exchange_offered||0)+1}
+   else if(offer)stats.exchange_not_included=(stats.exchange_not_included||0)+1;
    if(config.mode==='send'){state.first_send_at??=NOW();noteBaseline(state,p.asset_url,config.demand)}
    // The facts this email states: a follow-up may add only a fact that is not among them.
    if(Array.isArray(pitch.facts_used))p.facts_used=pitch.facts_used;else delete p.facts_used;
@@ -740,7 +759,7 @@ export async function runOutreach({state,assets,sites,writer,mailer,config,deadl
    config.mode==='send'?stats.sent++:stats.drafted++;budget--;perAsset.set(p.asset_url,(perAsset.get(p.asset_url)||0)+1);if(config.mode==='send')await sleep(config.gapMs());
   }catch(e){if(failed(p,e,'initial')){stop=true;break}}
  }
- log(`outreach: ${stats.sent} sent, ${stats.followups} follow-ups, ${stats.drafted} drafts, ${stats.verification_held} held for verification${stats.followups_retired?`, ${stats.followups_retired} follow-ups retired (address no longer verifiable)`:''}${stats.send_blocked?`; sending stopped (${stats.send_blocked})`:''}`);return stats;
+ log(`outreach: ${stats.sent} sent, ${stats.followups} follow-ups, ${stats.drafted} drafts, ${stats.verification_held} held for verification${stats.followups_retired?`, ${stats.followups_retired} follow-ups retired (address no longer verifiable)`:''}${stats.exchange_offered?`, ${stats.exchange_offered} with a return-link offer`:''}${stats.send_blocked?`; sending stopped (${stats.send_blocked})`:''}`);return stats;
 }
 /**
  * Won and lost links from the live page (attribution hardening remains in PR 25). 3-way exchanges (exchange.mjs): a link to
