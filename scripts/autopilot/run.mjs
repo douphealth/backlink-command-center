@@ -33,6 +33,7 @@ import {answerReplies} from './replies.mjs';
 import {sealJson,open,vaultFormat} from './vault.mjs';
 import {requireRebuild,rebuildHold,rebuildFromMailbox,linkRestoredSends,pruneRestoredSends} from './rebuild.mjs';
 import {verifyLedger,mxClassStats} from './recipient-policy.mjs';
+import {buildPartnerIndex,pickPartner,failingSites,trackExchanges,exchangeCounts,exchangeSummary} from './exchange.mjs';
 import {NOW,ageDays,normUrl} from './util.mjs';
 
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'../..');
@@ -224,7 +225,9 @@ export function funnel(state){
     replied:ps.filter(p=>p.replied_at).length,positive:by(['positive']),won:by(['won']),existing_links:by(['already_linked']),
     declined:by(['declined']),bounced:by(['bounced']),
     // Counts only (public): replies that wait for the owner's decision, and replies nobody has answered yet.
-    needs_owner:ps.filter(p=>p.needs_owner&&!p.owner_decided_at).length,awaiting_reply:ps.filter(p=>p.awaiting_us).length};
+    needs_owner:ps.filter(p=>p.needs_owner&&!p.owner_decided_at).length,awaiting_reply:ps.filter(p=>p.awaiting_us).length,
+    // 3-way link exchanges (counts only): offered, accepted, return links owed / overdue, and return links verified.
+    ...exchangeCounts(state)};
 }
 
 export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=fetch,mailer:injectedMailer,write=true,useCache=true,paths={}}={}){
@@ -360,6 +363,10 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
   await stage('broken_links',vaultOk,()=>enrichBrokenLinks({state,assets:ranked,sites:SITES,fetchImpl,deadline:deadline-5*60e3,log}),privateWhy,{until:deadline-4*60e3});
   // A prospect emailed before the vault was replaced (found again since) counts as contacted from that send.
   if(vaultOk){const n=linkRestoredSends(state);if(n)log(`rebuild: ${n} prospects matched to emails sent before the vault was replaced (marked contacted, or suppressed after an opt-out)`)}
+  // ---- 4b. 3-way exchanges: the pages of our OTHER sites that can carry a return link (this cycle's crawl, else the cache) ----
+  // exchangePartner(p,site) -> offer|null is used by the outreach and forms stages; null when exchanges are off.
+  const partnerIndex=buildPartnerIndex(crawl.length?crawl:cache,SITES,{failing:failingSites(indexation)});
+  const exchangePartner=vaultOk&&cfg.exchange.mode==='abc'?(p,site)=>pickPartner(p,site,{index:partnerIndex,state,cfg:cfg.exchange,now:new Date()}):null;
   // ---- 5. Mail ----
   // The production transport demands verified-mailbox proof for every recipient: without a verifier nothing could go out.
   const noVerifier=typeof mailer?.authorizeRecipient==='function'&&!verifierReady(cfg);
@@ -386,7 +393,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
     if(vaultOk){const n=linkRestoredSends(state);if(n)log(`rebuild: ${n} more prospects matched to emails sent before the vault was replaced after screening`)}
     const writer=new PitchWriter({...cfg.claude,senderName:cfg.outreach.senderName||'The editorial team',fetchImpl,log});
     await stage('reply_drafts',vaultOk&&gmailOk&&cfg.outreach.replyMode!=='off'&&typeof mailer?.draft==='function',()=>answerReplies({state,writer,mailer,config:cfg.outreach,assets:ranked,deadline:deadline-4*60e3,log}),!vaultOk?privateWhy:!mailer?'Gmail app password not set':!gmailOk?connections.gmail.error:cfg.outreach.replyMode==='off'?'REPLY_MODE=off':'transport cannot save drafts',{until:deadline-3.5*60e3});
-    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown&&!state.rebuild_required,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets,pickAsset,sentIndex,demand},deadline:deadline-2*60e3,log}),mailWhy||rebuildHold(state,stages.rebuild)||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
+    await stage('outreach',vaultOk&&gmailOk&&cfg.outreach.mode!=='off'&&!noVerifier&&!!cfg.outreach.senderName&&!sentUnknown&&!state.rebuild_required,()=>runOutreach({state,assets:ranked,sites:SITES,writer,mailer,config:{...cfg.outreach,blockedAssets,pickAsset,sentIndex,demand,exchange:cfg.exchange,exchangePartner},deadline:deadline-2*60e3,log}),mailWhy||rebuildHold(state,stages.rebuild)||(sentUnknown?'Sent-folder check failed, so nothing is sent this cycle (prevents duplicate emails)':'SENDER_NAME not set'));
     if(stages.outreach?.ok)stages.outreach.writer={claude:writer.used,free_ai:writer.usedAi,template_fallbacks:writer.fallbacks,...(writer.aiModel?{ai_provider:writer.aiProvider,ai_model:writer.aiModel}:{}),...(Object.keys(writer.reasons||{}).length?{fallback_reasons:writer.reasons}:{})};
     aiWriter=writer.ai;
     if(stages.outreach?.ok&&(writer.used+writer.usedAi+writer.fallbacks)>0){const why=Object.entries(writer.reasons||{}).map(([k,n])=>`${k} x${n}`).join(', ');
@@ -405,7 +412,9 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
       !vaultOk?privateWhy:noVerifier?'mailbox verifier not configured':braked?'outreach is off, so no inbox is verified':!mailer?.authorizeRecipient?'no Gmail transport':rebuildHold(state,stages.rebuild),{until:deadline-30e3});
   }finally{await mailer?.close?.().catch(()=>{})}
   // ---- 6. Link verification ----
-  await stage('link_checks',vaultOk,()=>checkLinks({state,ourDomains:SITES.map(s=>s.domain),fetchImpl,deadline,log}),privateWhy,{until:deadline+90e3});
+  await stage('link_checks',vaultOk,()=>checkLinks({state,ourDomains:SITES.map(s=>s.domain),fetchImpl,deadline,fulfilDays:cfg.exchange.fulfilDays,log}),privateWhy,{until:deadline+90e3});
+  // Every cycle, free: opt-outs close offers, stale offers lapse, and each return link owed is looked for on its partner page.
+  await stage('exchanges',vaultOk,()=>trackExchanges({state,index:partnerIndex,cfg:cfg.exchange,fetchImpl,now:new Date(),deadline:deadline+120e3,log}),privateWhy,{until:deadline+150e3});
   // ---- Outputs ----
   if(vaultOk){const r=prune(state);if(r.rejected)log(`vault: ${r.rejected} rejected prospects older than ${REJECTED_KEEP_DAYS} days removed (their domains stay deduplicated)`)}
   const f=vaultOk?funnel(state):previous.funnel||null;
@@ -464,6 +473,8 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
       kind:p.status==='won'?'won':'existing',target:p.won?.target||p.existing_link?.url||null,anchor:p.won?.anchor||p.existing_link?.anchor||'',rel:p.won?.rel||p.existing_link?.rel||'',found_at:p.won?.found_at||p.found_at})).sort((a,b)=>String(b.found_at).localeCompare(String(a.found_at))).slice(0,200),
     log:logs.slice(-80),
   };
+  // Exchanges in public: how many of our sites are partners (a count) and whether new offers are paused; details stay in the vault.
+  summary.exchanges=vaultOk?exchangeSummary(state,{cfg:cfg.exchange}):previous.exchanges||null;
   // The vault's size and format are published (numbers only): the sealed file written this cycle, else the one on disk.
   const sealer=write&&!cfg.dryRun&&vaultOk?vaultSealer(state,cfg.dataKey):null,sealed=sealer?await sealer.seal():null;
   Object.assign(summary.capabilities,{vault_bytes:sealed?sealed.bytes:await stat(P.vault).then(s=>s.size,()=>null),vault_format:vaultFormat(sealed?.box||box),rebuild_required:vaultOk&&!!state.rebuild_required});
