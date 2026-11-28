@@ -208,3 +208,12 @@ test('sender names per site are read from JSON or "domain = Name" lines, and rep
   assert.equal(load({REPLY_MODE:'loud',OUTREACH_DACH:'YES',HUNTER_DAILY_LIMIT:'500'},[]).outreach.replyMode,'draft');
   assert.equal(load({OUTREACH_DACH:'YES',HUNTER_DAILY_LIMIT:'500'},[]).verifier.hunterDailyLimit,50);
 });
+
+test('exchange, Saturday, unsubscribe-header and form-queue settings default to the owner\'s choices and can be switched off',async()=>{
+  const {loadConfig:load}=await import('../../scripts/autopilot/run.mjs');
+  const d=load({},[]);
+  assert.deepEqual(d.exchange,{mode:'abc',perPartnerSiteMonth:6,perPartnerPage:2,fulfilDays:7});
+  assert.equal(d.outreach.listUnsubscribe,false);assert.equal(d.outreach.saturday,true);assert.equal(d.forms.daily,5);
+  const o=load({LINKFORGE_SETTINGS:JSON.stringify({LINK_EXCHANGE:'off',SATURDAY_SENDS:'NO',LIST_UNSUBSCRIBE_HEADER:'on',FORM_QUEUE_DAILY:'0',EXCHANGE_PER_SITE_MONTH:'99'})},[]);
+  assert.equal(o.exchange.mode,'off');assert.equal(o.exchange.perPartnerSiteMonth,20);assert.equal(o.outreach.saturday,false);assert.equal(o.outreach.listUnsubscribe,true);assert.equal(o.forms.daily,0);
+});

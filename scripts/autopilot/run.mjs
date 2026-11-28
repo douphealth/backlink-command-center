@@ -41,7 +41,7 @@ const readJson=async(f,fallback)=>{try{return JSON.parse(await readFile(f,'utf8'
 const num=(v,d)=>Number.isFinite(Number(v))&&String(v).trim()!==''?Number(v):d;
 
 // The verifier opt-in and budget are read by the recipient gate (recipient-policy.mjs).
-const DASHBOARD_SETTINGS=['SENDER_NAME','SENDER_NAMES','SENDER_POSTAL_ADDRESS','OUTREACH_MODE','OUTREACH_DAILY_LIMIT','REPLY_MODE','EMAIL_VERIFICATION_ENABLED','EMAIL_VERIFY_DAILY_LIMIT','HUNTER_DAILY_LIMIT','OUTREACH_DACH'];
+const DASHBOARD_SETTINGS=['SENDER_NAME','SENDER_NAMES','SENDER_POSTAL_ADDRESS','OUTREACH_MODE','OUTREACH_DAILY_LIMIT','REPLY_MODE','EMAIL_VERIFICATION_ENABLED','EMAIL_VERIFY_DAILY_LIMIT','HUNTER_DAILY_LIMIT','OUTREACH_DACH','LINK_EXCHANGE','EXCHANGE_PER_SITE_MONTH','LIST_UNSUBSCRIBE_HEADER','SATURDAY_SENDS','FORM_QUEUE_DAILY'];
 /** The dashboard saves these as one JSON secret; it takes precedence over older repo variables. */
 export function withDashboardSettings(env){
   let s={};try{s=JSON.parse(env.LINKFORGE_SETTINGS||'{}')}catch{}
@@ -85,10 +85,20 @@ export function loadConfig(env=process.env,argv=process.argv){
       replyMode:['off','draft','send'].includes(env.REPLY_MODE)?env.REPLY_MODE:'draft',
       // DE/AT/CH recipients need prior consent for unsolicited business email: held unless the owner opts in.
       allowDach:env.OUTREACH_DACH==='YES',
+      // The List-Unsubscribe header marks mail as bulk (Gmail's Promotions signal): off for 1-to-1 outreach unless asked for.
+      // Every email still says, in plain words, that one reply stops all further email (that opt-out is never removed).
+      listUnsubscribe:env.LIST_UNSUBSCRIBE_HEADER==='on',
+      // Saturday morning (recipient's local time) is a send window too: solo bloggers read mail then. 'NO' turns it off.
+      saturday:env.SATURDAY_SENDS!=='NO',
       dailyLimit:num(env.OUTREACH_DAILY_LIMIT,12),followupDays:num(env.FOLLOWUP_DAYS,6),sendWindow:env.AUTOPILOT_SEND_WINDOW!=='off',gapMs:()=>15000+Math.floor(Math.random()*30000)},
     brave:{apiKey:env.BRAVE_SEARCH_API_KEY||'',monthlyRequests:num(env.BRAVE_MONTHLY_REQUESTS,900)},neighborPages:Math.max(0,Math.min(40,num(env.AUTOPILOT_NEIGHBOR_PAGES,12))),
     claude:{apiKey:env.ANTHROPIC_API_KEY||'',model:env.LINKFORGE_CLAUDE_MODEL||'claude-opus-5-5',
       providers:aiProviders(env)},
+    // 3-way (ABC) link exchange: publisher B links to our site A; in return one of our OTHER sites (C, never A) links to B
+    // from a genuinely related page. Capped per partner site and page so no site turns into a link farm. 'off' disables it.
+    exchange:{mode:env.LINK_EXCHANGE==='off'?'off':'abc',perPartnerSiteMonth:Math.max(0,Math.min(20,Math.floor(num(env.EXCHANGE_PER_SITE_MONTH,6)))),perPartnerPage:2,fulfilDays:7},
+    // Contact-form-only publishers: messages prepared per day for the owner to paste (never submitted automatically). 0 = off.
+    forms:{daily:Math.max(0,Math.min(20,Math.floor(num(env.FORM_QUEUE_DAILY,5))))},
     linkGapCalls:Math.max(0,Math.min(4,num(env.AUTOPILOT_LINKGAP_CALLS,2))),secondLook:Math.max(0,Math.min(200,num(env.AUTOPILOT_SECOND_LOOK,60))),
     gsc:!!env.GSC_SERVICE_ACCOUNT_JSON,bing:!!env.BING_WEBMASTER_API_KEY,preverifyMax:num(env.AUTOPILOT_PREVERIFY,10),serpDepth:Math.min(100,Math.max(10,num(env.AUTOPILOT_SERP_DEPTH,50))),maxQueries:num(env.AUTOPILOT_MAX_QUERIES,null),
     verifier:{providers:[...(env.VERIFALIA_USERNAME&&env.VERIFALIA_PASSWORD?['verifalia']:[]),...(env.HUNTER_API_KEY&&env.HUNTER_API_KEY!=='test-api-key'?['hunter']:[])],
@@ -434,7 +444,7 @@ export async function runAutopilot({env=process.env,argv=process.argv,fetchImpl=
       // Pages whose search demand was recorded when their first email went out (the "before" for traffic around won links).
       asset_baselines:vaultOk?Object.keys(state.asset_baseline||{}).length:previous.capabilities?.asset_baselines??0},
     // Booleans only, never the values: lets self-diagnosis flag a missing sender identity.
-    sender:{sender_name:!!cfg.outreach.senderName,postal_address:!!cfg.outreach.postalAddress,per_site_names:Object.keys(cfg.outreach.senderNames).length,reply_mode:cfg.outreach.replyMode,allow_dach:cfg.outreach.allowDach},
+    sender:{sender_name:!!cfg.outreach.senderName,postal_address:!!cfg.outreach.postalAddress,per_site_names:Object.keys(cfg.outreach.senderNames).length,reply_mode:cfg.outreach.replyMode,allow_dach:cfg.outreach.allowDach,list_unsubscribe:cfg.outreach.listUnsubscribe,saturday:cfg.outreach.saturday,link_exchange:cfg.exchange.mode,form_queue_daily:cfg.forms.daily},
     setup:setupChecklist(cfg),stages,
     totals:{sites:SITES.length,pages_crawled:crawl.reduce((n,s)=>n+s.pages.length,0),urls_discovered:crawl.reduce((n,s)=>n+(s.discovered||0),0),
       promotable:ranked.length,internal_suggestions:internal.length,promoting_now:chosen.length},
