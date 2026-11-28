@@ -46,7 +46,7 @@ test('the postal footer names the site where the address was published; nothing 
   assert.equal(emailFooter('PO Box 1, Town','not a url'),'\n\nPO Box 1, Town');
   const f=fixture({a:mk('a')},{postalAddress:'PO Box 1, Town'});await runOutreach(f.args);
   const {text}=decode(f.sent[0].raw);
-  assert.match(text,/reply "no" and I won't email again\.\n\nPO Box 1, Town\nYou're receiving this because this address is published on a\.example\.$/);
+  assert.match(text,/If it's not a fit, just say so and I won't follow up\.\n\nBest,\nOwner Name\ngearuptofit\.com\n\nPO Box 1, Town\nYou're receiving this because this address is published on a\.example\.$/);
   assert.equal((text.match(/https?:\/\/\S+/g)||[]).length,1,'no tracking link added');
   const none=fixture({a:mk('a')});await runOutreach(none.args);assert.doesNotMatch(decode(none.sent[0].raw).text,/receiving this because/);
 });

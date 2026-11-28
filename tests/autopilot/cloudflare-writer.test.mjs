@@ -80,7 +80,7 @@ test('engine: inside GitHub Actions the keyless writer is configured by itself a
   const asset={url:'https://gearuptofit.com/shoe-finder/',title:'Running Shoe Finder',type:'interactive_tool',interactive:true,description:'Answer six questions and get matched to running shoes by gait and terrain.',reasons:[]};
   const prospect={id:'x',title:'Resources for New Runners',page_url:'https://pub.example/resources',fit_section:'Choosing shoes',excerpt:'A list of tools for new runners.'};
   const site={domain:'gearuptofit.com',topic:'running'};
-  const bodyText=`Your "Choosing shoes" section in Resources for New Runners points readers to fitting advice. Our Running Shoe Finder asks six questions and matches runners to shoes by gait and terrain, free and without sign-up: ${asset.url}\n\nIf it fits, it could sit in that section.\n\nBest,\nAlex\ngearuptofit.com\n\nP.S. Not relevant for you? Just reply "no" and I won't email again.`;
+  const bodyText=`Your "Choosing shoes" section in Resources for New Runners points readers to fitting advice. Our Running Shoe Finder asks six questions and matches runners to shoes by gait and terrain, free and without sign-up: ${asset.url}\n\nIf it fits, it could sit in that section.\n\nIf it's not a fit, just say so and I won't follow up.\n\nBest,\nAlex\ngearuptofit.com`;
   const ai={run:async()=>({response:`Subject: A shoe finder for your new-runner resources\n\n${bodyText}`})};
   let tokenRequests=0;const seen=[];
   // The whole chain in one process: runner token service -> engine -> dashboard endpoint (real verification) -> model.

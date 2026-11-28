@@ -17,7 +17,7 @@ test('template pitches: who we are, one direct ask, one URL, one proof point and
   assert.equal(out.variant,'template:resource_suggestion');assert.equal(out.writer,'template');
   assert.match(out.body,/^Hi Jane,\n\nI'm writing from gearuptofit\.com, a site about running shoes\. Would you consider adding Running Shoe Finder to your "Choosing shoes" section in "Resources for New Runners"\?/);
   assert.match(out.body,/the edit would be one link in that section, with "Running Shoe Finder" as the link text\./,'ends with a concrete edit: asset title as anchor, in the matched section');
-  assert.deepEqual(urls(out.body),[asset.url]);assert.equal((out.body.match(/\?/g)||[]).length,2,'one ask (plus the P.S. question)');
+  assert.deepEqual(urls(out.body),[asset.url]);assert.equal((out.body.match(/\?/g)||[]).length,1,'one ask (the closing opt-out is a statement, not a question)');
   assert.doesNotMatch(out.body,BANNED);assert.doesNotMatch(out.body,/data tables|authoritative/,'one proof point only');
   assert.deepEqual(out.facts_used,[TOOL]);assert.doesNotMatch(out.body,/Flagship/);
   const plain=templatePitch({id:'b',title:'How to start running at 40'},asset,{senderName:'Alex',site});
@@ -26,7 +26,7 @@ test('template pitches: who we are, one direct ask, one URL, one proof point and
     alternativePitch({id:'d',kind:'linkgap',title:'Gear',competitor_link:{host:'other.example',anchor:'shoe quiz',match:'topic'}},asset,{senderName:'Alex',site}),
     mentionPitch({id:'e',kind:'mention',title:'Pest tips'},asset,{senderName:'Alex',site})]){
     assert.doesNotMatch(t.body,BANNED);assert.deepEqual(urls(t.body),[asset.url]);assert.match(t.variant,/^template:/);assert.ok(Array.isArray(t.facts_used));
-    assert.match(t.body,/Best,\nAlex\ngearuptofit\.com\n\nP\.S\. Not relevant for you\?/);
+    assert.match(t.body,/\n\nIf it's not a fit, just say so and I won't follow up\.\n\nBest,\nAlex\ngearuptofit\.com$/);assert.doesNotMatch(t.body,/P\.S\.|reply "no"/);
   }
   const broken=brokenLinkPitch({id:'c',title:'X guide',broken_link:{anchor:'old fit guide',host:'dead.example',reason:'not_found'}},asset,{senderName:'Alex',site});
   assert.match(broken.body,/Would you consider pointing "old fit guide" to the page above instead\?/,'the edit keeps their own anchor text');
@@ -57,7 +57,7 @@ test('a follow-up never presents a fact the first email stated: the honest nudge
   const p={title:'Resources for New Runners',author:'Jane Doe',fit_section:'Choosing shoes'};
   const legacy=followupPitch(p,asset,{senderName:'Alex',site,subject:'Re: Suggestion'});
   assert.equal(legacy.variant,'template:followup_nudge');assert.deepEqual(legacy.facts_used,[]);
-  assert.match(legacy.body,/^Hi Jane, just checking whether you'd consider adding Running Shoe Finder to your "Choosing shoes" section in "Resources for New Runners"\. Happy to send anything you need\.\n\nhttps:\/\/gearuptofit\.com\/shoe-finder\/\n\nBest,\nAlex\ngearuptofit\.com\n\nP\.S\. Not relevant/);
+  assert.match(legacy.body,/^Hi Jane, just checking whether you'd consider adding Running Shoe Finder to your "Choosing shoes" section in "Resources for New Runners"\. Happy to send anything you need\.\n\nhttps:\/\/gearuptofit\.com\/shoe-finder\/\n\nIf it's not a fit, just say so and I won't follow up\.\n\nBest,\nAlex\ngearuptofit\.com$/);
   assert.equal(legacy.subject,'Re: Suggestion');assert.doesNotMatch(legacy.body,BANNED);
   const fact=followupPitch({...p,facts_used:[TOOL]},asset,{senderName:'Alex',site});
   assert.equal(fact.variant,'template:followup_fact');assert.deepEqual(fact.facts_used,[TABLES]);assert.match(fact.body,/It includes 2 data tables\. Happy to send/);
@@ -96,7 +96,7 @@ const completion=content=>new Response(JSON.stringify({choices:[{message:{conten
 const modelList=()=>new Response(JSON.stringify({data:[{id:'fixture-chat-70b'}]}),{headers:{'content-type':'application/json'}});
 const writerWith=(answer,seen=[])=>new PitchWriter({senderName:'Default Name',providers:aiProviders({GROQ_API_KEY:'k'}),
   fetchImpl:async(u,o)=>{if(String(u).endsWith('/models'))return modelList();const req=JSON.parse(o.body);seen.push({system:req.messages[0].content,facts:JSON.parse(req.messages[1].content.replace(/^[^\n]*\n/,''))});return completion(answer)}});
-const SIG='\n\nBest,\nSam\ngearuptofit.com\n\nP.S. Not relevant for you? Just reply "no" and I won\'t email again.';
+const SIG='\n\nIf it\'s not a fit, just say so and I won\'t follow up.\n\nBest,\nSam\ngearuptofit.com';
 
 test('AI follow-ups: same thread subject, short, honest; a long or false answer falls back to the template',async()=>{
   const p={id:'f',title:'Resources for New Runners',author:'Jane Doe',facts_used:[TOOL],page_url:'https://pub.example/r'};
