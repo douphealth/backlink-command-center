@@ -9,6 +9,7 @@ import {assetStats,linkLikelihood} from './learn.mjs';
 import {RecipientVerifier,isSuppressed,usableVerification,samePublisher,normalizeEmail,verifyPassRate} from './recipient-policy.mjs';
 import {checkDead} from './broken.mjs';
 import {normUrl as normUrlKey} from './util.mjs';
+import {formQueue} from './forms.mjs';
 export const PER_ASSET_DAILY=2;
 // Recipient regions: [TLD pattern, weekday window as UTC hours [from,to), UTC offset in hours]. The offset decides the
 // recipient's own weekday, and places the Saturday-morning window in their local time.
@@ -114,6 +115,7 @@ export function outreachStatus(state,{limit,mode,qualifyVersion,now=new Date()})
  // Prospects the free screening retired, by the exact reason (counts only), so parser gaps show up as numbers.
  const retired={};for(const p of Object.values(state.prospects||{}))if(p.status==='contact_unverifiable'){const k=String(p.contact_quality?.detail||'unrecorded').replace(/[^a-z0-9:_-]/gi,'_').slice(0,60);retired[k]=(retired[k]||0)+1}
  return {mode,ready:ready.length,verified_ready:verified.length,pending_verification:ready.length-verified.length,holds,
+  form_queue:formQueue(state,now), // contact-form messages for the owner (counts only): ready to paste, prepared today, expired
   ...split,to_verify:toVerify,retired_by_reason:retired,...sendStats(state,now.getTime()),
   sent_today:sent,cap_today:cap,next_send_at:mode==='off'?null:next?.toISOString()||null,
   sending_now:mode==='send'&&sent<cap&&verified.some(p=>sendWindowOpen(p.domain,now)),reply_health:state.reply_health?.status||'unverified'};
